@@ -1,0 +1,54 @@
+interface/modules/custom_modules/oe-module-faxsms/library/faxMedia.php:44:$plain = $crypto->decryptStandard($token);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/VoiceClient.php:110:$decrypt = $this->crypto->decryptStandard(is_string($credentials) ? $credentials : null);
+interface/modules/custom_modules/oe-module-faxsms/src/RCVoice/VoiceFunctionsTrait.php:102:$plain = $this->crypto->decryptStandard((string)$row['credentials']);
+library/reminders.php:399:*      $token = $cryptoGen->decryptStandard($GLOBALS['phone_gateway_password']);
+src/BC/Crypto/ContextualEncryptionTrait.php:50:$result = $this->decryptStandard($value, keySource: KeySource::Drive, minimumVersion: $minimumVersion);
+src/BC/Crypto/ContextualEncryptionTrait.php:65:$result = $this->decryptStandard($value, keySource: KeySource::Database);
+src/BC/Crypto/Crypto.php:97:public function decryptStandard(?string $value, KeySource $keySource = KeySource::Drive, ?int $minimumVersion = null): false|string
+src/Common/Crypto/CryptoGen.php:98:public function decryptStandard(?string $value, KeySource $keySource = KeySource::Drive, ?int $minimumVersion = null): false|string
+src/Common/Crypto/CryptoGen.php:457:: $this->decryptStandard($fileContents, keySource: KeySource::Database);
+src/Common/Crypto/CryptoGen.php:491:: $this->decryptStandard($storedFileContents, keySource: KeySource::Database);
+src/Common/Crypto/CryptoInterface.php:35:public function decryptStandard(?string $value, KeySource $keySource = KeySource::Drive, ?int $minimumVersion = null): false|string;
+src/FHIR/SMART/SMARTLaunchToken.php:162:$jsonEncoded = $cryptoGen->decryptStandard($jsonEncrypted);
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:93:$result = $this->cryptoGen->decryptStandard($ciphertext, KeySource::Drive);
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:109:$result = $this->cryptoGen->decryptStandard($ciphertext, KeySource::Database);
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:123:$result = $this->cryptoGen->decryptStandard($invalidCiphertext, KeySource::Drive);
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:134:$result = $this->cryptoGen->decryptStandard($malformedCiphertext, KeySource::Drive);
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:150:$result = $this->cryptoGen->decryptStandard($tamperedCiphertext, KeySource::Drive);
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:161:$result = $this->cryptoGen->decryptStandard(
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:176:$result = $this->cryptoGen->decryptStandard(
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:188:$result = $this->cryptoGen->decryptStandard('', KeySource::Drive);
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:196:$result = $this->cryptoGen->decryptStandard(null, KeySource::Drive);
+tests/Tests/Fixtures/CryptoFixtureManager.php:39:* V3 introduced the encryptStandard()/decryptStandard() wrapper API to
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:115:$decrypted = $this->crypto->decryptStandard($encrypted);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:131:self::assertSame($plaintext, $this->crypto->decryptStandard($encrypted1));
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:132:self::assertSame($plaintext, $this->crypto->decryptStandard($encrypted2));
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:137:self::assertSame('', $this->crypto->decryptStandard(null));
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:142:self::assertSame('', $this->crypto->decryptStandard(''));
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:166:$decrypted = $this->crypto->decryptStandard($ciphertext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:173:$result = $this->crypto->decryptStandard('not valid encrypted data');
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:184:$result = $this->crypto->decryptStandard($tampered);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:194:$result = $this->crypto->decryptStandard($ciphertextV4, minimumVersion: 5);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:204:$result = $this->crypto->decryptStandard($ciphertextV5, minimumVersion: 5);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:214:$result = $this->crypto->decryptStandard($ciphertextV7, minimumVersion: 5);
+tests/Tests/Isolated/RestControllers/Authorization/EhrLaunchPatientContextTest.php:52:public function decryptStandard(?string $value, KeySource $keySource = KeySource::Drive, ?int $minimumVersion = null): false|string
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:154:$result = $this->cryptoGen->decryptStandard('');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:160:$result = $this->cryptoGen->decryptStandard(null);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:170:$decrypted = $this->cryptoGen->decryptStandard($encrypted);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:236:$result = $this->cryptoGen->decryptStandard('002' . 'invalid_data');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:321:$result = $this->cryptoGen->decryptStandard($invalidVersionData);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:353:$decrypted = $this->cryptoGen->decryptStandard($encrypted);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:364:$decrypted = $this->cryptoGen->decryptStandard($encrypted);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:375:$decrypted = $this->cryptoGen->decryptStandard($encrypted);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:391:$decrypted = $this->cryptoGen->decryptStandard($encrypted);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:398:$result = $this->cryptoGen->decryptStandard($priorVersionData);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:473:$result = $this->cryptoGen->decryptStandard($tamperedEncrypted);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:481:$result = $this->cryptoGen->decryptStandard('002' . $fakeEncrypted);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:488:$result = $this->cryptoGen->decryptStandard('abc123');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:492:$result = $this->cryptoGen->decryptStandard('999test');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:499:$result = $this->cryptoGen->decryptStandard($encrypted, minimumVersion: KeyVersion::CURRENT->value + 1);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:567:$decrypted = $this->cryptoGen->decryptStandard($encrypted);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:688:$result = $this->cryptoGen->decryptStandard($malformedData);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:693:$result2 = $this->cryptoGen->decryptStandard($malformedV2);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:778:$result = $mockCryptoGen->decryptStandard(KeyVersion::CURRENT->toPaddedString() . 'test_data');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:990:$result = $mockCryptoGen->decryptStandard(

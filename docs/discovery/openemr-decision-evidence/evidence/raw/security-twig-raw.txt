@@ -1,0 +1,32 @@
+templates/calendar/default/admin/submit_category.html.twig:193:<tr><td class="align-bottom">{{ FormSubmit|raw }}</td></tr>
+templates/calendar/default/admin/submit_category.html.twig:379:<tr><td class="align-bottom">{{ FormSubmit|raw }}</td></tr>
+templates/calendar/default/admin/submit_category.html.twig:389:{% if FormHidden is defined and FormHidden %} {{ FormHidden|raw }} {% endif %}
+templates/calendar/default/admin/submit_category.html.twig:391:{{ FormSubmit|raw }}
+templates/calendar/default/user/ajax_search.html.twig:51:{{ CATEGORY_OPTIONS|raw }}
+templates/calendar/default/user/ajax_search.html.twig:59:{{ TOPIC_OPTIONS|raw }}
+templates/calendar/default/user/ajax_search.html.twig:81:{{ PROVIDER_OPTIONS|raw }}
+templates/calendar/default/user/ajax_search.html.twig:87:{{ FACILITY_OPTIONS|raw }}
+templates/calendar/default/user/ajax_search.html.twig:167:{{ datepicker_xl|raw }}
+templates/calendar/default/views/day/ajax_template.html.twig:75:{{ monthSelectorHtml|raw }}
+templates/calendar/default/views/day/ajax_template.html.twig:187:{{ event.inLabelContent|raw }}
+templates/calendar/default/views/day/ajax_template.html.twig:197:{{ event.displayContentHtml|raw }}
+templates/calendar/default/views/day/ajax_template.html.twig:206:{{ event.displayContentHtml|raw }}
+templates/calendar/default/views/day_print/outlook_ajax_template.html.twig:126:{{ event.inLabelContent|raw }}
+templates/calendar/default/views/day_print/outlook_ajax_template.html.twig:133:{{ event.bodyContent|raw }}
+templates/calendar/default/views/month/ajax_template.html.twig:83:{{ currentMonthLabel|raw }}
+templates/calendar/default/views/month/ajax_template.html.twig:100:{{ monthSelectorHtml|raw }}
+templates/calendar/default/views/month/ajax_template.html.twig:205:{{ event.displayContentHtml|raw }}
+templates/calendar/default/views/month_print/outlook_ajax_template.html.twig:142:{{ event.content|raw }}
+templates/calendar/default/views/week/ajax_template.html.twig:58:{{ weekHeaderLabel|raw }}
+templates/calendar/default/views/week/ajax_template.html.twig:75:{{ monthSelectorHtml|raw }}
+templates/calendar/default/views/week/ajax_template.html.twig:208:{{ event.inLabelContent|raw }}
+templates/calendar/default/views/week/ajax_template.html.twig:218:{{ event.displayContentHtml|raw }}
+templates/calendar/default/views/week/ajax_template.html.twig:227:{{ event.displayContentHtml|raw }}
+templates/calendar/default/views/week_print/outlook_ajax_template.html.twig:108:{{ event.bodyContent|raw }}
+templates/calendar/default/views/week_print/outlook_ajax_template.html.twig:119:{{ event.bodyContent|raw }}
+templates/core/about.html.twig:46:{{ additionalInfoContent|raw }}
+templates/core/about.html.twig:84:{{ additionalButtonsContent|raw }}
+templates/oemr_ui/page_heading/partials/page_heading.html.twig:18:{{ titleNavContent|raw }}
+templates/patient/card/insurance.html.twig:43:{{ (c.insco.address.line2 != "") ? c.insco.address.line2|text ~ "<br>"|raw }}
+templates/patient/card/manage_care_team.html.twig:185:{{ team_status_options|raw }}
+templates/portal/registration/portal_register.html.twig:24:const webRoot = {{ global.web_root|json_encode|raw }};

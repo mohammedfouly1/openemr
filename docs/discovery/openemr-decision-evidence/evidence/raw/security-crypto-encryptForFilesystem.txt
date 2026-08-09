@@ -1,0 +1,36 @@
+controllers/C_Document.class.php:764:$document = $this->cryptoGen->encryptForFilesystem(file_get_contents($to_file_tmp_name));
+controllers/C_Document.class.php:922:$to_file_encrypted = $this->cryptoGen->encryptForFilesystem(file_get_contents($to_file_tmp_name));
+controllers/C_Document.class.php:1273:$LOG = $this->cryptoGen->encryptForFilesystem($LOG);
+interface/billing/edi_271.php:59:$uploadedFile = $cryptoGen->encryptForFilesystem($uploadedFile);
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1673:->encryptForFilesystem($content);
+interface/modules/custom_modules/oe-module-ehi-exporter/src/Services/EhiExporter.php:679:$encryptedContents = $this->cryptoGen->encryptForFilesystem($dataContents);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AuthenticateTrait.php:170:$encryptedData = $this->crypto->encryptForFilesystem($jsonData);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:615:file_put_contents($file_name, $this->crypto->encryptForFilesystem(base64_decode((string)$faxImage)));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:711:$bytes = file_put_contents($tmp, $this->crypto->encryptForFilesystem($decoded), LOCK_EX);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/FaxDocumentService.php:132:file_put_contents($mediaPath, $this->crypto->encryptForFilesystem($mediaContent));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:633:file_put_contents($filePath, $this->crypto->encryptForFilesystem($data));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:690:if (file_put_contents($where, $this->crypto->encryptForFilesystem($decodedContent)) !== false) {
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:514:file_put_contents($filePath, $this->crypto->encryptForFilesystem($data));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:546:if (file_put_contents($where, $this->crypto->encryptForFilesystem($decodedContent)) !== false) {
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:145:$this->crypto->encryptForFilesystem($content)
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:205:$this->crypto->encryptForFilesystem($content)
+interface/orders/receive_hl7_results.inc.php:1951:return ServiceContainer::getCrypto()->encryptForFilesystem($content);
+interface/patient_file/letter.php:119:$temp_bodytext = $cryptoGen->encryptForFilesystem($temp_bodytext);
+interface/patient_file/letter.php:275:$temp_bodytext = $cryptoGen->encryptForFilesystem($temp_bodytext);
+interface/patient_file/letter.php:314:$temp_bodytext = $cryptoGen->encryptForFilesystem($temp_bodytext);
+interface/super/manage_document_templates.php:135:$storedData = $cryptoGen->encryptForFilesystem($fileData);
+interface/super/manage_site_files.php:54:$fileData = ServiceContainer::getCrypto()->encryptForFilesystem($fileData);
+library/classes/Document.class.php:1003:$document = $this->is_encrypted() ? $cryptoGen->encryptForFilesystem($data) : base64_encode($data);
+library/classes/Document.class.php:1006:$th_document = $cryptoGen->encryptForFilesystem($thumbnail_data);
+library/classes/Document.class.php:1081:$storedData = $cryptoGen->encryptForFilesystem($data);
+library/classes/Document.class.php:1093:$storedThumbnailData = $cryptoGen->encryptForFilesystem($thumbnail_data);
+src/BC/Crypto/ContextualEncryptionTrait.php:31:public function encryptForFilesystem(?string $value): string
+src/Billing/BillingProcessor/BillingLogger.php:108:$this->hlog = $this->cryptoGen->encryptForFilesystem($this->hlog);
+src/Common/Crypto/CryptoInterface.php:61:public function encryptForFilesystem(?string $value): string;
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:330:$encrypted = $this->crypto->encryptForFilesystem($plaintext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:338:self::assertSame('', $this->crypto->encryptForFilesystem(null));
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:343:self::assertSame('', $this->crypto->encryptForFilesystem(''));
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:356:$result = $crypto->encryptForFilesystem($plaintext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:364:$encrypted = $this->crypto->encryptForFilesystem($plaintext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:392:$encrypted = $this->crypto->encryptForFilesystem('test data');
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:410:$encrypted = $this->crypto->encryptForFilesystem($plaintext);

@@ -1,0 +1,375 @@
+# slug: htmlspecialchars
+# description: htmlspecialchars( sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e htmlspecialchars( -- *.php HEAD
+# generated: 2026-08-07T06:30:25Z
+#
+acl_upgrade.php:56:    die(htmlspecialchars($response));
+admin.php:20:    die(htmlspecialchars($response));
+admin.php:124:                            echo "  <td>" . htmlspecialchars($sfname, ENT_NOQUOTES) . "</td>\n";
+admin.php:125:                            echo "  <td>" . htmlspecialchars($dbase, ENT_NOQUOTES) . "</td>\n";
+admin.php:128:                                echo "  <td colspan='3'><a href='setup.php?site=" . htmlspecialchars(urlencode($sfname), ENT_QUOTES) . "' class='text-decoration-none'>Needs setup, click here to run it</a></td>\n";
+admin.php:130:                                echo "  <td colspan='3' class='text-danger'>" . htmlspecialchars($errmsg, ENT_NOQUOTES) . "</td>\n";
+admin.php:156:                                echo "  <td>" . htmlspecialchars($openemr_name, ENT_NOQUOTES) . "</td>\n";
+admin.php:157:                                echo "  <td>" . htmlspecialchars($openemr_version, ENT_NOQUOTES) . "</td>\n";
+admin.php:159:                                    echo "  <td><a href='sql_upgrade.php?site=" . htmlspecialchars(urlencode($sfname), ENT_QUOTES) . "' class='text-decoration-none'>Upgrade Database</a></td>\n";
+admin.php:161:                                    echo "  <td><a href='acl_upgrade.php?site=" . htmlspecialchars(urlencode($sfname), ENT_QUOTES) . "' class='text-decoration-none'>Upgrade Access Controls</a></td>\n";
+admin.php:163:                                    echo "  <td><a href='sql_patch.php?site=" . htmlspecialchars(urlencode($sfname), ENT_QUOTES) . "' class='text-decoration-none'>Patch Database</a></td>\n";
+admin.php:168:                                    echo "  <td><a href='interface/login/login.php?site=" . htmlspecialchars(urlencode($sfname), ENT_QUOTES) . "' class='text-decoration-none'><i class='fa fa-sign-in-alt fa-lg' aria-hidden='true' data-toggle='tooltip' data-placement='top' title ='Login to site " . htmlspecialchars($sfname, ENT_QUOTES) . "'></i></a></td>\n";
+admin.php:169:                                    echo "  <td><a href='portal/index.php?site=" . htmlspecialchars(urlencode($sfname), ENT_QUOTES) . "' class='text-decoration-none'><i class='fa fa-sign-in-alt fa-lg' aria-hidden='true' data-toggle='tooltip' data-placement='top' title ='Login to site " . htmlspecialchars($sfname, ENT_QUOTES) . "'></i></a></td>\n";
+ccr/createCCR.php:208:        echo htmlspecialchars($result, ENT_NOQUOTES);
+ccr/createCCR.php:309:        echo htmlspecialchars($result, ENT_NOQUOTES);
+ccr/createCCR.php:393:            echo(htmlspecialchars(xl('Invalid recipient address. Please try again.'), ENT_QUOTES));
+controller.php:26:    echo htmlspecialchars($e->getMessage());
+index.php:21:    die("Site ID '" . htmlspecialchars($site_id, ENT_NOQUOTES) . "' contains invalid characters.");
+interface/billing/search_payments.php:538:                                                <!--<a class='iframe medium_modal' href="edit_payment.php?payment_id=<?php echo htmlspecialchars((string) $RowSearch['session_id']); ?>"><?php echo $Payer == '' ? '&nbsp;' : htmlspecialchars((string) $Payer); ?></a>-->
+interface/code_systems/standard_tables_manage.php:67:        echo htmlspecialchars(xl('ERROR: Unable to load the file into the database.'), ENT_NOQUOTES) . "<br />";
+interface/code_systems/standard_tables_manage.php:74:            echo htmlspecialchars(xl('ERROR: Unable to load the file into the database.'), ENT_NOQUOTES) . "<br />";
+interface/code_systems/standard_tables_manage.php:83:            echo htmlspecialchars(xl('ERROR: Unable to load the file into the database.'), ENT_NOQUOTES) . "<br />";
+interface/code_systems/standard_tables_manage.php:92:            echo htmlspecialchars(xl('ERROR: Unable to load the file into the database.'), ENT_NOQUOTES) . "<br />";
+interface/code_systems/standard_tables_manage.php:102:        echo htmlspecialchars(xl('ERROR: Unable to load the file into the database.'), ENT_NOQUOTES) . "<br />";
+interface/code_systems/standard_tables_manage.php:108:        echo htmlspecialchars(xl('ERROR: Unable to load the file into the database.'), ENT_NOQUOTES) . "<br />";
+interface/code_systems/standard_tables_manage.php:116:    echo htmlspecialchars(xl('ERROR: Unable to set the version number.'), ENT_NOQUOTES) . "<br />";
+interface/forms/CAMOS/admin.php:51:                fwrite($temp, "<category>" . htmlspecialchars($result1['category'] ?? '', ENT_XML1) . "</category>\n");
+interface/forms/CAMOS/admin.php:55:                    fwrite($temp, "<subcategory>" . htmlspecialchars($result2['subcategory'] ?? '', ENT_XML1) . "</subcategory>\n");
+interface/forms/CAMOS/admin.php:59:                        fwrite($temp, "<item>" . htmlspecialchars($result3['item'] ?? '', ENT_XML1) . "</item>\n");
+interface/forms/CAMOS/admin.php:62:                        fwrite($temp, "<content>" . htmlspecialchars($tmp, ENT_XML1) . "</content>\n");
+interface/forms/eye_mag/a_issue.php:888:                            $fldlength = htmlspecialchars((string) $fldlength, ENT_QUOTES);
+interface/forms/eye_mag/a_issue.php:889:                            $result2[$field_id]['resnote'] = htmlspecialchars($result2[$field_id]['resnote'], ENT_QUOTES);
+interface/forms/eye_mag/a_issue.php:890:                            $result2[$field_id]['resdate'] = htmlspecialchars($result2[$field_id]['resdate'], ENT_QUOTES);
+interface/forms/eye_mag/a_issue.php:892:                            $result2[$field_id]['resnote'] = nl2br(htmlspecialchars($currvalue, ENT_NOQUOTES));
+interface/forms/eye_mag/php/eye_mag_functions.php:1857:            $PMSFH['SOCH'][$field_id]['resnote'] = nl2br(htmlspecialchars((string) $currvalue, ENT_NOQUOTES));
+interface/forms/eye_mag/php/eye_mag_functions.php:1952:        $PMSFH['FH'][$field_id]['resnote'] = nl2br(htmlspecialchars((string) $currvalue, ENT_NOQUOTES));
+interface/forms/eye_mag/php/eye_mag_functions.php:2027:    // $PMSFH['SOCH'][$field_id]['resnote'] = nl2br(htmlspecialchars($currvalue,ENT_NOQUOTES));
+interface/forms/eye_mag/report.php:2587:    $term = nl2br(htmlspecialchars((string) $term, ENT_NOQUOTES));
+interface/globals.php:47:    die(htmlspecialchars($response));
+interface/main/calendar/includes/pnAPI.php:310:        $ourvar = htmlspecialchars($ourvar ?? '');
+interface/main/calendar/includes/pnAPI.php:372:        $ourvar = htmlspecialchars((string) $ourvar);
+interface/main/finder/document_select.php:93:    <title><?php echo htmlspecialchars(xl('Document Finder'), ENT_NOQUOTES); ?></title>
+interface/main/finder/document_select.php:158:                <label for="searchby" class="col-form-label col-form-label-sm col"><?php echo htmlspecialchars(xl('Search by name:'), ENT_NOQUOTES); ?></label>
+interface/main/finder/document_select.php:163:                    <input class='btn btn-primary btn-sm' type='submit' id="submitbtn" value='<?php echo htmlspecialchars(xl('Search'), ENT_QUOTES); ?>' />
+interface/main/finder/document_select.php:172:        <div id="searchstatus"><?php echo htmlspecialchars(xl('Enter your search criteria above'), ENT_NOQUOTES); ?></div>
+interface/main/finder/document_select.php:174:        <div id="searchstatus" class="alert alert-danger rounded-0"><?php echo htmlspecialchars(xl('No records found. Please expand your search criteria.'), ENT_NOQUOTES); ?>
+interface/main/finder/document_select.php:177:        <div id="searchstatus" class="alert alert-danger rounded-0"><?php echo htmlspecialchars(xl('More records found than could be displayed. Please narrow your search criteria.'), ENT_NOQUOTES); ?></div>
+interface/main/finder/document_select.php:179:        <div id="searchstatus" class="alert alert-success rounded-0"><?php echo htmlspecialchars(count($result), ENT_NOQUOTES); ?> <?php echo htmlspecialchars(xl('records found.'), ENT_NOQUOTES); ?></div>
+interface/main/finder/document_select.php:186:                <th class="srName"><?php echo htmlspecialchars(xl('Name'), ENT_NOQUOTES); ?></th>
+interface/main/finder/document_select.php:187:                <th class="srCategory"><?php echo htmlspecialchars(xl('Category'), ENT_NOQUOTES); ?></th> <!-- (CHEMED) Search by phone number -->
+interface/main/finder/document_select.php:188:                <th class="srDate"><?php echo htmlspecialchars(xl('Date'), ENT_NOQUOTES); ?></th>
+interface/main/finder/document_select.php:189:                <th class="srID"><?php echo htmlspecialchars(xl('ID'), ENT_NOQUOTES); ?></th>
+interface/modules/zend_modules/module/Application/src/Application/Plugin/CommonPlugin.php:148:                'value' => htmlspecialchars((string) $row['option_id'], ENT_QUOTES),
+interface/modules/zend_modules/module/Application/src/Application/Plugin/CommonPlugin.php:164:        return htmlspecialchars((string) $string, ENT_QUOTES);
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:140:        $this->data .= "<send>" . htmlspecialchars($send, ENT_QUOTES) . "</send>";
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:143:                <streetAddressLine>" . htmlspecialchars($assignedEntity['streetAddressLine'] ?? '', ENT_QUOTES) . "</streetAddressLine>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:144:                <city>" . htmlspecialchars($assignedEntity['city'] ?? '', ENT_QUOTES) . "</city>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:145:                <state>" . htmlspecialchars($assignedEntity['state'] ?? '', ENT_QUOTES) . "</state>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:146:                <postalCode>" . htmlspecialchars($assignedEntity['postalCode'] ?? '', ENT_QUOTES) . "</postalCode>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:147:                <country>" . htmlspecialchars($assignedEntity['country'] ?? '', ENT_QUOTES) . "</country>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:149:            <telecom use='WP' value='" . htmlspecialchars($assignedEntity['telecom'] ?? '', ENT_QUOTES) . "'/>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:151:                <name>" . htmlspecialchars($representedOrganization['name'] ?? '', ENT_QUOTES) . "</name>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:152:                <telecom use='WP' value='" . htmlspecialchars($representedOrganization['phone'] ?? '', ENT_QUOTES) . "'/>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:153:                <streetAddressLine>" . htmlspecialchars($representedOrganization['street'] ?? '', ENT_QUOTES) . "</streetAddressLine>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:154:                <city>" . htmlspecialchars($representedOrganization['city'] ?? '', ENT_QUOTES) . "</city>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:155:                <state>" . htmlspecialchars($representedOrganization['state'] ?? '', ENT_QUOTES) . "</state>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:156:                <postalCode>" . htmlspecialchars($representedOrganization['postal_code'] ?? '', ENT_QUOTES) . "</postalCode>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:157:                <country>" . htmlspecialchars($representedOrganization['country'] ?? '', ENT_QUOTES) . "</country>
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:159:        $this->data .= "<referral_reason><text>" . htmlspecialchars((string) $referral_reason ?: '', ENT_QUOTES) . "</text></referral_reason>";
+interface/patient_file/history/encounters.php:468:                generatePageElement($pagestart - $pagesize, $pagesize, $billing_view, $issue, "&lArr;" . htmlspecialchars(xl("Prev"), ENT_NOQUOTES) . " ");
+interface/patient_file/history/encounters.php:470:            echo (($pagesize > 0) ? ($pagestart + 1) : "1") . "-" . $upper . " " . htmlspecialchars(xl('of'), ENT_NOQUOTES) . " " . $numRes;
+interface/patient_file/history/encounters.php:473:                generatePageElement($pagestart + $pagesize, $pagesize, $billing_view, $issue, " " . htmlspecialchars(xl("Next"), ENT_NOQUOTES) . "&rArr;");
+interface/patient_file/summary/browse.php:195:<td><span class='text'><?php echo htmlspecialchars((string) $result3['subscriber_postal_code']);?></span></td>
+interface/patient_file/summary/stats.php:294:                $row['field'] = htmlspecialchars(xl($row['cvx_text']), ENT_NOQUOTES);
+interface/reports/clinical_reports.php:223:<?php echo htmlspecialchars(xl('Report - Clinical'), ENT_NOQUOTES); ?>
+library/classes/XmlWriterOemr.class.php:31:            $this->xml .= ' ' . htmlspecialchars((string) $key) . '="' . htmlspecialchars((string) $value) . '"';
+library/classes/XmlWriterOemr.class.php:35:        $this->stack[] = htmlspecialchars((string) $element);
+library/classes/XmlWriterOemr.class.php:42:            $this->xml .= ' ' . htmlspecialchars((string) $key) . '="' . htmlspecialchars((string) $value) . '"';
+library/classes/XmlWriterOemr.class.php:45:        $this->xml .= '>' . htmlspecialchars((string) $content) . '</' . htmlspecialchars((string) $element) . '>' . "\n";
+library/classes/XmlWriterOemr.class.php:50:        $this->xml .= '<' . htmlspecialchars((string) $element);
+library/classes/XmlWriterOemr.class.php:52:            $this->xml .= ' ' . htmlspecialchars((string) $key) . '="' . htmlspecialchars((string) $value) . '"';
+library/classes/XmlWriterOemr.class.php:61:        $this->xml .= "</" . htmlspecialchars((string) $element) . ">" . "\n";
+library/custom_template/add_context.php:167:              <td class='title_bar' colspan="4" align="center"><u><?php echo htmlspecialchars(xl('Add Context'), ENT_QUOTES);?></u></td>
+library/custom_template/add_context.php:168:              <td class='title_bar' align="center"><a href="#" id="addcontextbtn" class="btn btn-primary"><span><?php echo htmlspecialchars(xl('Add'), ENT_QUOTES);?></span></a></td>
+library/custom_template/add_context.php:175:                         <td align="center" class="title_bar_top top right bottom"><?php echo htmlspecialchars(xl('Context'), ENT_QUOTES);?></td>
+library/custom_template/add_context.php:176:                         <td align="center" class="title_bar_top top right bottom"><?php echo htmlspecialchars(xl('Edit'), ENT_QUOTES);?></td>
+library/custom_template/add_context.php:177:                         <td align="center" class="title_bar_top top right bottom"><?php echo htmlspecialchars(xl('Delete'), ENT_QUOTES);?></td>
+library/custom_template/add_context.php:187:                                <td class="right bottom left"><?php echo htmlspecialchars($i, ENT_QUOTES);?></td>
+library/custom_template/add_context.php:188:                                <td class="right bottom"><?php echo htmlspecialchars(xl($row['cl_list_item_long']), ENT_QUOTES);?></td>
+library/custom_template/add_context.php:189:                                <td class="right bottom"><a href="#" onclick='editme("<?php echo htmlspecialchars((string) $row['cl_list_slno'], ENT_QUOTES);?>","<?php echo htmlspecialchars((string) $row['cl_list_item_long'], ENT_QUOTES);?>")'><img src='<?php echo OEGlobalsBag::getInstance()->getKernel()->getImagesRelative(); ?>/b_edit.png' border=0></a></td>
+library/custom_template/add_context.php:190:                                <td class="right bottom"><a href="#" onclick="deleteme(<?php echo htmlspecialchars((string) $row['cl_list_slno'], ENT_QUOTES);?>)"><img src='<?php echo OEGlobalsBag::getInstance()->getKernel()->getImagesRelative(); ?>/deleteBtn.png' border=0></a></td>
+library/custom_template/add_context.php:200:                <td colspan="1"><a href="#" onclick="checkSubmit()" class="btn btn-primary"><span><?php echo htmlspecialchars(xl('Save'), ENT_QUOTES);?><a href="#" id="cancel" class="btn btn-secondary"><span><?php echo htmlspecialchars(xl('Cancel'), ENT_QUOTES);?></span></a></span></a></td>
+library/custom_template/add_context.php:204:                <td colspan="1"><a href="#" onclick="checkUpdate()" class="btn btn-primary"><span><?php echo htmlspecialchars(xl('Update'), ENT_QUOTES);?><a href="#" id="ucancel" class="btn btn-secondary"><span><?php echo htmlspecialchars(xl('Cancel'), ENT_QUOTES);?></span></a></span></a></td>
+library/custom_template/add_custombutton.php:102:  <h3 class="text-center"><?php echo htmlspecialchars(xl('Add Custom Button'), ENT_QUOTES); ?></h3>
+library/custom_template/add_custombutton.php:107:            <td class="title_bar_top"><?php echo htmlspecialchars(xl('Value'), ENT_QUOTES); ?></td>
+library/custom_template/add_custombutton.php:108:            <td class="title_bar_top"><?php echo htmlspecialchars(xl('Display Name'), ENT_QUOTES); ?></td>
+library/custom_template/add_custombutton.php:109:            <td class="title_bar_top"><?php echo htmlspecialchars(xl('Order'), ENT_QUOTES); ?></td>
+library/custom_template/add_custombutton.php:125:            <tr class='<?php echo htmlspecialchars($class, ENT_QUOTES); ?> text-center'>
+library/custom_template/add_custombutton.php:126:              <input type='hidden' name='<?php echo htmlspecialchars("hidid" . $i, ENT_QUOTES); ?>' value='<?php echo htmlspecialchars((string) $row['cl_list_slno'], ENT_QUOTES); ?>' />
+library/custom_template/add_custombutton.php:127:                <td><input type='text' class="form-control" name="<?php echo htmlspecialchars("sl" . $i, ENT_QUOTES); ?>" value="<?php echo htmlspecialchars($sl, ENT_QUOTES); ?>" readonly="" style="width:25px; background-color:#C9C9C9" /></td>
+library/custom_template/add_custombutton.php:128:                <td><input type='text' class="form-control" name="<?php echo htmlspecialchars("inshort" . $i, ENT_QUOTES); ?>" size="10" value="<?php echo htmlspecialchars((string) $row['cl_list_item_short'], ENT_QUOTES); ?>"/>
+library/custom_template/add_custombutton.php:130:                <td><input type='text' class="form-control" name="<?php echo htmlspecialchars("designation" . $i, ENT_QUOTES); ?>" value="<?php echo htmlspecialchars((string) $row['cl_list_item_long'], ENT_QUOTES); ?>"/>
+library/custom_template/add_custombutton.php:132:                <td><input type='text' class="form-control" name='<?php echo htmlspecialchars("level" . $i, ENT_QUOTES); ?>' value="<?php echo htmlspecialchars((string) $row['cl_order'], ENT_QUOTES); ?>" size='1'>
+library/custom_template/add_custombutton.php:134:                <td><input type='checkbox' name='<?php echo htmlspecialchars("chk" . $i, ENT_QUOTES); ?>' value='<?php echo htmlspecialchars((string) $row['cl_list_slno'], ENT_QUOTES); ?>'>
+library/custom_template/add_custombutton.php:143:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('sl' . $i, ENT_QUOTES); ?>" value="<?php echo htmlspecialchars($sl, ENT_QUOTES); ?>" readonly="" style="width:50px; background-color:#C9C9C9" /></td>
+library/custom_template/add_custombutton.php:144:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('inshort' . $i, ENT_QUOTES); ?>" size="10" value="" /></td>
+library/custom_template/add_custombutton.php:145:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('designation' . $i, ENT_QUOTES); ?>" value="" /></td>
+library/custom_template/add_custombutton.php:146:            <td><input type='text' class="form-control" name='<?php echo htmlspecialchars("level" . $i, ENT_QUOTES); ?>' size='1' /></td>
+library/custom_template/add_custombutton.php:149:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('sl' . ($i + 1), ENT_QUOTES); ?>" value="<?php echo htmlspecialchars(($sl + 1), ENT_QUOTES); ?>" readonly="" style="width:50px; background-color:#C9C9C9" /></td>
+library/custom_template/add_custombutton.php:150:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('inshort' . ($i + 1), ENT_QUOTES); ?>" size="10" value="" /></td>
+library/custom_template/add_custombutton.php:151:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('designation' . ($i + 1), ENT_QUOTES); ?>" value="" /></td>
+library/custom_template/add_custombutton.php:152:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('level' . ($i + 1), ENT_QUOTES); ?>" size='1' /></td>
+library/custom_template/add_custombutton.php:155:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('sl' . ($i + 2), ENT_QUOTES); ?>" value="<?php echo htmlspecialchars(($sl + 2), ENT_QUOTES); ?>" readonly="" style="width:50px; background-color:#C9C9C9" /></td>
+library/custom_template/add_custombutton.php:156:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('inshort' . ($i + 2), ENT_QUOTES); ?>" size="10" value="" /></td>
+library/custom_template/add_custombutton.php:157:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('designation' . ($i + 2), ENT_QUOTES); ?>" value="" /></td>
+library/custom_template/add_custombutton.php:158:            <td><input type='text' class="form-control" name="<?php echo htmlspecialchars('level' . ($i + 2), ENT_QUOTES); ?>" size='1' /></td>
+library/custom_template/add_custombutton.php:160:        <input type="hidden" name="count" value="<?php echo htmlspecialchars(($i + 2), ENT_QUOTES); ?>" />
+library/custom_template/add_custombutton.php:164:                       value="<?php echo htmlspecialchars(xl('Save'), ENT_QUOTES); ?>"/>
+library/custom_template/add_custombutton.php:166:                       value="<?php echo htmlspecialchars(xl('Delete'), ENT_QUOTES); ?>"
+library/custom_template/add_custombutton.php:167:                       title='<?php echo htmlspecialchars(xl('Select corresponding checkboxes to delete'), ENT_QUOTES); ?>'/>
+library/custom_template/add_template.php:103:                                echo "<option value='" . htmlspecialchars((string) $row['cl_list_id'], ENT_QUOTES) . "'>" . htmlspecialchars((string) $row['cl_list_item_long'], ENT_QUOTES) . "</option>";
+library/custom_template/add_template.php:112:                    <a href="#" onclick="add_template()" class="btn btn-primary"><span><?php echo htmlspecialchars(xl('ADD'), ENT_QUOTES);?></span></a>
+library/custom_template/custom_template.php:285:                    <option value=""><?php echo htmlspecialchars(xl('Select category'), ENT_QUOTES); ?></option>
+library/custom_template/custom_template.php:289:                        echo "<option value='" . htmlspecialchars((string) $rowTemplates['cl_list_slno'], ENT_QUOTES) . "'>" . htmlspecialchars(xl($rowTemplates['cl_list_item_long']), ENT_QUOTES) . "</option>";
+library/custom_template/custom_template.php:299:                    <a href="#" class="btn btn-primary btn-template-insert" data-template-text="<?php echo attr($row['cl_list_item_short']); ?>" title="<?php echo htmlspecialchars(xl($row['cl_list_item_long']), ENT_QUOTES); ?>"><?php echo ucfirst(htmlspecialchars(xl($row['cl_list_item_long']), ENT_QUOTES)); ?></a>
+library/custom_template/custom_template.php:308:                                <a class="expanded"><?php echo htmlspecialchars(xl('Components'), ENT_QUOTES); ?></a>
+library/custom_template/custom_template.php:320:                                    <a class="collapsed"><?php echo htmlspecialchars(xl('Patient Details'), ENT_QUOTES); ?></a>
+library/custom_template/custom_template.php:337:                                        <a class="collapsed"><?php echo htmlspecialchars(xl($issTypeDesc[0]), ENT_QUOTES); ?></a>
+library/custom_template/custom_template.php:355:                <a href="personalize.php?list_id=<?php echo $rowContext['cl_list_id'] ?? ''; ?>" id="personalize_link" class="iframe_medium btn btn-primary btn-sm"><?php echo htmlspecialchars(xl('Personalize'), ENT_QUOTES); ?></a>
+library/custom_template/custom_template.php:356:                <a href="add_custombutton.php" id="custombutton" class="iframe_medium btn btn-primary btn-sm" title="<?php echo htmlspecialchars(xl('Add Buttons for Special Chars,Texts to be Displayed on Top of the Editor for inclusion to the text on a Click'), ENT_QUOTES); ?>"><?php echo htmlspecialchars(xl('Add Buttons'), ENT_QUOTES); ?></a>
+library/custom_template/custom_template.php:368:      echo htmlspecialchars(xl('NO SUCH CONTEXT NAME') . $contextName, ENT_QUOTES);
+library/custom_template/delete_category.php:96:                <th><?php echo htmlspecialchars('Sl.No', ENT_QUOTES);?></th>
+library/custom_template/delete_category.php:97:                <th><?php echo htmlspecialchars(xl('Category'), ENT_QUOTES);?></th>
+library/custom_template/delete_category.php:98:                <th><?php echo htmlspecialchars(xl('Context'), ENT_QUOTES);?></th>
+library/custom_template/delete_category.php:99:                <th><?php echo htmlspecialchars(xl('Creator'), ENT_QUOTES);?></th>
+library/custom_template/delete_category.php:100:                <th><?php echo htmlspecialchars(xl('Delete'), ENT_QUOTES);?></th>
+library/custom_template/delete_category.php:108:        echo "<tr class='text " . htmlspecialchars($class, ENT_QUOTES) . "'>";
+library/custom_template/delete_category.php:110:        echo "<td>" . htmlspecialchars((string) $row['cl_list_item_long'], ENT_QUOTES) . "</td>";
+library/custom_template/delete_category.php:111:        echo "<td>" . htmlspecialchars((string) $context['cl_list_item_long'], ENT_QUOTES) . "</td>";
+library/custom_template/delete_category.php:112:        echo "<td>" . htmlspecialchars($row['fname'] . " " . $row['mname'] . " " . $row['lname'], ENT_QUOTES) . "</td>";
+library/custom_template/delete_category.php:114:        echo "<img src='../../interface/pic/Delete.gif' border=0 title='Delete This Row' onclick=delete_category('" . htmlspecialchars((string) $row['cl_list_slno'], ENT_QUOTES) . "')>";
+library/custom_template/quest_popup.php:88:                    <a href="#" onclick="replace_quest('<?php echo htmlspecialchars((string) $row['option_id'], ENT_QUOTES);?>')" class="btn btn-primary"><span><?php echo htmlspecialchars((string) $row['title'], ENT_QUOTES);?></span></a>
+library/custom_template/quest_popup.php:96:                <textarea name="quest" id="quest" rows="12" cols="70"><?php echo htmlspecialchars((string) $content, ENT_QUOTES);?></textarea>
+library/custom_template/quest_popup.php:101:                    <input type="button" name="save" value="<?php echo htmlspecialchars(xl('Save'), ENT_QUOTES);?>" onclick="save_this()">
+library/custom_template/quest_popup.php:102:                    <input type="button" name="cancel" value="<?php echo htmlspecialchars(xl('Cancel'), ENT_QUOTES);?>" onclick="javascript:window.close()">
+library/custom_template/save_as.php:48:                        <a href="#" class="btn btn-primary"><span><?php echo htmlspecialchars(xl('OK'), ENT_QUOTES);?></span></a>
+library/encounter_events.inc.php:44:        echo "<br /><br /><br /><h2 class='text-center'>" . htmlspecialchars(xl('Sorry No Appointment is Fixed'), ENT_QUOTES) . ". " . htmlspecialchars(xl('No Encounter could be created'), ENT_QUOTES) . ".</h2>";
+library/encounter_events.inc.php:54:        echo "<br /><br /><br /><h2 class='text-center'>" . htmlspecialchars(xl('More than one appointment was found'), ENT_QUOTES) . ". " . htmlspecialchars(xl('No Encounter could be created'), ENT_QUOTES) . ".</h2>";
+library/htmlspecialchars.inc.php:187:    return htmlspecialchars(($text ?? ''), ENT_XML1 | ENT_QUOTES);
+library/htmlspecialchars.inc.php:236:    return htmlspecialchars(($text ?? ''), ENT_NOQUOTES);
+library/htmlspecialchars.inc.php:293:    return htmlspecialchars(($text ?? ''), ENT_QUOTES);
+library/options.inc.php:301:            $optionValue = htmlspecialchars((string) $lrow_inactive['option_id'], ENT_QUOTES);
+library/options.inc.php:303:                'label' => htmlspecialchars(xl_list_label($lrow_inactive['title']), ENT_NOQUOTES),
+library/options.inc.php:593:    $currescaped = htmlspecialchars($currvalue ?? '', ENT_QUOTES);
+library/options.inc.php:619:    $field_id_esc = htmlspecialchars((string) $field_id, ENT_QUOTES);
+library/options.inc.php:620:    $list_id_esc = htmlspecialchars(($list_id ?? ''), ENT_QUOTES);
+library/options.inc.php:623:    $description = (isset($frow['description']) ? htmlspecialchars(xl_layout_label($frow['description']), ENT_QUOTES) : '');
+library/options.inc.php:713:        $fldlength = htmlspecialchars($frow['fld_length'] ?? '', ENT_QUOTES);
+library/options.inc.php:747:        $tmp = htmlspecialchars(OEGlobalsBag::getInstance()->getString('gbl_mask_patient_id'), ENT_QUOTES);
+library/options.inc.php:767:        $textCols = htmlspecialchars((string) $frow['fld_length'], ENT_QUOTES);
+library/options.inc.php:768:        $textRows = htmlspecialchars((string) $frow['fld_rows'], ENT_QUOTES);
+library/options.inc.php:864:            $optionValue = htmlspecialchars((string) $key, ENT_QUOTES);
+library/options.inc.php:865:            $optionLabel = htmlspecialchars($prow['name'] . ' ' . $prow['area_code'] . '-' .
+library/options.inc.php:897:                $optionValue = htmlspecialchars((string) $key, ENT_QUOTES);
+library/options.inc.php:898:                $optionLabel = htmlspecialchars((string) $value[3], ENT_NOQUOTES);
+library/options.inc.php:942:        echo "<option value=''>" . htmlspecialchars(xl('Unassigned'), ENT_NOQUOTES) . "</option>";
+library/options.inc.php:955:            $optionValue = htmlspecialchars((string) $urow['id'], ENT_QUOTES);
+library/options.inc.php:956:            $optionLabel = htmlspecialchars((string) $uname, ENT_NOQUOTES);
+library/options.inc.php:961:            $optionTitle = htmlspecialchars($title, ENT_QUOTES);
+library/options.inc.php:980:            $optionValue = htmlspecialchars((string) $key, ENT_QUOTES);
+library/options.inc.php:981:            $optionLabel = htmlspecialchars((string) $ipname, ENT_NOQUOTES);
+library/options.inc.php:1003:            $optionValue = htmlspecialchars((string) $key, ENT_QUOTES);
+library/options.inc.php:1004:            $optionLabel = htmlspecialchars((string) $value[1], ENT_NOQUOTES);
+library/options.inc.php:1069:                $option_id_esc = htmlspecialchars((string) $option_id, ENT_QUOTES);
+library/options.inc.php:1084:                echo " $disabled />" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES);
+library/options.inc.php:1091:                    $cols = htmlspecialchars((string) $cols, ENT_QUOTES);
+library/options.inc.php:1111:            $option_id_esc = htmlspecialchars((string) $option_id, ENT_QUOTES);
+library/options.inc.php:1122:            echo "<tr><td>" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:1123:            $fldlength = htmlspecialchars((string) $fldlength, ENT_QUOTES);
+library/options.inc.php:1124:            $optionValue = htmlspecialchars($avalue[$option_id], ENT_QUOTES);
+library/options.inc.php:1157:        echo "<tr><td class='font-weight-bold'>" . htmlspecialchars(xl('Exam or Test'), ENT_NOQUOTES) .
+library/options.inc.php:1158:        "</td><td class='font-weight-bold'>" . htmlspecialchars(xl('N/A'), ENT_NOQUOTES) .
+library/options.inc.php:1160:        htmlspecialchars(xl('Nor'), ENT_NOQUOTES) . "&nbsp;</td>" .
+library/options.inc.php:1162:        htmlspecialchars(xl('Abn'), ENT_NOQUOTES) . "&nbsp;</td><td class='font-weight-bold'>" .
+library/options.inc.php:1163:        htmlspecialchars(xl('Date/Notes'), ENT_NOQUOTES) . "</td></tr>";
+library/options.inc.php:1166:            $option_id_esc = htmlspecialchars((string) $option_id, ENT_QUOTES);
+library/options.inc.php:1171:            echo "<tr><td>" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:1174:                $inputValue = htmlspecialchars($i, ENT_QUOTES);
+library/options.inc.php:1186:            $fldlength = htmlspecialchars((string) $fldlength, ENT_QUOTES);
+library/options.inc.php:1187:            $resnote = htmlspecialchars($resnote, ENT_QUOTES);
+library/options.inc.php:1212:            echo htmlspecialchars((string) $lrow['title'], ENT_NOQUOTES);
+library/options.inc.php:1214:                echo ' (' . htmlspecialchars((string) $lrow['comments'], ENT_NOQUOTES) . ')';
+library/options.inc.php:1239:            $option_id_esc = htmlspecialchars((string) $option_id, ENT_QUOTES);
+library/options.inc.php:1244:            echo "<tr><td>" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:1246:            $option_id = htmlspecialchars((string) $option_id, ENT_QUOTES);
+library/options.inc.php:1254:            $fldlength = htmlspecialchars((string) $fldlength, ENT_QUOTES);
+library/options.inc.php:1255:            $resnote = htmlspecialchars($resnote, ENT_QUOTES);
+library/options.inc.php:1283:        $inputValue = htmlspecialchars(xl('Add'), ENT_QUOTES);
+library/options.inc.php:1314:            $option_id_esc = htmlspecialchars((string) $option_id, ENT_QUOTES);
+library/options.inc.php:1341:            echo " $disabled />" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES);
+library/options.inc.php:1349:                $cols = htmlspecialchars((string) $cols, ENT_QUOTES);
+library/options.inc.php:1356:            $fontTitle = htmlspecialchars(xl('Please choose a valid selection.'), ENT_QUOTES);
+library/options.inc.php:1357:            $fontText = htmlspecialchars(xl('Fix this'), ENT_NOQUOTES);
+library/options.inc.php:1408:        $fldlength = htmlspecialchars((string) $fldlength, ENT_QUOTES);
+library/options.inc.php:1409:        $resnote = htmlspecialchars($resnote, ENT_QUOTES);
+library/options.inc.php:1410:        $resdate = htmlspecialchars((string) $resdate, ENT_QUOTES);
+library/options.inc.php:1424:                htmlspecialchars(xl('Status'), ENT_NOQUOTES) . ":&nbsp;&nbsp;</td>";
+library/options.inc.php:1491:        echo "<a href='../../../library/custom_template/custom_template.php?type=form_{$field_id}&contextName=" . htmlspecialchars($list_id_esc, ENT_QUOTES) . "' class='iframe_medium text-body text-decoration-none'>";
+library/options.inc.php:1612:        $currdescstring = htmlspecialchars($currdescstring, ENT_QUOTES);
+library/options.inc.php:1704:    $currescaped = htmlspecialchars((string) $currvalue, ENT_QUOTES);
+library/options.inc.php:1782:        $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars($tmp, ENT_QUOTES);
+library/options.inc.php:1791:        $fldlength = htmlspecialchars((string) $fld_length, ENT_QUOTES);
+library/options.inc.php:1792:        $maxlength = htmlspecialchars((string) $frow['fld_rows'], ENT_QUOTES);
+library/options.inc.php:1828:            $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars($tmp, ENT_QUOTES);
+library/options.inc.php:1849:        $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars($tmp, ENT_QUOTES);
+library/options.inc.php:1868:        $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars((string) $tmp, ENT_QUOTES);
+library/options.inc.php:1886:        $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars((string) $tmp, ENT_QUOTES);
+library/options.inc.php:1904:        $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars((string) $tmp, ENT_QUOTES);
+library/options.inc.php:1921:        $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars((string) $tmp, ENT_QUOTES);
+library/options.inc.php:1938:        $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars($tmp, ENT_QUOTES);
+library/options.inc.php:1970:                echo ">" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES);
+library/options.inc.php:1977:                    $cols = htmlspecialchars((string) $cols, ENT_QUOTES);
+library/options.inc.php:1998:            echo "<tr><td>" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:1999:            $fldlength = htmlspecialchars((string) $fldlength, ENT_QUOTES);
+library/options.inc.php:2000:            $inputValue = htmlspecialchars($avalue[$option_id], ENT_QUOTES);
+library/options.inc.php:2024:        htmlspecialchars(xl('Exam or Test'), ENT_NOQUOTES) . "</td><td class='font-weight-bold'>" .
+library/options.inc.php:2025:        htmlspecialchars(xl('N/A'), ENT_NOQUOTES) .
+library/options.inc.php:2027:        htmlspecialchars(xl('Nor'), ENT_NOQUOTES) . "&nbsp;</td>" .
+library/options.inc.php:2029:        htmlspecialchars(xl('Abn'), ENT_NOQUOTES) . "&nbsp;</td><td class='font-weight-bold'>" .
+library/options.inc.php:2030:        htmlspecialchars(xl('Date/Notes'), ENT_NOQUOTES) . "</td></tr>";
+library/options.inc.php:2035:            echo "<tr><td>" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2045:            $resnote = htmlspecialchars($resnote, ENT_QUOTES);
+library/options.inc.php:2046:            $fldlength = htmlspecialchars((string) $fldlength, ENT_QUOTES);
+library/options.inc.php:2067:            echo htmlspecialchars((string) $lrow['title'], ENT_QUOTES);
+library/options.inc.php:2069:                echo htmlspecialchars(' (' . $lrow['comments'] . ')', ENT_QUOTES);
+library/options.inc.php:2089:            echo "<tr><td>" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2096:            $fldlength = htmlspecialchars((string) $fldlength, ENT_QUOTES);
+library/options.inc.php:2097:            $resnote = htmlspecialchars($resnote, ENT_QUOTES);
+library/options.inc.php:2131:            echo ">" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES);
+library/options.inc.php:2138:                $cols = htmlspecialchars((string) $cols, ENT_QUOTES);
+library/options.inc.php:2185:        $fldlength = htmlspecialchars((string) $fldlength, ENT_QUOTES);
+library/options.inc.php:2186:        $resnote = htmlspecialchars($resnote, ENT_QUOTES);
+library/options.inc.php:2187:        $resdate = htmlspecialchars((string) $resdate, ENT_QUOTES);
+library/options.inc.php:2195:            htmlspecialchars(xl('Status'), ENT_NOQUOTES) . ":&nbsp;</td>";
+library/options.inc.php:2203:        echo "/>" . htmlspecialchars(xl('Current'), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2210:        echo "/>" . htmlspecialchars(xl('Quit'), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2222:        echo " />" . htmlspecialchars(xl('Never'), ENT_NOQUOTES) . "</td>";
+library/options.inc.php:2229:        echo " />" . htmlspecialchars(xl('N/A'), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2235:        echo "<a href='../../../library/custom_template/custom_template.php?type=form_{$field_id}&contextName=" . htmlspecialchars($list_id_esc, ENT_QUOTES) . "' class='iframe_medium text-body text-decoration-none'>";
+library/options.inc.php:2274:            $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars($tmp, ENT_QUOTES);
+library/options.inc.php:2317:            $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars((string) $tmp, ENT_QUOTES);
+library/options.inc.php:2388:          $s = htmlspecialchars(xl_list_label($lrow['title'] ?? ''), ENT_NOQUOTES);
+library/options.inc.php:2394:              $s = htmlspecialchars(xl_list_label($lrow['title'] ?? ''), ENT_NOQUOTES);
+library/options.inc.php:2411:        $s = nl2br(htmlspecialchars((string) $currvalue, ENT_NOQUOTES));
+library/options.inc.php:2413:        $s = nl2br(htmlspecialchars((string) $currvalue, ENT_NOQUOTES));
+library/options.inc.php:2417:        $description = (isset($frow['description']) ? htmlspecialchars(xl_layout_label($frow['description']), ENT_QUOTES) : '');
+library/options.inc.php:2447:                $s .= htmlspecialchars($prow['name'] . ' ' . $prow['area_code'] . '-' .
+library/options.inc.php:2462:                    $s .= htmlspecialchars((string) $value[3], ENT_NOQUOTES);
+library/options.inc.php:2479:        $s = htmlspecialchars((string) $uname, ENT_NOQUOTES);
+library/options.inc.php:2487:                $s .= htmlspecialchars((string) $ipname, ENT_NOQUOTES);
+library/options.inc.php:2493:                $s .= htmlspecialchars((string) $value[1], ENT_NOQUOTES);
+library/options.inc.php:2502:        $s = htmlspecialchars((string) $crow['pc_catname'], ENT_NOQUOTES);
+library/options.inc.php:2558:            $s .= "<tr><td class='font-weight-bold align-top'>" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES) . ":&nbsp;</td>";
+library/options.inc.php:2560:            $s .= "<td class='text align-top'>" . htmlspecialchars($avalue[$option_id], ENT_NOQUOTES) . "</td></tr>";
+library/options.inc.php:2585:            $s .= "<tr><td class='font-weight-bold align-top'>" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2590:            $s .= "<td class='text align-top'>" . htmlspecialchars($restype, ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2591:            $s .= "<td class='text align-top'>" . htmlspecialchars($resnote, ENT_NOQUOTES) . "</td>";
+library/options.inc.php:2608:            $s .= htmlspecialchars((string) $lrow['title'], ENT_NOQUOTES);
+library/options.inc.php:2610:                $s .= ' (' . htmlspecialchars((string) $lrow['comments'], ENT_NOQUOTES) . ')';
+library/options.inc.php:2634:            $s .= "<tr><td class='font-weight-bold align-top'>" . htmlspecialchars(xl_list_label($lrow['title']), ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2637:            $s .= "<td class='text align-top'>" . htmlspecialchars($restype, ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2638:            $s .= "<td class='text align-top'>" . htmlspecialchars($resnote, ENT_NOQUOTES) . "</td>";
+library/options.inc.php:2738:                $s .= "<td class='text align-top'>" . htmlspecialchars($resnote, ENT_NOQUOTES) . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+library/options.inc.php:2743:            $s .= "<td class='text align-top'><strong>" . htmlspecialchars(xl('Status'), ENT_NOQUOTES) . "</strong>:&nbsp;" . htmlspecialchars($res, ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2747:            $s .= "<td class='text align-top'>" . htmlspecialchars((string) $resdate, ENT_NOQUOTES) . "&nbsp;</td>";
+library/options.inc.php:2761:        $s = htmlspecialchars($urow['name'] ?? '', ENT_NOQUOTES);
+library/options.inc.php:2806:            $s = $i > 0 ? $s . ", " . htmlspecialchars((string) $lrow['name'], ENT_NOQUOTES) : text($lrow['name'] ?? '');
+library/options.inc.php:2916:        $description = (isset($frow['description']) ? htmlspecialchars(xl_layout_label($frow['description']), ENT_QUOTES) : '');
+library/options.inc.php:3574:                    $titlecols_esc = htmlspecialchars((string) $titlecols, ENT_QUOTES);
+library/options.inc.php:3602:                    $datacols_esc = htmlspecialchars((string) $datacols, ENT_QUOTES);
+library/options.inc.php:3809:                    $titlecols_esc = htmlspecialchars((string) $titlecols, ENT_QUOTES);
+library/options.inc.php:3847:                    $datacols_esc = htmlspecialchars((string) $datacols, ENT_QUOTES);
+library/options.inc.php:4312:        die(htmlspecialchars(xl('ERROR: Field') . " '$field_id' " . xl('is too long'), ENT_NOQUOTES) .
+library/options.inc.php:4313:        ":<br />&nbsp;<br />" . htmlspecialchars((string) $value, ENT_NOQUOTES));
+library/options.inc.php:4651:        echo "   <select id='" . htmlspecialchars((string) $name, ENT_QUOTES) . "' class='form-control' name='" . htmlspecialchars((string) $name, ENT_QUOTES) . "'>";
+library/options.inc.php:4654:             echo "<option value=" . htmlspecialchars((string) $facrow['id'], ENT_QUOTES) . " $selected>" . htmlspecialchars((string) $facrow['name'], ENT_QUOTES) . "</option>";
+library/payment_jav.inc.php:189:            alert("<?php echo htmlspecialchars(xl('Please Select a Patient.'), ENT_QUOTES) ?>")
+library/payment_jav.inc.php:208:            alert("<?php echo htmlspecialchars(xl('Value Should be Numeric'), ENT_QUOTES) ?>");
+library/payment_jav.inc.php:217:            if (confirm("<?php echo htmlspecialchars(xl('Would you like to save?'), ENT_QUOTES) ?>")) {
+library/payment_jav.inc.php:326:                    alert("<?php echo htmlspecialchars(xl('Cannot Post for Insurance.The Paying Entity selected is Patient.'), ENT_QUOTES) ?>");
+library/payment_jav.inc.php:329:                    alert("<?php echo htmlspecialchars(xl('Cannot Post for Patient.The Paying Entity selected is Insurance.'), ENT_QUOTES) ?>");
+library/payment_jav.inc.php:371:        } else if (DateCheckGreater(document.getElementById('post_to_date').value, '<?php echo OEGlobalsBag::getInstance()->getString('post_to_date_benchmark') == '' ? date('Y-m-d', time() - (10 * 24 * 60 * 60)) : htmlspecialchars((string) oeFormatShortDate(OEGlobalsBag::getInstance()->getString('post_to_date_benchmark')));?>',
+library/standard_tables_capture.inc.php:584:        echo htmlspecialchars(xl('ERROR: No ICD import directory.'), ENT_NOQUOTES) . "<br />";
+library/standard_tables_capture.inc.php:786:        echo htmlspecialchars(xl('ERROR: Unable to copy the file.'), ENT_NOQUOTES) . "<br />";
+library/standard_tables_capture.inc.php:792:        echo htmlspecialchars(xl('ERROR: Unable to extract the file.'), ENT_NOQUOTES) . "<br />";
+portal/lib/appsql.class.php:294:        error_log("ERROR: " . htmlspecialchars($logMsg, ENT_QUOTES), 0);
+portal/lib/appsql.class.php:298:        return htmlspecialchars((string) $string, ENT_QUOTES);
+portal/patient/fwk/libs/savant/Savant3.php:547:     * Unfortunately, a call to "echo htmlspecialchars()" is twice
+portal/patient/fwk/libs/savant/Savant3.php:550:     * 0.007 seconds for htmlspecialchars(), and 0.014 seconds for
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_ahref.php:81:            $html .= htmlspecialchars($tmp);
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_ahref.php:84:            $html .= htmlspecialchars($href);
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_ahref.php:93:                $key = htmlspecialchars((string) $key);
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_ahref.php:94:                $val = htmlspecialchars((string) $val);
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_ahref.php:99:            $html .= htmlspecialchars(" $attr");
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_htmlAttribs.php:54:            $key = htmlspecialchars((string) $key);
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_htmlAttribs.php:55:            $val = htmlspecialchars((string) $val);
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_image.php:151:            $html .= "(src='" . htmlspecialchars($file) . "',sizingMethod='scale');\"";
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_image.php:152:            $html .= ' title="' . htmlspecialchars((string) $alt) . '"';
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_image.php:161:            $html .= ' src="' . htmlspecialchars($file) . '"';
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_image.php:168:            $html .= ' alt="' . htmlspecialchars($alt) . '"';
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_image.php:172:                $html .= ' height="' . htmlspecialchars((string) $height) . '"';
+portal/patient/fwk/libs/savant/Savant3/resources/Savant3_Plugin_image.php:177:                $html .= ' width="' . htmlspecialchars((string) $width) . '"';
+portal/patient/fwk/libs/verysimple/HTTP/RequestUtil.php:478:     *          if true htmlspecialchars($val) is returned (default = false)
+portal/patient/fwk/libs/verysimple/HTTP/RequestUtil.php:495:            $val = htmlspecialchars((string) $val, ENT_COMPAT, null, false);
+portal/patient/fwk/libs/verysimple/Phreeze/PHPRenderEngine.php:77:                throw new Exception("The template file '" . htmlspecialchars($path) . "' was not found.");
+portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php:456:        $xml .= "<ObjectName>" . htmlspecialchars((string) $page->ObjectName) . "</ObjectName>\r\n";
+portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php:457:        $xml .= "<ObjectKey>" . htmlspecialchars((string) $page->ObjectKey) . "</ObjectKey>\r\n";
+portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php:458:        $xml .= "<TotalRecords>" . htmlspecialchars((string) $page->TotalResults) . "</TotalRecords>\r\n";
+portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php:459:        $xml .= "<TotalPages>" . htmlspecialchars((string) $page->TotalPages) . "</TotalPages>\r\n";
+portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php:460:        $xml .= "<CurrentPage>" . htmlspecialchars((string) $page->CurrentPage) . "</CurrentPage>\r\n";
+portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php:461:        $xml .= "<PageSize>" . htmlspecialchars((string) $page->PageSize) . "</PageSize>\r\n";
+portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php:477:            $xml .= "<" . htmlspecialchars((string) $page->ObjectName) . ">\r\n";
+portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php:497:                    $xml .= "<" . htmlspecialchars((string) $var) . ">" . $val . "</" . htmlspecialchars((string) $var) . ">\r\n";
+portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php:506:                        $xml .= "<" . htmlspecialchars($meth . $prop) . ">" . htmlspecialchars((string) $obj->$meth()->$prop) . "</" . htmlspecialchars($meth . $prop) . ">\r\n";
+portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php:511:            $xml .= "</" . htmlspecialchars((string) $page->ObjectName) . ">\r\n";
+portal/patient/fwk/libs/verysimple/String/VerySimpleStringUtil.php:182:        return htmlspecialchars($text);
+portal/patient/fwk/libs/verysimple/String/VerySimpleStringUtil.php:257:            $result = htmlspecialchars($result, ENT_QUOTES, null, false);
+setup.php:38:    die(htmlspecialchars($response));
+sphere/initial_response.php:53:            <form id="myForm" method="post" onsubmit="return top.restoreSession()" action="process_revert_response.php?front=<?php echo htmlspecialchars(urlencode((string) $front), ENT_QUOTES); ?>&csrf_token=<?php echo htmlspecialchars(urlencode((string) $csrf), ENT_QUOTES); ?>">
+sphere/initial_response.php:55:            <form id="myForm" method="post" onsubmit="return top.restoreSession()" action="process_response.php?front=<?php echo htmlspecialchars(urlencode((string) $front), ENT_QUOTES); ?>&cancel=<?php echo htmlspecialchars(urlencode($cancel), ENT_QUOTES); ?>&patient_id_cc=<?php echo htmlspecialchars(urlencode((string) $patientIdCc), ENT_QUOTES); ?>&csrf_token=<?php echo htmlspecialchars(urlencode((string) $csrf), ENT_QUOTES); ?>">
+sphere/initial_response.php:59:            echo '<input type="hidden" name="' . htmlspecialchars((string) $a, ENT_QUOTES) . '" value="' . htmlspecialchars((string) $b, ENT_QUOTES) . '">';
+sql_patch.php:18:    die(htmlspecialchars($response));
+sql_upgrade.php:47:    die(htmlspecialchars($response));
+src/Common/Forms/Types/BillingCodeType.php:63:        $currescaped = htmlspecialchars($currvalue ?? '', ENT_QUOTES);
+src/Common/Forms/Types/BillingCodeType.php:85:        $field_id_esc = htmlspecialchars((string) $field_id, ENT_QUOTES);
+src/Common/Forms/Types/BillingCodeType.php:88:        $description = (isset($frow['description']) ? htmlspecialchars(xl_layout_label($frow['description']), ENT_QUOTES) : '');
+src/Common/Forms/Types/EncounterListOptionType.php:79:        $field_id_esc = htmlspecialchars((string) $field_id, ENT_QUOTES);
+src/Common/Forms/Types/LocalProviderListType.php:80:        $tmp = $tmp === '' ? '&nbsp;' : htmlspecialchars($tmp, ENT_QUOTES);
+src/Common/Forms/Types/LocalProviderListType.php:100:        $currescaped = htmlspecialchars($currvalue ?? '', ENT_QUOTES);
+src/Common/Forms/Types/LocalProviderListType.php:122:        $field_id_esc = htmlspecialchars((string) $field_id, ENT_QUOTES);
+src/Common/Forms/Types/LocalProviderListType.php:138:        $description = (isset($frow['description']) ? htmlspecialchars(xl_layout_label($frow['description']), ENT_QUOTES) : '');
+src/Common/Forms/Types/SmokingStatusType.php:43:        $fldlength = htmlspecialchars((string) $fldlength, ENT_QUOTES);
+src/Common/Forms/Types/SmokingStatusType.php:44:        $resnote = htmlspecialchars((string) $resnote, ENT_QUOTES);
+src/Common/Forms/Types/SmokingStatusType.php:45:        $resdate = htmlspecialchars((string) $resdate, ENT_QUOTES);
+src/Common/Forms/Types/SmokingStatusType.php:57:        $printView .= "<td class='font-weight-bold'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . htmlspecialchars(xl('Status'), ENT_NOQUOTES) . ":&nbsp;&nbsp;</td>";
+src/Common/Forms/Types/SmokingStatusType.php:64:        $printView .= "/>" . htmlspecialchars(xl('Current'), ENT_NOQUOTES) . "&nbsp;</td>";
+src/Common/Forms/Types/SmokingStatusType.php:71:        $printView .= "/>" . htmlspecialchars(xl('Quit'), ENT_NOQUOTES) . "&nbsp;</td>";
+src/Common/Forms/Types/SmokingStatusType.php:83:        $printView .= " />" . htmlspecialchars(xl('Never'), ENT_NOQUOTES) . "</td>";
+src/Common/Forms/Types/SmokingStatusType.php:90:        $printView .= " />" . htmlspecialchars(xl('N/A'), ENT_NOQUOTES) . "&nbsp;</td>";
+src/Common/Forms/Types/SmokingStatusType.php:197:            $s .= "<td class='text align-top'>" . htmlspecialchars((string) $resnote, ENT_NOQUOTES) . "&nbsp;&nbsp;</td>";
+src/Common/Forms/Types/SmokingStatusType.php:200:            $s .= "<td class='text align-top'><strong>" . htmlspecialchars(xl('Status'), ENT_NOQUOTES) . "</strong>:&nbsp;" . htmlspecialchars($res, ENT_NOQUOTES) . "&nbsp;</td>";
+src/Common/Forms/Types/SmokingStatusType.php:204:            $s .= "<td class='text align-top'>" . htmlspecialchars((string) $resdate, ENT_NOQUOTES) . "&nbsp;</td>";
+src/Common/Forms/Types/SmokingStatusType.php:207:        $s .= "<td class='text align-top'><strong>" . xl('Cigarette Pack Years') . '</strong> ' . htmlspecialchars((string) $smokingQuantity, ENT_NOQUOTES) . "&nbsp;</td>";
+src/Common/Forms/Types/SmokingStatusType.php:246:        $field_id_esc = htmlspecialchars((string) $field_id, ENT_QUOTES);
+src/Common/Forms/Types/SmokingStatusType.php:248:        $description = (isset($frow['description']) ? htmlspecialchars(xl_layout_label($frow['description']), ENT_QUOTES) : '');
+src/Common/Forms/Types/SmokingStatusType.php:277:        $fldlength = htmlspecialchars((string)$fldlength, ENT_QUOTES);
+src/Common/Forms/Types/SmokingStatusType.php:278:        $resnote = htmlspecialchars((string) $resnote, ENT_QUOTES);
+src/Common/Forms/Types/SmokingStatusType.php:279:        $resdate = htmlspecialchars((string)$resdate, ENT_QUOTES);
+src/Gacl/Gacl.php:153:                error_log("CHECK SSL CIPHER IN GACL ADODB: " . htmlspecialchars(print_r($this->db->Execute("SHOW STATUS LIKE 'Ssl_cipher';")->fields, true), ENT_QUOTES));
+src/Gacl/GaclApi.php:1332:                        $text = $spacing.htmlspecialchars((string) $name,ENT_QUOTES);
+src/Gacl/GaclApi.php:1341:                        $text = $spacing." ".htmlspecialchars((string) $name,ENT_QUOTES);
+src/PostCalendar/ViewModel/CalendarRenderDataBuilder.php:505:                $entry['inLabelContent'] = htmlspecialchars($dispStartH . ':' . $startM, ENT_QUOTES) . ' ' . $bodyContent;
+src/Services/Qrda/ExportCat3Service.php:476:        return htmlspecialchars((string) $content, ENT_XML1 | ENT_COMPAT, 'UTF-8');
+tests/Tests/Isolated/Billing/EdiHistory/X12FileIsolatedTest.php:36:        return htmlspecialchars($value ?? '', ENT_NOQUOTES);
+tests/Tests/Isolated/Common/Utils/PaginationUtilsTest.php:26:        return htmlspecialchars(($text ?? ''), ENT_NOQUOTES);
+tests/Tests/Isolated/Common/Utils/PaginationUtilsTest.php:33:        return htmlspecialchars(($text ?? ''), ENT_QUOTES);
+tests/Tests/Isolated/Modules/FaxSMS/Notification/runner_test_stubs.php:57:                return htmlspecialchars($value, ENT_NOQUOTES);
+tests/Tests/Isolated/Modules/FaxSMS/Notification/runner_test_stubs.php:60:                return htmlspecialchars((string) $value, ENT_NOQUOTES);
+tests/Tests/Services/Common/Layouts/FieldRenderingSnapshotTest.php:528:        // arguments to substr(), htmlspecialchars(), etc.). Those are real

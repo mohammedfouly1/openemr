@@ -1,0 +1,24 @@
+# slug: js_docwrite
+# description: document.write sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e document.write -- *.js *.php HEAD
+# generated: 2026-08-07T06:30:37Z
+#
+interface/easipro/pro.php:178:                    document.write(jqXHR.responseText + ':' + textStatus + ':' + errorThrown);
+interface/easipro/pro.php:226:                                document.write(jqXHR.responseText + ':' + textStatus + ':' + errorThrown);
+interface/main/calendar/modules/PostCalendar/pnincludes/ColorPicker2.js:70:    document.writeln("<div id=\"colorPickerDiv\" style=\"position:absolute;visibility:hidden;\"> </div>");
+interface/main/calendar/modules/PostCalendar/pnincludes/PopupWindow.js:115:            d.document.writeln(this.contents);
+interface/main/calendar/modules/PostCalendar/pnincludes/PopupWindow.js:121:            this.popupWindow.document.writeln(this.contents);
+interface/main/messages/messages.php:1156:                win.document.write("<iframe width='100%' height='100%' style='border:none;' src='" + dataUrl + "'></iframe>");
+interface/modules/custom_modules/oe-module-faxsms/public/js/messageUI.js:403:        win.document.write("<iframe width='100%' height='100%' style='border:none;' src='" + dataUrl + "'></iframe>");
+interface/modules/zend_modules/public/js/lib/virtualpaginate.js:16:document.write('<style type="text/css">' //write out CSS for class ".hidepeice" that hides pieces of contents within pages
+interface/patient_file/report/patient_report.php:667:            view.document.write(response);
+library/js/CategoryTreeMenu.js:154:* to the layer (or document.write()s it)
+library/js/CategoryTreeMenu.js:257:			* document.write()ing the string: '<div style="display:...' will screw up nn4.x
+library/js/CategoryTreeMenu.js:317:		document.write(this.output);
+library/js/DocumentTreeMenu.js:154:* to the layer (or document.write()s it)
+library/js/DocumentTreeMenu.js:257:			* document.write()ing the string: '<div style="display:...' will screw up nn4.x
+library/js/DocumentTreeMenu.js:310:		document.write(this.output);
+library/spreadsheet.inc.php:721:            echo "<script>document.write(genStatic('$cellstatic'));</script>";
+src/Common/Auth/OpenIDConnect/Entities/ServerScopeListEntity.php:220:                "user/document.write",
+tests/Tests/Api/ApiTestClient.php:128:        'user/document.write',

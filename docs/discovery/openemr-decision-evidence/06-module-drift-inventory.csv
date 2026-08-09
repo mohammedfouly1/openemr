@@ -1,0 +1,10 @@
+module,module_path,exists_in_fork,exists_in_upstream_stable,exists_in_upstream_master,tracked_in_fork,composer_package,composer_version,byte_identical_to_stable,byte_identical_to_master,added_files,deleted_files,modified_files,untracked_files,classification,recommended_ownership,confidence
+(root-files),interface/modules/custom_modules/,TRUE,TRUE,TRUE,TRUE,,,TRUE,TRUE,0,0,0,0,upstream_bundled,upstream,CONFIRMED
+oe-module-claimrev-connect,interface/modules/custom_modules/oe-module-claimrev-connect,FALSE,FALSE,FALSE,FALSE,claimrevolution/oe-module-claimrev-connect,v2.1.6,FALSE,FALSE,0,0,0,0,composer_installed_only,composer,CONFIRMED
+oe-module-comlink-telehealth,interface/modules/custom_modules/oe-module-comlink-telehealth,TRUE,TRUE,TRUE,TRUE,,,FALSE,TRUE,0,0,1,0,upstream_bundled_modified,mixed,CONFIRMED
+oe-module-dashboard-context,interface/modules/custom_modules/oe-module-dashboard-context,TRUE,TRUE,TRUE,TRUE,,,TRUE,TRUE,0,0,0,0,upstream_bundled,upstream,CONFIRMED
+oe-module-dorn,interface/modules/custom_modules/oe-module-dorn,TRUE,TRUE,TRUE,TRUE,,,TRUE,FALSE,0,0,0,0,upstream_bundled,upstream,CONFIRMED
+oe-module-ehi-exporter,interface/modules/custom_modules/oe-module-ehi-exporter,TRUE,TRUE,TRUE,TRUE,,,TRUE,FALSE,0,0,0,0,upstream_bundled,upstream,CONFIRMED
+oe-module-faxsms,interface/modules/custom_modules/oe-module-faxsms,TRUE,TRUE,TRUE,TRUE,,,TRUE,FALSE,0,0,0,0,upstream_bundled,upstream,CONFIRMED
+oe-module-prior-authorizations,interface/modules/custom_modules/oe-module-prior-authorizations,TRUE,TRUE,TRUE,TRUE,,,TRUE,TRUE,0,0,0,0,upstream_bundled,upstream,CONFIRMED
+oe-module-weno,interface/modules/custom_modules/oe-module-weno,TRUE,TRUE,TRUE,TRUE,,,TRUE,FALSE,0,0,0,0,upstream_bundled,upstream,CONFIRMED

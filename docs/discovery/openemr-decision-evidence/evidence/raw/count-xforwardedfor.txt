@@ -1,0 +1,18 @@
+# slug: xforwardedfor
+# description: X-Forwarded-For handling
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -in -e X_FORWARDED_FOR -e X-Forwarded-For -- *.php *.conf *.yml HEAD
+# generated: 2026-08-07T06:31:16Z
+#
+ci/nginx/nginx.conf:13:                      '"$http_user_agent" "$http_x_forwarded_for"';
+docker/library/dockers/dev-nginx/nginx.conf:13:                      '"$http_user_agent" "$http_x_forwarded_for"';
+library/sanitize.inc.php:35:    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+library/sanitize.inc.php:37:        $forwardIp = $_SERVER['HTTP_X_FORWARDED_FOR'];
+portal/patient/fwk/libs/verysimple/HTTP/RequestUtil.php:47:     * @see http://en.wikipedia.org/wiki/X-Forwarded-For
+portal/patient/fwk/libs/verysimple/HTTP/RequestUtil.php:56:        if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
+portal/patient/fwk/libs/verysimple/HTTP/RequestUtil.php:57:            return $_SERVER ['HTTP_X_FORWARDED_FOR'];
+portal/patient/fwk/libs/verysimple/HTTP/RequestUtil.php:60:        if (array_key_exists('X_FORWARDED_FOR', $_SERVER)) {
+portal/patient/fwk/libs/verysimple/HTTP/RequestUtil.php:61:            return $_SERVER ['X_FORWARDED_FOR'];
+tests/Tests/Isolated/Common/Logging/EventAuditLoggerAuthFailureTest.php:48:        unset($_SERVER['HTTP_X_FORWARDED_FOR']);
+tests/Tests/Isolated/Common/Logging/EventAuditLoggerAuthFailureTest.php:53:        unset($_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_X_FORWARDED_FOR']);
+tests/Tests/Isolated/Common/Logging/EventAuditLoggerAuthFailureTest.php:201:        $_SERVER['HTTP_X_FORWARDED_FOR'] = '10.0.0.1';

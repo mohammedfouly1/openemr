@@ -1,0 +1,36 @@
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:363:$token = $this->crypto->encryptStandard((string)$payload);
+interface/modules/custom_modules/oe-module-faxsms/src/RCVoice/VoiceFunctionsTrait.php:76:$content = $this->crypto->encryptStandard((string)json_encode(['secret' => $secret]));
+src/BC/Crypto/ContextualEncryptionTrait.php:28:return $this->encryptStandard($value, keySource: KeySource::Drive);
+src/BC/Crypto/ContextualEncryptionTrait.php:39:return $this->encryptStandard($value, keySource: KeySource::Database);
+src/BC/Crypto/Crypto.php:70:public function encryptStandard(?string $value, KeySource $keySource = KeySource::Drive): string
+src/Common/Crypto/CryptoGen.php:90:public function encryptStandard(?string $value, KeySource $keySource = KeySource::Drive): string
+src/Common/Crypto/CryptoGen.php:482:: $this->encryptStandard($key, keySource: KeySource::Database);
+src/Common/Crypto/CryptoInterface.php:24:public function encryptStandard(?string $value, KeySource $keySource = KeySource::Drive): string;
+src/FHIR/SMART/SMARTLaunchToken.php:132:$launchParams = $cryptoGen->encryptStandard($jsonEncoded !== false ? $jsonEncoded : null);
+tests/Tests/Fixtures/CryptoFixtureManager.php:39:* V3 introduced the encryptStandard()/decryptStandard() wrapper API to
+tests/Tests/Fixtures/CryptoFixtureManager.php:41:* algorithm remained identical - v3's encryptStandard() simply called
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:95:self::assertSame('', $this->crypto->encryptStandard(null));
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:100:self::assertSame('', $this->crypto->encryptStandard(''));
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:105:$encrypted = $this->crypto->encryptStandard('test data');
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:114:$encrypted = $this->crypto->encryptStandard($plaintext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:124:$encrypted1 = $this->crypto->encryptStandard($plaintext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:125:$encrypted2 = $this->crypto->encryptStandard($plaintext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:244:$encrypted = $this->crypto->encryptStandard('test data');
+tests/Tests/Isolated/RestControllers/Authorization/EhrLaunchPatientContextTest.php:46:public function encryptStandard(?string $value, KeySource $keySource = KeySource::Drive): string
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:107:$result = $this->cryptoGen->encryptStandard('');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:115:$result = $this->cryptoGen->encryptStandard(null);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:124:$result = $this->cryptoGen->encryptStandard($testValue);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:145:$result = $mockCryptoGen->encryptStandard($testValue, keySource: KeySource::Database);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:168:$encrypted = $this->cryptoGen->encryptStandard($originalValue);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:315:$encrypted = $this->cryptoGen->encryptStandard($testData);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:351:$encrypted = $this->cryptoGen->encryptStandard($largeData);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:362:$encrypted = $this->cryptoGen->encryptStandard($specialData);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:373:$encrypted = $this->cryptoGen->encryptStandard($binaryData);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:389:$encrypted = $this->cryptoGen->encryptStandard($testData);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:460:$encrypted = $this->cryptoGen->encryptStandard($testData);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:497:$encrypted = $this->cryptoGen->encryptStandard($testData); // Current version
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:562:$encrypted = $this->cryptoGen->encryptStandard('');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:627:$encryptedKey = $mockCryptoGenForEncryption->encryptStandard($rawKey, keySource: KeySource::Database);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:712:$mockCryptoGen->encryptStandard('test data');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:761:$mockCryptoGen->encryptStandard('non_empty_data', keySource: KeySource::Database);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:961:$mockCryptoGen->encryptStandard('test data', keySource: KeySource::Drive);

@@ -1,0 +1,54 @@
+# slug: doctrine_dbal
+# description: Doctrine DBAL usage sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e Doctrine\\DBAL -- *.php HEAD
+# generated: 2026-08-07T06:29:56Z
+#
+config/database.php:16:use Doctrine\DBAL\{
+db/Migrations/Version00000000000000.php:15:use Doctrine\DBAL\Schema\Schema;
+interface/main/calendar/includes/pnAPI.php:3:use Doctrine\DBAL\Connection;
+interface/main/calendar/includes/pnAPI.php:113:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/includes/pnAPI.php:162:        } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/includes/pnMod.php:59:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/includes/pnMod.php:107:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/includes/pnMod.php:143:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/includes/pnMod.php:190:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/includes/pnMod.php:238:    } catch (Doctrine\DBAL\Exception $e) {
+interface/main/calendar/includes/pnMod.php:296:        } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/includes/pnMod.php:351:    } catch (Doctrine\DBAL\Exception $e) {
+interface/main/calendar/includes/pnMod.php:542:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/modules/PostCalendar/common.api.php:514:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/modules/PostCalendar/common.api.php:565:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/modules/PostCalendar/pnadminapi.php:42:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/modules/PostCalendar/pnadminapi.php:58:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/modules/PostCalendar/pnadminapi.php:117:    } catch (Doctrine\DBAL\Exception) {
+interface/main/calendar/modules/PostCalendar/pnuserapi.php:909:    } catch (Doctrine\DBAL\Exception $e) {
+interface/main/calendar/modules/PostCalendar/pnuserapi.php:1234:    } catch (Doctrine\DBAL\Exception $e) {
+src/BC/Database.php:15:use Doctrine\DBAL\{
+src/BC/DatabaseConnectionFactory.php:8:use Doctrine\DBAL\{
+src/BC/DatabaseConnectionOptions.php:15:use Doctrine\DBAL\DriverManager;
+src/Common/Database/ConnectionManager.php:22:use Doctrine\DBAL\Connection;
+src/Common/Logging/Audit/LogTablesSink.php:20:use Doctrine\DBAL\Connection;
+src/Common/Logging/BreakglassChecker.php:17:use Doctrine\DBAL\Connection;
+src/Core/Migrations/CreateTableTrait.php:15:use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
+src/Core/Migrations/CreateTableTrait.php:16:use Doctrine\DBAL\Schema\Table;
+src/Encryption/Storage/PlaintextKeyInDbKeysTable.php:15:use Doctrine\DBAL\Connection;
+src/Entities/Code.php:15:use Doctrine\DBAL\Types\Types;
+src/Entities/CodeType.php:15:use Doctrine\DBAL\Types\Types;
+src/Services/HolidayService.php:25:use Doctrine\DBAL\Connection;
+src/Services/HolidayService.php:26:use Doctrine\DBAL\Exception as DbalException;
+src/Services/HolidayService.php:101:        // Doctrine\DBAL\Connection from a service. Until the BC layer settles,
+tests/Tests/BC/DatabaseTest.php:15:use Doctrine\DBAL\{Connection, Result};
+tests/Tests/Isolated/Common/Database/ConnectionManagerTest.php:7:use Doctrine\DBAL\Connection;
+tests/Tests/Isolated/Common/Logging/Audit/LogTablesSinkTest.php:17:use Doctrine\DBAL\Connection;
+tests/Tests/Isolated/Common/Logging/BreakglassCheckerTest.php:17:use Doctrine\DBAL\Connection;
+tests/Tests/Isolated/Core/Migrations/CreateTableTraitTest.php:15:use Doctrine\DBAL\Connection;
+tests/Tests/Isolated/Core/Migrations/CreateTableTraitTest.php:16:use Doctrine\DBAL\Platforms\AbstractPlatform;
+tests/Tests/Isolated/Core/Migrations/CreateTableTraitTest.php:17:use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+tests/Tests/Isolated/Core/Migrations/CreateTableTraitTest.php:18:use Doctrine\DBAL\Schema\Schema;
+tests/Tests/Isolated/Core/Migrations/CreateTableTraitTest.php:19:use Doctrine\DBAL\Schema\Table;
+tests/Tests/Isolated/Encryption/Storage/PlaintextKeyInDbKeysTableTest.php:15:use Doctrine\DBAL\Connection;
+tests/Tests/Isolated/Encryption/Storage/PlaintextKeyInDbKeysTableTest.php:16:use Doctrine\DBAL\Query\QueryBuilder;
+tests/Tests/Isolated/Services/HolidayServiceTest.php:25:use Doctrine\DBAL\Connection;
+tests/Tests/Isolated/Services/HolidayServiceTest.php:26:use Doctrine\DBAL\DriverManager;
+tests/Tests/Isolated/Services/HolidayServiceTest.php:27:use Doctrine\DBAL\Exception as DbalException;

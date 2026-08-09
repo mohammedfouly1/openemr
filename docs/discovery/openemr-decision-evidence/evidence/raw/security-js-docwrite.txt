@@ -1,0 +1,11 @@
+interface/main/calendar/modules/PostCalendar/pnincludes/ColorPicker2.js:70:document.writeln("<div id=\"colorPickerDiv\" style=\"position:absolute;visibility:hidden;\"> </div>");
+interface/main/calendar/modules/PostCalendar/pnincludes/PopupWindow.js:115:d.document.writeln(this.contents);
+interface/main/calendar/modules/PostCalendar/pnincludes/PopupWindow.js:121:this.popupWindow.document.writeln(this.contents);
+interface/modules/custom_modules/oe-module-faxsms/public/js/messageUI.js:403:win.document.write("<iframe width='100%' height='100%' style='border:none;' src='" + dataUrl + "'></iframe>");
+interface/modules/zend_modules/public/js/lib/virtualpaginate.js:16:document.write('<style type="text/css">' //write out CSS for class ".hidepeice" that hides pieces of contents within pages
+library/js/CategoryTreeMenu.js:154:* to the layer (or document.write()s it)
+library/js/CategoryTreeMenu.js:257:* document.write()ing the string: '<div style="display:...' will screw up nn4.x
+library/js/CategoryTreeMenu.js:317:document.write(this.output);
+library/js/DocumentTreeMenu.js:154:* to the layer (or document.write()s it)
+library/js/DocumentTreeMenu.js:257:* document.write()ing the string: '<div style="display:...' will screw up nn4.x
+library/js/DocumentTreeMenu.js:310:document.write(this.output);

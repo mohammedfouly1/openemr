@@ -1,0 +1,69 @@
+# slug: encrypt_fs
+# description: encryptForFilesystem sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e ForFilesystem -- *.php HEAD
+# generated: 2026-08-07T06:30:51Z
+#
+.phpstan/baseline/argument.type.php:720:    'message' => '#^Parameter \\#1 \\$value of method OpenEMR\\\\Common\\\\Crypto\\\\CryptoInterface\\:\\:encryptForFilesystem\\(\\) expects string\\|null, string\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:2070:    'message' => '#^Parameter \\#1 \\$value of method OpenEMR\\\\Common\\\\Crypto\\\\CryptoInterface\\:\\:encryptForFilesystem\\(\\) expects string\\|null, string\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:19420:    'message' => '#^Parameter \\#1 \\$value of method OpenEMR\\\\Common\\\\Crypto\\\\CryptoInterface\\:\\:encryptForFilesystem\\(\\) expects string\\|null, string\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:19455:    'message' => '#^Parameter \\#1 \\$value of method OpenEMR\\\\Common\\\\Crypto\\\\CryptoInterface\\:\\:encryptForFilesystem\\(\\) expects string\\|null, string\\|false given\\.$#',
+controllers/C_Document.class.php:764:                        $document = $this->cryptoGen->encryptForFilesystem(file_get_contents($to_file_tmp_name));
+controllers/C_Document.class.php:922:                        $to_file_encrypted = $this->cryptoGen->encryptForFilesystem(file_get_contents($to_file_tmp_name));
+controllers/C_Document.class.php:1273:            $LOG = $this->cryptoGen->encryptForFilesystem($LOG);
+interface/billing/edi_271.php:59:        $uploadedFile = $cryptoGen->encryptForFilesystem($uploadedFile);
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1673:            ->encryptForFilesystem($content);
+interface/modules/custom_modules/oe-module-ehi-exporter/src/Services/EhiExporter.php:679:        $encryptedContents = $this->cryptoGen->encryptForFilesystem($dataContents);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AuthenticateTrait.php:170:        $encryptedData = $this->crypto->encryptForFilesystem($jsonData);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:615:            file_put_contents($file_name, $this->crypto->encryptForFilesystem(base64_decode((string)$faxImage)));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:711:            $bytes = file_put_contents($tmp, $this->crypto->encryptForFilesystem($decoded), LOCK_EX);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/FaxDocumentService.php:129:                // patient-matched branch above. encryptForFilesystem is a
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/FaxDocumentService.php:132:                file_put_contents($mediaPath, $this->crypto->encryptForFilesystem($mediaContent));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:633:        file_put_contents($filePath, $this->crypto->encryptForFilesystem($data));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:690:            if (file_put_contents($where, $this->crypto->encryptForFilesystem($decodedContent)) !== false) {
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:514:        file_put_contents($filePath, $this->crypto->encryptForFilesystem($data));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:546:            if (file_put_contents($where, $this->crypto->encryptForFilesystem($decodedContent)) !== false) {
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:145:            $this->crypto->encryptForFilesystem($content)
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:205:            $this->crypto->encryptForFilesystem($content)
+interface/orders/receive_hl7_results.inc.php:1951:    return ServiceContainer::getCrypto()->encryptForFilesystem($content);
+interface/patient_file/letter.php:119:    $temp_bodytext = $cryptoGen->encryptForFilesystem($temp_bodytext);
+interface/patient_file/letter.php:275:    $temp_bodytext = $cryptoGen->encryptForFilesystem($temp_bodytext);
+interface/patient_file/letter.php:314:    $temp_bodytext = $cryptoGen->encryptForFilesystem($temp_bodytext);
+interface/super/manage_document_templates.php:135:        $storedData = $cryptoGen->encryptForFilesystem($fileData);
+interface/super/manage_site_files.php:54:        $fileData = ServiceContainer::getCrypto()->encryptForFilesystem($fileData);
+library/classes/Document.class.php:1003:            $document = $this->is_encrypted() ? $cryptoGen->encryptForFilesystem($data) : base64_encode($data);
+library/classes/Document.class.php:1006:                    $th_document = $cryptoGen->encryptForFilesystem($thumbnail_data);
+library/classes/Document.class.php:1081:            $storedData = $cryptoGen->encryptForFilesystem($data);
+library/classes/Document.class.php:1093:                $storedThumbnailData = $cryptoGen->encryptForFilesystem($thumbnail_data);
+src/BC/Crypto/ContextualEncryptionTrait.php:31:    public function encryptForFilesystem(?string $value): string
+src/BC/Crypto/ContextualEncryptionTrait.php:36:        if (!$this->shouldEncryptForFilesystem) {
+src/BC/Crypto/ContextualEncryptionTrait.php:108:            return $this->shouldEncryptForFilesystem && $version === KeyVersion::CURRENT;
+src/BC/Crypto/ContextualEncryptionTrait.php:111:            return !$this->shouldEncryptForFilesystem;
+src/BC/Crypto/Crypto.php:53:        private bool $shouldEncryptForFilesystem,
+src/BC/Crypto/Crypto.php:66:            shouldEncryptForFilesystem: OEGlobalsBag::getInstance()->getBoolean('drive_encryption'),
+src/Billing/BillingProcessor/BillingLogger.php:108:            $this->hlog = $this->cryptoGen->encryptForFilesystem($this->hlog);
+src/Common/Crypto/CryptoGen.php:70:    private readonly bool $shouldEncryptForFilesystem;
+src/Common/Crypto/CryptoGen.php:76:        ?bool $shouldEncryptForFilesystem = null,
+src/Common/Crypto/CryptoGen.php:83:        $this->shouldEncryptForFilesystem = $shouldEncryptForFilesystem
+src/Common/Crypto/CryptoInterface.php:61:    public function encryptForFilesystem(?string $value): string;
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:50:            shouldEncryptForFilesystem: true,
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:326:    public function testEncryptForFilesystemReturnsEncryptedString(): void
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:330:        $encrypted = $this->crypto->encryptForFilesystem($plaintext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:336:    public function testEncryptForFilesystemReturnsEmptyStringForNull(): void
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:338:        self::assertSame('', $this->crypto->encryptForFilesystem(null));
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:341:    public function testEncryptForFilesystemReturnsEmptyStringForEmptyString(): void
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:343:        self::assertSame('', $this->crypto->encryptForFilesystem(''));
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:346:    public function testEncryptForFilesystemPassesThroughPlaintextWhenDisabled(): void
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:352:            shouldEncryptForFilesystem: false,
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:356:        $result = $crypto->encryptForFilesystem($plaintext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:364:        $encrypted = $this->crypto->encryptForFilesystem($plaintext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:392:        $encrypted = $this->crypto->encryptForFilesystem('test data');
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:406:    public function testEncryptForFilesystemRoundTrip(): void
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:410:        $encrypted = $this->crypto->encryptForFilesystem($plaintext);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:422:            shouldEncryptForFilesystem: true,
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:473:            shouldEncryptForFilesystem: true,
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:488:            shouldEncryptForFilesystem: true,
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:540:            shouldEncryptForFilesystem: false,
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:555:            shouldEncryptForFilesystem: false,
+tests/Tests/Isolated/Billing/BillingLoggerTest.php:44:        $crypto->method('encryptForFilesystem')->willReturnArgument(0);
+tests/Tests/Isolated/RestControllers/Authorization/EhrLaunchPatientContextTest.php:45:            private bool $shouldEncryptForFilesystem = true;

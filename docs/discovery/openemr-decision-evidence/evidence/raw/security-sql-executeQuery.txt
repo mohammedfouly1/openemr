@@ -1,0 +1,8 @@
+D:\OpenEmr\interface\main\calendar\includes\pnAPI.php:111:$result = $conn->executeQuery($query, [_PN_CONFIG_MODULE]);
+D:\OpenEmr\interface\main\calendar\modules\PostCalendar\common.api.php:513:$result = $conn->executeQuery($sql);
+D:\OpenEmr\interface\main\calendar\modules\PostCalendar\common.api.php:564:$result = $conn->executeQuery($sql);
+D:\OpenEmr\interface\main\calendar\modules\PostCalendar\pnuserapi.php:908:$result = $conn->executeQuery($sql);
+D:\OpenEmr\interface\main\calendar\modules\PostCalendar\pnuserapi.php:1233:$result = $conn->executeQuery($sql);
+D:\OpenEmr\src\BC\Database.php:141:return $this->conn->executeQuery($sql, $bindings);
+D:\OpenEmr\src\Services\Qdm\QdmBuilder.php:74:$patientResult = $patientService->executeQuery();
+D:\OpenEmr\src\Services\Qdm\QdmBuilder.php:88:$result = $service->executeQuery();

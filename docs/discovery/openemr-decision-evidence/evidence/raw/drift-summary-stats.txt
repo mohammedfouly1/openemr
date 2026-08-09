@@ -1,0 +1,72 @@
+﻿CLASSIFICATION:
+  upstream_unmodified: 414 (96.1%)
+  custom_module: 15 (3.5%)
+  dependency_lock_change: 2 (0.5%)
+
+CHANGE-TYPE:
+  A: 67
+  D: 5
+  M: 358
+  R094: 1
+
+TOP-LEVEL DIR:
+  interface: files=79 +1159 -1015
+  tests: files=58 +28023 -158
+  src: files=49 +890 -673
+  .phpstan: files=44 +131 -1751
+  .github: files=28 +2571 -234
+  ci: files=27 +47 -32
+  tools: files=25 +3418 -3
+  (root): files=19 +1923 -239
+  library: files=19 +175 -58
+  ccdaservice: files=17 +316 -215
+  docker: files=16 +55 -45
+  templates: files=14 +42 -43
+  controllers: files=10 +44 -34
+  ccr: files=9 +30 -41
+  config: files=6 +148 -12
+  portal: files=5 +15 -15
+  custom: files=3 +38 -37
+  docs: files=2 +97 -26
+  gacl: files=1 +1 -1
+
+A: 67  D: 5  R: 1
+DELETED:
+  .github/docker-byte-identical.yml
+  .phpstan/baseline/openemr.forbiddenEval.php
+  ccr/uuid.php
+  interface/expand_contract_js.php
+  src/Common/Command/CreateReleaseChangelogCommand.php
+RENAMED:
+  R094 .github/workflows/validate-byte-identical.yml
+
+ADDED by top-level:
+  tests: 29
+  tools: 21
+  .github: 8
+  src: 6
+  .phpstan: 1
+  config: 1
+  library: 1
+
+TOP-20 SECOND-LEVEL:
+  tests/Tests: 51
+  .phpstan/baseline: 41
+  tools/release: 25
+  .github/workflows: 20
+  interface/forms: 18
+  src/Common: 18
+  interface/patient_file: 15
+  src/Services: 14
+  interface/modules: 12
+  docker/library: 10
+  templates/super: 10
+  interface/reports: 9
+  ccdaservice/oe-blue-button-generate: 7
+  interface/main: 7
+  .github/scripts: 5
+  ccdaservice/utils: 5
+  interface/usergroup: 5
+  src/Patient: 5
+  tests/bats: 5
+  interface/orders: 4

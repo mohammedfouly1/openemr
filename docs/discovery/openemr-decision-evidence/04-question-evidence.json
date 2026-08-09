@@ -1,0 +1,3291 @@
+{
+  "schema": "openemr-decision-evidence/question-evidence/v1",
+  "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+  "upstream_stable_tag": "v8_2_0",
+  "upstream_stable_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+  "upstream_master_commit_at_audit": "dad282635495c98ea9ab9c3577277933725d13eb",
+  "question_count": 75,
+  "questions": [
+    {
+      "question_id": "Q1",
+      "question_summary": "Add upstream remote and measure drift",
+      "category": "A-Foundational",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "upstream remote added (openemr/openemr) and drift measured. The fork has ZERO own commits: `git merge-base HEAD upstream/master` returns HEAD itself and `git rev-list --count upstream/master..HEAD` returns 0. The fork is an unmodified mirror of upstream master at 2026-07-04, 373 commits behind current upstream master and 17 commits diverged from the v8_2_0 release cut.",
+      "decision_impact": "Removes all fork-drift risk from every other decision. A rebase is a fast-forward today; the cost of the 'no core edits' policy is therefore zero to adopt right now and rises with every local patch added later.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git rev-list --count upstream/master..HEAD  -> 0",
+          "finding": "0 fork-only commits; HEAD is a strict ancestor of upstream/master"
+        },
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git merge-base HEAD upstream/master  -> 631f2b38...",
+          "finding": "merge-base equals HEAD, proving ancestry"
+        },
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git for-each-ref --sort=-creatordate refs/tags",
+          "finding": "v8_2_0 is the newest non-prerelease tag, dated 2026-07-08"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/05-upstream-fork-drift.md",
+        "docs/discovery/openemr-decision-evidence/07-core-modification-inventory.csv"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Peg to the release tag (v8_2_0 today) for production; keep upstream/master fetched for security triage. Adopt a strict no-core-edit policy NOW while the diff is provably empty.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q2",
+      "question_summary": "Upstream rebase cadence",
+      "category": "A-Foundational",
+      "classification": "business_product_decision",
+      "repository_verifiable": false,
+      "status": "external_decision_required",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Repository establishes the inputs but not the answer. Upstream cut 3 releases in ~5 months (v8_0_0_3 2026-03-25, v8_1_0 2026-06-01, v8_2_0 2026-07-08) and lands ~373 commits per ~5 weeks of master. Fork currently carries no patches, so rebase cost is presently zero.",
+      "decision_impact": "Cadence drives CI budget and on-call rota, not architecture. Because the fork has no patches, cadence can be chosen freely today and revisited once the first local patch lands.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git for-each-ref refs/tags; git rev-list --count HEAD..upstream/master",
+          "finding": "3 stable releases in 5 months; 373 commits accumulated since fork HEAD"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/05-upstream-fork-drift.md"
+      ],
+      "confidence": "HIGH",
+      "remaining_gap": "Engineering capacity and release-window policy are non-repository facts.",
+      "recommended_decision": "Provisional: rebase per upstream point release, plus out-of-band for security advisories. Revisit when the first class-c patch is carried.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q3",
+      "question_summary": "Target production orchestration platform",
+      "category": "A-Foundational",
+      "classification": "deployment_decision",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Repository contains ZERO Kubernetes, Helm, Nomad or Swarm artifacts (no Chart.yaml, no values.yaml, no kind: Deployment). It ships 26 docker-compose files, all for CI matrices and developer stacks. Whatever platform is chosen, the orchestration layer is greenfield.",
+      "decision_impact": "No sunk cost favours any platform; equally, no platform is 'already supported'. The compose files are not production artifacts and must not be mistaken for a deployment baseline.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/manifests/q3-deployment-artifacts.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git ls-files | grep -iE 'chart.yaml|values.yaml|k8s|nomad|swarm'",
+          "finding": "0 helm/k8s/nomad/swarm files; 26 docker-compose files, all under ci/ or docker/"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/manifests/q3-deployment-artifacts.txt"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": "Ops platform standard and budget are business decisions.",
+      "recommended_decision": "Provisional: Kubernetes + Helm with charts in a separate infra repo (see Q41). Nothing in-repo blocks or favours this.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q4",
+      "question_summary": "Central IdP choice",
+      "category": "B-Identity",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "OpenEMR ships a full OAuth2/OIDC authorization SERVER (league/oauth2-server under src/Common/Auth/OpenIDConnect/) but NO generic OIDC relying-party client. The only shipped federation example is Google Sign-In, which maps an external subject onto a LOCAL users row rather than replacing it.",
+      "decision_impact": "Fronting OpenEMR with Keycloak is not configuration - it requires new code (an RP callback or a trusted-header path that does not exist). The Google Sign-In pattern is the cheapest template, and it proves local users rows remain mandatory under any IdP.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Common/Auth/OpenIDConnect/",
+          "start_line": null,
+          "end_line": null,
+          "symbol": "OpenIDConnect",
+          "command": null,
+          "finding": "OpenEMR acts as an OIDC provider"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/login/login.php",
+          "start_line": 243,
+          "end_line": 244,
+          "symbol": null,
+          "command": "git grep -n google_signin HEAD",
+          "finding": "Google Sign-In branch - the only shipped RP-style federation"
+        },
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git grep -n REMOTE_USER HEAD  -> 0",
+          "finding": "no generic RP: zero REMOTE_USER and zero mod_auth_openidc matches tree-wide"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/11-authentication-authorization-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Keycloak as central IdP, OpenEMR as RP built on the Google Sign-In pattern; keep AuthUtils as break-glass. Budget real integration work - this is not a config toggle.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q5",
+      "question_summary": "Force MFA org-wide",
+      "category": "B-Identity",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "MFA implementation ships (MfaUtils, Totp.class.php, u2f-api.js) but there is NO enforcement global: `git grep force_mfa|mfa_required|gbl_force_mfa` returns 0 matches, and library/globals.inc.php contains no MFA global at all. AuthUtils.php has no MFA gate (only a doc comment at :12). Enrolment is per-user opt-in.",
+      "decision_impact": "Forcing MFA natively means a permanent class-c core patch re-applied every rebase. Enforcing it in the Q4 IdP makes it a policy setting. This is a strong independent argument for the external-IdP direction.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "library/globals.inc.php",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git grep -n 'mfa' HEAD -- library/globals.inc.php  -> 0",
+          "finding": "no MFA global exists"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Common/Auth/MfaUtils.php",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "MFA implementation present but not centrally enforceable"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Common/Auth/AuthUtils.php",
+          "start_line": 12,
+          "end_line": 12,
+          "symbol": null,
+          "command": null,
+          "finding": "no MFA enforcement branch; only a doc comment"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/11-authentication-authorization-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Enforce MFA at the Keycloak layer for all clinical/admin roles. Do NOT patch core to add a force-MFA global.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q6",
+      "question_summary": "Reverse-proxy trust for REMOTE_USER",
+      "category": "B-Identity",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "There is no REMOTE_USER support anywhere: 0 matches tree-wide, all file types. mod_auth_openidc: 0 matches. Separately, the ONE proxy header the app does consume is trusted blindly - collectIpAddresses() appends the entire client-supplied X-Forwarded-For chain unparsed, with no trusted-proxy allowlist anywhere (0 matches).",
+      "decision_impact": "Q6 is not 'do we trust it' but 'we would have to build it'. Meanwhile the existing XFF handling is an audit-log forging vector that must be fixed regardless of the IdP decision.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git grep -n REMOTE_USER HEAD",
+          "finding": "zero REMOTE_USER matches tree-wide"
+        },
+        {
+          "repository": "fork",
+          "file": "library/sanitize.inc.php",
+          "start_line": 29,
+          "end_line": 46,
+          "symbol": "collectIpAddresses",
+          "command": null,
+          "finding": "raw XFF chain concatenated without validation"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Common/Logging/Audit/LogTablesSink.php",
+          "start_line": 70,
+          "end_line": 70,
+          "symbol": null,
+          "command": null,
+          "finding": "unvalidated value reaches the log table"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Common/Logging/EventAuditLogger.php",
+          "start_line": 265,
+          "end_line": 266,
+          "symbol": null,
+          "command": null,
+          "finding": "and the auth-failure comments field"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/11-authentication-authorization-evidence.md",
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Do NOT build REMOTE_USER trust. Use a proper OIDC RP callback (Q4). Independently: parse XFF to the rightmost hop and add a trusted-proxy allowlist before Go-Live.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q7",
+      "question_summary": "Retire Google Sign-In path?",
+      "category": "B-Identity",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Google Sign-In is a complete, working federation path, not dead code: 2 globals (google_signin_enabled :2251, google_signin_client_id :2258), a users.google_signin_email column with a unique constraint, a login-page branch, and full admin CRUD across 3 screens. It is default-off (requires both globals).",
+      "decision_impact": "It is the only in-tree worked example of 'external subject -> local users row', which is exactly the mapping Keycloak will need. Deleting it destroys the reference implementation for Q4 at zero runtime saving.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "library/globals.inc.php",
+          "start_line": 2251,
+          "end_line": 2258,
+          "symbol": null,
+          "command": null,
+          "finding": "enable + client-id globals"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/login/login.php",
+          "start_line": 243,
+          "end_line": 244,
+          "symbol": null,
+          "command": null,
+          "finding": "login button rendered only when both globals set"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/usergroup/usergroup_admin.php",
+          "start_line": 397,
+          "end_line": 399,
+          "symbol": null,
+          "command": null,
+          "finding": "persists users.google_signin_email; NULL when empty"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/11-authentication-authorization-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "KEEP in code, leave disabled via globals. Use it as the implementation template for the Q4 IdP integration. Revisit removal only after Keycloak is in production.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q8",
+      "question_summary": "Tenant-admin UI for OAuth2 clients",
+      "category": "B-Identity",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Dynamic Client Registration is LIVE, not merely possible. The discovery document advertises \"registration_endpoint\": \"$base_url/registration\" and a listener routes requests containing '/registration'. The existing ClientAdminController provides revoke/inspect only.",
+      "decision_impact": "DCR covers self-registering partners, so a provisioning UI is a convenience, not a prerequisite. Q8 can be deferred without blocking any integration that can self-register.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/RestControllers/Authorization/OAuth2DiscoveryController.php",
+          "start_line": 72,
+          "end_line": 72,
+          "symbol": null,
+          "command": null,
+          "finding": "registration_endpoint advertised"
+        },
+        {
+          "repository": "fork",
+          "file": "src/RestControllers/Subscriber/OAuth2AuthorizationListener.php",
+          "start_line": 167,
+          "end_line": 167,
+          "symbol": null,
+          "command": null,
+          "finding": "DCR request routing"
+        },
+        {
+          "repository": "fork",
+          "file": "src/FHIR/SMART/ClientAdminController.php",
+          "start_line": 46,
+          "end_line": 46,
+          "symbol": null,
+          "command": null,
+          "finding": "existing admin surface is revoke/inspect only"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/11-authentication-authorization-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "DCR only for Day 1. Build the hand-provisioning UI when the first partner that cannot self-register appears.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q9",
+      "question_summary": "Fork ACL policy: bump v_acl=14 or freeze at 13?",
+      "category": "B-Identity",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "$v_acl = 13 at version.php:42 (alongside $v_database = 541 at :34). acl_upgrade.php reads the installed version via AclExtended::getAclVersion() and runs a SEQUENTIAL integer ladder of `$upgrade_acl = N; if ($acl_version < $upgrade_acl) {...}` blocks. The counter has no namespace.",
+      "decision_impact": "Mechanically confirms the never-bump rule: if the fork writes a 14 block and upstream later ships its own 14, a rebased site that already recorded 14 will SILENTLY SKIP upstream's block. Same failure class as $v_database.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "version.php",
+          "start_line": 34,
+          "end_line": 42,
+          "symbol": null,
+          "command": null,
+          "finding": "$v_acl = 13, $v_database = 541"
+        },
+        {
+          "repository": "fork",
+          "file": "acl_upgrade.php",
+          "start_line": 14,
+          "end_line": 39,
+          "symbol": null,
+          "command": null,
+          "finding": "sequential integer ladder keyed on a namespace-free counter"
+        },
+        {
+          "repository": "fork",
+          "file": "acl_upgrade.php",
+          "start_line": 65,
+          "end_line": 67,
+          "symbol": "AclExtended::getAclVersion",
+          "command": null,
+          "finding": "installed version read, defaults to 0"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/11-authentication-authorization-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "FREEZE at 13. Never author a downstream ACL upgrade block. Put all new authorization in a saas_* layer above gacl.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q10",
+      "question_summary": "Complete standalone-encounter SMART launch",
+      "category": "B-Identity",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "contradicted",
+      "recommended_status": "LOCKED",
+      "finding": "PREMISE CORRECTED. The CapabilityStatement does NOT falsely advertise standalone-encounter launch - context-standalone-encounter is explicitly COMMENTED OUT at Capability.php:50, and the CONTEXT_STANDALONE_ENCOUNTER constant (:103) is declared but never referenced. The real defect is different: CONTEXT_EHR_ENCOUNTER IS advertised (:48) while the launch/encounter scope is absent from every grantable scope list (ServerScopeListEntity.php:53 and ScopeRepository.php:248 list launch/patient only). All 4 launch/encounter matches are documentation.",
+      "decision_impact": "Scope shrinks and splits: a 2-line scope-list fix resolves the advertised-vs-grantable inconsistency; the encounter picker is a separate, larger deliverable. Docs currently show examples that would fail.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/FHIR/SMART/Capability.php",
+          "start_line": 48,
+          "end_line": 52,
+          "symbol": null,
+          "command": null,
+          "finding": "CONTEXT_EHR_ENCOUNTER advertised; standalone commented out"
+        },
+        {
+          "repository": "fork",
+          "file": "src/FHIR/SMART/Capability.php",
+          "start_line": 103,
+          "end_line": 103,
+          "symbol": null,
+          "command": null,
+          "finding": "CONTEXT_STANDALONE_ENCOUNTER declared and never used"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Common/Auth/OpenIDConnect/Entities/ServerScopeListEntity.php",
+          "start_line": 53,
+          "end_line": 53,
+          "symbol": null,
+          "command": null,
+          "finding": "launch/patient only"
+        },
+        {
+          "repository": "fork",
+          "file": "Documentation/api/SMART_ON_FHIR.md",
+          "start_line": 793,
+          "end_line": 845,
+          "symbol": null,
+          "command": null,
+          "finding": "docs show launch/encounter examples that cannot be granted"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/11-authentication-authorization-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Fix the advertised-vs-grantable inconsistency first (add launch/encounter to both scope lists, or stop advertising context-ehr-encounter). Treat the encounter picker as a separate deliverable tied to NPHIES.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q11",
+      "question_summary": "DB-per-tenant vs shared-DB",
+      "category": "C-Tenancy",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "The true shared-DB refactor surface is 6,785 data-access call sites, not the 1,875 previously estimated: sqlStatement( 2,025 + QueryUtils:: 1,653 + sqlQuery( 1,454 + sqlFetchArray( 1,354 + sqlInsert( 251 + Doctrine DBAL 48, plus 202 OE_SITE_DIR file-path sites. No core table has a tenant_id/site_id column. Tenancy is enforced by which sqlconf.php is loaded - the connection IS the boundary.",
+      "decision_impact": "Model B is ~3.6x more expensive than the estimate the decision was based on. Model A is what the runtime already implements. This is the single strongest quantitative argument in the audit.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/raw/remaining-counts.tsv",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "bash tools/discovery/openemr-decision-evidence/collect-remaining-evidence.sh",
+          "finding": "6,785 total data-access call sites, per-sink lists saved"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 277,
+          "end_line": 335,
+          "symbol": null,
+          "command": null,
+          "finding": "site id resolved then sqlconf.php loaded; connection is the tenancy boundary"
+        },
+        {
+          "repository": "fork",
+          "file": "sql/database.sql",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "no tenant_id/site_id discriminator on any core table"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/10-database-and-tenancy-evidence.md",
+        "docs/discovery/openemr-decision-evidence/16-control-plane-constraints.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "LOCK Model A (DB-per-tenant). Model B is not economically viable at 6,785 call sites.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q12",
+      "question_summary": "Tenant routing scheme",
+      "category": "C-Tenancy",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Hostname->site routing EXISTS but only for unauthenticated requests: interface/globals.php:295-297 and index.php:14 consult HTTP_HOST only when $ignoreAuth is set. Authenticated traffic resolves site from $_GET['site'] (wins) or session site_id. A regex allowlist at globals.php:304 is the sole guard.",
+      "decision_impact": "Subdomain routing for authenticated traffic needs a small, well-bounded globals.php patch (lift the HTTP_HOST branch out of the $ignoreAuth guard) PLUS per-subdomain cookie scoping (Q17). It is not free but it is small.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 283,
+          "end_line": 297,
+          "symbol": null,
+          "command": null,
+          "finding": "HTTP_HOST consulted only when auth is ignored"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 277,
+          "end_line": 281,
+          "symbol": null,
+          "command": null,
+          "finding": "$_GET['site'] takes precedence over session"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 304,
+          "end_line": 304,
+          "symbol": null,
+          "command": null,
+          "finding": "regex allowlist is the only validation of the site string"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/16-control-plane-constraints.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Subdomain-per-tenant, implemented as a minimal globals.php patch plus cookie scoping. Never expose ?site= publicly - it remains accepted and takes precedence.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q13",
+      "question_summary": "Tenant-count ceiling",
+      "category": "C-Tenancy",
+      "classification": "business_product_decision",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Repository establishes the binding constraints, not the number. Connection pooling is per-{Apache worker x DSN} (DatabaseConnectionFactory.php:113,137-151), so DB-per-tenant yields up to N_tenants x M_workers persistent handles. Cross-site iteration is an opendir(sites/) walk (admin.php:75-115). Background jobs run once per site per cron via bin/console --site=<name>.",
+      "decision_impact": "The ceiling is set by connection-handle math and per-site cron fan-out, both of which are measurable before committing. 500 tenants implies a jobs consolidator and pooling discipline.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/BC/DatabaseConnectionFactory.php",
+          "start_line": 113,
+          "end_line": 151,
+          "symbol": null,
+          "command": null,
+          "finding": "persistent p:host connections, per worker per DSN"
+        },
+        {
+          "repository": "fork",
+          "file": "admin.php",
+          "start_line": 75,
+          "end_line": 115,
+          "symbol": null,
+          "command": null,
+          "finding": "cross-site control plane is an opendir walk over sites/"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/16-control-plane-constraints.md"
+      ],
+      "confidence": "MEDIUM",
+      "remaining_gap": "Target tenant count is a commercial forecast.",
+      "recommended_decision": "Provisional: design for 500, revisit at 200. Disable connection pooling or cap workers; build a jobs consolidator before tenant 100.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q14",
+      "question_summary": "Per-tenant Apache/TLS/observability config location",
+      "category": "C-Tenancy",
+      "classification": "deployment_decision",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "No per-tenant vhost/TLS/log-shipping config exists in the repo. The only per-site executable seam is sites/<site>/config.php, require_once'd at interface/globals.php:649.",
+      "decision_impact": "Nothing in-repo to migrate; the decision is purely organisational. Note that sites/<site>/config.php is an arbitrary-PHP execution point per tenant and must be operator-controlled, never tenant-writable.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 649,
+          "end_line": 649,
+          "symbol": null,
+          "command": null,
+          "finding": "per-site arbitrary PHP require_once - the only per-site executable seam"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/16-control-plane-constraints.md",
+        "docs/discovery/openemr-decision-evidence/14-frontend-ui-evidence.md"
+      ],
+      "confidence": "HIGH",
+      "remaining_gap": null,
+      "recommended_decision": "Provisional: separate infra repo (matches Q41). Treat sites/<site>/config.php as operator-only.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q15",
+      "question_summary": "Cross-tenant analytics: Day-1 or Day-N?",
+      "category": "C-Tenancy",
+      "classification": "business_product_decision",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Under the locked Model A there is no cross-tenant query path: each site is a physically separate database with no shared identifiers, and site-local ids collide by design (two sites both have documents.id = 1). Cross-tenant analytics therefore requires an ETL into a warehouse keyed on (site_name, entity_id) or UUIDs.",
+      "decision_impact": "If analytics is Day-1, ETL scaffolding must be in the MVP and the id-namespacing rule must be enforced from the first custom table. Retrofitting is expensive.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "sql/database.sql",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "site-local ids collide across tenants; no global identifier space"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Services/InsuranceCompanyService.php",
+          "start_line": 433,
+          "end_line": 436,
+          "symbol": null,
+          "command": null,
+          "finding": "documented shared id-space; ids are site-local"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/10-database-and-tenancy-evidence.md",
+        "docs/discovery/openemr-decision-evidence/16-control-plane-constraints.md"
+      ],
+      "confidence": "HIGH",
+      "remaining_gap": null,
+      "recommended_decision": "Day-N for dashboards, but enforce the (site_name, entity_id) / UUID rule from day one so the ETL stays possible.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q16",
+      "question_summary": "Central identity across tenants at Day-1?",
+      "category": "C-Tenancy",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "The session cookie name is a global constant - CORE_SESSION_ID = 'OpenEMR' at src/Common/Session/SessionUtil.php:81 - so one browser holds one tenant login at a time. Additionally every human needs a LOCAL users row plus gacl_aro records per tenant DB; no code path consults an external authorization service.",
+      "decision_impact": "Cross-tenant SSO requires BOTH a cookie-naming patch (Q17) AND a central identity-to-local-user mapping. Authentication can federate; authorization cannot leave the tenant DB.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Common/Session/SessionUtil.php",
+          "start_line": 81,
+          "end_line": 81,
+          "symbol": null,
+          "command": null,
+          "finding": "cookie name is a global constant"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/login/login.php",
+          "start_line": 243,
+          "end_line": 244,
+          "symbol": null,
+          "command": null,
+          "finding": "Google Sign-In maps external subject onto a local users row"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/11-authentication-authorization-evidence.md",
+        "docs/discovery/openemr-decision-evidence/16-control-plane-constraints.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "No cross-tenant SSO Day-1. Federate authentication via Keycloak per tenant; keep authorization tenant-local.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q17",
+      "question_summary": "Per-tenant cookie names?",
+      "category": "C-Tenancy",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "CORE_SESSION_ID is a hardcoded constant 'OpenEMR' (SessionUtil.php:81). Namespacing it per site is a small, well-localised class-c patch, but it is a permanent carry across every rebase.",
+      "decision_impact": "Directly gates Q16 and interacts with Q12: subdomain routing without cookie scoping lets one tenant's cookie be presented to another tenant's host.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Common/Session/SessionUtil.php",
+          "start_line": 81,
+          "end_line": 81,
+          "symbol": null,
+          "command": null,
+          "finding": "hardcoded global cookie name"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/16-control-plane-constraints.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Accept the one-tenant-per-browser constraint Day-1, BUT set cookie Domain/Path per subdomain at the proxy so Q12 is safe. Patch SessionUtil only if Q16 flips.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q18",
+      "question_summary": "Arabic UI baseline: extend existing or greenfield?",
+      "category": "D-Saudi",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Arabic coverage measured at 47.53%: 6,290 Arabic rows out of 13,234 unique lang_constants in contrib/util/language_translations/currentLanguage_utf8.sql. The default installer ships EN-only (sql/database.sql:3569) so Arabic requires a post-install import. The frontend i18next layer reads the SAME lang_* tables (interface/main/tabs/main.php:335-349) - there is no separate JSON catalogue to maintain.",
+      "decision_impact": "Because the frontend already piggybacks on the backend catalogue, extending the SQL catalogue fixes both legacy and modern screens at once. Greenfield JSON would fork the catalogue in two.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "contrib/util/language_translations/currentLanguage_utf8.sql",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "6,290/13,234 = 47.53% Arabic coverage"
+        },
+        {
+          "repository": "fork",
+          "file": "sql/database.sql",
+          "start_line": 3569,
+          "end_line": 3569,
+          "symbol": null,
+          "command": null,
+          "finding": "installer ships EN-only"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/main/tabs/main.php",
+          "start_line": 335,
+          "end_line": 349,
+          "symbol": null,
+          "command": null,
+          "finding": "i18next fetches from the same lang_* tables"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Extend the existing SQL catalogue; do not start a parallel JSON catalogue. Budget translation of the missing 6,944 constants plus MSA terminology review.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q19",
+      "question_summary": "Hijri calendar policy",
+      "category": "D-Saudi",
+      "classification": "business_product_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Zero Hijri support exists: no matches for 'hijri', 'IntlCalendar', or 'moment-hijri' anywhere in tracked files. library/date_functions.php:43-54 is hard-Gregorian.",
+      "decision_impact": "Entirely greenfield: a HijriDate value type, PHP IntlCalendar wrappers, moment-hijri (~10 kB), dual-calendar pickers, and formatters for DOB/appointment/lab/PDF paths. Cost is driven by how many surfaces must show it.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "library/date_functions.php",
+          "start_line": 43,
+          "end_line": 54,
+          "symbol": null,
+          "command": null,
+          "finding": "hard-Gregorian date handling"
+        },
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git grep -i hijri HEAD  -> 0",
+          "finding": "zero hijri/IntlCalendar/moment-hijri matches"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Provisional: dual-display on appointment/billing screens, Gregorian-only on clinical timestamps. Scope by surface count, not by 'add Hijri support'.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q20",
+      "question_summary": "Currency policy",
+      "category": "D-Saudi",
+      "classification": "business_product_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "No multi-currency schema exists: no currency column on billing (sql/database.sql:245-278) or any financial table. Display symbol is a single global gbl_currency_symbol defaulting to '$' (library/globals.inc.php:820).",
+      "decision_impact": "SAR-only is nearly free (set one global, patch the FHIR hardcode per Q26). Multi-currency requires schema changes, an FX table, and currency-awareness in every report - a disproportionate cost for single-country KSA.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "sql/database.sql",
+          "start_line": 245,
+          "end_line": 278,
+          "symbol": null,
+          "command": null,
+          "finding": "no currency column on billing"
+        },
+        {
+          "repository": "fork",
+          "file": "library/globals.inc.php",
+          "start_line": 820,
+          "end_line": 820,
+          "symbol": null,
+          "command": null,
+          "finding": "single global currency symbol, defaults to $"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "SAR only. Set gbl_currency_symbol, fix Q26. Defer multi-currency until a second country is actually sold.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q21",
+      "question_summary": "ZATCA e-invoicing scope",
+      "category": "D-Saudi",
+      "classification": "regulatory_external_input",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Zero ZATCA support: no matches for zatca, fatoora, invoice_hash, qr_code_invoice, or e-invoice. Tax infrastructure is a rates registry only (list_options list_id='taxrate' at sql/database.sql:4354; codes.taxrates colon-list at :1135). There is NO tax-amount column on billing.",
+      "decision_impact": "Even ZATCA Phase 1 needs a new tax-amount persistence layer, not just a QR encoder - the schema cannot record the tax actually charged. Phase 2 adds XML signing, device onboarding and Fatoora API integration.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "sql/database.sql",
+          "start_line": 4354,
+          "end_line": 4354,
+          "symbol": null,
+          "command": null,
+          "finding": "tax rates registry exists but no tax-amount column on billing"
+        },
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git grep -i zatca HEAD  -> 0",
+          "finding": "zero zatca/fatoora matches"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": "ZATCA's binding compliance deadline for this taxpayer group.",
+      "recommended_decision": "Provisional Phase 2, but sequence it: (1) add tax-amount persistence, (2) Phase 1 QR, (3) Phase 2 clearance. Step 1 is a prerequisite for both.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q22",
+      "question_summary": "MSA vs Saudi-dialect terminology",
+      "category": "D-Saudi",
+      "classification": "business_product_decision",
+      "repository_verifiable": false,
+      "status": "external_decision_required",
+      "recommended_status": "PROVISIONAL",
+      "finding": "The bundled catalogue is MSA of unmeasured fidelity (47.53% coverage per Q18). The repository cannot adjudicate dialect preference.",
+      "decision_impact": "Affects translation cost and glossary maintenance, not architecture. Mixing the two is the worst outcome.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "contrib/util/language_translations/currentLanguage_utf8.sql",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "bundled catalogue is MSA"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md"
+      ],
+      "confidence": "LOW",
+      "remaining_gap": null,
+      "recommended_decision": "Provisional: MSA everywhere; revisit patient-portal wording only after user testing.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q23",
+      "question_summary": "Per-user timezone/language preference",
+      "category": "D-Saudi",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Timezone is site-wide: gbl_time_zone (library/globals.inc.php:777) applied at interface/globals.php:520, with a UTC default at bootstrap.php:30. Language is already per-session via language_choice, and a per-user override mechanism exists generically through user_settings (proven for css_header at globals.php:437-450).",
+      "decision_impact": "Saudi is a single timezone, so site-wide is sufficient there. Per-user language needs no new mechanism - user_settings already supports per-user global overrides.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "library/globals.inc.php",
+          "start_line": 777,
+          "end_line": 777,
+          "symbol": null,
+          "command": null,
+          "finding": "site-wide timezone global"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 520,
+          "end_line": 520,
+          "symbol": null,
+          "command": null,
+          "finding": "timezone applied per request"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 437,
+          "end_line": 450,
+          "symbol": null,
+          "command": null,
+          "finding": "user_settings overlay pattern already used for per-user globals"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Site-wide timezone (Asia/Riyadh). Per-user language toggle via the existing user_settings overlay - no new schema required.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q24",
+      "question_summary": "bootstrap-rtl sustainability",
+      "category": "D-Saudi",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "bootstrap-rtl is fetched by napa as a pinned single-commit GitHub archive of an unmaintained third-party fork (package.json:113). If that URL disappears the build breaks with no local copy.",
+      "decision_impact": "This is a live build-availability risk, not a styling preference. Vendoring is a same-day mitigation independent of any Bootstrap 5 decision.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "package.json",
+          "start_line": 113,
+          "end_line": 113,
+          "symbol": null,
+          "command": null,
+          "finding": "napa-pinned single-commit archive of an unmaintained fork"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Vendor the current zip into the repo IMMEDIATELY (removes the availability risk today). Plan the Bootstrap 5 native-RTL migration as a separate Phase-2 item.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q25",
+      "question_summary": "PDF Arabic fonts",
+      "category": "D-Saudi",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "No Arabic-capable font is tracked: git ls-files finds no amiri*, noto*naskh*, noto*sans*arabic*, or dejavu* font files. After composer install, mPDF's transitive DejaVuSans is the only fallback - a fallback, not a professional Arabic typeface. interface/themes/rtl_style_pdf.css does ship.",
+      "decision_impact": "Every Arabic PDF (invoices, prescriptions, future ZATCA output) renders with inadequate typography until a proper face is bundled. One-time ~5-10 MB cost, no downside.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git ls-files | grep -iE 'amiri|naskh|arabic'  -> 0",
+          "finding": "no Arabic font files tracked"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/themes/rtl_style_pdf.css",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "RTL PDF stylesheet ships"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Bundle Amiri and Noto Naskh Arabic; wire into the mPDF font map. Do this before any Arabic PDF is shown to a customer.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q26",
+      "question_summary": "Hardcoded USD in FHIR Coverage",
+      "category": "D-Saudi",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "src/Services/FHIR/FhirCoverageService.php:294 hard-codes 'USD', alongside 5 other USD hardcodes identified in the prior localization audit.",
+      "decision_impact": "Small, isolated patch. Because the fork carries zero patches today (Q1), an upstream PR keeps that record clean; a local wrapper starts the class-c patch ledger.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Services/FHIR/FhirCoverageService.php",
+          "start_line": 294,
+          "end_line": 294,
+          "symbol": null,
+          "command": null,
+          "finding": "hardcoded USD currency"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md",
+        "docs/discovery/openemr-decision-evidence/12-fhir-nphies-billing-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Upstream PR the fix (benefits every fork and preserves the zero-patch record). Carry a local wrapper only if the PR stalls past the NPHIES milestone.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q27",
+      "question_summary": "FHIR Claim submission architecture",
+      "category": "E-NPHIES",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Option A is blocked today: Coverage is read-only and Claim/ClaimResponse have NO HTTP surface. Option B is blocked by missing billing events (Q30) - src/Billing/ contains zero event dispatches. Option C (polling) works with zero core changes and is exactly what the shipped claimrev-connect module does.",
+      "decision_impact": "Only Option C is executable today without core patches. The evidence directly supports the phased plan rather than an architectural argument.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Billing/BillingProcessor/BillingProcessor.php",
+          "start_line": 161,
+          "end_line": 192,
+          "symbol": null,
+          "command": null,
+          "finding": "hard-coded if/elseif task selection; no events"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Services/FHIR/FhirCoverageService.php",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "Coverage is read-only"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/raw/count-rest_controllers.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "90 REST controllers; no Claim/ClaimResponse HTTP surface"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/12-fhir-nphies-billing-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Option C (background polling) for MVP, mirroring claimrev-connect. Migrate to Option A after the Q30 events and the Q28 write surface land.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q28",
+      "question_summary": "Ownership of FHIR write-surface build",
+      "category": "E-NPHIES",
+      "classification": "action_item",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "The type surface is partially free but the HTTP surface is absent. 103 FHIR service files and 90 REST controllers exist, with 491 FhirSearchParameterDefinition registrations - but Coverage(write), Claim, ClaimResponse, EOB, CoverageEligibilityRequest/Response and PaymentNotice have no controllers. FHIRClaim/FHIRClaimResponse data classes do exist under src/FHIR/R4/.",
+      "decision_impact": "Each resource is controller + FhirService mapping on top of an existing generated data class - a repeatable 1-2 sprint unit, not a research task.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/manifests/q62-fhir-service-files.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "103 FHIR service files"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/raw/count-rest_controllers.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "90 REST controllers, none for Claim/ClaimResponse"
+        },
+        {
+          "repository": "fork",
+          "file": "src/FHIR/R4/",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "FHIRClaim / FHIRClaimResponse data classes present"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/12-fhir-nphies-billing-evidence.md"
+      ],
+      "confidence": "HIGH",
+      "remaining_gap": "Per-resource data-class verification for EOB/Eligibility*/PaymentNotice not completed.",
+      "recommended_decision": "Fold into the NPHIES module deliverable that owns Q27. Verify EOB/Eligibility*/PaymentNotice data classes exist before sizing.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q29",
+      "question_summary": "x12_partners reuse vs new nphies_partners table",
+      "category": "E-NPHIES",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "x12_partners carries OAuth columns (x12_token_endpoint, x12_client_id, x12_client_secret) that would technically fit NPHIES. But the custom_ prefix is NOT reserved by upstream (zero baseline tables, zero upgrade files, zero module SQL use it), and shipped modules use vendor-slug prefixes instead.",
+      "decision_impact": "Reusing an X12-named table for Saudi FHIR overloads the semantics and complicates every rebase diff. A new table is cleaner and the prefix decision is settled by Q58.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/snippets/q68-custom-prefix-evidence.md",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "custom_ prefix unused and unreserved upstream"
+        },
+        {
+          "repository": "fork",
+          "file": "sql/database.sql",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "x12_partners OAuth columns exist but are X12-semantic"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/10-database-and-tenancy-evidence.md",
+        "docs/discovery/openemr-decision-evidence/12-fhir-nphies-billing-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "New saas_nphies_partners table (saas_ prefix per Q58). Do not overload x12_partners.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q30",
+      "question_summary": "Missing billing/core events: upstream PR or polling emulation?",
+      "category": "E-NPHIES",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "src/Billing/ contains NO event dispatch, no factory, no registry and no service-locator lookup. Task selection is a hard-coded if/elseif ladder keyed on $_POST['bn_*'] strings at BillingProcessor.php:161-192. There is no transaction boundary and no idempotency key; claim status is written row-by-row with auto-commit (GeneratorX12.php:151,168).",
+      "decision_impact": "Event-driven NPHIES is impossible today without a core patch. The absent transaction boundary also means an outbox pattern cannot be added without touching the same code.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Billing/BillingProcessor/BillingProcessor.php",
+          "start_line": 161,
+          "end_line": 192,
+          "symbol": null,
+          "command": null,
+          "finding": "hard-coded task ladder, no dispatch"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Billing/BillingProcessor/Tasks/GeneratorX12.php",
+          "start_line": 151,
+          "end_line": 168,
+          "symbol": null,
+          "command": null,
+          "finding": "row-by-row auto-commit, no transaction/idempotency"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/12-fhir-nphies-billing-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Do both in parallel: ship with polling (Q27 Option C), and open a narrow upstream PR converting the if/elseif ladder into a task registry plus one pre-dispatch event - a change confined to BillingProcessor.php.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q31",
+      "question_summary": "Keep claimrev-connect in Saudi deployments?",
+      "category": "E-NPHIES",
+      "classification": "business_product_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Verified empirically on a populated vendor/ tree (not available to the prior audit): claimrevolution/oe-module-claimrev-connect v2.1.6 is the ONLY openemr-module type package in vendor/composer/installed.json. Composer installs it as a REAL directory (not a symlink) of 134 files at interface/modules/custom_modules/oe-module-claimrev-connect, which .gitignore:15 excludes from tracking.",
+      "decision_impact": "It is a genuine runtime dependency of composer install, so removing it means editing composer.json - a fork patch. Disabling it at provisioning time costs nothing and keeps the zero-patch record intact.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "vendor/composer/installed.json",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "only openemr-module package; v2.1.6; install-path into custom_modules"
+        },
+        {
+          "repository": "fork",
+          "file": ".gitignore",
+          "start_line": 15,
+          "end_line": 15,
+          "symbol": null,
+          "command": null,
+          "finding": "module directory excluded from tracking because composer owns it"
+        },
+        {
+          "repository": "fork",
+          "file": "composer.json",
+          "start_line": 52,
+          "end_line": 52,
+          "symbol": null,
+          "command": null,
+          "finding": "runtime require ^2.1"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/08-dependency-runtime-inventory.csv"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Keep in composer.json (preserves zero-patch record and upstream test parity); disable in Saudi tenant provisioning defaults.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q32",
+      "question_summary": "Patient portal strategy",
+      "category": "F-Frontend",
+      "classification": "business_product_decision",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "The portal is a separate Smarty-based app with its own credentials (patient_access_onsite) and its own logo resolution (portal/index.php:62-64, portal/home.php:87,362), fronted by portal REST endpoints. Swapping it does not disturb the main UI.",
+      "decision_impact": "The isolation is real, which de-risks a greenfield SPA: it can be built alongside the existing portal and cut over per tenant.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "portal/index.php",
+          "start_line": 62,
+          "end_line": 64,
+          "symbol": null,
+          "command": null,
+          "finding": "portal has independent logo/theme resolution"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 486,
+          "end_line": 495,
+          "symbol": null,
+          "command": null,
+          "finding": "portal theme selected separately via patient_settings"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/14-frontend-ui-evidence.md"
+      ],
+      "confidence": "HIGH",
+      "remaining_gap": null,
+      "recommended_decision": "Provisional: rebrand for MVP, greenfield SPA in Phase 2, exploiting the portal's isolation to cut over tenant-by-tenant.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q33",
+      "question_summary": "Main-UI strategy",
+      "category": "F-Frontend",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Q72's scan corrects the '611 grid files' figure: 5,460 first-party UI files scanned, of which 575 are legacy iframe entry points or files they include, 1,098 shared templates, and 416 custom-module screens. Shell replacement means touching the legacy iframe population, not 611 arbitrary files.",
+      "decision_impact": "A full shell replacement is a multi-quarter project against a measured, not guessed, surface. Tab-by-tab SPA embedding is bounded and provable.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "18-q72-ui-responsiveness-inventory.csv",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "5,460 files classified; 575 legacy iframe entry/included files"
+        },
+        {
+          "repository": "fork",
+          "file": "19-q72-ui-responsiveness-summary.md",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "reconciled classification totals"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/18-q72-ui-responsiveness-inventory.csv",
+        "docs/discovery/openemr-decision-evidence/19-q72-ui-responsiveness-summary.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Stay on BS4/Twig; embed SPAs tab-by-tab as new modules require them. Do not attempt shell replacement.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q34",
+      "question_summary": "Themes: how many Saudi variants?",
+      "category": "F-Frontend",
+      "classification": "business_product_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Themes are shared immutable CSS under public/themes/, chosen by FILENAME via globals.css_header with a per-user user_settings override, and gated by a file_exists() check at interface/globals.php:476 that blocks arbitrary filenames. The dropdown is a filesystem scan (edit_globals.php:714-731), not a DB list. RTL is a filename substitution (rtl_<name>.css) at globals.php:551-611.",
+      "decision_impact": "Per-tenant brand colour must NOT be a per-tenant CSS file - the runtime has no per-site CSS include at all (Q59). It has to be a token/variable override on a shared bundle.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 474,
+          "end_line": 483,
+          "symbol": null,
+          "command": null,
+          "finding": "file_exists gate blocks arbitrary theme filenames"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 551,
+          "end_line": 611,
+          "symbol": null,
+          "command": null,
+          "finding": "RTL variant selected by filename substitution"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/super/edit_globals.php",
+          "start_line": 714,
+          "end_line": 731,
+          "symbol": null,
+          "command": null,
+          "finding": "theme list is a filesystem scan"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/14-frontend-ui-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Ship 2 themes (light-RTL, dark-RTL). Implement per-tenant branding as CSS-variable design tokens over a shared immutable bundle plus per-site logos - never per-tenant CSS files.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q35",
+      "question_summary": "CKEditor 5 Arabic bundling",
+      "category": "F-Frontend",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "CKEditor 5 is configured at library/js/nncustom_config.js:198 and library/js/limitedcustom_config.js:259, and grep for language/direction/rtl/ltr in both returns ZERO hits. The @ckeditor/ckeditor5-language 47.6.2 package IS already present in package-lock.json:1173-1175 but is never wired.",
+      "decision_impact": "The dependency is already paid for; this is a config change, not a bundling project. Without it the WYSIWYG toolbar stays English in Arabic tenants.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "library/js/nncustom_config.js",
+          "start_line": 198,
+          "end_line": 198,
+          "symbol": null,
+          "command": null,
+          "finding": "no language/direction config"
+        },
+        {
+          "repository": "fork",
+          "file": "package-lock.json",
+          "start_line": 1173,
+          "end_line": 1175,
+          "symbol": null,
+          "command": null,
+          "finding": "ckeditor5-language already a dependency"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Set language: 'ar' and contentsLangDirection: 'rtl' in both OE CKEditor configs. Trivial - do it with Q18.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q36",
+      "question_summary": "Byte identity of in-tree oe-module directories",
+      "category": "G-Modules",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "SEVEN in-tree module directories exist (not six), and ZERO have fork-only modifications. Against v8_2_0 only one file differs - oe-module-comlink-telehealth/tests/bootstrap.php - and that difference is caused by an UPSTREAM commit present in HEAD but not in the release cut (0ec6697e0 'feat(bc): add internal deprecation utility (#12753)'). Working tree is clean: git status over custom_modules returns 0 entries. oe-module-claimrev-connect is composer-installed and gitignored, so it has no tracked blobs to compare.",
+      "decision_impact": "The blocking premise behind Q36 dissolves: there is no per-module hotfix ledger to maintain, and the fork-vs-upstream module diff is provably empty.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git diff --name-status v8_2_0 HEAD -- interface/modules/custom_modules/",
+          "finding": "single differing file vs v8_2_0, attributable to an upstream commit"
+        },
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git log --oneline v8_2_0..HEAD -- .../oe-module-comlink-telehealth/tests/bootstrap.php",
+          "finding": "the differing file's change comes from upstream commit 0ec6697e0"
+        },
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git status --porcelain interface/modules/custom_modules/  -> empty",
+          "finding": "no untracked or modified module files"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/17-q36-module-byte-identity.md",
+        "docs/discovery/openemr-decision-evidence/06-module-drift-inventory.csv"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Treat all seven tracked modules as pristine upstream. No hotfix tracking needed. Re-run the one-line diff each rebase to keep the claim true.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q37",
+      "question_summary": "openemr/oe-module-installer-plugin internals",
+      "category": "G-Modules",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Read from installed source (vendor/ populated on this machine; unavailable to the prior audit). Plugin class: OpenEMR\\Composer\\ModuleInstallerPlugin\\Plugin (Plugin.php:9), which on activate() registers CustomModuleInstaller and ZendModuleInstaller. CustomModuleInstaller extends Composer's LibraryInstaller, supports() only 'openemr-module', and getInstallPath() returns interface/modules/custom_modules/<LAST SEGMENT OF PACKAGE NAME> (CustomModuleInstaller.php:13-20). Confirmed in practice: installed.json maps claimrev-connect to that path and the result is a real directory of 134 files, not a symlink.",
+      "decision_impact": "OVERLAY RISK IDENTIFIED: the install path derives ONLY from the package name's last segment and ignores the vendor. Any composer package named <anyvendor>/oe-module-weno would resolve to the SAME directory as the tracked upstream oe-module-weno. Packaging our own modules must use names that cannot collide with upstream module directory names.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "vendor/openemr/oe-module-installer-plugin/src/Plugin.php",
+          "start_line": 9,
+          "end_line": 17,
+          "symbol": null,
+          "command": null,
+          "finding": "plugin class and installer registration"
+        },
+        {
+          "repository": "fork",
+          "file": "vendor/openemr/oe-module-installer-plugin/src/CustomModuleInstaller.php",
+          "start_line": 13,
+          "end_line": 20,
+          "symbol": null,
+          "command": null,
+          "finding": "install path = custom_modules/<last name segment>; vendor ignored"
+        },
+        {
+          "repository": "fork",
+          "file": "vendor/composer/installed.json",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "claimrev-connect v2.1.6 installed to that path as a real directory"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/08-dependency-runtime-inventory.csv",
+        "docs/discovery/openemr-decision-evidence/evidence/snippets/q37-q70-installer-plugin-analysis.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Name our packages so the last segment is unique (e.g. saas/oe-module-saas-nphies). Add a CI check asserting that no composer package resolves onto a tracked module directory.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q38",
+      "question_summary": "Twig namespacing convention for custom modules",
+      "category": "G-Modules",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "TwigContainer::addPath() supports namespaces but no convention is enforced in-tree, so template resolution is order-dependent and two modules shipping layout.twig collide silently.",
+      "decision_impact": "The collision is silent and surfaces at rebase/deploy time. Enforcing a prefix costs one scaffolding line.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Common/Twig/TwigContainer.php",
+          "start_line": null,
+          "end_line": null,
+          "symbol": "TwigContainer::addPath",
+          "command": null,
+          "finding": "addPath supports namespaces; no convention enforced"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/08-dependency-runtime-inventory.csv"
+      ],
+      "confidence": "HIGH",
+      "remaining_gap": null,
+      "recommended_decision": "Enforce a @<module_slug>/ namespace prefix in the module scaffolding template and assert it in CI.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q39",
+      "question_summary": "Do we publish our own Docker images?",
+      "category": "H-DevOps",
+      "classification": "deployment_decision",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "59 GitHub workflows ship, including the docker-build/docker-release family. Because the fork will carry Arabic assets, Amiri/Noto fonts (Q25), a vendored bootstrap-rtl (Q24) and an NPHIES module, the runtime artifact necessarily diverges from upstream's image.",
+      "decision_impact": "The divergence list is now concrete, which makes 'publish our own' a consequence of earlier locked decisions rather than an independent choice.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/manifests/q39-workflow-inventory.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "59 workflows including docker build/release family"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/manifests/q39-workflow-inventory.txt"
+      ],
+      "confidence": "HIGH",
+      "remaining_gap": null,
+      "recommended_decision": "Publish our own images to a private registry. Adopt upstream's docker-build workflows as the starting point.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q40",
+      "question_summary": "Inferno ONC certification in scope?",
+      "category": "H-DevOps",
+      "classification": "business_product_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Inferno ships as two git submodules (ci/inferno/onc-certification-g10-test-kit and ci/inferno/inferno-files) plus inferno-test.yml. It validates US ONC / US Core conformance, which has no Saudi regulatory force.",
+      "decision_impact": "Keeping it costs CI minutes but provides a regression net over the FHIR surface that NPHIES work will touch. Removing it frees the fork to diverge from US Core.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/manifests/q40-inferno-artifacts.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "inferno submodules and workflow present"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/manifests/q40-inferno-artifacts.txt"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Remove from required checks, keep the config so re-enabling is one line. Re-evaluate if US Core divergence becomes deliberate.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q41",
+      "question_summary": "k8s/Helm charts - in-fork or infra repo?",
+      "category": "H-DevOps",
+      "classification": "deployment_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Zero Helm/k8s artifacts exist in the repository (same evidence as Q3). Nothing to migrate either way.",
+      "decision_impact": "Because there is no existing chart, choosing the infra repo now costs nothing; choosing in-fork later would require a move.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/manifests/q3-deployment-artifacts.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "no chart/values/k8s manifests tracked"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/manifests/q3-deployment-artifacts.txt"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Separate infra repo, referenced by SHA from this fork's release notes (matches Q14).",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q42",
+      "question_summary": "Production X-Forwarded-For handling",
+      "category": "H-DevOps",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "The application trusts XFF blindly. collectIpAddresses() (library/sanitize.inc.php:29-46) appends the ENTIRE client-supplied chain, unparsed, to ip_string; there is no trusted-proxy allowlist anywhere (0 matches). The value reaches the log table (LogTablesSink.php:70) and auth-failure comments (EventAuditLogger.php:265-266). Mitigation: the real socket peer is preserved separately in the 'ip' key.",
+      "decision_impact": "This is a code-level audit-log forging vector, not merely a deployment posture question as originally framed. It must be fixed in code or neutralised at the proxy before Go-Live.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "library/sanitize.inc.php",
+          "start_line": 29,
+          "end_line": 46,
+          "symbol": "collectIpAddresses",
+          "command": null,
+          "finding": "entire client-controlled XFF chain appended unvalidated"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Common/Logging/Audit/LogTablesSink.php",
+          "start_line": 70,
+          "end_line": 70,
+          "symbol": null,
+          "command": null,
+          "finding": "flows into the log table IP column"
+        },
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git grep -in 'trustedproxies|trusted_proxy' HEAD  -> 0",
+          "finding": "no trusted-proxy configuration exists"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md",
+        "docs/discovery/openemr-decision-evidence/11-authentication-authorization-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Strip inbound XFF at the edge and re-add exactly one hop from our own LB; additionally parse to the rightmost entry in code. Treat existing forward_ip values as untrusted.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q43",
+      "question_summary": "Rotate exposed GitHub PATs",
+      "category": "I-Security",
+      "classification": "action_item",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "SCOPE IS LARGER THAN RECORDED: 4 compose files x 3 variables = 12 hardcoded token values, not 2 in one file. Locations: development-easy:75-77, development-easy-light:75-77, development-easy-redis:180-182, development-insane:224-226. Three obfuscation layers are used for the same secret class (raw, base64, space-separated decimal char codes), all decoded inline by docker/flex/openemr.sh:766-790. All values REDACTED and never written to any artifact.",
+      "decision_impact": "Naive ghp_-prefix scanners miss two of the three variants, which is why only one file was previously found. Critically, these are UPSTREAM's committed tokens - the fork has zero own commits - so rotation is upstream's action; the fork's duty is containment.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "docker/development-easy/docker-compose.yml",
+          "start_line": 75,
+          "end_line": 77,
+          "symbol": null,
+          "command": null,
+          "finding": "3 hardcoded token variables [REDACTED]"
+        },
+        {
+          "repository": "fork",
+          "file": "docker/development-easy-redis/docker-compose.yml",
+          "start_line": 180,
+          "end_line": 182,
+          "symbol": null,
+          "command": null,
+          "finding": "same 3 variables [REDACTED]"
+        },
+        {
+          "repository": "fork",
+          "file": "docker/flex/openemr.sh",
+          "start_line": 766,
+          "end_line": 790,
+          "symbol": null,
+          "command": null,
+          "finding": "decodes all three obfuscation layers inline"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Treat as burned. Report upstream. Ensure they never reach a published image or public fork. Add a secret scanner that detects base64 and decimal-encoded token variants, not just ghp_.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q44",
+      "question_summary": "Per-tenant KMS key isolation Day-1?",
+      "category": "I-Security",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "No KMS SDK exists in composer.json. Keys are per-site files on disk: $OE_SITE_DIR/documents/certificates/oa{private,public}.key (OAuth2KeyConfig.php:63-64) and sites/<site>/documents/logs_and_misc/methods/.",
+      "decision_impact": "DB-per-tenant ALREADY delivers per-tenant key isolation by construction. A KMS adds rotation, escrow and HSM custody - not isolation. This materially shrinks Day-1 scope.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Common/Auth/OAuth2KeyConfig.php",
+          "start_line": 63,
+          "end_line": 64,
+          "symbol": null,
+          "command": null,
+          "finding": "per-site key files on disk"
+        },
+        {
+          "repository": "fork",
+          "file": "composer.json",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "no KMS/Vault/SecretsManager SDK required"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md",
+        "docs/discovery/openemr-decision-evidence/16-control-plane-constraints.md"
+      ],
+      "confidence": "HIGH",
+      "remaining_gap": null,
+      "recommended_decision": "Day-1: keep per-site key files (isolation already achieved); add a KMS-backed wrapper for CUSTODY and rotation of the site key material. Do not rebuild encryption.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q45",
+      "question_summary": "Saudi PDPL data-residency plan",
+      "category": "I-Security",
+      "classification": "regulatory_external_input",
+      "repository_verifiable": false,
+      "status": "external_decision_required",
+      "recommended_status": "PROVISIONAL",
+      "finding": "No repository evidence can answer this. The repo constrains only that each tenant is a separate database and separate filesystem tree, which makes per-region placement mechanically straightforward.",
+      "decision_impact": "Residency drives cloud provider, region, backup destinations and observability endpoints - all outside the codebase. Model A makes per-region tenant placement easy, which is the one relevant repository fact.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 277,
+          "end_line": 335,
+          "symbol": null,
+          "command": null,
+          "finding": "per-tenant DB + filesystem tree enables per-region placement"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/16-control-plane-constraints.md"
+      ],
+      "confidence": "EVIDENCE-BLOCKED",
+      "remaining_gap": "Legal interpretation of PDPL cross-border rules for health data.",
+      "recommended_decision": "Provisional: Kingdom-only region. Confirm with legal before Go-Live. Safe default: assume no cross-border transfer, including for backups, logs and metrics.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q46",
+      "question_summary": "Breakglass justification-prompt UI",
+      "category": "I-Security",
+      "classification": "business_product_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "gbl_force_log_breakglass exists at library/globals.inc.php:2851-2856 with default '1' (ON). It LOGS emergency user activity; no justification-prompt UI exists anywhere.",
+      "decision_impact": "Premise confirmed exactly: logging without a reason prompt. Auditors typically expect the reason. Build cost is small and it is additive (no core behaviour change).",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "library/globals.inc.php",
+          "start_line": 2851,
+          "end_line": 2856,
+          "symbol": null,
+          "command": null,
+          "finding": "breakglass logging global, default ON, no prompt"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Build the justification prompt as a module/overlay rather than a core patch, so it survives rebases.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q47",
+      "question_summary": "Default value of drive_encryption for Saudi tenants",
+      "category": "I-Security",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "contradicted",
+      "recommended_status": "LOCKED",
+      "finding": "PREMISE CORRECTED: drive_encryption ALREADY DEFAULTS TO ON ('1') at library/globals.inc.php:1035-1040. The prior audit recorded this as unverified. database_encryption likewise defaults to '1' (:1028-1032), consumed at Crypto.php:65 and CryptoGen.php:82. The deprecated couchdb_encryption global (:1043-1048) is an explicit no-op.",
+      "decision_impact": "No patch is required - only a provisioning guarantee that tenants never turn it off. Converts a code change into a configuration assertion.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "library/globals.inc.php",
+          "start_line": 1035,
+          "end_line": 1040,
+          "symbol": null,
+          "command": null,
+          "finding": "drive_encryption default '1' (ON)"
+        },
+        {
+          "repository": "fork",
+          "file": "library/globals.inc.php",
+          "start_line": 1028,
+          "end_line": 1032,
+          "symbol": null,
+          "command": null,
+          "finding": "database_encryption default '1' (ON)"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Common/Crypto/CryptoGen.php",
+          "start_line": 82,
+          "end_line": 82,
+          "symbol": null,
+          "command": null,
+          "finding": "database_encryption consumed here"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Force on via provisioning defaults and assert it in a tenant health check. No core patch needed.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q48",
+      "question_summary": "Audit-log retention (PDPL 5+ years)",
+      "category": "I-Security",
+      "classification": "regulatory_external_input",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "No retention policy, pruner or archival job exists for log / api_log. The seeded background_services rows (sql/database.sql:209-217) contain no log-maintenance service. Tables grow without bound.",
+      "decision_impact": "Both a compliance floor and a cost ceiling are unmet. The background_services mechanism is the natural, already-supported place to add a pruner without a core patch.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git grep -iln 'log_pruner|prune.*audit|retention' HEAD -- src/ library/ bin/",
+          "finding": "no pruner/retention job"
+        },
+        {
+          "repository": "fork",
+          "file": "sql/database.sql",
+          "start_line": 209,
+          "end_line": 217,
+          "symbol": null,
+          "command": null,
+          "finding": "seeded background services contain no log maintenance"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": "Binding PDPL retention period is a legal determination.",
+      "recommended_decision": "Build a retention job as a background_service (no core patch). Default 7 years pending the legal answer on the binding floor.",
+      "requires_external_non_repository_input": true
+    },
+    {
+      "question_id": "Q49",
+      "question_summary": "AV scanning for uploads (ClamAV)",
+      "category": "I-Security",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Zero antivirus integration exists (0 matches for clamav/virus_scan/antivirus). The only content gate is isWhiteFile() (library/sanitize.inc.php:113), called from just 2 sites (C_Document.class.php:243, DocumentService.php:130), BOTH gated behind the operator-disableable secure_upload global (default '1' ON, globals.inc.php:2125-2130). createDocument( has 26 call sites but only 2 consult the allow-list. No magic-byte MIME validation on the gate, no quarantine, no size limit beyond php.ini.",
+      "decision_impact": "Extension allow-listing alone is the weakest standard control, it is switchable off, and its coverage across document-creation paths is unverified. For a healthcare SaaS accepting patient/lab/scan uploads this is a material gap.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "library/sanitize.inc.php",
+          "start_line": 113,
+          "end_line": 113,
+          "symbol": null,
+          "command": null,
+          "finding": "isWhiteFile allow-list definition"
+        },
+        {
+          "repository": "fork",
+          "file": "controllers/C_Document.class.php",
+          "start_line": 243,
+          "end_line": 243,
+          "symbol": null,
+          "command": null,
+          "finding": "gate call site, conditional on secure_upload"
+        },
+        {
+          "repository": "fork",
+          "file": "library/globals.inc.php",
+          "start_line": 2125,
+          "end_line": 2130,
+          "symbol": null,
+          "command": null,
+          "finding": "secure_upload default ON but operator-disableable"
+        },
+        {
+          "repository": "fork",
+          "file": "controllers/C_Document.class.php",
+          "start_line": 154,
+          "end_line": 154,
+          "symbol": null,
+          "command": null,
+          "finding": "DICOM zip written at :154, gate at :243 - ordering needs review"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": "Per-caller triage of the 26 createDocument sites and the DICOM write-order question.",
+      "recommended_decision": "Required Day-1: AV sidecar plus magic-byte validation. Pin secure_upload=1 in provisioning. Audit all 26 createDocument callers and resolve the :154/:243 ordering question.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q50",
+      "question_summary": "Add .github/SECURITY.md and .github/dependabot.yml",
+      "category": "I-Security",
+      "classification": "action_item",
+      "repository_verifiable": true,
+      "status": "contradicted",
+      "recommended_status": "LOCKED",
+      "finding": "DECISION CONTRADICTED: BOTH FILES ALREADY EXIST. .github/SECURITY.md ships (two disclosure routes: GitHub private advisory and security@open-emr.org with a PGP key), .github/dependabot.yml ships with a full weekly composer configuration (grouped symfony/laminas/development updates, PR limit 15), plus a bonus dependabot-auto-merge.yml workflow.",
+      "decision_impact": "The task as written is already done. The REAL remaining action is different: SECURITY.md directs reporters to the OpenEMR security team, which is wrong for a fork holding Saudi tenant PHI and must be rewritten.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": ".github/SECURITY.md",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "disclosure policy present, points at OpenEMR's team"
+        },
+        {
+          "repository": "fork",
+          "file": ".github/dependabot.yml",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "weekly composer updates with grouping already configured"
+        },
+        {
+          "repository": "fork",
+          "file": ".github/workflows/dependabot-auto-merge.yml",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "auto-merge automation present"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Close the original item as already satisfied. Open a NEW item: rewrite SECURITY.md for the fork's own disclosure channel, and decide whether Dependabot stays enabled given the Q2 rebase cadence.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q51",
+      "question_summary": "Current numeric coverage % baseline",
+      "category": "J-Testing",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Retrieved LIVE during this audit run from the official Codecov v2 API (https://api.codecov.io/api/v2/github/openemr/repos/openemr/, updatestamp 2026-08-07T06:02:21Z): coverage 28.66%, files 4028, lines 428660, hits 122880, misses 305780, branch master. The prior run measured 27.53% on 2026-07-21 (+1.13 pp in ~17 days). This measures UPSTREAM openemr/openemr; the fork is not onboarded to Codecov, but since fork HEAD is a strict ancestor of upstream master the number is representative.",
+      "decision_impact": "The real baseline is ~29%, not the ~4% historical figure cited in codecov.yml:24. A 60% total-coverage target would be a large uplift; an 80% patch-coverage target on new code is achievable and standard.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "upstream",
+          "file": "evidence/raw/q51-codecov-api-response.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "live Codecov v2 API response captured this run"
+        },
+        {
+          "repository": "fork",
+          "file": "codecov.yml",
+          "start_line": 24,
+          "end_line": 24,
+          "symbol": null,
+          "command": null,
+          "finding": "the ~4% figure in-repo is stale"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/raw/q51-codecov-api-response.txt",
+        "docs/discovery/openemr-decision-evidence/09-test-and-ci-inventory.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Set our-module targets at 80% patch / 60% total. Distinguish clearly: online aggregate 28.66% (upstream), configured target in codecov.yml, and our new-code target.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q52",
+      "question_summary": "CI DB strategy: fresh-per-job or persistent?",
+      "category": "J-Testing",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "TWO divergent patterns coexist. integration-tests.yml uses GitHub-native services: containers - genuinely fresh MySQL/MariaDB per matrix arm. test.yml (used by test-all.yml and test-scheduled.yml) uses compose-stack DBs: a setup job installs OpenEMR, dumps the DB, and each parallel test job RESTORES that snapshot. So: fresh container per arm, same snapshot restored across suites within an arm.",
+      "decision_impact": "Because a snapshot is restored rather than rebuilt, cross-suite interdependency bugs are possible within an arm. Our own suites should not inherit that pattern.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": ".github/workflows/integration-tests.yml",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "GitHub services: containers, fresh per arm"
+        },
+        {
+          "repository": "fork",
+          "file": ".github/workflows/test.yml",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "dump/restore snapshot shared across suites within an arm"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/09-test-and-ci-inventory.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Fresh-per-job for our module suites; leave upstream suites as-is to avoid a fork patch.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q53",
+      "question_summary": "Panther local ChromeDriver fallback on Windows",
+      "category": "J-Testing",
+      "classification": "deployment_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "symfony/panther ^2.0 (composer.json:159). CI uses a SHA-pinned Selenium standalone-chromium at ci/compose-shared-selenium/docker-compose.yml:2-3, reached at http://selenium:4444/wd/hub (BaseTrait.php:26,37,72). A local-ChromeDriver fallback exists at BaseTrait.php:79 (static::createPantherClient() when SELENIUM_USE_GRID != true) but is exercised by NO workflow. Environment note: this audit machine cannot run Docker at all (GCE VM without nested virtualization), so container-based E2E is unavailable here regardless.",
+      "decision_impact": "The fallback is untested by CI, so relying on it is unsupported. On hosts without Docker the E2E suite simply cannot run - a real constraint for this team's current hardware.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "composer.json",
+          "start_line": 159,
+          "end_line": 159,
+          "symbol": null,
+          "command": null,
+          "finding": "symfony/panther ^2.0"
+        },
+        {
+          "repository": "fork",
+          "file": "tests/Tests/E2e/Base/BaseTrait.php",
+          "start_line": 79,
+          "end_line": 79,
+          "symbol": null,
+          "command": null,
+          "finding": "untested local ChromeDriver fallback"
+        },
+        {
+          "repository": "fork",
+          "file": "ci/compose-shared-selenium/docker-compose.yml",
+          "start_line": 2,
+          "end_line": 3,
+          "symbol": null,
+          "command": null,
+          "finding": "SHA-pinned Selenium image"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/09-test-and-ci-inventory.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Mandate dev-in-container for E2E and document it. Do not invest in the Windows fallback. Note the hardware constraint explicitly in onboarding docs.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q54",
+      "question_summary": "Review tools/ directory",
+      "category": "K-Misc",
+      "classification": "action_item",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "19 tracked files, fully enumerated. 18 are the upstream release-automation toolkit under tools/release/ (bin/ CLI entrypoints: branch-to-version, create-tag, derive-prev-release, dispatch, render-pr-body, verify-tag; src/ supporting classes; one JSON contract schema). The 19th is tools/ci/analyze-flaky-tests.sh. No secrets, no dead scripts, no developer footguns.",
+      "decision_impact": "The [BUILD/TOOLING] classification was accurate. This tree is upstream release machinery the fork does not need to own, but it is also harmless to carry.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/manifests/q54-tools-inventory.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git ls-files 'tools/**'",
+          "finding": "complete 19-file listing"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/manifests/q54-tools-inventory.txt"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Accept the classification and move on. If the fork publishes its own releases (Q39), tools/release/ becomes directly reusable.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q55",
+      "question_summary": "wkhtmltopdf-openemr and oe-module-cqm transitive owners",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Verified against a populated vendor/ tree (unavailable to the prior audit): NEITHER package appears in vendor/composer/installed.json (247 packages installed). Both are declared only as VCS repositories (composer.json:161-165 and :166-169), are not in require, and are not in composer.lock. They are DEAD entries.",
+      "decision_impact": "Removing them is safe and removes two rebase-conflict surfaces. Confirmed empirically rather than inferred.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "vendor/composer/installed.json",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "neither package installed among 247 packages"
+        },
+        {
+          "repository": "fork",
+          "file": "composer.json",
+          "start_line": 161,
+          "end_line": 169,
+          "symbol": null,
+          "command": null,
+          "finding": "declared as repositories only, never required"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/08-dependency-runtime-inventory.csv"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Safe to remove - but note this would be a fork patch to composer.json. Given the zero-patch record (Q1), prefer an upstream PR or simply leave them (they cost nothing at runtime).",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q56",
+      "question_summary": "React 15 via napa - who consumes it?",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Consumer-graph tracing (evidence/snippets/q56-react15-consumer-graph.md) found the declaration and the napa download path but no confirmed runtime consumer in first-party code. Classification remains 'uncertain' rather than 'dead' because removal has not been proven not to change generated assets.",
+      "decision_impact": "React 15 is 9+ years out of support. If genuinely unused it is pure CVE surface that can be deleted; the remaining step is a build-output diff, not more grepping.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "package.json",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "React 15 declared via napa"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/snippets/q56-react15-consumer-graph.md",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "declared -> downloaded -> no confirmed consumer"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/snippets/q56-react15-consumer-graph.md"
+      ],
+      "confidence": "MEDIUM",
+      "remaining_gap": "Build-output diff with/without the dependency not executed (npm build must run off the Drive mount).",
+      "recommended_decision": "Run the decisive test: build with and without the napa React entry and diff public/ output. Remove only if byte-identical. Do NOT declare it dead on grep evidence alone.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q57",
+      "question_summary": "documents.id / insurance_companies.id without auto_increment",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "TWO DIFFERENT ANSWERS. documents.id: deliberate-by-inertia; every writer allocates via QueryUtils::generateId() against the global sequences table (UPDATE sequences SET id=LAST_INSERT_ID(id+1), atomic on InnoDB). Conversion is technically safe (zero INSERT ... VALUES (0,...) sites). insurance_companies.id: deliberate AND LOAD-BEARING - documented at InsuranceCompanyService.php:433-436 as sharing an id-space with pharmacies via the addresses satellite table, whose foreign_id is a bare int with no type discriminator. Converting it in isolation would silently corrupt address lookups.",
+      "decision_impact": "The two tables must not be treated as one anomaly. More importantly it yields a hard rule for new tables: never share an id-space across tables.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Services/InsuranceCompanyService.php",
+          "start_line": 433,
+          "end_line": 436,
+          "symbol": null,
+          "command": null,
+          "finding": "documented shared id-space with pharmacies"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Common/ORDataObject/ORDataObject.php",
+          "start_line": 80,
+          "end_line": 84,
+          "symbol": null,
+          "command": null,
+          "finding": "id allocation via generateId on persist"
+        },
+        {
+          "repository": "fork",
+          "file": "src/BC/Database.php",
+          "start_line": 165,
+          "end_line": 165,
+          "symbol": null,
+          "command": null,
+          "finding": "sequences-table allocation, race caveat in source"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/10-database-and-tenancy-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Leave BOTH alone; document as known anomalies. For new saas_* tables: bigint AUTO_INCREMENT PK + uuid binary(16) NOT NULL UNIQUE; never share id-spaces; use (source_table, source_id) tuples for cross-table refs.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q58",
+      "question_summary": "Formal upstream policy on custom_ prefix",
+      "category": "K-Misc",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "NOT RESERVED. Zero baseline tables, zero upgrade-file operations, zero module SQL and zero documentation use the custom_ prefix. Shipped modules use vendor-slug prefixes (weno_*, comlink_telehealth_*) or bare descriptive names. Reservation is de facto, never de jure. Separately, 'custom' already means 'third-party module directory' in interface/modules/custom_modules/ - a semantic collision.",
+      "decision_impact": "Relying on an unwritten reservation is a silent-collision risk at rebase time. A distinct prefix removes the risk without needing upstream cooperation.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/snippets/q68-custom-prefix-evidence.md",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "5 independent channels all return zero custom_ usage"
+        },
+        {
+          "repository": "fork",
+          "file": "sql/database.sql",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "no baseline table uses the prefix"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/10-database-and-tenancy-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Use saas_<domain>_ (not custom_). Add a rebase check: git diff <prev>..upstream/master -- sql/ | grep saas_ must stay empty. Open a docs PR upstream requesting reservation but do not block on it.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q59",
+      "question_summary": "sites/<tenant>/documents/theme/ per-site theme override path",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "contradicted",
+      "recommended_status": "LOCKED",
+      "finding": "PREMISE REFUTED: sites/<tenant>/documents/theme/ has NO runtime behaviour whatsoever - 0 matches across **/*.php, **/*.twig and **/*.js. The string exists only in prior discovery documents. The actual per-tenant surface is: logos via LogoService (src/Services/LogoService.php:75-108) reading sites/<site>/images/logos/<type>/logo.*, legacy per-site images under OE_SITE_WEBROOT/images/, a per-site custom menu JSON, and sites/<site>/config.php (arbitrary PHP, interface/globals.php:649). NO per-site .css or .js is included at runtime anywhere.",
+      "decision_impact": "Q34's per-tenant palette cannot be delivered as a per-tenant CSS file - the mechanism does not exist. It must be design tokens/CSS variables over a shared immutable bundle.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git grep -n 'documents/theme' HEAD -- '*.php' '*.twig' '*.js'  -> 0",
+          "finding": "zero runtime references to the theme override path"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Services/LogoService.php",
+          "start_line": 75,
+          "end_line": 108,
+          "symbol": null,
+          "command": null,
+          "finding": "actual per-tenant branding surface is logos only"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/globals.php",
+          "start_line": 649,
+          "end_line": 649,
+          "symbol": null,
+          "command": null,
+          "finding": "sites/<site>/config.php is the only per-site executable seam"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/14-frontend-ui-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Unblock Q34 with: shared immutable CSS bundle + CSS-variable design tokens + per-site logos via LogoService. Never allow tenant-supplied CSS/JS (it would be an XSS and cross-tenant leakage vector).",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q60",
+      "question_summary": "DB DEFAULT CHARSET / COLLATION at CREATE TABLE level",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Charset/collation evidence collected into evidence/manifests/q60-charset-collation.txt (per-table DEFAULT CHARSET occurrence counts in sql/database.sql plus the Installer's utf8mb4/COLLATE handling). The risk is real: if production MySQL has a different server default, Arabic sort order and case-folding change silently.",
+      "decision_impact": "For an Arabic deployment collation is not cosmetic - it changes sorting and comparison of patient names. Pinning it explicitly is cheap insurance.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/manifests/q60-charset-collation.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git grep -n 'utf8mb4|COLLATE|CHARACTER SET' HEAD -- library/classes/Installer.class.php",
+          "finding": "charset/collation declarations and Installer handling"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/manifests/q60-charset-collation.txt"
+      ],
+      "confidence": "MEDIUM",
+      "remaining_gap": "No live database was available on this machine to confirm the effective server collation.",
+      "recommended_decision": "Pin utf8mb4_unicode_ci explicitly in provisioning and in all saas_* DDL. Verify empirically on a provisioned tenant with an Arabic sort test before Go-Live.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q61",
+      "question_summary": "DWV DICOM viewer locale JSON",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "DWV 0.27.1 ships NINE locales - de, en, es, fr, it, jp, ro, ru, zh - and NO Arabic (no ar, ar-SA or ar_SA anywhere). Verified by fetching and inspecting the npm registry tarball, not by inference. Per-locale key counts are in evidence/manifests/dwv-locales.csv. An Arabic overlay needs 114 translation leaves plus 3 overlay leaves.",
+      "decision_impact": "Bounded and precisely sized: 117 strings. DICOM controls would otherwise stay English inside an Arabic UI.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/manifests/dwv-locales.csv",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "9 locales enumerated with key counts; no Arabic"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/raw/dwv-0.27.1.tgz",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "upstream package inspected directly"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md",
+        "docs/discovery/openemr-decision-evidence/evidence/manifests/dwv-locales.csv"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Author ar/translation.json (114 leaves) + ar/overlays.json (3) as a fork-local overlay under public/assets/dwv/locales/ar/, and contribute upstream to ivmartel/dwv.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q62",
+      "question_summary": "Full FHIR SearchParameter enumeration",
+      "category": "K-Misc",
+      "classification": "action_item",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Structural census complete: 103 FHIR service files (evidence/manifests/q62-fhir-service-files.txt) containing 491 FhirSearchParameterDefinition registrations, alongside 90 REST controllers. The per-resource catalogue itself was not generated.",
+      "decision_impact": "The catalogue is now a mechanical extraction from 491 known registration sites rather than an open-ended research task - roughly a day, as originally estimated.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/manifests/q62-fhir-service-files.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "103 FHIR service files"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/raw/count-search_params.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "491 SearchParameter registration sites"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/manifests/q62-fhir-service-files.txt"
+      ],
+      "confidence": "HIGH",
+      "remaining_gap": "Per-resource catalogue not generated; only the extraction surface was measured.",
+      "recommended_decision": "Build the static catalogue when NPHIES conformance testing starts (Q28). Generate it from the 491 sites so it stays diffable across rebases.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q63",
+      "question_summary": "Numeric API versioning strategy",
+      "category": "K-Misc",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "There is NO numeric version segment: zero /v1/ matches across REST controllers and the route map. Versioning today is implicit in the pinned US Core route-map filename.",
+      "decision_impact": "Introducing /v1/ retroactively means router changes plus a client migration window. Since NPHIES clients are not yet built, the cheapest moment to introduce versioning is at the first NPHIES endpoint - for new routes only.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/raw/count-api_version_seg.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "zero /v1/ segments in controllers or route map"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/12-fhir-nphies-billing-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Freeze the existing surface unversioned. Introduce /v1/ ONLY on new NPHIES/SaaS routes, so no existing client migration is ever required.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q64",
+      "question_summary": "Application-tier rate limiting",
+      "category": "K-Misc",
+      "classification": "locked_architectural_decision",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "NO inbound rate limiting exists. All 17 'rate limit' matches are unrelated: PHPStan baselines, the fax module's OUTBOUND throttle to respect a vendor's limits (RCFaxClient.php:45,106,948,1063), GitHub API rate-limit messages in a release CLI, and a telemetry caching comment.",
+      "decision_impact": "Per-OAuth-client fairness cannot be enforced at a proxy that cannot see the client_id. That is the specific gap proxy-only leaves.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/raw/count-rate_limit.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "17 matches, none an inbound limiter"
+        },
+        {
+          "repository": "fork",
+          "file": "interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php",
+          "start_line": 45,
+          "end_line": 45,
+          "symbol": null,
+          "command": null,
+          "finding": "outbound vendor throttle, not inbound limiting"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/12-fhir-nphies-billing-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Proxy-only Day-1 for volumetric abuse. Add an app-tier per-client limiter when partner integrations go live, since only the app knows the OAuth client identity.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q65",
+      "question_summary": "BillingProcessor hookable extension points",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Well-factored INTERNAL OOP hierarchy (ProcessingTaskInterface -> GeneratorInterface; AbstractProcessingTask -> AbstractGenerator) but ZERO external-module extension surface. Task selection is a hard-coded if/elseif ladder keyed on $_POST['bn_*'] at BillingProcessor.php:161-192 - no factory, registry, service-locator or event dispatch anywhere in src/Billing/. GeneratorExternal is a legacy include of custom/BillingExport.php (file not shipped; only a rename-me stub), NOT a supported module mechanism. No transaction boundary and no idempotency key: GeneratorX12.php:151,168 auto-commit per row.",
+      "decision_impact": "A NPHIES module CANNOT register a billing generator without patching core. It also answers the outbox question: there is no transaction boundary to hang one on.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Billing/BillingProcessor/BillingProcessor.php",
+          "start_line": 161,
+          "end_line": 192,
+          "symbol": null,
+          "command": null,
+          "finding": "hard-coded task selection ladder"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Billing/BillingProcessor/Tasks/GeneratorX12.php",
+          "start_line": 151,
+          "end_line": 168,
+          "symbol": null,
+          "command": null,
+          "finding": "row-by-row auto-commit, no transaction"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Billing/BillingProcessor/GeneratorInterface.php",
+          "start_line": 18,
+          "end_line": 18,
+          "symbol": null,
+          "command": null,
+          "finding": "clean internal contract exists"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/12-fhir-nphies-billing-evidence.md",
+        "docs/discovery/openemr-decision-evidence/evidence/snippets/q65-billing-call-graph.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Upstream PR converting the if/elseif ladder into a POST-key->factory registry plus one pre-dispatch event - confined to BillingProcessor.php, so it is a clean, reviewable upstream change. Until it lands, use polling (Q27 Option C).",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q66",
+      "question_summary": "claimrev-connect FHIR emission",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Analysed from the actually-installed v2.1.6 source (134 files). Reuse matrix recorded in evidence/snippets/q66-claimrev-reuse-matrix.csv, classifying each component as direct_reuse / pattern_reuse_only / not_reusable, and distinguishing genuine FHIR R4 resources from generic 'claim' vocabulary, X12 claims, UI labels and plain REST transport.",
+      "decision_impact": "Determines whether NPHIES can crib implementation or only architecture. The transferable asset is the polling/reconciliation PATTERN (which Q27 Option C adopts), not X12-specific code.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/snippets/q66-claimrev-reuse-matrix.csv",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "per-component reuse classification"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/snippets/oe-module-claimrev-connect-source-inventory.md",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "full installed source inventory"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/snippets/q66-claimrev-reuse-matrix.csv"
+      ],
+      "confidence": "HIGH",
+      "remaining_gap": null,
+      "recommended_decision": "Reuse the background-polling and state-reconciliation pattern; do not attempt to reuse X12 transport code for NPHIES FHIR.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q67",
+      "question_summary": "Full audit of SQL interpolation sinks and echo-vs-text ratio",
+      "category": "K-Misc",
+      "classification": "action_item",
+      "repository_verifiable": true,
+      "status": "partially_answered",
+      "recommended_status": "PROVISIONAL",
+      "finding": "Census complete, triage NOT complete. Data-access surface: 6,785 sites (see Q11). Output escaping is genuinely strong: 13,590 uses of the project's escaping helpers (echo xlt( 9,476 + echo attr( 2,060 + echo text( 2,054) vs 369 raw htmlspecialchars, 32 Twig |raw, and ZERO Smarty nofilter. Residual XSS risk concentrates in 390 innerHTML and 18 document.write JavaScript sinks, which PHP-side helpers do not protect.",
+      "decision_impact": "The escaping discipline is much better than a truncated sample suggested, and the risk is now localised to a 408-site JavaScript worklist rather than the whole tree.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/raw/remaining-counts.tsv",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "full escaping and data-access census with saved match lists"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/raw/count-js_innerhtml.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "390 innerHTML sinks - the actual worklist"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/raw/count-smarty_nofilter.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "zero Smarty nofilter"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md"
+      ],
+      "confidence": "MEDIUM",
+      "remaining_gap": "No per-site triage of 6,785 SQL sites or 408 JS sinks; this audit did not prove absence of SQL injection or XSS.",
+      "recommended_decision": "Run the dedicated pre-Go-Live security sprint, but retarget it: start with the 408 JS sinks and identifier-interpolation SQL, not a blanket review. Match lists in evidence/raw/ are the worklist.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q68",
+      "question_summary": "log.checksum chain verification cadence",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "It is NOT A CHAIN. LogTablesSink.php:63 computes hash('sha3-512', implode('', array_values($logData))) - the current row's own fields only. No previous-row hash (not a chain), no secret key (plain hash(), not hash_hmac). Zero scheduled verifier exists anywhere. EventAuditLogger.php:670-671 notes log.checksum is unused since 6.0, with the operative value in log_comment_encrypt.",
+      "decision_impact": "Anyone with UPDATE on the log tables can edit a row and recompute a valid checksum with a one-line script. Describing this as tamper-proof would be false. Verification cadence is not the gap - the CONSTRUCTION is.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "src/Common/Logging/Audit/LogTablesSink.php",
+          "start_line": 63,
+          "end_line": 91,
+          "symbol": null,
+          "command": null,
+          "finding": "unkeyed per-row hash, no chaining"
+        },
+        {
+          "repository": "fork",
+          "file": "src/Common/Logging/EventAuditLogger.php",
+          "start_line": 670,
+          "end_line": 671,
+          "symbol": null,
+          "command": null,
+          "finding": "log.checksum unused since 6.0"
+        },
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git grep -in 'verifyChecksum|checksum.*verif' HEAD -- src/ library/ bin/  -> 0",
+          "finding": "no verifier exists"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Do not schedule a verifier for a non-chain. To get real tamper-evidence all three are required: hash_hmac with a key the DB user cannot read, inclusion of the previous row's hash, and a scheduled verifier. Build as a saas_ overlay, then add the nightly job.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q69",
+      "question_summary": "Complete encryptStandard column inventory",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "THE HEADLINE COUNT IS MISLEADING. Of 36 encryptStandard( sites, most are tests, PHPStan baselines and the crypto library's own interface. The real application write paths are only: SMART launch tokens (SMARTLaunchToken.php:132), key wrapping (CryptoGen.php:482), fax media tokens and vendor credentials (oe-module-faxsms), and the phone gateway password (reminders.php:399). NO CORE CLINICAL PHI COLUMN IS ENCRYPTED VIA THIS API - patient_data, form_encounter, billing and documents metadata are plaintext columns. What protects PHI at rest is drive_encryption (default ON, for files) and database_encryption (default ON, for the keys/audit-comment paths).",
+      "decision_impact": "Any claim that 'OpenEMR encrypts PHI columns' is FALSE. Encryption-at-rest for clinical PHI depends on document encryption plus deployment-supplied volume/DB encryption. This materially changes the PDPL posture narrative and must not be misstated to auditors.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/raw/count-encryptstandard.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "36 sites; application paths are credentials/tokens only"
+        },
+        {
+          "repository": "fork",
+          "file": "src/FHIR/SMART/SMARTLaunchToken.php",
+          "start_line": 132,
+          "end_line": 132,
+          "symbol": null,
+          "command": null,
+          "finding": "ephemeral launch token encryption"
+        },
+        {
+          "repository": "fork",
+          "file": "library/globals.inc.php",
+          "start_line": 1028,
+          "end_line": 1040,
+          "symbol": null,
+          "command": null,
+          "finding": "drive_encryption + database_encryption both default ON"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": "A bespoke encryption path under a different function name would not be caught by a two-name grep.",
+      "recommended_decision": "State the posture accurately: file-level plus storage-level encryption, NOT column-level. Pin both globals on. If column-level PHI encryption is required by legal, treat it as a new build, not a configuration change.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q70",
+      "question_summary": "Vendored-vs-composer-installed oe-module-* runtime model",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "Resolved empirically on a populated vendor/ tree. The seven tracked modules are NOT in composer.lock, so composer install never touches them - git is authoritative. Only claimrev-connect is composer-managed, and .gitignore:15 excludes its directory precisely because composer owns it. There is no overlay of tracked files today: authority is cleanly partitioned, and no module exists twice.",
+      "decision_impact": "Confirms tracked copies are authoritative and production will not diverge silently from git. BUT see Q37: the installer resolves paths by package-name last segment only, so a future package could collide onto a tracked module directory.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "vendor/composer/installed.json",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "only claimrev-connect is an openemr-module package"
+        },
+        {
+          "repository": "fork",
+          "file": ".gitignore",
+          "start_line": 15,
+          "end_line": 15,
+          "symbol": null,
+          "command": null,
+          "finding": "claimrev directory excluded because composer owns it"
+        },
+        {
+          "repository": "fork",
+          "file": "08-dependency-runtime-inventory.csv",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "per-module authority table"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/08-dependency-runtime-inventory.csv"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Treat tracked copies as authoritative. Add a CI assertion that no composer package's install path collides with a tracked module directory (mitigates the Q37 overlay risk).",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q71",
+      "question_summary": "Which module owns DICOM viewer include chain?",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "DICOM viewing is CORE document-viewer functionality, not a dedicated module. The PHP->JS include chain from the document viewer through dicom_launcher.js to DWV is traced in 13-localization-arabic-evidence.md, along with how the DWV runtime locale is selected.",
+      "decision_impact": "Because it is core rather than a module, the Arabic DWV overlay (Q61) must be delivered as an asset overlay, not packaged inside a module.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "library/js/dwv/",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "DWV assets live in core, not in a module"
+        },
+        {
+          "repository": "fork",
+          "file": "13-localization-arabic-evidence.md",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "full PHP->JS include chain and locale selection"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Bundle the Q61 Arabic locale work as a core asset overlay under public/assets/dwv/locales/ar/.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q72",
+      "question_summary": "File-level vs line-level responsiveness coverage",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "The '611 files' figure is CORRECTED and replaced by a reproducible file-level inventory: 5,460 first-party UI files scanned (fingerprint sha256(q72-file-list.txt) = eeaee99e60392dff40a968d5961e552812904bdbee842d5715f4d50f359d776f). Classification reconciles to the row count: unknown/non-UI backend 3,111; shared_template 1,098; custom_module_screen 416; legacy_iframe_included_file 288; legacy_standalone_page 287; remainder per the summary. Exclusions are documented in evidence/raw/q72-scanner-exclusions.txt.",
+      "decision_impact": "Sizes the RTL/mobile QA matrix against measured categories instead of a single unreconciled number, and directly supports the Q33 decision to avoid shell replacement.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "18-q72-ui-responsiveness-inventory.csv",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "one row per file, 17 columns, 5,460 rows"
+        },
+        {
+          "repository": "fork",
+          "file": "19-q72-ui-responsiveness-summary.md",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "reconciled totals with formulas"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/raw/q72-file-list.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "exact scanned set, sha256 fingerprinted"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/18-q72-ui-responsiveness-inventory.csv",
+        "docs/discovery/openemr-decision-evidence/19-q72-ui-responsiveness-summary.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Use the CSV as the RTL/mobile QA worklist. Prioritise the legacy iframe population (575 files) and the 416 module screens; treat the 3,111 non-UI rows as out of scope.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q73",
+      "question_summary": "Scripted count of QueryUtils:: call sites",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "QueryUtils:: = 1,653 call sites (previously uncounted). Full data-access surface: sqlStatement( 2,025, sqlQuery( 1,454, sqlFetchArray( 1,354, sqlInsert( 251, Doctrine DBAL 48 - total 6,785, plus 202 OE_SITE_DIR file-path sites. Every count has a saved match list and a SHA-256.",
+      "decision_impact": "The shared-DB (Model B) estimate was based on 1,875 sites. The true figure is 3.6x that. This is the decisive quantitative input to Q11.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "evidence/raw/count-queryutils.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "1,653 QueryUtils:: sites with full match list"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/raw/remaining-counts.tsv",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "all sink counts in one table"
+        },
+        {
+          "repository": "fork",
+          "file": "evidence/manifests/remaining-counts-sha256.txt",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "checksums for reproducibility"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/evidence/raw/remaining-counts.tsv"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Count is delivered regardless of the Model A/B outcome, and it settles Q11 conclusively in favour of Model A.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q74",
+      "question_summary": "tests/Tests/Integration/ tree scope",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "VESTIGIAL - the directory DOES NOT EXIST. git ls-files 'tests/Tests/Integration/**' returns 0 rows and the path is absent on disk. phpunit.integration.xml:34,37 references two nonexistent directories. Zero invocations anywhere: 0 hits in .github/workflows/, composer.json scripts, package.json, devtools, bin/ and tools/. The 11 *IntegrationTest.php files that DO exist live under tests/Tests/{Common,RestControllers,Services}/ - a naming convention, not occupants of this config, and they run under phpunit.xml's existing suites.",
+      "decision_impact": "Nothing to extend or maintain. The config file is dead weight that misleads readers into thinking an integration tier exists.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": "git ls-files 'tests/Tests/Integration/**'  -> 0 rows",
+          "finding": "directory absent from the index"
+        },
+        {
+          "repository": "fork",
+          "file": "phpunit.integration.xml",
+          "start_line": 34,
+          "end_line": 37,
+          "symbol": null,
+          "command": null,
+          "finding": "references two nonexistent directories"
+        },
+        {
+          "repository": "fork",
+          "file": "(git)",
+          "start_line": null,
+          "end_line": null,
+          "symbol": null,
+          "command": null,
+          "finding": "zero invocations across workflows, composer, npm, devtools"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/09-test-and-ci-inventory.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Do not invest. Recommend deleting phpunit.integration.xml upstream; nothing consumes it. Build our own integration tier fresh if needed.",
+      "requires_external_non_repository_input": false
+    },
+    {
+      "question_id": "Q75",
+      "question_summary": "phpunit-isolated.xml actually run in CI?",
+      "category": "K-Misc",
+      "classification": "technical_unknown",
+      "repository_verifiable": true,
+      "status": "answered",
+      "recommended_status": "LOCKED",
+      "finding": "YES - a first-class gate. .github/workflows/isolated-tests.yml:50 runs `vendor/bin/phpunit -c phpunit-isolated.xml --coverage-clover=clover.xml --log-junit=junit.xml` on every push and PR to master and rel-*, across PHP 8.2/8.3/8.4/8.5/8.6 (the BROADEST matrix of any suite - only isolated tests cover 8.6), on ubuntu-24.04 with xdebug coverage, uploading Clover + JUnit to Codecov under isolated-php<ver> flags.",
+      "decision_impact": "Twig compile/render tests and other isolated tests ARE enforced on PRs. It is also the only suite runnable on this audit machine (no Docker), making it the practical local gate for fork development.",
+      "fork_commit": "631f2b38cf633769c305233f88cdf9c73ca80657",
+      "upstream_ref": "v8_2_0",
+      "upstream_commit": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+      "evidence": [
+        {
+          "repository": "fork",
+          "file": ".github/workflows/isolated-tests.yml",
+          "start_line": 30,
+          "end_line": 52,
+          "symbol": null,
+          "command": null,
+          "finding": "exact command, matrix and coverage upload"
+        },
+        {
+          "repository": "fork",
+          "file": "phpunit-isolated.xml",
+          "start_line": 32,
+          "end_line": 32,
+          "symbol": null,
+          "command": null,
+          "finding": "no bootstrap, no DB, no browser required"
+        }
+      ],
+      "generated_artifacts": [
+        "docs/discovery/openemr-decision-evidence/09-test-and-ci-inventory.md"
+      ],
+      "confidence": "CONFIRMED",
+      "remaining_gap": null,
+      "recommended_decision": "Treat the isolated suite as the primary local gate for fork development and add our new tests there wherever a DB is not required.",
+      "requires_external_non_repository_input": false
+    }
+  ]
+}

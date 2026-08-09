@@ -1,0 +1,2 @@
+D:\OpenEmr\src\BC\Database.php:107:$row = $this->query($sql, $bindings)->fetchAssociative();
+D:\OpenEmr\tests\Tests\Isolated\Services\HolidayServiceTest.php:332:$event = $this->connection->fetchAssociative('SELECT pc_title, pc_eventDate FROM openemr_postcalendar_events');

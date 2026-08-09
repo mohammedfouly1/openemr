@@ -1,0 +1,3 @@
+controllers/C_Document.class.php:243:} elseif (OEGlobalsBag::getInstance()->getBoolean('secure_upload') && !isWhiteFile($_FILES['file']['tmp_name'][$key])) {
+library/sanitize.inc.php:113:function isWhiteFile($file)
+src/Services/DocumentService.php:130:if (OEGlobalsBag::getInstance()->getBoolean('secure_upload') && !isWhiteFile($fileData["tmp_name"])) {

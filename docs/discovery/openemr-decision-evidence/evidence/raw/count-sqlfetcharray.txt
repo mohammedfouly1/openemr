@@ -1,0 +1,1360 @@
+# slug: sqlfetcharray
+# description: sqlFetchArray( call sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e sqlFetchArray( -- *.php HEAD
+# generated: 2026-08-07T06:29:44Z
+#
+ccr/createCCR.php:69:    while ($res = sqlFetchArray($result[2])) {
+ccr/createCCRActor.php:30:while ($row = sqlFetchArray($result[0])) {
+ccr/createCCRActor.php:137:$row1 = sqlFetchArray($result[1]);
+ccr/createCCRActor.php:294:while ($row2 = sqlFetchArray($result[2])) {
+ccr/createCCRAlerts.php:25:$row = sqlFetchArray($result);
+ccr/createCCRAlerts.php:33://while ($row = sqlFetchArray($result)) {
+ccr/createCCRAlerts.php:129:} while ($row = sqlFetchArray($result));
+ccr/createCCRImmunization.php:25:    $row = sqlFetchArray($result);
+ccr/createCCRImmunization.php:87:} while ($row = sqlFetchArray($result));
+ccr/createCCRMedication.php:25:    $value = sqlFetchArray($result);
+ccr/createCCRMedication.php:149:} while ($value = sqlFetchArray($result));
+ccr/createCCRProblem.php:25:    $row = sqlFetchArray($result);
+ccr/createCCRProblem.php:27:    //while ($row = sqlFetchArray($result)) {
+ccr/createCCRProblem.php:136:} while ($row = sqlFetchArray($result));
+ccr/createCCRProcedure.php:25:    $row = sqlFetchArray($result);
+ccr/createCCRProcedure.php:132:} while ($row = sqlFetchArray($result));
+ccr/createCCRResult.php:25:$row = sqlFetchArray($result);
+ccr/createCCRResult.php:218:} while ($row = sqlFetchArray($result));
+ccr/transmitCCD.php:278:            ($u = sqlFetchArray($r)) === false
+contrib/util/dupecheck/index.php:156:    while ($row = sqlFetchArray($qResults)) {
+contrib/util/dupecheck/index.php:212:        while ($mrow = sqlFetchArray($mResults)) {
+contrib/util/dupecheck/mergerecords.php:74:$row = sqlFetchArray($qResults);
+contrib/util/dupecheck/mergerecords.php:92:    $orow = sqlFetchArray($qResults);
+contrib/util/dupecheck/mergerecords.php:118:    while ($row = sqlFetchArray($qResults)) {
+contrib/util/dupecheck/mergerecords.php:170:        $row = sqlFetchArray($qResults);
+contrib/util/dupscore.cli.php:91:    while ($row1 = sqlFetchArray($res1)) {
+controllers/C_Document.class.php:492:        while ($irow = sqlFetchArray($ires)) {
+controllers/C_Document.class.php:510:            while ($row_result_docs = sqlFetchArray($result_docs)) {
+controllers/C_Document.class.php:527:        while ($crow = sqlFetchArray($cres)) {
+controllers/C_Document.class.php:544:            while ($row = sqlFetchArray($imgOrders)) {
+controllers/C_PatientFinder.class.php:99:        while ($result = sqlFetchArray($results)) {
+controllers/C_PatientFinder.class.php:120:        while ($result = sqlFetchArray($results)) {
+controllers/C_PatientFinder.class.php:142:        while ($result = sqlFetchArray($results)) {
+controllers/C_Prescription.class.php:86:            while ($row = sqlFetchArray($res)) {
+controllers/C_Prescription.class.php:203:                while ($name = sqlFetchArray($medList)) {
+custom/BillingExport.csv.php:221:        while ($irow = sqlFetchArray($ires)) {
+custom/BillingExport.csv.php:262:        while ($brow = sqlFetchArray($bres)) {
+custom/code_types.inc.php:76:    while ($ctrow = sqlFetchArray($ctres)) {
+custom/code_types.inc.php:759:        $ret = sqlFetchArray($res);
+custom/export_labworks.php:115: $row = sqlFetchArray(sqlStatement($query, [$insrow[0]['id'], $insrow[1]['id'], $pid]));
+custom/export_labworks.php:129: $prow = sqlFetchArray(sqlStatement($query, $sqlBindArray));
+custom/export_xml.php:150: $row = sqlFetchArray(sqlStatement($query, [($insrow[0]['id'] ?? null), ($insrow[1]['id'] ?? null), ($insrow[2]['id'] ?? null), $pid]));
+custom/export_xml.php:209:    $prow = sqlFetchArray(sqlStatement($query, [$row['providerID']]));
+custom/qrda_functions.php:68:        while ($insRow = sqlFetchArray($insRes)) {
+custom/qrda_functions.php:109:        while ($patRow = sqlFetchArray($patRes)) {
+custom/qrda_functions.php:164:    while ($insRow = sqlFetchArray($insRes)) {
+custom/qrda_functions.php:184:    while ($patRow = sqlFetchArray($patRes)) {
+custom/qrda_functions.php:196:    while ($diagRow = sqlFetchArray($diagRes)) {
+custom/qrda_functions.php:208:    while ($medRow = sqlFetchArray($medRes)) {
+custom/qrda_functions.php:220:    while ($medRow = sqlFetchArray($medRes)) {
+custom/qrda_functions.php:240:    while ($procRow = sqlFetchArray($procRes)) {
+custom/qrda_functions.php:256:    while ($vitRow = sqlFetchArray($vitRes)) {
+custom/qrda_functions.php:270:    while ($immRow = sqlFetchArray($immRes)) {
+interface/batchcom/batchEmail.php:57:        while ($row = sqlFetchArray($res)) {
+interface/batchcom/batchPhoneList.php:58:                    while ($row = sqlFetchArray($res)) {
+interface/batchcom/batchcom.inc.php:72:    while ($row = sqlFetchArray($sql_result)) {
+interface/billing/billing_report.php:1053:                                while ($rowresult4 = sqlFetchArray($result4)) {
+interface/billing/billing_report.php:1174:                                    while ($crow = sqlFetchArray($cres)) {
+interface/billing/billing_report.php:1233:                                    } // end while ($crow = sqlFetchArray($cres))
+interface/billing/billing_report.php:1350:                                while ($rowMoneyGot = sqlFetchArray($resMoneyGot)) {
+interface/billing/edi_270.php:147:    while ($row = sqlFetchArray($rslt)) {
+interface/billing/edit_payment.php:690:                    if ($RowSearchSub = sqlFetchArray($ResultSearchSub)) {
+interface/billing/edit_payment.php:708:                            $row = sqlFetchArray($res);
+interface/billing/edit_payment.php:753:                                while ($RowSearch = sqlFetchArray($ResultSearch)) {
+interface/billing/edit_payment.php:771:                                    $rowPayer = sqlFetchArray($resPayer);
+interface/billing/edit_payment.php:778:                                    $rowId = sqlFetchArray($resId);
+interface/billing/edit_payment.php:786:                                        $rowCopay = sqlFetchArray($resCopay);
+interface/billing/edit_payment.php:795:                                        $rowMoneyGot = sqlFetchArray($resMoneyGot);
+interface/billing/edit_payment.php:811:                                        $rowMoneyGot = sqlFetchArray($resMoneyGot);
+interface/billing/edit_payment.php:820:                                        $rowMoneyAdjusted = sqlFetchArray($resMoneyAdjusted);
+interface/billing/edit_payment.php:827:                                        $rowSequence = sqlFetchArray($resSequence);
+interface/billing/edit_payment.php:837:                                        $rowMoneyGot = sqlFetchArray($resMoneyGot);
+interface/billing/edit_payment.php:847:                                        $rowMoneyAdjusted = sqlFetchArray($resMoneyAdjusted);
+interface/billing/edit_payment.php:859:                                        $rowMoneyGot = sqlFetchArray($resMoneyGot);
+interface/billing/edit_payment.php:868:                                        $rowMoneyAdjusted = sqlFetchArray($resMoneyAdjusted);
+interface/billing/edit_payment.php:879:                                        $rowSequence = sqlFetchArray($resSequence);
+interface/billing/edit_payment.php:889:                                        $rowMoneyGot = sqlFetchArray($resMoneyGot);
+interface/billing/edit_payment.php:898:                                        $rowMoneyAdjusted = sqlFetchArray($resMoneyAdjusted);
+interface/billing/edit_payment.php:910:                                    $rowPayment = sqlFetchArray($resPayment);
+interface/billing/edit_payment.php:919:                                    $rowPayment = sqlFetchArray($resPayment);
+interface/billing/edit_payment.php:928:                                    $rowPayment = sqlFetchArray($resPayment);
+interface/billing/edit_payment.php:938:                                    $rowPayment = sqlFetchArray($resPayment);
+interface/billing/edit_payment.php:949:                                    $rowPayment = sqlFetchArray($resPayment);
+interface/billing/edit_payment.php:959:                                    $rowPayment = sqlFetchArray($resPayment);
+interface/billing/edit_payment.php:1035:                                }//End of while ($RowSearch = sqlFetchArray($ResultSearch))
+interface/billing/edit_payment.php:1039:                        } while ($RowSearchSub = sqlFetchArray($ResultSearchSub));
+interface/billing/edit_payment.php:1060:                    }//End of if($RowSearchSub = sqlFetchArray($ResultSearchSub))
+interface/billing/indigent_patients_report.php:210:    for ($irow = 0; $row = sqlFetchArray($rez); ++$irow) {
+interface/billing/payment_master.inc.php:35:    while ($lrow = sqlFetchArray($lres)) {
+interface/billing/payment_master.inc.php:80:    $row = sqlFetchArray($rs);
+interface/billing/payment_master.inc.php:87:    $row = sqlFetchArray($rs);
+interface/billing/payment_master.inc.php:95:    $row = sqlFetchArray($res);
+interface/billing/payment_master.inc.php:111:        $row = sqlFetchArray($res);
+interface/billing/payment_master.inc.php:120:        $row = sqlFetchArray($res);
+interface/billing/payment_pat_sel.inc.php:51:        $row = sqlFetchArray($res);
+interface/billing/payment_pat_sel.inc.php:102:                    if ($RowSearch = sqlFetchArray($ResultSearchNew)) { ?>
+interface/billing/payment_pat_sel.inc.php:163:                            $rowId = sqlFetchArray($resId);
+interface/billing/payment_pat_sel.inc.php:171:                                $rowCopay = sqlFetchArray($resCopay);
+interface/billing/payment_pat_sel.inc.php:180:                                $rowMoneyGot = sqlFetchArray($resMoneyGot);
+interface/billing/payment_pat_sel.inc.php:193:                            $rowMoneyGot = sqlFetchArray($resMoneyGot);
+interface/billing/payment_pat_sel.inc.php:202:                            $rowMoneyAdjusted = sqlFetchArray($resMoneyAdjusted);
+interface/billing/payment_pat_sel.inc.php:276:                        } while ($RowSearch = sqlFetchArray($ResultSearchNew)); ?>
+interface/billing/payment_pat_sel.inc.php:290:                    <?php } //if($RowSearch = sqlFetchArray($ResultSearchNew))
+interface/billing/search_payments.php:58:            while ($RowSearch = sqlFetchArray($ResultSearch)) {
+interface/billing/search_payments.php:155:                $row = sqlFetchArray($res);
+interface/billing/search_payments.php:167:                $row = sqlFetchArray($res);
+interface/billing/search_payments.php:188:            while ($rowrs = sqlFetchArray($rs)) {
+interface/billing/search_payments.php:194:            while ($rowrs = sqlFetchArray($rs)) {
+interface/billing/search_payments.php:487:                                    while ($RowSearch = sqlFetchArray($ResultSearch)) {
+interface/billing/search_payments.php:493:                                            $row = sqlFetchArray($res);
+interface/billing/search_payments.php:500:                                            $row = sqlFetchArray($res);
+interface/billing/search_payments.php:565:                                                $row = sqlFetchArray($rs);
+interface/billing/search_payments.php:573:                                                $row = sqlFetchArray($rs);
+interface/billing/search_payments.php:586:                                    }// End of while ($RowSearch = sqlFetchArray($ResultSearch))
+interface/billing/sl_eob_invoice.php:740:                                        while ($orow = sqlFetchArray($ores)) {
+interface/billing/sl_eob_search.php:421:    while ($row = sqlFetchArray($res)) {
+interface/billing/sl_eob_search.php:1128:                            while ($row = sqlFetchArray($t_res)) {
+interface/billing/sl_receipts_report.php:208:                                    while ($row = sqlFetchArray($res)) {
+interface/billing/sl_receipts_report.php:434:                            while ($row = sqlFetchArray($res)) {
+interface/billing/sl_receipts_report.php:546:                        while ($row = sqlFetchArray($res)) {
+interface/billing/ub04_helpers.php:52:            while ($row = sqlFetchArray($users)) {
+interface/billing/ub04_helpers.php:121:    while ($row = sqlFetchArray($response)) {
+interface/code_systems/list_installed.php:42:for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+interface/drugs/add_edit_drug.php:74:    while ($prow = sqlFetchArray($pres)) {
+interface/drugs/add_edit_drug.php:521:                    while ($pwrow = sqlFetchArray($pwres)) {
+interface/drugs/add_edit_drug.php:617:                    while ($prow = sqlFetchArray($pres)) {
+interface/drugs/add_edit_drug.php:627:                    while ($prow = sqlFetchArray($pres)) {
+interface/drugs/add_edit_drug.php:639:                while ($trow = sqlFetchArray($tres)) {
+interface/drugs/add_edit_drug.php:652:                    while ($prow = sqlFetchArray($pres)) {
+interface/drugs/add_edit_lot.php:94:    while ($lrow = sqlFetchArray($lres)) {
+interface/drugs/add_edit_lot.php:686:                        while ($lrow = sqlFetchArray($lres)) {
+interface/drugs/dispense_drug.php:95:             * while ($row = sqlFetchArray($res)) {
+interface/drugs/drug_inventory.php:315:while ($frow = sqlFetchArray($fres)) {
+interface/drugs/drug_inventory.php:336:while ($lrow = sqlFetchArray($lres)) {
+interface/drugs/drug_inventory.php:410:while ($row = sqlFetchArray($res)) {
+interface/drugs/drugs.inc.php:180:    while ($wfrow = sqlFetchArray($wfres)) {
+interface/eRxSOAP.php:570:        while ($row = sqlFetchArray($resource)) {
+interface/eRxSOAP.php:697:                $result = sqlFetchArray($check);
+interface/eRxXMLBuilder.php:667:        while ($healthplan = sqlFetchArray($healthplans)) {
+interface/eRxXMLBuilder.php:684:        while ($allergy = sqlFetchArray($allergyData)) {
+interface/eRxXMLBuilder.php:714:        while ($diagnosis = sqlFetchArray($diagnosisData)) {
+interface/eRxXMLBuilder.php:825:        while ($medication = sqlFetchArray($medications)) {
+interface/eRxXMLBuilder.php:863:            while ($selectPrescriptionId = sqlFetchArray($selectPrescriptionIds)) {
+interface/eRx_xml.php:807:    while ($row_med = sqlFetchArray($res_med)) {
+interface/eRx_xml.php:863:    while ($row = sqlFetchArray($res)) {
+interface/eRx_xml.php:922:    while ($row = sqlFetchArray($resource)) {
+interface/fax/fax_dispatch.php:69:    while ($crow = sqlFetchArray($cres)) {
+interface/fax/fax_dispatch.php:715:                        while ($urow = sqlFetchArray($ures)) {
+interface/fax/fax_dispatch_newpid.php:31:while ($row = sqlFetchArray($res)) {
+interface/forms/LBF/new.php:270:    while ($frow = sqlFetchArray($fres)) {
+interface/forms/LBF/new.php:987:                                while ($irow = sqlFetchArray($ires)) {
+interface/forms/LBF/new.php:1037:                while ($frow = sqlFetchArray($fres)) {
+interface/forms/LBF/new.php:1213:                                while ($hrow = sqlFetchArray($hres)) {
+interface/forms/LBF/new.php:1442:                        while ($row = sqlFetchArray($fscres)) {
+interface/forms/LBF/new.php:1741:                    while ($refrow = sqlFetchArray($refres)) {
+interface/forms/LBF/printable.php:345:while ($frow = sqlFetchArray($fres)) {
+interface/forms/LBF/report.php:48:    while ($frow = sqlFetchArray($fres)) {
+interface/forms/care_plan/new.php:53:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/forms/care_plan/report.php:34:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/forms/care_plan/save.php:68:    $getMaxid = sqlFetchArray($res2);
+interface/forms/eye_mag/SpectacleRx.php:130:        while ($row = sqlFetchArray($dispense_fields)) {
+interface/forms/eye_mag/SpectacleRx.php:223:        $wearing = sqlFetchArray($wear);
+interface/forms/eye_mag/SpectacleRx.php:309:        while ($row = sqlFetchArray($dispense_fields)) {
+interface/forms/eye_mag/SpectacleRx.php:458:            while ($row = sqlFetchArray($dispensed)) {
+interface/forms/eye_mag/a_issue.php:225:                while ($res = sqlFetchArray($qry ?? '')) { //Should we take the top 10 and display alphabetically?
+interface/forms/eye_mag/a_issue.php:848:                    while ($group_fields = sqlFetchArray($group_fields_query)) {
+interface/forms/eye_mag/js/eye_base.php:3465:                                            $list = sqlFetchArray($result);
+interface/forms/eye_mag/js/eye_base.php:3479:                                                while ($val = sqlFetchArray($start)) {
+interface/forms/eye_mag/js/eye_base.php:3486:                                                $maxseq = sqlFetchArray($pres);
+interface/forms/eye_mag/js/eye_base.php:3503:                                            while ($row = sqlFetchArray($DEFAULT_data)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:70:        while ($prior = sqlFetchArray($result)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:77:                $data = sqlFetchArray($sub_data);
+interface/forms/eye_mag/php/eye_mag_functions.php:138:        while ($row = sqlFetchArray($orders)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:215:    while ($prefs = sqlFetchArray($result)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:1726:        while ($row = sqlFetchArray($pres)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:1813:    while ($group_fields = sqlFetchArray($group_fields_query)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:1939:    while ($group_fields = sqlFetchArray($group_fields_query)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:2041:    while ($row = sqlFetchArray($ROS)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:3047:    while ($QP = sqlFetchArray($result)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:3738:        while ($wearing = sqlFetchArray($wear)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:3800:    while ($frow = sqlFetchArray($fres)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:3830:    while ($frow = sqlFetchArray($fres)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:3860:    while ($row1 = sqlFetchArray($sql1)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:3886:    while ($row2 = sqlFetchArray($sql2)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:4310:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/forms/eye_mag/php/eye_mag_functions.php:4439:    while ($fielding = sqlFetchArray($result)) {//build the list of clinical fields to search through
+interface/forms/eye_mag/php/eye_mag_functions.php:4446:    while ($term_sheet = sqlFetchArray($result)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:4822:    while ($row = sqlFetchArray($res)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:6223:    while ($row = sqlFetchArray($TXs_data)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:6450:    while ($wearing = sqlFetchArray($wear)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:6832:    while ($row = sqlFetchArray($result)) {
+interface/forms/eye_mag/php/eye_mag_functions.php:6844:    while ($default_TARGETS = sqlFetchArray($result)) {
+interface/forms/eye_mag/report.php:84:while ($prefs = sqlFetchArray($result)) {
+interface/forms/eye_mag/report.php:571:                    while ($wearing = sqlFetchArray($wear)) {
+interface/forms/eye_mag/report.php:2421:    while ($ip_list = sqlFetchArray($result)) {
+interface/forms/eye_mag/report.php:2467:                    while ($plan_row = sqlFetchArray($PLAN_results)) {
+interface/forms/eye_mag/save.php:367:        $ID = sqlFetchArray($result);
+interface/forms/eye_mag/save.php:573:                while ($frow = sqlFetchArray($fres)) {
+interface/forms/eye_mag/save.php:586:                    while ($frow = sqlFetchArray($fres)) {
+interface/forms/eye_mag/save.php:853:            while ($res = sqlFetchArray($result)) {
+interface/forms/eye_mag/save.php:887:            $tracker = sqlFetchArray(sqlStatement($sql, [$_POST['pid'], $Vdate]));
+interface/forms/eye_mag/save.php:1067:            while ($row = sqlFetchArray($result)) {
+interface/forms/eye_mag/save.php:1242:            while ($visit = sqlFetchArray($result)) {
+interface/forms/eye_mag/save.php:1283:        $ID = sqlFetchArray($result);
+interface/forms/eye_mag/save.php:1328:    while ($trow = sqlFetchArray($tres)) {
+interface/forms/eye_mag/taskman.php:107:while ($task = sqlFetchArray($result)) {
+interface/forms/eye_mag/view.php:49:while ($prefs = sqlFetchArray($result)) {
+interface/forms/eye_mag/view.php:874:                while ($wearing = sqlFetchArray($wear)) {
+interface/forms/eye_mag/view.php:1363:                            while ($visit = sqlFetchArray($result)) {
+interface/forms/eye_mag/view.php:1712:                                    while ($row = sqlFetchArray($CTLMANUFACTURER_data)) {
+interface/forms/eye_mag/view.php:1753:                                    while ($row = sqlFetchArray($CTLSUPPLIER_data)) {
+interface/forms/eye_mag/view.php:1794:                                    while ($row = sqlFetchArray($CTLBRAND_data)) {
+interface/forms/eye_mag/view.php:3868:                                                              while ($row = sqlFetchArray($res)) {
+interface/forms/eye_mag/view.php:3886:                                                                while ($prow = sqlFetchArray($pres)) {
+interface/forms/eye_mag/view.php:3892:                                                                    while ($row = sqlFetchArray($res)) {
+interface/forms/eye_mag/view.php:3943:                                                            while ($row = sqlFetchArray($TODO_data)) {
+interface/forms/eye_mag/view.php:4061:                                    while ($TODO = sqlFetchArray($TODO_data)) {
+interface/forms/eye_mag/view.php:4091:                                                while ($plan_row = sqlFetchArray($PLAN_results)) {
+interface/forms/eye_mag/view.php:4095:                                                while ($row = sqlFetchArray($TODO_data)) {
+interface/forms/eye_mag/view.php:4160:                                                      while ($urow = sqlFetchArray($ures)) {
+interface/forms/eye_mag/view.php:4190:                                                  while ($urow = sqlFetchArray($ures)) {
+interface/forms/fee_sheet/contraception_products/ajax/find_contraception_products.php:18:    while ($row = sqlFetchArray($results)) {
+interface/forms/fee_sheet/contraception_products/ajax/find_contraception_products.php:43:        $row = sqlFetchArray($results);
+interface/forms/fee_sheet/new.php:1031:                                    while ($plrow = sqlFetchArray($plres)) {
+interface/forms/fee_sheet/new.php:1056:                            while ($row = sqlFetchArray($res)) {
+interface/forms/fee_sheet/new.php:1079:                            while ($prow = sqlFetchArray($pres)) {
+interface/forms/fee_sheet/new.php:1089:                                while ($row = sqlFetchArray($res)) {
+interface/forms/fee_sheet/new.php:1116:                                while ($trow = sqlFetchArray($tres)) {
+interface/forms/fee_sheet/new.php:1213:                                        while ($row = sqlFetchArray($res)) {
+interface/forms/fee_sheet/new.php:1376:                                    while ($rowMoneyGot = sqlFetchArray($resMoneyGot)) {
+interface/forms/fee_sheet/new.php:1457:                                while ($srow = sqlFetchArray($sres)) {
+interface/forms/fee_sheet/review/fee_sheet_options_queries.php:51:    while ($res = sqlFetchArray($results)) {
+interface/forms/fee_sheet/review/fee_sheet_queries.php:170:            $billing_entry = sqlFetchArray($search);
+interface/forms/fee_sheet/review/fee_sheet_queries.php:245:    while ($res = sqlFetchArray($results)) {
+interface/forms/fee_sheet/review/fee_sheet_queries.php:286:    while ($res = sqlFetchArray($results)) {
+interface/forms/fee_sheet/review/fee_sheet_queries.php:329:    while ($res = sqlFetchArray($results)) {
+interface/forms/fee_sheet/review/fee_sheet_queries.php:369:    while ($res = sqlFetchArray($results)) {
+interface/forms/fee_sheet/review/fee_sheet_search_queries.php:34:    while ($code = sqlFetchArray($search)) {
+interface/forms/functional_cognitive_status/new.php:42:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/forms/functional_cognitive_status/report.php:27:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/forms/functional_cognitive_status/save.php:52:    $getMaxid = sqlFetchArray($res2);
+interface/forms/group_attendance/functions.php:91:    $result_array = sqlFetchArray($result);
+interface/forms/group_attendance/functions.php:121:    $result_array = sqlFetchArray($result);
+interface/forms/group_attendance/functions.php:168:    while ($p = sqlFetchArray($result)) {
+interface/forms/group_attendance/functions.php:226:    $getMaxid = sqlFetchArray($res);
+interface/forms/group_attendance/report.php:30:    $form_data = sqlFetchArray($res);
+interface/forms/newGroupEncounter/common.php:184:                                    while ($crow = sqlFetchArray($cres)) {
+interface/forms/newGroupEncounter/common.php:316:                                        $drow = sqlFetchArray($dres);
+interface/forms/newGroupEncounter/report.php:31:    while ($result = sqlFetchArray($res)) {
+interface/forms/newGroupEncounter/save.php:185:            while ($rowresult4 = sqlFetchArray($result4)) {
+interface/forms/newpatient/C_EncounterVisitForm.class.php:215:        while ($row = sqlFetchArray($result)) {
+interface/forms/newpatient/C_EncounterVisitForm.class.php:293:        while ($irow = sqlFetchArray($ires)) {
+interface/forms/newpatient/C_EncounterVisitForm.class.php:395:        while ($row = sqlFetchArray($result)) {
+interface/forms/newpatient/C_EncounterVisitForm.class.php:605:            while ($override = sqlFetchArray($q_events)) {
+interface/forms/newpatient/report.php:35:    while ($result = sqlFetchArray($res)) {
+interface/forms/newpatient/save.php:206:            while ($rowresult4 = sqlFetchArray($result4)) {
+interface/forms/physical_exam/edit_diagnoses.php:102:<?php for ($i = 1; $drow = sqlFetchArray($dres); ++$i) { ?>
+interface/forms/physical_exam/new.php:59:    while ($drow = sqlFetchArray($dres)) {
+interface/forms/physical_exam/new.php:148:    while ($row = sqlFetchArray($res)) {
+interface/forms/physical_exam/report.php:27:    while ($row = sqlFetchArray($res)) {
+interface/forms/procedure_order/common.php:137:    while ($ll = sqlFetchArray($query)) {
+interface/forms/procedure_order/common.php:1274:            while ($oprow = sqlFetchArray($opres)) {
+interface/forms/procedure_order/common.php:1282:            while ($oprow = sqlFetchArray($reqres)) {
+interface/forms/procedure_order/common.php:1305:            while ($sp = sqlFetchArray($spq)) {
+interface/forms/procedure_order/common.php:1339:                                    while ($pprow = sqlFetchArray($ppres)) {
+interface/forms/procedure_order/common.php:1403:                                    while ($locrow = sqlFetchArray($locres)) {
+interface/forms/procedure_order/common.php:1487:                                    while ($facrow = sqlFetchArray($ppres)) {
+interface/forms/procedure_order/common.php:1570:                                    while ($probrow = sqlFetchArray($diagres)) {
+interface/forms/procedure_order/common.php:1768:                                while ($r = sqlFetchArray($sp)) {
+interface/forms/procedure_order/procedure_order_save_functions.php:36:    while ($row = sqlFetchArray($existingQuery)) {
+interface/forms/procedure_order/procedure_order_save_functions.php:189:    while ($row = sqlFetchArray($existingQuery)) {
+interface/forms/procedure_order/procedure_order_save_functions.php:615:    while ($qrow = sqlFetchArray($qres)) {
+interface/forms/track_anything/create.php:278:while ($myrow = sqlFetchArray($result)) {
+interface/forms/track_anything/create.php:317:    while ($myrow2 = sqlFetchArray($result2)) {
+interface/forms/track_anything/history.php:229:while ($myrow = sqlFetchArray($query)) {
+interface/forms/track_anything/history.php:256:    while ($myrow2 = sqlFetchArray($query2)) {
+interface/forms/track_anything/history.php:273:            while ($myrow3 = sqlFetchArray($query3)) {
+interface/forms/track_anything/history.php:297:        while ($myrow3 = sqlFetchArray($query3)) {
+interface/forms/track_anything/new.php:106:        while ($myrow = sqlFetchArray($testi)) {
+interface/forms/track_anything/new.php:217:    while ($myrow = sqlFetchArray($query)) {
+interface/forms/track_anything/new.php:240:while ($myrow = sqlFetchArray($query)) {
+interface/forms/track_anything/new.php:254:        while ($myrow2 = sqlFetchArray($query2)) {
+interface/forms/track_anything/new.php:267:    while ($myrow2 = sqlFetchArray($query2)) {
+interface/forms/track_anything/report.php:53:    while ($myrow = sqlFetchArray($query)) {
+interface/forms/track_anything/report.php:66:            while ($myrow2 = sqlFetchArray($query2)) {
+interface/forms/track_anything/report.php:80:        while ($myrow2 = sqlFetchArray($query2)) {
+interface/forms/treatment_plan/new.php:121:    while ($urow = sqlFetchArray($ures)) {
+interface/globals.php:445:        for ($iter = 0; $row = sqlFetchArray($glres_user); $iter++) {
+interface/globals.php:460:    while ($glrow = sqlFetchArray($glres)) {
+interface/language/csv/load_csv_file.php:37:while ($row = sqlFetchArray($resLanguages)) {
+interface/language/csv/load_csv_file.php:66:            while ($row = sqlFetchArray($res)) {
+interface/language/csv/translation_utilities.php:28:            $row = sqlFetchArray($result);
+interface/language/csv/translation_utilities.php:33:            $row = sqlFetchArray($result);
+interface/language/csv/translation_utilities.php:35:            while ($row = sqlFetchArray($result)) {
+interface/language/csv/translation_utilities.php:65:            $row = sqlFetchArray($result);
+interface/language/csv/validate_csv.php:41:$rowLanguage = sqlFetchArray($resLanguage);
+interface/language/lang_definition.php:85:            while ($row = sqlFetchArray($res)) {
+interface/language/lang_definition.php:129:            $row_l = sqlFetchArray($res);
+interface/language/lang_definition.php:132:            $row_c = sqlFetchArray($res);
+interface/language/lang_definition.php:148:            if (!sqlFetchArray($res_test)) {
+interface/language/lang_definition.php:159:                $row = sqlFetchArray($res);
+interface/language/lang_definition.php:199:        $row = sqlFetchArray($res);
+interface/language/lang_definition.php:214:        while ($row = sqlFetchArray($res)) {
+interface/language/lang_definition.php:229:                if (sqlFetchArray($res2)) {
+interface/language/lang_definition.php:247:        while ($row = sqlFetchArray($res)) {
+interface/language/lang_definition.php:259:            $row = sqlFetchArray($res); // jump one to get the second language selected
+interface/language/lang_definition.php:272:                if (sqlFetchArray($res2)) {
+interface/language/lang_manage.php:52:    while ($row = sqlFetchArray($res)) {
+interface/language/lang_manage.php:59:    while ($row = sqlFetchArray($res)) {
+interface/language/lang_manage.php:74:            $row = sqlFetchArray($res);
+interface/language/lang_manage.php:89:    while ($row = sqlFetchArray($res)) {
+interface/language/lang_manage.php:96:    while ($row = sqlFetchArray($res)) {
+interface/language/lang_manage.php:122:    while ($row = sqlFetchArray($res)) {
+interface/language/lang_manage.php:126:        $row2 = sqlFetchArray($res2);
+interface/language/lang_manage.php:132:        $row2 = sqlFetchArray($res2);
+interface/language/lang_manage.php:138:        $row2 = sqlFetchArray($res2);
+interface/language/lang_manage.php:145:            if (sqlFetchArray($res_test)) {
+interface/language/language.inc.php:35:        if (!sqlFetchArray($res_test)) {
+interface/language/language.inc.php:44:        if (!sqlFetchArray($res_test)) {
+interface/language/language.inc.php:53:        if (!sqlFetchArray($res_test)) {
+interface/language/language.inc.php:57:            if (sqlFetchArray($res_test2)) {
+interface/login/login.php:82:    while ($app = sqlFetchArray($rs)) {
+interface/login/login.php:138:    while ($row = sqlFetchArray($res)) {
+interface/login/login.php:167:    while ($row = sqlFetchArray($res)) {
+interface/logview/logview.php:118:                        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/logview/logview.php:161:                                            while ($urow = sqlFetchArray($ures)) {
+interface/logview/logview.php:183:                                    while ($erow = sqlFetchArray($res)) {
+interface/logview/logview.php:198:                                    while ($row = sqlFetchArray($res1)) {
+interface/logview/logview.php:314:                                            while ($iter = sqlFetchArray($ret)) {
+interface/logview/logview.php:385:                                                while ($iter = sqlFetchArray($ret)) {
+interface/main/authorizations/authorizations.php:117:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/main/authorizations/authorizations.php:135:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/main/authorizations/authorizations.php:154:            for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/main/authorizations/authorizations.php:173:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/main/authorizations/authorizations.php:222:        $providerName = sqlFetchArray(sqlStatement(
+interface/main/authorizations/authorizations_full.php:62:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/main/authorizations/authorizations_full.php:78:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/main/authorizations/authorizations_full.php:95:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/main/authorizations/authorizations_full.php:112:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/main/backup.php:202:            while ($row = sqlFetchArray($res)) {
+interface/main/backup.php:267:            while ($row = sqlFetchArray($res)) {
+interface/main/backup.php:350:            while ($row = sqlFetchArray($res)) {
+interface/main/backup.php:633:    while ($lrow = sqlFetchArray($lres)) {
+interface/main/backup.php:646:    while ($lrow = sqlFetchArray($lres)) {
+interface/main/backup.php:772:                while ($tmprow = sqlFetchArray($tmpres)) {
+interface/main/calendar/add_edit_event.php:176:        $max = sqlFetchArray($q);
+interface/main/calendar/add_edit_event.php:480:            while ($current = sqlFetchArray($up)) {
+interface/main/calendar/add_edit_event.php:512:                $max = sqlFetchArray($q);
+interface/main/calendar/add_edit_event.php:556:                $max = sqlFetchArray($q);
+interface/main/calendar/add_edit_event.php:936:            $pref_facility = sqlFetchArray(sqlStatement(
+interface/main/calendar/add_edit_event.php:946:            $pref_facility = sqlFetchArray(sqlStatement("
+interface/main/calendar/add_edit_event.php:1025:while ($crow = sqlFetchArray($cres)) {
+interface/main/calendar/add_edit_event.php:1223:            while ($facrow = sqlFetchArray($qsql)) {
+interface/main/calendar/add_edit_event.php:1332:                while ($r = sqlFetchArray($qall)) {
+interface/main/calendar/add_edit_event.php:1337:                $providers_array = sqlFetchArray($qall);
+interface/main/calendar/add_edit_event.php:1342:        while ($urow = sqlFetchArray($ures)) {
+interface/main/calendar/add_edit_event.php:1365:            $provider = sqlFetchArray($qprov);
+interface/main/calendar/add_edit_event.php:1376:                    $firstProvider = sqlFetchArray(sqlStatement("select id from users where username=?", [$pc_username[0]]));
+interface/main/calendar/add_edit_event.php:1386:        while ($urow = sqlFetchArray($ures)) {
+interface/main/dated_reminders/dated_reminders_add.php:352:                                    for ($i = 2; $uRow = sqlFetchArray($uSQL); $i++) {
+interface/main/dated_reminders/dated_reminders_log.php:149:        for ($i = 0; $uRow = sqlFetchArray($uSQL); $i++) {
+interface/main/display_documents.php:219:                    while ($row = sqlFetchArray($resultSet)) {
+interface/main/finder/dynamic_finder.php:50:while ($row = sqlFetchArray($res)) {
+interface/main/finder/dynamic_finder.php:400:    while ($row = sqlFetchArray($res)) {
+interface/main/finder/dynamic_finder.php:409:    while ($row = sqlFetchArray($res_dtCols)) {
+interface/main/finder/dynamic_finder_ajax.php:50:    for ($iter = 0; $row = sqlFetchArray($layoutCols); $iter++) {
+interface/main/finder/dynamic_finder_ajax.php:255:while ($row = sqlFetchArray($res)) {
+interface/main/finder/dynamic_finder_ajax.php:261:while ($row = sqlFetchArray($res)) {
+interface/main/finder/patient_select.php:179:    while ($frow = sqlFetchArray($fres)) {
+interface/main/finder/patient_select.php:236:    while ($row = sqlFetchArray($rez)) {
+interface/main/finder/patient_select.php:385:    while ($trow = sqlFetchArray($tres)) {
+interface/main/finder/patient_select.php:463:            if ($results = sqlFetchArray($statement)) {
+interface/main/finder/patient_select.php:479:            if ($results = sqlFetchArray($statement)) {
+interface/main/finder/patient_select.php:492:            if ($results = sqlFetchArray($statement)) {
+interface/main/finder/patient_select.php:501:            if ($results = sqlFetchArray($statement)) {
+interface/main/ippf_export.php:176:    while ($brow = sqlFetchArray($bres)) {
+interface/main/ippf_export.php:206:    while ($prow = sqlFetchArray($pres)) {
+interface/main/ippf_export.php:221:    while ($drow = sqlFetchArray($dres)) {
+interface/main/ippf_export.php:238:    while ($trow = sqlFetchArray($tres)) {
+interface/main/ippf_export.php:293:    while ($irow = sqlFetchArray($ires)) {
+interface/main/ippf_export.php:329:        while ($ierow = sqlFetchArray($ieres)) {
+interface/main/ippf_export.php:349:        while ($frow = sqlFetchArray($fres)) {
+interface/main/ippf_export.php:361:            while ($grow = sqlFetchArray($gres)) {
+interface/main/ippf_export.php:473:    while ($row = sqlFetchArray($res)) {
+interface/main/ippf_export.php:605:        while ($erow = sqlFetchArray($eres)) {
+interface/main/main_screen.php:159:    while ($row1 = sqlFetchArray($res1)) {
+interface/main/messages/lab_results_messages.php:36:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+interface/main/messages/messages.php:520:                                                    while ($urow = sqlFetchArray($ures)) {
+interface/main/messages/messages.php:550:                                            while ($gprow = sqlFetchArray($tmp)) {
+interface/main/messages/messages.php:664:                        while ($myrow = sqlFetchArray($result)) {
+interface/main/messages/save.php:32:    while ($frow = sqlFetchArray($result)) {
+interface/main/messages/save.php:85:        $facility = sqlFetchArray(sqlStatement($query));
+interface/main/messages/save.php:123:            while ($frow = sqlFetchArray($fetch)) {
+interface/main/messages/save.php:129:            while ($prow = sqlFetchArray($prove)) {
+interface/modules/custom_modules/oe-module-dorn/src/DornGenHl7Order.php:229:            while ($qrow = sqlFetchArray($qres)) {
+interface/modules/custom_modules/oe-module-dorn/src/GenHl7OrderBase.php:237:        while ($drow = sqlFetchArray($dres)) {
+interface/modules/custom_modules/oe-module-dorn/src/GenHl7OrderBase.php:269:        while ($drow = sqlFetchArray($gres)) {
+interface/modules/custom_modules/oe-module-dorn/src/LabCompendiumInstall.php:35:            while ($record = sqlFetchArray($result)) {
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1468:            $tmp = sqlFetchArray($res);
+interface/modules/custom_modules/oe-module-faxsms/library/rc_sms_notification_helpers.php:202:        $db_sms_msg = sqlFetchArray(sqlStatement($query, [$type]));
+interface/modules/custom_modules/oe-module-faxsms/library/setup_services.php:89:    while ($user = sqlFetchArray($users_result)) {
+interface/modules/custom_modules/oe-module-faxsms/library/setup_services.php:181:while ($user = sqlFetchArray($users_result)) {
+interface/modules/custom_modules/oe-module-faxsms/library/utility.php:236:                while ($lrow = sqlFetchArray($lres)) {
+interface/modules/custom_modules/oe-module-faxsms/library/utility.php:316:                    while ($orow = sqlFetchArray($ores)) {
+interface/modules/custom_modules/oe-module-faxsms/library/utility.php:345:                    while ($orow = sqlFetchArray($ores)) {
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:60:        while ($row = sqlFetchArray($gl)) {
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AppDispatch.php:858:            while ($nrow = sqlFetchArray($res)) {
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:822:        $user = sqlFetchArray($result);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:838:            $rows = sqlFetchArray($result);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:984:        while ($row = sqlFetchArray($result)) {
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:816:        $u = sqlFetchArray($result);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:832:            while ($nrow = sqlFetchArray($res)) {
+interface/modules/custom_modules/oe-module-prior-authorizations/public/index.php:146:                    while ($iter = sqlFetchArray($authList)) {
+interface/modules/custom_modules/oe-module-prior-authorizations/public/reports/list_report.php:57:                while ($iter = sqlFetchArray($patients)) {
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/ListAuthorizations.php:41:        while ($row = sqlFetchArray($auths)) {
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/ListAuthorizations.php:94:            while ($row = sqlFetchArray($auths)) {
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/ListAuthorizations.php:111:        while ($row = sqlFetchArray($auths)) {
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/ListAuthorizations.php:122:        while ($row = sqlFetchArray($load)) {
+interface/modules/custom_modules/oe-module-weno/scripts/weno_pharmacy_search.php:38:    while ($row = sqlFetchArray($res)) {
+interface/modules/custom_modules/oe-module-weno/scripts/weno_pharmacy_search.php:103:    while ($row = sqlFetchArray($res)) {
+interface/modules/custom_modules/oe-module-weno/scripts/weno_pharmacy_search.php:166:    while ($row = sqlFetchArray($res)) {
+interface/modules/custom_modules/oe-module-weno/src/Services/FacilityProperties.php:30:        while ($row = sqlFetchArray($list)) {
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:71:        while ($row = sqlFetchArray($gl)) {
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:79:        while ($row = sqlFetchArray($us)) {
+interface/modules/custom_modules/oe-module-weno/templates/download_log_viewer.php:145:            while ($task = sqlFetchArray($backGroundTask)) {
+interface/modules/custom_modules/oe-module-weno/templates/download_log_viewer.php:267:                while ($row = sqlFetchArray($result)) {
+interface/modules/custom_modules/oe-module-weno/templates/pharmacy_list_form.php:171:                    <?php while ($row = sqlFetchArray($res)) { ?>
+interface/modules/custom_modules/oe-module-weno/templates/setup_facilities.php:41:while ($row = sqlFetchArray($list)) {
+interface/modules/custom_modules/oe-module-weno/templates/synch.php:96:    while ($row = sqlFetchArray($result)) {
+interface/modules/custom_modules/oe-module-weno/templates/synch.php:130:    while ($row = sqlFetchArray($result)) {
+interface/modules/custom_modules/oe-module-weno/templates/weno_fragment.php:102:while ($row = sqlFetchArray($list)) {
+interface/modules/custom_modules/oe-module-weno/templates/weno_fragment.php:365:        while ($row = sqlFetchArray($resDrugs)) { ?>
+interface/modules/custom_modules/oe-module-weno/templates/weno_users.php:36:while ($row = sqlFetchArray($fetch)) {
+interface/modules/custom_modules/oe-module-weno/templates/weno_users.php:43:while ($row = sqlFetchArray($list)) {
+interface/modules/zend_modules/module/Application/src/Application/Listener/ModuleMenuSubscriber.php:92:            while ($modulerow = sqlFetchArray($module_query)) {
+interface/modules/zend_modules/module/Application/src/Application/Listener/ModuleMenuSubscriber.php:132:                    while ($hookrow = sqlFetchArray($module_hooks)) {
+interface/modules/zend_modules/module/Application/src/Application/Listener/ModuleMenuSubscriber.php:175:            while ($hookrow = sqlFetchArray($module_query)) {
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/Configuration.php:261:        while ($row = sqlFetchArray($res)) {
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncounterccdadispatchTable.php:4899:            $row = sqlFetchArray($res);
+interface/new/new.php:125:    while ($orow = sqlFetchArray($ores)) {
+interface/new/new.php:176:while ($orow = sqlFetchArray($ores)) {
+interface/new/new.php:200:    while ($orow = sqlFetchArray($ores)) {
+interface/new/new_comprehensive.php:315:while ($lrow = sqlFetchArray($lres)) {
+interface/new/new_comprehensive.php:427:                    while ($frow = sqlFetchArray($fres)) {
+interface/new/new_comprehensive.php:846:        while ($mfrow = sqlFetchArray($mfres)) {
+interface/new/new_comprehensive.php:889:while ($lrow = sqlFetchArray($lres)) {
+interface/new/new_comprehensive_save.php:56:while ($frow = sqlFetchArray($fres)) {
+interface/new/new_search_popup.php:153:        while ($row = sqlFetchArray($rez)) {
+interface/new/new_search_popup.php:198:                while ($trow = sqlFetchArray($tres)) {
+interface/orders/find_order_popup.php:45:            while ($row = sqlFetchArray($res)) {
+interface/orders/find_order_popup.php:189:                    while ($row = sqlFetchArray($res)) {
+interface/orders/gen_hl7_order.inc.php:178:    while ($mres = sqlFetchArray($msql)) {
+interface/orders/gen_hl7_order.inc.php:285:    while ($pcrow = sqlFetchArray($pcres)) {
+interface/orders/gen_hl7_order.inc.php:351:        while ($qrow = sqlFetchArray($qres)) {
+interface/orders/list_reports.php:182:                        while ($pprow = sqlFetchArray($ppres)) {
+interface/orders/list_reports.php:409:                while ($pprow = sqlFetchArray($ppres)) {
+interface/orders/list_reports.php:517:            while ($row = sqlFetchArray($res)) {
+interface/orders/load_compendium.php:137:                                while ($grow = sqlFetchArray($gres)) {
+interface/orders/order_manifest.php:255:        while ($row = sqlFetchArray($res)) {
+interface/orders/order_manifest.php:280:            while ($qrow = sqlFetchArray($qres)) {
+interface/orders/orders_results.php:519:                while ($row = sqlFetchArray($res)) {
+interface/orders/orders_results.php:541:                    $query_test = sqlFetchArray(sqlStatement("select deleted from forms where form_id=? and formdir='procedure_order'", [$order_id]));
+interface/orders/orders_results.php:577:                    while ($rrow = sqlFetchArray($rres)) {
+interface/orders/patient_match_dialog.php:132:            while ($row = sqlFetchArray($res)) {
+interface/orders/pending_followup.php:236:    while ($row = sqlFetchArray($res)) {
+interface/orders/pending_orders.php:214:    while ($row = sqlFetchArray($res)) {
+interface/orders/procedure_provider_edit.php:153:    while ($org_row = sqlFetchArray($org_res)) {
+interface/orders/procedure_provider_list.php:130:                                while ($row = sqlFetchArray($res)) {
+interface/orders/procedure_stats.php:79:while ($lrow = sqlFetchArray($lres)) {
+interface/orders/procedure_stats.php:478:    while ($row = sqlFetchArray($res)) {
+interface/orders/qoe.inc.php:52:    while ($qrow = sqlFetchArray($qres)) {
+interface/orders/qoe.inc.php:65:            while ($arow = sqlFetchArray($ares)) {
+interface/orders/receive_hl7_results.inc.php:475:        $tmp = sqlFetchArray($res);
+interface/orders/receive_hl7_results.inc.php:1536:    while ($pprow = sqlFetchArray($ppres)) {
+interface/orders/single_order_results.inc.php:327:    while ($diag = sqlFetchArray($dres)) {
+interface/orders/single_order_results.inc.php:564:            while ($row = sqlFetchArray($res)) {
+interface/orders/single_order_results.inc.php:583:                        while ($rrow = sqlFetchArray($rres)) {
+interface/orders/single_order_results.inc.php:618:                        while ($rrow = sqlFetchArray($rres)) {
+interface/orders/types_ajax.php:48:while ($row = sqlFetchArray($res)) {
+interface/orders/types_edit.php:49:    while ($row = sqlFetchArray($res)) {
+interface/orders/types_edit.php:385:                                        while ($ll = sqlFetchArray($query)) {
+interface/orders/types_edit.php:486:                                            while ($pprow = sqlFetchArray($ppres)) {
+interface/patient_file/download_template.php:99:    while ($lrow = sqlFetchArray($lres)) {
+interface/patient_file/encounter/cash_receipt.php:91:while ($result = sqlFetchArray($inclookupres)) {
+interface/patient_file/encounter/copay.php:32:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/patient_file/encounter/find_code_dynamic_ajax.php:356:        while ($count < $number && $row = sqlFetchArray($res)) {// && $iFilteredTotal < $maxCount) {
+interface/patient_file/encounter/find_code_dynamic_ajax.php:374:        while ($count < $maxCount && $row = sqlFetchArray($res)) {
+interface/patient_file/encounter/find_code_dynamic_ajax.php:377:        $out['iTotalHasMoreRecords'] = sqlFetchArray($res) ? true : false;
+interface/patient_file/encounter/find_code_dynamic_ajax.php:384:    while ($row = sqlFetchArray($res)) {
+interface/patient_file/encounter/find_code_history.php:31:    while ($diag = sqlFetchArray($dres)) {
+interface/patient_file/encounter/find_code_history.php:51:    while ($diag = sqlFetchArray($dres)) {
+interface/patient_file/encounter/find_code_popup.php:191:                        while ($row = sqlFetchArray($res)) {
+interface/patient_file/encounter/find_code_popup.php:204:                        while ($row = sqlFetchArray($res)) { // Display normal search
+interface/patient_file/encounter/forms.php:294:            while ($arow = sqlFetchArray($ares)) {
+interface/patient_file/encounter/forms.php:605:            while ($row = sqlFetchArray($module_query)) {
+interface/patient_file/encounter/search_code.php:92:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/patient_file/encounter/superbill_codes.php:93:for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/patient_file/encounter/superbill_custom_full.php:150:        while ($row = sqlFetchArray($results)) {
+interface/patient_file/encounter/superbill_custom_full.php:172:        while ($row = sqlFetchArray($results)) {
+interface/patient_file/encounter/superbill_custom_full.php:208:        $code_sql = sqlFetchArray(sqlStatement("SELECT (ct_label) FROM code_types WHERE ct_id=?", [$code_type]));
+interface/patient_file/encounter/superbill_custom_full.php:216:        $category_sql = sqlFetchArray(sqlStatement("SELECT (title) FROM list_options WHERE list_id='superbill'" .
+interface/patient_file/encounter/superbill_custom_full.php:629:            for ($i = 0; $prow = sqlFetchArray($pres); ++$i) {
+interface/patient_file/encounter/superbill_custom_full.php:639:            while ($prow = sqlFetchArray($pres)) {
+interface/patient_file/encounter/superbill_custom_full.php:745:        while ($prow = sqlFetchArray($pres)) {
+interface/patient_file/encounter/superbill_custom_full.php:759:    for ($i = 0; $row = sqlFetchArray($res); $i++) {
+interface/patient_file/encounter/superbill_custom_full.php:793:            if ($srow = sqlFetchArray($sres)) {
+interface/patient_file/encounter/superbill_custom_full.php:823:            while ($prow = sqlFetchArray($pres)) {
+interface/patient_file/front_payment.php:172:                if ($RowSearch = sqlFetchArray($ResultSearchNew)) {
+interface/patient_file/front_payment.php:249:                            $rowMoneyGot = sqlFetchArray($resMoneyGot);
+interface/patient_file/front_payment.php:260:                    while ($RowSearch = sqlFetchArray($ResultSearchNew)) {
+interface/patient_file/front_payment.php:272:                        $rowMoneyGot = sqlFetchArray($resMoneyGot);
+interface/patient_file/front_payment.php:280:                        $rowMoneyAdjusted = sqlFetchArray($resMoneyAdjusted);
+interface/patient_file/front_payment.php:595:                        while ($each_row = sqlFetchArray($row_data)) {
+interface/patient_file/front_payment.php:614:                        while ($myproducts = sqlFetchArray($dres)) {
+interface/patient_file/front_payment.php:1107:                                while ($brow1112 = sqlFetchArray($bres1112)) {
+interface/patient_file/front_payment.php:1194:                                while ($brow = sqlFetchArray($bres)) {
+interface/patient_file/front_payment.php:1242:                                while ($drow = sqlFetchArray($dres)) {
+interface/patient_file/front_payment.php:1341:                                    $RowNumberOfInsurance = sqlFetchArray($ResultNumberOfInsurance);
+interface/patient_file/history/encounters.php:123:            while ($row = sqlFetchArray($noteResultSet)) {
+interface/patient_file/history/encounters.php:419:                $drow = sqlFetchArray($dres);
+interface/patient_file/history/encounters.php:454:            $count = sqlFetchArray($countRes);
+interface/patient_file/history/encounters.php:480:            while ($result4 = sqlFetchArray($res4)) {
+interface/patient_file/history/encounters.php:516:                    $drow = sqlFetchArray($dres);
+interface/patient_file/history/encounters.php:561:                            for ($i = 0; $irow = sqlFetchArray($ires); ++$i) {
+interface/patient_file/history/encounters.php:707:                        while ($srow = sqlFetchArray($sres)) {
+interface/patient_file/history/encounters.php:870:                $drow = sqlFetchArray($dres);
+interface/patient_file/history/history_save.php:58:while ($frow = sqlFetchArray($fres)) {
+interface/patient_file/history/history_sdoh.php:188:                                while ($row = sqlFetchArray($res)) {
+interface/patient_file/history/history_sdoh_list.php:74:            <?php while ($r = sqlFetchArray($res)) : ?>
+interface/patient_file/letter.php:354:while ($urow = sqlFetchArray($ures)) {
+interface/patient_file/letter.php:377:while ($srow = sqlFetchArray($sres)) {
+interface/patient_file/manage_dup_patients.php:172:        while ($row1 = sqlFetchArray($results)) {
+interface/patient_file/manage_dup_patients.php:365:while ($row1 = sqlFetchArray($res1)) {
+interface/patient_file/manage_dup_patients.php:379:    while ($row2 = sqlFetchArray($res2)) {
+interface/patient_file/merge_patients.php:182:                while ($source_row = sqlFetchArray($source_res)) {
+interface/patient_file/merge_patients.php:183:                    while ($target_row = sqlFetchArray($target_res)) {
+interface/patient_file/merge_patients.php:352:                while ($tbl = sqlFetchArray($res)) {
+interface/patient_file/merge_patients.php:468:            while ($drow = sqlFetchArray($dres)) {
+interface/patient_file/merge_patients.php:533:            while ($trow = sqlFetchArray($tres)) {
+interface/patient_file/pos_checkout_ippf.php:172:    while ($arow = sqlFetchArray($ares)) {
+interface/patient_file/pos_checkout_ippf.php:234:    while ($taxrow = sqlFetchArray($taxres)) {
+interface/patient_file/pos_checkout_ippf.php:830:    while ($inrow = sqlFetchArray($inres)) {
+interface/patient_file/pos_checkout_ippf.php:860:    while ($inrow = sqlFetchArray($inres)) {
+interface/patient_file/pos_checkout_ippf.php:996:    while ($inrow = sqlFetchArray($inres)) {
+interface/patient_file/pos_checkout_ippf.php:1015:    while ($inrow = sqlFetchArray($inres)) {
+interface/patient_file/pos_checkout_ippf.php:1475:while ($prow = sqlFetchArray($pres)) {
+interface/patient_file/pos_checkout_ippf.php:1827:while ($urow = sqlFetchArray($ures)) {
+interface/patient_file/pos_checkout_ippf.php:1891:    while ($tmprow = sqlFetchArray($tmpres)) {
+interface/patient_file/pos_checkout_ippf.php:2021:    while ($tmprow = sqlFetchArray($tmpres)) {
+interface/patient_file/pos_checkout_ippf.php:2202:    while ($lrow = sqlFetchArray($lres)) {
+interface/patient_file/pos_checkout_ippf.php:2223:    while ($lrow = sqlFetchArray($lres)) {
+interface/patient_file/pos_checkout_ippf.php:2345:while ($brow = sqlFetchArray($bres)) {
+interface/patient_file/pos_checkout_ippf.php:2424:while ($drow = sqlFetchArray($dres)) {
+interface/patient_file/pos_checkout_ippf.php:2566:while ($arow = sqlFetchArray($ares)) {
+interface/patient_file/pos_checkout_normal.php:360:                        while ($inrow = sqlFetchArray($inres)) {
+interface/patient_file/pos_checkout_normal.php:379:                        while ($inrow = sqlFetchArray($inres)) {
+interface/patient_file/pos_checkout_normal.php:401:                        while ($inrow = sqlFetchArray($inres)) {
+interface/patient_file/pos_checkout_normal.php:432:                        while ($inrow = sqlFetchArray($inres)) {
+interface/patient_file/pos_checkout_normal.php:448:                        while ($inrow = sqlFetchArray($inres)) {
+interface/patient_file/pos_checkout_normal.php:546:    while ($prow = sqlFetchArray($pres)) {
+interface/patient_file/pos_checkout_normal.php:713:            if ($RowSearch = sqlFetchArray($ResultSearchNew)) {
+interface/patient_file/pos_checkout_normal.php:797:    while ($urow = sqlFetchArray($ures)) {
+interface/patient_file/pos_checkout_normal.php:992:                                    while ($brow = sqlFetchArray($bres)) {
+interface/patient_file/pos_checkout_normal.php:1071:                                    while ($drow = sqlFetchArray($dres)) {
+interface/patient_file/pos_checkout_normal.php:1147:                                        while ($brow1112 = sqlFetchArray($bres1112)) {
+interface/patient_file/printed_fee_sheet.php:155:    while ($row = sqlFetchArray($res)) {
+interface/patient_file/printed_fee_sheet.php:170:    while ($prow = sqlFetchArray($pres)) {
+interface/patient_file/printed_fee_sheet.php:175:        while ($row = sqlFetchArray($res)) {
+interface/patient_file/printed_fee_sheet.php:188:        while ($trow = sqlFetchArray($tres)) {
+interface/patient_file/problem_encounter.php:277:            while ($row = sqlFetchArray($peres)) {
+interface/patient_file/problem_encounter.php:307:                                    while ($row = sqlFetchArray($pres)) {
+interface/patient_file/problem_encounter.php:334:                                    while ($row = sqlFetchArray($eres)) {
+interface/patient_file/reminder/patient_reminders.php:286:                while ($myrow = sqlFetchArray($result)) { ?>
+interface/patient_file/report/custom_report.php:259:                                while ($res_forms_ids = sqlFetchArray($arr)) {
+interface/patient_file/report/custom_report.php:290:            while ($result = sqlFetchArray($inclookupres)) {
+interface/patient_file/report/custom_report.php:442:                            while ($row = sqlFetchArray($result)) {
+interface/patient_file/report/custom_report.php:473:                        while ($row = sqlFetchArray($result)) {
+interface/patient_file/report/custom_report.php:789:                                while ($brow = sqlFetchArray($bres)) {
+interface/patient_file/report/patient_report.php:309:                                        while ($prow = sqlFetchArray($pres)) {
+interface/patient_file/report/patient_report.php:340:                                            while ($ierow = sqlFetchArray($ieres)) {
+interface/patient_file/report/patient_report.php:388:                                        while ($result2 = sqlFetchArray($res2)) {
+interface/patient_file/report/patient_report.php:392:                                        while ($result = sqlFetchArray($res)) {
+interface/patient_file/report/patient_report.php:519:                                while ($row = sqlFetchArray($res)) {
+interface/patient_file/report/patient_report.php:532:                                    while ($oprow = sqlFetchArray($opres)) {
+interface/patient_file/rules/patient_data.php:217:    while ($row = sqlFetchArray($res)) {
+interface/patient_file/summary/add_edit_amendments.php:253:                    while ($row = sqlFetchArray($resultSet)) {
+interface/patient_file/summary/add_edit_issue.php:115:    while ($issueCodesRow2 = sqlFetchArray($issueCodes2)) {
+interface/patient_file/summary/add_edit_issue.php:388:        while ($res = sqlFetchArray($qry)) {
+interface/patient_file/summary/add_edit_issue.php:754:                while ($vrow = sqlFetchArray($vres)) {
+interface/patient_file/summary/advancedirectives.php:127:                    while ($myrows3 = sqlFetchArray($resNew1)) {
+interface/patient_file/summary/advancedirectives.php:139:                        while ($myrows4 = sqlFetchArray($resNew2)) {
+interface/patient_file/summary/demographics.php:142:    while ($row = sqlFetchArray($ret)) {
+interface/patient_file/summary/demographics.php:174:        while ($results = sqlFetchArray($query)) {
+interface/patient_file/summary/demographics.php:196:        while ($result = sqlFetchArray($query)) {
+interface/patient_file/summary/demographics.php:549:                while ($row_soapstatus = sqlFetchArray($soap_status)) { ?>
+interface/patient_file/summary/demographics.php:728:            while ($gfrow = sqlFetchArray($gfres)) { ?>
+interface/patient_file/summary/demographics.php:940:                    while ($rowresult4 = sqlFetchArray($result4)) { ?>
+interface/patient_file/summary/demographics.php:1191:                        while ($row = sqlFetchArray($res)) {
+interface/patient_file/summary/demographics.php:1453:                        while ($row = sqlFetchArray($result)) {
+interface/patient_file/summary/demographics.php:1545:                    while ($gfrow = sqlFetchArray($gfres)) :
+interface/patient_file/summary/demographics.php:1674:                            while ($myrows3 = sqlFetchArray($resNew1)) {
+interface/patient_file/summary/demographics.php:1686:                                while (($myrows4 = sqlFetchArray($resNew2)) && ($limitCounter == 0)) {
+interface/patient_file/summary/demographics.php:1841:                        while ($result = sqlFetchArray($query)) {
+interface/patient_file/summary/demographics.php:1902:                            while ($result2 = sqlFetchArray($query)) {
+interface/patient_file/summary/demographics_full.php:561:            while ($mfrow = sqlFetchArray($mfres)) {
+interface/patient_file/summary/demographics_print.php:243:while ($frow = sqlFetchArray($fres)) {
+interface/patient_file/summary/demographics_save.php:77:while ($frow = sqlFetchArray($fres)) {
+interface/patient_file/summary/disc_fragment.php:37:    for ($iter = 0; $frow = sqlFetchArray($r1); $iter++) {
+interface/patient_file/summary/disclosure_full.php:144:                    for ($iter = 0; $frow = sqlFetchArray($r1); $iter++) {
+interface/patient_file/summary/immunizations.php:254:        for ($iter = 0; $row = sqlFetchArray($observation_criteria_res); $iter++) {
+interface/patient_file/summary/immunizations.php:264:        for ($iter = 0; $row = sqlFetchArray($observation_criteria_value_res); $iter++) {
+interface/patient_file/summary/immunizations.php:285:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/patient_file/summary/immunizations.php:472:                                        while ($row = sqlFetchArray($result)) {
+interface/patient_file/summary/immunizations.php:539:                                while ($row = sqlFetchArray($result)) {
+interface/patient_file/summary/immunizations.php:786:                        while ($row = sqlFetchArray($result)) {
+interface/patient_file/summary/labdata.php:194:                                        while ($myrow = sqlFetchArray($query)) {
+interface/patient_file/summary/labdata.php:285:                            while ($myrow = sqlFetchArray($query)) {
+interface/patient_file/summary/labdata.php:393:                            while ($myrow = sqlFetchArray($query)) {
+interface/patient_file/summary/list_amendments.php:111:                            <?php while ($row = sqlFetchArray($resultSet)) {
+interface/patient_file/summary/pnotes_full_add.php:261:                        while ($urow = sqlFetchArray($ures)) {
+interface/patient_file/summary/print_amendments.php:78:    while ($row = sqlFetchArray($resultSet)) {
+interface/patient_file/summary/shot_record.php:52:    while ($row = sqlFetchArray($data_array)) {
+interface/patient_file/summary/stats.php:73:    while ($row = sqlFetchArray($res)) {
+interface/patient_file/summary/stats.php:112:    while ($row = sqlFetchArray($res)) {
+interface/patient_file/summary/stats.php:161:            while ($row = sqlFetchArray($res)) {
+interface/patient_file/summary/stats.php:253:            while ($row = sqlFetchArray($dres)) {
+interface/patient_file/summary/stats.php:286:    while ($row = sqlFetchArray($result)) {
+interface/patient_file/summary/stats.php:326:    while ($row = sqlFetchArray($res)) {
+interface/patient_file/summary/stats_full.php:314:                        while ($row = sqlFetchArray($pres)) :
+interface/patient_file/summary/track_anything_fragment.php:46:    while ($myrow = sqlFetchArray($result)) {
+interface/patient_file/transaction/add_transaction.php:72:    while ($frow = sqlFetchArray($fres)) {
+interface/patient_file/transaction/add_transaction.php:434:                            while ($ttrow = sqlFetchArray($ttres)) {
+interface/patient_file/transaction/add_transaction.php:500:                        while ($frow = sqlFetchArray($fres)) {
+interface/patient_file/transaction/add_transaction.php:530:                        while ($frow = sqlFetchArray($fres)) {
+interface/patient_file/transaction/print_referral.php:185:while ($frow = sqlFetchArray($fres)) {
+interface/patient_tracker/patient_tracker.php:120:while ($lrow = sqlFetchArray($lres)) {
+interface/patient_tracker/patient_tracker.php:135:    while ($icon = sqlFetchArray($iconed)) {
+interface/patient_tracker/patient_tracker.php:141:    $prefs = sqlFetchArray($preferences);
+interface/patient_tracker/patient_tracker.php:192:                                    while ($cat = sqlFetchArray($categories)) {
+interface/patient_tracker/patient_tracker.php:208:                                    while ($apptstat = sqlFetchArray($apptstats)) {
+interface/patient_tracker/patient_tracker.php:223:                                        while ($fac = sqlFetchArray($fac_sql)) {
+interface/patient_tracker/patient_tracker.php:246:                                while ($urow = sqlFetchArray($ures)) {
+interface/patient_tracker/patient_tracker.php:533:                            while ($row = sqlFetchArray($myMedEx)) {
+interface/practice/ins_list.php:173:while ($row = sqlFetchArray($res)) {
+interface/practice/ins_search.php:363:                                while ($xrow = sqlFetchArray($xres)) {
+interface/procedure_tools/ereqs/ereq_universal_form.php:173:        while ($row = sqlFetchArray($proc_sql)) {
+interface/procedure_tools/gen_universal_hl7/gen_hl7_order.inc.php:181:    while ($mres = sqlFetchArray($msql)) {
+interface/procedure_tools/gen_universal_hl7/gen_hl7_order.inc.php:298:    while ($pcrow = sqlFetchArray($pcres)) {
+interface/procedure_tools/gen_universal_hl7/gen_hl7_order.inc.php:365:        while ($qrow = sqlFetchArray($qres)) {
+interface/procedure_tools/labcorp/ereq_form.php:181:        while ($row = sqlFetchArray($proc_sql)) {
+interface/procedure_tools/labcorp/gen_hl7_order.inc.php:100:    while ($drow = sqlFetchArray($dres)) {
+interface/procedure_tools/labcorp/gen_hl7_order.inc.php:136:    while ($drow = sqlFetchArray($gres)) {
+interface/procedure_tools/labcorp/gen_hl7_order.inc.php:507:    while ($pdrow = sqlFetchArray($pdres)) {
+interface/procedure_tools/labcorp/gen_hl7_order.inc.php:536:    while ($pcrow = sqlFetchArray($pcres)) {
+interface/procedure_tools/labcorp/gen_hl7_order.inc.php:600:        while ($qrow = sqlFetchArray($qres)) {
+interface/procedure_tools/libs/labs_ajax.php:47:    while ($data = sqlFetchArray($result)) {
+interface/procedure_tools/quest/gen_hl7_order.inc.php:177:    while ($mres = sqlFetchArray($msql)) {
+interface/procedure_tools/quest/gen_hl7_order.inc.php:297:    while ($pcrow = sqlFetchArray($pcres)) {
+interface/procedure_tools/quest/gen_hl7_order.inc.php:364:        while ($qrow = sqlFetchArray($qres)) {
+interface/reports/amc_full_report.php:90:        for ($iter = $index; $row = sqlFetchArray($rez); $iter++) {
+interface/reports/amc_full_report.php:143:            for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+interface/reports/amc_tracking.php:250:                while ($urow = sqlFetchArray($ures)) {
+interface/reports/appointments_report.php:271:                while ($urow = sqlFetchArray($ures)) {
+interface/reports/appointments_report.php:303:                                        while ($cat = sqlFetchArray($categories)) {
+interface/reports/appt_encounter_report.php:357:        while ($row = sqlFetchArray($res)) {
+interface/reports/appt_encounter_report.php:379:            while ($brow = sqlFetchArray($bres)) {
+interface/reports/audit_log_tamper_report.php:230:        while ($iter = sqlFetchArray($ret)) {
+interface/reports/chart_location_activity.php:171:        while ($row = sqlFetchArray($res)) {
+interface/reports/charts_checked_out.php:85:while ($row = sqlFetchArray($res)) {
+interface/reports/clinical_reports.php:729:        while ($row = sqlFetchArray($result)) { ?>
+interface/reports/collections_report.php:627:                        while ($urow = sqlFetchArray($ures)) {
+interface/reports/collections_report.php:795:    while ($erow = sqlFetchArray($eres)) {
+interface/reports/custom_report_range.php:288:    while ($result = sqlFetchArray($res)) {
+interface/reports/daily_summary_report.php:280:        while ($totalNewPatientRecord = sqlFetchArray($newPatientSql)) {
+interface/reports/daily_summary_report.php:292:        while ($totalVisitRecord = sqlFetchArray($totalVisitSql)) {
+interface/reports/daily_summary_report.php:306:        while ($totalPaymentRecord = sqlFetchArray($totalPaymetsSql)) {
+interface/reports/daily_summary_report.php:321:        while ($totalPaidRecord = sqlFetchArray($totalPaidAmountSql)) {
+interface/reports/destroyed_drugs_report.php:218:    while ($row = sqlFetchArray($res)) {
+interface/reports/direct_message_log.php:151:while ($row = sqlFetchArray($res)) {
+interface/reports/direct_message_log.php:189:} // $row = sqlFetchArray($res) while
+interface/reports/encounters_report.php:260:                while ($urow = sqlFetchArray($ures)) {
+interface/reports/encounters_report.php:396:        while ($row = sqlFetchArray($res)) {
+interface/reports/encounters_report.php:459:                while ($srow = sqlFetchArray($sres)) {
+interface/reports/external_data.php:84:                                while ($row1 = sqlFetchArray($res1)) {
+interface/reports/external_data.php:123:                                while ($row2 = sqlFetchArray($res2)) {
+interface/reports/front_receipts_report.php:151:            while ($urow = sqlFetchArray($ures)) {
+interface/reports/front_receipts_report.php:262:        while ($row = sqlFetchArray($res)) {
+interface/reports/immunization_report.php:143:    while ($r = sqlFetchArray($res)) {
+interface/reports/immunization_report.php:359:                                        while ($crow = sqlFetchArray($cres)) {
+interface/reports/immunization_report.php:448:                    while ($row = sqlFetchArray($res)) {
+interface/reports/insurance_allocation_report.php:203:    while ($row = sqlFetchArray($res)) {
+interface/reports/inventory_activity.php:527:    while ($prow = sqlFetchArray($pres)) {
+interface/reports/inventory_activity.php:671:    while ($row = sqlFetchArray($res)) {
+interface/reports/inventory_list.php:131:    while ($row = sqlFetchArray($res)) {
+interface/reports/inventory_list.php:199:    while ($row = sqlFetchArray($res)) {
+interface/reports/inventory_list.php:219:    while ($row = sqlFetchArray($res)) {
+interface/reports/inventory_list.php:239:    while ($row = sqlFetchArray($res)) {
+interface/reports/inventory_list.php:452:    while ($irow = sqlFetchArray($ires)) {
+interface/reports/inventory_list.php:825:    while ($frow = sqlFetchArray($fres)) {
+interface/reports/inventory_list.php:843:    while ($lrow = sqlFetchArray($lres)) {
+interface/reports/inventory_list.php:963:    while ($row = sqlFetchArray($res)) {
+interface/reports/inventory_transactions.php:411:    while ($row = sqlFetchArray($res)) {
+interface/reports/ip_tracker.php:218:                while ($row = sqlFetchArray($ipLoginFailsSql)) {
+interface/reports/ippf_cyp_report.php:221:    while ($frow = sqlFetchArray($fres)) {
+interface/reports/ippf_cyp_report.php:316:    while ($row = sqlFetchArray($res)) {
+interface/reports/ippf_cyp_report.php:349:    while ($row = sqlFetchArray($res)) {
+interface/reports/ippf_daily.php:223:    while ($lorow = sqlFetchArray($lores)) {
+interface/reports/ippf_daily.php:259:    while ($row = sqlFetchArray($res)) {
+interface/reports/ippf_statistics.php:150:while ($lrow = sqlFetchArray($lres)) {
+interface/reports/ippf_statistics.php:851:      while ($drow = sqlFetchArray($dres)) {
+interface/reports/ippf_statistics.php:867:        while ($drow = sqlFetchArray($dres)) {
+interface/reports/ippf_statistics.php:1296:        while ($row = sqlFetchArray($res)) {
+interface/reports/ippf_statistics.php:1325:                while ($brow = sqlFetchArray($bres)) {
+interface/reports/ippf_statistics.php:1361:        while ($row = sqlFetchArray($res)) {
+interface/reports/ippf_statistics.php:1385:    while ($row = sqlFetchArray($res)) {
+interface/reports/ippf_statistics.php:1407:    while ($row = sqlFetchArray($res)) {
+interface/reports/ippf_statistics.php:1465:        while ($row = sqlFetchArray($res)) {
+interface/reports/message_list.php:239:    while ($row = sqlFetchArray($res)) {
+interface/reports/non_reported.php:47:    while ($arow = sqlFetchArray($res)) {
+interface/reports/non_reported.php:160:    while ($r = sqlFetchArray($res)) {
+interface/reports/non_reported.php:356:while ($crow = sqlFetchArray($cres)) {
+interface/reports/non_reported.php:451:    while ($row = sqlFetchArray($res)) {
+interface/reports/pat_ledger.php:75:    while ($row = sqlFetchArray($result)) {
+interface/reports/pat_ledger.php:101:        $rret = sqlFetchArray($fres);
+interface/reports/pat_ledger.php:127:    while ($row = sqlFetchArray($result)) {
+interface/reports/pat_ledger.php:525:                                                            while ($urow = sqlFetchArray($ures)) {
+interface/reports/pat_ledger.php:751:    while ($erow = sqlFetchArray($res)) {
+interface/reports/patient_flow_board_report.php:188:                while ($urow = sqlFetchArray($ures)) {
+interface/reports/patient_flow_board_report.php:222:                                        while ($cat = sqlFetchArray($categories)) {
+interface/reports/patient_list.php:263:    while ($row = sqlFetchArray($res)) {
+interface/reports/patient_list_creation.php:213:for ($iter = 0; $row = sqlFetchArray($encarr_from_db); $iter++) {
+interface/reports/patient_list_creation.php:923:        while ($row = sqlFetchArray($result)) {
+interface/reports/prescriptions_report.php:261:        while ($row = sqlFetchArray($res)) {
+interface/reports/receipts_by_method_report.php:404:                        while ($row = sqlFetchArray($res)) {
+interface/reports/receipts_by_method_report.php:570:            while ($row = sqlFetchArray($res)) {
+interface/reports/receipts_by_method_report.php:644:        while ($row = sqlFetchArray($res)) {
+interface/reports/referrals_report.php:207:        while ($row = sqlFetchArray($res)) {
+interface/reports/report_results.php:180:while ($row = sqlFetchArray($res)) {
+interface/reports/report_results.php:267:} // $row = sqlFetchArray($res) while
+interface/reports/sales_by_item.php:408:            while ($row = sqlFetchArray($res)) {
+interface/reports/sales_by_item.php:575:    while ($row = sqlFetchArray($res)) {
+interface/reports/sales_by_item.php:613:    while ($row = sqlFetchArray($res)) {
+interface/reports/services_by_category.php:172:    while ($prow = sqlFetchArray($pres)) {
+interface/reports/services_by_category.php:200:    while ($row = sqlFetchArray($res)) {
+interface/reports/services_by_category.php:245:        while ($prow = sqlFetchArray($pres)) {
+interface/reports/svc_code_financial_report.php:143:            while ($urow = sqlFetchArray($ures)) {
+interface/reports/unique_seen_patients_report.php:228:    while ($row = sqlFetchArray($res)) {
+interface/super/edit_globals.php:64:    while ($globalsrow = sqlFetchArray($globalsres)) {
+interface/super/edit_globals.php:131:    while ($globalsrow = sqlFetchArray($bgservices)) {
+interface/super/edit_globals.php:485:                                                while ($glrow = sqlFetchArray($glres)) {
+interface/super/edit_globals.php:590:                                                    while ($row = sqlFetchArray($res)) {
+interface/super/edit_globals.php:622:                                                    while ($row = sqlFetchArray($res)) {
+interface/super/edit_globals.php:639:                                                    while ($row = sqlFetchArray($ret)) {
+interface/super/edit_globals.php:691:                                                    while ($row = sqlFetchArray($result)) {
+interface/super/edit_layout.php:57:    while ($grow = sqlFetchArray($gres)) {
+interface/super/edit_layout.php:75:while ($lrow = sqlFetchArray($lres)) {
+interface/super/edit_layout.php:111:    while ($row = sqlFetchArray($res)) {
+interface/super/edit_layout.php:156:    while ($result = sqlFetchArray($results)) {
+interface/super/edit_layout.php:678:    while ($row = sqlFetchArray($res)) {
+interface/super/edit_layout.php:701:    $row = sqlFetchArray($res);
+interface/super/edit_layout.php:703:    while ($row = sqlFetchArray($res)) {
+interface/super/edit_layout.php:756:        while ($row = sqlFetchArray($res)) {
+interface/super/edit_layout.php:911:        while ($row = sqlFetchArray($res)) {
+interface/super/edit_layout.php:1598:while ($grow = sqlFetchArray($gres)) {
+interface/super/edit_layout.php:1615:    while ($row = sqlFetchArray($res)) {
+interface/super/edit_layout.php:1832:        while ($row = sqlFetchArray($res)) {
+interface/super/edit_layout_props.php:396:    while ($itrow = sqlFetchArray($itres)) {
+interface/super/edit_list.php:489:        while ($frow = sqlFetchArray($fres)) {
+interface/super/edit_list.php:1189:                            while ($row = sqlFetchArray($res)) {
+interface/super/edit_list.php:1410:                    $total_rows = sqlFetchArray($res)["total_rows"];
+interface/super/edit_list.php:1414:                    while ($row = sqlFetchArray($res)) {
+interface/super/edit_list.php:1422:                    $total_rows = sqlFetchArray($res)["total_rows"];
+interface/super/edit_list.php:1426:                    while ($row = sqlFetchArray($res)) {
+interface/super/edit_list.php:1434:                    $total_rows = sqlFetchArray($res)["total_rows"];
+interface/super/edit_list.php:1438:                    while ($row = sqlFetchArray($res)) {
+interface/super/edit_list.php:1449:                    $total_rows = sqlFetchArray($res)["total_rows"];
+interface/super/edit_list.php:1458:                    while ($row = sqlFetchArray($res)) {
+interface/super/layout_listitems_ajax.php:36:while ($row = sqlFetchArray($res)) {
+interface/super/layout_service_codes.php:118:                while ($relrow = sqlFetchArray($relres)) {
+interface/super/layout_service_codes.php:210:while ($row = sqlFetchArray($res)) {
+interface/super/manage_site_files.php:143:        while ($lrow = sqlFetchArray($lres)) {
+interface/therapy_groups/therapy_groups_models/group_statuses_model.php:41:        while ($row = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_models/group_statuses_model.php:57:        while ($row = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_models/therapy_groups_counselors_model.php:39:        while ($c = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_models/therapy_groups_counselors_model.php:53:        while ($c = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_models/therapy_groups_encounters_model.php:42:        while ($row = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_models/therapy_groups_model.php:39:        while ($tg = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_models/therapy_groups_model.php:92://        $count = sqlFetchArray($result);
+interface/therapy_groups/therapy_groups_models/therapy_groups_model.php:129:        while ($row = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_models/therapy_groups_participants_model.php:48:        while ($gp = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_models/therapy_groups_participants_model.php:89://        $count = sqlFetchArray($result);
+interface/therapy_groups/therapy_groups_models/users_model.php:44:        while ($u = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_models/users_model.php:79:            while ($p = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_models/users_model.php:87:            while ($p = sqlFetchArray($result)) {
+interface/therapy_groups/therapy_groups_views/groupDetailsGeneralData.php:255:        while ($rowresult4 = sqlFetchArray($result4)) {
+interface/therapy_groups/therapy_groups_views/groupDetailsParticipants.php:287:        while ($rowresult4 = sqlFetchArray($result4)) {
+interface/usergroup/addrbook_edit.php:112:    while ($row_query = sqlFetchArray($sql)) {
+interface/usergroup/addrbook_list.php:184:while ($row = sqlFetchArray($res)) {
+interface/usergroup/facility_user.php:41:    while ($frow = sqlFetchArray($fres)) {
+interface/usergroup/facility_user.php:94:    for ($i = 0; $row = sqlFetchArray($f_res); $i++) {
+interface/usergroup/facility_user.php:103:    for ($i = 0; $row = sqlFetchArray($l_res); $i++) {
+interface/usergroup/facility_user.php:140:                        while ($user = sqlFetchArray($u_res)) {
+interface/usergroup/facility_user_admin.php:155:    for ($i = 0; $row = sqlFetchArray($l_res); $i++) {
+interface/usergroup/mfa_registrations.php:151:                                    while ($row = sqlFetchArray($res)) {
+interface/usergroup/user_admin.php:53:for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/usergroup/user_admin.php:562:        while ($frow = sqlFetchArray($fres)) {
+interface/usergroup/user_admin.php:579:                while ($lrow = sqlFetchArray($lres)) {
+interface/usergroup/user_info.php:92:$row = sqlFetchArray($res);
+interface/usergroup/usergroup_admin.php:85:                $row = sqlFetchArray($res);
+interface/usergroup/usergroup_admin.php:104:        $user_data = sqlFetchArray(sqlStatement("select * from users where id= ? ", [$_POST["id"]]));
+interface/usergroup/usergroup_admin.php:180:            while ($tmprow = sqlFetchArray($tmpres)) {
+interface/usergroup/usergroup_admin.php:316:        $user_data = sqlFetchArray(sqlStatement("select username from users where id= ?", [$_POST["id"]]));
+interface/usergroup/usergroup_admin.php:487:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/usergroup/usergroup_admin.php:521:    for ($iter = 0; $row = sqlFetchArray($res); $iter++)
+interface/usergroup/usergroup_admin.php:537:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/usergroup/usergroup_admin.php:551:        if (sqlFetchArray($res) != false) {
+interface/usergroup/usergroup_admin.php:684:                        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/usergroup/usergroup_admin.php:784:                for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/usergroup/usergroup_admin_add.php:281:for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/usergroup/usergroup_admin_add.php:461:        while ($frow = sqlFetchArray($fres)) {
+interface/usergroup/usergroup_admin_add.php:478:                while ($lrow = sqlFetchArray($lres)) {
+interface/usergroup/usergroup_admin_add.php:580:for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/usergroup/usergroup_admin_add.php:612:for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/usergroup/usergroup_admin_add.php:627:for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+interface/usergroup/usergroup_admin_add.php:648:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+ippf_upgrade.php:124:                    while ($trow = sqlFetchArray($tres)) {
+ippf_upgrade.php:151:                while ($irow = sqlFetchArray($ires)) {
+ippf_upgrade.php:162:                        while ($ierow = sqlFetchArray($ieres)) {
+library/ESign/DbRow/Signable.php:44:        while ($row = sqlFetchArray($result)) {
+library/ESign/Encounter/Signable.php:45:        while ($encRow = sqlFetchArray($res)) {
+library/ESign/Form/LBF/Signable.php:41:            while ($frow = sqlFetchArray($fres)) {
+library/ESign/Form/Signable.php:129:            $frs = sqlFetchArray($rs);
+library/ESign/Form/Signable.php:132:            while ($fr = sqlFetchArray($rs)) {
+library/FeeSheet.class.php:513:                while ($row = sqlFetchArray($prrecordset)) {
+library/FeeSheet.class.php:696:            while ($row = sqlFetchArray($prrecordset)) {
+library/FeeSheet.class.php:808:        while ($srow = sqlFetchArray($sres)) {
+library/FeeSheetHtml.class.php:61:        while ($row = sqlFetchArray($res)) {
+library/FeeSheetHtml.class.php:117:            while ($lrow = sqlFetchArray($lres)) {
+library/FeeSheetHtml.class.php:183:        while ($lrow = sqlFetchArray($lres)) {
+library/FeeSheetHtml.class.php:286:        while ($plrow = sqlFetchArray($plres)) {
+library/MedEx/API.php:142:            while ($urow = sqlFetchArray($ures)) {
+library/MedEx/API.php:149:        while ($urow = sqlFetchArray($ures)) {
+library/MedEx/API.php:158:        while ($urow = sqlFetchArray($ures)) {
+library/MedEx/API.php:163:        while ($urow = sqlFetchArray($ures)) {
+library/MedEx/API.php:168:        while ($urow = sqlFetchArray($ures)) {
+library/MedEx/API.php:182:        while ($urow = sqlFetchArray($ures)) {
+library/MedEx/API.php:197:        while ($result1 = sqlFetchArray($test)) {
+library/MedEx/API.php:200:            $result2 = sqlFetchArray($test2);
+library/MedEx/API.php:213:        while ($row = sqlFetchArray($result)) {
+library/MedEx/API.php:217:            $result3 = sqlFetchArray($test3);
+library/MedEx/API.php:225:        while ($urow = sqlFetchArray($my_status)) {
+library/MedEx/API.php:271:        $info = sqlFetchArray(sqlStatement($query));
+library/MedEx/API.php:306:        while ($icons = sqlFetchArray($result)) {
+library/MedEx/API.php:403:                    while ($appt = sqlFetchArray($result)) {
+library/MedEx/API.php:468:                while ($recall = sqlFetchArray($result)) {
+library/MedEx/API.php:618:                while ($appt = sqlFetchArray($result)) {
+library/MedEx/API.php:708:                    while ($appt = sqlFetchArray($result)) {
+library/MedEx/API.php:758:                while ($urow = sqlFetchArray($ures)) {
+library/MedEx/API.php:928:                while ($appt = sqlFetchArray($result)) {
+library/MedEx/API.php:1418:                $patient = sqlFetchArray(sqlStatement($query, [$data['pc_eid']]));
+library/MedEx/API.php:1434:                $tracker = sqlFetchArray(sqlStatement($query, [$data['pc_eid']]));
+library/MedEx/API.php:1705:                                                        while ($fac = sqlFetchArray($result)) {
+library/MedEx/API.php:1728:                                                    while ($prov = sqlFetchArray($ures)) {
+library/MedEx/API.php:1926:                                        while ($fac = sqlFetchArray($fac_sql)) {
+library/MedEx/API.php:1957:                                    $c = sqlFetchArray($ures);
+library/MedEx/API.php:1971:                                        while ($urow = sqlFetchArray($ures)) {
+library/MedEx/API.php:2138:        while ($recall = sqlFetchArray($result)) {
+library/MedEx/API.php:2155:        while ($facrow = sqlFetchArray($fac_sql)) {
+library/MedEx/API.php:2160:        while ($prov = sqlFetchArray($prov_sql)) {
+library/MedEx/API.php:2307:        $count = sqlFetchArray(sqlStatement($query, [$recall['r_pid'],$recall['r_eventDate']]));
+library/MedEx/API.php:2326:        while ($progress = sqlFetchArray($result)) {
+library/MedEx/API.php:2435:        $result = sqlFetchArray(sqlStatement($query, [$recall['pid']]));
+library/MedEx/API.php:2469:        while ($icons = sqlFetchArray($result)) {
+library/MedEx/API.php:2481:        while ($icons = sqlFetchArray($result)) {
+library/MedEx/API.php:2512:            $prefs = sqlFetchArray(sqlStatement($sql));
+library/MedEx/API.php:2672:                                            $firstProvider = sqlFetchArray(sqlStatement("SELECT id FROM users WHERE username=?", [$pc_username[0]]));
+library/MedEx/API.php:2682:                                    while ($urow = sqlFetchArray($ures)) {
+library/MedEx/API.php:2705:                                    while ($facrow = sqlFetchArray($qsql)) {
+library/MedEx/API.php:2856:            while ($urow = sqlFetchArray($result)) {
+library/MedEx/API.php:2999:            while ($hit = sqlFetchArray($datas)) {
+library/MedEx/API.php:3468:        $info = sqlFetchArray(sqlStatement($query));
+library/MedEx/API.php:3470:        $back = sqlFetchArray(sqlStatement($sql));
+library/ajax/addlistitem.php:80:while ($lrow = sqlFetchArray($lres)) {
+library/ajax/adminacl_ajax.php:257:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+library/ajax/code_attributes_ajax.php:56:        while ($lrow = sqlFetchArray($lres)) {
+library/ajax/code_attributes_ajax.php:78:        if ($crow = sqlFetchArray($cres)) {
+library/ajax/document_helpers.php:41:    while ($row = sqlFetchArray($response)) {
+library/ajax/facility_ajax_code.php:52:$row = sqlFetchArray($q);
+library/ajax/graphs.php:228:while ($row = sqlFetchArray($values)) {
+library/ajax/graphs.php:249:    while ($row = sqlFetchArray($values_alt)) {
+library/ajax/i18n_generator.php:28:while ($row = sqlFetchArray($tarns)) {
+library/ajax/imm_autocomplete/search.php:29:    while ($row = sqlFetchArray($res)) {
+library/ajax/payment_ajax.php:50:        while ($row = sqlFetchArray($res)) {
+library/ajax/payment_ajax.php:127:        while ($row = sqlFetchArray($res)) {
+library/ajax/payment_ajax.php:177:        while ($row = sqlFetchArray($res)) {
+library/ajax/prescription_drugname_lookup.php:51:    while ($row = sqlFetchArray($res)) {
+library/ajax/sql_server_status.php:43:    while ($stat_row = sqlFetchArray($stat_result)) {
+library/ajax/template_context_search.php:50:while ($result = sqlFetchArray($r)) {
+library/amc.php:209:        for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/amc.php:216:        for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/amc.php:239:            while ($res = sqlFetchArray($rez)) {
+library/amc.php:262:            while ($res = sqlFetchArray($rez)) {
+library/amc.php:280:            while ($res = sqlFetchArray($rez)) {
+library/appointments.inc.php:200:    while ($event = sqlFetchArray($res)) {
+library/appointments.inc.php:466:    $row2 = sqlFetchArray($res2);
+library/appointments.inc.php:788:    while ($row = sqlFetchArray($res)) {
+library/calendar.inc.php:47:    while ($row = sqlFetchArray($rez)) {
+library/calendar.inc.php:62:    while ($row = sqlFetchArray($res)) {
+library/checkout_receipt_array.inc.php:344:    while ($arow = sqlFetchArray($ares)) {
+library/checkout_receipt_array.inc.php:360:    while ($inrow = sqlFetchArray($inres)) {
+library/checkout_receipt_array.inc.php:403:    while ($inrow = sqlFetchArray($inres)) {
+library/checkout_receipt_array.inc.php:456:    while ($inrow = sqlFetchArray($inres)) {
+library/checkout_receipt_array.inc.php:480:    while ($inrow = sqlFetchArray($inres)) {
+library/checkout_receipt_array.inc.php:507:    while ($inrow = sqlFetchArray($inres)) {
+library/checkout_receipt_array.inc.php:563:    while ($row = sqlFetchArray($res)) {
+library/classes/ClinicalTypes/ClinicalType.php:72:        $arr = sqlFetchArray($results);
+library/classes/ClinicalTypes/Medication.php:83:            for ($iter = 0; $row = sqlFetchArray($result); $iter++) {
+library/classes/Document.class.php:319:        while ($category = sqlFetchArray($resultSet)) {
+library/classes/InsuranceNumbers.class.php:98:            while ($row = sqlFetchArray($results)) {
+library/classes/Pharmacy.class.php:281:        while ($row = sqlFetchArray($results)) {
+library/classes/X12Partner.class.php:114:        while ($row = sqlFetchArray($res)) {
+library/classes/postmaster.php:122:            while ($ret = sqlFetchArray($res)) {
+library/classes/rulesets/Amc/library/AbstractAmcReport.php:422:        for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/classes/rulesets/Amc/library/AbstractAmcReport.php:461:        for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/classes/rulesets/Amc/library/AbstractAmcReport.php:466:            while ($frow = sqlFetchArray($fres)) {
+library/classes/rulesets/Amc/reports/AMC_304f/Numerator.php:24:        while ($res = sqlFetchArray($amcResults)) {
+library/classes/rulesets/Amc/reports/AMC_315g_2c/Denominator.php:54:        $result = sqlFetchArray($rez);
+library/classes/thumbnail/ThumbnailGenerator.php:61:        $row = sqlFetchArray($results);
+library/classes/thumbnail/ThumbnailGenerator.php:79:        while ($row = sqlFetchArray($results)) {
+library/clinical_rules.php:322:    for ($iter = 0; $row = sqlFetchArray($res_allergies); $iter++) {
+library/clinical_rules.php:351:        while ($urow = sqlFetchArray($res_meds)) {
+library/clinical_rules.php:357:        while ($urow = sqlFetchArray($res_rx)) {
+library/clinical_rules.php:651:        while ($urow = sqlFetchArray($rez)) {
+library/clinical_rules.php:715:        while ($frow = sqlFetchArray($frez)) {
+library/clinical_rules.php:814:        while ($urow = sqlFetchArray($ures)) {
+library/clinical_rules.php:845:                while ($urow = sqlFetchArray($ures)) {
+library/clinical_rules.php:1439:            for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/clinical_rules.php:1507:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/clinical_rules.php:1567:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/clinical_rules.php:1887:    for ($iter = 0; $row = sqlFetchArray($sql); $iter++) {
+library/clinical_rules.php:2019:    for ($iter = 0; $row = sqlFetchArray($sql); $iter++) {
+library/clinical_rules.php:2153:    for ($iter = 0; $row = sqlFetchArray($sql); $iter++) {
+library/clinical_rules.php:2310:    for ($iter = 0; $row = sqlFetchArray($sql); $iter++) {
+library/clinical_rules.php:2331:    for ($iter = 0; $row = sqlFetchArray($sql); $iter++) {
+library/clinical_rules.php:2359:    for ($iter = 0; $row = sqlFetchArray($sql); $iter++) {
+library/clinical_rules.php:2391:    for ($iter = 0; $row = sqlFetchArray($sql); $iter++) {
+library/custom_template/add_context.php:182:                        while ($row = sqlFetchArray($res)) {
+library/custom_template/add_custombutton.php:118:        while ($row = sqlFetchArray($res)) {
+library/custom_template/add_template.php:102:                            while ($row = sqlFetchArray($res)) {
+library/custom_template/ajax_code.php:62:        while ($rowTemplates = sqlFetchArray($resTemplates)) {
+library/custom_template/ajax_code.php:97:        while ($row = sqlFetchArray($res)) {
+library/custom_template/ajax_code.php:122:    while ($rowTemplates = sqlFetchArray($resTemplates)) {
+library/custom_template/ajax_code.php:131:    while ($row = sqlFetchArray($res)) {
+library/custom_template/ajax_code.php:141:    while ($row = sqlFetchArray($res)) {
+library/custom_template/ajax_code.php:163:    while ($row = sqlFetchArray($res)) {
+library/custom_template/custom_template.php:288:                    while ($rowTemplates = sqlFetchArray($resTemplates)) {
+library/custom_template/custom_template.php:298:                while ($row = sqlFetchArray($res)) { ?>
+library/custom_template/custom_template.php:340:                                            while ($row = sqlFetchArray($res)) {
+library/custom_template/delete_category.php:104:    while ($row = sqlFetchArray($res)) {
+library/custom_template/personalize.php:49:            while ($row = sqlFetchArray($qry)) {
+library/custom_template/personalize.php:62:            while ($row = sqlFetchArray($qry)) {
+library/custom_template/personalize.php:64:                while ($rowTU = sqlFetchArray($qryTU)) {
+library/custom_template/personalize.php:71:            while ($row = sqlFetchArray($qry)) {
+library/custom_template/personalize.php:307:                        while ($context_row = sqlFetchArray($context_res)) {
+library/custom_template/personalize.php:322:                        while ($user_row = sqlFetchArray($user_res)) {
+library/custom_template/personalize.php:386:                        while ($rowTemplates = sqlFetchArray($resTemplates)) {
+library/custom_template/personalize.php:403:                        while ($roworphan = sqlFetchArray($resorphan ?? '')) {
+library/custom_template/personalize.php:429:                        while ($rowTemplates = sqlFetchArray($resTemplates)) {
+library/custom_template/quest_popup.php:86:                    while ($row = sqlFetchArray($res)) {
+library/custom_template/share_template.php:92:                            while ($row = sqlFetchArray($res)) {
+library/custom_template/upgrade_version.php:34:while ($row = sqlFetchArray($rs)) {
+library/custom_template/upgrade_version.php:38:    while ($row2 = sqlFetchArray($rs2)) {
+library/custom_template/upgrade_version.php:41:        while ($row3 = sqlFetchArray($rs3)) {
+library/dated_reminder_functions.php:110:    for ($i = 0; $drRow = sqlFetchArray($drSQL); $i++) {
+library/dated_reminder_functions.php:115:            $pRow = sqlFetchArray($pSQL);
+library/dated_reminder_functions.php:174:    $drRow = sqlFetchArray($drSQL);
+library/dated_reminder_functions.php:208:    $drRow = sqlFetchArray($drSQL);
+library/dated_reminder_functions.php:296:        $rdrRow = sqlFetchArray($rdrSQL);
+library/dated_reminder_functions.php:330:    $rdrRow = sqlFetchArray($rdrSQL);
+library/dated_reminder_functions.php:379:        $cRow = sqlFetchArray(sqlStatement('SELECT count(id) FROM  `users` WHERE  `id` = ?', [$sendDMTo ?? '']));
+library/dated_reminder_functions.php:416:    $pRow = sqlFetchArray($pSQL);
+library/dated_reminder_functions.php:503:    for ($i = 0; $drRow = sqlFetchArray($drSQL); $i++) {
+library/dated_reminder_functions.php:506:        $pRow = sqlFetchArray($pSQL);
+library/dated_reminder_functions.php:509:        $prRow = sqlFetchArray($prSQL);
+library/daysheet.inc.php:102:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+library/daysheet.inc.php:113:    for ($iter; $row = sqlFetchArray($query); $iter++) {
+library/daysheet.inc.php:124:    for ($iter; $row = sqlFetchArray($query); $iter++) {
+library/direct_message_check.inc.php:197:                if (($msg = sqlFetchArray($res)) === false) {
+library/direct_message_check.inc.php:240:                    $fail_user = ($res2 === false || ($user_row = sqlFetchArray($res2)) === false) ?
+library/direct_message_check.inc.php:589:        ($u = sqlFetchArray($r)) === false
+library/encounter_events.inc.php:261:    $origEvent = sqlFetchArray($origEventRes);
+library/encounter_events.inc.php:319:    $origEvent = sqlFetchArray($origEventRes);
+library/encounter_events.inc.php:335:        $origEventRow = sqlFetchArray($origEvent);
+library/formdata.inc.php:125:        while ($row = sqlFetchArray($res)) {
+library/formdata.inc.php:143:        while ($row = sqlFetchArray($res)) {
+library/forms.inc.php:97:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+library/forms.inc.php:150:        while ($row = sqlFetchArray($res)) {
+library/global_functions.inc.php:139:    return sqlFetchArray(sqlStatement(
+library/global_functions.inc.php:180:    while ($prow = sqlFetchArray($db_patient)) {
+library/global_functions.inc.php:816:    $rrow = sqlFetchArray($rlist);
+library/ippf_issues.inc.php:68:    while ($frow = sqlFetchArray($fres)) {
+library/ippf_issues.inc.php:100:    while ($frow = sqlFetchArray($fres)) {
+library/ippf_issues.inc.php:210:    while ($frow = sqlFetchArray($fres)) {
+library/ippf_issues.inc.php:242:    while ($frow = sqlFetchArray($fres)) {
+library/lab.inc.php:48:    while ($rows = sqlFetchArray($listOrders)) {
+library/lab.inc.php:101:    return sqlFetchArray($res) ?? [];
+library/lab.inc.php:165:        return sqlFetchArray($res);
+library/lists.inc.php:53:while ($row = sqlFetchArray($res)) {
+library/lists.inc.php:87:while ($row = sqlFetchArray($res)) {
+library/options.inc.php:250:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:299:        $lrow_inactive = sqlFetchArray($lres_inactive);
+library/options.inc.php:334:            while ($lrow_backup = sqlFetchArray($lres_backup)) {
+library/options.inc.php:505:    while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:826:        while ($urow = sqlFetchArray($ures)) {
+library/options.inc.php:855:        while ($prow = sqlFetchArray($pres)) {
+library/options.inc.php:943:        while ($urow = sqlFetchArray($ures)) {
+library/options.inc.php:1028:        while ($crow = sqlFetchArray($cres)) {
+library/options.inc.php:1067:            for ($count = 0; $lrow = sqlFetchArray($lres); ++$count) {
+library/options.inc.php:1109:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:1164:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:1207:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:1237:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:1312:        for ($count = 0; $lrow = sqlFetchArray($lres); ++$count) {
+library/options.inc.php:1583:        while ($urow = sqlFetchArray($ures)) {
+library/options.inc.php:1836:            while ($prow = sqlFetchArray($pres)) {
+library/options.inc.php:1956:            for ($count = 0; $lrow = sqlFetchArray($lres); ++$count) {
+library/options.inc.php:1995:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:2031:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:2062:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:2085:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:2117:        for ($count = 0; $lrow = sqlFetchArray($lres); ++$count) {
+library/options.inc.php:2353:    while ($row = sqlFetchArray($result)) {
+library/options.inc.php:2444:        while ($prow = sqlFetchArray($pres)) {
+library/options.inc.php:2513:            for ($count = 0; $lrow = sqlFetchArray($lres); ++$count) {
+library/options.inc.php:2551:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:2576:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:2603:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:2625:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:2649:        for ($count = 0; $lrow = sqlFetchArray($lres); ++$count) {
+library/options.inc.php:2934:        while ($prow = sqlFetchArray($pres)) {
+library/options.inc.php:2979:            while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:3000:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:3025:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:3052:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:3073:        while ($lrow = sqlFetchArray($lres)) {
+library/options.inc.php:3446:    while ($grow = sqlFetchArray($gres)) {
+library/options.inc.php:3478:    while ($prow = sqlFetchArray($pres)) {
+library/options.inc.php:3493:        while ($frow = sqlFetchArray($fres)) {
+library/options.inc.php:3633:    while ($prow = sqlFetchArray($pres)) {
+library/options.inc.php:3647:        while ($frow = sqlFetchArray($fres)) {
+library/options.inc.php:3688:    while ($prow = sqlFetchArray($pres)) {
+library/options.inc.php:3707:        while ($frow = sqlFetchArray($fres)) {
+library/options.inc.php:3733:            while ($group_fields = sqlFetchArray($group_fields_query)) {
+library/options.inc.php:3909:    while ($prow = sqlFetchArray($pres)) {
+library/options.inc.php:3956:        while ($frow = sqlFetchArray($fres)) {
+library/options.inc.php:4034:            while ($group_fields = sqlFetchArray($group_fields_query)) {
+library/options.inc.php:4337:    while ($prow = sqlFetchArray($pres)) {
+library/options.inc.php:4344:        while ($frow = sqlFetchArray($fres)) {
+library/options.inc.php:4683:    while ($codes_row = sqlFetchArray($smoking_codes)) {
+library/patient.inc.php:89:        for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:103:        for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:127:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:288:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:328:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:375:    while ($row = sqlFetchArray($sql_res)) {
+library/patient.inc.php:412:    while ($row = sqlFetchArray($res)) {
+library/patient.inc.php:582:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:665:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:684:    for ($iter = 0; $row = sqlFetchArray($layoutCols); $iter++) {
+library/patient.inc.php:699:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:770:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:832:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:937:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:961:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:986:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/patient.inc.php:1514:    while ($icl = sqlFetchArray($inco)) {
+library/patient.inc.php:1547:    while ($ferow = sqlFetchArray($feres)) {
+library/payment.inc.php:242:    while ($trow = sqlFetchArray($tres)) {
+library/registry.inc.php:66:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+library/registry.inc.php:154:            while ($row = sqlFetchArray($res)) {
+library/registry.inc.php:169:    while ($lrow = sqlFetchArray($lres)) {
+library/reminders.php:475:    for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/report.inc.php:124:    while ($list = sqlFetchArray($res)) {
+library/report.inc.php:141:    while ($list = sqlFetchArray($res)) {
+library/report.inc.php:157:    while ($list = sqlFetchArray($res)) {
+library/report.inc.php:173:    while ($list = sqlFetchArray($res)) {
+library/report.inc.php:189:    while ($list = sqlFetchArray($res)) {
+library/report.inc.php:204:    while ($result = sqlFetchArray($res)) {
+library/report.inc.php:213:    while ($result = sqlFetchArray($res)) {
+library/report.inc.php:246:    while ($frow = sqlFetchArray($fres)) {
+library/report.inc.php:267:    while ($row = sqlFetchArray($res)) {
+library/report.inc.php:281:    while ($result = sqlFetchArray($res)) {
+library/report.inc.php:308:    while ($result = sqlFetchArray($res)) {
+library/report.inc.php:320:    while ($result = sqlFetchArray($inclookupres)) {
+library/report.inc.php:335:    while ($result = sqlFetchArray($res)) {
+library/report.inc.php:372:                while ($brow = sqlFetchArray($bres)) {
+library/report.inc.php:398:    while ($result = sqlFetchArray($res)) {
+library/report.inc.php:425:    while ($result = sqlFetchArray($res)) {
+library/report.inc.php:455:    while ($result = sqlFetchArray($res)) {
+library/report.inc.php:484:    while ($result = sqlFetchArray($res)) {
+library/report_database.inc.php:215:    while ($row = sqlFetchArray($res)) {
+library/report_database.inc.php:241:    while ($row = sqlFetchArray($res)) {
+library/report_database.inc.php:452:        for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+library/sanitize.inc.php:119:        while ($lrow = sqlFetchArray($lres)) {
+library/spreadsheet.inc.php:627:while ($trow = sqlFetchArray($tres)) {
+library/spreadsheet.inc.php:659:    $drow = sqlFetchArray($dres);
+library/spreadsheet.inc.php:672:                $drow = sqlFetchArray($dres);
+library/spreadsheet.inc.php:676:                $drow = sqlFetchArray($dres);
+library/sql.inc.php:89:* The sqlFetchArray() function should be used to
+library/sql.inc.php:114: * The sqlFetchArray() function should be used to
+library/sql.inc.php:147:* The sqlFetchArray() function should be used to
+library/sql.inc.php:202:function sqlFetchArray($r)
+library/sql.inc.php:357:    while ($row = sqlFetchArray($resource)) {
+library/sql.inc.php:430:* The sqlFetchArray() function should be used to
+library/transactions.inc.php:9:    while ($frow = sqlFetchArray($fres)) {
+library/transactions.inc.php:23:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+library/transactions.inc.php:28:        while ($frow = sqlFetchArray($fres)) {
+library/translation.inc.php:74:            $row = sqlFetchArray($res);
+library/translation.inc.php:217:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+library/validation/LBF_Validation.php:49:        while ($frow = sqlFetchArray($fres)) {
+library/validation/validate_core.php:35:    while ($row = sqlFetchArray($sql)) {
+portal/account/account.lib.php:270:    $row = sqlFetchArray($sql);
+portal/account/account.lib.php:289:    $row = sqlFetchArray($sql);
+portal/account/verify.php:52:for ($iter = 0; $row = sqlFetchArray($res2); $iter++) {
+portal/account/verify.php:80:    for ($iter = 0; $row = sqlFetchArray($res3); $iter++) {
+portal/add_edit_event_user.php:244:            while ($current = sqlFetchArray($up)) {
+portal/add_edit_event_user.php:389:            $max = sqlFetchArray($q);
+portal/add_edit_event_user.php:567:    $pref_facility = sqlFetchArray(sqlStatement("SELECT facility_id, facility FROM users WHERE id = ?", [$userid]));
+portal/add_edit_event_user.php:595:    while ($crow = sqlFetchArray($cres)) {
+portal/add_edit_event_user.php:698:                            while ($urow = sqlFetchArray($ures)) {
+portal/get_allergies.php:43:    while ($row = sqlFetchArray($res)) {
+portal/get_amendments.php:43:    while ($row = sqlFetchArray($res)) {
+portal/get_lab_results.php:61:    while ($row = sqlFetchArray($res)) {
+portal/get_lab_results.php:93:        while ($rrow = sqlFetchArray($rres)) {
+portal/get_medications.php:42:    while ($row = sqlFetchArray($res)) {
+portal/get_patient_documents.php:50:while ($file = sqlFetchArray($fres)) {
+portal/get_patient_documents.php:56:    $cat = sqlFetchArray($catres);
+portal/get_patient_documents.php:64:    while ($parent = sqlFetchArray($pathres)) {
+portal/get_prescriptions.php:42:    while ($row = sqlFetchArray($res)) {
+portal/get_problems.php:42:    while ($row = sqlFetchArray($res)) {
+portal/home.php:334:while ($row = sqlFetchArray($result)) {
+portal/import_template.php:101:                while ($rtn_id = sqlFetchArray($rtn_ids)) {
+portal/index.php:194:    $sqlVerify = sqlFetchArray($sqlResource);
+portal/index.php:308:    for ($iter = 0; $row = sqlFetchArray($res2); $iter++) {
+portal/index.php:338:        for ($iter = 0; $row = sqlFetchArray($res3); $iter++) {
+portal/lib/appsql.class.php:78:            return sqlFetchArray($return);
+portal/lib/appsql.class.php:111:            return sqlFetchArray($return);
+portal/lib/portal_mail.inc.php:130:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+portal/lib/portal_mail.inc.php:180:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+portal/lib/portal_mail.inc.php:226:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+portal/lib/portal_mail.inc.php:275:    for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+portal/messaging/messages.php:84:        while ($row = sqlFetchArray($authusers)) {
+portal/messaging/messages.php:96:        while ($row = sqlFetchArray($authpatients)) {
+portal/messaging/messages.php:104:        while ($row = sqlFetchArray($authusers)) {
+portal/patient/libs/Controller/PatientController.php:99:        while ($key = sqlFetchArray($q)) {
+portal/patient/libs/Controller/PatientController.php:112:        while ($row = sqlFetchArray($user_list_rst)) {
+portal/portal_payment.php:161:            if ($RowSearch = sqlFetchArray($ResultSearchNew)) {
+portal/portal_payment.php:239:                $rowMoneyGot = sqlFetchArray($resMoneyGot);
+portal/portal_payment.php:250:                while ($RowSearch = sqlFetchArray($ResultSearchNew)) {
+portal/portal_payment.php:262:                    $rowMoneyGot = sqlFetchArray($resMoneyGot);
+portal/portal_payment.php:270:                    $rowMoneyAdjusted = sqlFetchArray($resMoneyAdjusted);
+portal/portal_payment.php:665:                        while ($brow1112 = sqlFetchArray($bres1112)) {
+portal/portal_payment.php:801:            while ($brow = sqlFetchArray($bres)) {
+portal/portal_payment.php:846:            while ($drow = sqlFetchArray($dres)) {
+portal/portal_payment.php:907:                $RowNumberOfInsurance = sqlFetchArray($ResultNumberOfInsurance);
+portal/report/document_downloads_action.php:55:    while ($parent = sqlFetchArray($pathres)) {
+portal/report/pat_ledger.php:66:    while ($row = sqlFetchArray($result)) {
+portal/report/pat_ledger.php:93:        $rret = sqlFetchArray($fres);
+portal/report/pat_ledger.php:123:    while ($row = sqlFetchArray($result)) {
+portal/report/pat_ledger.php:475:                while ($erow = sqlFetchArray($res)) {
+portal/report/portal_custom_report.php:588:            while ($row = sqlFetchArray($result)) {
+portal/report/portal_custom_report.php:619:            while ($row = sqlFetchArray($result)) {
+portal/report/portal_custom_report.php:766:                    while ($brow = sqlFetchArray($bres)) {
+portal/sign/lib/save-signature.php:84:    $c = sqlFetchArray($r);
+sites/default/LBF/LBFgcac.plugin.php:129:    while ($row = sqlFetchArray($res)) {
+sites/default/LBF/LBFgcac.plugin.php:289:    while ($row = sqlFetchArray($res)) {
+sites/default/LBF/LBFgcac.plugin.php:307:            while ($lrow = sqlFetchArray($lres)) {
+sites/default/statement.inc.php:74:    $facility = sqlFetchArray($service_query);
+sites/default/statement.inc.php:142:    $row = sqlFetchArray($service_query);
+sites/default/statement.inc.php:150:    $row = sqlFetchArray($service_query);
+sites/default/statement.inc.php:588:    $row = sqlFetchArray($service_query);
+sites/default/statement.inc.php:596:    $row = sqlFetchArray($service_query);
+sites/default/statement.inc.php:607:    $row = sqlFetchArray($atres);
+sites/default/statement.inc.php:887:    $row = sqlFetchArray($atres);
+sql_upgrade.php:100:for ($iter = 0; $row = sqlFetchArray($res2); $iter++) {
+src/Billing/BillingProcessor/Tasks/GeneratorX12Direct.php:91:        while ($row = sqlFetchArray($result)) {
+src/Billing/BillingReport.php:151:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+src/Billing/BillingReport.php:184:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+src/Billing/BillingReport.php:191:        for ($iter; $row = sqlFetchArray($query); $iter++) {
+src/Billing/BillingReport.php:219:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+src/Billing/BillingReport.php:267:        while ($row = sqlFetchArray($res)) {
+src/Billing/BillingUtilities.php:1427:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+src/Billing/BillingUtilities.php:1753:        while ($brow = sqlFetchArray($bres)) {
+src/Billing/BillingUtilities.php:1790:        $rowMoneyGot = sqlFetchArray($resMoneyGot);
+src/Billing/Claim.php:108:        while ($row = sqlFetchArray($res)) {
+src/Billing/Claim.php:155:        while ($rowMoneyGot = sqlFetchArray($resMoneyGot)) {
+src/Billing/Claim.php:265:        while ($drow = sqlFetchArray($dres)) {
+src/Billing/EDI270.php:422:        while ($row = sqlFetchArray($res)) {
+src/Billing/EDI270.php:621:        while ($benefit = sqlFetchArray($result)) {
+src/Billing/EDI270.php:756:            for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+src/Billing/EDI270.php:769:        for ($iter = 0; $row = sqlFetchArray($rez); $iter++) {
+src/Billing/InvoiceSummary.php:58:        while ($row = sqlFetchArray($res)) {
+src/Billing/InvoiceSummary.php:104:        while ($row = sqlFetchArray($res)) {
+src/Billing/InvoiceSummary.php:127:        while ($row = sqlFetchArray($res)) {
+src/Billing/InvoiceSummary.php:141:        while ($row = sqlFetchArray($res)) {
+src/Billing/SLEOB.php:50:            while ($prow = sqlFetchArray($pres)) {
+src/ClinicalDecisionRules/Interface/Controller/ControllerEdit.php:192:        for ($iter = 0; $row = sqlFetchArray($stmts); $iter++) {
+src/ClinicalDecisionRules/Interface/Controller/ControllerEdit.php:202:        for ($iter = 0; $row = sqlFetchArray($stmts); $iter++) {
+src/ClinicalDecisionRules/Interface/Controller/ControllerEdit.php:214:        for ($iter = 0; $row = sqlFetchArray($stmts); $iter++) {
+src/ClinicalDecisionRules/Interface/Controller/ControllerLog.php:90:        while ($row = sqlFetchArray($res)) {
+src/ClinicalDecisionRules/Interface/RuleLibrary/CodeManager.php:52:        for ($iter = 0; $row = sqlFetchArray($stmt); $iter++) {
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleCriteriaDatabaseCustom.php:66:        for ($iter = 0; $row = sqlFetchArray($stmts); $iter++) {
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleCriteriaLifestyle.php:58:        for ($iter = 0; $row = sqlFetchArray($stmt); $iter++) {
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:293:        for ($iter = 0; $row = sqlFetchArray($stmt); $iter++) {
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:417:        for ($iter = 0; $row = sqlFetchArray($stmt); $iter++) {
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:463:        for ($iter = 0; $row = sqlFetchArray($stmt); $iter++) {
+src/ClinicalDecisionRules/Interface/RuleTemplateExtension.php:120:            $result = sqlFetchArray($sql);
+src/ClinicalDecisionRules/Interface/RulesPlanMappingEventHandlers.php:46:        while ($row = sqlFetchArray($result)) {
+src/ClinicalDecisionRules/Interface/RulesPlanMappingEventHandlers.php:68:        while ($row = sqlFetchArray($result)) {
+src/ClinicalDecisionRules/Interface/RulesPlanMappingEventHandlers.php:91:        while ($row = sqlFetchArray($result)) {
+src/ClinicalDecisionRules/Interface/RulesPlanMappingEventHandlers.php:105:        $row = sqlFetchArray($res);
+src/ClinicalDecisionRules/Interface/RulesPlanMappingEventHandlers.php:119:        $row = sqlFetchArray($res);
+src/ClinicalDecisionRules/Interface/RulesPlanMappingEventHandlers.php:139:            while ($row = sqlFetchArray($res)) {
+src/ClinicalDecisionRules/Interface/RulesPlanMappingEventHandlers.php:184:        $row_chk = sqlFetchArray($res_chk);
+src/ClinicalDecisionRules/Interface/RulesPlanMappingEventHandlers.php:216:            $row = sqlFetchArray($res_check);
+src/ClinicalDecisionRules/Interface/RulesPlanMappingEventHandlers.php:242:            while ($row = sqlFetchArray($res)) {
+src/ClinicalDecisionRules/Interface/RulesPlanMappingEventHandlers.php:262:        $row = sqlFetchArray($res);
+src/Common/Acl/AclExtended.php:181:        $user_data = sqlFetchArray(sqlStatement("SELECT * FROM users WHERE username = ?", [$username]));
+src/Common/Acl/AclExtended.php:215:        $user_data = sqlFetchArray(sqlStatement("SELECT * FROM users WHERE username = ?", [$username]));
+src/Common/Acl/AclMain.php:280:        while ($row = sqlFetchArray($res_groups)) {
+src/Common/Auth/MfaUtils.php:46:        while ($row = sqlFetchArray($res)) {
+src/Common/Command/AclModify.php:74:        while ($row = sqlFetchArray($res)) {
+src/Common/Database/QueryUtils.php:200:     * The sqlFetchArray() function should be used to
+src/Common/Forms/CoreFormToPortalUtility.php:179:        while ($ret = sqlFetchArray($res)) {
+src/Common/Logging/EventAuditLogger.php:234:            for ($iter = 0; $rowMenuItem = sqlFetchArray($resMenuItems); $iter++) {
+src/Common/Uuid/UuidMapping.php:154:            while ($row = sqlFetchArray($resultSet)) {
+src/Controllers/Portal/PortalPatientReportController.php:60:        while ($row = sqlFetchArray($res)) {
+src/Controllers/Portal/PortalPatientReportController.php:77:        while ($row = sqlFetchArray($res)) {
+src/Controllers/Portal/PortalPatientReportController.php:99:        while ($prow = sqlFetchArray($pres)) {
+src/Controllers/Portal/PortalPatientReportController.php:130:        while ($ierow = sqlFetchArray($ieres)) {
+src/Controllers/Portal/PortalPatientReportController.php:155:        while ($result2 = sqlFetchArray($res2)) {
+src/Controllers/Portal/PortalPatientReportController.php:160:        while ($result = sqlFetchArray($res)) {
+src/Core/ModulesApplication.php:100:                $row = sqlFetchArray($resultSet);
+src/Core/ModulesApplication.php:126:        while ($row = sqlFetchArray($resultSet)) {
+src/Core/ModulesApplication.php:144:        while ($row = sqlFetchArray($resultSet)) {
+src/Easipro/Easipro.php:82:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+src/Menu/PatientMenuRole.php:157:            while ($hookrow = sqlFetchArray($module_query)) {
+src/Patient/Cards/PortalCard.php:71:        $nrow = sqlFetchArray($res);
+src/PaymentProcessing/PaymentProcessing.php:127:        while ($row = sqlFetchArray($res)) {
+src/Reports/RealWorldTesting.php:119:        while ($row = sqlFetchArray($res)) {
+src/Services/AllergyIntoleranceService.php:113:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/AppointmentService.php:197:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/AppointmentService.php:387:            while ($current = sqlFetchArray($up)) {
+src/Services/BaseService.php:320:        while ($row = sqlFetchArray($rtn)) {
+src/Services/CarePlanService.php:267:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/Cda/CdaComponentParseHelpers.php:195:        while ($row = sqlFetchArray($result)) {
+src/Services/ConditionService.php:89:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/DemographicsRelatedPersonsService.php:64:        while ($r = sqlFetchArray($res)) {
+src/Services/DocumentService.php:112:        while ($row = sqlFetchArray($documentResults)) {
+src/Services/DocumentService.php:281:            while ($row = sqlFetchArray($statementResults)) {
+src/Services/DocumentTemplates/DocumentTemplateRender.php:612:        while ($lrow = sqlFetchArray($lres)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:60:        while ($row = sqlFetchArray($query_result)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:107:            while ($row = sqlFetchArray($query_result)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:133:                    while ($row = sqlFetchArray($query_result)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:150:                while ($row = sqlFetchArray($query_result)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:281:        while ($row = sqlFetchArray($query_result)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:298:        while ($row = sqlFetchArray($rtn)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:312:        while ($row = sqlFetchArray($rtn)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:400:        while ($row = sqlFetchArray($response)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:417:            while ($row = sqlFetchArray($query)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:423:        while ($row = sqlFetchArray($query_result)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:445:        while ($row = sqlFetchArray($query_result)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:472:        while ($row = sqlFetchArray($query_result)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:503:        while ($row = sqlFetchArray($query_result)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:644:                while ($row = sqlFetchArray($query_result)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:781:        while ($row = sqlFetchArray($rtn)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:800:        while ($row = sqlFetchArray($rtn)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:813:        while ($row = sqlFetchArray($rtn)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:826:        while ($row = sqlFetchArray($rtn)) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:875:        while ($row = sqlFetchArray($rtn)) {
+src/Services/DrugService.php:157:            while ($row = sqlFetchArray($statementResults)) {
+src/Services/EncounterService.php:626:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/FHIR/Condition/FhirConditionHealthConcernService.php:194:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:190:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/FHIR/FhirSpecimenService.php:196:        while ($row = sqlFetchArray($result)) {
+src/Services/FormService.php:54:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+src/Services/GroupService.php:112:        while ($row = sqlFetchArray($queryResource)) {
+src/Services/ImmunizationService.php:168:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/InsuranceCompanyService.php:268:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/InsuranceCompanyService.php:303:        while ($row = sqlFetchArray($type)) {
+src/Services/InsuranceCompanyService.php:324:        while ($row = sqlFetchArray($claim_type)) {
+src/Services/InsuranceCompanyService.php:347:        while ($row = sqlFetchArray($cqm_sop)) {
+src/Services/InsuranceService.php:109:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/InsuranceService.php:205:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/ListService.php:55:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/ListService.php:141:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/ObservationLabService.php:152:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/PatientIssuesService.php:217:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/PatientNameHistoryService.php:120:        while ($row = sqlFetchArray($results)) {
+src/Services/PatientService.php:539:        while ($row = sqlFetchArray($queryResource)) {
+src/Services/PatientTrackerService.php:313:        for ($iter = 0; $row = sqlFetchArray($res); $iter++) {
+src/Services/PractitionerRoleService.php:225:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/PractitionerRoleService.php:318:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/ProcedureOrderRelationshipService.php:80:        while ($row = sqlFetchArray($result)) {
+src/Services/ProcedureOrderRelationshipService.php:107:        while ($row = sqlFetchArray($result)) {
+src/Services/ProcedureOrderRelationshipService.php:298:        while ($row = sqlFetchArray($result)) {
+src/Services/ProcedureOrderRelationshipService.php:316:        while ($row = sqlFetchArray($result)) {
+src/Services/ProcedureOrderRelationshipService.php:353:        while ($row = sqlFetchArray($result)) {
+src/Services/ProcedureService.php:338:        while ($row = sqlFetchArray($queryResource)) {
+src/Services/ProcedureService.php:508:                    while ($specimenRow = sqlFetchArray($specimenResults)) {
+src/Services/ProcedureService.php:681:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/ProcedureService.php:713:            while ($codeRow = sqlFetchArray($codesResult)) {
+src/Services/ProcedureService.php:730:            while ($reportRow = sqlFetchArray($reportsResult)) {
+src/Services/ProcedureService.php:747:                while ($resultRow = sqlFetchArray($resultsResult)) {
+src/Services/ProcedureService.php:894:            while ($codeRow = sqlFetchArray($codesResult)) {
+src/Services/ProcedureService.php:906:            while ($reportRow = sqlFetchArray($reportsResult)) {
+src/Services/ProcedureService.php:912:                while ($resultRow = sqlFetchArray($resultsResult)) {
+src/Services/ProcedureService.php:996:        while ($row = sqlFetchArray($result)) {
+src/Services/ProcedureService.php:1052:        while ($row = sqlFetchArray($result)) {
+src/Services/ProcedureService.php:1437:        while ($row = sqlFetchArray($result)) {
+src/Services/ProcedureService.php:1472:        while ($row = sqlFetchArray($result)) {
+src/Services/Qdm/QdmBuilder.php:75:        while ($patient = sqlFetchArray($patientResult)) {
+src/Services/Qdm/QdmBuilder.php:89:                while ($record = sqlFetchArray($result)) {
+src/Services/Qrda/QrdaReportService.php:68:        while ($row = sqlFetchArray($results)) {
+src/Services/QuestionnaireService.php:222:        while ($row = sqlFetchArray($r)) {
+src/Services/SocialHistoryService.php:133:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/SurgeryService.php:120:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/SurgeryService.php:213:        while ($row = sqlFetchArray($statementResult)) {
+src/Services/UserService.php:138:        while ($row = sqlFetchArray($user)) {
+src/Services/UserService.php:291:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/UserService.php:363:        while ($row = sqlFetchArray($statementResults)) {
+src/Services/Utils/SQLUpgradeService.php:544:                while ($item = sqlFetchArray($items_to_convert)) {
+src/Services/Utils/SQLUpgradeService.php:626:                    while ($row = sqlFetchArray($emptyNames)) {
+src/Services/Utils/SQLUpgradeService.php:652:                    while ($row = sqlFetchArray($emptyDates)) {
+src/Services/Utils/SQLUpgradeService.php:670:                    while ($mBORow = sqlFetchArray($emptyMBOEncounters)) {
+src/Services/Utils/SQLUpgradeService.php:681:                            while ($row = sqlFetchArray($encounters)) {
+src/Services/Utils/SQLUpgradeService.php:1157:        while ($row = sqlFetchArray($res)) {
+src/Services/Utils/SQLUpgradeService.php:1180:        while ($row = sqlFetchArray($res)) {
+src/Services/Utils/SQLUpgradeService.php:1202:        while ($row = sqlFetchArray($res)) {
+src/Services/Utils/SQLUpgradeService.php:1268:        while ($row = sqlFetchArray($res)) {
+src/Services/Utils/SQLUpgradeService.php:1298:        while ($row = sqlFetchArray($res)) {
+src/Services/Utils/SQLUpgradeService.php:1393:            while ($grow = sqlFetchArray($gres)) {
+src/Services/Utils/SQLUpgradeService.php:1448:            while ($row = sqlFetchArray($result)) {
+src/Services/Utils/TranslationService.php:35:        while ($row = sqlFetchArray($tarns)) {
+src/Services/VitalsService.php:206:        while ($row = sqlFetchArray($statementResults)) {
+tests/PHPStan/Rules/ForbiddenFunctionsRule.php:41:        'sqlFetchArray' => 'Use QueryUtils::fetchRecords() or QueryUtils::fetchArrayFromResultSet() instead of sqlFetchArray().',
+tests/Tests/ECQM/MeasureResultsTest.php:86:            while ($row = sqlFetchArray($result)) {
+tests/Tests/Fixtures/ConditionFixtureManager.php:266:        $row = sqlFetchArray($result);
+tests/Tests/Fixtures/ConditionFixtureManager.php:277:        $row = sqlFetchArray($result);
+tests/Tests/Fixtures/ConditionFixtureManager.php:288:        $row = sqlFetchArray($result);
+tests/Tests/Fixtures/FacilityFixtureManager.php:84:        while ($row = sqlFetchArray($sel)) {
+tests/Tests/Fixtures/FixtureManager.php:241:        while ($row = sqlFetchArray($sel)) {
+tests/Tests/Fixtures/PractitionerFixtureManager.php:192:        while ($row = sqlFetchArray($sel)) {
+tests/Tests/Services/FHIR/FhirPatientServiceQueryTest.php:187:        $patient = sqlFetchArray($result);

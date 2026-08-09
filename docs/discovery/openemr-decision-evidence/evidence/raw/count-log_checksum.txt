@@ -1,0 +1,145 @@
+# slug: log_checksum
+# description: log checksum references
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e checksum -- *.php HEAD
+# generated: 2026-08-07T06:31:09Z
+#
+.phpstan/baseline/encapsedStringPart.nonString.php:515:    'message' => '#^Part \\$_POST\\[\'form_checksum\'\\] \\(mixed\\) of encapsed string cannot be cast to string\\.$#',
+.phpstan/baseline/missingType.parameter.php:25090:    'message' => '#^Function update_tracker_table\\(\\) has parameter \\$file_checksum with no type specified\\.$#',
+.phpstan/baseline/offsetAccess.nonOffsetAccessible.php:21385:    'message' => '#^Cannot access offset \'checksum\' on array\\|false\\.$#',
+.phpstan/baseline/offsetAccess.nonOffsetAccessible.php:25480:    'message' => '#^Cannot access offset \'checksum\' on array\\|false\\.$#',
+.phpstan/baseline/offsetAccess.nonOffsetAccessible.php:26590:    'message' => '#^Cannot access offset \'checksum\' on array\\|false\\.$#',
+.phpstan/baseline/offsetAccess.nonOffsetAccessible.php:34495:    'message' => '#^Cannot access offset \'checksum\' on mixed\\.$#',
+.phpstan/baseline/openemr.forbiddenGlobalKeyword.php:915:    'message' => '#^Use of the "global" keyword is forbidden \\(\\$aTaxNames, \\$aInvTaxes, \\$checkout_times, \\$current_checksum\\)\\. Use dependency injection instead\\.$#',
+Documentation/help_files/mfa_help.php:230:                            <p><?php echo xlt("This is passed to the application along with checksum value and is unique for each USB key and thereby the user who owns it");?>.</p>
+Documentation/help_files/mfa_help.php:240:                            <p><?php echo xlt("The application generates challenge - a random number and passes it to the USB key along with the nonce and checksum stored in the application");?>.</p>
+Documentation/help_files/mfa_help.php:242:                            <p><?php echo xlt("The USB key takes this the nonce supplied by the application after confirming the checksum and generates a private key using the process similar to that used in the registration process");?>.</p>
+interface/billing/sl_eob_search.php:154:            $audit['checksum'] = "";
+interface/code_systems/dataloads_ajax.php:237:                        const parm = `db=${dbName}&newInstall=` + (($(this).val() === 'INSTALL') ? 1 : 0) + '&file_checksum=' + $(this).attr('file_checksum') + '&file_revision_date=' + $(this).attr('file_revision_date') + '&version=' + $(this).attr('version') + '&rf=' + $(this).attr('rf');
+interface/code_systems/list_staged.php:47:$file_checksum = "";
+interface/code_systems/list_staged.php:64:$current_checksum = '';
+interface/code_systems/list_staged.php:67:$sqlReturn = sqlQuery("SELECT DATE_FORMAT(`revision_date`,'%Y-%m-%d') as `revision_date`, `revision_version`, `name`, `file_checksum` FROM `standardized_tables_track` WHERE upper(`name`) = ? ORDER BY `imported_date` DESC, `revision_date` DESC", [$db]);
+interface/code_systems/list_staged.php:73:    $current_checksum = $sqlReturn['file_checksum'];
+interface/code_systems/list_staged.php:231:                $qry_str = "SELECT `load_checksum`,`load_source`,`load_release_date` FROM `supported_external_dataloads` WHERE `load_type` = ? and `load_filename` = ? and `load_checksum` = ? ORDER BY `load_release_date` DESC";
+interface/code_systems/list_staged.php:234:                // filename and checksum for each file that are part of the same release.
+interface/code_systems/list_staged.php:242:                $file_checksum = md5(file_get_contents($file));
+interface/code_systems/list_staged.php:243:                $sqlReturn = sqlQuery($qry_str, [$db, basename($file), $file_checksum]);
+interface/code_systems/list_staged.php:248:                    $temp_date = ['date' => $date_release, 'version' => $version, 'path' => $file, 'checksum' => $file_checksum];
+interface/code_systems/list_staged.php:301:    // and collect the date and revision. Also collect a checksum and path.
+interface/code_systems/list_staged.php:304:    $file_checksum = '';
+interface/code_systems/list_staged.php:335:        // collect checksum (if a multiple file import, then can use any one)
+interface/code_systems/list_staged.php:336:        $file_checksum = $value['checksum'] ?? '';
+interface/code_systems/list_staged.php:454:            <input id="<?php echo attr($db); ?>_install_button" class="btn btn-primary btn-sm" version="<?php echo attr($file_revision); ?>" rf="<?php echo $rf; ?>" file_revision_date="<?php echo attr($file_revision_date); ?>" file_checksum="<?php echo attr($file_checksum); ?>" type="button" value="<?php echo attr($action); ?>"/>
+interface/code_systems/standard_tables_manage.php:45:$file_checksum = $_GET['file_checksum'] ?? '0';
+interface/code_systems/standard_tables_manage.php:115:if (!update_tracker_table($db, $file_revision_date, $version, $file_checksum)) {
+interface/forms/fee_sheet/new.php:487:$current_checksum = $fs->visitChecksum();
+interface/forms/fee_sheet/new.php:508:// It's important to look for a checksum mismatch even if we're just refreshing
+interface/forms/fee_sheet/new.php:510:if (isset($_POST['form_checksum'])) {
+interface/forms/fee_sheet/new.php:511:    if ($_POST['form_checksum'] != $current_checksum) {
+interface/forms/fee_sheet/new.php:513:        $comment = "CHECKSUM ERROR, expecting '{$_POST['form_checksum']}'";
+interface/forms/fee_sheet/new.php:515:            "checksum",
+interface/forms/fee_sheet/new.php:548:        $current_checksum = $fs->visitChecksum();
+interface/forms/fee_sheet/new.php:561:        // form with an updated checksum to properly support the invoking logic.
+interface/forms/fee_sheet/new.php:563:        $current_checksum = $fs->visitChecksum(true);
+interface/forms/fee_sheet/new.php:630:    $current_checksum = $fs->visitChecksum();
+interface/forms/fee_sheet/new.php:1768:                                    <input type='hidden' name='form_checksum' value='<?php echo attr($current_checksum); ?>' />
+interface/forms/requisition/barcode.php:22:    // Must not change order of array elements as the checksum depends on the array's key to validate final code
+interface/forms/requisition/barcode.php:37:    // Must not change order of array elements as the checksum depends on the array's key to validate final code
+interface/main/backup.php:334:        $out .= csvEscape(xl('checksum')) . ',';
+interface/main/backup.php:360:                        csvEscape($row['checksum'  ]) . ',' .
+interface/patient_file/pos_checkout_ippf.php:456:// Compute a current checksum of this encounter's invoice-related data from the database.
+interface/patient_file/pos_checkout_ippf.php:463:        "))) AS checksum FROM billing WHERE " .
+interface/patient_file/pos_checkout_ippf.php:470:        "))) AS checksum FROM drug_sales WHERE " .
+interface/patient_file/pos_checkout_ippf.php:477:        "))) AS checksum FROM ar_activity WHERE " .
+interface/patient_file/pos_checkout_ippf.php:484:        "))) AS checksum FROM form_encounter WHERE " .
+interface/patient_file/pos_checkout_ippf.php:488:    return (0 + $row1['checksum']) ^ (0 + $row2['checksum']) ^ (0 + $row3['checksum']) ^ (0 + $row4['checksum']);
+interface/patient_file/pos_checkout_ippf.php:502:    global $aTaxNames, $aInvTaxes, $checkout_times, $current_checksum;
+interface/patient_file/pos_checkout_ippf.php:531:    // Generate checksum.
+interface/patient_file/pos_checkout_ippf.php:532:    $current_checksum = invoiceChecksum($patient_id, $encounter);
+interface/patient_file/pos_checkout_ippf.php:610:            form_checksum: <?php echo js_escape($current_checksum); ?>,
+interface/patient_file/pos_checkout_ippf.php:1503:// Compute and validate the checksum.
+interface/patient_file/pos_checkout_ippf.php:1504:$current_checksum = 0;
+interface/patient_file/pos_checkout_ippf.php:1506:    $current_checksum = invoiceChecksum($patient_id, $encounter_id);
+interface/patient_file/pos_checkout_ippf.php:1507:    if (!empty($_REQUEST['form_checksum'])) {
+interface/patient_file/pos_checkout_ippf.php:1508:        if ($_REQUEST['form_checksum'] != $current_checksum) {
+interface/patient_file/pos_checkout_ippf.php:1744:    $current_checksum = invoiceChecksum($patient_id, $encounter_id);
+interface/patient_file/pos_checkout_ippf.php:1776:    $current_checksum = invoiceChecksum($patient_id, $encounter_id);
+interface/patient_file/pos_checkout_ippf.php:1779:    $current_checksum = invoiceChecksum($patient_id, $encounter_id);
+interface/patient_file/pos_checkout_ippf.php:1816:// We have $patient_id and $encounter_id. Generate checksum if not already done.
+interface/patient_file/pos_checkout_ippf.php:1817:if (!$current_checksum) {
+interface/patient_file/pos_checkout_ippf.php:1818:    $current_checksum = invoiceChecksum($patient_id, $encounter_id);
+interface/patient_file/pos_checkout_ippf.php:2732:            <input type='hidden' name='form_checksum'  value='<?php echo attr($current_checksum); ?>' />
+interface/reports/audit_log_tamper_report.php:195:  <th id="sortby_newchecksum" class="text" title="<?php xla('Sort by New Checksum'); ?>"><?php echo xlt('Tampered Checksum'); ?></th>
+interface/reports/audit_log_tamper_report.php:196:  <th id="sortby_oldchecksum" class="text" title="<?php xla('Sort by Old Checksum'); ?>"><?php echo xlt('Original Checksum'); ?></th>
+interface/reports/audit_log_tamper_report.php:241:            $checkSumOld = $iter['checksum'];
+interface/reports/audit_log_tamper_report.php:243:                // no checksum, so skip
+interface/reports/audit_log_tamper_report.php:246:                // for backward compatibility (for log checksums created in the sha1 days)
+interface/reports/audit_log_tamper_report.php:247:                $checkSumNew = sha1($iter['date'] . $iter['event'] . $iter['user'] . $iter['groupname'] . $iter['comments'] . $iter['patient_id'] . $iter['success'] . $iter['checksum'] . $iter['crt_user']);
+interface/reports/audit_log_tamper_report.php:252:            $checkSumOldApi = $iter['checksum_api'];
+interface/reports/audit_log_tamper_report.php:389:    $("#sortby_oldchecksum").click(function() { $("#sortby").val("checksum"); $("#theform").submit(); });
+interface/reports/audit_log_tamper_report.php:390:    $("#sortby_newchecksum").click(function() { $("#sortby").val("checksum"); $("#theform").submit(); });
+interface/super/edit_list.php:55:// Compute a current checksum of the data from the database for the given list.
+interface/super/edit_list.php:63:            "))) AS checksum FROM fee_sheet_options"
+interface/super/edit_list.php:69:            "))) AS checksum FROM code_types"
+interface/super/edit_list.php:75:            "))) AS checksum FROM list_options WHERE " .
+interface/super/edit_list.php:80:    return (0 + $row['checksum']);
+interface/super/edit_list.php:85:if (isset($_POST['form_checksum']) && $_POST['formaction'] == 'save') {
+interface/super/edit_list.php:86:    if ($_POST['form_checksum'] != listChecksum($list_id)) {
+interface/super/edit_list.php:1493:        <input type='hidden' name='form_checksum' value='<?php echo attr(listChecksum($list_id)); ?>' />
+library/FeeSheet.class.php:43:// For logging checksums set this to true.
+library/FeeSheet.class.php:316:  // Compute a current checksum of this encounter's Fee Sheet data from the database.
+library/FeeSheet.class.php:324:            "))) AS checksum FROM billing WHERE " .
+library/FeeSheet.class.php:331:            "))) AS checksum FROM drug_sales WHERE " .
+library/FeeSheet.class.php:338:            "))) AS checksum FROM form_encounter WHERE " .
+library/FeeSheet.class.php:342:        $ret = intval($rowb['checksum']) ^ intval($rowp['checksum']) ^ intval($rowv['checksum']);
+library/FeeSheet.class.php:346:            EventAuditLogger::getInstance()->newEvent("checksum", $session->get('authUser'), $session->get('authProvider'), 1, $comment, $this->pid);
+library/classes/php-barcode.php:338:            // The code is self-checking and does not include a checksum.
+library/classes/php-barcode.php:392:        // get checksum
+library/classes/php-barcode.php:591:        // checksum
+library/classes/php-barcode.php:594:        $weightK    = 1; // start at 1 because the right-most character is 'C' checksum
+library/classes/php-barcode.php:710:        // checksum
+library/classes/php-barcode.php:714:            $weightK    = 1; // start at 1 because the right-most character is 'C' checksum
+library/standard_tables_capture.inc.php:721:function update_tracker_table($type, $revision, $version, $file_checksum)
+library/standard_tables_capture.inc.php:724:        sqlStatement("INSERT INTO `standardized_tables_track` (`imported_date`,`name`,`revision_date`, `revision_version`, `file_checksum`) VALUES (NOW(),'RXNORM',?,?,?)", [$revision, $version, $file_checksum]);
+library/standard_tables_capture.inc.php:727:        sqlStatement("INSERT INTO `standardized_tables_track` (`imported_date`,`name`,`revision_date`, `revision_version`, `file_checksum`) VALUES (NOW(),'SNOMED',?,?,?)", [$revision, $version, $file_checksum]);
+library/standard_tables_capture.inc.php:730:        sqlStatement("INSERT INTO `standardized_tables_track` (`imported_date`,`name`,`revision_date`, `revision_version`, `file_checksum`) VALUES (NOW(),'ICD9',?,?,?)", [$revision, $version, $file_checksum]);
+library/standard_tables_capture.inc.php:733:        sqlStatement("INSERT INTO `standardized_tables_track` (`imported_date`,`name`,`revision_date`, `revision_version`, `file_checksum`) VALUES (NOW(),'CQM_VALUESET',?,?,?)", [$revision, $version, $file_checksum]);
+library/standard_tables_capture.inc.php:736:        sqlStatement("INSERT INTO `standardized_tables_track` (`imported_date`,`name`,`revision_date`, `revision_version`, `file_checksum`) VALUES (NOW(),'ICD10',?,?,?)", [$revision, $version, $file_checksum]);
+portal/import_template_ui.php:88:    'checksum' => null,
+portal/lib/appsql.class.php:145:     *         $audit['checksum']="";
+portal/lib/appsql.class.php:176:        $audit['checksum'] = $auditvals['checksum'] ?: "";
+portal/lib/appsql.class.php:182:                            "table_action, table_args, action_user, action_taken_time, checksum) " .
+portal/lib/appsql.class.php:187:                                        "action_user=?, action_taken_time=?, checksum=? ";
+portal/lib/paylib.php:229:        $audit['checksum'] = $cryptoGen->encryptForDatabase(is_string($cc) ? $cc : null);
+portal/lib/paylib.php:263:        $audit['checksum'] = $cryptoGen->encryptForDatabase(is_string($cc) ? $cc : null);
+portal/patient/libs/Controller/OnsitePortalActivityController.php:160:            $onsiteportalactivity->Checksum = $this->SafeGetVal($json, 'checksum');
+portal/patient/libs/Controller/OnsitePortalActivityController.php:216:            $onsiteportalactivity->Checksum = $this->SafeGetVal($json, 'checksum', $onsiteportalactivity->Checksum);
+portal/patient/libs/Controller/PatientController.php:419:            $audit['checksum'] = "0";
+portal/patient/libs/Controller/PortalPatientController.php:246:            $audit['checksum'] = "0";
+portal/patient/libs/Model/DAO/OnsiteActivityViewMap.php:75:            self::$FM["Checksum"] = new FieldMap("Checksum", "onsite_portal_activity", "checksum", false, FM_TYPE_LONGTEXT, null, null, false);
+portal/patient/libs/Model/DAO/OnsitePortalActivityMap.php:74:            self::$FM["Checksum"] = new FieldMap("Checksum", "onsite_portal_activity", "checksum", false, FM_TYPE_LONGTEXT, null, null, false);
+portal/patient/libs/Reporter/OnsiteActivityViewReporter.php:97:            `onsite_portal_activity`.`checksum` AS Checksum,
+portal/patient/libs/Reporter/OnsitePortalActivityReporter.php:73:			,`onsite_portal_activity`.`checksum` as Checksum
+portal/patient/templates/OnsiteActivityViewListView.tpl.php:140:                <td><%= _.escape(item.get('checksum') || '') %></td>
+portal/patient/templates/OnsitePortalActivityListView.tpl.php:91:                <td><%= _.escape(item.get('checksum') || '') %></td>
+portal/patient/templates/OnsitePortalActivityListView.tpl.php:213:                <div class="form-group inline" id="checksumInputContainer">
+portal/patient/templates/OnsitePortalActivityListView.tpl.php:214:                    <label class="control-label" for="checksum"><?php echo xlt('Checksum'); ?></label>
+portal/patient/templates/OnsitePortalActivityListView.tpl.php:216:                        <textarea class="form-control" id="checksum" rows="3"><%= _.escape(item.get('checksum') || '') %></textarea>
+portal/portal_payment.php:94:    $ccdataRaw = $cryptoGen->decryptFromDatabase(is_string($edata['checksum']) ? $edata['checksum'] : null);
+portal/portal_payment.php:97:    echo "<script>var jsondata=" . js_escape($edata['table_args']) . ";var ccdata=" . js_escape($edata['checksum']) . "</script>";
+src/Common/Logging/Audit/LogTablesSink.php:63:        $checksum = hash('sha3-512', implode('', array_values($logData)));
+src/Common/Logging/Audit/LogTablesSink.php:66:            $checksumGenerateApi = '';
+src/Common/Logging/Audit/LogTablesSink.php:83:            $checksumGenerateApi = hash('sha3-512', implode('', array_values($apiLogData)));
+src/Common/Logging/Audit/LogTablesSink.php:86:        // 2. insert associated entry (in addition to calculating and storing applicable checksums) into log_comment_encrypt
+src/Common/Logging/Audit/LogTablesSink.php:90:            'checksum' => $checksum,
+src/Common/Logging/Audit/LogTablesSink.php:91:            'checksum_api' => $checksumGenerateApi,
+src/Common/Logging/EventAuditLogger.php:284:                 el.`encrypt`, el.`checksum`, el.`checksum_api`, el.`version`, el.`log_id` as `log_id_hash`,
+src/Common/Logging/EventAuditLogger.php:670:        // Note that no longer using checksum field in log table in OpenEMR 6.0 and onward since using the checksum in log_comment_encrypt table.
+src/Common/Logging/EventAuditLogger.php:671:        //  Need to keep to maintain backward compatibility since the checksum is used when calculating checksum stored in log_comment_encrypt table
+tests/PHPStan/Rules/Sql/ReservedWordRegistry.php:80:        'page_checksum',
+tests/Tests/Isolated/Common/Logging/Audit/LogTablesSinkTest.php:118:        self::assertSame('', $capturedLogCommentData['checksum_api']);
+tests/Tests/Isolated/Common/Logging/Audit/LogTablesSinkTest.php:121:        self::assertIsString($capturedLogCommentData['checksum']);
+tests/Tests/Isolated/Common/Logging/Audit/LogTablesSinkTest.php:122:        self::assertSame(128, strlen($capturedLogCommentData['checksum']));
+tests/Tests/Isolated/Common/Logging/Audit/LogTablesSinkTest.php:341:        // API checksum should be a sha3-512 hash (128 hex chars)
+tests/Tests/Isolated/Common/Logging/Audit/LogTablesSinkTest.php:343:        self::assertIsString($capturedLogCommentData['checksum_api']);
+tests/Tests/Isolated/Common/Logging/Audit/LogTablesSinkTest.php:344:        self::assertSame(128, strlen($capturedLogCommentData['checksum_api']));

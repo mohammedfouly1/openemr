@@ -1,0 +1,105 @@
+D:\OpenEmr\interface\billing\billing_process.php:33:$logger = $billingProcessor->execute();
+D:\OpenEmr\interface\modules\custom_modules\oe-module-weno\src\Services\DownloadWenoPharmacies.php:130:$stmt->execute();
+D:\OpenEmr\interface\modules\custom_modules\oe-module-weno\src\Services\DownloadWenoPharmacies.php:140:$stmt->execute();
+D:\OpenEmr\library\classes\rulesets\Amc\library\AbstractAmcReport.php:134:$this->logger->debug(static::class . "->execute() starting function");
+D:\OpenEmr\library\classes\rulesets\Amc\library\AbstractAmcReport.php:164:$this->logger->debug(static::class . "->execute()", ['totalPatients' => $totalPatients, 'object_to_count' => $object_to_count]);
+D:\OpenEmr\library\classes\rulesets\Amc\library\AbstractAmcReport.php:174:static::class . "->execute() manual labs processed",
+D:\OpenEmr\library\classes\rulesets\Amc\library\AbstractAmcReport.php:191:$this->logger->debug(static::class . "->execute() leaving rule");
+D:\OpenEmr\library\classes\rulesets\Amc\library\AbstractAmcReport.php:238:static::class . "->execute() patient processed",
+D:\OpenEmr\library\classes\rulesets\Amc\library\AbstractAmcReport.php:298:static::class . "->execute() patient processed",
+D:\OpenEmr\library\classes\rulesets\ReportManager.php:56:$report->execute();
+D:\OpenEmr\src\Billing\BillingProcessor\BillingProcessor.php:139:$processingTask->execute($claim);
+D:\OpenEmr\src\Common\Command\Runner\CommandRunner.php:76:$command->execute($context);
+D:\OpenEmr\src\Services\Qdm\QdmBuilder.php:136:$generator->execute();
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:82:$tester->execute(['action' => 'list']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:97:$tester->execute(['action' => 'list']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:117:$tester->execute(['action' => 'run']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:129:$tester->execute(['action' => 'run']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:143:$tester->execute(['action' => 'run', '--name' => 'phimail']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:160:$tester->execute(['action' => 'run', '--name' => 'phimail']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:177:$tester->execute(['action' => 'run', '--name' => 'phimail']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:190:$tester->execute(['action' => 'run', '--name' => 'phimail']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:203:$tester->execute(['action' => 'run', '--name' => 'nonexistent']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:216:$tester->execute(['action' => 'run', '--name' => 'phimail']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:234:$tester->execute(['action' => 'run']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:255:$tester->execute(['action' => 'run']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:272:$tester->execute(['action' => 'run', '--force' => true]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:293:$tester->execute(['action' => 'run', '--name' => 'phimail', '--force' => true]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:321:$tester->execute(['action' => 'run', '--name' => 'phimail', '--json' => true]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:354:$tester->execute(['action' => 'run', '--name' => 'phimail', '--json' => true]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:378:$tester->execute(['action' => 'run', '--json' => true]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:389:$tester->execute(['action' => 'invalid']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:404:$tester->execute(['action' => 'list']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:416:$tester->execute(['action' => 'list']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:431:$tester->execute(['action' => 'list']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:455:$tester->execute(['action' => 'list']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:467:$tester->execute(['action' => 'crontab']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:479:$tester->execute(['action' => 'crontab']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:491:$tester->execute(['action' => 'crontab']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:503:$tester->execute(['action' => 'crontab']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:515:$tester->execute(['action' => 'crontab']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:525:$tester->execute(['action' => 'unlock']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:536:$tester->execute(['action' => 'unlock', '--name' => 'ghost']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BackgroundServicesCommandTest.php:549:$tester->execute(['action' => 'unlock', '--name' => 'svc']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:38:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:56:$tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:70:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:84:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:96:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:108:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:120:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:133:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:146:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:159:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:173:$tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\BranchCutCommandTest.php:201:$tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:72:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:85:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:96:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:113:$tester->execute(['--pid' => '7', '--owner' => '3', '--limit' => '5']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:134:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:150:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:164:$tester->execute(['--in-situ' => true]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:180:$tester->execute(['--in-situ' => true, '--category' => '5']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:196:$tester->execute(['--in-situ' => true]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:219:$tester->execute(['--limit' => '2']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:233:$tester->execute(['--category' => 'Medical%20Records', '--in-situ' => true]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:247:$tester->execute(['--in-situ' => true, '--category' => '42']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:263:$tester->execute(['--in-situ' => true, '--category' => 'ghost']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\DocumentImportCommandTest.php:278:$tester->execute(['--owner' => 'not-a-number']);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:39:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:57:$tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:71:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:83:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:95:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:107:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:119:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:132:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:145:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:158:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:172:$tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:191:$tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PatchPrepCommandTest.php:216:$tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:97:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:110:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:123:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:134:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:155:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:188:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:203:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:229:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:246:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:260:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:283:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:306:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:323:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\PhoneNotificationCommandTest.php:350:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\ReleasePrep\ReleasePrepCommandTest.php:44:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\ReleasePrep\ReleasePrepCommandTest.php:60:$tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\ReleasePrep\ReleasePrepCommandTest.php:74:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\ReleasePrep\ReleasePrepCommandTest.php:88:$tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\ReleasePrep\ReleasePrepCommandTest.php:102:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Common\Command\ReleasePrep\ReleasePrepCommandTest.php:113:$exit = $tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Console\Command\Codes\UpdateMappingsCommandTest.php:35:$tester->execute([]);
+D:\OpenEmr\tests\Tests\Isolated\Console\Command\InstallCommandTest.php:46:$tester->execute([
+D:\OpenEmr\tests\Tests\Isolated\Console\Command\InstallCommandTest.php:88:$tester->execute([], ['interactive' => false]);

@@ -1,0 +1,257 @@
+# slug: sqlinsert
+# description: sqlInsert( call sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e sqlInsert( -- *.php HEAD
+# generated: 2026-08-07T06:29:48Z
+#
+controllers/C_Document.class.php:1362:                $formID = sqlInsert($query, $bindArray);
+controllers/C_Document.class.php:1394:                $img_report_id = sqlInsert("INSERT INTO procedure_report(procedure_order_id,procedure_order_seq,date_collected,date_report,report_status) values(?,?,?,?,'final')", [$img_procedure_id,$img_order['procedure_order_seq'],$img_order['date_collected'],$report_date]);
+interface/batchcom/emailnotification.php:73:        $id = sqlInsert($query, $values);
+interface/batchcom/settingsnotification.php:69:        $id = sqlInsert($query, $values);
+interface/batchcom/smsnotification.php:70:        $id = sqlInsert($query, $values);
+interface/billing/new_payment.php:103:    $payment_id = QueryUtils::sqlInsert(
+interface/drugs/add_edit_drug.php:288:        $drug_id = sqlInsert(
+interface/drugs/add_edit_lot.php:497:                        $lot_id = sqlInsert(
+interface/drugs/dispense_drug.php:136:         * $sale_id = sqlInsert("INSERT INTO drug_sales ( " .
+interface/eRxStore.php:451:        return sqlInsert(
+interface/fax/fax_dispatch.php:231:                $formid = sqlInsert($query, [$_POST['form_copy_sn_comments']]);
+interface/forms/CAMOS/content_parser.php:33:    return QueryUtils::sqlInsert($sql, [$session->get('pid'), $session->get('authUserID'), $time]);
+interface/forms/CAMOS/content_parser.php:80:    return QueryUtils::sqlInsert($sql, [$encounter, $code_type, $code, $code_text, $session->get('pid'), $authorized, $session->get('authUserID'), $session->get('authProvider'), $session->get('authUserID'), $modifier, $units, $fee, $justify_string]);
+interface/forms/LBF/new.php:238:        $newid = sqlInsert("INSERT INTO lbf_data " .
+interface/forms/aftercare_plan/save.php:62:    $newid = sqlInsert(
+interface/forms/clinic_note/new.php:68:        $newid = sqlInsert($query, [$_POST['form_history'], $_POST['form_examination'], $_POST['form_plan'], rbvalue('fu_required'), $fu_timing]);
+interface/forms/clinic_note/view.php:68:        $newid = sqlInsert($query, [$_POST['form_history'], $_POST['form_examination'], $_POST['form_plan'], rbvalue('fu_required'), $fu_timing]);
+interface/forms/clinical_instructions/save.php:46:    $newid = sqlInsert("INSERT INTO form_clinical_instructions (pid,encounter,user,instruction) VALUES (?,?,?,?)", [$pid, $encounter, $session->get('authUser'), $instruction]);
+interface/forms/eye_mag/new.php:90:    $answer = sqlInsert($sql, [$encounter,$form_name,$newid,$pid,$user,$group,$providerid,$form_folder]);
+interface/forms/eye_mag/save.php:770:                    $issue = QueryUtils::sqlInsert(
+interface/forms/fee_sheet/review/fee_sheet_queries.php:167:            $res = sqlInsert($sqlCreateDiag, $bound_params);
+interface/forms/group_attendance/functions.php:104:        $pc_eid = sqlInsert($insert_sql, $sqlBindArray);
+interface/forms/group_attendance/functions.php:135:        $form_id = sqlInsert($insert_encounter_sql, $sqlBindArray);
+interface/forms/misc_billing_options/save.php:104:    $newid = sqlInsert(
+interface/forms/newGroupEncounter/save.php:70:        sqlInsert(
+interface/forms/procedure_order/common.php:253:        $formid = sqlInsert($query, $set_array);
+interface/forms/procedure_order/procedure_order_save_functions.php:139:    sqlInsert(
+interface/forms/procedure_order/procedure_order_save_functions.php:339:        $ptid = sqlInsert(
+interface/forms/procedure_order/procedure_order_save_functions.php:446:    return sqlInsert(
+interface/forms/questionnaire_assessments/save.php:101:        $rtn = sqlInsert("Insert Into `registry` Set
+interface/forms/track_anything/create.php:56:        $save_into_db = sqlInsert($insertspell, [$the_name, $the_descr, $the_pos, $the_parent,1]);
+interface/forms/track_anything/new.php:81:            $formid = sqlInsert($query, $myprocedureid);
+interface/forms/transfer_summary/save.php:59:    $newid = sqlInsert(
+interface/forms/treatment_plan/save.php:61:    $newid = sqlInsert(
+interface/language/csv/translation_utilities.php:46:            $new_index = sqlInsert($sqlInsert, [$constant]);
+interface/language/csv/translation_utilities.php:95:                $id = sqlInsert($sqlInsert, [$cons_id, $language, $definition]);
+interface/modules/custom_modules/oe-module-comlink-telehealth/src/Repository/TeleHealthPersonSettingsRepository.php:47:            $id = QueryUtils::sqlInsert($sql, $bind);
+interface/modules/custom_modules/oe-module-comlink-telehealth/src/Repository/TeleHealthSessionRepository.php:28:        QueryUtils::sqlInsert($sql, [$pc_eid, $user_id, $encounter, $pid]);
+interface/modules/custom_modules/oe-module-comlink-telehealth/src/Repository/TeleHealthUserRepository.php:79:        return QueryUtils::sqlInsert($sql, $binds);
+interface/modules/custom_modules/oe-module-dashboard-context/ModuleManagerListener.php:93:        QueryUtils::sqlInsert($sql);
+interface/modules/custom_modules/oe-module-dashboard-context/ModuleManagerListener.php:98:        QueryUtils::sqlInsert($sql);
+interface/modules/custom_modules/oe-module-dashboard-context/ModuleManagerListener.php:145:        QueryUtils::sqlInsert($sql);
+interface/modules/custom_modules/oe-module-dashboard-context/ModuleManagerListener.php:150:        QueryUtils::sqlInsert($sql);
+interface/modules/custom_modules/oe-module-dorn/src/AddressBookAddEdit.php:92:        $userid = sqlInsert(
+interface/modules/custom_modules/oe-module-dorn/src/LabCompendiumInstall.php:69:        $id = sqlInsert($sql, $sqlArr);
+interface/modules/custom_modules/oe-module-dorn/src/LabCompendiumInstall.php:75:        $id = sqlInsert($sql, $sqlArr);
+interface/modules/custom_modules/oe-module-dorn/src/LabCompendiumInstall.php:98:            $id = sqlInsert($sql, $sqlArr);
+interface/modules/custom_modules/oe-module-dorn/src/LabCompendiumInstall.php:116:        $id = sqlInsert($sql, $sqlArr);
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:588:                            $in_orderid = sqlInsert(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:700:                            sqlInsert(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1106:        return sqlInsert($query, $binds);
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1511:            sqlInsert(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1565:        return sqlInsert(
+interface/modules/custom_modules/oe-module-ehi-exporter/src/Services/EhiExportJobService.php:44:            $insertId = QueryUtils::sqlInsert($sql, $bind);
+interface/modules/custom_modules/oe-module-ehi-exporter/src/Services/EhiExportJobService.php:53:                QueryUtils::sqlInsert($patientJoinSql, $joinBind);
+interface/modules/custom_modules/oe-module-ehi-exporter/src/Services/EhiExportJobTaskService.php:72:            $insertId = QueryUtils::sqlInsert($sql, $bind);
+interface/modules/custom_modules/oe-module-ehi-exporter/src/Services/EhiExportJobTaskService.php:81:                QueryUtils::sqlInsert($patientJoinSql, $joinBind);
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:72:        sqlInsert(
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:896:        return (int)sqlInsert($sql, [
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:952:        return sqlInsert($sql, [$uid, $account, $jobId, $sentDate, $callerId, $dialNumber, $details_encoded]);
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/AuthorizationService.php:44:        QueryUtils::sqlInsert($statement, $binding);
+interface/modules/custom_modules/oe-module-weno/src/Services/LogDataInsert.php:38:            sqlInsert($sql, [
+interface/modules/custom_modules/oe-module-weno/src/Services/PharmacyService.php:32:            sqlInsert($sql, [
+interface/modules/custom_modules/oe-module-weno/src/Services/PharmacyService.php:56:            sqlInsert($sql, [
+interface/modules/custom_modules/oe-module-weno/src/Services/WenoLogService.php:57:            sqlInsert($sql, $bind);
+interface/modules/zend_modules/module/Application/src/Application/Plugin/CommonPlugin.php:90:        $audit_master_id = QueryUtils::sqlInsert($master_query, [0, $approval_status, $ip_address, $type, $isQrdaDocument, $isUnstructeredDocument]);
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncounterccdadispatchTable.php:3961:            $moduleInsertId = QueryUtils::sqlInsert($query, [$binaryUuid, $pid, $encounter, $file_path, $time, $status, $user_id, $docid, $revid, $hash, $view, $transfer, $emr_transfer, $encrypted, $referralId]);
+interface/modules/zend_modules/module/Ccr/src/Ccr/Model/CcrTable.php:112:        $audit_master_id = QueryUtils::sqlInsert($master_query, [0, $approval_status, $ip_address, $type]);
+interface/modules/zend_modules/module/Installer/src/Installer/Model/InstModuleTable.php:291:            $moduleInsertId = QueryUtils::sqlInsert($sql, $params);
+interface/orders/load_compendium.php:219:                                                $ptid = sqlInsert(
+interface/orders/orders_results.php:131:                    $report_id = QueryUtils::sqlInsert(
+interface/orders/orders_results.php:141:                    $report_id = QueryUtils::sqlInsert(
+interface/orders/orders_results.php:212:                $result_id = QueryUtils::sqlInsert(
+interface/orders/procedure_provider_edit.php:122:            $ppid = sqlInsert("INSERT INTO `procedure_providers` SET $sets", $params);
+interface/orders/receive_hl7_results.inc.php:113:    return sqlInsert($query, $binds);
+interface/orders/receive_hl7_results.inc.php:562:        sqlInsert(
+interface/orders/receive_hl7_results.inc.php:616:    return sqlInsert(
+interface/orders/receive_hl7_results.inc.php:1109:                        $in_orderid = sqlInsert(
+interface/orders/receive_hl7_results.inc.php:1213:                        sqlInsert(
+interface/orders/types_edit.php:288:                $newid = sqlInsert("INSERT INTO procedure_type SET parent = ?, $sets", $bindValues);
+interface/patient_file/encounter/superbill_custom_full.php:124:                $code_id = sqlInsert("INSERT INTO codes SET $sql");
+interface/patient_file/front_payment.php:130:            $payment_id = sqlInsert(
+interface/patient_file/front_payment.php:184:                    $session_id = sqlInsert(
+interface/patient_file/front_payment.php:221:                          $payment_id = sqlInsert(
+interface/patient_file/history/history_sdoh_health_concerns.php:121:                    QueryUtils::sqlInsert(
+interface/patient_file/pos_checkout_normal.php:722:              $session_id = sqlInsert(
+interface/patient_file/summary/add_edit_amendments.php:63:        $amendment_id = sqlInsert($query, $sqlBindArray);
+interface/patient_file/summary/immunizations.php:110:        $newid = sqlInsert($sql, $sqlBindArray);
+interface/patient_file/transaction/add_transaction.php:65:        $newid = sqlInsert("INSERT INTO transactions SET $sets", $sqlBindArray);
+interface/therapy_groups/therapy_groups_models/therapy_groups_model.php:60:        $groupId = sqlInsert($sql, $groupData);
+interface/usergroup/addrbook_edit.php:478:        $userid = sqlInsert("INSERT INTO users ( " .
+ippf_upgrade.php:84:                    $newid = sqlInsert($query);
+library/ESign/DbRow/Signable.php:132:        $id = sqlInsert($statement, $signature);
+library/FeeSheet.class.php:397:            $form_id = sqlInsert("INSERT INTO lbf_data (field_id, field_value) " .
+library/FeeSheet.class.php:411:        sqlInsert(
+library/FeeSheet.class.php:1008:                        $session_id = sqlInsert(
+library/FeeSheet.class.php:1507:                    $newid = sqlInsert(
+library/MedEx/API.php:1070:            $pc_eid = sqlInsert($sql, [$appt['pc_catid'], $appt['pc_multiple'], $appt['pc_aid'], $appt['pc_pid'], $appt['pc_gid'], $appt['pc_title'],
+library/MedEx/API.php:1078:            sqlInsert(
+library/MedEx/API.php:1441:                    sqlInsert(
+library/ajax/addlistitem.php:70:$rc = sqlInsert("INSERT INTO list_options ( " .
+library/api.inc.php:73:    return sqlInsert($sql, $sqlBindingArray);
+library/api.inc.php:94:    return sqlInsert($sql, $sqlBindingArray);
+library/classes/Prescription.class.php:365:                $medListId = QueryUtils::sqlInsert(
+library/classes/Prescription.class.php:667:                QueryUtils::sqlInsert("insert into lists_medication(list_id, drug_dosage_instructions, prescription_id"
+library/classes/postmaster.php:84:            QueryUtils::sqlInsert("INSERT into `email_queue` (`sender`, `recipient`, `subject`, `body`,  `template_name`, `datetime_queued`) VALUES (?, ?, ?, ?, ?, NOW())", [$sender, $recipient, $subject, $body, $template]);
+library/classes/postmaster.php:106:        sqlInsert("INSERT into `email_queue` (`sender`, `recipient`, `subject`, `body`, `datetime_queued`) VALUES (?, ?, ?, ?, NOW())", [$sender, $recipient, $subject, $body]);
+library/custom_template/add_context.php:39:        $id = sqlInsert("INSERT INTO customlists (cl_list_type,cl_list_item_long) VALUES(?,?)", [2,$_POST['contextname']]);
+library/custom_template/add_custombutton.php:56:                $newid = sqlInsert($sql, [$itemID, 6, $_POST['inshort' . $cnt], $_POST['designation' . $cnt], $_POST['level' . $cnt]]);
+library/custom_template/ajax_code.php:54:            $newid = sqlInsert("INSERT INTO customlists (cl_list_id,cl_list_type,cl_list_item_long,cl_creator) VALUES (?,?,?,?)", [$arr[$i], 3, $templateid, $authUserID]);
+library/custom_template/ajax_code.php:78:    $newid = sqlInsert("INSERT INTO customlists (cl_list_id,cl_list_type,cl_list_item_long,cl_order,cl_creator) VALUES (?,?,?,?,?)", [$templateid, 4, $item, $order, $authUserID]);
+library/custom_template/ajax_code.php:85:    $newid = sqlInsert("INSERT INTO customlists (cl_list_id,cl_list_type,cl_list_item_long,cl_order,cl_creator) VALUES (?,?,?,?,?)", [$templateid, 4, $content, $order, $authUserID]);
+library/dated_reminder_functions.php:386:        $mID = sqlInsert(
+library/encounter_events.inc.php:100:        sqlInsert(
+library/encounter_events.inc.php:160:        sqlInsert(
+library/encounter_events.inc.php:241:        sqlInsert(
+library/encounter_events.inc.php:365:        $pc_eid = sqlInsert(
+library/lists.inc.php:115:    return sqlInsert("insert into lists (date, pid, type, title, activity, comments, user, groupname) values (NOW(), ?, ?, ?, ?, ?, ?, ?)", [$pid, $type, $title, $activity, $comments, $session->get('authUser'), $session->get('authProvider')]);
+library/patient.inc.php:1067:    $id = QueryUtils::sqlInsert(
+library/patient.inc.php:1175:    return QueryUtils::sqlInsert(
+library/patient.inc.php:1258:    return sqlInsert(
+library/payment.inc.php:53:    $payid = sqlInsert("INSERT INTO payments ( " .
+library/pnotes.inc.php:311:    return QueryUtils::sqlInsert(
+library/pnotes.inc.php:346:    return QueryUtils::sqlInsert(
+library/registry.inc.php:21:        return sqlInsert("insert into registry set
+library/registry.inc.php:37:    return sqlInsert("update registry set $mod, date=NOW() where id=?", [$id]);
+library/sql.inc.php:241:function sqlInsert($statement, $binds = false)
+library/sql.inc.php:244:        return QueryUtils::sqlInsert($statement, $binds);
+library/transactions.inc.php:49:    $id = sqlInsert("insert into transactions ( " .
+portal/lib/portal_mail.inc.php:80:    return sqlInsert(
+portal/portal_payment.php:124:            $payment_id = sqlInsert(
+portal/portal_payment.php:173:                $session_id = sqlInsert(
+portal/portal_payment.php:211:                $payment_id = sqlInsert(
+src/Billing/BillingProcessor/X12RemoteTracker.php:155:        $results = sqlInsert(
+src/Billing/BillingUtilities.php:1472:        return sqlInsert($sql, [$encounter_id, $code_type, $code, $code_text, $pid, $authorized,
+src/Billing/EDI270.php:704:            $res = sqlInsert($query, $sqlBindArray);
+src/Billing/SLEOB.php:87:        return sqlInsert("INSERT INTO ar_session ( " .
+src/Billing/SLEOB.php:102:            $sessionId = sqlInsert($query, [$payer_id, $session->get('authUserID'), 'ePay - ' . $check_number, $check_date, $pay_total, $post_to_date, $deposit_date]);
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:536:            QueryUtils::sqlInsert($sql, $bind);
+src/Common/Auth/AuthUtils.php:691:                $newUserId = QueryUtils::sqlInsert($insertSql, array_values($userData));
+src/Common/Auth/AuthUtils.php:704:                QueryUtils::sqlInsert($passwordSQL, [$newUserId, $new_username, $hash]);
+src/Common/Auth/OneTimeAuth.php:248:        return sqlInsert($sql, $bind);
+src/Common/Auth/OpenIDConnect/Repositories/ClientRepository.php:124:        $result = QueryUtils::sqlInsert($sql, $i_vals);
+src/Common/Database/DatabaseQueryTrait.php:131:    protected function sqlInsert($statement, $binds = [])
+src/Common/Database/DatabaseQueryTrait.php:133:        return QueryUtils::sqlInsert($statement, $binds);
+src/Common/Database/QueryUtils.php:280:    public static function sqlInsert($statement, $binds = [])
+src/PaymentProcessing/Recorder.php:112:        return (string) QueryUtils::sqlInsert($query, $params);
+src/Services/AddressService.php:79:        QueryUtils::sqlInsert(
+src/Services/AllergyIntoleranceService.php:275:        $results = sqlInsert(
+src/Services/AppointmentService.php:345:        $results = sqlInsert(
+src/Services/CareExperiencePreferenceService.php:124:        return QueryUtils::sqlInsert($sql, $params);
+src/Services/CareTeamService.php:471:            return QueryUtils::sqlInsert(
+src/Services/CareTeamService.php:496:        QueryUtils::sqlInsert(
+src/Services/Cda/CdaTemplateImportDispose.php:193:                $list_id = QueryUtils::sqlInsert($query, [$pid,
+src/Services/Cda/CdaTemplateImportDispose.php:420:                $facility_id = QueryUtils::sqlInsert($query4, [
+src/Services/Cda/CdaTemplateImportDispose.php:464:                $facility_id2 = QueryUtils::sqlInsert($query7, ['',
+src/Services/Cda/CdaTemplateImportDispose.php:536:                $pro_id = QueryUtils::sqlInsert($query_insert_pro, [$pro_name]);
+src/Services/Cda/CdaTemplateImportDispose.php:547:                $ptid = sqlInsert(
+src/Services/Cda/CdaTemplateImportDispose.php:561:            $po_id = QueryUtils::sqlInsert($query_insert_po, ['', $pid, $encounter_for_billing, $procedure_date_value, 'normal', ($value['status'] ?? 'completed'), 1, $pro_id, $value['procedure_type']]);
+src/Services/Cda/CdaTemplateImportDispose.php:652:                $facility_id = QueryUtils::sqlInsert($query_ins_fac, [
+src/Services/Cda/CdaTemplateImportDispose.php:697:                $pc_catid = sqlInsert($sql, [$catname, $const_id, '#BFBFBF', 0, 1]);
+src/Services/Cda/CdaTemplateImportDispose.php:739:                $enc_id = QueryUtils::sqlInsert(
+src/Services/Cda/CdaTemplateImportDispose.php:799:                        $list_id = QueryUtils::sqlInsert($query_insert, [$pid, 'medical_problem', $diag_date, 1,
+src/Services/Cda/CdaTemplateImportDispose.php:890:                $facility_id = QueryUtils::sqlInsert($query_ins_fac, [$value['represented_organization'],
+src/Services/Cda/CdaTemplateImportDispose.php:1517:                $list_id = QueryUtils::sqlInsert($query, [$pid,
+src/Services/Cda/CdaTemplateImportDispose.php:1590:        $user_id = QueryUtils::sqlInsert($query_ins_users, [
+src/Services/Cda/CdaTemplateImportDispose.php:1632:                $pro_id = QueryUtils::sqlInsert($query_insert_pro, [$pro_name]);
+src/Services/Cda/CdaTemplateImportDispose.php:1654:                $res_pt_id = QueryUtils::sqlInsert($query_insert_pt, [$value['proc_text'], $pro_id, $value['proc_code'] ?? '', 'ord', 1, 'laboratory_test']);
+src/Services/Cda/CdaTemplateImportDispose.php:1669:            $po_id = QueryUtils::sqlInsert($query_insert_po, ['', $pid, $enc_id, $date, $date, 'normal', $value['status'] ?? 'complete', 1, $pro_id]);
+src/Services/Cda/CdaTemplateImportDispose.php:1679:            $res_id = QueryUtils::sqlInsert($query_insert_pr, [$po_id, $date, $date, 'final', 'reviewed']);
+src/Services/Cda/CdaTemplateImportDispose.php:1701:                        $res_pt_id_res = QueryUtils::sqlInsert($query_insert_pt, [$res['result_text'], $pro_id, $res['result_code'], 'res', 1, 'laboratory_test']);
+src/Services/Cda/CdaTemplateImportDispose.php:1855:            $trans_id = QueryUtils::sqlInsert($query_insert, [date('Y-m-d H:i:s'), 'LBTref', $pid, $authProvider, $authUser, $userauthorized]);
+src/Services/Cda/CdaTemplateImportDispose.php:1961:                $vitals_id = QueryUtils::sqlInsert(
+src/Services/ClinicalNotesService.php:285:            $recordId = QueryUtils::sqlInsert($sql, $bindValues);
+src/Services/ConditionService.php:226:        $results = sqlInsert(
+src/Services/DocumentTemplates/DocumentTemplateService.php:350:                    $rtn = sqlInsert($sql, [$profile, $session->get('authUserID'), $group['group'] ?? '', $group['active']]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:597:        return sqlInsert($sql, [$pid, $session->get('authUserID'), ($profile ?: ''), $category ?: '', $template, $name, 'New', $content, strlen((string) $content), $mimetype, $pid, $session->get('authUserID'), $content, strlen((string) $content), $mimetype]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:758:                $rtn = sqlInsert(
+src/Services/DrugSalesService.php:284:            $sale_id = QueryUtils::sqlInsert(
+src/Services/DrugSalesService.php:441:            $sale_id = QueryUtils::sqlInsert(
+src/Services/EmployerService.php:148:            $insert = QueryUtils::sqlInsert($sql, $insert['bind']);
+src/Services/EncounterService.php:386:        $results = sqlInsert(
+src/Services/EncounterService.php:499:        $soapResults = sqlInsert(
+src/Services/EncounterService.php:523:        $formResults = sqlInsert(
+src/Services/FacilityService.php:229:        $facilityId = sqlInsert(
+src/Services/FacilityService.php:398:        $results = sqlInsert(
+src/Services/FormService.php:102:        return QueryUtils::sqlInsert($sql, $arraySqlBind);
+src/Services/FormService.php:114:        $insert = QueryUtils::sqlInsert($sql, $bind);
+src/Services/FormService.php:123:        $id = QueryUtils::sqlInsert($encounterFormSql, $encounterFormBind);
+src/Services/InsuranceCompanyService.php:457:        QueryUtils::sqlInsert(
+src/Services/InsuranceService.php:363:        $insuranceDataId = sqlInsert(
+src/Services/ListService.php:198:        return sqlInsert(
+src/Services/MedicationPatientIssueService.php:47:        return QueryUtils::sqlInsert($sql, $insert['bind']);
+src/Services/MessageService.php:60:        $results = sqlInsert(
+src/Services/ONoteService.php:39:        return QueryUtils::sqlInsert("INSERT INTO `onotes` (`date`, `body`, `user`, `groupname`, `activity`) VALUES (NOW(), ?, ?, ?, 1)", [$body, $session->get("authUser"), $session->get('authProvider')]);
+src/Services/ObservationService.php:567:            $observationData['id'] = QueryUtils::sqlInsert(
+src/Services/PatientIssuesService.php:76:        $whiteListDict['id'] = QueryUtils::sqlInsert($sql, $insert['bind']);
+src/Services/PatientIssuesService.php:284:        QueryUtils::sqlInsert($query, [$uuid, $pid, $issueId, $encounter, $resolved,$userCreatorId,$userCreatorId]);
+src/Services/PatientNameHistoryService.php:85:        return QueryUtils::sqlInsert($sql, $insert['bind']);
+src/Services/PatientPortalService.php:257:        return sqlInsert(
+src/Services/PatientService.php:196:        $results = sqlInsert($sql, $query['bind']);
+src/Services/PatientTrackerService.php:199:            $tracker_id = sqlInsert(
+src/Services/PatientTransactionService.php:170:        $results = sqlInsert(
+src/Services/PatientTransactionService.php:223:        $results = sqlInsert(
+src/Services/PersonPatientLinkService.php:80:            $result = QueryUtils::sqlInsert($sql, [
+src/Services/PhoneNumberService.php:72:        QueryUtils::sqlInsert(
+src/Services/PractitionerService.php:216:        $results = sqlInsert(
+src/Services/PrescriptionService.php:437:        $results = QueryUtils::sqlInsert($sql, $binds);
+src/Services/ProcedureOrderRelationshipService.php:52:        $result = sqlInsert($sql, [
+src/Services/QuestionnaireResponseService.php:527:            $id = sqlInsert($sql_insert, $bind) ?: 0;
+src/Services/QuestionnaireService.php:189:            sqlInsert($sql_update, $bind);
+src/Services/QuestionnaireService.php:192:            $id = sqlInsert($sql_insert, $bind) ?: 0;
+src/Services/SDOH/HistorySdohService.php:459:            $insertId = QueryUtils::sqlInsert($sql, $columns['bind']);
+src/Services/SocialHistoryService.php:193:        $insertId = QueryUtils::sqlInsert($sql, $arraySqlBind);
+src/Services/TreatmentInterventionPreferenceService.php:124:        return QueryUtils::sqlInsert($sql, $params);
+src/Services/TrustedUserService.php:68:            $id = QueryUtils::sqlInsert($sql, $bind);
+src/Services/Utils/SQLUpgradeService.php:1618:        $careTeamId = QueryUtils::sqlInsert($sql, [
+src/Services/VitalsCalculatedService.php:266:            QueryUtils::sqlInsert($sql, $columns['bind']);
+src/Services/VitalsService.php:374:            $id = QueryUtils::sqlInsert($sql, $values);
+src/Services/VitalsService.php:499:            $vitalDetails['id'] = QueryUtils::sqlInsert($sql, $values);
+tests/PHPStan/Rules/ForbiddenFunctionsRule.php:40:        'sqlInsert' => 'Use QueryUtils::sqlInsert() instead of sqlInsert().',
+tests/Tests/E2e/SvcCodeFinancialReportTest.php:254:        QueryUtils::sqlInsert("INSERT INTO facility (name) VALUES (?)", ['e2e-test-svc-report']);
+tests/Tests/E2e/SvcCodeFinancialReportTest.php:259:        QueryUtils::sqlInsert(
+tests/Tests/E2e/SvcCodeFinancialReportTest.php:265:        QueryUtils::sqlInsert(
+tests/Tests/E2e/SvcCodeFinancialReportTest.php:269:        QueryUtils::sqlInsert(
+tests/Tests/E2e/SvcCodeFinancialReportTest.php:276:        QueryUtils::sqlInsert(
+tests/Tests/E2e/SvcCodeFinancialReportTest.php:280:        QueryUtils::sqlInsert(
+tests/Tests/E2e/SvcCodeFinancialReportTest.php:289:        QueryUtils::sqlInsert(
+tests/Tests/Fixtures/BaseFixtureManager.php:137:            QueryUtils::sqlInsert($sqlInsert . $sqlColumnValues, $sqlBinds);
+tests/Tests/Fixtures/ConditionFixtureManager.php:34:        $userId = QueryUtils::sqlInsert($sql, $bind);
+tests/Tests/Fixtures/EventAuditLoggerFixturesTest.php:126:            QueryUtils::sqlInsert($sql, $binds);
+tests/Tests/Fixtures/FixtureManager.php:139:            $isInserted = QueryUtils::sqlInsert($sqlInsert . $sqlColumnValues, $sqlBinds);
+tests/Tests/Fixtures/MedicationDispenseFixtureManager.php:108:        $result = QueryUtils::sqlInsert($sql, $bind);
+tests/Tests/Fixtures/MedicationDispenseFixtureManager.php:198:        $result = QueryUtils::sqlInsert($sql, $bind);
+tests/Tests/Fixtures/MedicationDispenseFixtureManager.php:229:        $drugId = QueryUtils::sqlInsert($sql, $bind);
+tests/Tests/Fixtures/MedicationDispenseFixtureManager.php:250:        $inventoryId = QueryUtils::sqlInsert($sql, $bind);
+tests/Tests/Fixtures/MedicationDispenseFixtureManager.php:278:        $prescriptionId = QueryUtils::sqlInsert($sql, $bind);
+tests/Tests/Fixtures/MedicationDispenseFixtureManager.php:348:        $userId = QueryUtils::sqlInsert($sql, $bind);
+tests/Tests/Fixtures/PractitionerFixtureManager.php:114:            $isInserted = sqlInsert($sqlInsert . $sqlColumnValues, $sqlBinds);
+tests/Tests/Services/FHIR/FhirLocationServiceIntegrationTest.php:340:        $facilityId = QueryUtils::sqlInsert($sql, $params);
+tests/Tests/Services/FHIR/Observation/FhirObservationEmployerServiceTest.php:120:        $insertId = QueryUtils::sqlInsert("INSERT INTO users (username, fname, lname, authorized, active, npi) VALUES (?, ?, ?, ?, ?, ?)", [
+tests/Tests/Services/FHIR/Observation/FhirObservationEmployerServiceTest.php:160:            QueryUtils::sqlInsert(
+tests/Tests/Services/FHIR/Observation/FhirObservationHistorySdohServiceTest.php:121:        $insertId = QueryUtils::sqlInsert("INSERT INTO users (username, fname, lname, authorized, active, npi) VALUES (?, ?, ?, ?, ?, ?)", [
+tests/Tests/Services/FHIR/Observation/FhirObservationHistorySdohServiceTest.php:582:            $secondPatientRecordId = QueryUtils::sqlInsert(
+tests/Tests/Services/FHIR/Observation/FhirObservationPatientServiceTest.php:108:        $insertId = QueryUtils::sqlInsert("INSERT INTO users (username, fname, lname, authorized, active, npi) VALUES (?, ?, ?, ?, ?, ?)", [
+tests/Tests/Services/FHIR/Observation/FhirObservationPatientServiceTest.php:151:            QueryUtils::sqlInsert(
+tests/Tests/Services/Reports/FinancialSummaryReportServiceTest.php:283:        $id = QueryUtils::sqlInsert(
+tests/Tests/Services/Reports/FinancialSummaryReportServiceTest.php:306:        $id = QueryUtils::sqlInsert(
+tests/Tests/Services/Reports/FinancialSummaryReportServiceTest.php:323:        $id = QueryUtils::sqlInsert(
+tests/Tests/Services/Reports/FinancialSummaryReportServiceTest.php:339:        $id = QueryUtils::sqlInsert(
+tests/Tests/Services/Reports/FinancialSummaryReportServiceTest.php:350:        $id = QueryUtils::sqlInsert(

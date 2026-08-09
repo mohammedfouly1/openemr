@@ -1,0 +1,10 @@
+# CHARSET / COLLATE declarations in sql/ at 631f2b38cf633769c305233f88cdf9c73ca80657
+## sql/database.sql DEFAULT CHARSET occurrences:
+0
+## COLLATE occurrences in sql/database.sql:
+0
+## Installer collation handling:
+HEAD:library/classes/Installer.class.php:347:     * defaulting to utf8mb4_general_ci if not specified.
+HEAD:library/classes/Installer.class.php:355:            $this->collate = 'utf8mb4_general_ci';
+HEAD:library/classes/Installer.class.php:357:        $sql .= " character set utf8mb4 collate " . $this->escapeCollateName($this->collate);
+HEAD:library/classes/Installer.class.php:1735:        return $this->execute_sql("SET NAMES 'utf8mb4'");

@@ -1,0 +1,11 @@
+controllers/C_Document.class.php:244:$error = xl("The system does not permit uploading files with MIME content type") . " - " . mime_content_type($_FILES['file']['tmp_name'][$key]) . ".\n";
+controllers/C_Document.class.php:308:$mimetype = mime_content_type($_FILES['file']['tmp_name'][$key]);
+interface/billing/edi_271.php:49:if (mime_content_type($_FILES['uploaded']['tmp_name']) != "text/plain") {
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:403:$type = mime_content_type($content);
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxMailer.php:134:$detected = mime_content_type($file);
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:117:$mime = mime_content_type($tmpName);
+interface/modules/zend_modules/module/Documents/src/Documents/Controller/DocumentsController.php:59:$mime_type = mime_content_type($filePtr['tmp_name']);
+interface/patient_file/download_template.php:392:$mimetype = mime_content_type($templatepath);
+library/sanitize.inc.php:128:$mimetype  = mime_content_type($file);
+src/Services/DocumentService.php:153:$ret = $doc->createDocument($pid, $categoryId, $fileData["name"], mime_content_type($fileData["tmp_name"]), $file, eid: $eid);
+src/Services/DocumentTemplates/DocumentTemplateService.php:530:$mimetype = mime_content_type($file);

@@ -1,0 +1,1460 @@
+# slug: sqlquery
+# description: sqlQuery( call sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e sqlQuery( -- *.php HEAD
+# generated: 2026-08-07T06:29:40Z
+#
+contrib/util/billing/load_fee_schedule.php:57:        $codes_sql = sqlQuery("SELECT `codes`.*, `prices`.`pr_id`, `prices`.`pr_price` as fee FROM `codes` LEFT JOIN `prices` ON `prices`.`pr_id` = `codes`.`id` WHERE `code` = ? AND `modifier` = ?", [$sched_code, $sched_mod]);
+contrib/util/billing/load_fee_schedule.php:73:            sqlQuery($sql, [$insurance_company_id, $sched_plan, $sched_code, $sched_mod, $sched_type, $sched_fee, $effective_date]);
+contrib/util/billing/load_fee_schedule.php:81:                $update_prices = sqlQuery("UPDATE `prices` SET `pr_price` = ? WHERE `pr_id` = ?", [$ceil_fee, $price_id]);
+controllers/C_Document.class.php:204:            $acoSpec = sqlQuery("SELECT `aco_spec` from `categories` WHERE `id` = ?", [$category_id])['aco_spec'];
+controllers/C_Document.class.php:1159:                $name = sqlQuery($query, [$cur_pid]);
+controllers/C_Document.class.php:1341:                $facilityRow = sqlQuery("SELECT username, facility, facility_id FROM users WHERE id = ?", ["$provider_id"]);
+controllers/C_Document.class.php:1389:            $img_order  = sqlQuery("select * from procedure_order_code where procedure_order_id = ? and procedure_code = ? ", [$img_procedure_id,$proc_code]);
+controllers/C_Document.class.php:1390:            $img_report = sqlQuery("select * from procedure_report where procedure_order_id = ? and procedure_order_seq = ? ", [$img_procedure_id,$img_order['procedure_order_seq']]);
+controllers/C_Document.class.php:1397:            $img_result = sqlQuery("select * from procedure_result where procedure_report_id = ? and document_id = ?", [$img_report_id,$document_id]);
+controllers/C_Document.class.php:1419:            $map = sqlQuery("select poc.procedure_order_id,poc.procedure_code from procedure_result pres
+controllers/C_Document.class.php:1431:        $doc_notes = sqlQuery("select note from notes where foreign_id = ?", [$doc_id]);
+controllers/C_Document.class.php:1436:            $ep = sqlQuery("select u.username as assigned_to from form_encounter inner join users u on u.id = provider_id where encounter = ?", [$encounter]);
+controllers/C_Document.class.php:1438:            $ep = sqlQuery("select u.username as assigned_to from procedure_order inner join users u on u.id = provider_id where procedure_order_id = ?", [$image_procedure_id]);
+controllers/C_Prescription.class.php:66:        $rxn = sqlQuery("SELECT table_name FROM information_schema.tables WHERE table_name = 'RXNCONSO' OR table_name = 'rxconso'");
+controllers/C_Prescription.class.php:67:        $rxcui = sqlQuery("SELECT ct_id FROM `code_types` WHERE `ct_key` = ? AND `ct_active` = 1", ['RXCUI']);
+controllers/C_Prescription.class.php:193:            $rxn = sqlQuery("SELECT table_name FROM information_schema.tables WHERE table_name = 'RXNCONSO' OR table_name = 'rxconso'");
+controllers/C_Prescription.class.php:205:                    $rXn = sqlQuery("SELECT `rxcui` FROM " . $tbl_rxnconso . " WHERE `str` LIKE ?", ["%" . $drug[0] . "%"]);
+controllers/C_Prescription.class.php:456:        $res = sqlQuery(
+controllers/C_Prescription.class.php:518:        $res = sqlQuery(
+controllers/C_Prescription.class.php:566:        $res = sqlQuery(
+controllers/C_Prescription.class.php:622:        $res = sqlQuery(
+custom/BillingExport.csv.php:149:        $prow = sqlQuery($query, [$patient_id, $patient_id]);
+custom/BillingExport.csv.php:185:        $erow = sqlQuery($query, [$patient_id, $patient_id, $encounter]);
+custom/chart_tracker.php:103:    $row = sqlQuery($query, [$form_newid]);
+custom/code_types.inc.php:256:    $sql = sqlQuery("SELECT `revision_version` FROM `standardized_tables_track` WHERE `name` = 'SNOMED' ORDER BY `id` DESC");
+custom/code_types.inc.php:619:            $check_table = sqlQuery("SHOW TABLES LIKE '" . $table . "'");
+custom/code_types.inc.php:653:                $check_table = sqlQuery("SHOW TABLES LIKE '" . $join_table . "'");
+custom/code_types.inc.php:695:                    $result = sqlQuery("SHOW INDEX FROM " . $table . " WHERE Column_name = ? AND Index_type = 'FULLTEXT'", [$code_text_col]);
+custom/code_types.inc.php:821:                $check_table = sqlQuery("SHOW TABLES LIKE '" . $join_table . "'");
+custom/code_types.inc.php:874:            $crow = sqlQuery($sql, $sqlArray);
+custom/code_types.inc.php:1073:        $row = sqlQuery(
+custom/export_labworks.php:83:    $insrow[] = sqlQuery("SELECT id FROM insurance_data WHERE " .
+custom/export_qrda_xml.php:369:    $userRow = sqlQuery("SELECT facility, facility_id, federaltaxid, npi, phone,fname, lname FROM users WHERE id=?", [$form_provider]);
+custom/export_xml.php:91:    $insrow[] = sqlQuery("SELECT id FROM insurance_data WHERE " .
+custom/qrda_category1_functions.php:487:            $vset = sqlQuery("select * from valueset where code = ? and nqf_code = ?", [$measure['code'],$xml->nqf_code]);
+custom/qrda_category1_functions.php:537:        $vset = sqlQuery("select * from valueset where code = ? and nqf_code = ?", [$procRow['procedure_code'],$xml->nqf_code]);
+custom/qrda_category1_functions.php:586:        $vset = sqlQuery("select * from valueset where code = ? and nqf_code = ? ", [$procRow['procedure_code'],$xml->nqf_code]);
+custom/qrda_category1_functions.php:640:        $vset = sqlQuery("select * from valueset where code = ? and nqf_code = ? ", [$procRow['procedure_code'],$xml->nqf_code]);
+custom/qrda_category1_functions.php:686:        $vset = sqlQuery("select * from valueset where code = ? and nqf_code = ? ", [$procRow['procedure_code'],$xml->nqf_code]);
+custom/qrda_category1_functions.php:735:        $vset = sqlQuery("select * from valueset where code = ? and nqf_code = ? ", [$medRow['rxnorm_drugcode'],$xml->nqf_code]);
+custom/qrda_category1_functions.php:820:        $vset = sqlQuery("select * from valueset where code = ? and nqf_code = ? ", [$medRow['rxnorm_drugcode'],$xml->nqf_code]);
+custom/qrda_category1_functions.php:916:        $vset = sqlQuery("select * from valueset where code = ? and nqf_code = ?", [$diagDispCode,$xml->nqf_code]);
+custom/qrda_category1_functions.php:1315:    $query = sqlQuery("select codes from list_options where list_id ='smoking_status' and option_id = ?", [$tobaccoArr[3]]);
+custom/qrda_category1_functions.php:1318:    $vset = sqlQuery("select * from valueset where code = ? and nqf_code = ?", [$tobacco_code,$xml->nqf_code]);
+custom/qrda_functions.php:278:    $patientRow = sqlQuery("SELECT * FROM patient_data WHERE pid= ?", [$patient_id]);
+custom/qrda_functions.php:286:        $userRow = sqlQuery("SELECT facility, facility_id, federaltaxid, npi, phone,fname, lname FROM users WHERE id= ?", [$provider_id]);
+custom/qrda_functions.php:300:    $patientHistRow = sqlQuery("SELECT tobacco, date FROM history_data WHERE pid= ? ORDER BY id DESC LIMIT 1", [$patient_id]);
+interface/batchcom/emailnotification.php:84:$result = sqlQuery($sql);
+interface/batchcom/settingsnotification.php:79:$result = sqlQuery($sql);
+interface/batchcom/smsnotification.php:82:$result = sqlQuery($sql);
+interface/billing/billing_report.php:937:                                $res = sqlQuery(
+interface/billing/billing_report.php:984:                                    $res = sqlQuery(
+interface/billing/billing_report.php:1001:                                $mboid = sqlQuery("SELECT forms.form_id FROM forms WHERE forms.encounter = ? AND forms.authorized = 1 AND forms.formdir = 'misc_billing_options' AND forms.deleted != 1 LIMIT 1", [$iter['enc_encounter']]);
+interface/billing/billing_report.php:1009:                                $res = sqlQuery(
+interface/billing/billing_report.php:1094:                                    $c = sqlQuery(
+interface/billing/billing_report.php:1121:                                    $last_level_closed = sqlQuery("SELECT `last_level_closed` FROM `form_encounter` WHERE `encounter` = ?", [$iter['enc_encounter']])['last_level_closed'];
+interface/billing/billing_report.php:1126:                                        $insuranceName = sqlQuery("SELECT `name` FROM `insurance_companies` WHERE `id` = ?", [$row['provider']])['name'];
+interface/billing/billing_report.php:1127:                                        $x12Partner = sqlQuery("SELECT `x12_default_partner_id` FROM `insurance_companies` WHERE `id` = ?", [$row['provider']])['x12_default_partner_id'];
+interface/billing/billing_report.php:1184:                                        $irow = sqlQuery(
+interface/billing/get_claim_file.php:69:    $row = sqlQuery($sql, [$x12_partner_id]);
+interface/billing/indigent_patients_report.php:215:        $arow = sqlQuery("SELECT SUM(fee) AS amount FROM drug_sales WHERE " .
+interface/billing/indigent_patients_report.php:218:        $arow = sqlQuery("SELECT SUM(fee) AS amount FROM billing WHERE " .
+interface/billing/indigent_patients_report.php:222:        $arow = sqlQuery("SELECT SUM(fee) AS amount FROM billing WHERE " .
+interface/billing/indigent_patients_report.php:226:        $arow = sqlQuery(
+interface/billing/payment_pat_sel.inc.php:131:                            $ferow = sqlQuery("SELECT date, last_level_closed " .
+interface/billing/sl_eob_invoice.php:275:$ferow = sqlQuery("SELECT e.*, p.fname, p.mname, p.lname FROM form_encounter AS e, patient_data AS p WHERE e.id = ? AND p.pid = e.pid", [$trans_id]);
+interface/billing/sl_eob_invoice.php:342:                $tmp = sqlQuery("SELECT option_value FROM list_options WHERE list_id = 'adjreason' AND activity = 1 AND option_id = ?", [$reason]);
+interface/billing/sl_eob_invoice.php:452:$pdrow = sqlQuery("select billing_note from patient_data where pid = ? limit 1", [$patient_id]);
+interface/billing/sl_eob_invoice.php:453:$bnrow = sqlQuery("select billing_note from form_encounter where pid = ? AND encounter = ? limit 1", [$patient_id, $encounter_id]);
+interface/billing/sl_eob_invoice.php:478:                        $tmp = sqlQuery("SELECT fname, mname, lname " .
+interface/billing/sl_eob_invoice.php:481:                        $tmp = sqlQuery("SELECT bill_date FROM billing WHERE " .
+interface/billing/sl_eob_invoice.php:506:                                $tmp = sqlQuery("SELECT name FROM insurance_companies WHERE id = ?", [$payerid]);
+interface/billing/sl_eob_patient_note.php:40:    $row = sqlQuery("Select billing_note From patient_data Where pid=?", [$patient_id]);
+interface/billing/sl_eob_patient_note.php:59:    $row = sqlQuery("select fname, lname, billing_note " .
+interface/billing/sl_eob_process.php:332:            $ferow = sqlQuery("SELECT e.*, p.fname, p.mname, p.lname " .
+interface/billing/sl_receipts_report.php:448:                                    $tmp = sqlQuery("SELECT count(*) AS count FROM billing WHERE " .
+interface/billing/sl_receipts_report.php:574:                                $tmp = sqlQuery("SELECT count(*) AS count FROM billing WHERE " .
+interface/billing/sl_receipts_report.php:616:                                $tmp = sqlQuery("SELECT name FROM insurance_companies WHERE " .
+interface/billing/sl_receipts_report.php:655:                                $tmp = sqlQuery("SELECT lname, fname FROM users WHERE id = ?", [$docid]);
+interface/billing/sl_receipts_report.php:680:                                        $tmp = sqlQuery("SELECT SUM(fee) AS sum FROM billing WHERE " .
+interface/billing/ub04_dispose.php:64:    $p = sqlQuery("SELECT insurance_companies.* FROM insurance_companies WHERE insurance_companies.id = ?", [$payerid]);
+interface/billing/ub04_dispose.php:183:    $row = sqlQuery($sql, [
+interface/billing/ub04_dispose.php:259:        $revcode[$tlh] = sqlQuery($sql, [
+interface/code_systems/list_staged.php:67:$sqlReturn = sqlQuery("SELECT DATE_FORMAT(`revision_date`,'%Y-%m-%d') as `revision_date`, `revision_version`, `name`, `file_checksum` FROM `standardized_tables_track` WHERE upper(`name`) = ? ORDER BY `imported_date` DESC, `revision_date` DESC", [$db]);
+interface/code_systems/list_staged.php:243:                $sqlReturn = sqlQuery($qry_str, [$db, basename($file), $file_checksum]);
+interface/drugs/add_edit_drug.php:207:        $crow = sqlQuery(
+interface/drugs/add_edit_drug.php:416:    $row = sqlQuery("SELECT * FROM drugs WHERE drug_id = ?", [$drug_id]);
+interface/drugs/add_edit_lot.php:47:    $row = sqlQuery("SELECT count(*) AS count FROM drug_inventory WHERE " .
+interface/drugs/add_edit_lot.php:55:    $row = sqlQuery(
+interface/drugs/add_edit_lot.php:73:    $drow = sqlQuery("SELECT allow_multiple FROM drugs WHERE drug_id = ?", [$drug_id]);
+interface/drugs/add_edit_lot.php:341:        $row = sqlQuery("SELECT * FROM drug_inventory WHERE drug_id = ? " .
+interface/drugs/add_edit_lot.php:400:            $srow = sqlQuery(
+interface/drugs/add_edit_lot.php:425:                $erow = sqlQuery(
+interface/drugs/add_edit_lot.php:484:                    $crow = sqlQuery(
+interface/drugs/destroy_lot.php:114: $row = sqlQuery("SELECT * FROM drug_inventory WHERE drug_id = ? " .
+interface/drugs/dispense_drug.php:121:             * $rowsum = sqlQuery("SELECT sum(on_hand) AS sum FROM drug_inventory WHERE " .
+interface/drugs/dispense_drug.php:123:             * $rowdrug = sqlQuery("SELECT * FROM drugs WHERE " .
+interface/drugs/dispense_drug.php:157:$row = sqlQuery("SELECT " .
+interface/drugs/dispense_drug.php:198://  $refills_row = sqlQuery("SELECT count(*) AS count FROM drug_sales " .
+interface/drugs/drugs.inc.php:108:    $countrow = sqlQuery("SELECT count(*) AS count FROM users_facility WHERE " .
+interface/drugs/drugs.inc.php:122:    $countrow = sqlQuery(
+interface/drugs/drugs.inc.php:128:        $countrow = sqlQuery(
+interface/drugs/drugs.inc.php:148:    $countrow = sqlQuery(
+interface/drugs/drugs.inc.php:155:        $countrow = sqlQuery(
+interface/eRxStore.php:39:        $return = sqlQuery('SELECT `name`, `federal_ein`, `street`, `city`, `state`, `postal_code`, `country_code`, `phone`, `fax`
+interface/eRxStore.php:64:        return sqlQuery(
+interface/eRxStore.php:79:        return sqlQuery(
+interface/eRxStore.php:95:        return sqlQuery(
+interface/eRxStore.php:105:        $result = sqlQuery(
+interface/eRxStore.php:185:        $return = sqlQuery(
+interface/eRxStore.php:209:        sqlQuery(
+interface/eRxStore.php:228:        sqlQuery(
+interface/eRxStore.php:242:        sqlQuery(
+interface/eRxStore.php:264:        return sqlQuery(
+interface/eRxStore.php:336:        $return = sqlQuery(
+interface/eRxStore.php:361:        $return = sqlQuery(
+interface/eRxStore.php:384:        $return = sqlQuery(
+interface/eRxStore.php:402:        sqlQuery(
+interface/eRxStore.php:518:        sqlQuery(
+interface/eRxStore.php:570:        $return = sqlQuery(
+interface/eRxStore.php:603:        sqlQuery(
+interface/eRxStore.php:635:        sqlQuery(
+interface/eRxStore.php:660:        sqlQuery(
+interface/eRxStore.php:678:        sqlQuery(
+interface/eRxStore.php:720:        sqlQuery(
+interface/eRxStore.php:740:        sqlQuery(
+interface/eRxStore.php:774:        sqlQuery(
+interface/eRx_xml.php:138:    $userRole = sqlQuery("select * from users where username=?", [$session->get('authUser')]);
+interface/eRx_xml.php:175:    $userRole = sqlQuery("select * from users where username=?", [$session->get('authUser')]);
+interface/eRx_xml.php:293:    $userRole = sqlQuery("SELECT * FROM users AS u LEFT JOIN facility AS f ON f.id=u.facility_id WHERE u.username=?", [$session->get('authUser')]);
+interface/eRx_xml.php:392:    $user_details = sqlQuery("SELECT * FROM users WHERE id = ?", [$session->get('authUserID')]);
+interface/eRx_xml.php:449:    $user_details = sqlQuery("SELECT * FROM users WHERE id = ?", [$session->get('authUserID')]);
+interface/eRx_xml.php:484:    $user_details = sqlQuery("SELECT * FROM users WHERE id = ?", [$session->get('authUserID')]);
+interface/eRx_xml.php:541:    $user_details = sqlQuery("SELECT * FROM users WHERE id = ?", [$session->get('authUserID')]);
+interface/eRx_xml.php:600:    $patient_data = sqlQuery("select *, DATE_FORMAT(DOB,'%Y%m%d') AS date_of_birth from patient_data where pid=?", [$pid]);
+interface/eRx_xml.php:737:        $prec = sqlQuery("SELECT p.note,p.dosage,p.substitute,p.per_refill,p.form,p.route,p.size,p.interval,p.drug,l1.title AS title1,l2.title AS title2,l3.title AS title3,l4.title AS title4,p.id AS prescid,
+interface/fax/fax_dispatch.php:189:                    $catrow = sqlQuery("SELECT name, parent FROM categories WHERE id = ?", [$tmp]);
+interface/fax/fax_dispatch.php:415:$tmp = sqlQuery("SELECT count(*) AS count FROM registry WHERE " .
+interface/forms/LBF/new.php:125:    $portal_form_pid = sqlQuery(
+interface/forms/LBF/new.php:133:    $pidForm = sqlQuery("SELECT `pid` FROM `forms` WHERE `form_id` = ? AND `formdir` = ?", [$formid, $formname])['pid'];
+interface/forms/LBF/new.php:145:    $frow = sqlQuery(
+interface/forms/LBF/new.php:940:                    $enrow = sqlQuery("SELECT p.fname, p.mname, p.lname, p.cmsportal_login, " .
+interface/forms/LBF/new.php:957:                            $firow = sqlQuery(
+interface/forms/LBF/new.php:1082:                                $tmp = sqlQuery(
+interface/forms/LBF/new.php:1095:                                $tmp = sqlQuery(
+interface/forms/LBF/new.php:1551:                            $crow = sqlQuery(
+interface/forms/LBF/new.php:1752:                                $rrow = sqlQuery(
+interface/forms/care_plan/new.php:42:    $formid = sqlQuery($sql, [$session->get('pid'), $session->get('encounter')])['form_id'] ?? 0;
+interface/forms/clinic_note/new.php:79:    $row = sqlQuery("SELECT * FROM form_clinic_note WHERE " .
+interface/forms/clinic_note/report.php:24:    $data = sqlQuery("SELECT * " .
+interface/forms/clinic_note/view.php:79:    $row = sqlQuery("SELECT * FROM form_clinic_note WHERE " .
+interface/forms/clinical_notes/new.php:50:    $formid = sqlQuery($sql, [$session->get('pid'), $session->get('encounter')])['form_id'] ?? 0;
+interface/forms/clinical_notes/new.php:76:            $record['full_name'] = sqlQuery("SELECT CONCAT(fname, ' ', lname) AS full_name FROM users WHERE username = ?", [$record['user']]) ['full_name'] ?? '';
+interface/forms/eye_mag/SpectacleRx.php:73:    $data = sqlQuery($query, [$_REQUEST['encounter'], $_REQUEST['pid']]);
+interface/forms/eye_mag/SpectacleRx.php:111:    $prov_data  = sqlQuery($query, [$data['provider_id']]);
+interface/forms/eye_mag/SpectacleRx.php:114:    $pat_data   = sqlQuery($query, [$data['pid']]);
+interface/forms/eye_mag/a_issue.php:90:    $irow = sqlQuery("SELECT * FROM lists WHERE id = ?", [
+interface/forms/eye_mag/a_issue.php:108:$rres = sqlQuery(
+interface/forms/eye_mag/a_issue.php:825:                        $result1 = sqlQuery("select $given from history_data where pid = ? and date >= ? and date <= ? order by date DESC limit 0,1", [
+interface/forms/eye_mag/a_issue.php:831:                        $result1 = sqlQuery("select $given from history_data where pid = ? and date >= ? order by date DESC limit 0,1", [
+interface/forms/eye_mag/a_issue.php:836:                        $result1 = sqlQuery("select $given from history_data where pid = ? and date <= ? order by date DESC limit 0,1", [
+interface/forms/eye_mag/a_issue.php:841:                        $result1 = sqlQuery("select $given from history_data where pid=? order by date DESC limit 0,1", [
+interface/forms/eye_mag/new.php:62:$encounter_data = sqlQuery($query, [$pid,$encounter]);
+interface/forms/eye_mag/new.php:69:$erow = sqlQuery($query, [$pid, $encounter_date, $form_folder, $encounter]);
+interface/forms/eye_mag/php/eye_mag_functions.php:239:    $result = sqlQuery($query, [$pid,$id_to_show]);
+interface/forms/eye_mag/php/eye_mag_functions.php:1807:    $result1 = sqlQuery("select * from history_data where pid=? order by date DESC limit 0,1", [$pid]);
+interface/forms/eye_mag/php/eye_mag_functions.php:3294:                $doc = sqlQuery($sql, ["%" . $base_name . "%"]);
+interface/forms/eye_mag/php/eye_mag_functions.php:3396:    $objQuery = sqlQuery($query, [$pid,$copy_from]);
+interface/forms/eye_mag/php/eye_mag_functions.php:4262:                                $pharm = sqlQuery($sql, [$pat_data['pharmacy_id']]);
+interface/forms/eye_mag/php/eye_mag_functions.php:5769:            $wear   = sqlQuery($query, [$pid,$prior['form_id']]);
+interface/forms/eye_mag/php/eye_mag_functions.php:6188:    $find_provider = sqlQuery("SELECT * FROM form_encounter " .
+interface/forms/eye_mag/php/eye_mag_functions.php:6196:        $find_provider3 = sqlQuery($query, [$pid,$visit_date]);
+interface/forms/eye_mag/php/eye_mag_functions.php:6202:                $find_provider2 = sqlQuery("SELECT providerID FROM patient_data WHERE pid = ? ", [$pid]);
+interface/forms/eye_mag/php/eye_mag_functions.php:6252:    $wear   = sqlQuery($query, [$pid,$form_id,$encounter,$W]);
+interface/forms/eye_mag/php/eye_mag_functions.php:6843:    $result = sqlQuery($query, ["Eye_defaults_" . $provider_id]);
+interface/forms/eye_mag/php/taskman_functions.php:42:    $to_data    =  sqlQuery($query, [$to_id]);
+interface/forms/eye_mag/php/taskman_functions.php:46:    $doc = sqlQuery($query, [$enc,$patient_id,'%' . $filename . '%' ]);
+interface/forms/eye_mag/php/taskman_functions.php:50:    $task = sqlQuery($sql, [$from_id,$to_id,$patient_id,$enc]);
+interface/forms/eye_mag/php/taskman_functions.php:63:        $task = sqlQuery($sql, [$from_id,$to_id,$patient_id,$enc]);
+interface/forms/eye_mag/php/taskman_functions.php:90:            $task = sqlQuery($sql, [$from_id,$to_id,$patient_id,$enc]);
+interface/forms/eye_mag/php/taskman_functions.php:95:            sqlQuery($sql, [$from_id, $to_id, $patient_id, $doc_type, $doc_id, $enc]);
+interface/forms/eye_mag/php/taskman_functions.php:106:        sqlQuery($sql, [$from_id, $to_id, $patient_id, $doc_type, $doc_id, $enc]);
+interface/forms/eye_mag/php/taskman_functions.php:151:        sqlQuery($sql, [$task['DOC_ID'],$task['ID']]);
+interface/forms/eye_mag/php/taskman_functions.php:161:        sqlQuery($sql, [$task['DOC_ID'],$value,$task['ID']]);
+interface/forms/eye_mag/php/taskman_functions.php:167:        sqlQuery($sql, [$task['DOC_ID'],$value,$task['ID']]);
+interface/forms/eye_mag/php/taskman_functions.php:189:    $from_data      = sqlQuery($query, [$task['FROM_ID']]);
+interface/forms/eye_mag/php/taskman_functions.php:197:    $to_data        = sqlQuery($query, [$task['TO_ID']]);
+interface/forms/eye_mag/php/taskman_functions.php:254:    $form_row = sqlQuery(
+interface/forms/eye_mag/php/taskman_functions.php:267:    $from_data      = sqlQuery($query, [$task['FROM_ID']]);
+interface/forms/eye_mag/php/taskman_functions.php:275:    $to_data        = sqlQuery($query, [$task['TO_ID']]);
+interface/forms/eye_mag/php/taskman_functions.php:285:    $patientData    = sqlQuery($query, [$task['PATIENT_ID']]);
+interface/forms/eye_mag/php/taskman_functions.php:319:    $encounter_data = sqlQuery($query, [$encounter,$task['PATIENT_ID']]);
+interface/forms/eye_mag/php/taskman_functions.php:341:        $ID             = sqlQuery($query, [$category_name]);
+interface/forms/eye_mag/php/taskman_functions.php:352:        $ID             = sqlQuery($query, [$category_name]);
+interface/forms/eye_mag/php/taskman_functions.php:361:        sqlQuery($sql, ["%" . $filename]);
+interface/forms/eye_mag/php/taskman_functions.php:363:        sqlQuery($sql, ["%" . $filename]);
+interface/forms/eye_mag/php/taskman_functions.php:581:    sqlQuery($sql, [$encounter,$task['DOC_ID']]);
+interface/forms/eye_mag/report.php:129:    $objQuery = sqlQuery($query, [$encounter,$pid]);
+interface/forms/eye_mag/report.php:240:    $encounter_data = sqlQuery($query, [$encounter, $pid]);
+interface/forms/eye_mag/report.php:525:                    $result = sqlQuery($sql, [OEGlobalsBag::getInstance()->getString('patient_photo_category_name'), $pid]);
+interface/forms/eye_mag/report.php:2529:    $doc = sqlQuery($sql);
+interface/forms/eye_mag/save.php:84:    sqlQuery($query, [$session->get('authUserID'), $_REQUEST['PREFS_VA'] ?? '']);
+interface/forms/eye_mag/save.php:89:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_VAHx'] ?? '']);
+interface/forms/eye_mag/save.php:94:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_W'] ?? '']);
+interface/forms/eye_mag/save.php:99:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_W_width'] ?? '']);
+interface/forms/eye_mag/save.php:104:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_MR'] ?? '']);
+interface/forms/eye_mag/save.php:109:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_W_width'] ?? '']);
+interface/forms/eye_mag/save.php:114:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_CR'] ?? '']);
+interface/forms/eye_mag/save.php:119:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_CTL'] ?? '']);
+interface/forms/eye_mag/save.php:124:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_VAX'] ?? '']);
+interface/forms/eye_mag/save.php:129:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_RXHX'] ?? '']);
+interface/forms/eye_mag/save.php:134:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_ADDITIONAL'] ?? '']);
+interface/forms/eye_mag/save.php:139:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_CLINICAL'] ?? '']);
+interface/forms/eye_mag/save.php:144:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_IOP'] ?? '']);
+interface/forms/eye_mag/save.php:149:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_EXAM'] ?? '']);
+interface/forms/eye_mag/save.php:154:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_CYL'] ?? '']);
+interface/forms/eye_mag/save.php:159:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_HPI_VIEW'] ?? '']);
+interface/forms/eye_mag/save.php:164:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_EXT_VIEW'] ?? '']);
+interface/forms/eye_mag/save.php:169:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_ANTSEG_VIEW'] ?? '']);
+interface/forms/eye_mag/save.php:174:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_RETINA_VIEW'] ?? '']);
+interface/forms/eye_mag/save.php:179:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_NEURO_VIEW'] ?? '']);
+interface/forms/eye_mag/save.php:184:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_ACT_VIEW'] ?? '']);
+interface/forms/eye_mag/save.php:189:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_ACT_SHOW'] ?? '']);
+interface/forms/eye_mag/save.php:194:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_HPI_RIGHT'] ?? '']);
+interface/forms/eye_mag/save.php:199:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_PMH_RIGHT'] ?? '']);
+interface/forms/eye_mag/save.php:203:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_EXT_RIGHT'] ?? '']);
+interface/forms/eye_mag/save.php:207:    $result = sqlQuery($query, [$authUserID, $_REQUEST['PREFS_ANTSEG_RIGHT'] ?? '']);
+interface/forms/eye_mag/save.php:212:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_RETINA_RIGHT'] ?? '']);
+interface/forms/eye_mag/save.php:217:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_SDRETINA_RIGHT'] ?? '']);
+interface/forms/eye_mag/save.php:222:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_NEURO_RIGHT'] ?? '']);
+interface/forms/eye_mag/save.php:226:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_IMPPLAN_RIGHT'] ?? '']);
+interface/forms/eye_mag/save.php:230:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_PANEL_RIGHT'] ?? '']);
+interface/forms/eye_mag/save.php:234:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_KB'] ?? '']);
+interface/forms/eye_mag/save.php:238:    sqlQuery($query, [$authUserID, $_REQUEST['PREFS_TOOLTIPS'] ?? '']);
+interface/forms/eye_mag/save.php:288:    $lock = sqlQuery($query, [$form_id]);
+interface/forms/eye_mag/save.php:291:        sqlQuery($query, [$form_id]);
+interface/forms/eye_mag/save.php:298:    $result = sqlQuery($query, [$_REQUEST['uniqueID'], $form_id ]);
+interface/forms/eye_mag/save.php:300:    $lock = sqlQuery($query, [$form_id]);
+interface/forms/eye_mag/save.php:306:    $lock = sqlQuery($query, [$form_id]);
+interface/forms/eye_mag/save.php:323:            sqlQuery($query, ['1', $_REQUEST['LOCKEDBY'], $form_id]);
+interface/forms/eye_mag/save.php:329:        sqlQuery($query, ['1', ($_REQUEST['LOCKEDBY'] ?? ''), $form_id]);
+interface/forms/eye_mag/save.php:378:        sqlQuery($sql, ['%' . $filename]);
+interface/forms/eye_mag/save.php:380:        sqlQuery($sql, ['%' . $filename]);
+interface/forms/eye_mag/save.php:424:        sqlQuery($sql, [$encounter, $doc_id]);
+interface/forms/eye_mag/save.php:437:        sqlQuery($query, [$form_id, $pid]);
+interface/forms/eye_mag/save.php:441:            $response = sqlQuery($query, [$form_id, $pid, $IMPPLAN[$i]['title'], $IMPPLAN[$i]['code'], $IMPPLAN[$i]['codetype'], $IMPPLAN[$i]['codedesc'], $IMPPLAN[$i]['codetext'], $IMPPLAN[$i]['plan'], $i, $IMPPLAN[$i]['PMSFH_link']]);
+interface/forms/eye_mag/save.php:455:        sqlQuery($query, [$_POST['rDOC'], $_POST['pcp'], $pid]);
+interface/forms/eye_mag/save.php:462:            $DOC1 = sqlQuery($query, [$_POST['pcp']]);
+interface/forms/eye_mag/save.php:475:            $FAX_PCP = sqlQuery($query, [$_REQUEST['pcp'], $pid, $encounter]);
+interface/forms/eye_mag/save.php:500:            $DOC2 = sqlQuery($query, [$_REQUEST['rDOC']]);
+interface/forms/eye_mag/save.php:514:            $FAX_REF = sqlQuery($query, [$_REQUEST['rDOC'], $pid, $encounter]);
+interface/forms/eye_mag/save.php:686:                        $issue2 = sqlQuery($query, [$_REQUEST['form_title'], $form_type, $pid]);
+interface/forms/eye_mag/save.php:690:                        $issue2 = sqlQuery($query, [$_REQUEST['form_title'], $form_type, $pid, $subtype]);
+interface/forms/eye_mag/save.php:920:    $encounter_data = sqlQuery($query, [$encounter]);
+interface/forms/eye_mag/save.php:926:    sqlQuery($sql_clear, [$pid, $providerID, $visit_date]);
+interface/forms/eye_mag/save.php:936:            $okthen = sqlQuery($ORDERS_sql, [$form_id, $pid, $_POST['PLAN'][$i], $i, 'pending', $visit_date, $providerID]);
+interface/forms/eye_mag/save.php:1110:            sqlQuery($query, [$encounter, $form_id, $pid, $rx_number, $_POST['ODSPH_1'], $_POST['ODCYL_1'], $_POST['ODAXIS_1'],
+interface/forms/eye_mag/save.php:1121:        sqlQuery($query, [$encounter, $pid, $form_id, '1']);
+interface/forms/eye_mag/save.php:1135:        sqlQuery($query, [$encounter, $form_id, $pid, $rx_number, $_POST['ODSPH_2'], $_POST['ODCYL_2'], $_POST['ODAXIS_2'],
+interface/forms/eye_mag/save.php:1146:        sqlQuery($query, [$encounter, $pid, $form_id, '2']);
+interface/forms/eye_mag/save.php:1160:        sqlQuery($query, [$encounter, $form_id, $pid, $rx_number, $_POST['ODSPH_3'], $_POST['ODCYL_3'], $_POST['ODAXIS_3'],
+interface/forms/eye_mag/save.php:1171:        sqlQuery($query, [$encounter, $pid, $form_id, '3']);
+interface/forms/eye_mag/save.php:1185:        sqlQuery($query, [$encounter, $form_id, $pid, $rx_number, $_POST['ODSPH_4'], $_POST['ODCYL_4'], $_POST['ODAXIS_4'],
+interface/forms/eye_mag/save.php:1196:        sqlQuery($query, [$encounter, $pid, $form_id, '4']);
+interface/forms/eye_mag/save.php:1201:        sqlQuery($query, [$encounter, $pid, $form_id, $i]);
+interface/forms/eye_mag/save.php:1274:    $ans1 = sqlQuery($sql, ['%' . $base_name . '%']);
+interface/forms/eye_mag/save.php:1287:        sqlQuery($sql, [$ans1['id']]);
+interface/forms/eye_mag/save.php:1289:        sqlQuery($sql, [$ans1['id']]);
+interface/forms/eye_mag/save.php:1301:    sqlQuery($sql, [$encounter, $doc_id]);
+interface/forms/eye_mag/view.php:133:$encounter_data = sqlQuery($query10, [$id, $pid, $encounter]);
+interface/forms/eye_mag/view.php:206:$pat_data       =  sqlQuery($query, [$pid]);
+interface/forms/eye_mag/view.php:209:$prov_data      = sqlQuery($query, [$provider_id]);
+interface/forms/eye_mag/view.php:213:$pcp_data =  sqlQuery($query, [$pat_data['providerID']]);
+interface/forms/eye_mag/view.php:214:$ref_data =  sqlQuery($query, [$pat_data['ref_providerID']]);
+interface/forms/eye_mag/view.php:4234:                                                        $FAX_PCP  =  sqlQuery($query, [$pat_data['providerID'],$pid,$encounter]);
+interface/forms/eye_mag/view.php:4264:                                                        $FAX_REF  =  sqlQuery($query, [$pat_data['ref_providerID'],$pid,$encounter]);
+interface/forms/fee_sheet/new.php:56:$tmp = sqlQuery("SELECT COUNT(*) AS count FROM list_options where list_id = 'pricelevel' AND activity = 1");
+interface/forms/fee_sheet/new.php:964:$enrow = sqlQuery(
+interface/forms/fee_sheet/new.php:1561:                                            $tmp = sqlQuery(
+interface/forms/fee_sheet/new.php:1581:                                                $tmp = sqlQuery("SELECT copay FROM insurance_data WHERE pid = ? " .
+interface/forms/fee_sheet/new.php:1593:                                                $result = sqlQuery("SELECT dt.quantity, d.route " .
+interface/forms/fee_sheet/new.php:1625:                                                    $tmp = sqlQuery("SELECT ndc_info FROM billing WHERE " .
+interface/forms/fee_sheet/new.php:1631:                                                        $tmp = sqlQuery("SELECT ndc_number FROM drugs WHERE " .
+interface/forms/fee_sheet/new.php:1695:                                    $super_id = sqlQuery("Select supervisor_id From users Where id = ?", [$default_rid])['supervisor_id'];
+interface/forms/fee_sheet/review/fee_sheet_queries.php:49:    $res = sqlQuery($sqlEncounterDate, [$encounter]);
+interface/forms/group_attendance/functions.php:31:    $result = sqlQuery($sql, [$encounter, $group_id]);
+interface/forms/group_attendance/functions.php:156:    $result = sqlQuery($sql, [$encounter_id]);
+interface/forms/group_attendance/functions.php:181:    $result = sqlQuery($sql, [$encounter_id]);
+interface/forms/group_attendance/functions.php:194:    $to_create = sqlQuery($sql, [$status]);
+interface/forms/group_attendance/functions.php:201:    $result = sqlQuery($sql, [$status]);
+interface/forms/group_attendance/functions.php:233:    $result = sqlQuery('SELECT pc_catid FROM openemr_postcalendar_categories WHERE pc_cattype = 3 AND pc_active = 1 LIMIT 1');
+interface/forms/misc_billing_options/report.php:64:                $trow = sqlQuery("SELECT id, lname, fname FROM users WHERE " .
+interface/forms/newGroupEncounter/common.php:35:    $result = sqlQuery("SELECT * FROM form_groups_encounter WHERE id = ?", [$id]);
+interface/forms/newGroupEncounter/common.php:381:    $erow = sqlQuery("SELECT fe.encounter, fe.date " .
+interface/forms/newGroupEncounter/save.php:110:    $result = sqlQuery("SELECT encounter, sensitivity FROM form_groups_encounter WHERE id = ?", [$id]);
+interface/forms/newpatient/C_EncounterVisitForm.class.php:102:        $care_team_facility = sqlQuery("SELECT `care_team_facility` FROM `patient_data` WHERE `pid` = ?", [$pid]);
+interface/forms/newpatient/C_EncounterVisitForm.class.php:301:                $perow = sqlQuery(
+interface/forms/newpatient/C_EncounterVisitForm.class.php:452:            $erow = sqlQuery("SELECT fe.encounter, fe.date " .
+interface/forms/newpatient/C_EncounterVisitForm.class.php:509:            $result = sqlQuery("SELECT * FROM form_encounter WHERE id = ?", [$id]);
+interface/forms/newpatient/C_EncounterVisitForm.class.php:523:                $followup_enc = sqlQuery($q, [$encounter_followup_id]);
+interface/forms/newpatient/C_EncounterVisitForm.class.php:609:                $q_enc = sqlQuery($q, [$pid, $encnow, $override['pc_aid']]);
+interface/forms/newpatient/save.php:61:    $enc_from_id = sqlQuery("SELECT `encounter` FROM `form_encounter` WHERE `id` = ?", [intval($_POST['id'])]);
+interface/forms/newpatient/save.php:171:    $encResult = sqlQuery("SELECT uuid FROM form_encounter WHERE id = ?", [$id]);
+interface/forms/note/new.php:35:$provider_results = sqlQuery("select fname, lname from users where username=?", [$session->get('authUser')]);
+interface/forms/note/print.php:30:$provider_results = sqlQuery("select fname, lname from users where username=?", [$session->get('authUser')]);
+interface/forms/note/view.php:34:$provider_results = sqlQuery("select fname, lname from users where username=?", [$session->get('authUser')]);
+interface/forms/procedure_order/common.php:77:    $category = sqlQuery("SELECT id FROM categories WHERE name LIKE ?", ["LabCorp"]);
+interface/forms/procedure_order/common.php:79:        $category = sqlQuery("SELECT id FROM categories WHERE name LIKE ?", ['Lab Report']);
+interface/forms/procedure_order/common.php:101:    $result = sqlQuery($sql);
+interface/forms/procedure_order/common.php:107:    $dornRecord = sqlQuery($sql, [$ppid]);
+interface/forms/procedure_order/common.php:120:    $tmp = sqlQuery("SELECT name, send_fac_id as clientid, npi FROM procedure_providers Where ppid = ?", [$id]);
+interface/forms/procedure_order/common.php:469:    $row = sqlQuery("SELECT * FROM procedure_order WHERE procedure_order_id = ?", [$formid]);
+interface/forms/procedure_order/common.php:472:$enrow = sqlQuery(
+interface/forms/procedure_order/handle_deletions.php:99:        $remaining = sqlQuery(
+interface/forms/procedure_order/procedure_order_save_functions.php:105:            $order_seq_result = sqlQuery(
+interface/forms/procedure_order/procedure_order_save_functions.php:329:    $result_types = sqlQuery(
+interface/forms/procedure_order/procedure_order_save_functions.php:352:        sqlQuery($query_update_pt, [$ptid, $ptid]);
+interface/forms/questionnaire_assessments/patient_portal.php:21:$formMetaData = sqlQuery("SELECT `date`, `form_name` FROM `forms` WHERE `form_id` = ? AND `formdir` = ?", [$formid, 'questionnaire_assessments']);
+interface/forms/questionnaire_assessments/questionnaire_assessments.php:81:            $form = sqlQuery("SELECT * FROM `form_questionnaire_assessments` Where id=? And activity = 1 Limit 1", [$formid]);
+interface/forms/questionnaire_assessments/save.php:93:    $check = sqlQuery("Select id From registry Where `directory` = ? And `name` = ? And `form_foreign_id` > 0", ["questionnaire_assessments", $form_name]);
+interface/forms/sdoh/patient_portal.php:23:$formMetaData = sqlQuery("SELECT `date` FROM `forms` WHERE `form_id` = ? AND `formdir` = ?", [$formid, 'sdoh']);
+interface/forms/track_anything/create.php:158:        $myrow = sqlQuery($spell, [$the_item]);
+interface/forms/track_anything/create.php:191:        $myrow = sqlQuery($spell, [$the_item]);
+interface/forms/track_anything/create.php:224:        $myrow = sqlQuery($spell, [$the_item]);
+interface/forms/track_anything/history.php:200:$myrow = sqlQuery($spell, [$formid]);
+interface/forms/track_anything/new.php:83:            $myrow = sqlQuery($spell, [$myprocedureid]);
+interface/forms/track_anything/new.php:195:        $myrow = sqlQuery($spell, [$formid]);
+interface/forms/track_anything/report.php:41:    $myrow = sqlQuery($spell, [$formid]);
+interface/forms_admin/forms_admin.php:80:                        sqlQuery("update registry set nickname = ? where id = ?", [$val, $matches[1]]);
+interface/forms_admin/forms_admin.php:82:                        sqlQuery("update registry set category = ? where id = ?", [$val, $matches[1]]);
+interface/forms_admin/forms_admin.php:84:                        sqlQuery("update registry set priority = ? where id = ?", [$val, $matches[1]]);
+interface/forms_admin/forms_admin.php:86:                        sqlQuery("update registry set aco_spec = ? where id = ?", [$val, $matches[1]]);
+interface/forms_admin/forms_admin.php:121:                                $priority_category = sqlQuery(
+interface/main/authorizations/authorizations.php:45:$atemp = sqlQuery("SELECT see_auth FROM users WHERE username = ?", [$session->get('authUser')]);
+interface/main/backup.php:787:                $listid_check = sqlQuery("SELECT `list_id` FROM `list_options` WHERE `list_id` = ? OR `option_id` = ?", [$listid, $listid]);
+interface/main/backup.php:832:                $layoutid_check_one = sqlQuery("SELECT `form_id` FROM `layout_options` WHERE `form_id` = ?", [$layoutid]);
+interface/main/backup.php:833:                $layoutid_check_two = sqlQuery("SELECT `grp_form_id` FROM `layout_group_properties` WHERE `grp_form_id` = ?", [$layoutid]);
+interface/main/backup.php:1034:    $tmprow = sqlQuery("SELECT COUNT(*) AS count, MIN(date) AS date FROM log");
+interface/main/calendar/add_edit_event.php:308:    $facility = sqlQuery("SELECT pc_facility, pc_multiple, pc_aid, facility.name
+interface/main/calendar/add_edit_event.php:314:        $qmin = sqlQuery("SELECT facility_id as minId, facility FROM users WHERE id = ?", [$facility['pc_aid']]);
+interface/main/calendar/add_edit_event.php:472:        $row = sqlQuery("SELECT pc_multiple FROM openemr_postcalendar_events WHERE pc_eid = ?", [$eid]);
+interface/main/calendar/add_edit_event.php:493:                    $origEvent = sqlQuery("SELECT pc_recurrspec FROM openemr_postcalendar_events " .
+interface/main/calendar/add_edit_event.php:586:                            $old_eid =  sqlQuery("SELECT pc_eid FROM openemr_postcalendar_events WHERE pc_aid=? AND pc_multiple=?", [$to_be_removed,$row['pc_multiple']]);
+interface/main/calendar/add_edit_event.php:588:                        sqlQuery("DELETE FROM openemr_postcalendar_events WHERE pc_aid=? AND pc_multiple=?", [$to_be_removed,$row['pc_multiple']]);
+interface/main/calendar/add_edit_event.php:623:                    sqlQuery("UPDATE form_groups_encounter SET appt_id = ? WHERE appt_id = ?", [$new_eid, $old_eid['pc_eid']]);
+interface/main/calendar/add_edit_event.php:691:                $origEvent = sqlQuery("SELECT pc_recurrspec FROM openemr_postcalendar_events WHERE pc_eid = ?", [$eid]);
+interface/main/calendar/add_edit_event.php:885:    // $row = sqlQuery("SELECT * FROM openemr_postcalendar_events WHERE pc_eid = $eid");
+interface/main/calendar/add_edit_event.php:887:    $row = sqlQuery("SELECT e.*, u.fname, u.mname, u.lname " .
+interface/main/calendar/add_edit_event.php:961:    $prow = sqlQuery("SELECT lname, fname, phone_home, phone_biz, DOB " .
+interface/main/calendar/find_appt_popup.php:101:    $srow = sqlQuery("SELECT pc_duration FROM openemr_postcalendar_categories WHERE pc_catid = ?", [$input_catid]);
+interface/main/display_documents.php:193:        $catIDRs = sqlQuery($query, [OEGlobalsBag::getInstance()->getString('lab_results_category_name')]);
+interface/main/finder/dynamic_finder.php:458:        $pd_data[] = sqlQuery($pd_sql, $v['pid']);
+interface/main/finder/dynamic_finder_ajax.php:233:$row = sqlQuery("SELECT COUNT(id) AS count FROM patient_data WHERE $customWhere", $boundFilter->getBoundValues());
+interface/main/finder/dynamic_finder_ajax.php:239:$row = sqlQuery("SELECT COUNT(id) AS count FROM patient_data WHERE $where", $srch_bind);
+interface/main/ippf_export.php:114:    $row = sqlQuery("SELECT mapping FROM list_options WHERE " .
+interface/main/ippf_export.php:130:    $row = sqlQuery("SELECT list_id FROM " .
+interface/main/ippf_export.php:148:    $row = sqlQuery("SELECT mapping FROM " .
+interface/main/ippf_export.php:248:                $rrow = sqlQuery("SELECT related_code FROM codes WHERE " .
+interface/main/ippf_export.php:512:        $crow = sqlQuery("SELECT l.begdate, c.new_method " .
+interface/main/ippf_export.php:518:        $hrow = sqlQuery("SELECT date, " .
+interface/main/ippf_export.php:538:              $lorow = sqlQuery("SELECT option_value FROM list_options WHERE " .
+interface/main/main_screen.php:190:                $res1 = sqlQuery(
+interface/main/main_screen.php:257:                $tmprow = sqlQuery("SELECT login_work_area FROM users_secure WHERE id = ?", [$userid]);
+interface/main/messages/messages.php:331:                                        $pres = sqlQuery("SELECT lname, fname " .
+interface/main/messages/messages.php:470:                                                    $prow = sqlQuery("SELECT lname, fname,pid, pubpid, DOB  " .
+interface/main/messages/print_postcards.php:26:$facility = sqlQuery($sql);
+interface/main/messages/print_postcards.php:29:$prefs = sqlQuery($sql);
+interface/main/messages/print_postcards.php:39:    $patdata = sqlQuery("SELECT " .
+interface/main/messages/print_postcards.php:44:    $prov = sqlQuery("SELECT * FROM users WHERE id IN (SELECT r_provider  FROM `medex_recalls` WHERE `r_pid`=?)", [$pid]);
+interface/main/messages/save.php:40:        $result2 = sqlQuery($sql, [$frow['pid']]);
+interface/main/messages/save.php:69:        sqlQuery($query, [$_POST['execute_interval']]);
+interface/main/messages/save.php:71:        $result['output'] = sqlQuery($sql, $myValues);
+interface/main/messages/save.php:83:        $user_data = sqlQuery($query, [$session->get('authUserID')]);
+interface/main/messages/save.php:119:            sqlQuery("DELETE FROM medex_prefs");
+interface/main/messages/save.php:141:            sqlQuery($query);
+interface/main/messages/save.php:156:            sqlQuery("UPDATE `background_services` SET `active`='0' WHERE `name`='MedEx'");
+interface/main/messages/save.php:167:    $result = sqlQuery($query, [$_REQUEST['pid']]);
+interface/main/messages/save.php:183:    $result2 = sqlQuery($query, [$_REQUEST['pid']]);
+interface/main/messages/save.php:189:    $result2 = sqlQuery($query, [$_REQUEST['pid']]);
+interface/main/messages/save.php:200:    $result3 = sqlQuery($query, [$_REQUEST['pid']]);
+interface/main/messages/save.php:237:        sqlQuery($sql, ['recall_' . $new_pid[0], $_POST['item'], $authUserID, $_POST['msg_notes']]);
+interface/main/messages/save.php:250:            sqlQuery($sql, ['recall_' . $pid, $_POST['item'], $authUserID, 'Postcard printed locally']);
+interface/main/messages/save.php:256:            sqlQuery($sql, ['recall_' . $pid, $_POST['item'], $authUserID, 'Label printed locally']);
+interface/main/tabs/main.php:379:        $newcrop_user_role_sql = sqlQuery("SELECT `newcrop_user_role` FROM `users` WHERE `username` = ?", [$session->get('authUser')]);
+interface/main/tabs/main.php:387:    $track_anything_sql = sqlQuery("SELECT `state` FROM `registry` WHERE `directory` = 'track_anything'");
+interface/main/tabs/main.php:411:    <?php $userQuery = sqlQuery("select * from users where username = ?", [$session->get('authUser')]); ?>
+interface/modules/custom_modules/oe-module-comlink-telehealth/moduleConfig.php:49:        sqlQuery(
+interface/modules/custom_modules/oe-module-dorn/ModuleManagerListener.php:177:        $results = sqlQuery($sql, [$modId]);
+interface/modules/custom_modules/oe-module-dorn/ModuleManagerListener.php:201:                sqlQuery($sql_next, [$name]);
+interface/modules/custom_modules/oe-module-dorn/ModuleManagerListener.php:206:            sqlQuery($sql_next, [$flag, $name]);
+interface/modules/custom_modules/oe-module-dorn/ModuleManagerListener.php:220:        return sqlQuery($sql, [$flag, $flag_ui, $modId, $modId]);
+interface/modules/custom_modules/oe-module-dorn/src/AddressBookAddEdit.php:21:            $existingRecord = sqlQuery("SELECT * FROM users WHERE id = ?", [$uid]);
+interface/modules/custom_modules/oe-module-dorn/src/AddressBookAddEdit.php:23:            $existingRecord = sqlQuery("SELECT * FROM users WHERE organization = ? AND notes LIKE CONCAT('%', ?, '%') LIMIT 1", [$organization, $notes]);
+interface/modules/custom_modules/oe-module-dorn/src/DornGenHl7Order.php:27:        $result = sqlQuery($sql);
+interface/modules/custom_modules/oe-module-dorn/src/DornGenHl7Order.php:33:        $dornRecord = sqlQuery($sql, [$ppid]);
+interface/modules/custom_modules/oe-module-dorn/src/DornGenHl7Order.php:717:        $porow = sqlQuery("SELECT " .
+interface/modules/custom_modules/oe-module-dorn/src/DornGenHl7Order.php:741:        $pprow = sqlQuery($ppSql, [$ppid]);
+interface/modules/custom_modules/oe-module-dorn/src/GenHl7OrderBase.php:250:            $crow = sqlQuery("SELECT * FROM insurance_companies WHERE id = ?", [$drow['provider']]);
+interface/modules/custom_modules/oe-module-dorn/src/LabCompendiumInstall.php:53:        $parentRecord = sqlQuery($sql, [0, $lab_id, 'grp']);
+interface/modules/custom_modules/oe-module-dorn/src/LabCompendiumInstall.php:57:            $orderingTests = sqlQuery($sql, [$parentRecord["procedure_type_id"], $lab_id, "grp", "Ordering Tests"]);
+interface/modules/custom_modules/oe-module-dorn/src/LabCompendiumInstall.php:88:        $procOrder = sqlQuery($sql, [$lab_id, $parentId, $item->code, "ord", $item->loinc]);
+interface/modules/custom_modules/oe-module-dorn/src/LabCompendiumInstall.php:130:        $qrow = sqlQuery(
+interface/modules/custom_modules/oe-module-dorn/src/LabRouteSetup.php:113:        $record = sqlQuery($sql, [$labGuid, $routeGuid]);
+interface/modules/custom_modules/oe-module-dorn/src/LabRouteSetup.php:120:        $record = sqlQuery($sql_pp_search, [$npi, $active, $notes]);
+interface/modules/custom_modules/oe-module-dorn/src/ProcedureSqlStatements.php:23:        $porow = sqlQuery("SELECT " .
+interface/modules/custom_modules/oe-module-dorn/src/ProcedureSqlStatements.php:53:        $vitals = sqlQuery("SELECT * FROM form_vitals v join forms f on f.form_id=v.id WHERE f.pid=? and f.encounter=? ORDER BY v.date DESC LIMIT 1", [$pid, $encounter]);
+interface/modules/custom_modules/oe-module-dorn/src/ProcedureSqlStatements.php:58:        $vitals = sqlQuery("SELECT specimen FROM procedure_type WHERE procedure_code=?", [$procedureCode]);
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:71:        $record = sqlQuery($sql, [$result->labGuid, $result->accountNumber]);
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:264:        $catrow = sqlQuery(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:277:            $catrow = sqlQuery(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:537:                        $porow = sqlQuery(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:557:                        $encrow = sqlQuery(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:627:                    $porow = sqlQuery(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:681:                $pcrow = sqlQuery($pcquery, $pcqueryargs);
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:692:                            $procedure_order_seq = sqlQuery(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:720:                            return sqlQuery($pcquery, $pcqueryargs);
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1472:            $tmp = sqlQuery(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1498:        $res = sqlQuery($query, [$labid, $procedure_code]);
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1618:            $oprow = sqlQuery(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1651:        $tmp = sqlQuery("SELECT MAX(pid)+1 AS pid FROM patient_data");
+interface/modules/custom_modules/oe-module-faxsms/library/setup_services.php:99:            $existing_result = sqlQuery($existing_query, [$user_id, $setting_label]);
+interface/modules/custom_modules/oe-module-faxsms/library/setup_services.php:117:        $existing_primary_result = sqlQuery($existing_primary_query, [$user_id, $use_primary_label]);
+interface/modules/custom_modules/oe-module-faxsms/library/setup_services.php:139:        $existing_primary_user_result = sqlQuery($existing_primary_user_query, [$user_id, $primary_label]);
+interface/modules/custom_modules/oe-module-faxsms/library/utility.php:42:        $result = sqlQuery("SELECT count(*) AS count FROM patient_data WHERE " .
+interface/modules/custom_modules/oe-module-faxsms/library/utility.php:50:    $result = sqlQuery("select max(pid)+1 as pid from patient_data");
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:35:        $result = sqlQuery(
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:100:            sqlQuery(
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:118:        $results = sqlQuery($sql, [$modId]);
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:133:            $id = sqlQuery(
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:153:        return sqlQuery($sql, ['', $authId, $vendor, $content, $authId, $vendor, $content]);
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:163:        $globals = sqlQuery("SELECT `credentials` FROM `module_faxsms_credentials` WHERE `auth_user` = ? AND `vendor` = ?", [$authUserId, $vendor]) ?? [];
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:178:        $result = sqlQuery($query, [$user_id, $setting_label]);
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:193:        $result = sqlQuery($query, [$user_id, $setting_label]);
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:200:        $result = sqlQuery($query);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AppDispatch.php:687:        $result = sqlQuery($query, [$id]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AppDispatch.php:913:        $row = sqlQuery("SELECT foreign_id FROM documents WHERE id = ?", [$docId]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AppDispatch.php:918:        $patient = sqlQuery("SELECT pid FROM patient_data WHERE pid = ?", [$pid]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:507:            return sqlQuery(
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:1004:        $row = $jobId ? sqlQuery("SELECT `id`, `details_json` FROM `oe_faxsms_queue` WHERE `job_id` = ? AND `deleted` = '0' ORDER BY `date` DESC LIMIT 1", [$jobId]) : sqlQuery("SELECT `id`, `details_json` FROM `oe_faxsms_queue` WHERE `id` = ? AND `deleted` = '0' ORDER BY `date` DESC LIMIT 1", [$id]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:1020:        return (int)sqlQuery("SELECT COUNT(id) as count FROM `oe_faxsms_queue` WHERE deleted = 0")['count'] ?? 0;
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:1029:        return sqlQuery("UPDATE `oe_faxsms_queue` SET `deleted` = '1' WHERE `job_id` = ?", [$jobId]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:1053:        $catid = sqlQuery("SELECT id FROM `categories` WHERE `name` = 'FAX'")['id'] ?? sqlQuery("SELECT id FROM `categories` WHERE `name` = 'Medical Record'")['id'];
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:797:        $result = sqlQuery($sql, ["%" . $digits]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:1191:        $catid = sqlQuery("SELECT id FROM `categories` WHERE `name` = 'FAX'")['id'] ?? sqlQuery("SELECT id FROM `categories` WHERE `name` = 'Medical Record'")['id'];
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/VoiceClient.php:92:        $credentials = sqlQuery("SELECT * FROM `module_faxsms_credentials` WHERE `auth_user` = ? AND `vendor` = ?", [$this->authUser, $vendor]);
+interface/modules/custom_modules/oe-module-faxsms/src/RCVoice/VoiceFunctionsTrait.php:79:        sqlQuery(
+interface/modules/custom_modules/oe-module-faxsms/src/RCVoice/VoiceFunctionsTrait.php:97:        $row = sqlQuery(
+interface/modules/custom_modules/oe-module-prior-authorizations/ModuleManagerListener.php:116:        $records = sqlQuery("SELECT * FROM `module_prior_authorizations` ORDER BY id DESC LIMIT 1"); // Query the database for all records in the module_prior_authorizations table
+interface/modules/custom_modules/oe-module-prior-authorizations/public/deleter.php:25:sqlQuery("delete from `module_prior_authorizations` where `id` = ?", [$_GET['id']]);
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/AuthorizationService.php:65:        $result = sqlQuery($statement, $binds);
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/AuthorizationService.php:205:        return sqlQuery($sql);
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/AuthorizationService.php:230:        $insurance = sqlQuery("SELECT ic.name FROM `insurance_data` id
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/AuthorizationService.php:243:        $result_array = sqlQuery(
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/AuthorizationService.php:273:        return sqlQuery($sql, [$pid]);
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/AuthorizationService.php:279:        return sqlQuery("SELECT `ps`.`status` FROM `patient_status` ps WHERE `ps`.`pid` = ? ORDER BY `ps`.`statusId` DESC", [$pid]);
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/ListAuthorizations.php:65:                    $isinstalled = sqlQuery("SELECT 1 FROM `form_prior_auth` LIMIT 1");
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/ListAuthorizations.php:67:                        $getinfo = sqlQuery("SELECT date_from, date_to FROM `form_prior_auth` WHERE `prior_auth_number` = ? ORDER BY `id` DESC LIMIT 1 ", [$auth]);
+interface/modules/custom_modules/oe-module-prior-authorizations/src/Controller/ListAuthorizations.php:88:        $doesExist = sqlQuery("SELECT table_name FROM information_schema.tables WHERE table_name = 'form_form_prior_auth'");
+interface/modules/custom_modules/oe-module-weno/ModuleManagerListener.php:153:        sqlQuery($sql, ['WenoExchange', 'WenoExchangePharmacies']);
+interface/modules/custom_modules/oe-module-weno/ModuleManagerListener.php:170:            $rtn = sqlQuery($sql);
+interface/modules/custom_modules/oe-module-weno/ModuleManagerListener.php:174:            $rtn = sqlQuery($sql);
+interface/modules/custom_modules/oe-module-weno/ModuleManagerListener.php:178:            $rtn = sqlQuery($sql);
+interface/modules/custom_modules/oe-module-weno/ModuleManagerListener.php:182:            $rtn = sqlQuery($sql);
+interface/modules/custom_modules/oe-module-weno/ModuleManagerListener.php:186:            $rtn = sqlQuery($sql);
+interface/modules/custom_modules/oe-module-weno/ModuleManagerListener.php:227:        $results = sqlQuery($sql, [$modId]);
+interface/modules/custom_modules/oe-module-weno/scripts/update_pharmacy.php:26:$result = sqlQuery($sql, [$pid]);
+interface/modules/custom_modules/oe-module-weno/scripts/weno_log_sync.php:24:    $flag = sqlQuery($sql, [$modId]);
+interface/modules/custom_modules/oe-module-weno/src/Bootstrap.php:402:        $provider = sqlQuery("SELECT weno_prov_id FROM users WHERE id = ?", [$id]);
+interface/modules/custom_modules/oe-module-weno/src/Services/FacilityProperties.php:40:            sqlQuery("update facility set weno_id = ? where id = ?", [$location[1], $location[0]]);
+interface/modules/custom_modules/oe-module-weno/src/Services/LogDataInsert.php:75:            sqlQuery($sql, [
+interface/modules/custom_modules/oe-module-weno/src/Services/LogImportBuild.php:35:        $provider = sqlQuery("SELECT id FROM users WHERE weno_prov_id = ? ", [$external_provider_id]);
+interface/modules/custom_modules/oe-module-weno/src/Services/LogImportBuild.php:47:        $record = sqlQuery($sql);
+interface/modules/custom_modules/oe-module-weno/src/Services/LogImportBuild.php:55:        $drugformid = sqlQuery($sql, [$title]);
+interface/modules/custom_modules/oe-module-weno/src/Services/LogImportBuild.php:62:        $entry = sqlQuery($sql, [$this->messageid]);
+interface/modules/custom_modules/oe-module-weno/src/Services/LogProperties.php:100:        $lastSyncRow = sqlQuery("SELECT * FROM `weno_download_log` WHERE value='Sync Report' AND status = 'Success' ORDER BY `id` DESC LIMIT 1;");
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:39:        return sqlQuery($sql_next, [$flag, 'WenoExchange', 'WenoExchangePharmacies']);
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:127:                sqlQuery(
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:138:                sqlQuery(
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:157:        $results = sqlQuery($sql, [$modId, $modId]);
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:199:            //sqlQuery($sql, array('WenoExchangePharmacies'));
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:221:        return sqlQuery($sql, [$flag, $flag_ui, $modId, $modId]);
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:227:        $flag = sqlQuery($sql, [$modId, $modId]);
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:238:        $provider_info = sqlQuery("select fname, mname, lname from users where username=? ", [$session->get('authUser')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/PharmacyService.php:70:        return json_decode(sqlQuery($sql, [$pid])['search_persist'] ?? '');
+interface/modules/custom_modules/oe-module-weno/src/Services/PharmacyService.php:79:        $result = sqlQuery($sql, [$pid]);
+interface/modules/custom_modules/oe-module-weno/src/Services/PharmacyService.php:91:        $result = sqlQuery($sql, [$pid]);
+interface/modules/custom_modules/oe-module-weno/src/Services/PharmacyService.php:104:        $has_data = sqlQuery("SELECT 1 FROM weno_pharmacy LIMIT 1");
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:301:        $relation = sqlQuery($guardian, [$session->get('pid')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:304:            $relation = sqlQuery($insurance, [$session->get('pid')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:358:            $locId = sqlQuery("select name, street, city, state, postal_code, phone, fax, weno_id from facility where weno_id > '' and id = ?", [$facilityId]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:369:                $default_facility = sqlQuery("SELECT name, street, city, state, postal_code, phone, fax, weno_id from facility where weno_id > '' and `id` = ? limit 1", [$locId['id']]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:373:                $default_facility = sqlQuery("SELECT name, street, city, state, postal_code, phone, fax, weno_id from facility where weno_id > '' order by id limit 1");
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:388:        return sqlQuery("SELECT * from facility where weno_id = ? limit 1", [$this->wenoLocation]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:401:        $patient = sqlQuery("select title, fname, lname, mname, street, state, city, email, phone_cell, phone_home, postal_code, dob, sex, pid from patient_data where pid=?", [$session->get('pid')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:501:        $vitals = sqlQuery("SELECT date, height, weight FROM form_vitals WHERE pid = ? ORDER BY id DESC", [$session->get('pid')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:526:        $relation = sqlQuery("select subscriber_relationship from insurance_data where pid = ? and type = 'primary'", [$session->get('pid')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:538:        $data = sqlQuery("SELECT * FROM `weno_assigned_pharmacy` WHERE `pid` = ? ", [$session->get('pid')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:563:        $provider_info = sqlQuery("select fname, mname, lname from users where username=? ", [$session->get('authUser')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:574:        $patient_info = sqlQuery("select fname, mname, lname from patient_data where pid=? ", [$session->get('pid')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:599:        $provider = sqlQuery("SELECT weno_prov_id FROM users WHERE id = ?", [$id]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:608:                sqlQuery($sql, [$provider['weno_prov_id'], $id, $provider['weno_prov_id']]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:612:            sqlQuery($sql, [OEGlobalsBag::getInstance()->get('weno_provider_uid'), $id, OEGlobalsBag::getInstance()->get('weno_provider_uid')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:618:            sqlQuery($sql, [$provider['weno_prov_id'], $id, $provider['weno_prov_id']]);
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:624:            sqlQuery($sql, [OEGlobalsBag::getInstance()->get('weno_provider_uid'), $id, OEGlobalsBag::getInstance()->get('weno_provider_uid')]);
+interface/modules/custom_modules/oe-module-weno/src/Services/WenoLogService.php:27:        return sqlQuery($sql, [$params]);
+interface/modules/custom_modules/oe-module-weno/src/Services/WenoLogService.php:34:        $vsql = sqlQuery("SELECT * FROM `weno_download_log` WHERE `value` = ? ORDER BY `created_at` DESC, `id` DESC LIMIT 1", [$params]);
+interface/modules/custom_modules/oe-module-weno/src/Services/WenoLogService.php:39:        $count = sqlQuery("SELECT COUNT(`id`) as count FROM `weno_pharmacy`");
+interface/modules/custom_modules/oe-module-weno/src/Services/WenoLogService.php:43:            $vsql = sqlQuery("SELECT `created_at` FROM `weno_download_log` WHERE `value` = ? AND `status` LIKE ? ORDER BY `created_at` DESC, `id` DESC LIMIT 1", [$params, "$lastStatus%"]);
+interface/modules/custom_modules/oe-module-weno/src/Services/WenoLogService.php:98:        $isIt = sqlQuery("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'weno_download_log' AND COLUMN_NAME = 'data_in_context'");
+interface/modules/custom_modules/oe-module-weno/src/Services/WenoPharmaciesJson.php:106:        $activeStatus = sqlQuery($sql);
+interface/modules/custom_modules/oe-module-weno/templates/pharmacy_list_form.php:49:$activeStatus = sqlQuery("SELECT `active` FROM background_services WHERE `name` = 'WenoExchangePharmacies'");
+interface/modules/custom_modules/oe-module-weno/templates/setup_facilities.php:32:        sqlQuery("update facility set weno_id = ? where id = ?", [$location[1], $location[0]]);
+interface/modules/custom_modules/oe-module-weno/templates/weno_fragment.php:91:    $provider = sqlQuery("SELECT fname, mname, lname FROM users WHERE weno_prov_id = ? OR id = ?", [$external_id, $provider_id]);
+interface/modules/custom_modules/oe-module-weno/templates/weno_fragment.php:99:$defaultUserFacility = sqlQuery("SELECT id,username,lname,fname,weno_prov_id,facility,facility_id FROM `users` WHERE active = 1 AND `username` > '' and id = ?", [$session->get('authUserID') ?? 0]);
+interface/modules/custom_modules/oe-module-weno/templates/weno_users.php:40:$defaultUserFacility = sqlQuery("SELECT id,username,lname,fname,weno_prov_id,facility,facility_id FROM `users` WHERE active = 1 AND `username` > '' and id = ?", [$session->get('authUserID') ?? 0]);
+interface/modules/custom_modules/oe-module-weno/templates/weno_users.php:50:        sqlQuery(
+interface/modules/zend_modules/module/Application/ajax/reporting_period_handler.php:63:    $result = sqlQuery($sql, [$period]);
+interface/modules/zend_modules/module/Application/ajax/reporting_period_handler.php:74:            $globalExists = sqlQuery("SELECT COUNT(*) as count FROM globals WHERE gl_name = 'cqm_performance_period'");
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CarecoordinationTable.php:369:        $patient_language = sqlQuery("SELECT `option_id`  FROM `list_options` WHERE `list_id` = 'language' And `notes` = ?", [$patient_language])['option_id'];
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CarecoordinationTable.php:616:                    $pid_exist = sqlQuery("SELECT pid FROM `patient_data` WHERE `referrerID` = ? ORDER BY `pid` DESC Limit 1", [$uuid])['pid'] ?? '';
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CarecoordinationTable.php:619:                        $enc_exist = (sqlQuery("SELECT COUNT(`encounter`) as `cnt` FROM `form_encounter` WHERE `pid` = ? AND `encounter` > 0", [(int)$pid_exist])['cnt']) ?? 0;
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncounterccdadispatchTable.php:259:        $row = sqlQuery($sql, ['disability_status', 'pregnancy_status', $pid]) ?: [];
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncounterccdadispatchTable.php:371:        $row = sqlQuery($sql, [$pid]) ?: [];
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncounterccdadispatchTable.php:1810:            $no_list_count = sqlQuery("select count(*) as cnt from lists_touch where pid = ? and type = ?", [$pid, $list_type]);
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncounterccdadispatchTable.php:1811:            $list_count = sqlQuery("select count(*) as cnt from lists where pid = ? and type = ?", [$pid, $list_type]);
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncounterccdadispatchTable.php:4097:        $rx = sqlQuery("Select drug_code From drugs Where name = ?", ["$code_text"]);
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncounterccdadispatchTable.php:4287:                        $uuid = sqlQuery($q, [$issue])['uuid'];
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncounterccdadispatchTable.php:4501:        $sdoh = sqlQuery($sql, [$pid]);
+interface/modules/zend_modules/module/PatientFlowBoard/src/PatientFlowBoard/Listener/PatientFlowBoardEventsSubscriber.php:73:        $drug_test_done = sqlQuery("SELECT `random_drug_test`, pid from patient_tracker " .
+interface/modules/zend_modules/module/PatientFlowBoard/src/PatientFlowBoard/Listener/PatientFlowBoardEventsSubscriber.php:83:                $drug_test_count = sqlQuery("SELECT COUNT(*) from patient_tracker " .
+interface/new/new_comprehensive_save.php:34:    $result = sqlQuery("SELECT count(*) AS count FROM patient_data WHERE " .
+interface/new/new_patient_save.php:30:    $result = sqlQuery("SELECT count(*) AS count FROM patient_data WHERE " .
+interface/new/new_patient_save.php:46:$result = sqlQuery("select max(pid)+1 as pid from patient_data");
+interface/new/new_patient_save.php:144:        sqlQuery("UPDATE patient_data SET referral_source = ? " .
+interface/orders/find_order_popup.php:35:        $ptrow = sqlQuery("SELECT * FROM procedure_type WHERE procedure_type_id = ?", [$typeid]);
+interface/orders/gen_hl7_order.inc.php:61:        $crow = sqlQuery(
+interface/orders/gen_hl7_order.inc.php:94:    $porow = sqlQuery(
+interface/orders/gen_hl7_order.inc.php:393:    $pprow = sqlQuery("SELECT * FROM procedure_providers " .
+interface/orders/list_reports.php:57:        $row = sqlQuery("SELECT lab_id FROM procedure_order WHERE procedure_order_id = ?", [$formid]);
+interface/orders/load_compendium.php:53:    $lrow = sqlQuery(
+interface/orders/load_compendium.php:210:                                            $trow = sqlQuery(
+interface/orders/load_compendium.php:243:                                            $trow = sqlQuery(
+interface/orders/load_compendium.php:324:                                        $qrow = sqlQuery(
+interface/orders/load_compendium.php:374:                                        $qrow = sqlQuery(
+interface/orders/load_compendium.php:422:                                            $trow = sqlQuery(
+interface/orders/load_compendium.php:497:                                        $qrow = sqlQuery(
+interface/orders/order_manifest.php:57:    $orow = sqlQuery(
+interface/orders/orders_results.php:396:                                $ptrow = sqlQuery("SELECT name FROM procedure_type WHERE " .
+interface/orders/pending_followup.php:53:    $crow = sqlQuery("SELECT code_text FROM codes WHERE " .
+interface/orders/pending_followup.php:248:            $brow = sqlQuery("SELECT count(*) AS count " .
+interface/orders/procedure_provider_edit.php:93:        $org_res = sqlQuery($org_qry, [$_POST['form_name']]);
+interface/orders/procedure_provider_edit.php:97:            $org_res = sqlQuery($org_qry, [$ppid]);
+interface/orders/procedure_provider_edit.php:145:        $row = sqlQuery("SELECT * FROM procedure_providers WHERE ppid = ?", [$ppid]);
+interface/orders/procedure_provider_edit.php:162:            $checkName = sqlQuery("SELECT `name` FROM `procedure_providers` WHERE `name` = ?", [$org_name]);
+interface/orders/procedure_stats.php:95:    $row = sqlQuery("SELECT title FROM list_options WHERE " .
+interface/orders/procedure_stats.php:548:            $crow = sqlQuery("SELECT code_text FROM codes WHERE " .
+interface/orders/receive_hl7_results.inc.php:479:        $tmp = sqlQuery(
+interface/orders/receive_hl7_results.inc.php:549:    $res = sqlQuery($query, [$labid, $procedure_code]);
+interface/orders/receive_hl7_results.inc.php:670:        $oprow = sqlQuery(
+interface/orders/receive_hl7_results.inc.php:691:    $tmp = sqlQuery("SELECT MAX(pid)+1 AS pid FROM patient_data");
+interface/orders/receive_hl7_results.inc.php:792:    $catrow = sqlQuery(
+interface/orders/receive_hl7_results.inc.php:802:        $catrow = sqlQuery(
+interface/orders/receive_hl7_results.inc.php:1058:                    $porow = sqlQuery(
+interface/orders/receive_hl7_results.inc.php:1078:                    $encrow = sqlQuery(
+interface/orders/receive_hl7_results.inc.php:1148:                $porow = sqlQuery("SELECT * FROM procedure_order WHERE " .
+interface/orders/receive_hl7_results.inc.php:1194:            $pcrow = sqlQuery($pcquery, $pcqueryargs);
+interface/orders/receive_hl7_results.inc.php:1205:                        $procedure_order_seq = sqlQuery(
+interface/orders/receive_hl7_results.inc.php:1233:                        return sqlQuery($pcquery, $pcqueryargs);
+interface/orders/single_order_results.inc.php:163:            $trow = sqlQuery(
+interface/orders/single_order_results.inc.php:245:            $narrative_notes = sqlQuery("select group_concat(note SEPARATOR '\n') as notes from notes where foreign_id = ?", [$result_document_id]);
+interface/orders/single_order_results.inc.php:305:    $orow = sqlQuery(
+interface/orders/types.php:43:    $ptrow = sqlQuery("SELECT name FROM procedure_type WHERE procedure_type_id = ?", [$form_order]);
+interface/orders/types.php:159:        $row = sqlQuery("SELECT parent FROM procedure_type WHERE procedure_type_id = ?", [$parentid]);
+interface/orders/types_ajax.php:37:    $row = sqlQuery("SELECT parent FROM procedure_type WHERE procedure_type_id = ?", [$parentid]);
+interface/orders/types_ajax.php:53:    $trow = sqlQuery("SELECT procedure_type_id FROM procedure_type WHERE parent = ? LIMIT 1", [$chid]);
+interface/orders/types_edit.php:283:                $row = sqlQuery("SELECT parent FROM procedure_type WHERE " .
+interface/orders/types_edit.php:294:                $row = sqlQuery("SELECT parent FROM procedure_type WHERE " .
+interface/orders/types_edit.php:303:            $trow = sqlQuery("SELECT procedure_type_id FROM procedure_type WHERE parent = ? LIMIT 1", [$parent]);
+interface/orders/types_edit.php:317:            $row = sqlQuery("SELECT * FROM procedure_type WHERE procedure_type_id = ?", [$typeid]);
+interface/patient_file/addr_appt_label.php:67:    $patdata = sqlQuery("SELECT " .
+interface/patient_file/addr_label.php:26:$patdata = sqlQuery("SELECT " .
+interface/patient_file/barcode_label.php:28:$patdata = sqlQuery("SELECT " .
+interface/patient_file/download_template.php:281:            $frow = sqlQuery(
+interface/patient_file/download_template.php:287:                $ldrow = sqlQuery(
+interface/patient_file/download_template.php:314:            $frow = sqlQuery(
+interface/patient_file/download_template.php:339:$ptrow = sqlQuery("SELECT pd.*, " .
+interface/patient_file/download_template.php:345:$hisrow = sqlQuery("SELECT * FROM history_data WHERE pid = ? " .
+interface/patient_file/download_template.php:352:    $enrow = sqlQuery("SELECT * FROM form_encounter WHERE pid = ? AND " .
+interface/patient_file/encounter/cash_receipt.php:76:if ($date_result = sqlQuery("select date from form_encounter where encounter=? and pid=?", [$encounter, $pid])) {
+interface/patient_file/encounter/delete_form.php:106:                        $formName = sqlQuery("SELECT form_name FROM forms WHERE id = ? AND deleted = 0", [$form_id]);
+interface/patient_file/encounter/diagnosis.php:61:        $tmp = sqlQuery("SELECT users.id FROM forms, users WHERE " .
+interface/patient_file/encounter/diagnosis.php:97:                    $tmp = sqlQuery("SELECT ndc_info FROM billing WHERE " .
+interface/patient_file/encounter/diagnosis.php:218:    $erow = sqlQuery("SELECT user FROM forms WHERE " .
+interface/patient_file/encounter/forms.php:104:        $tmp = sqlQuery(
+interface/patient_file/encounter/forms.php:332:        $result = sqlQuery("SELECT * FROM form_encounter WHERE pid = ? AND encounter = ?", [
+interface/patient_file/encounter/forms.php:561:            $sensitivity = sqlQuery($sensitivityQuery, [OEGlobalsBag::getInstance()->get("encounter") ?? null])['sensitivity'] ?? null;
+interface/patient_file/encounter/forms.php:696:                        $sensitivityResult = sqlQuery("SELECT sensitivity FROM form_groups_encounter WHERE encounter = ?", [$encounter]);
+interface/patient_file/encounter/forms.php:851:                    $noteData = sqlQuery($queryString, [$doc_iter['id']]);
+interface/patient_file/encounter/forms.php:895:                    $lrow = sqlQuery(
+interface/patient_file/encounter/superbill_custom_full.php:97:        $crow = sqlQuery("SELECT COUNT(*) AS count FROM codes WHERE " .
+interface/patient_file/encounter/trend_form.php:31:    $default = sqlQuery(
+interface/patient_file/front_payment.php:94:$patdata = sqlQuery("SELECT " .
+interface/patient_file/front_payment.php:343:    $payrow = sqlQuery("SELECT " .
+interface/patient_file/front_payment.php:361:        $tmprow = sqlQuery("SELECT `facility_id` FROM `form_encounter` WHERE `encounter` = ?", [$payrow['encounter']]);
+interface/patient_file/front_payment.php:1225:                                        $trow = sqlQuery($query, $sql_array);
+interface/patient_file/front_payment.php:1255:                                    $trow = sqlQuery("SELECT taxrates FROM `drug_templates` WHERE drug_id = ? " .
+interface/patient_file/front_payment.php:1317:                                    $drow = sqlQuery(
+interface/patient_file/front_payment.php:1328:                                    $drow = sqlQuery(
+interface/patient_file/front_payment.php:1346:                                        $brow = sqlQuery("SELECT SUM(fee) AS amount FROM `billing` WHERE " .
+interface/patient_file/front_payment.php:1348:                                        $srow = sqlQuery("SELECT SUM(fee) AS amount FROM `drug_sales` WHERE " .
+interface/patient_file/front_payment.php:1350:                                        $drow = sqlQuery("SELECT SUM(pay_amount) AS payments, " .
+interface/patient_file/front_payment_cc.php:64:    $pd = sqlQuery("SELECT " .
+interface/patient_file/front_payment_cc.php:180:        $pd = sqlQuery("SELECT " .
+interface/patient_file/history/edit_billnote.php:48:            $tmp = sqlQuery("SELECT billing_note FROM form_encounter " .
+interface/patient_file/history/edit_billnote.php:64:    $tmp = sqlQuery("SELECT billing_note FROM form_encounter " .
+interface/patient_file/history/encounters.php:83:$tmp = sqlQuery("select authorized from users " .
+interface/patient_file/history/encounters.php:107:                $irow = sqlQuery("SELECT type, title, begdate FROM lists WHERE id = ? LIMIT 1", [$documentrow['list_id']]);
+interface/patient_file/history/encounters.php:158:        $irow = sqlQuery("SELECT type, title, begdate " .
+interface/patient_file/history/encounters.php:279:            $tmp = sqlQuery("SELECT title FROM lists WHERE id = ?", [$issue]);
+interface/patient_file/history/encounters.php:688:                                $tmp = sqlQuery("SELECT id FROM form_encounter WHERE " .
+interface/patient_file/history/encounters.php:843:                    $encounter_type = sqlQuery("SELECT pc_catname, pc_cattype FROM openemr_postcalendar_categories where pc_catid = ?", [$result4['pc_catid']]);
+interface/patient_file/history/history_sdoh.php:41:    $info = sqlQuery("SELECT * FROM form_history_sdoh WHERE id = ? AND pid = ?", [$rec_id, $pid]) ?: [];
+interface/patient_file/history/history_sdoh_widget.php:46:    $row = sqlQuery("SELECT title FROM list_options WHERE list_id = ? AND option_id = ?", [$listId, $value]);
+interface/patient_file/history/history_sdoh_widget.php:93:    $info = sqlQuery(
+interface/patient_file/label.php:27:$patdata = sqlQuery("SELECT " .
+interface/patient_file/letter.php:83:$patdata = sqlQuery("SELECT " .
+interface/patient_file/letter.php:101:    $frow = sqlQuery("SELECT * FROM users WHERE id = ?", [$form_from]);
+interface/patient_file/letter.php:102:    $trow = sqlQuery("SELECT * FROM users WHERE id = ?", [$form_to]);
+interface/patient_file/merge_patients.php:94:            $crow = sqlQuery(
+interface/patient_file/merge_patients.php:128:            $crow = sqlQuery(
+interface/patient_file/merge_patients.php:165:            $crow = sqlQuery(
+interface/patient_file/merge_patients.php:249:                $crow = sqlQuery(
+interface/patient_file/merge_patients.php:310:            $source = sqlQuery($sql, [$target_pid, $source_pid]);
+interface/patient_file/merge_patients.php:321:            $target = sqlQuery($sql, [$targetPid, $source['date']]);
+interface/patient_file/merge_patients.php:328:                $target = sqlQuery($sql, [$targetPid, $src_date]);
+interface/patient_file/merge_patients.php:424:            $tprow = sqlQuery(
+interface/patient_file/merge_patients.php:428:            $sprow = sqlQuery(
+interface/patient_file/merge_patients.php:550:                    $crow = sqlQuery(
+interface/patient_file/merge_patients.php:593:            $row = sqlQuery(
+interface/patient_file/merge_patients.php:601:            $row = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:130:    $row = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:142:    $frow = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:460:    $row1 = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:467:    $row2 = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:474:    $row3 = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:481:    $row4 = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:511:        $ferow = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:517:        $ferow = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:694:    $row = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:701:    $row = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:706:    $row = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:714:    $row = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:1148:    $ferow = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:1528:    $tmprow = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:1635:                sqlQuery($query, [$chargecat, $id]);
+interface/patient_file/pos_checkout_ippf.php:1638:                sqlQuery($query, [$chargecat, $id]);
+interface/patient_file/pos_checkout_ippf.php:1646:    sqlQuery($query, [$this_bill_date, $patient_id, $encounter_id]);
+interface/patient_file/pos_checkout_ippf.php:1649:    sqlQuery($query, [$this_bill_date, $patient_id, $encounter_id]);
+interface/patient_file/pos_checkout_ippf.php:1788:    $brow = sqlQuery($query, [$patient_id]);
+interface/patient_file/pos_checkout_ippf.php:1792:    $drow = sqlQuery($query, [$patient_id]);
+interface/patient_file/pos_checkout_ippf.php:2374:        $tmp = sqlQuery($query, $binds);
+interface/patient_file/pos_checkout_ippf.php:2441:    $tmp = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:2616:    $erow = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:2675:$tmprow = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:2809:    $grow = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:2815:        $grow = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:2822:            $grow = sqlQuery(
+interface/patient_file/pos_checkout_ippf.php:2844:    $csrow = sqlQuery(
+interface/patient_file/pos_checkout_normal.php:160:        $ferow = sqlQuery("SELECT id, date, encounter, provider_id FROM form_encounter " .
+interface/patient_file/pos_checkout_normal.php:163:        $ferow = sqlQuery("SELECT id, date, encounter, provider_id FROM form_encounter " .
+interface/patient_file/pos_checkout_normal.php:185:        $providerrow = sqlQuery("SELECT fname, mname, lname, title, street, streetb, " .
+interface/patient_file/pos_checkout_normal.php:190:    $encrow = sqlQuery("SELECT invoice_refno FROM form_encounter WHERE " .
+interface/patient_file/pos_checkout_normal.php:612:                $ferow = sqlQuery("SELECT id FROM form_encounter WHERE " .
+interface/patient_file/pos_checkout_normal.php:642:                sqlQuery($query, [$amount,$form_encounter,$id]);
+interface/patient_file/pos_checkout_normal.php:670:                sqlQuery($query, [$amount, $this_bill_date, $id]);
+interface/patient_file/pos_checkout_normal.php:1017:                                            $tmp = sqlQuery($query, $sqlBindArray);
+interface/patient_file/pos_checkout_normal.php:1090:                                        $tmp = sqlQuery("SELECT taxrates FROM drug_templates WHERE drug_id = ? " .
+interface/patient_file/pos_checkout_normal.php:1119:                                        $erow = sqlQuery("SELECT provider_id FROM form_encounter WHERE " .
+interface/patient_file/pos_checkout_normal.php:1235:                    $grow = sqlQuery("SELECT COUNT(*) AS count FROM layout_group_properties " .
+interface/patient_file/pos_checkout_normal.php:1239:                        $grow = sqlQuery("SELECT COUNT(*) AS count FROM transactions " .
+interface/patient_file/pos_checkout_normal.php:1243:                            $grow = sqlQuery("SELECT COUNT(*) AS count FROM forms " .
+interface/patient_file/printed_fee_sheet.php:455:                $encdata = sqlQuery($query, [$pid, $encounter]);
+interface/patient_file/printed_fee_sheet.php:486:                        $row = sqlQuery($query, [$pid, $instype]);
+interface/patient_file/report/custom_report.php:669:                        $irow = sqlQuery("SELECT lists.type, lists.title, lists.comments, lists.diagnosis, " .
+interface/patient_file/report/custom_report.php:712:                            display_layout_rows('GCA', sqlQuery("SELECT * FROM lists_ippf_gcac WHERE id = ?", [$rowid]));
+interface/patient_file/report/custom_report.php:716:                            display_layout_rows('CON', sqlQuery("SELECT * FROM lists_ippf_con WHERE id = ?", [$rowid]));
+interface/patient_file/rules/patient_data.php:139:    $selectedEntry = sqlQuery("SELECT `date`, `complete`, `result` " .
+interface/patient_file/summary/add_edit_amendments.php:114:    $resultSet = sqlQuery($query, [$amendment_id]);
+interface/patient_file/summary/advancedirectives.php:55:    $myrow = sqlQuery($sql, [$pid]);
+interface/patient_file/summary/advancedirectives.php:122:                $myrow2 = sqlQuery($query);
+interface/patient_file/summary/create_portallogin.php:66:        $patientData = sqlQuery("SELECT `email` FROM `patient_data` WHERE `pid` = ?", [$pid]);
+interface/patient_file/summary/demographics.php:231:    $portalStatus = sqlQuery("SELECT allow_patient_portal FROM patient_data WHERE pid = ?", [$pid]);
+interface/patient_file/summary/demographics.php:242:    $apiStatus = sqlQuery("SELECT prevent_portal_apps FROM patient_data WHERE pid = ?", [$pid]);
+interface/patient_file/summary/demographics.php:252:    $credentialsCreated = sqlQuery("SELECT date_created FROM `patient_access_onsite` WHERE `pid`=?", [$pid]);
+interface/patient_file/summary/demographics.php:264:    $email = sqlQuery("SELECT email, email_direct FROM patient_data WHERE pid = ?", [$pid]);
+interface/patient_file/summary/demographics.php:344:$tmp = sqlQuery("SELECT count(*) AS count FROM registry WHERE directory = 'vitals' AND state = 1");
+interface/patient_file/summary/demographics.php:956:                $query_result = sqlQuery("SELECT `date` FROM `form_encounter` WHERE `encounter` = ?", [$encounter]); ?>
+interface/patient_file/summary/demographics.php:1486:                        $existLabdata = sqlQuery($spruch, [$pid]);
+interface/patient_file/summary/demographics.php:1511:                        $existVitals = sqlQuery("SELECT * FROM form_vitals WHERE pid=?", [$pid]);
+interface/patient_file/summary/demographics.php:1558:                            $existVitals = sqlQuery("SELECT * FROM forms WHERE pid = ? AND formdir = ? AND deleted = 0", [$pid, $vitals_form_id]);
+interface/patient_file/summary/demographics.php:1668:                        $myrow2 = sqlQuery($query);
+interface/patient_file/summary/demographics.php:2028:                    $tmp = sqlQuery("SELECT count(*) AS count FROM registry WHERE directory = 'track_anything' AND state = 1");
+interface/patient_file/summary/demographics.php:2032:                        $existTracks = sqlQuery($spruch, [$pid, "track_anything"]);
+interface/patient_file/summary/disclosure_full.php:35:$res = sqlQuery("select username from users where username=?", [$session->get("authUser")]);
+interface/patient_file/summary/immunizations.php:136:        $result = sqlQuery($sql, [$_GET['id']]);
+interface/patient_file/summary/immunizations.php:159:            $result_code_text = sqlQuery($query, [$cvx_code]);
+interface/patient_file/summary/immunizations.php:174:            $user_result = sqlQuery($stmt, [$result['administered_by_id']]);
+interface/patient_file/summary/immunizations.php:222:    $row = sqlQuery($stmt, [$session->get('authUserID')]);
+interface/patient_file/summary/immunizations.php:231:    $row = sqlQuery($stmt, [$entered_by_id]);
+interface/patient_file/summary/immunizations.php:304:                $result2                = sqlQuery($sql2, [$val['imo_im_id'],$val['imo_pid']]);
+interface/patient_file/summary/immunizations.php:354:            $res                      = sqlQuery($sql, [$id,$session->get("pid"),$immunizationdata['observation_criteria'][$i],$imo_criteria_value,$session->get('authUserID'),$code, $code_text, $code_type,$vis_published_dateval,$vis_presented_dateval]);
+interface/patient_file/summary/labdata.php:135:                $myrow = sqlQuery($spell, [$pid]);
+interface/patient_file/summary/labdata_fragment.php:37:$result = sqlQuery($spell, [$pid]);
+interface/patient_file/summary/lbf_fragment.php:30:    $result = sqlQuery(
+interface/patient_file/summary/pnotes.php:32:    $row = sqlQuery("SELECT foreign_id FROM documents WHERE id = ?", [$docid]);
+interface/patient_file/summary/pnotes.php:35:    $row = sqlQuery("SELECT patient_id FROM procedure_order WHERE procedure_order_id = ?", [$orderid]);
+interface/patient_file/summary/pnotes_full.php:53:    $row = sqlQuery("SELECT foreign_id FROM documents WHERE id = ?", [$docid]);
+interface/patient_file/summary/pnotes_full.php:56:    $row = sqlQuery("SELECT patient_id FROM procedure_order WHERE procedure_order_id = ?", [$orderid]);
+interface/patient_file/summary/pnotes_full_add.php:44:    $row = sqlQuery("SELECT foreign_id FROM documents WHERE id = ?", [$docid]);
+interface/patient_file/summary/pnotes_full_add.php:47:    $row = sqlQuery("SELECT patient_id FROM procedure_order WHERE procedure_order_id = ?", [$orderid]);
+interface/patient_file/summary/print_amendments.php:42:    $resultSet = sqlQuery($query, [$amendmentID]);
+interface/patient_file/summary/record_disclosure.php:127:                            $dres = sqlQuery("select date,recipient,description,event from extended_log where id=?", [$editlid]);
+interface/patient_file/summary/shot_record.php:30:$res2 = sqlQuery("select concat(p.lname,', ',p.fname,' ',p.mname) patient_name " .
+interface/patient_file/summary/stats_full.php:319:                            $ierow = sqlQuery("SELECT count(*) AS count FROM issue_encounter WHERE list_id = ?", [$rowid]);
+interface/patient_file/summary/vitals_fragment.php:27:$result = sqlQuery("SELECT FORM_VITALS.date, FORM_VITALS.id FROM form_vitals AS FORM_VITALS LEFT JOIN forms AS FORMS ON FORM_VITALS.id = FORMS.form_id WHERE FORM_VITALS.pid=? AND FORMS.deleted != '1' ORDER BY FORM_VITALS.date DESC", [$pid]);
+interface/patient_file/transaction/print_referral.php:113:$frrow = sqlQuery("SELECT * FROM users WHERE id = ?", [$trow['refer_from']]);
+interface/patient_file/transaction/print_referral.php:118:$torow = sqlQuery("SELECT * FROM users WHERE id = ?", [$trow['refer_to']]);
+interface/patient_file/transaction/print_referral.php:130:$vrow = sqlQuery("SELECT * FROM form_vitals WHERE " .
+interface/patient_file/transaction/print_referral.php:142:// $facrow = sqlQuery("SELECT name, facility_npi FROM facility ORDER BY " .
+interface/patient_file/transaction/record_request.php:53:$recordRequest = sqlQuery("SELECT * FROM `amc_misc_data` WHERE `pid`=? AND `amc_id`='provide_rec_pat_amc' AND " .
+interface/patient_tracker/patient_tracker_status.php:36:$trow = sqlQuery("SELECT apptdate, appttime, patient_tracker_element.room AS lastroom, " .
+interface/patient_tracker/patient_tracker_status.php:72:            $genenc = sqlQuery("select pc_catid as category, pc_hometext as reason, pc_aid as provider, pc_facility as facility, pc_billing_location as billing_facility " .
+interface/patient_tracker/patient_tracker_status.php:95:$row = sqlQuery("select fname, lname " .
+interface/procedure_tools/ereqs/ereq_universal_form.php:56:        $procedure = sqlQuery("SELECT * FROM procedure_order WHERE procedure_order_id=?", [$form_id]);
+interface/procedure_tools/ereqs/ereq_universal_form.php:58:        $facility = sqlQuery("SELECT * FROM facility f WHERE f.id=?", [$account_facility]);
+interface/procedure_tools/ereqs/ereq_universal_form.php:117:        $provider = sqlQuery("SELECT concat(lname,', ', fname) as name, npi, upin, id FROM users WHERE id=?", [$procedure['provider_id']]);
+interface/procedure_tools/ereqs/ereq_universal_form.php:132:        $patient = sqlQuery("SELECT * FROM patient_data WHERE pid=?", [$pid]);
+interface/procedure_tools/ereqs/ereq_universal_form.php:232:        $vitals = sqlQuery("SELECT height, weight FROM form_vitals v join forms f on f.form_id=v.id WHERE f.pid=? and f.encounter=? ORDER BY v.date DESC LIMIT 1", [$pid, $encounter]);
+interface/procedure_tools/ereqs/ereq_universal_form.php:398:        $primary = sqlQuery("SELECT i.*,ic.name,ic.id FROM insurance_data i join insurance_companies ic ON i.provider=ic.id WHERE i.pid=? and i.type='primary' ORDER BY i.date DESC LIMIT 1", [$pid]);
+interface/procedure_tools/ereqs/ereq_universal_form.php:624:        $paddress = sqlQuery("SELECT * FROM addresses WHERE foreign_id=?", [$primary['id']]);
+interface/procedure_tools/ereqs/ereq_universal_form.php:639:        $secondary = sqlQuery("SELECT i.*, ic.name, ic.id FROM insurance_data i join insurance_companies ic ON i.provider=ic.id WHERE i.pid=? and i.type='secondary' ORDER BY i.date DESC LIMIT 1", [$pid]);
+interface/procedure_tools/ereqs/ereq_universal_form.php:641:        $saddress = sqlQuery("SELECT * FROM addresses WHERE foreign_id=?", [$secondary['id']]);
+interface/procedure_tools/ereqs/ereq_universal_form.php:753:        $category = sqlQuery("SELECT id FROM categories WHERE name LIKE ?", ["LabCorp"]);
+interface/procedure_tools/ereqs/ereq_universal_form.php:755:            $category = sqlQuery("SELECT id FROM categories WHERE name LIKE ?", ['Lab Report']);
+interface/procedure_tools/gen_universal_hl7/gen_hl7_order.inc.php:65:        $crow = sqlQuery(
+interface/procedure_tools/gen_universal_hl7/gen_hl7_order.inc.php:98:    $porow = sqlQuery(
+interface/procedure_tools/gen_universal_hl7/gen_hl7_order.inc.php:407:    $pprow = sqlQuery("SELECT * FROM procedure_providers " .
+interface/procedure_tools/labcorp/ereq_form.php:64:        $procedure = sqlQuery("SELECT * FROM procedure_order WHERE procedure_order_id=?", [$form_id]);
+interface/procedure_tools/labcorp/ereq_form.php:66:        $facility = sqlQuery("SELECT * FROM facility f WHERE f.id=?", [$account_facility]);
+interface/procedure_tools/labcorp/ereq_form.php:125:        $provider = sqlQuery("SELECT concat(lname,', ', fname) as name, npi, upin, id FROM users WHERE id=?", [$procedure['provider_id']]);
+interface/procedure_tools/labcorp/ereq_form.php:140:        $patient = sqlQuery("SELECT * FROM patient_data WHERE pid=?", [$pid]);
+interface/procedure_tools/labcorp/ereq_form.php:240:        $vitals = sqlQuery("SELECT height, weight FROM form_vitals v join forms f on f.form_id=v.id WHERE f.pid=? and f.encounter=? ORDER BY v.date DESC LIMIT 1", [$pid, $encounter]);
+interface/procedure_tools/labcorp/ereq_form.php:406:        $primary = sqlQuery("SELECT i.*,ic.name,ic.id FROM insurance_data i join insurance_companies ic ON i.provider=ic.id WHERE i.pid=? and i.type='primary' ORDER BY i.date DESC LIMIT 1", [$pid]);
+interface/procedure_tools/labcorp/ereq_form.php:632:        $paddress = sqlQuery("SELECT * FROM addresses WHERE foreign_id=?", [$primary['id']]);
+interface/procedure_tools/labcorp/ereq_form.php:647:        $secondary = sqlQuery("SELECT i.*, ic.name, ic.id FROM insurance_data i join insurance_companies ic ON i.provider=ic.id WHERE i.pid=? and i.type='secondary' ORDER BY i.date DESC LIMIT 1", [$pid]);
+interface/procedure_tools/labcorp/ereq_form.php:649:        $saddress = sqlQuery("SELECT * FROM addresses WHERE foreign_id=?", [$secondary['id']]);
+interface/procedure_tools/labcorp/ereq_form.php:761:        $category = sqlQuery("SELECT id FROM categories WHERE name LIKE ?", ["LabCorp"]);
+interface/procedure_tools/labcorp/ereq_form.php:763:            $category = sqlQuery("SELECT id FROM categories WHERE name LIKE ?", ['Lab Report']);
+interface/procedure_tools/labcorp/gen_hl7_order.inc.php:111:        $crow = sqlQuery(
+interface/procedure_tools/labcorp/gen_hl7_order.inc.php:218:    $porow = sqlQuery(
+interface/procedure_tools/labcorp/gen_hl7_order.inc.php:262:    $vitals = sqlQuery(
+interface/procedure_tools/labcorp/gen_hl7_order.inc.php:554:        $specprocedure = sqlQuery("SELECT specimen FROM procedure_type WHERE procedure_code=?", [$pcrow['procedure_code']]);
+interface/procedure_tools/labcorp/gen_hl7_order.inc.php:687:    $pprow = sqlQuery("SELECT * FROM procedure_providers " .
+interface/procedure_tools/libs/labs_ajax.php:27:    return sqlQuery($sql, [$order]);
+interface/procedure_tools/quest/gen_hl7_order.inc.php:60:        $crow = sqlQuery(
+interface/procedure_tools/quest/gen_hl7_order.inc.php:94:    $porow = sqlQuery(
+interface/procedure_tools/quest/gen_hl7_order.inc.php:422:    $pprow = sqlQuery("SELECT * FROM procedure_providers " .
+interface/reports/appointments_report.php:122:    $rs = sqlQuery(
+interface/reports/appt_encounter_report.php:420:                        $tmp = sqlQuery($query, $sqlBindArray);
+interface/reports/appt_encounter_report.php:448:          $grow = sqlQuery("SELECT l.id, l.title, l.begdate, ie.pid " .
+interface/reports/appt_encounter_report.php:468:                 $grow = sqlQuery("SELECT COUNT(*) AS count FROM forms " .
+interface/reports/chart_location_activity.php:81:    $ptrow = sqlQuery($query, [$form_patient_id]);
+interface/reports/chart_location_activity.php:91:    $ptrow = sqlQuery($query, [$curr_pid]);
+interface/reports/collections_report.php:318:    $tmp = sqlQuery("SELECT name FROM insurance_companies WHERE id = ? ", [$payerid]);
+interface/reports/collections_report.php:966:            $insrow = sqlQuery("SELECT policy_number FROM insurance_data WHERE " .
+interface/reports/collections_report.php:973:            $insrow = sqlQuery("SELECT group_number FROM insurance_data WHERE " .
+interface/reports/insurance_allocation_report.php:206:        $irow = sqlQuery("SELECT insurance_companies.name " .
+interface/reports/inventory_activity.php:76:    $eirow = sqlQuery("SELECT sum(di.on_hand) AS on_hand " .
+interface/reports/inventory_activity.php:82:    $sarow = sqlQuery("SELECT sum(ds.quantity) AS quantity " .
+interface/reports/inventory_activity.php:89:    $xfrow = sqlQuery("SELECT sum(ds.quantity) AS quantity " .
+interface/reports/inventory_list.php:83:    $srow = sqlQuery($query, $binds);
+interface/reports/inventory_list.php:96:    $ohrow = sqlQuery($query, $binds);
+interface/reports/inventory_list.php:186:    $row = sqlQuery($qohSql, $condbind);
+interface/reports/inventory_list.php:303:        $srow = sqlQuery($query, array_merge([$drug_id, $facility_id, $form_days], $fwbind));
+interface/reports/inventory_list.php:316:        $srow = sqlQuery($query, array_merge([$drug_id, $warehouse_id, $form_days], $fwbind));
+interface/reports/inventory_list.php:328:        $srow = sqlQuery($query, array_merge([$drug_id, $form_days], $fwbind));
+interface/reports/inventory_list.php:379:        $sminrow = sqlQuery($minSaleSql, array_merge([$drug_id, $form_days], $extraBindForQuery));
+interface/reports/ippf_daily.php:266:                $crow = sqlQuery("SELECT lc.new_method " .
+interface/reports/ippf_daily.php:299:                $trow = sqlQuery("SELECT count(*) AS count FROM form_encounter " .
+interface/reports/ippf_statistics.php:164:    $row = sqlQuery("SELECT title FROM list_options WHERE " .
+interface/reports/ippf_statistics.php:367:  return sqlQuery($query);
+interface/reports/ippf_statistics.php:402:    $tmp = sqlQuery($query, [$pid, $encdate, $encdate]);
+interface/reports/ippf_statistics.php:434:    $irow = sqlQuery($query, [$pid, $encdate, $encdate]);
+interface/reports/ippf_statistics.php:468:    $tmp = sqlQuery($query, [$encdate, $encdate]);
+interface/reports/ippf_statistics.php:680:        $irow = sqlQuery($query);
+interface/reports/ippf_statistics.php:709:            $irow = sqlQuery($query, [$patient_id, $encdate, $encdate]);
+interface/reports/ippf_statistics.php:749:        $crow = sqlQuery("SELECT title FROM list_options WHERE " .
+interface/reports/ippf_statistics.php:830:    $row = sqlQuery($query, [$form_id, $field_id, $list_id]);
+interface/reports/ippf_statistics.php:855:        $crow = sqlQuery("SELECT title FROM list_options WHERE " .
+interface/reports/ippf_statistics.php:874:                $crow = sqlQuery("SELECT title FROM list_options WHERE " .
+interface/reports/ippf_statistics.php:944:                $rrow = sqlQuery("SELECT related_code FROM codes WHERE " .
+interface/reports/ippf_statistics.php:1588:            $crow = sqlQuery("SELECT code_text FROM codes WHERE " .
+interface/reports/pat_ledger.php:207:            $payer = sqlQuery("SELECT `name` FROM `insurance_companies` WHERE `id` = ?", [$payerId])['name'];
+interface/reports/pat_ledger.php:646:        $patient = sqlQuery("SELECT * from patient_data WHERE pid=?", [$form_patient]);
+interface/reports/receipts_by_method_report.php:182:                $pferow = sqlQuery("SELECT p.fname, p.mname, p.lname, fe.date, fe.id " .
+interface/reports/sales_by_item.php:73:    $patdata = sqlQuery("SELECT " .
+interface/reports/services_by_category.php:232:                $relrow = sqlQuery("SELECT code_text FROM codes WHERE " .
+interface/super/edit_globals.php:308:        $auditLogStatusNew = sqlQuery("SELECT `gl_value` FROM `globals` WHERE `gl_name` = 'enable_auditlog'");
+interface/super/edit_globals.php:313:        $forceBreakglassLogStatusNew = sqlQuery("SELECT `gl_value` FROM `globals` WHERE `gl_name` = 'gbl_force_log_breakglass'");
+interface/super/edit_globals.php:498:                                                    $userSettingArray = sqlQuery("SELECT * FROM user_settings WHERE setting_user=? AND setting_label=?", [$authUserID, "global:" . $fldid]);
+interface/super/edit_layout.php:305:    $tmp = sqlQuery(
+interface/super/edit_layout.php:325:        $tmp = sqlQuery(
+interface/super/edit_layout.php:336:                $lotmp = sqlQuery(
+interface/super/edit_layout.php:376:    $colarr = sqlQuery("SHOW COLUMNS FROM " . escape_table_name($tablename) . " LIKE '" . add_escape_custom($old_field_id) . "'");
+interface/super/edit_layout.php:382:    $tmp = sqlQuery("SHOW COLUMNS FROM " . escape_table_name($tablename) . " LIKE '" . add_escape_custom($new_field_id) . "'");
+interface/super/edit_layout.php:604:        $srow = sqlQuery(
+interface/super/edit_layout.php:612:        $trow = sqlQuery(
+interface/super/edit_layout_props.php:180:            $tmp = sqlQuery(
+interface/super/edit_layout_props.php:236:    $row = sqlQuery(
+interface/super/edit_list.php:60:        $row = sqlQuery(
+interface/super/edit_list.php:66:        $row = sqlQuery(
+interface/super/edit_list.php:72:        $row = sqlQuery(
+interface/super/edit_list.php:300:    $row = sqlQuery("SELECT max(seq) AS maxseq FROM list_options WHERE list_id= 'lists'");
+interface/super/edit_list.php:301:    $dup_cnt = sqlQuery("SELECT count(seq) as validate FROM list_options WHERE list_id= 'lists' AND option_id = ?", [$newlistID])['validate'];
+interface/super/edit_list.php:368:            $row = sqlQuery("SELECT name FROM drugs WHERE drug_id = ?", [$code]);
+interface/super/edit_list.php:371:            $row = sqlQuery("SELECT code_text FROM codes WHERE " .
+interface/super/layout_service_codes.php:240:        $crow = sqlQuery(
+interface/super/load_codes.php:126:                    $tmp = sqlQuery("SELECT id FROM codes WHERE code_type = ? AND code = ? LIMIT 1", [$code_type_id, $code]);
+interface/therapy_groups/therapy_groups_models/therapy_groups_model.php:51:        $group = sqlQuery($sql, [$groupId]);
+interface/therapy_groups/therapy_groups_models/therapy_groups_model.php:93:        $count = sqlQuery($sql, $conditions);
+interface/therapy_groups/therapy_groups_models/therapy_groups_participants_model.php:90:        $count = sqlQuery($sql, [$pid, $groupId]);
+interface/therapy_groups/therapy_groups_models/users_model.php:60:        $user_name = sqlQuery($sql, [$uid]);
+interface/therapy_groups/therapy_groups_models/users_model.php:105:        $result = sqlQuery($sql, [$eid]);
+interface/usergroup/addrbook_edit.php:418:    $type_sql_row = sqlQuery("SELECT `option_value` FROM `list_options` WHERE `list_id` = 'abook_type' AND `option_id` = ? AND activity = 1", [trim((string) $_POST['form_abook_type'])]);
+interface/usergroup/addrbook_edit.php:556:    $row = sqlQuery("SELECT * FROM users WHERE id = ?", [$userid]);
+interface/usergroup/facility_user.php:43:        $entry_id = sqlQuery("SELECT `id` FROM `facility_user_ids` WHERE `uid` = ? AND `facility_id` = ? AND `field_id` =?", [$_POST["user_id"], $_POST["fac_id"], $frow['field_id']]);
+interface/usergroup/facility_user.php:148:                                        $entry_data = sqlQuery("SELECT `field_value` FROM `facility_user_ids` " .
+interface/usergroup/facility_user_admin.php:145:    $user_info = sqlQuery("select * from `users` WHERE `id` = ?", [$_GET["user_id"]]);
+interface/usergroup/facility_user_admin.php:148:    $fac_info = sqlQuery("select * from `facility` where `id` = ?", [$_GET["fac_id"]]);
+interface/usergroup/facility_user_admin.php:199:                                $entry_data = sqlQuery("SELECT `field_value` FROM `facility_user_ids` " .
+interface/usergroup/mfa_u2f.php:155:            $row = sqlQuery(
+interface/usergroup/usergroup_admin.php:343:        $res = sqlQuery("select username from users where username = ?", [trim((string) $_POST['rumple'])]);
+interface/usergroup/usergroup_admin.php:700:                            $mfa = sqlQuery(
+ippf_upgrade.php:34:    $row = sqlQuery("SELECT COUNT(*) AS count FROM forms WHERE " .
+ippf_upgrade.php:118:                $trow = sqlQuery("SHOW CREATE DATABASE $dbase");
+library/ESign/DbRow/Signable.php:79:        $row = sqlQuery($statement, [ $this->_tableId, $this->_tableName, SignatureIF::ESIGN_LOCK ]);
+library/ESign/DbRow/Signable.php:98:        $row = sqlQuery($statement, [ $this->_tableId, $this->_tableName, SignatureIF::ESIGN_LOCK ]);
+library/ESign/Form/LBF/Signable.php:36:        $row = sqlQuery($statement, [ $this->_formId ]);
+library/ESign/Form/Signable.php:43:                $row = sqlQuery($statement, [ $this->_tableId, $this->_tableName ]);
+library/ESign/Form/Signable.php:75:            $row = sqlQuery($statement, [ $this->_encounterId, 'form_encounter', SignatureIF::ESIGN_LOCK ]);
+library/ESign/Form/Signable.php:97:        $row = sqlQuery(
+library/FeeSheet.class.php:120:        $wrow = sqlQuery("SELECT count(*) AS count FROM list_options WHERE list_id = 'warehouse' AND activity = 1");
+library/FeeSheet.class.php:122:        $wrow = sqlQuery(
+library/FeeSheet.class.php:129:        $visit_row = sqlQuery("SELECT fe.date, fe.provider_id, fe.supervisor_id, " .
+library/FeeSheet.class.php:193:        $find_provider = sqlQuery(
+library/FeeSheet.class.php:207:            $find_provider = sqlQuery("SELECT providerID FROM patient_data " .
+library/FeeSheet.class.php:219:        $tmp1 = sqlQuery(
+library/FeeSheet.class.php:224:        $tmp2 = sqlQuery(
+library/FeeSheet.class.php:248:            $tmprow = sqlQuery(
+library/FeeSheet.class.php:270:        $tmp = sqlQuery(
+library/FeeSheet.class.php:321:        $rowb = sqlQuery(
+library/FeeSheet.class.php:328:        $rowp = sqlQuery(
+library/FeeSheet.class.php:335:        $rowv = sqlQuery(
+library/FeeSheet.class.php:371:                $tmprow = sqlQuery(
+library/FeeSheet.class.php:493:        $result = sqlQuery($query, $sqlArray);
+library/FeeSheet.class.php:558:            $codesrow = sqlQuery(
+library/FeeSheet.class.php:677:        $drow = sqlQuery("SELECT name, related_code FROM drugs WHERE drug_id = ?", [$drug_id]);
+library/FeeSheet.class.php:859:                    $dirow = sqlQuery($query, [$sale_id]);
+library/FeeSheet.class.php:912:            $drow = sqlQuery("SELECT name FROM drugs WHERE drug_id = ?", [$insufficient]);
+library/FeeSheet.class.php:989:                        $res_amount = sqlQuery(
+library/FeeSheet.class.php:1067:                    $tmp = sqlQuery(
+library/FeeSheet.class.php:1224:                    $tmprow = sqlQuery(
+library/FeeSheet.class.php:1383:                    $drow = sqlQuery(
+library/FeeSheet.class.php:1464:            $csrow = sqlQuery(
+library/FeeSheet.class.php:1474:            $csrow = sqlQuery(
+library/FeeSheet.class.php:1564:            $crow = sqlQuery(
+library/FeeSheet.class.php:1573:            $crow = sqlQuery(
+library/FeeSheet.class.php:1596:            $crow = sqlQuery(
+library/FeeSheet.class.php:1604:        $prow = sqlQuery(
+library/FeeSheetHtml.class.php:42:        $drow = sqlQuery("SELECT facility_id FROM users where username = ?", [$session->get('authUser')]);
+library/FeeSheetHtml.class.php:231:            $csrow = sqlQuery(
+library/FeeSheetHtml.class.php:246:                  $csrow = sqlQuery($query, array($this->pid));
+library/FeeSheetHtml.class.php:256:            $csrow = sqlQuery(
+library/MedEx/API.php:137:        $my_status = sqlQuery($sqlQuery);
+library/MedEx/API.php:206:                sqlQuery($sqlUPDATE, [$result2['pc_apptstatus'],$result2['msg_uid']]);
+library/MedEx/API.php:220:                sqlQuery($sqlUPDATE, [$result3['pc_eid'],$result2['msg_uid']]);
+library/MedEx/API.php:314:        $prefs = sqlQuery($sql2);
+library/MedEx/API.php:937:                        $result = sqlQuery($sql_NoFollowUp, [$appt['pc_pid'], $appt['pc_eventDate']]);
+library/MedEx/API.php:1137:            sqlQuery($sqlUPDATE, [$appt['reply'],$appt['extra'],$appt['pc_eid'],$appt['C_UID'], $appt['M_type']]);
+library/MedEx/API.php:1428:            sqlQuery($sqlINSERT, [$data['pc_eid'],$data['patient_id'], $data['campaign_uid'], $data['M_type'],$data['msg_reply'],$data['msg_extra'],$data['msg_uid']]);
+library/MedEx/API.php:1450:                sqlQuery($sqlUPDATE, [$data['pc_eid']]);
+library/MedEx/API.php:1455:                sqlQuery($sqlUPDATE, [$data['patient_id']]);
+library/MedEx/API.php:1458:                sqlQuery($sqlUPDATE, [$data['patient_id']]);
+library/MedEx/API.php:1461:                sqlQuery($sqlUPDATE, [$data['patient_id']]);
+library/MedEx/API.php:1465:                sqlQuery($sqlDELETE, [$data['pc_eid']]);
+library/MedEx/API.php:2187:            $result2 = sqlQuery($query, [$recall['pid']]);
+library/MedEx/API.php:2190:                $result2['DOB'] = sqlQuery("Select DOB From patient_data Where `pid` = ?", [$recall['pid']])['DOB'];
+library/MedEx/API.php:2335:                $who  = sqlQuery($sql2, [$progress['msg_reply']]);
+library/MedEx/API.php:3011:            $data = sqlQuery($sqlSync, [$pid]);
+library/MedEx/API.php:3421:        sqlQuery($sql, [json_encode($response)]);
+library/MedEx/API.php:3458:            sqlQuery("UPDATE `background_services` SET `active`='0' WHERE `name`='MedEx'");
+library/ajax/addlistitem.php:47:$exists_title = sqlQuery("SELECT * FROM list_options WHERE " .
+library/ajax/addlistitem.php:55:$exists_id = sqlQuery("SELECT * FROM list_options WHERE " .
+library/ajax/addlistitem.php:66:$row = sqlQuery("SELECT max(seq) as maxseq FROM list_options WHERE list_id = ? AND activity = 1", [$list_id]);
+library/ajax/code_attributes_ajax.php:37:        $wrow = sqlQuery(
+library/ajax/code_attributes_ajax.php:43:        $crow = sqlQuery(
+library/ajax/code_attributes_ajax.php:82:                    $prow = sqlQuery(
+library/ajax/facility_ajax_code.php:31:    $pos = sqlQuery("SELECT pos_code FROM facility WHERE id = ?", [$fid]);
+library/ajax/prescription_drugname_lookup.php:44:        $code_type = sqlQuery("SELECT ct_id FROM `code_types` WHERE `ct_key` = ? AND `ct_active` = 1", ['RXCUI']);
+library/ajax/upload.php:84:        $category = sqlQuery("SELECT id FROM categories WHERE name LIKE ?", [$category_id])['id'] ?: 3;
+library/ajax/upload.php:136:        return json_encode(sqlQuery("UPDATE documents SET document_data = ? WHERE id = ?", [$json_data, $doc_id]));
+library/ajax/upload.php:140:        $qrtn = sqlQuery("Select document_data FROM documents WHERE id = ?", [$doc_id]);
+library/amc.php:192:    return sqlQuery("SELECT * FROM `amc_misc_data` WHERE `amc_id`=? AND `pid`=? AND `map_category`=? AND `map_id`=?", [$amc_id,$patient_id,$object_category,$object_id]);
+library/api.inc.php:114:    return sqlQuery("select " . escape_sql_column_name(process_cols_escape($cols), [$tableName]) . " from " . escape_table_name($tableName) . " where id=? and pid = ? and activity like ? order by date DESC LIMIT 0,1", [$id,OEGlobalsBag::getInstance()->get('pid'),$activity]) ;
+library/appointment_status.inc.php:33:    $tmp = sqlQuery($query, [$pid, $encdate]);
+library/calendar.inc.php:23:        $countrow = sqlQuery(
+library/checkout_receipt_array.inc.php:37:    $row = sqlQuery(
+library/checkout_receipt_array.inc.php:68:        $tmprow = sqlQuery(
+library/checkout_receipt_array.inc.php:167:    $ferow = sqlQuery($query, $binds);
+library/checkout_receipt_array.inc.php:202:    $userrow = sqlQuery(
+library/checkout_receipt_array.inc.php:236:    $row = sqlQuery($query, $binds);
+library/checkout_receipt_array.inc.php:246:    $row = sqlQuery($query, $binds);
+library/checkout_receipt_array.inc.php:257:    $row = sqlQuery($query, $binds);
+library/checkout_receipt_array.inc.php:269:    $row = sqlQuery($query, $binds);
+library/checkout_receipt_array.inc.php:320:        $tmp = sqlQuery(
+library/checkout_receipt_array.inc.php:368:        $taxrow = sqlQuery(
+library/checkout_receipt_array.inc.php:408:        $taxrow = sqlQuery(
+library/checkout_receipt_array.inc.php:543:    $inrow = sqlQuery($query, $binds);
+library/classes/Document.class.php:815:        $type = sqlQuery(
+library/classes/Document.class.php:833:        sqlQuery("UPDATE documents SET imported = 1 WHERE id = ?", [$doc_id]);
+library/classes/Document.class.php:1245:            $catrow = sqlQuery("SELECT name, parent FROM categories WHERE id = ?", [$tmp]);
+library/classes/Note.class.php:96:            $user_info = sqlQuery("SELECT `fname`, `lname` FROM `users` where `id`=?", [$this->owner]);
+library/classes/PQRIXml.class.php:39:        $res = sqlQuery("select * from users where username=?", [$session->get('authUser')]);
+library/classes/Pharmacy.class.php:291:        $res = sqlQuery($sql);
+library/classes/Pharmacy.class.php:311:        $count = sqlQuery($sql);
+library/classes/PrescriptionPatient.class.php:46:            $res = sqlQuery("SELECT providerID , fname , lname , mname, " .
+library/classes/Provider.class.php:47:        $res = sqlQuery("SELECT fname,lname,federaldrugid, specialty, npi, state_license_number FROM users where id ='" . add_escape_custom($this->id) . "'");
+library/classes/postmaster.php:123:                $sql = sqlQuery("SELECT `sent` FROM `email_queue` WHERE `id` = ?", [$ret['id']]);
+library/classes/rulesets/Amc/reports/AMC_302c/Numerator.php:24:        $firstCheck = sqlQuery("SELECT * FROM `lists_touch` WHERE `pid`=? AND `type`=?", [$patient->id,'medical_problem']);
+library/classes/rulesets/Amc/reports/AMC_302c/Numerator.php:25:        $secondCheck = sqlQuery("SELECT * FROM `lists` WHERE `activity`='1' AND `pid`=? AND `type`=?", [$patient->id,'medical_problem']);
+library/classes/rulesets/Amc/reports/AMC_302d/Numerator.php:27:        $firstCheck = sqlQuery("SELECT * FROM `lists_touch` WHERE `pid`=? AND (`type`=? OR type=?)", [$patient->id,'medication','prescription_erx']);
+library/classes/rulesets/Amc/reports/AMC_302d/Numerator.php:28:        $secondCheck = sqlQuery("SELECT * FROM `lists` WHERE `activity`='1' AND `pid`=? AND `type`=?", [$patient->id,'medication']);
+library/classes/rulesets/Amc/reports/AMC_302e/Numerator.php:24:        $firstCheck = sqlQuery("SELECT * FROM `lists_touch` WHERE `pid`=? AND `type`=?", [$patient->id,'allergy']);
+library/classes/rulesets/Amc/reports/AMC_302e/Numerator.php:25:        $secondCheck = sqlQuery("SELECT * FROM `lists` WHERE `activity`='1' AND `pid`=? AND `type`=?", [$patient->id,'allergy']);
+library/classes/rulesets/Amc/reports/AMC_302h/Numerator.php:27:        $check = sqlQuery($sql, [$procedure_order_id]);
+library/classes/rulesets/Amc/reports/AMC_302j/Numerator.php:29:        $check = sqlQuery($sql, [$patient->object['encounter']]);
+library/classes/rulesets/Amc/reports/AMC_302m/Numerator.php:24:        $item = sqlQuery("SELECT * FROM `amc_misc_data` as amc, `form_encounter` as enc " .
+library/classes/rulesets/Amc/reports/AMC_302m_STG2/Denominator.php:34:        $off_visits = sqlQuery("select count(encounter) as cnt from form_encounter e inner join openemr_postcalendar_categories opc on opc.pc_catid = e.pc_catid where e.pid = ? and e.date >= ? and e.date <= ? and opc.pc_catname = 'office visit'", [$patient->id,$beginDate,$endDate]);
+library/classes/rulesets/Amc/reports/AMC_302m_STG2/Numerator.php:35:        $item = sqlQuery("SELECT * FROM `amc_misc_data` as amc, `form_encounter` as enc " .
+library/classes/rulesets/Amc/reports/AMC_304a/Denominator.php:35:        $check = sqlQuery($sql, [$patient->id,$beginDate,$endDate,$patient->id,$beginDate,$endDate]);
+library/classes/rulesets/Amc/reports/AMC_304a/Numerator.php:22:        $check = sqlQuery("SELECT * FROM `prescriptions` WHERE `patient_id`=? AND `date_added`>=? AND `date_added`<=? AND erx_source = 1", [$patient->id,$beginDate,$endDate]);
+library/classes/rulesets/Amc/reports/AMC_304d/Numerator.php:22:        $result_query = sqlQuery("SELECT * FROM `patient_reminders` WHERE `pid`=? AND `date_sent`>=? AND `date_sent`<=?", [$patient->id,$beginDate,$endDate]);
+library/classes/rulesets/Amc/reports/AMC_304d_STG2/Numerator.php:35:        $result_query = sqlQuery("SELECT * FROM `patient_reminders` WHERE `pid`=? AND `date_sent`>=? AND `date_sent`<=?", [$patient->id,$beginDate,$endDate]);
+library/classes/rulesets/Amc/reports/AMC_304f/Denominator.php:29:        $amccheck =  sqlQuery("SELECT * FROM `amc_misc_data` WHERE `amc_id`=? AND `pid`=? AND `date_created`>=? AND `date_created`<=?", ['provide_rec_pat_amc',$patient->id,$beginDate,$endDate]);
+library/classes/rulesets/Amc/reports/AMC_304g/Numerator.php:23:        $check = sqlQuery("SELECT `allow_patient_portal` FROM `patient_data` WHERE `pid`=?", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG1/Numerator.php:38:            $no_problems = sqlQuery("select count(*) as cnt from lists_touch where pid = ? and type = 'medical_problem'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG1/Numerator.php:39:                $problems    = sqlQuery("select count(*) as cnt from lists where pid = ? and type = 'medical_problem'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG1/Numerator.php:41:                $no_allergy     = sqlQuery("select count(*) as cnt from lists_touch where pid = ? and type = 'allergy'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG1/Numerator.php:42:                $allergies      = sqlQuery("select count(*) as cnt from lists where pid = ? and type = 'allergy'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG1/Numerator.php:44:                $no_medication = sqlQuery("select count(*) as cnt from lists_touch where pid = ? and type = 'medication'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG1/Numerator.php:45:                $medications   = sqlQuery("select count(*) as cnt from lists where pid = ? and type = 'medication'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG1/Numerator.php:46:                $prescriptions = sqlQuery("select count(*) as cnt from prescriptions where patient_id = ? ", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG2/Numerator.php:56:        $amc_elec_check  = sqlQuery('select count(*) as cnt from ccda where pid = ? and emr_transfer = 1', [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG2/Numerator.php:76:            $no_problems = sqlQuery("select count(*) as cnt from lists_touch where pid = ? and type = 'medical_problem'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG2/Numerator.php:77:            $problems    = sqlQuery("select count(*) as cnt from lists where pid = ? and type = 'medical_problem'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG2/Numerator.php:79:            $no_allergy = sqlQuery("select count(*) as cnt from lists_touch where pid = ? and type = 'allergy'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG2/Numerator.php:80:            $allergies  = sqlQuery("select count(*) as cnt from lists where pid = ? and type = 'allergy'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG2/Numerator.php:82:            $no_medication = sqlQuery("select count(*) as cnt from lists_touch where pid = ? and type = 'medication'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG2/Numerator.php:83:            $medications   = sqlQuery("select count(*) as cnt from lists where pid = ? and type = 'medication'", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_304i_STG2/Numerator.php:84:            $prescriptions = sqlQuery("select count(*) as cnt from prescriptions where patient_id = ? ", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_314g_1_2_14/Numerator.php:42:                $check = sqlQuery('select count(id) as count from ccda where pid = ? and (view = 1 or emr_transfer = 1) and user_id is null and updated_date >= ? and updated_date <= ?', [$patient->id,$beginDate,$endDate]);
+library/classes/rulesets/Amc/reports/AMC_314g_1_2_14_STG2/Numerator.php:43:        $portal_permission = sqlQuery("SELECT `allow_patient_portal` FROM `patient_data` WHERE pid = ?", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_314g_1_2_14_STG2/Numerator.php:51:        $check = sqlQuery($portalQry, [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_314g_1_2_19/Numerator.php:36:        $check = sqlQuery($smQry, [$patient->id, $beginDate, $endDate]);
+library/classes/rulesets/Amc/reports/AMC_314g_1_2_20/Numerator.php:51:            $check = sqlQuery($docLabQry, [$patient->id, $beginDate, $endDate]);
+library/classes/rulesets/Amc/reports/AMC_314g_1_2_21/Numerator.php:34:        $check = sqlQuery("SELECT dc_father,dc_mother, dc_siblings, dc_offspring FROM `history_data` WHERE `pid`=? ORDER BY id DESC LIMIT 1", [$patient->id]);
+library/classes/rulesets/Amc/reports/AMC_314g_1_2_22/Numerator.php:37:        $check = sqlQuery($encQry, [$patient->id, $beginDate, $endDate]);
+library/classes/rulesets/Cqm/reports/NQF_0002/Exclusion.php:81:        $check = sqlQuery($query, [$patient->id, $beginDate, $endDate]);
+library/classes/rulesets/Cqm/reports/NQF_0002/InitialPatientPopulation.php:44:            $check = sqlQuery($query, [$patient->id, $beginDate, $endDate]);
+library/classes/rulesets/Cqm/reports/NQF_0002/Numerator.php:48:        $check = sqlQuery($query, [$patient->id, $beginDate, $endDate]);
+library/classes/rulesets/Cqm/reports/NQF_0013/Exclusion.php:50:        $check = sqlQuery($sql, [$patient->id, $beginDate, $endDate]);
+library/classes/rulesets/Cqm/reports/NQF_0024/Numerator2.php:23:        $nutrition = sqlQuery("SELECT * FROM `rule_patient_data` " .
+library/classes/rulesets/Cqm/reports/NQF_0024/Numerator3.php:23:        $exercise = sqlQuery("SELECT * FROM `rule_patient_data` " .
+library/classes/rulesets/Cqm/reports/NQF_0028_2014/DenominatorException.php:43:        $diagnosis = sqlQuery($query, [$patient->id,$beginDate,$endDate,$endDate]);
+library/classes/rulesets/Cqm/reports/NQF_0028_2014/DenominatorException.php:61:        $check = sqlQuery($riskCatAssessQry, [$beginDate, $endDate, $patient->id]);
+library/classes/rulesets/Cqm/reports/NQF_0028_2014/Numerator.php:51:                    $smoke_cess = sqlQuery("SELECT * FROM `rule_patient_data` " .
+library/classes/rulesets/Cqm/reports/NQF_0028b/Numerator.php:27:                $smoke_cess = sqlQuery("SELECT * FROM `rule_patient_data` " .
+library/classes/rulesets/Cqm/reports/NQF_0041/Numerator.php:35:        $sql = sqlQuery($query, [$patient->id,$beginDate,$endDate,$periodMinus153Days,$periodPlus89Days]);
+library/classes/rulesets/Cqm/reports/NQF_0041/Numerator.php:44:        $sql = sqlQuery($query, [$patient->id,$beginDate,$endDate,$periodMinus153Days,$periodPlus89Days]);
+library/classes/rulesets/Cqm/reports/NQF_0043/Numerator.php:31:        $sql = sqlQuery($query, [$patient->id,$beginDate,$endDate,$beginDate,$endDate]);
+library/classes/rulesets/Cqm/reports/NQF_0043/Numerator.php:41:        $sql = sqlQuery($query, [$patient->id,$beginDate,$endDate,$beginDate,$endDate]);
+library/classes/rulesets/Cqm/reports/NQF_0059/InitialPatientPopulation.php:45:            $sql = sqlQuery($query, [$patient->id,$beginDate,$endDate,$beginDate,$beginDate,$endDate,$endDate]);
+library/classes/rulesets/Cqm/reports/NQF_0101/DenominatorException.php:51:        $check = sqlQuery($riskCatAssessQry, [$beginDate, $endDate, $patient->id]);
+library/classes/rulesets/Cqm/reports/NQF_0101/Numerator.php:45:        $check = sqlQuery($riskCatAssessQry, [$beginDate, $endDate, $patient->id]);
+library/classes/rulesets/Cqm/reports/NQF_0384/InitialPatientPopulation.php:40:        $check_cancer = sqlQuery($cancerCheckQry, [$patient->id, $beginDate, $endDate]);
+library/classes/rulesets/Cqm/reports/NQF_0384/InitialPatientPopulation.php:52:            $check_radiotheraphy = sqlQuery($radiotheraphyQry, [ $beginDate, $endDate, $patient->id]);
+library/classes/rulesets/Cqm/reports/NQF_0384/Numerator.php:45:        $check = sqlQuery($riskCatAssessQry, [$beginDate, $endDate, $patient->id]);
+library/clinical_rules.php:97:            $ruleData = sqlQuery("SELECT `bibliographic_citation`, `developer`, `funding_source`, `release_version`, `web_reference`, `linked_referential_cds` " .
+library/clinical_rules.php:411:    $prior_targets_sql = sqlQuery("SELECT `value` FROM `clinical_rules_log` " .
+library/contraception_billing_scan.inc.php:45:    $codesrow = sqlQuery($sql, [$code_types[$code_type]['id'], $code]);
+library/contraception_billing_scan.inc.php:57:            $tmprow = sqlQuery(
+library/custom_template/add_custombutton.php:53:                $rowID = sqlQuery("SELECT MAX(cl_list_item_id)+1 as maxID FROM customlists WHERE cl_list_type=6");
+library/custom_template/ajax_code.php:76:    $row = sqlQuery("SELECT max(cl_order)+1 as order1 FROM customlists WHERE cl_list_id=?", [$templateid]);
+library/custom_template/ajax_code.php:83:    $row = sqlQuery("SELECT max(cl_order)+1 as order1 FROM customlists WHERE cl_list_id=?", [$templateid]);
+library/custom_template/ajax_code.php:90:    $selcat = sqlQuery("SELECT * FROM customlists WHERE cl_list_slno=? AND cl_list_type=3 AND cl_deleted=0", [$list_id]);
+library/custom_template/ajax_code.php:91:    $selcont = sqlQuery("SELECT * FROM customlists WHERE cl_list_slno=? AND cl_list_type=2 AND cl_deleted=0", [$selcat['cl_list_id']]);
+library/custom_template/custom_template.php:63:$rowContext = sqlQuery("SELECT * FROM customlists WHERE cl_list_type = 2 AND cl_list_item_long = ?", [$contextName]);
+library/custom_template/custom_template.php:315:                                $row = sqlQuery("SELECT p.*, IF(ISNULL(p.providerID), NULL, CONCAT(u.lname,',',u.fname)) pcp " .
+library/custom_template/delete_category.php:105:        $context = sqlQuery("SELECT * FROM customlists WHERE cl_list_slno=?", [$row['cl_list_id']]);
+library/custom_template/personalize.php:361:                    <?php $user = sqlQuery("SELECT * FROM users WHERE id=?", [$session->get('authUserID')]); ?>
+library/custom_template/personalize.php:389:                                $context = sqlQuery("SELECT * FROM customlists WHERE cl_list_slno=?", [$rowTemplates['cl_list_id']]);
+library/custom_template/personalize.php:393:                                $context = sqlQuery("SELECT * FROM users WHERE id=?", [$rowTemplates['tu_user_id']]);
+library/custom_template/personalize.php:406:                                $context = sqlQuery("SELECT * FROM customlists WHERE cl_list_slno=?", [$roworphan['cl_list_id']]);
+library/custom_template/personalize.php:432:                                $context = sqlQuery("SELECT * FROM customlists WHERE cl_list_slno=?", [$rowTemplates['cl_list_id']]);
+library/custom_template/share_template.php:91:                            $row_sel = sqlQuery($sel_query, [$list_id]);
+library/deletedrug.php:36:        $dn = sqlQuery($drug_name, [$id]);
+library/deletedrug.php:67:        sqlQuery($sql, [$id]);
+library/documents.php:104:    $ret = sqlQuery("SELECT `id` FROM `categories` WHERE `name`=?", [$category_title]);
+library/edihistory/edih_io.php:725: * @uses sqlQuery()
+library/edihistory/edih_io.php:737:        $row = sqlQuery("SELECT reference, pay_total, global_amount FROM ar_session WHERE reference = ?", [$srchval]);
+library/encounter.inc.php:20:    $result = sqlQuery($sql, [$encounter]);
+library/encounter.inc.php:31:    $result = sqlQuery($sql, [$encounter]);
+library/encounter_events.inc.php:89:    $tmprow = sqlQuery("SELECT username, facility, facility_id FROM users WHERE id = ?", [$session->get('authUserID')]);
+library/encounter_events.inc.php:94:    $pos_code = sqlQuery("SELECT pos_code FROM facility WHERE id = ?", [$facility_id])['pos_code'];
+library/encounter_events.inc.php:150:    $tmprow = sqlQuery("SELECT username, facility, facility_id FROM users WHERE id = ?", [$session->get('authUserID')]);
+library/encounter_events.inc.php:192:    $tmprow = sqlQuery("SELECT encounter FROM form_encounter WHERE " .
+library/encounter_events.inc.php:204:    $tmprow = sqlQuery("SELECT encounter FROM form_groups_encounter WHERE " .
+library/encounter_events.inc.php:231:    $tmprow = sqlQuery("SELECT username, facility, facility_id FROM users " .
+library/forms.inc.php:62:    sqlQuery("UPDATE forms SET authorized = ? WHERE id = ? AND deleted = 0", [$authorized, $id]);
+library/forms.inc.php:110:    return sqlQuery($sql, [$encounter]);
+library/forms.inc.php:118:        $res = sqlQuery($sql, [$encounter]);
+library/forms.inc.php:124:    return sqlQuery("SELECT form_name FROM forms WHERE formdir = ? AND form_id = ? AND deleted = 0", [$formdir, $form_id]);
+library/forms.inc.php:129:    $result = sqlQuery("select id from forms where formdir = ? and form_id = ? and deleted = 0 ", [ $formdir, $form_id ]);
+library/forms.inc.php:135:    return sqlQuery("SELECT form_name FROM forms WHERE formdir = ? AND deleted = 0", [$formdir]);
+library/forms.inc.php:161:    $formRow = sqlQuery("SELECT aco_spec FROM registry WHERE directory = ?", [$formDir]);
+library/global_functions.inc.php:49:        $trow = sqlQuery(
+library/global_functions.inc.php:407:    $crow = sqlQuery("SELECT uor FROM layout_options WHERE " .
+library/gprelations.inc.php:31:    $tmp = sqlQuery("SELECT count(*) AS count FROM gprelations WHERE " .
+library/ippf_issues.inc.php:84:    $pprow = $issue ? sqlQuery("SELECT * FROM lists_ippf_gcac WHERE id = ?", [$issue]) : [];
+library/ippf_issues.inc.php:226:    $pprow = $issue ? sqlQuery("SELECT * FROM lists_ippf_con WHERE id = ?", [$issue]) : [];
+library/lab.inc.php:23:    $res = sqlQuery($sql, [$pid,$encounter]);
+library/lab.inc.php:76:    $res = sqlQuery($sql, [$pid]);
+library/lab.inc.php:88:    $res = sqlQuery($sql, [$prov_id]);
+library/lab.inc.php:112:    $rez = sqlQuery($sql, [$prov_id]);
+library/lab.inc.php:124:    $res = sqlQuery($sql);
+library/lab.inc.php:142:    $bar = sqlQuery($sql, [$lab_id,$pid]);
+library/lab.inc.php:143:    $isOrder = sqlQuery($checkForLabOrder, [$lab_id,$pid]);
+library/lists.inc.php:108:    return sqlQuery("select " . escape_sql_column_name(process_cols_escape($cols), ['lists']) . " from lists where id=? order by date DESC limit 0,1", [$id]);
+library/lists.inc.php:132:    $ret = sqlQuery("SELECT `date` FROM `lists_touch` WHERE pid=? AND type=?", [$patient_id,$type]);
+library/lists.inc.php:143:    $ret = sqlQuery("SELECT `date` FROM `lists_touch` WHERE pid=? AND type=?", [$patient_id,$type]);
+library/options.inc.php:119:        $tmp = sqlQuery(
+library/options.inc.php:314:        $lrow = sqlQuery("SELECT title FROM list_options WHERE list_id = ? AND option_id = ?", [$list_id, $currvalue]);
+library/options.inc.php:1747:            $lrow = sqlQuery(
+library/options.inc.php:1754:                $lrow = sqlQuery(
+library/options.inc.php:1764:                  $lrow = sqlQuery("SELECT title FROM list_options " .
+library/options.inc.php:1821:                $urow = sqlQuery("SELECT fname, lname, specialty FROM users " .
+library/options.inc.php:1874:            $urow = sqlQuery("SELECT fname, lname, specialty FROM users " .
+library/options.inc.php:1927:            $crow = sqlQuery(
+library/options.inc.php:2242:        $urow = sqlQuery(
+library/options.inc.php:2259:                $lrow = sqlQuery("SELECT title FROM list_options " .
+library/options.inc.php:2264:                        $lrow = sqlQuery("SELECT title FROM list_options " .
+library/options.inc.php:2309:                    $lrow = sqlQuery("SELECT name as name FROM facility WHERE id = ?", [$value]);
+library/options.inc.php:2312:                    $lrow = sqlQuery("SELECT CONCAT(fname,' ',lname) as name FROM users WHERE id = ?", [$value]);
+library/options.inc.php:2386:        $lrow = sqlQuery("SELECT title FROM list_options " .
+library/options.inc.php:2392:              $lrow = sqlQuery("SELECT title FROM list_options " .
+library/options.inc.php:2438:            $urow = sqlQuery("SELECT fname, lname, specialty FROM users " .
+library/options.inc.php:2467:        $urow = sqlQuery("SELECT fname, lname, specialty, organization FROM users " .
+library/options.inc.php:2497:        $crow = sqlQuery(
+library/options.inc.php:2766:            $lrow = sqlQuery("SELECT title FROM list_options " .
+library/options.inc.php:2770:                  $lrow = sqlQuery("SELECT title FROM list_options " .
+library/options.inc.php:2801:                $lrow = sqlQuery("SELECT name as name FROM facility WHERE id = ?", [$value]);
+library/options.inc.php:2804:                $lrow = sqlQuery("SELECT CONCAT(fname,' ',lname) as name FROM users WHERE id = ?", [$value]);
+library/options.inc.php:2887:        $lrow = sqlQuery(
+library/options.inc.php:2896:            $lrow = sqlQuery("SELECT title FROM list_options " .
+library/options.inc.php:2928:            $urow = sqlQuery("SELECT fname, lname, specialty FROM users " .
+library/options.inc.php:2943:        $urow = sqlQuery("SELECT fname, lname, specialty FROM users " .
+library/options.inc.php:2965:        $crow = sqlQuery(
+library/options.inc.php:3153:            $lrow = sqlQuery("SELECT title FROM list_options " .
+library/options.inc.php:3158:                  $lrow = sqlQuery("SELECT title FROM list_options " .
+library/options.inc.php:3176:                $lrow = sqlQuery("SELECT name as name FROM facility WHERE id = ?", [$value]);
+library/options.inc.php:3179:                $lrow = sqlQuery("SELECT CONCAT(fname,' ',lname) as name FROM users WHERE id = ?", [$value]);
+library/options.inc.php:3272:    $prow = sqlQuery("SELECT lname, fname FROM patient_data WHERE pid = ?", [$pid]);
+library/options.inc.php:3449:            $tmprow = sqlQuery(
+library/options.inc.php:4670:    $row = sqlQuery("SELECT grp_title FROM layout_group_properties " .
+library/options.inc.php:4718:        $tmp = sqlQuery("SHOW COLUMNS FROM " . escape_table_name($table) . " WHERE Field = ?", [$field_id]);
+library/options.inc.php:4723:        $pdrow = sqlQuery("SELECT `$field_id` AS field_value FROM " . escape_table_name($table) . " WHERE pid = ? $orderby", [$pid]);
+library/options.inc.php:4731:            $sarow = sqlQuery(
+library/options.inc.php:4742:            $sarow = sqlQuery(
+library/options.inc.php:4764:            $ferow = sqlQuery(
+library/options.inc.php:4774:            $ferow = sqlQuery(
+library/options.inc.php:4789:        $ldrow = sqlQuery("SELECT field_value FROM lbf_data WHERE " .
+library/patient.inc.php:71:    return sqlQuery($sql, [$pid]);
+library/patient.inc.php:78:    $row = sqlQuery($sql, [$ins_id]);
+library/patient.inc.php:346:        $res = sqlQuery("select $given from history_data where $where pid = ? and date >= ? and date <= ? order by date DESC, id DESC limit 0,1", [$pid,$dateStart,$dateEnd]);
+library/patient.inc.php:348:        $res = sqlQuery("select $given from history_data where $where pid = ? and date >= ? order by date DESC, id DESC limit 0,1", [$pid,$dateStart]);
+library/patient.inc.php:350:        $res = sqlQuery("select $given from history_data where $where pid = ? and date <= ? order by date DESC, id DESC limit 0,1", [$pid,$dateEnd]);
+library/patient.inc.php:352:        $res = sqlQuery("select $given from history_data where $where pid = ? order by date DESC, id DESC limit 0,1", [$pid]);
+library/patient.inc.php:366:    return sqlQuery($sql, [$pid, $type]);
+library/patient.inc.php:401:    return sqlQuery($sql, [$pid, $date, $date, $type]);
+library/patient.inc.php:414:        $rs = sqlQuery("SELECT sum(pay_amount) AS total_pay_amt FROM ar_activity WHERE session_id = ? AND pid = ? AND deleted IS NULL", [$row['session_id'], $pid]);
+library/patient.inc.php:437:    $row = sqlQuery($sql, [$pid, $date, $date, $type]);
+library/patient.inc.php:489:        $tmp = sqlQuery("SELECT count(*) AS count FROM patient_data WHERE $where", $whereBindArray);
+library/patient.inc.php:1050:        $rez = sqlQuery("select id, fitness, referral_source from patient_data where pid = ?", [$pid]);
+library/patient.inc.php:1063:    $lrow = sqlQuery("SELECT option_id FROM list_options WHERE " .
+library/patient.inc.php:1106:    $foo = sqlQuery("select `pid`, `uuid` from `patient_data` where `id` = ? order by `date` limit 0,1", [$id]);
+library/patient.inc.php:1478:        $tmp = sqlQuery(
+library/patient.inc.php:1554:            $brow = sqlQuery(
+library/patient.inc.php:1560:            $drow = sqlQuery(
+library/patient.inc.php:1579:                $brow = sqlQuery("SELECT SUM(fee) AS amount FROM billing WHERE " .
+library/patient.inc.php:1584:                $brow = sqlQuery("SELECT SUM(fee) AS amount FROM billing WHERE " .
+library/patient.inc.php:1588:            $drow = sqlQuery("SELECT SUM(pay_amount) AS payments, " .
+library/patient.inc.php:1591:            $srow = sqlQuery("SELECT SUM(fee) AS amount FROM drug_sales WHERE " .
+library/patient.inc.php:1606:    $brow = sqlQuery(
+library/patient.inc.php:1613:    $srow = sqlQuery(
+library/patient.inc.php:1620:    $drow = sqlQuery(
+library/patient.inc.php:1649:    $results = sqlQuery("SELECT DATEDIFF(?,`deceased_date`) AS `days_deceased`, `deceased_date` AS `date_deceased` " .
+library/patient.inc.php:1676:    $row = sqlQuery(
+library/patient.inc.php:1696:    $res = sqlQuery($query, [$pid]);
+library/payment.inc.php:33:    $tmprow = sqlQuery(
+library/payment.inc.php:188:            $ferow = sqlQuery('SELECT last_level_closed FROM form_encounter WHERE pid=? AND encounter=?', [
+library/payment.inc.php:207:                $ferow = sqlQuery('SELECT date, last_level_closed FROM form_encounter WHERE pid=? AND encounter=?', [
+library/payment.inc.php:276:    if (sqlQuery("SELECT * FROM " . escape_table_name($table) . " WHERE $where")) {
+library/registry.inc.php:10:    $check = sqlQuery("select state from registry where directory=?", [$directory]);
+library/registry.inc.php:79:    return sqlQuery($sql, [$id]);
+library/registry.inc.php:85:    return sqlQuery($sql, $directory);
+library/registry.inc.php:122:    $result = sqlQuery($sql, [$directory, $state]);
+library/report.inc.php:228:        $ldrow = sqlQuery("SELECT field_value FROM lbt_data WHERE " .
+library/report.inc.php:292:    $erow = sqlQuery("SELECT provider_id FROM form_encounter WHERE " .
+library/report.inc.php:341:            $tmp = sqlQuery("SELECT u.title, u.fname, u.mname, u.lname " .
+library/report_database.inc.php:100:    $query = sqlQuery("SELECT max(`report_id`) as max_report_id FROM `report_results`");
+library/report_database.inc.php:122:        $query = sqlQuery("SELECT max(`report_id`) as max_report_id FROM `report_results`");
+library/spreadsheet.inc.php:83:    $trow = sqlQuery("SELECT value FROM " . escape_table_name('form_' . $spreadsheet_form_name) .
+library/spreadsheet.inc.php:87:    $trow = sqlQuery("SELECT value FROM " . escape_table_name('form_' . $spreadsheet_form_name) .
+library/spreadsheet.inc.php:139:            $tmprow = sqlQuery(
+library/spreadsheet.inc.php:148:            $tmprow = sqlQuery("SELECT MAX(id) AS maxid FROM " .
+library/spreadsheet.inc.php:181:            $trow = sqlQuery(
+library/spreadsheet.inc.php:208:                $tmprow = sqlQuery("SELECT MIN(id) AS minid FROM " .
+library/spreadsheet.inc.php:279:    $tmprow = sqlQuery(
+library/spreadsheet.inc.php:292:    $tmprow = sqlQuery(
+library/sql-ccr.inc.php:532:    $result = sqlQuery($sql, [$pid]);
+library/sql.inc.php:262:function sqlQuery($statement, $binds = false)
+library/sql.inc.php:278:* sqlQuery() function, EXCEPT it skips the
+library/sql.inc.php:305:* sqlQuery() function wrapper for CDR engine in OpenEMR.
+library/sql.inc.php:321:        return sqlQuery($statement, $binds);
+library/transactions.inc.php:7:    $row = sqlQuery("SELECT " . escape_sql_column_name(process_cols_escape($cols), ['transactions']) . " FROM transactions WHERE id = ?", [$id]);
+library/transactions.inc.php:64:    sqlQuery("update transactions set authorized = ? where " .
+library/translation.inc.php:238:    $row = sqlQuery('SELECT * FROM lang_languages WHERE lang_id = ?', [$lang_id]);
+portal/account/account.lib.php:126:    $sql = sqlQuery(
+portal/account/account.lib.php:162:        $sql = sqlQuery("SELECT `id` FROM `verify_email` WHERE `email` = ?", [$email]);
+portal/account/account.lib.php:347:    $newpd = sqlQuery("SELECT id,fname,mname,lname,email,email_direct, providerID FROM `patient_data` WHERE `pid` = ?", [$pid]);
+portal/add_edit_event_user.php:131:    $facility = sqlQuery("SELECT pc_facility, pc_multiple, pc_aid, facility.name
+portal/add_edit_event_user.php:136:        $qmin = sqlQuery("SELECT facility_id as minId, facility FROM users WHERE id = ?", [$facility['pc_aid']]);
+portal/add_edit_event_user.php:235:        $row = sqlQuery("SELECT pc_multiple FROM openemr_postcalendar_events WHERE pc_eid = ?", [$eid]);
+portal/add_edit_event_user.php:255:                    sqlQuery("DELETE FROM openemr_postcalendar_events WHERE pc_aid = ? AND pc_multiple = ?", [$to_be_removed, $row['pc_multiple']]);
+portal/add_edit_event_user.php:464:        $row = sqlQuery("SELECT pc_multiple FROM openemr_postcalendar_events WHERE pc_eid = ?", [$eid]);
+portal/add_edit_event_user.php:522:    $row = sqlQuery("SELECT * FROM openemr_postcalendar_events WHERE pc_eid = ?", [$eid]);
+portal/add_edit_event_user.php:549:    $prow = sqlQuery("SELECT lname, fname, phone_home, phone_biz, DOB " .
+portal/find_appt_popup_user.php:124:    $srow = sqlQuery("SELECT pc_duration FROM openemr_postcalendar_categories WHERE pc_catid = ?", [$input_catid]);
+portal/home.php:184:$current_theme = sqlQuery("SELECT `setting_value` FROM `patient_settings` WHERE setting_patient = ? AND `setting_label` = ?", [$pid, 'portal_theme'])['setting_value'] ?? '';
+portal/lib/doc_lib.php:88:            $updateActivity = sqlQuery("UPDATE onsite_portal_activity SET action_taken_time = NOW(), table_action = 'delete', status = 'deleted', narrative = ? WHERE id = ?", [$msg, $updateId]);
+portal/lib/doc_lib.php:89:            $deleteDocument = sqlQuery("DELETE FROM onsite_documents WHERE id = ?", [$deleteId]);
+portal/lib/doc_lib.php:114:        $result = sqlQuery("SELECT id FROM categories WHERE name LIKE ?", ["Reviewed"]);
+portal/lib/portal_mail.inc.php:299:        $stats = sqlQuery("Select * From onsite_mail Where id = ? AND `owner` = ?", [$id, $owner]);
+portal/messaging/handle_note.php:61:        $nameCheck = sqlQuery("SELECT `fname`, `lname` FROM `patient_data` WHERE `pid` = ?", [$session->get('pid')]);
+portal/messaging/messages.php:88:            $resultusers[] = sqlQuery("SELECT users.username as userid,
+portal/messaging/messages.php:108:            $resultpd[] = sqlQuery("SELECT users.username as userid, CONCAT(users.fname,' ',users.lname) as username FROM users WHERE id = 1");
+portal/patient/index.php:49:        $sqlCollectPatientId = sqlQuery("SELECT `id` FROM `patient_data` WHERE `pid` = ?", [$globalsBag->get('bootstrap_pid')]);
+portal/patient/libs/Controller/OnsiteDocumentController.php:54:        $help_id = sqlQuery('SELECT * FROM `document_templates` WHERE `template_name` = ? Order By modified_date DESC Limit 1', ['Help'])['id'] ?? 0;
+portal/patient/templates/OnsiteDocumentListView.tpl.php:59:    $result = sqlQuery("SELECT name FROM categories WHERE id = ?", [$category]);
+portal/portal_payment.php:104:$patdata = sqlQuery("SELECT " . "p.fname, p.mname, p.lname, p.postal_code, p.pubpid,p.pid, i.copay " . "FROM patient_data AS p " . "LEFT OUTER JOIN insurance_data AS i ON " . "i.pid = p.pid AND i.type = 'primary' " . "WHERE p.pid = ? ORDER BY i.date DESC LIMIT 1", [$pid
+portal/portal_payment.php:330:    $frow = sqlQuery("SELECT * FROM facility " . "ORDER BY billing_location DESC, accepts_assignment DESC, id LIMIT 1");
+portal/portal_payment.php:336:    $payrow = sqlQuery("SELECT " . "SUM(amount1) AS amount1, " . "SUM(amount2) AS amount2, " . "MAX(method) AS method, " . "MAX(source) AS source, " . "MAX(dtime) AS dtime, " .
+portal/portal_payment.php:342:    $tmprow = sqlQuery("SELECT facility_id FROM form_encounter WHERE encounter = ?", [$payrow['encounter']]);
+portal/portal_payment.php:343:    $frow = sqlQuery("SELECT * FROM facility " . " WHERE id = ?", [$tmprow['facility_id']
+portal/portal_payment.php:830:                    $trow = sqlQuery($query, $sql_array);
+portal/portal_payment.php:858:                $trow = sqlQuery(
+portal/portal_payment.php:882:                $drow = sqlQuery(
+portal/portal_payment.php:893:                $drow = sqlQuery(
+portal/portal_payment.php:911:                    $brow = sqlQuery("SELECT SUM(fee) AS amount FROM billing WHERE " . "pid = ? and encounter = ? AND activity = 1", [$pid, $enc
+portal/portal_payment.php:913:                    $srow = sqlQuery("SELECT SUM(fee) AS amount FROM drug_sales WHERE " . "pid = ? and encounter = ? ", [$pid, $enc
+portal/portal_payment.php:915:                    $drow = sqlQuery(
+portal/report/document_downloads_action.php:39:    $file = sqlQuery($sql, [$documentId]);
+portal/report/document_downloads_action.php:47:    $cat = sqlQuery($sql, [$file['id']]);
+portal/report/pat_ledger.php:415:            $patient = sqlQuery("SELECT * from patient_data WHERE pid=?", [$pid]);
+portal/report/portal_custom_report.php:667:            $irow = sqlQuery("SELECT type, title, comments, diagnosis " .
+portal/report/portal_custom_report.php:697:                display_layout_rows('GCA', sqlQuery("SELECT * FROM lists_ippf_gcac WHERE id = ?", [$rowid]));
+portal/report/portal_custom_report.php:701:                display_layout_rows('CON', sqlQuery("SELECT * FROM lists_ippf_con WHERE id = ?", [$rowid]));
+portal/sign/lib/show-signature.php:83:    $user_result = sqlQuery($stmt, [$user]) ?: [];
+portal/sign/lib/show-signature.php:85:    $pt_result = sqlQuery($stmt, [$req_pid]) ?: [];
+portal/sign/lib/show-signature.php:98:    $row = sqlQuery("SELECT pid,status,sig_image,type,user FROM onsite_signatures WHERE user=? && type=?", [$user, $type]);
+portal/sign/lib/show-signature.php:100:    $row = sqlQuery("SELECT pid,status,sig_image,type,user FROM onsite_signatures WHERE pid=? And user=?", [$req_pid, $user]);
+sites/default/LBF/LBFathbf.plugin.php:22:    $ptrow = sqlQuery("SELECT DOB, sex FROM patient_data WHERE " .
+sites/default/LBF/LBFgcac.plugin.php:21:    $encrow = sqlQuery("SELECT date FROM form_encounter WHERE " .
+sites/default/LBF/LBFgcac.plugin.php:55:    $row = sqlQuery($query, [$name]);
+sites/default/LBF/LBFgcac.plugin.php:71:    $encrow = sqlQuery("SELECT date FROM form_encounter WHERE " .
+sites/default/LBF/LBFvbf.plugin.php:135:    $ptrow = sqlQuery("SELECT DOB, sex FROM patient_data WHERE " .
+sites/default/statement.inc.php:158:    $find_provider = sqlQuery("SELECT * FROM form_encounter " .
+sites/default/statement.inc.php:902:    $find_provider = sqlQuery("SELECT * FROM form_encounter " .
+sql_patch.php:79:                $row = sqlQuery("SELECT count(*) AS count FROM globals WHERE gl_name = '$fldid'");
+sql_upgrade.php:423:                                $row = sqlQuery("SELECT count(*) AS count FROM globals WHERE gl_name = '$fldid'");
+src/Billing/BillingProcessor/BillingClaim.php:138:        $result = sqlQuery($sql, [$this->getPartner()]);
+src/Billing/BillingUtilities.php:1459:        $tmp = sqlQuery(
+src/Billing/BillingUtilities.php:1479:        sqlQuery("update billing set authorized = ? where id = ?", [$authorized, $id]);
+src/Billing/BillingUtilities.php:1548:            $row = sqlQuery($sql, $sqlBindArray);
+src/Billing/BillingUtilities.php:1678:                $version = sqlQuery(
+src/Billing/BillingUtilities.php:1771:        $tmp = sqlQuery("SELECT provider, copay FROM insurance_data " .
+src/Billing/BillingUtilities.php:1800:        $trow = sqlQuery(
+src/Billing/BillingUtilities.php:1847:            $corow = sqlQuery(
+src/Billing/BillingUtilities.php:1860:            $row = sqlQuery(
+src/Billing/BillingUtilities.php:1874:            $row = sqlQuery(
+src/Billing/BillingUtilities.php:1885:        $encrow = sqlQuery(
+src/Billing/Claim.php:133:                $row['provider'] = sqlQuery($sql, [$row['provider_id']]);
+src/Billing/Claim.php:138:                $row['insurance_numbers'] = sqlQuery($sql, [$row['payer_id'], $row['provider_id']]);
+src/Billing/Claim.php:165:        return sqlQuery($sql, [$x12_partner_id]);
+src/Billing/Claim.php:173:        return sqlQuery($sql, [$payer_id, $provider_id]);
+src/Billing/Claim.php:183:        return sqlQuery($sql, [$pid, $encounter_id]);
+src/Billing/Claim.php:288:            $crow = sqlQuery("SELECT * FROM insurance_companies WHERE id = ?", [$drow['provider']]);
+src/Billing/Claim.php:826:            $ores = sqlQuery($query, [$this->x12_partner['x12_submitter_id'] ?? '']);
+src/Billing/Claim.php:838:            $ores = sqlQuery($query, [$this->x12_partner['x12_submitter_id'] ?? '']);
+src/Billing/Claim.php:861:            $ores = sqlQuery($query, [$this->x12_partner['x12_submitter_id'] ?? '']);
+src/Billing/Claim.php:875:            $ores = sqlQuery($query, [$this->x12_partner['x12_submitter_id'] ?? '']);
+src/Billing/EDI270.php:687:        $insId = sqlQuery($query, [$patient_id]);
+src/Billing/EDI270.php:694:        $resId = sqlQuery($query, [$insurance_id]);
+src/Billing/EDI270.php:752:            $returnval = sqlQuery("select * from x12_partners WHERE id = ?", [$id]);
+src/Billing/EDI270.php:922:        $rtn = sqlQuery($sql, [$fn, $ln, $sex, $dob]);
+src/Billing/InvoiceSummary.php:224:        $row = sqlQuery("SELECT date, last_level_billed, last_level_closed " .
+src/Billing/SLEOB.php:41:            $brow = sqlQuery("SELECT encounter FROM billing WHERE " .
+src/Billing/SLEOB.php:77:            $row = sqlQuery("SELECT session_id FROM ar_session WHERE " .
+src/Billing/SLEOB.php:169:         * $row= sqlQuery("SELECT * FROM billing WHERE " .
+src/Billing/SLEOB.php:261:        $nprow = sqlQuery($query, [$patient_id, $value, $date_of_service, $date_of_service]);
+src/Billing/SLEOB.php:281:        $ferow = sqlQuery("SELECT date, last_level_billed " .
+src/Billing/X125010837I.php:994:            $revcode[$tlh] = sqlQuery($sql, [
+src/ClinicalDecisionRules/Interface/RuleLibrary/CodeManager.php:65:        $row = sqlQuery(self::SQL_SELECT . " " . self::SQL_WHERE_GET, [$id]);
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleCriteriaTargetFactory.php:36:        $result = sqlQuery(self::SQL_RULE_INTERVAL, [$ruleId]);
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:160:        $ruleResult = sqlQuery(
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:485:        $result = sqlQuery(self::SQL_RULE_ACTION_BY_GUID, [$guid]);
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:560:        $result = sqlQuery("select count(*)+1 AS id from clinical_rules");
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:637:                $result = sqlQuery("SELECT max(group_id) AS group_id FROM rule_target WHERE id = ?", [$rule->id]);
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:662:        $result = sqlQuery(
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:786:        $result = sqlQuery("SELECT * FROM rule_action_item WHERE category = ? AND item = ?", [$category, $item]);
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:816:            $result = sqlQuery("select max(seq)+10 AS seq from list_options where list_id = ? AND activity = 1", [$listId]);
+src/ClinicalDecisionRules/Interface/RuleLibrary/RuleManager.php:828:        $result = sqlQuery("SELECT COUNT(*) AS CT FROM list_options WHERE list_id = ? AND option_id = ? AND title = ? AND activity = 1", [$listId, $optionId, $title]);
+src/Common/Acl/AclMain.php:307:        $res_user_allowed   = sqlQuery($sql_user_acl, [$section_identifier, $user_id, 1]);
+src/Common/Acl/AclMain.php:320:            $res_group_allowed   = sqlQuery($sql_group_acl_allowed, $groups_sql_param);
+src/Common/Acl/AclMain.php:378:        $aco = sqlQuery(
+src/Common/Auth/AuthUtils.php:1153:        $sql = sqlQuery("SELECT `ip_string` FROM `ip_tracking` WHERE `ip_string` = ?", [$ipString]);
+src/Common/Auth/AuthUtils.php:1206:        $query = sqlQuery("SELECT `ip_auto_block_emailed`, `ip_force_block`, `ip_no_prevent_timing_attack`, `ip_login_fail_counter`, TIMESTAMPDIFF(SECOND, `ip_last_login_fail`, NOW()) as `seconds_last_ip_login_fail` FROM `ip_tracking` WHERE `ip_string` = ?", [$ipString]);
+src/Common/Auth/AuthUtils.php:1297:            $query = sqlQuery("SELECT TIMESTAMPDIFF(SECOND, `ip_last_login_fail`, NOW()) as `seconds_last_ip_login_fail` FROM `ip_tracking` WHERE `ip_string` = ?", [$ipString]);
+src/Common/Auth/MfaUtils.php:198:        $tmprow = sqlQuery("SELECT login_work_area FROM users_secure WHERE id = ?", [$this->uid]);
+src/Common/Auth/OneTimeAuth.php:262:        return sqlQuery($sql, [$access_ip, $pid, $token]);
+src/Common/Auth/OneTimeAuth.php:278:        $data = sqlQuery($sql, $bind);
+src/Common/Command/AclModify.php:69:        $moduleId = sqlQuery("SELECT `mod_id` FROM `modules` WHERE `mod_name` = ?", [$moduleName])['mod_id'];
+src/Common/Command/AclModify.php:79:        $groupAclId = sqlQuery("SELECT `id` FROM `gacl_aro_groups` WHERE `value` = ?", [$groupAclName])['id'];
+src/Common/Forms/CoreFormToPortalUtility.php:68:            $pidForm = sqlQuery("SELECT `pid` FROM `forms` WHERE `form_id` = ? AND `formdir` = ?", [$formid, $formdir])['pid'];
+src/Common/Forms/CoreFormToPortalUtility.php:148:        $infoNewRegisteredForm = sqlQuery("SELECT `name`, `directory` FROM `registry` WHERE `id` = ?", [$id]);
+src/Common/Forms/CoreFormToPortalUtility.php:151:            $checkDocumentTemplate = sqlQuery("SELECT `id` FROM `document_templates` WHERE `template_name` = ?", [$infoNewRegisteredForm['name']]);
+src/Common/Forms/Types/LocalProviderListType.php:65:            $urow = sqlQuery("SELECT fname, lname, specialty FROM users " .
+src/Common/Layouts/LayoutsUtils.php:19:        $row = sqlQuery("SELECT `title` FROM `list_options` WHERE `list_id` = ? AND `option_id` = ? AND activity = 1", [$list, $option]);
+src/Common/ORDataObject/Contact.php:66:        $id = sqlQuery("SELECT `id` FROM `contact` WHERE `foreign_table_name` = ? AND `foreign_id` = ?", [$this->foreign_table_name, $this->foreign_id])['id'] ?? null;
+src/Common/ORDataObject/ORDataObject.php:126:        $results = sqlQuery($sql, [strval($this->get_id())]);
+src/Common/Uuid/UniqueInstallationUuid.php:30:        $sqlArray = sqlQuery("SELECT `gl_value` FROM `globals` WHERE `gl_name` = 'unique_installation_id'");
+src/Core/AbstractModuleActionListener.php:149:        $results = sqlQuery($sql, [$modId]);
+src/Core/AbstractModuleActionListener.php:173:        return sqlQuery($sql, [$flag, $flag_ui, $modId, $modId]);
+src/Core/AbstractModuleActionTrait.php:29:        $result = sqlQuery($query, [$id]);
+src/Cqm/QrdaControllers/QrdaReportController.php:162:                    $meta = sqlQuery("Select `fname`, `lname`, `pid` From `patient_data` Where `pid` = ?", [$pid]);
+src/Cqm/QrdaControllers/QrdaReportController.php:195:                $meta = sqlQuery("Select `fname`, `lname`, `pid` From `patient_data` Where `pid` = ?", [$pid]);
+src/Cqm/QrdaControllers/QrdaReportController.php:308:                $meta = sqlQuery("SELECT `fname`, `lname`, `pid` FROM `patient_data` WHERE `pid` = ?", [$pids[0]]);
+src/Easipro/Easipro.php:98:        $patientData = sqlQuery("SELECT `fname`, `lname`, `email` FROM `patient_data` WHERE `pid`=?", [$patient_id]);
+src/Easipro/Easipro.php:148:        $assessmentData = sqlQuery("SELECT `user_id`, `patient_id` FROM `pro_assessments` WHERE `assessment_oid`=?", [$assessment_oid]);
+src/Easipro/Easipro.php:149:        $patientData = sqlQuery("SELECT `fname`, `lname` FROM `patient_data` WHERE `pid`=?", [$assessmentData['patient_id']]);
+src/Easipro/Easipro.php:150:        $userData = sqlQuery("SELECT `fname`, `lname`, `email` FROM `users` WHERE `id`=?", [$assessmentData['user_id']]);
+src/Events/Messaging/SendNotificationEvent.php:95:        $result = sqlQuery($query, [$id]);
+src/Events/Messaging/SendSmsEvent.php:59:        return sqlQuery($query, [$id])['phone_cell'] ?? '';
+src/PaymentProcessing/PaymentProcessing.php:67:        $ret = sqlQuery("SELECT `uuid`, `service`, `pid`, `transaction_id`, `amount` FROM `payment_processing_audit` WHERE `uuid` = ?", [$uuidUpdate]);
+src/Pharmacy/Services/ImportPharmacies.php:135:        $query = sqlQuery($sql, [$npi]);
+src/Reminder/BirthdayReminder.php:37:        $res = sqlQuery($sql, [$this->pid]);
+src/Reminder/BirthdayReminder.php:77:        $res = sqlQuery($sql, [$this->pid, $this->user_id]);
+src/Reports/RealWorldTesting.php:48:        $check = sqlQuery("SELECT count(`id`) AS `count` FROM `ccda` WHERE `updated_date` >= ? AND `updated_date` <= ?", [$this->beginDate, $this->endDate]);
+src/Reports/RealWorldTesting.php:61:        $check = sqlQuery("SELECT count(`id`) AS `count` FROM `direct_message_log` WHERE `status` = 'S' AND `create_ts` >= ? AND `create_ts` <= ?", [$this->beginDate, $this->endDate]);
+src/Reports/RealWorldTesting.php:67:        $check = sqlQuery("SELECT count(`id`) AS `count` FROM `direct_message_log` WHERE `status` = 'R' AND `create_ts` >= ? AND `create_ts` <= ?", [$this->beginDate, $this->endDate]);
+src/Reports/RealWorldTesting.php:80:        $check = sqlQuery("SELECT count(`id`) AS `count` FROM `audit_master` WHERE `is_qrda_document` = '1' AND `created_time` >= ? AND `created_time` <= ?", [$this->beginDate, $this->endDate]);
+src/Reports/RealWorldTesting.php:93:        $check = sqlQuery("SELECT count(`id`) AS `count` FROM `log` WHERE `event` = 'qrda3-export' AND `success` = '1' AND `date` >= ? AND `date` <= ?", [$this->beginDate, $this->endDate]);
+src/Reports/RealWorldTesting.php:155:        $row = sqlQuery("SHOW TABLES LIKE 'ehi_export_job_tasks'");
+src/Reports/RealWorldTesting.php:160:        $check = sqlQuery("SELECT count(`ehi_task_id`) AS `count` FROM `ehi_export_job_tasks` WHERE `status` = 'completed' AND `completion_date` >= ? AND `completion_date` <= ?", [$this->beginDate, $this->endDate]);
+src/RestControllers/AuthorizationController.php:491:            $client = sqlQuery("SELECT * FROM `oauth_clients` WHERE `registration_uri_path` = ?", [$uri_path]);
+src/RestControllers/FHIR/Operations/FhirOperationExportRestController.php:518:        $categoryId = sqlQuery('Select `id` FROM categories WHERE name=?', [self::FHIR_DOCUMENT_CATEGORY]);
+src/Services/AppointmentService.php:382:            $row = sqlQuery("SELECT pc_multiple FROM openemr_postcalendar_events WHERE pc_eid = ?", [$eid]);
+src/Services/AppointmentService.php:405:                    $origEvent = sqlQuery("SELECT pc_recurrspec FROM openemr_postcalendar_events " .
+src/Services/AppointmentService.php:460:                $origEvent = sqlQuery("SELECT pc_recurrspec FROM openemr_postcalendar_events WHERE pc_eid = ?", [$eid]);
+src/Services/AppointmentService.php:512:        $row = sqlQuery("SELECT toggle_setting_1 FROM list_options WHERE " .
+src/Services/AppointmentService.php:528:        $row = sqlQuery("SELECT toggle_setting_2 FROM list_options WHERE " .
+src/Services/BaseService.php:390:        $result = sqlQuery($sql, [$uuid]);
+src/Services/BaseService.php:406:        $result = sqlQuery($sql, [$id]);
+src/Services/BaseService.php:446:        $resultId = sqlQuery("SELECT MAX($idField)+1 AS $idField FROM $table");
+src/Services/BaseService.php:588:            $data = sqlQuery("SELECT uuid
+src/Services/CDADocumentService.php:63:        return sqlQuery($query, [$pid]);
+src/Services/CDADocumentService.php:73:        $row = sqlQuery($query, [$id]);
+src/Services/Cda/CdaTemplateImportDispose.php:543:            $result_types = sqlQuery($query_select_pt, [$code, $pro_id]);
+src/Services/Cda/CdaTemplateImportDispose.php:553:                sqlQuery($query_update_pt, [$ptid, $ptid]);
+src/Services/Cda/CdaTemplateImportDispose.php:585:        $isuser = sqlQuery("Select id, username From users Where fname = ? And lname = ?", ['External', 'Provider']);
+src/Services/Cda/CdaTemplateImportDispose.php:684:                $pc_catid = sqlQuery("SELECT pc_catid FROM `openemr_postcalendar_categories` Where `pc_catname` = ?", [$catname])['pc_catid'] ?? '';
+src/Services/Cda/CdaTemplateImportDispose.php:1572:            $is_user = sqlQuery(
+src/Services/Cda/CdaTemplateImportDispose.php:1578:            $is_user = sqlQuery("Select id From users Where fname = ? And lname = ?", ['External', 'Provider']);
+src/Services/Cda/CdaTemplateImportDispose.php:2266:        $resultBefore = sqlQuery($sqlBefore, [$item_date_end, $item_pid]);
+src/Services/Cda/CdaTemplateImportDispose.php:2273:        $resultAfter = sqlQuery($sqlAfter, [$item_date_start, $item_pid]);
+src/Services/Cda/CdaTemplateImportDispose.php:2323:        $rtn = sqlQuery($sql, [$item_date, $item_pid]);
+src/Services/Cda/CdaTemplateImportDispose.php:2342:            $exist = sqlQuery("SELECT id  FROM `documents` WHERE `foreign_id` = ? AND `hash` = ? LIMIT 1", [$pid, $value['hash']]);
+src/Services/Cda/CdaValidateDocuments.php:356:        $log = sqlQuery("SELECT `document_data` FROM `documents` WHERE `audit_master_id` = ?", [$audit_id])['document_data'];
+src/Services/CodeTypesService.php:465:            $value = sqlQuery(
+src/Services/CodeTypesService.php:470:            $value = sqlQuery(
+src/Services/DemographicsRelatedPersonsService.php:94:        $row = sqlQuery("SELECT $colList FROM `{$this->table}` WHERE `pid` = ?", [$pid]);
+src/Services/DocumentService.php:65:            $categoryResults = sqlQuery($categoriesSql, [str_replace("_", "", $part)]);
+src/Services/DocumentService.php:92:        $results = sqlQuery($sql, [str_replace("_", "", $lastInPath)]);
+src/Services/DocumentService.php:164:        $filenameSql = sqlQuery("SELECT `name`, `mimetype` FROM `documents` WHERE `id` = ? AND `foreign_id` = ? AND `deleted` = 0", [$did, $pid]);
+src/Services/DocumentTemplates/DocumentTemplateRender.php:82:        $this->ptrow = sqlQuery("SELECT pd.*, " . "ur.fname AS ur_fname, ur.mname AS ur_mname, ur.lname AS ur_lname, ur.title AS ur_title, ur.specialty AS ur_specialty " . "FROM patient_data AS pd " . "LEFT JOIN users AS ur ON ur.id = ? " . "WHERE pd.pid = ?", [$this->user, $this->pid]);
+src/Services/DocumentTemplates/DocumentTemplateRender.php:84:        $this->hisrow = sqlQuery("SELECT * FROM history_data WHERE pid = ? " . "ORDER BY date DESC LIMIT 1", [
+src/Services/DocumentTemplates/DocumentTemplateRender.php:91:            $this->enrow = sqlQuery("SELECT * FROM form_encounter WHERE pid = ? AND " . "encounter = ?", [
+src/Services/DocumentTemplates/DocumentTemplateRender.php:453:                $frow = sqlQuery("SELECT * FROM layout_options " . "WHERE form_id = ? AND field_id = ? LIMIT 1", [
+src/Services/DocumentTemplates/DocumentTemplateRender.php:458:                    $ldrow = sqlQuery("SELECT ld.field_value " . "FROM lbf_data AS ld, forms AS f WHERE " . "f.pid = ? AND f.encounter = ? AND f.formdir = ? AND f.deleted = 0 AND " . "ld.form_id = f.form_id AND ld.field_id = ? " . "ORDER BY f.form_id DESC LIMIT 1", [
+src/Services/DocumentTemplates/DocumentTemplateRender.php:481:                $frow = sqlQuery("SELECT * FROM layout_options " . "WHERE form_id = ? AND field_id = ? LIMIT 1", [
+src/Services/DocumentTemplates/DocumentTemplateRender.php:649:                $return = sqlQuery('SELECT * FROM `onsite_documents` WHERE `id` = ?', [$template_id]);
+src/Services/DocumentTemplates/DocumentTemplateRender.php:651:                $return = sqlQuery('SELECT * FROM `onsite_documents` WHERE `file_name` = ?', [$template_id]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:155:                            $name = sqlQuery($sql_patient, [$row['pid']])['name'] ?? '';
+src/Services/DocumentTemplates/DocumentTemplateService.php:204:        return sqlQuery("SELECT * FROM `document_template_profiles` WHERE `template_id` = ? AND `profile` = ?", [$tid ?? 0, $profile ?? '']);
+src/Services/DocumentTemplates/DocumentTemplateService.php:215:        $result = sqlQuery("SELECT * FROM `onsite_documents` WHERE `pid` = ? AND `file_path` = ? ORDER BY `create_date` DESC LIMIT 1", [$template['pid'], $template['id']]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:326:            $return = sqlQuery('SELECT * FROM `document_templates` WHERE `id` = ?', [$id]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:328:            $return = sqlQuery('SELECT * FROM `document_templates` WHERE `template_name` = ?', [$id]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:345:            sqlQuery('DELETE From `document_template_profiles` WHERE `template_id` = 0');
+src/Services/DocumentTemplates/DocumentTemplateService.php:372:            $rtn = sqlQuery('UPDATE `patient_data` SET `patient_groups` = ? WHERE `pid` > ?', [null, 0]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:374:                $rtn = sqlQuery('UPDATE `patient_data` SET `patient_groups` = ? WHERE `pid` = ?', [$groups, $id]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:448:                $duh = sqlQuery("Select `id` From `document_templates` Where `pid` = '0' And `template_name` = ?", [$row['template_name']])['id'];
+src/Services/DocumentTemplates/DocumentTemplateService.php:470:            return sqlQuery('SELECT * FROM `document_templates` WHERE category = ? AND pid = ? AND template_name = ? LIMIT 1', [$category, $pid, $name]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:587:            $name = sqlQuery("SELECT `pid`, Concat_Ws(', ', `lname`, `fname`) as name FROM `patient_data` WHERE `pid` = ?", [$pid])['name'] ?? '';
+src/Services/DocumentTemplates/DocumentTemplateService.php:606:        sqlQuery("UPDATE `document_template_profiles` SET `active` = '0' WHERE `template_id` = 0");
+src/Services/DocumentTemplates/DocumentTemplateService.php:609:            $rtn = sqlQuery("UPDATE `document_template_profiles` SET `active` = '1' WHERE `profile` = ? AND `template_id` = 0", [$profile]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:620:        $rtn = sqlQuery("Select `active` From `document_template_profiles` WHERE `profile` = ? And `template_id` = 0", [$profile]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:711:        return sqlQuery('UPDATE `document_templates` SET `template_content` = ?, modified_date = NOW() WHERE `id` = ?', [$content, $id]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:721:        return sqlQuery('UPDATE  `document_templates`  SET `category` =  ? WHERE `id` = ?', [$category, $id]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:733:            $profile_delete = sqlQuery('DELETE FROM `document_template_profiles` WHERE `template_id` = ?', [$id]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:734:            $delete = sqlQuery('DELETE FROM `document_templates` WHERE `template_name` = ?', [$template]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:736:            $delete = sqlQuery('DELETE FROM `document_templates` WHERE `id` = ?', [$id]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:751:            sqlQuery("DELETE FROM `document_template_profiles` WHERE `template_id` > 0");
+src/Services/DocumentTemplates/DocumentTemplateService.php:847:        $q = sqlQuery($sql, [$pid, $name]);
+src/Services/DocumentTemplates/DocumentTemplateService.php:861:        return sqlQuery('SELECT active FROM `document_template_profiles` WHERE `template_id` = "0" AND `profile` = ?', [$profile])['active'];
+src/Services/DocumentTemplates/DocumentTemplateService.php:905:                    $in_edit = sqlQuery("Select `id`, `doc_type`, `denial_reason` From `onsite_documents` Where (`denial_reason` = '"
+src/Services/EncounterService.php:449:        $result = sqlQuery("SELECT sensitivity FROM form_encounter WHERE encounter = ?", [$encounter]);
+src/Services/EncounterService.php:642:        return sqlQuery($sql, [$eid, $sid, $pid]);
+src/Services/EncounterService.php:785:        $result = sqlQuery($sql, [$facility_id]);
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:299:            $result = sqlQuery($sql, [$patientUuidBytes]);
+src/Services/Globals/UserSettingsService.php:46:        $res = sqlQuery("SELECT setting_value FROM user_settings
+src/Services/Globals/UserSettingsService.php:116:        sqlQuery("DELETE FROM user_settings " .
+src/Services/Globals/UserSettingsService.php:122:        return sqlQuery("SELECT fname, lname, username FROM users where id=?", [$id]);
+src/Services/InsuranceCompanyService.php:280:        return sqlQuery($sql, [$id]);
+src/Services/InsuranceService.php:74:        return sqlQuery($sql, [$id, $type]);
+src/Services/InsuranceService.php:127:        $sqlResult = sqlQuery($sql, [$uuidBytes]);
+src/Services/InsuranceService.php:222:            return sqlQuery("Select `id` From `insurance_data` Where pid = ? And type = ?", [$pid, $type])['id'] ?? null;
+src/Services/ListService.php:183:        return sqlQuery($sql, [$pid, $list_type, $list_id]);
+src/Services/LocationService.php:207:        $sqlResult = sqlQuery($sql, [$uuidBinary]);
+src/Services/MessageService.php:82:        $existingBody = sqlQuery("SELECT body FROM pnotes WHERE pid = ? AND id = ?", [$pid, $mid]);
+src/Services/PatientAccessOnsiteService.php:258:        $patientData = sqlQuery("SELECT * FROM `patient_data` WHERE `pid`=?", [$patient_id]);
+src/Services/PatientNameHistoryService.php:35:        return sqlQuery($sql, [$id]);
+src/Services/PatientNameHistoryService.php:141:        $result =  sqlQuery($sql, [$pid, $id, 'name_history']);
+src/Services/PatientPortalService.php:53:        $patient = sqlQuery(
+src/Services/PatientPortalService.php:57:        $portal = sqlQuery(
+src/Services/PatientPortalService.php:114:        $result = sqlQuery($query, [$id]);
+src/Services/PatientPortalService.php:138:        return sqlQuery("SELECT `portal_user` FROM `users` WHERE `id` = ? OR username = ? LIMIT 1", [$user, $user])['portal_user'];
+src/Services/PatientService.php:153:        $pid = sqlQuery("SELECT MAX(pid)+1 AS pid FROM patient_data");
+src/Services/PatientService.php:681:        $result = sqlQuery($sql, [OEGlobalsBag::getInstance()->getString('patient_photo_category_name'), $pid]);
+src/Services/PatientService.php:945:        $row = sqlQuery($query, [$curUser['id']]);
+src/Services/PatientService.php:993:        $res = sqlQuery($sql, [$currUser['id']]);
+src/Services/PatientTrackerService.php:152:        $enc_yn = sqlQuery("SELECT encounter from patient_tracker WHERE `apptdate` = ? AND encounter > 0 " .
+src/Services/PatientTrackerService.php:177:        $pc_appt =  sqlQuery("SELECT `pc_recurrtype` FROM `openemr_postcalendar_events` WHERE `pc_eid` = ?", [$eid]);
+src/Services/PatientTrackerService.php:188:        $tracker = sqlQuery("SELECT id, apptdate, appttime, eid, pid, original_user, encounter, lastseq," .
+src/Services/PatientTrackerService.php:268:        $pc_appt =  sqlQuery("SELECT `pc_apptstatus`, `pc_room` FROM `openemr_postcalendar_events` WHERE `pc_eid` = ?", [$eid]);
+src/Services/PatientTrackerService.php:292:        $row = sqlQuery("SELECT notes FROM list_options WHERE " .
+src/Services/PatientTrackerService.php:327:        $tracker = sqlQuery(
+src/Services/PatientTrackerService.php:351:        $tracker = sqlQuery(
+src/Services/PhoneNumberService.php:116:        $phoneNumbersIdSqlResults = sqlQuery("SELECT id FROM phone_numbers WHERE foreign_id=?", [$this->foreignId]);
+src/Services/PhoneNumberService.php:141:        return sqlQuery($sql, [$foreignId]);
+src/Services/PractitionerRoleService.php:370:        $sqlResult = sqlQuery($sql, [$uuidBinary]);
+src/Services/ProcedureOrderRelationshipService.php:175:        $result = sqlQuery($sql, [$procedureOrderId, $resourceType, $uuidBinary]);
+src/Services/ProcedureOrderRelationshipService.php:192:        $result = sqlQuery($sql, [$procedureOrderId]);
+src/Services/ProcedureOrderRelationshipService.php:288:        $result = sqlQuery($sql);
+src/Services/ProcedureOrderRelationshipService.php:305:        $result = sqlQuery($sql);
+src/Services/ProcedureOrderRelationshipService.php:325:        $result = sqlQuery($sql);
+src/Services/ProcedureService.php:478:                $orderIdResult = sqlQuery($orderIdSql, [UuidRegistry::uuidToBytes($reportUuid)]);
+src/Services/ProcedureService.php:868:        $sqlResult = sqlQuery($sql, $sqlBindArray);
+src/Services/ProcedureService.php:1110:        $order = sqlQuery($orderSql, [$orderId]);
+src/Services/ProcedureService.php:1292:        $result = sqlQuery($sql, [$uuidBinary]);
+src/Services/ProductRegistrationService.php:34:        $row = sqlQuery("SELECT * FROM `product_registration`");
+src/Services/ProductRegistrationService.php:78:        return sqlQuery("SELECT `email` FROM `product_registration`")['email'] ?? '';
+src/Services/ProductRegistrationService.php:83:        $row = sqlQuery("SELECT * FROM `product_registration`");
+src/Services/ProductRegistrationService.php:161:        $row = sqlQuery("SELECT * FROM `product_registration`");
+src/Services/QuestionnaireResponseService.php:509:            $result = sqlQuery($sql_update, $bind);
+src/Services/QuestionnaireResponseService.php:747:        $response = sqlQuery($sql, $bind) ?: [];
+src/Services/QuestionnaireResponseService.php:769:        $response = sqlQuery($sql, $bind) ?: [];
+src/Services/QuestionnaireResponseService.php:787:        $resource = sqlQuery($sql, [$record_id, $qr_id]);
+src/Services/QuestionnaireService.php:57:        $response = sqlQuery($sql, $bind) ?: [];
+src/Services/QuestionnaireService.php:78:        $response = sqlQuery($sql, $bind) ?: [];
+src/Services/QuestionnaireService.php:205:        $q_id = sqlQuery($sql, [$name])['form_foreign_id'];
+src/Services/QuestionnaireService.php:245:        $response = sqlQuery($sql, $bind) ?: [];
+src/Services/SDOH/HistorySdohService.php:367:        $row = sqlQuery(
+src/Services/SDOH/HistorySdohService.php:1022:        $row = sqlQuery($sql, [$listId, $optionId]);
+src/Services/SDOH/HistorySdohService.php:1049:        $row = sqlQuery(
+src/Services/SDOH/HistorySdohService.php:1166:        $goals = sqlQuery(
+src/Services/SDOH/HistorySdohService.php:1366:        $row = sqlQuery($sql, [$pid]);
+src/Services/SocialHistoryService.php:51:            $res = sqlQuery("select $given from history_data where $where pid = ? and date >= ? and date <= ? order by date DESC limit 0,1", [$pid, $dateStart, $dateEnd]);
+src/Services/SocialHistoryService.php:53:            $res = sqlQuery("select $given from history_data where $where pid = ? and date >= ? order by date DESC limit 0,1", [$pid, $dateStart]);
+src/Services/SocialHistoryService.php:55:            $res = sqlQuery("select $given from history_data where $where pid = ? and date <= ? order by date DESC limit 0,1", [$pid, $dateEnd]);
+src/Services/SocialHistoryService.php:57:            $res = sqlQuery("select $given from history_data where $where pid=? order by date DESC limit 0,1", [$pid]);
+src/Services/SurgeryService.php:281:        $sqlResult = sqlQuery($sql, $sqlBindArray);
+src/Services/UserService.php:94:        $record = sqlQuery("SELECT * FROM `users` WHERE `id` = ?", [$userId]);
+src/Services/UserService.php:105:        $record = sqlQuery("SELECT * FROM `users` WHERE BINARY `username` = ?", [$username]);
+src/Services/UserService.php:154:        $user = sqlQuery("SELECT * FROM `users` WHERE `id` = ?", [$session->get('authUserID')]);
+src/Services/UserService.php:171:        $user = sqlQuery("SELECT * FROM `users` WHERE `uuid` = ?", [$uuid]);
+src/Services/UserService.php:375:        $id = sqlQuery("SELECT `id` FROM `users` WHERE BINARY `username` = ?", [$username]);
+src/Services/Utils/SQLUpgradeService.php:874:        $row = sqlQuery("SELECT database() AS dbname");
+src/Services/Utils/SQLUpgradeService.php:887:        $row = sqlQuery("SHOW TABLES LIKE '$tblname'");
+src/Services/Utils/SQLUpgradeService.php:905:        $row = sqlQuery("SHOW COLUMNS FROM $tblname LIKE '$colname'");
+src/Services/Utils/SQLUpgradeService.php:924:        $row = sqlQuery("SHOW COLUMNS FROM $tblname LIKE '$colname'");
+src/Services/Utils/SQLUpgradeService.php:944:        $row = sqlQuery("SHOW COLUMNS FROM $tblname WHERE `Field` = ?", [$colname]);
+src/Services/Utils/SQLUpgradeService.php:957:            $row = sqlQuery("SHOW COLUMNS FROM $tblname WHERE `Field` = ? AND `Default` IS NULL", [$colname]);
+src/Services/Utils/SQLUpgradeService.php:961:            $row = sqlQuery("SHOW COLUMNS FROM $tblname WHERE `Field` = ? AND `Default` IS NOT NULL AND `Default` = ''", [$colname]);
+src/Services/Utils/SQLUpgradeService.php:979:        $row = sqlQuery("SELECT COUNT(*) AS count FROM $tblname WHERE " .
+src/Services/Utils/SQLUpgradeService.php:995:        $row = sqlQuery("SELECT COUNT(*) AS count FROM $tblname WHERE " .
+src/Services/Utils/SQLUpgradeService.php:1013:        $row = sqlQuery("SELECT COUNT(*) AS count FROM $tblname WHERE " .
+src/Services/Utils/SQLUpgradeService.php:1033:        $row = sqlQuery("SELECT COUNT(*) AS count FROM $tblname WHERE " .
+src/Services/Utils/SQLUpgradeService.php:1055:        $row = sqlQuery("SELECT COUNT(*) AS count FROM $tblname WHERE " .
+src/Services/Utils/SQLUpgradeService.php:1070:        $row = sqlQuery("SHOW INDEX FROM `$tblname` WHERE `Key_name` = '$colname'");
+src/Services/Utils/SQLUpgradeService.php:1083:        $row = sqlQuery('SELECT 1 FROM information_schema.tables WHERE table_name=? AND engine=? AND table_type="BASE TABLE"', [$tblname, $engine]);
+src/Services/Utils/SQLUpgradeService.php:1095:        $row = sqlQuery("SELECT * FROM list_options WHERE list_id = 'lists' AND option_id = ?", [$option_id]);
+src/Services/Utils/SQLUpgradeService.php:1308:                $props = sqlQuery(
+src/Services/Utils/SQLUpgradeService.php:1319:                $props = sqlQuery(
+src/Validators/BaseValidator.php:114:        $result = sqlQuery(
+src/Validators/BaseValidator.php:136:        $result = sqlQuery(
+src/Validators/PatientValidator.php:34:        $result = sqlQuery(
+tests/PHPStan/Rules/ForbiddenFunctionsRule.php:38:        'sqlQuery' => 'Use QueryUtils::querySingleRow() or QueryUtils::fetchRecords() instead of sqlQuery().',
+tests/Tests/E2e/Base/BaseTrait.php:298:        $usernameDatabase = sqlQuery("SELECT `username` FROM `users` WHERE `username` = ?", [$username]);
+tests/Tests/E2e/Base/BaseTrait.php:308:        $patientDatabase = sqlQuery("SELECT `fname` FROM `patient_data` WHERE `fname` = ? AND `lname` = ? AND `DOB` = ? AND `sex` = ?", [$firstname, $lastname, $dob, $sex]);
+tests/Tests/E2e/Base/BaseTrait.php:318:        $patientDatabase = sqlQuery("SELECT `patient_data`.`fname`
+tests/Tests/Fixtures/FacilityFixtureManager.php:85:            sqlQuery("DELETE FROM `uuid_registry` WHERE `table_name` = 'facility' AND `uuid` = ?", [$row['uuid']]);
+tests/Tests/Fixtures/FixtureManager.php:242:            sqlQuery("DELETE FROM `uuid_registry` WHERE `table_name` = 'patient_data' AND `uuid` = ?", [$row['uuid']]);
+tests/Tests/Fixtures/PractitionerFixtureManager.php:193:            sqlQuery("DELETE FROM `uuid_registry` WHERE `table_name` = 'users' AND `uuid` = ?", [$row['uuid']]);
+tests/Tests/Services/CarePlanServiceTest.php:66:        $expectedResult = sqlQuery("SELECT `fcp`.`id` AS `form_id`,`fe`.`uuid` AS `euuid`, `fcp`.`encounter` FROM `form_care_plan` fcp "
+tests/Tests/Services/FHIR/FhirLocationServiceIntegrationTest.php:391:        $result = sqlQuery($sql, [$facilityId]);
+tests/Tests/Services/FacilityServiceTest.php:117:        $result = sqlQuery($sql, [UuidRegistry::uuidToBytes($actualUuid)]);
+tests/Tests/Services/FacilityServiceTest.php:127:        $result = sqlQuery("SELECT `uuid` FROM `facility`");
+tests/Tests/Services/PatientServiceTest.php:125:        $result = sqlQuery($sql, [UuidRegistry::uuidToBytes($actualUuid)]);
+tests/Tests/Services/PatientServiceTest.php:167:        $result = sqlQuery("SELECT `uuid` FROM `patient_data`");
+tests/Tests/Services/PractitionerServiceTest.php:117:        $result = sqlQuery($sql, [UuidRegistry::uuidToBytes($actualUuid)]);
+tests/Tests/Services/PractitionerServiceTest.php:127:        $result = sqlQuery("SELECT `uuid` FROM `users` WHERE npi IS NOT NULL");
+tests/Tests/Validators/PatientValidatorTest.php:75:        $fixturePid = sqlQuery(
+tests/Tests/Validators/PatientValidatorTest.php:82:        $fixtureUuid = sqlQuery(
+tests/Tests/Validators/PatientValidatorTest.php:106:        $fixtureUuid = sqlQuery(

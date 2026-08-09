@@ -1,0 +1,295 @@
+# slug: cryptogen
+# description: CryptoGen usage sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e CryptoGen -- *.php HEAD
+# generated: 2026-08-07T06:30:48Z
+#
+.phpstan/baseline/argument.type.php:29402:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/argument.type.php:29407:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/argument.type.php:29410:    'message' => '#^Parameter \\#1 \\$length of method OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen\\:\\:getRandomBytes\\(\\) expects int\\<1, max\\>, int given\\.$#',
+.phpstan/baseline/argument.type.php:29412:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/argument.type.php:29417:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/argument.type.php:29420:    'message' => '#^Parameter \\#1 \\$value of method OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen\\:\\:decryptStandard\\(\\) expects string\\|null, string\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:29422:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/argument.type.php:29427:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/argument.type.php:29432:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/argument.type.php:29437:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/argument.type.php:29442:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/argument.type.php:73312:    'path' => __DIR__ . '/../../tests/Tests/Unit/Common/Crypto/CryptoGenTest.php',
+.phpstan/baseline/cast.string.php:2817:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/empty.notAllowed.php:3612:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/method.alreadyNarrowedType.php:947:    'path' => __DIR__ . '/../../tests/Tests/Unit/Common/Crypto/CryptoGenTest.php',
+.phpstan/baseline/method.alreadyNarrowedType.php:952:    'path' => __DIR__ . '/../../tests/Tests/Unit/Common/Crypto/CryptoGenTest.php',
+.phpstan/baseline/missingType.iterableValue.php:4180:    'message' => '#^Method OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen\\:\\:sqlQueryNoLog\\(\\) has parameter \\$binds with no value type specified in iterable type array\\.$#',
+.phpstan/baseline/missingType.iterableValue.php:4182:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/missingType.iterableValue.php:4185:    'message' => '#^Method OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen\\:\\:sqlQueryNoLog\\(\\) return type has no value type specified in iterable type array\\.$#',
+.phpstan/baseline/missingType.iterableValue.php:4187:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/missingType.iterableValue.php:4190:    'message' => '#^Method OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen\\:\\:sqlStatementNoLog\\(\\) has parameter \\$binds with no value type specified in iterable type array\\.$#',
+.phpstan/baseline/missingType.iterableValue.php:4192:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/missingType.iterableValue.php:4195:    'message' => '#^Property OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen\\:\\:\\$keyCache type has no value type specified in iterable type array\\.$#',
+.phpstan/baseline/missingType.iterableValue.php:4197:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/offsetAccess.nonOffsetAccessible.php:38152:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/openemr.deprecatedSqlFunction.php:6502:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/openemr.deprecatedSqlFunction.php:6507:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/openemr.forbiddenCatchType.php:602:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/openemr.forbiddenInstantiation.php:15:    'message' => '#^Direct instantiation of OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen is discouraged\\. Use OpenEMR\\\\BC\\\\ServiceContainer\\:\\:getCrypto\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenInstantiation.php:25:    'message' => '#^Direct instantiation of OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen is discouraged\\. Use OpenEMR\\\\BC\\\\ServiceContainer\\:\\:getCrypto\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenInstantiation.php:265:    'message' => '#^Direct instantiation of OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen is discouraged\\. Use OpenEMR\\\\BC\\\\ServiceContainer\\:\\:getCrypto\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenInstantiation.php:267:    'path' => __DIR__ . '/../../tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php',
+.phpstan/baseline/openemr.forbiddenInstantiation.php:270:    'message' => '#^Direct instantiation of OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen is discouraged\\. Use OpenEMR\\\\BC\\\\ServiceContainer\\:\\:getCrypto\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenInstantiation.php:272:    'path' => __DIR__ . '/../../tests/Tests/Unit/Common/Crypto/CryptoGenTest.php',
+.phpstan/baseline/return.type.php:2810:    'message' => '#^Method OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen\\:\\:collectCryptoKey\\(\\) should return string but returns mixed\\.$#',
+.phpstan/baseline/return.type.php:2812:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/return.type.php:2815:    'message' => '#^Method OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen\\:\\:getOpenSSLCipherIvLength\\(\\) should return int but returns int\\|false\\.$#',
+.phpstan/baseline/return.type.php:2817:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+.phpstan/baseline/return.type.php:2820:    'message' => '#^Method OpenEMR\\\\Common\\\\Crypto\\\\CryptoGen\\:\\:openSSLEncrypt\\(\\) should return string but returns string\\|false\\.$#',
+.phpstan/baseline/return.type.php:2822:    'path' => __DIR__ . '/../../src/Common/Crypto/CryptoGen.php',
+controllers/C_Document.class.php:289:                        } catch (\OpenEMR\Common\Crypto\CryptoGenException) {
+interface/logview/logview.php:20:use OpenEMR\Common\Crypto\CryptoGenException;
+interface/logview/logview.php:343:                                                        } catch (CryptoGenException) {
+interface/main/main_screen.php:26:use OpenEMR\Common\Crypto\CryptoGenException;
+interface/main/main_screen.php:204:                } catch (CryptoGenException) {
+interface/main/main_screen.php:217:                        } catch (CryptoGenException) {
+interface/modules/custom_modules/oe-module-faxsms/library/faxMedia.php:43:    $crypto = new \OpenEMR\Common\Crypto\CryptoGen();
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AuthenticateTrait.php:16:use OpenEMR\Common\Crypto\CryptoGenException;
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AuthenticateTrait.php:109:        } catch (CryptoGenException) {
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/FaxDocumentService.php:18:use OpenEMR\Common\Crypto\CryptoGenException;
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/FaxDocumentService.php:190:            } catch (CryptoGenException $e) {
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:359:            // Encrypted, expiring token. Authenticated encryption (CryptoGen)
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:24:use OpenEMR\Common\Crypto\CryptoGenException;
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:238:        } catch (CryptoGenException $e) {
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:276:        } catch (CryptoGenException $e) {
+interface/modules/custom_modules/oe-module-weno/src/Services/LogProperties.php:17:use OpenEMR\Common\Crypto\CryptoGenException;
+interface/modules/custom_modules/oe-module-weno/src/Services/LogProperties.php:81:        } catch (CryptoGenException) {
+interface/modules/custom_modules/oe-module-weno/src/Services/LogProperties.php:89:        } catch (CryptoGenException) {
+interface/modules/custom_modules/oe-module-weno/src/Services/LogProperties.php:279:                } catch (CryptoGenException) {
+interface/modules/custom_modules/oe-module-weno/src/Services/LogProperties.php:292:            } catch (CryptoGenException) {
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:20:use OpenEMR\Common\Crypto\CryptoGenException;
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:464:        } catch (CryptoGenException) {
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:487:            } catch (CryptoGenException) {
+interface/modules/zend_modules/module/Documents/src/Documents/Controller/DocumentsController.php:114:                    } catch (\OpenEMR\Common\Crypto\CryptoGenException) {
+interface/patient_file/front_payment.php:35:use OpenEMR\Common\Crypto\CryptoGen;
+interface/patient_file/front_payment.php:67:$cryptoGen = new CryptoGen();
+interface/reports/audit_log_tamper_report.php:20:use OpenEMR\Common\Crypto\CryptoGenException;
+interface/reports/audit_log_tamper_report.php:300:                    } catch (CryptoGenException) {
+library/classes/Document.class.php:25:use OpenEMR\Common\Crypto\CryptoGenException;
+library/classes/Document.class.php:1188:        } catch (CryptoGenException $e) {
+library/classes/Installer.class.php:2119:     * Check if OpenEMR CryptoGen class exists.
+library/classes/Installer.class.php:2127:        return class_exists(\OpenEMR\Common\Crypto\CryptoGen::class);
+library/classes/Installer.class.php:2156:     * Encrypt TOTP secret using CryptoGen.
+library/reminders.php:398:    *      $cryptoGen = new CryptoGen();
+portal/account/account.lib.php:22:use OpenEMR\Common\Crypto\CryptoGenException;
+portal/account/account.lib.php:64:    } catch (CryptoGenException) {
+src/BC/Crypto/ContextualEncryptionTrait.php:8:    CryptoGenException,
+src/BC/Crypto/ContextualEncryptionTrait.php:52:            throw new CryptoGenException('Decryption failed');
+src/BC/Crypto/ContextualEncryptionTrait.php:67:            throw new CryptoGenException('Decryption failed');
+src/BC/Crypto/ContextualEncryptionTrait.php:75:     * Note: This uses the CryptoGen tooling even in BC\Crypto, intentionally.
+src/BC/Crypto/Crypto.php:17:    CryptoGenException,
+src/BC/Crypto/Crypto.php:81:        $bcKey = Key::fromCryptoGen($keyVersion, $keySource);
+src/BC/Crypto/Crypto.php:117:            $bcKey = Key::fromCryptoGen($keyVersion, $keySource);
+src/BC/Crypto/Key.php:40:    public static function fromCryptoGen(KeyVersion $format, KeySource $source): self
+src/BC/Crypto/LegacyKeychainLoader.php:37: * `Key` enum (e.g., 'seven-drive'), NOT the numeric prefixes used by CryptoGen
+src/BC/Crypto/LegacyKeychainLoader.php:110:        // CryptoGen had a create-keys-on-first-use logic, recreate for now.
+src/BC/Crypto/LegacyKeychainLoader.php:159:            Key::fromCryptoGen($version, KeySource::Database)->getId(),
+src/BC/Crypto/LegacyKeychainLoader.php:172:            Key::fromCryptoGen($version, KeySource::Drive)->getId(),
+src/BC/ServiceContainer.php:127:            static fn() => new Crypto\CryptoGen(),
+src/Common/Auth/AuthGlobal.php:18:use OpenEMR\Common\Crypto\CryptoGenException;
+src/Common/Auth/AuthGlobal.php:40:        } catch (CryptoGenException) {
+src/Common/Auth/MfaUtils.php:16:use OpenEMR\Common\Crypto\CryptoGenException;
+src/Common/Auth/MfaUtils.php:148:        } catch (CryptoGenException) {
+src/Common/Auth/MfaUtils.php:161:                } catch (\OpenEMR\Common\Crypto\CryptoGenException) {
+src/Common/Auth/OAuth2KeyConfig.php:20:use OpenEMR\Common\Crypto\CryptoGenException;
+src/Common/Auth/OAuth2KeyConfig.php:115:            } catch (CryptoGenException) {
+src/Common/Auth/OAuth2KeyConfig.php:134:            } catch (CryptoGenException) {
+src/Common/Auth/OpenIDConnect/Repositories/ClientRepository.php:18:use OpenEMR\Common\Crypto\CryptoGenException;
+src/Common/Auth/OpenIDConnect/Repositories/ClientRepository.php:37:    public function getCryptoGen(): CryptoInterface
+src/Common/Auth/OpenIDConnect/Repositories/ClientRepository.php:45:    public function setCryptoGen(CryptoInterface $cryptoGen): ClientRepository
+src/Common/Auth/OpenIDConnect/Repositories/ClientRepository.php:92:            $cryptoGen = $this->getCryptoGen();
+src/Common/Auth/OpenIDConnect/Repositories/ClientRepository.php:201:                } catch (CryptoGenException) {
+src/Common/Crypto/CryptoGen.php:4: * CryptoGen class
+src/Common/Crypto/CryptoGen.php:15: * 8. To ensure performance, the CryptoGen class will cache the key sets that are used inside the object,
+src/Common/Crypto/CryptoGen.php:42:class CryptoGen implements CryptoInterface
+src/Common/Crypto/CryptoGen.php:171:     * @throws CryptoGenException If encryption fails due to critical errors
+src/Common/Crypto/CryptoGen.php:176:            throw new CryptoGenException("OpenEMR Error : Encryption is not working because missing openssl extension.");
+src/Common/Crypto/CryptoGen.php:185:            throw new CryptoGenException("OpenEMR Error : Encryption is not working because key(s) is blank.");
+src/Common/Crypto/CryptoGen.php:190:            throw new CryptoGenException("OpenEMR Error: Random Bytes error - exiting");
+src/Common/Crypto/CryptoGen.php:203:            throw new CryptoGenException("OpenEMR Error : Encryption is not working (encrypted value is blank or hmac hash is blank).");
+src/Common/Crypto/CryptoGen.php:371:     * @throws CryptoGenException If key collection fails due to critical errors
+src/Common/Crypto/CryptoGen.php:399:     * @throws CryptoGenException if key collection fails
+src/Common/Crypto/CryptoGen.php:408:            throw new CryptoGenException("OpenEMR Error : Key creation in database is not working - Exiting.");
+src/Common/Crypto/CryptoGen.php:420:     * @throws CryptoGenException if key creation, storage, encoding or encryption fails
+src/Common/Crypto/CryptoGen.php:427:            throw new CryptoGenException("OpenEMR Error: Random Bytes error - exiting");
+src/Common/Crypto/CryptoGen.php:437:        throw new CryptoGenException("OpenEMR Error: The newly created key could not be stored or encoded correctly.");
+src/Common/Crypto/CryptoGen.php:446:     * @throws CryptoGenException if key collection fails
+src/Common/Crypto/CryptoGen.php:461:        throw new CryptoGenException("OpenEMR Error: Key in drive is not compatible (ie. can not be decrypted) with key in database - Exiting.");
+src/Common/Crypto/CryptoGen.php:471:     * @throws CryptoGenException if key creation, storage, encoding or encryption fails
+src/Common/Crypto/CryptoGen.php:478:            throw new CryptoGenException("OpenEMR Error: Random Bytes error - exiting");
+src/Common/Crypto/CryptoGen.php:496:        throw new CryptoGenException("OpenEMR Error: The newly created key could not be stored, encoded or encrypted correctly.");
+src/Common/Crypto/CryptoGenException.php:4: * CryptoGenException
+src/Common/Crypto/CryptoGenException.php:15:class CryptoGenException extends \Exception
+src/Common/Crypto/CryptoInterface.php:67:     * If decryption fails, throws CryptoGenException.
+src/Common/Crypto/CryptoInterface.php:72:     * @throws CryptoGenException If decryption of encrypted data fails
+src/Common/Crypto/CryptoInterface.php:82:     * If decryption fails, throws CryptoGenException.
+src/Common/Crypto/CryptoInterface.php:86:     * @throws CryptoGenException If decryption of encrypted data fails
+src/Common/Crypto/KeyVersion.php:6: * Defines encryption algorithm versions used by OpenEMR's CryptoGen class.
+src/Common/Crypto/PasswordBasedCrypto.php:62:            throw new CryptoGenException('Encryption failed');
+src/Common/Crypto/PasswordBasedCrypto.php:82:            throw new CryptoGenException('Could not base64-decode the ciphertext');
+src/Common/Crypto/PasswordBasedCrypto.php:92:            throw new CryptoGenException('Ciphertext too short');
+src/Common/Crypto/PasswordBasedCrypto.php:117:            throw new CryptoGenException('Could not decrypt data');
+src/Common/Crypto/PasswordBasedCrypto.php:138:            throw new CryptoGenException('Invalid HMAC');
+src/Common/Crypto/PasswordBasedCrypto.php:144:            throw new CryptoGenException('Could not decrypt data');
+src/Common/Crypto/PasswordBasedCrypto.php:169:            throw new CryptoGenException('Invalid HMAC');
+src/Common/Crypto/PasswordBasedCrypto.php:175:            throw new CryptoGenException('Could not decrypt data');
+src/Encryption/Cipher/Aes256CbcHmacSha256.php:8:use OpenEMR\Common\Crypto\CryptoGenException;
+src/Encryption/Cipher/Aes256CbcHmacSha256.php:41:            throw new CryptoGenException('HMAC invalid while decrypting message');
+src/Encryption/Cipher/Aes256CbcHmacSha256.php:53:            throw new CryptoGenException('Decryption failed despite HMAC validating');
+src/Encryption/Cipher/Aes256CbcHmacSha384.php:15:use OpenEMR\Common\Crypto\CryptoGenException;
+src/Encryption/Cipher/Aes256CbcHmacSha384.php:48:            throw new CryptoGenException('HMAC invalid while decrypting message');
+src/Encryption/Cipher/Aes256CbcHmacSha384.php:60:            throw new CryptoGenException('Decryption failed despite HMAC validating');
+src/Encryption/Cipher/Aes256CbcNoHmac.php:8:use OpenEMR\Common\Crypto\CryptoGenException;
+src/Encryption/Cipher/Aes256CbcNoHmac.php:44:            throw new CryptoGenException('Decryption failed');
+src/Encryption/CipherSuiteInterface.php:24: * Note: This is the replacement for `CryptoInterface` (and `CryptoGen`), and
+src/PaymentProcessing/Sphere/SpherePayment.php:16:use OpenEMR\Common\Crypto\CryptoGenException;
+src/PaymentProcessing/Sphere/SpherePayment.php:73:        } catch (CryptoGenException) {
+src/PaymentProcessing/Sphere/SphereRevert.php:20:use OpenEMR\Common\Crypto\CryptoGenException;
+src/PaymentProcessing/Sphere/SphereRevert.php:87:        } catch (CryptoGenException $e) {
+src/RestControllers/AuthorizationController.php:53:use OpenEMR\Common\Crypto\CryptoGenException;
+src/RestControllers/AuthorizationController.php:501:            } catch (CryptoGenException) {
+src/RestControllers/AuthorizationController.php:1513:        $tokenRestController->setCryptoGen($this->cryptoGen);
+src/RestControllers/TokenIntrospectionRestController.php:28:use OpenEMR\Common\Crypto\CryptoGenException;
+src/RestControllers/TokenIntrospectionRestController.php:173:    public function getCryptoGen(): CryptoInterface {
+src/RestControllers/TokenIntrospectionRestController.php:180:    public function setCryptoGen(CryptoInterface $cryptoGen): void {
+src/RestControllers/TokenIntrospectionRestController.php:369:                        $decryptedSecret = $this->getCryptoGen()->decryptFromDatabase(is_string($client['client_secret']) ? $client['client_secret'] : null);
+src/RestControllers/TokenIntrospectionRestController.php:370:                    } catch (CryptoGenException) {
+tests/PHPStan/Rules/ForbiddenInstantiationsRule.php:34:        Common\Crypto\CryptoGen::class => ServiceContainer::class . '::getCrypto()',
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:4: * Integration tests for CryptoGen decryption across all key versions.
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:6: * These tests verify that CryptoGen can correctly decrypt data encrypted
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:24:use OpenEMR\Common\Crypto\CryptoGen;
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:31:final class CryptoGenDecryptionTest extends TestCase
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:34:    private CryptoGen $cryptoGen;
+tests/Tests/Common/Crypto/CryptoGenDecryptionTest.php:53:        $this->cryptoGen = new CryptoGen();
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:21:use OpenEMR\Common\Crypto\CryptoGenException;
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:78:                    Key::fromCryptoGen(
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:311:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/BC/Crypto/CryptoTest.php:401:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/BC/Crypto/KeyTest.php:33:    public static function fromCryptoGenProvider(): array
+tests/Tests/Isolated/BC/Crypto/KeyTest.php:58:    #[DataProvider('fromCryptoGenProvider')]
+tests/Tests/Isolated/BC/Crypto/KeyTest.php:59:    public function testFromCryptoGen(KeyVersion $version, KeySource $source, Key $expected): void
+tests/Tests/Isolated/BC/Crypto/KeyTest.php:61:        $this->assertSame($expected, Key::fromCryptoGen($version, $source));
+tests/Tests/Isolated/BC/Crypto/KeyTest.php:107:            $driveKey = Key::fromCryptoGen($version, KeySource::Drive);
+tests/Tests/Isolated/BC/Crypto/KeyTest.php:108:            $dbKey = Key::fromCryptoGen($version, KeySource::Database);
+tests/Tests/Isolated/BC/Crypto/KeyTest.php:130:            $driveKey = Key::fromCryptoGen($version, KeySource::Drive);
+tests/Tests/Isolated/BC/Crypto/KeyTest.php:131:            $dbKey = Key::fromCryptoGen($version, KeySource::Database);
+tests/Tests/Isolated/Common/Crypto/PasswordBasedCryptoTest.php:18:    CryptoGenException,
+tests/Tests/Isolated/Common/Crypto/PasswordBasedCryptoTest.php:105:     * Test vectors generated from CryptoGen v4-7 to ensure backwards compatibility.
+tests/Tests/Isolated/Common/Crypto/PasswordBasedCryptoTest.php:232:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Common/Crypto/PasswordBasedCryptoTest.php:241:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Common/Crypto/PasswordBasedCryptoTest.php:252:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Common/Crypto/PasswordBasedCryptoTest.php:266:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Common/Crypto/PasswordBasedCryptoTest.php:275:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Common/Crypto/PasswordBasedCryptoTest.php:289:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Common/Crypto/PasswordBasedCryptoTest.php:304:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha256Test.php:21:use OpenEMR\Common\Crypto\CryptoGenException;
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha256Test.php:77:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha256Test.php:97:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha256Test.php:111:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha256Test.php:127:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha256Test.php:142:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha384Test.php:20:use OpenEMR\Common\Crypto\CryptoGenException;
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha384Test.php:72:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha384Test.php:92:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha384Test.php:108:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha384Test.php:121:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha384Test.php:136:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha384Test.php:212:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcHmacSha384Test.php:230:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcNoHmacTest.php:21:use OpenEMR\Common\Crypto\CryptoGenException;
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcNoHmacTest.php:58:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/Encryption/Cipher/Aes256CbcNoHmacTest.php:70:        $this->expectException(CryptoGenException::class);
+tests/Tests/Isolated/USPS/USPSAddressVerifyV3Test.php:278:        // Don't call parent constructor to avoid CryptoGen dependency
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:4: * Tests for the CryptoGen class
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:18:use OpenEMR\Common\Crypto\CryptoGen;
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:19:use OpenEMR\Common\Crypto\CryptoGenException;
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:27:final class CryptoGenTest extends TestCase
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:30:     * @var CryptoGen
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:62:        $this->cryptoGen = new CryptoGen();
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:96:        $cryptoGen = new CryptoGen();
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:134:        // Create a mock CryptoGen to mock SQL wrapper methods
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:135:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:140:        $mockCryptoGen->expects($this->atLeastOnce())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:145:        $result = $mockCryptoGen->encryptStandard($testValue, keySource: KeySource::Database);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:259:        // Create a mock CryptoGen to test database key collection
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:260:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:268:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:273:        $mockCryptoGen->expects($this->exactly(2))
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:280:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:283:        $reflection = new ReflectionMethod($mockCryptoGen, 'collectCryptoKey');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:285:        $key = $reflection->invoke($mockCryptoGen, $keyVersion, 'a', KeySource::Database);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:614:        // Create a mock CryptoGen for the encryption part
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:615:        $mockCryptoGenForEncryption = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:620:        $mockCryptoGenForEncryption->expects($this->atLeastOnce())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:627:        $encryptedKey = $mockCryptoGenForEncryption->encryptStandard($rawKey, keySource: KeySource::Database);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:631:        $mockCryptoGenForDecryption = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:635:        $mockCryptoGenForDecryption->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:639:        $reflection = new ReflectionMethod($mockCryptoGenForDecryption, 'collectCryptoKey');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:641:        $key = $reflection->invoke($mockCryptoGenForDecryption, KeyVersion::CURRENT, 'x', KeySource::Drive);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:655:        $this->expectException(CryptoGenException::class);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:702:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:706:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:710:        $this->expectException(CryptoGenException::class);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:712:        $mockCryptoGen->encryptStandard('test data');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:720:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:733:        $mockCryptoGen->expects($this->atLeastOnce())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:738:        $mockCryptoGen->expects($this->atLeastOnce())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:742:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:746:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:751:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:755:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:759:        $this->expectException(CryptoGenException::class);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:761:        $mockCryptoGen->encryptStandard('non_empty_data', keySource: KeySource::Database);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:769:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:773:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:778:        $result = $mockCryptoGen->decryptStandard(KeyVersion::CURRENT->toPaddedString() . 'test_data');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:813:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:818:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:823:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:827:        $reflection = new ReflectionMethod($mockCryptoGen, 'collectCryptoKey');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:829:        $this->expectException(CryptoGenException::class);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:831:        $reflection->invoke($mockCryptoGen, $keyVersion, 'a', KeySource::Database);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:844:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:849:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:853:        $reflection = new ReflectionMethod($mockCryptoGen, 'collectCryptoKey');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:855:        $this->expectException(CryptoGenException::class);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:857:        $reflection->invoke($mockCryptoGen, $keyVersion, 'a', KeySource::Drive);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:865:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:872:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:878:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:882:        $reflection = new ReflectionMethod($mockCryptoGen, 'collectCryptoKey');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:884:        $this->expectException(CryptoGenException::class);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:886:        $reflection->invoke($mockCryptoGen, $keyVersion, 'a', KeySource::Database);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:891:     * from the database in the round-trip check, we expect a CryptoGenException.
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:895:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:904:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:912:        $mockCryptoGen->expects($this->exactly(2))
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:920:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:927:        $reflection = new ReflectionMethod($mockCryptoGen, 'collectCryptoKey');
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:929:        $this->expectException(CryptoGenException::class);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:932:        $reflection->invoke($mockCryptoGen, $keyVersion, 'a', KeySource::Database);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:940:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:946:        $mockCryptoGen->expects($this->exactly(2))
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:950:        $mockCryptoGen->expects($this->exactly(2))
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:954:        $mockCryptoGen->expects($this->once())
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:958:        $this->expectException(CryptoGenException::class);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:961:        $mockCryptoGen->encryptStandard('test data', keySource: KeySource::Drive);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:970:        $mockCryptoGen = $this->getMockBuilder(CryptoGen::class)
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:980:        $mockCryptoGen->method('legacyDecrypt')->willReturn($success);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:981:        $mockCryptoGen->method('coreDecrypt')->willReturn($success);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:990:                $result = $mockCryptoGen->decryptStandard(
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:1082:        $this->expectException(CryptoGenException::class);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:1100:        $this->expectException(CryptoGenException::class);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:1108:        $cryptoGen = new CryptoGen(shouldEncryptForDatabase: false);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:1118:        $cryptoGen = new CryptoGen(shouldEncryptForDatabase: false);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:1125:        $cryptoGen = new CryptoGen(shouldEncryptForDatabase: false);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:1132:        $cryptoGen = new CryptoGen(shouldEncryptForDatabase: false);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:1142:        $cryptoGen = new CryptoGen(shouldEncryptForDatabase: false);
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:1154:        $cryptoGen = new CryptoGen(shouldEncryptForDatabase: true);

@@ -1,0 +1,6 @@
+# slug: api_version_seg
+# description: /v1/ style version segments
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e /v1/ -- src/RestControllers/*.php _rest_routes.inc.php HEAD
+# generated: 2026-08-07T06:31:15Z
+#

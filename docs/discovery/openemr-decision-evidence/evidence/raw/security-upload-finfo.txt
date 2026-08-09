@@ -1,0 +1,7 @@
+interface/patient_file/download_template.php:388:$finfo = finfo_open(FILEINFO_MIME_TYPE);
+interface/patient_file/download_template.php:389:$mimetype = finfo_file($finfo, $templatepath);
+src/Common/Utils/FileUtils.php:99:$f_info = finfo_open(FILEINFO_MIME_TYPE);
+src/Common/Utils/FileUtils.php:101:$mimeType = finfo_buffer($f_info, $content);
+src/Common/Utils/FileUtils.php:113:$mimeType = finfo_file($f_info, $filePath);
+src/Services/DocumentTemplates/DocumentTemplateService.php:526:$finfo = finfo_open(FILEINFO_MIME_TYPE);
+src/Services/DocumentTemplates/DocumentTemplateService.php:527:$mimetype = finfo_file($finfo, $file);

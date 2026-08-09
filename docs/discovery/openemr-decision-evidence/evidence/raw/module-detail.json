@@ -1,0 +1,247 @@
+{
+  "(root-files)": {
+    "path": "interface/modules/custom_modules/",
+    "counts": {
+      "fork": 1,
+      "stable": 1,
+      "master": 1
+    },
+    "vs_stable": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "vs_master": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "in_fork": true,
+    "in_stable": true,
+    "in_master": true,
+    "composer_pkg": "",
+    "composer_ver": "",
+    "classification": "upstream_bundled"
+  },
+  "oe-module-claimrev-connect": {
+    "path": "interface/modules/custom_modules/oe-module-claimrev-connect",
+    "counts": {
+      "fork": 0,
+      "stable": 0,
+      "master": 0
+    },
+    "vs_stable": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": false
+    },
+    "vs_master": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": false
+    },
+    "in_fork": false,
+    "in_stable": false,
+    "in_master": false,
+    "composer_pkg": "claimrevolution/oe-module-claimrev-connect",
+    "composer_ver": "v2.1.6",
+    "classification": "composer_installed_only"
+  },
+  "oe-module-comlink-telehealth": {
+    "path": "interface/modules/custom_modules/oe-module-comlink-telehealth",
+    "counts": {
+      "fork": 100,
+      "stable": 100,
+      "master": 100
+    },
+    "vs_stable": {
+      "added": [],
+      "deleted": [],
+      "modified": [
+        "interface/modules/custom_modules/oe-module-comlink-telehealth/tests/bootstrap.php"
+      ],
+      "byte_identical": false
+    },
+    "vs_master": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "in_fork": true,
+    "in_stable": true,
+    "in_master": true,
+    "composer_pkg": "",
+    "composer_ver": "",
+    "classification": "upstream_bundled_modified"
+  },
+  "oe-module-dashboard-context": {
+    "path": "interface/modules/custom_modules/oe-module-dashboard-context",
+    "counts": {
+      "fork": 23,
+      "stable": 23,
+      "master": 23
+    },
+    "vs_stable": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "vs_master": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "in_fork": true,
+    "in_stable": true,
+    "in_master": true,
+    "composer_pkg": "",
+    "composer_ver": "",
+    "classification": "upstream_bundled"
+  },
+  "oe-module-dorn": {
+    "path": "interface/modules/custom_modules/oe-module-dorn",
+    "counts": {
+      "fork": 38,
+      "stable": 38,
+      "master": 38
+    },
+    "vs_stable": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "vs_master": {
+      "added": [],
+      "deleted": [],
+      "modified": [
+        "interface/modules/custom_modules/oe-module-dorn/public/ack_lab_results.php"
+      ],
+      "byte_identical": false
+    },
+    "in_fork": true,
+    "in_stable": true,
+    "in_master": true,
+    "composer_pkg": "",
+    "composer_ver": "",
+    "classification": "upstream_bundled"
+  },
+  "oe-module-ehi-exporter": {
+    "path": "interface/modules/custom_modules/oe-module-ehi-exporter",
+    "counts": {
+      "fork": 35,
+      "stable": 35,
+      "master": 35
+    },
+    "vs_stable": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "vs_master": {
+      "added": [],
+      "deleted": [],
+      "modified": [
+        "interface/modules/custom_modules/oe-module-ehi-exporter/src/Services/EhiExporter.php"
+      ],
+      "byte_identical": false
+    },
+    "in_fork": true,
+    "in_stable": true,
+    "in_master": true,
+    "composer_pkg": "",
+    "composer_ver": "",
+    "classification": "upstream_bundled"
+  },
+  "oe-module-faxsms": {
+    "path": "interface/modules/custom_modules/oe-module-faxsms",
+    "counts": {
+      "fork": 74,
+      "stable": 74,
+      "master": 74
+    },
+    "vs_stable": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "vs_master": {
+      "added": [],
+      "deleted": [],
+      "modified": [
+        "interface/modules/custom_modules/oe-module-faxsms/library/api_onetime.php",
+        "interface/modules/custom_modules/oe-module-faxsms/src/Controller/FaxDocumentService.php"
+      ],
+      "byte_identical": false
+    },
+    "in_fork": true,
+    "in_stable": true,
+    "in_master": true,
+    "composer_pkg": "",
+    "composer_ver": "",
+    "classification": "upstream_bundled"
+  },
+  "oe-module-prior-authorizations": {
+    "path": "interface/modules/custom_modules/oe-module-prior-authorizations",
+    "counts": {
+      "fork": 15,
+      "stable": 15,
+      "master": 15
+    },
+    "vs_stable": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "vs_master": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "in_fork": true,
+    "in_stable": true,
+    "in_master": true,
+    "composer_pkg": "",
+    "composer_ver": "",
+    "classification": "upstream_bundled"
+  },
+  "oe-module-weno": {
+    "path": "interface/modules/custom_modules/oe-module-weno",
+    "counts": {
+      "fork": 42,
+      "stable": 42,
+      "master": 42
+    },
+    "vs_stable": {
+      "added": [],
+      "deleted": [],
+      "modified": [],
+      "byte_identical": true
+    },
+    "vs_master": {
+      "added": [],
+      "deleted": [],
+      "modified": [
+        "interface/modules/custom_modules/oe-module-weno/templates/pharmacy_list_form.php"
+      ],
+      "byte_identical": false
+    },
+    "in_fork": true,
+    "in_stable": true,
+    "in_master": true,
+    "composer_pkg": "",
+    "composer_ver": "",
+    "classification": "upstream_bundled"
+  }
+}

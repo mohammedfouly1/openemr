@@ -1,0 +1,6 @@
+# slug: smarty_nofilter
+# description: Smarty nofilter sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e nofilter -- *.tpl *.html HEAD
+# generated: 2026-08-07T06:30:30Z
+#

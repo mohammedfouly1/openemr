@@ -1,0 +1,28 @@
+# slug: finfo
+# description: finfo / mime detection sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e finfo_ -- *.php HEAD
+# generated: 2026-08-07T06:31:05Z
+#
+.phpstan/baseline/argument.type.php:13845:    'message' => '#^Parameter \\#1 \\$finfo of function finfo_close expects finfo, finfo\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:13850:    'message' => '#^Parameter \\#1 \\$finfo of function finfo_file expects finfo, finfo\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:30070:    'message' => '#^Parameter \\#1 \\$finfo of function finfo_buffer expects finfo, finfo\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:30075:    'message' => '#^Parameter \\#1 \\$finfo of function finfo_close expects finfo, finfo\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:30080:    'message' => '#^Parameter \\#1 \\$finfo of function finfo_file expects finfo, finfo\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:62265:    'message' => '#^Parameter \\#1 \\$finfo of function finfo_close expects finfo, finfo\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:62270:    'message' => '#^Parameter \\#1 \\$finfo of function finfo_file expects finfo, finfo\\|false given\\.$#',
+.phpstan/baseline/argument.type.php:62310:    'message' => '#^Parameter \\#2 \\$filename of function finfo_file expects string, mixed given\\.$#',
+interface/patient_file/download_template.php:387:    if (function_exists('finfo_open')) {
+interface/patient_file/download_template.php:388:        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+interface/patient_file/download_template.php:389:        $mimetype = finfo_file($finfo, $templatepath);
+interface/patient_file/download_template.php:390:        finfo_close($finfo);
+src/Common/Utils/FileUtils.php:99:        $f_info = finfo_open(FILEINFO_MIME_TYPE);
+src/Common/Utils/FileUtils.php:101:            $mimeType = finfo_buffer($f_info, $content);
+src/Common/Utils/FileUtils.php:102:            finfo_close($f_info);
+src/Common/Utils/FileUtils.php:109:            finfo_close($f_info);
+src/Common/Utils/FileUtils.php:113:        $mimeType = finfo_file($f_info, $filePath);
+src/Common/Utils/FileUtils.php:114:        finfo_close($f_info);
+src/Services/DocumentTemplates/DocumentTemplateService.php:525:        if (function_exists('finfo_open')) {
+src/Services/DocumentTemplates/DocumentTemplateService.php:526:            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+src/Services/DocumentTemplates/DocumentTemplateService.php:527:            $mimetype = finfo_file($finfo, $file);
+src/Services/DocumentTemplates/DocumentTemplateService.php:528:            finfo_close($finfo);

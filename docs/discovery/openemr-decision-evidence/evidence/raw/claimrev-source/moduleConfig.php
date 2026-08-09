@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * Config Module.
+ * Call the module setup page if present.
+ * Included in all modules and called by Module Manager.
+ *
+ * @package   OpenEMR Module
+ * @link      https://www.open-emr.org
+ * @author    Jerry Padgett <sjpadgett@gmail.com>
+ * @copyright Copyright (c) 2023-24 Jerry Padgett <sjpadgett@gmail.com>
+ * @license   https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
+ */
+
+declare(strict_types=1);
+
+use OpenEMR\Core\ModulesClassLoader;
+use OpenEMR\Core\OEGlobalsBag;
+
+require_once dirname(__FILE__, 4) . '/globals.php';
+
+// Load compatibility shims for OpenEMR 7.x (no-op on 8.x)
+require_once __DIR__ . '/src/Compat/compat.php';
+
+/* required for config before install */
+$classLoader = new ModulesClassLoader(OEGlobalsBag::getInstance()->getProjectDir());
+$classLoader->registerNamespaceIfNotExists("OpenEMR\\Modules\\ClaimRevConnector\\", __DIR__ . DIRECTORY_SEPARATOR . 'src');
+
+$module_config = 1;
+
+exit;

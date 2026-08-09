@@ -1,0 +1,23 @@
+# slug: rate_limit
+# description: rate limiting references
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -in -e rate.limit -- *.php HEAD
+# generated: 2026-08-07T06:31:12Z
+#
+.phpstan/baseline/binaryOp.invalid.php:13715:    'message' => '#^Binary operation "\\." between \'Rate Limit Reset\\: \' and mixed results in an error\\.$#',
+.phpstan/baseline/binaryOp.invalid.php:13720:    'message' => '#^Binary operation "\\." between \'Rate Limit\\: \' and mixed results in an error\\.$#',
+.phpstan/baseline/binaryOp.invalid.php:13725:    'message' => '#^Binary operation "\\." between \'Rate Limit…\' and mixed results in an error\\.$#',
+.phpstan/baseline/classConstant.unused.php:5:    'message' => '#^Constant OpenEMR\\\\Modules\\\\FaxSMS\\\\Controller\\\\RCFaxClient\\:\\:AUTH_RATE_LIMIT is unused\\.$#',
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:45:    private const AUTH_RATE_LIMIT = 5; // Max attempts per minute
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:106:                sleep(1); // Sleep to avoid rate limit 10 per minute
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:948:                    usleep(200000); // 0.2s throttle to respect rate limits
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:1063:                                    sleep(0.8); // Sleep to avoid rate limit
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:1070:                                    $messageText = xlt("Rate limit exceeded. Please try again after 30 seconds.");
+src/Common/Command/CreateReleaseChangelogCommand.php:42:                    new InputOption('token', 't', InputOption::VALUE_REQUIRED, 'Optional A github access token to use for API calls (unauthenticated requests are rate limited to 60 api calls per hour)'),
+src/Common/Command/CreateReleaseChangelogCommand.php:129:        echo "Github API Rate Limit Exceeded\n";
+src/Common/Command/CreateReleaseChangelogCommand.php:130:        echo "Rate Limit: " . $rateLimit . "\n";
+src/Common/Command/CreateReleaseChangelogCommand.php:131:        echo "Rate Limit Remaining: " . $rateLimitRemaining . "\n";
+src/Common/Command/CreateReleaseChangelogCommand.php:132:        echo "Rate Limit Reset: " . $rateLimitReset . " Date: " . date(DATE_ATOM, $rateLimitReset) . "\n";
+src/Common/Command/CreateReleaseChangelogCommand.php:133:        echo "Please wait until the rate limit resets and try again\n";
+src/Telemetry/GeoTelemetry.php:14: * - Caching to prevent rate limiting
+src/Telemetry/GeoTelemetry.php:54:     * Now with caching to prevent rate limiting

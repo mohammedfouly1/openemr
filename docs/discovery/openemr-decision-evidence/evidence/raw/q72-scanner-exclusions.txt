@@ -1,0 +1,670 @@
+# Q72 scanner exclusions — generated 2026-07-21T07:47:03.923653+00:00
+# Total excluded (in-scope extension): 666
+# Format: <path> -- <reason>
+
+Documentation/EHI_Export/docs/anomalies.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/anomalies.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/bootstrap/css/bootstrap-theme.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/bootstrap/css/bootstrap-theme.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/bootstrap/css/bootstrap.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/bootstrap/css/bootstrap.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/bootstrap/js/bootstrap.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/bootstrap/js/bootstrap.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/admin-lte/bootstrap/js/npm.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/AdminLTE.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/AdminLTE.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/alt/AdminLTE-bootstrap-social.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/alt/AdminLTE-bootstrap-social.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/alt/AdminLTE-fullcalendar.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/alt/AdminLTE-fullcalendar.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/alt/AdminLTE-select2.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/alt/AdminLTE-select2.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/alt/AdminLTE-without-plugins.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/alt/AdminLTE-without-plugins.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/_all-skins.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/_all-skins.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-black-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-black-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-black.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-black.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-blue-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-blue-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-blue.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-blue.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-green-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-green-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-green.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-green.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-purple-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-purple-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-purple.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-purple.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-red-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-red-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-red.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-red.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-yellow-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-yellow-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-yellow.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/css/skins/skin-yellow.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/js/app.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/js/app.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/admin-lte/dist/js/demo.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/js/pages/dashboard.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/dist/js/pages/dashboard2.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/plugins/fastclick/fastclick.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/plugins/fastclick/fastclick.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/admin-lte/plugins/jQueryUI/jquery-ui.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/admin-lte/plugins/slimScroll/jquery.slimscroll.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/anchor-js/anchor.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/codemirror/codemirror.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/codemirror/codemirror.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/codemirror/sql.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/datatables.net-bs/css/dataTables.bootstrap.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/datatables.net-bs/css/dataTables.bootstrap.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/datatables.net-bs/js/dataTables.bootstrap.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/datatables.net-bs/js/dataTables.bootstrap.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/datatables.net-buttons-bs/css/buttons.bootstrap.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/datatables.net-buttons-bs/js/buttons.bootstrap.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/datatables.net-buttons/buttons.colVis.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/datatables.net-buttons/buttons.colVis.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/datatables.net-buttons/buttons.flash.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/datatables.net-buttons/buttons.flash.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/datatables.net-buttons/buttons.html5.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/datatables.net-buttons/buttons.html5.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/datatables.net-buttons/buttons.print.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/datatables.net-buttons/buttons.print.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/datatables.net-buttons/dataTables.buttons.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/datatables.net-buttons/dataTables.buttons.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/datatables.net/jquery.dataTables.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/font-awesome/css/font-awesome.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/font-awesome/css/font-awesome.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/html5shiv/html5shiv.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/ionicons/css/ionicons.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/ionicons/css/ionicons.min.css -- third-party minified CSS
+Documentation/EHI_Export/docs/bower/jquery/jquery.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/js-xlsx/xlsx.full.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/pdfmake/pdfmake.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/pdfmake/vfs_fonts.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/respond/respond.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/bower/salvattore/salvattore.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/bower/salvattore/salvattore.min.js -- third-party minified JS
+Documentation/EHI_Export/docs/column.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/columns.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/constraint.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/constraints.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/fonts/indieflower/indie-flower.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/fonts/source-sans-pro/source-sans-pro.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/index.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/main.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/orphans.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/relationships.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/relationships.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/routines.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/routines.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/routines/routine.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/schemaSpy.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/schemaSpy.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/address.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/addresses.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/amc_misc_data.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/amendments.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/amendments_history.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/api_log.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/api_refresh_token.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/api_token.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ar_activity.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ar_session.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/audit_details.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/audit_master.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/automatic_notification.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/background_services.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/batchcom.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/benefit_eligibility.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/billing.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/calendar_external.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/care_team.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/care_team_member.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/care_teams.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/categories.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/categories_seq.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/categories_to_documents.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ccda.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ccda_components.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ccda_field_mapping.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ccda_sections.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ccda_table_mapping.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/chart_tracker.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/claims.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/clinical_notes_documents.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/clinical_notes_procedure_results.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/clinical_plans.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/clinical_plans_rules.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/clinical_rules.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/clinical_rules_log.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/code_types.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/codes.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/codes_cpt.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/codes_history.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/comlink_telehealth_appointment_session.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/comlink_telehealth_auth.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/comlink_telehealth_person_settings.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/contact.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/contact_address.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/contact_relation.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/contact_telecom.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/customlists.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/dated_reminders.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/dated_reminders_link.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/direct_message_log.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/document_template_profiles.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/document_templates.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/documents.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/documents_legal_categories.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/documents_legal_detail.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/documents_legal_master.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/drug_inventory.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/drug_sales.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/drug_templates.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/drugs.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/dsi_source_attributes.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/edi_sequences.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ehi_export_job.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ehi_export_job_patients.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ehi_export_job_task_patients.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ehi_export_job_tasks.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/eligibility_verification.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/email_queue.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/employer_data.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/enc_category_map.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/erx_narcotics.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/erx_rx_log.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/erx_ttl_touch.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/erx_weno_drugs.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/esign_signatures.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/export_job.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/extended_log.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/external_encounters.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/external_procedures.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/facility.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/facility_user_ids.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/fee_schedule.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/fee_sheet_options.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_CAMOS.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_CAMOS_category.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_CAMOS_item.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_CAMOS_subcategory.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_aftercare_plan.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_ankleinjury.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_bronchitis.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_care_plan.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_clinic_note.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_clinical_instructions.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_clinical_notes.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_dictation.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_encounter.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_acuity.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_antseg.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_base.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_biometrics.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_external.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_hpi.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_locking.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_mag_dispense.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_mag_impplan.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_mag_orders.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_mag_prefs.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_mag_wearing.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_neuro.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_postseg.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_refraction.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_ros.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_eye_vitals.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_functional_cognitive_status.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_gad7.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_group_attendance.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_groups_encounter.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_history_sdoh.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_history_sdoh_health_concerns.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_misc_billing_options.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_note.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_observation.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_painmap.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_phq9.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_physical_exam.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_physical_exam_diagnoses.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_prior_auth.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_questionnaire_assessments.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_reviewofs.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_ros.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_sdoh.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_soap.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_taskman.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_track_anything.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_track_anything_results.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_track_anything_type.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_transfer_summary.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_treatment_plan.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_vital_details.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_vitals.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_vitals_calculation.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_vitals_calculation_components.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/form_vitals_calculation_form_vitals.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/forms.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_acl.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_acl_sections.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_acl_seq.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aco.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aco_map.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aco_sections.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aco_sections_seq.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aco_seq.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aro.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aro_groups.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aro_groups_id_seq.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aro_groups_map.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aro_map.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aro_sections.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aro_sections_seq.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_aro_seq.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_axo.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_axo_groups.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_axo_groups_map.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_axo_map.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_axo_sections.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_groups_aro_map.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_groups_axo_map.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gacl_phpgacl.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/globals.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/gprelations.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/groups.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/history_data.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd10_dx_order_code.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd10_gem_dx_10_9.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd10_gem_dx_9_10.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd10_gem_pcs_10_9.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd10_gem_pcs_9_10.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd10_pcs_order_code.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd10_reimbr_dx_9_10.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd10_reimbr_pcs_9_10.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd9_dx_code.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd9_dx_long_code.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd9_sg_code.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/icd9_sg_long_code.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/immunization_observation.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/immunizations.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/insurance_companies.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/insurance_data.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/insurance_numbers.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/insurance_type_codes.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/ip_tracking.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/issue_encounter.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/issue_types.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/jwt_grant_history.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/keys.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/lang_constants.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/lang_custom.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/lang_definitions.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/lang_languages.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/layout_group_properties.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/layout_options.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/lbf_data.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/lbt_data.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/list_options.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/lists.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/lists_medication.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/lists_touch.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/log.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/log_comment_encrypt.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/login_mfa_registrations.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/medex_icons.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/medex_outgoing.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/medex_prefs.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/medex_recalls.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/misc_address_book.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/module_acl_group_settings.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/module_acl_sections.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/module_acl_user_settings.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/module_configuration.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/modules.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/modules_hooks_settings.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/modules_settings.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/multiple_db.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/notes.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/notification_log.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/notification_settings.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/oauth_clients.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/oauth_trusted_user.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/onetime_auth.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/onotes.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/onsite_documents.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/onsite_mail.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/onsite_messages.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/onsite_online.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/onsite_portal_activity.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/onsite_signatures.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/openemr_module_vars.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/openemr_modules.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/openemr_postcalendar_categories.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/openemr_postcalendar_events.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_access_onsite.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_birthday_alert.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_care_experience_preferences.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_data.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_history.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_portal_menu.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_reminders.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_settings.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_tracker.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_tracker_element.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/patient_treatment_intervention__11811af1.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/payment_gateway_details.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/payment_processing_audit.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/payments.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/person.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/person_patient_link.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/pharmacies.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/phone_numbers.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/pnotes.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/preference_value_sets.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/prescriptions.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/prices.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/pro_assessments.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/procedure_answers.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/procedure_order.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/procedure_order_code.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/procedure_order_relationships.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/procedure_providers.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/procedure_questions.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/procedure_report.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/procedure_result.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/procedure_specimen.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/procedure_type.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/product_registration.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/product_warehouse.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/questionnaire_repository.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/questionnaire_response.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/recent_patients.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/registry.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/report_itemized.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/report_results.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/requisition.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/rule_action.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/rule_action_item.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/rule_filter.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/rule_patient_data.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/rule_reminder.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/rule_target.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/sct2_concept.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/sct2_description.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/sct2_description2.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/sct2_identifier.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/sct2_relationship.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/sct2_statedrelationship.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/sct2_textdefinition.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/sequences.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/session_tracker.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/shared_attributes.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/standardized_tables_track.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/supported_external_dataloads.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/syndromic_surveillance.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/table.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/template_users.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/therapy_groups.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/therapy_groups_counselors.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/therapy_groups_participant_attendance.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/therapy_groups_participants.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/track_events.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/transactions.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/user_settings.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/users.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/users_facility.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/users_secure.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/uuid_mapping.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/uuid_registry.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/valueset.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/valueset_oid.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/verify_email.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/version.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/voids.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/x12_partners.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/docs/tables/x12_remote_tracker.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/anomalies.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/anomalies.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/bootstrap/css/bootstrap-theme.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/bootstrap/css/bootstrap-theme.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/bootstrap/css/bootstrap.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/bootstrap/css/bootstrap.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/bootstrap/js/bootstrap.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/bootstrap/js/bootstrap.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/bootstrap/js/npm.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/AdminLTE.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/AdminLTE.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/alt/AdminLTE-bootstrap-social.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/alt/AdminLTE-bootstrap-social.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/alt/AdminLTE-fullcalendar.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/alt/AdminLTE-fullcalendar.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/alt/AdminLTE-select2.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/alt/AdminLTE-select2.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/alt/AdminLTE-without-plugins.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/alt/AdminLTE-without-plugins.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/_all-skins.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/_all-skins.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-black-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-black-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-black.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-black.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-blue-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-blue-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-blue.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-blue.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-green-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-green-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-green.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-green.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-purple-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-purple-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-purple.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-purple.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-red-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-red-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-red.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-red.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-yellow-light.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-yellow-light.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-yellow.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/css/skins/skin-yellow.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/js/app.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/js/app.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/js/demo.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/js/pages/dashboard.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/dist/js/pages/dashboard2.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/plugins/fastclick/fastclick.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/plugins/fastclick/fastclick.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/plugins/jQueryUI/jquery-ui.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/plugins/slimScroll/jquery.slimscroll.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/anchor-js/anchor.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/codemirror/codemirror.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/codemirror/codemirror.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/codemirror/sql.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-bs/css/dataTables.bootstrap.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-bs/css/dataTables.bootstrap.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-bs/js/dataTables.bootstrap.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-bs/js/dataTables.bootstrap.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons-bs/css/buttons.bootstrap.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons-bs/js/buttons.bootstrap.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons/buttons.colVis.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons/buttons.colVis.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons/buttons.flash.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons/buttons.flash.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons/buttons.html5.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons/buttons.html5.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons/buttons.print.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons/buttons.print.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons/dataTables.buttons.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net-buttons/dataTables.buttons.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/datatables.net/jquery.dataTables.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/font-awesome/css/font-awesome.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/font-awesome/css/font-awesome.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/html5shiv/html5shiv.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/ionicons/css/ionicons.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/ionicons/css/ionicons.min.css -- third-party minified CSS
+Documentation/EHI_Export/schemaspy/layout/bower/jquery/jquery.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/js-xlsx/xlsx.full.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/pdfmake/pdfmake.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/pdfmake/vfs_fonts.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/respond/respond.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/bower/salvattore/salvattore.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/bower/salvattore/salvattore.min.js -- third-party minified JS
+Documentation/EHI_Export/schemaspy/layout/column.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/column.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/constraint.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/constraint.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/container.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/fonts/indieflower/indie-flower.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/fonts/source-sans-pro/source-sans-pro.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/main.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/main.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/multi.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/orphans.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/relationships.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/relationships.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/routines.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/routines.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/routines/routine.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/routines/routine.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/schemaSpy.css -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/schemaSpy.js -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/tables/table.html -- generated ONC EHI export documentation
+Documentation/EHI_Export/schemaspy/layout/tables/table.js -- generated ONC EHI export documentation
+interface/forms/eye_mag/js/jquery-1-10-2/jquery.min.js -- third-party minified JS
+interface/forms/eye_mag/js/jquery-panelslider/jquery.panelslider.min.js -- third-party minified JS
+interface/forms/eye_mag/js/jquery-ui-1-11-4/jquery-ui.min.js -- third-party minified JS
+interface/forms/questionnaire_assessments/lforms/fhir/R4/lformsFHIR.min.js -- third-party minified JS
+interface/forms/questionnaire_assessments/lforms/fhir/R4B/lformsFHIR.min.js -- third-party minified JS
+interface/forms/questionnaire_assessments/lforms/fhir/R5/lformsFHIR.min.js -- third-party minified JS
+interface/forms/questionnaire_assessments/lforms/fhir/STU3/lformsFHIR.min.js -- third-party minified JS
+interface/forms/questionnaire_assessments/lforms/fhir/lformsFHIRAll.min.js -- third-party minified JS
+interface/forms/questionnaire_assessments/lforms/webcomponent/assets/lib/zone.min.js -- third-party minified JS
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/css/telehealth.css -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/dist/telehealth.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/dist/telehealth.min.js -- third-party minified JS
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/add-patient-dialog.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/at-slot.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/caller-slot.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/conference-room.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/configure-session-call-dialog.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/confirm-session-close-dialog.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/cvb.min.js -- third-party minified JS
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/local-caller-slot.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/minimized-conference-room.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/patient-conference-room.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/presentation-screen.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/registration-checker.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/telehealth-bridge.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/telehealth.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/video-bar-button.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/src/video-bar.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/telehealth-appointment.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/telehealth-calendar.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/telehealth-patient.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/telehealth-provider.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/webpack-dev.config.js -- built/bundled module assets
+interface/modules/custom_modules/oe-module-comlink-telehealth/public/assets/js/webpack.config.js -- built/bundled module assets
+interface/modules/zend_modules/public/css/bootstrap-responsive.min.css -- third-party minified CSS
+interface/modules/zend_modules/public/css/bootstrap.min.css -- third-party minified CSS
+interface/modules/zend_modules/public/css/easyui.css -- bundled easyui vendor CSS
+interface/modules/zend_modules/public/css/jquery-ui.css -- bundled jquery-ui vendor CSS
+interface/modules/zend_modules/public/css/jquery.contextMenu.css -- bundled jquery.contextMenu vendor CSS
+interface/modules/zend_modules/public/css/jquery.custom-scrollbar.css -- bundled jquery.custom-scrollbar vendor CSS
+interface/modules/zend_modules/public/css/jquery.treeview-1.4.1/jquery.treeview.css -- bundled jquery.treeview vendor CSS
+interface/modules/zend_modules/public/css/jquery.treeview-1.4.1/rtl-treeview/jquery.treeview.rtl.css -- bundled jquery.treeview vendor CSS
+interface/modules/zend_modules/public/css/multipledb/multipledb.css -- bundled multipledb vendor CSS
+interface/modules/zend_modules/public/css/slider/css/slide.css -- bundled slider vendor CSS
+interface/modules/zend_modules/public/js/acl/acl.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/application/common.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/application/sendTo.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/autosuggest/autosuggest.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/carecoordination/demo.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/carecoordination/encounterManager.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/carecoordination/responsive-tables.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/installer/action.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/bootstrap.min.js -- third-party minified JS
+interface/modules/zend_modules/public/js/lib/jquery-1.10.2.min.js -- third-party minified JS
+interface/modules/zend_modules/public/js/lib/jquery-1.4.3.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery-1.8.0.min.js -- third-party minified JS
+interface/modules/zend_modules/public/js/lib/jquery-1.8.2.min.js -- third-party minified JS
+interface/modules/zend_modules/public/js/lib/jquery-1.8.3.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery-ui.custom.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery-ui.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.custom-scrollbar.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.easyui.min.js -- third-party minified JS
+interface/modules/zend_modules/public/js/lib/jquery.easyui.overrider.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.treeview-1.4.1/jquery.treeview.async.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.treeview-1.4.1/jquery.treeview.edit.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.treeview-1.4.1/jquery.treeview.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.treeview-1.4.1/jquery.treeview.sortable.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.treeview-1.4.1/lib/jquery.cookie.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.treeview-1.4.1/lib/jquery.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.ui.core.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.ui.datepicker.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.ui.mouse.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.ui.sortable.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.ui.tabs.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/jquery.ui.widget.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/lib/modernizr-2.6.2.min.js -- third-party minified JS
+interface/modules/zend_modules/public/js/lib/virtualpaginate.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/scripts/cancercare.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/scripts/file_uploader.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/scripts/fixdate.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/scripts/immunization.js -- bundled zend module JS
+interface/modules/zend_modules/public/js/scripts/syndromicsurveillance.js -- bundled zend module JS
+interface/super/rules/www/js/cdr-multiselect/jquery-ui.min.js -- third-party minified JS
+interface/super/rules/www/js/cdr-multiselect/jquery.min.js -- third-party minified JS
+library/js/dwv/dicom_gui.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/dwv_i18n.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/browser.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/colourMap.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/custom.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/dropboxLoader.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/filter.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/generic.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/help.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/html.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/infoController.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/infoOverlay.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/loader.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/plot.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/tools.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/dwv/gui/undo.js -- bundled third-party dwv library (spec keeps only dicom_launcher.js)
+library/js/vendors/validate/validate_extend.js -- explicit vendor bucket under library/js/
+library/js/vendors/validate/validate_modified.js -- explicit vendor bucket under library/js/
+portal/patient/scripts/libs/LAB.min.js -- third-party minified JS
+public/assets/modified/@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.css -- third-party build output / npm mirror
+public/assets/modified/@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css -- third-party minified CSS
+public/assets/modified/@ttskch/select2-bootstrap4-theme/src/_layout.scss -- third-party build output / npm mirror
+public/assets/modified/@ttskch/select2-bootstrap4-theme/src/_multiple.scss -- third-party build output / npm mirror
+public/assets/modified/@ttskch/select2-bootstrap4-theme/src/_single.scss -- third-party build output / npm mirror
+public/assets/modified/@ttskch/select2-bootstrap4-theme/src/select2-bootstrap4.scss -- third-party build output / npm mirror
+public/assets/modified/dygraphs-2-0-0/dygraph.css -- third-party build output / npm mirror
+public/assets/modified/dygraphs-2-0-0/dygraph.js -- third-party build output / npm mirror
+swagger/index.css -- bundled swagger-ui third-party assets
+swagger/index.html -- bundled swagger-ui third-party assets
+swagger/oauth2-redirect.html -- bundled swagger-ui third-party assets
+swagger/swagger-initializer.js -- bundled swagger-ui third-party assets
+swagger/swagger-ui-bundle.js -- bundled swagger-ui third-party assets
+swagger/swagger-ui-es-bundle-core.js -- bundled swagger-ui third-party assets
+swagger/swagger-ui-es-bundle.js -- bundled swagger-ui third-party assets
+swagger/swagger-ui-standalone-preset.js -- bundled swagger-ui third-party assets
+swagger/swagger-ui.css -- bundled swagger-ui third-party assets
+swagger/swagger-ui.js -- bundled swagger-ui third-party assets

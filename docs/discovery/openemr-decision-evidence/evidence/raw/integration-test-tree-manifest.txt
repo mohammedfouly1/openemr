@@ -1,0 +1,61 @@
+# Integration test tree manifest — Q74
+# Generated: git ls-files "tests/Tests/Integration/**"
+# Date: 2026-07-21 (audit)
+#
+# ============================================================================
+# RESULT: EMPTY DIRECTORY — 0 tracked files
+# ============================================================================
+#
+# The directory `tests/Tests/Integration/` does NOT exist on disk:
+#   PS> Test-Path tests\Tests\Integration        -> False
+#   PS> Test-Path tests\Tests\Integration\Api    -> False
+#   PS> Test-Path tests\Tests\Integration\RestControllers -> False
+#
+# git ls-files "tests/Tests/Integration/**" returned 0 rows.
+# git ls-files "tests/Tests/Integration*"    returned 0 rows.
+#
+# Files with the SUBSTRING "Integration" in their path live elsewhere
+# (naming convention only — they are NOT under tests/Tests/Integration/):
+#   tests/Tests/Common/Auth/OpenIDConnect/SMARTSessionTokenContextIntegrationTest.php
+#   tests/Tests/Common/Session/Predis/LockingRedisSessionHandlerIntegrationTest.php
+#   tests/Tests/RestControllers/FHIR/FhirQuestionnaireResponseRestControllerIntegrationTest.php
+#   tests/Tests/RestControllers/FHIR/FhirQuestionnaireRestControllerIntegrationTest.php
+#   tests/Tests/Services/Background/BackgroundServiceRunnerIntegrationTest.php
+#   tests/Tests/Services/Background/BackgroundServicesCliIntegrationTest.php
+#   tests/Tests/Services/Background/BackgroundServicesCommandIntegrationTest.php
+#   tests/Tests/Services/Background/Probe/CliIntegrationProbe.php
+#   tests/Tests/Services/FHIR/FhirLocationServiceIntegrationTest.php
+#   tests/Tests/Services/FHIR/Questionnaire/FhirQuestionnaireFormServiceIntegrationTest.php
+#   tests/Tests/Services/FHIR/QuestionnaireResponse/FhirQuestionnaireResponseFormServiceIntegrationTest.php
+#   tests/js/jspdf-integration.test.js
+#
+# Total tracked files under tests/Tests/Integration/**   : 0
+# Distinct *Test.php class files                          : 0
+# Total 'public function test' methods                    : 0
+# Directory breakdown (one level under Integration/)      : n/a (dir absent)
+#
+# phpunit.integration.xml directives (path-validity check):
+#   phpunit.integration.xml:34  <directory>tests/Tests/Integration/Api/</directory>                    -> NONEXISTENT
+#   phpunit.integration.xml:37  <directory>tests/Tests/Integration/RestControllers/Subscriber/</directory> -> NONEXISTENT
+#   Result: BOTH directives point at directories that do not exist in the tree.
+#
+# Last meaningful modification to the (never-existed) tree — inferred from
+# most recent commit affecting phpunit.integration.xml itself and the
+# 'chore(testing): move database-independent tests to isolated suite' commit
+# which is the closest audit trail:
+#   phpunit.integration.xml:  2026-05-26 a3f8159514 test: exclude non-logic dirs from phpunit coverage (#12268)
+#   tests/Tests/Integration/  (git log -1 -- tests/Tests/Integration/): NO COMMIT — path never populated
+#   Closest historical touchpoint: 2026-04-15 6cd0ba6da chore(testing): move database-independent tests to isolated suite (#11637)
+#
+# Cross-tree invocation check for `phpunit.integration`:
+#   Grep across .github/workflows/  -> 0 hits
+#   Grep across composer.json       -> 0 hits (script keys: "phpunit-isolated" only)
+#   Grep across package.json        -> 0 hits
+#   Grep across docker/             -> 0 hits (devtools has no phpunit-integration entry)
+#   Grep across bin/                -> 0 hits
+#   Grep across tools/              -> 0 hits
+#
+# VERDICT: phpunit.integration.xml is a VESTIGIAL config file. The directories
+# it references were never created (or were removed and the config left behind).
+# No CI workflow, composer script, npm script, devtools alias, or openemr-cmd
+# subcommand invokes it. Safe to delete in a follow-up cleanup PR.

@@ -1,0 +1,25 @@
+contrib/util/ccda_import/import_ccda.php:201:$document->createDocument('00', 13, basename($file), 'text/xml', $fileContents);
+controllers/C_Document.class.php:316:$rc = $d->createDocument(
+interface/billing/sl_eob_search.php:602:$invoice = $d->createDocument(
+interface/forms/procedure_order/common.php:84:$good = $d->createDocument($pid, $category['id'], $filename, "application/pdf", $mpdfData);
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:815:$rc = $d->createDocument(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:916:$rc = $d->createDocument(
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:1152:$rc = $d->createDocument($patient_id, $mdm_category_id, $filename, 'text/plain', $mdm_text);
+interface/modules/custom_modules/oe-module-ehi-exporter/src/Services/EhiExporter.php:568:$result = $document->createDocument(
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:1061:$result = $document->createDocument($pid, $catid, $fileName, $mime, $content);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/FaxDocumentService.php:96:$error = $document->createDocument(
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:1211:$result = $document->createDocument($pid, $catid, $fileName, $contentType, $content);
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Controller/CarecoordinationController.php:985:$ret = $ob->createDocument($pid, $catId, $file_name, 'text/xml', $contents);
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncounterccdadispatchTable.php:3942:$result = $document->createDocument(
+interface/modules/zend_modules/module/Documents/src/Documents/Controller/DocumentsController.php:129:$ret = $ob->createDocument($pid, $category_id, $file_name, $file['type'], $filetext, '', 1, 0);
+interface/orders/receive_hl7_results.inc.php:159:$rc = $d->createDocument($patient_id, $mdm_category_id, $filename, 'text/plain', $mdm_text);
+interface/orders/receive_hl7_results.inc.php:1328:$rc = $d->createDocument(
+interface/orders/receive_hl7_results.inc.php:1429:$rc = $d->createDocument(
+interface/procedure_tools/ereqs/ereq_universal_form.php:760:$good = $d->createDocument($pid, $DOCUMENT_CATEGORY, $filename, "application/pdf", $mpdfData);
+interface/procedure_tools/labcorp/ereq_form.php:768:$good = $d->createDocument($pid, $DOCUMENT_CATEGORY, $filename, "application/pdf", $mpdfData);
+portal/lib/doc_lib.php:159:$rc = $d->createDocument($cpid, $category, $form_filename, 'application/pdf', $data);
+src/Pdf/PatientPortalPDFDocumentCreator.php:70:$rc = $d->createDocument($cpid, $documentCategory, $formFilename, 'application/pdf', $data);
+src/RestControllers/FHIR/Operations/FhirOperationExportRestController.php:534:$result = $document->createDocument(
+src/Services/Cda/CdaTemplateImportDispose.php:2363:$result = $document->createDocument(
+src/Services/DocumentService.php:153:$ret = $doc->createDocument($pid, $categoryId, $fileData["name"], mime_content_type($fileData["tmp_name"]), $file, eid: $eid);
+tests/Tests/Services/DocumentTest.php:46:$document->createDocument($jobId, $categoryId, $fullPath, $mimeType, $data, $higherLevelPath, $pathDepth, $owner, eid: $eid);

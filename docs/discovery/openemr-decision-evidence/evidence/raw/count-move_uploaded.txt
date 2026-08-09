@@ -1,0 +1,10 @@
+# slug: move_uploaded
+# description: move_uploaded_file sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e move_uploaded_file -- *.php HEAD
+# generated: 2026-08-07T06:31:02Z
+#
+.phpstan/baseline/argument.type.php:595:    'message' => '#^Parameter \\#1 \\$from of function move_uploaded_file expects string, mixed given\\.$#',
+.phpstan/baseline/argument.type.php:6935:    'message' => '#^Parameter \\#1 \\$from of function move_uploaded_file expects string, mixed given\\.$#',
+controllers/C_Document.class.php:154:                move_uploaded_file($_FILES['dicom_folder']['tmp_name'][$i], $zfn);
+interface/main/backup.php:971:        if (move_uploaded_file($_FILES['userfile']['tmp_name'], $EXPORT_FILE)) {

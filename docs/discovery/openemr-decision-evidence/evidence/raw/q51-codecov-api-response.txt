@@ -1,0 +1,16 @@
+# Q51 — Codecov live coverage retrieval
+# Endpoint: https://api.codecov.io/api/v2/github/openemr/repos/openemr/
+# Retrieved: 2026-08-07 (this audit run) via WebFetch
+# Repository measured: openemr/openemr (UPSTREAM). The fork mohammedfouly1/openemr
+# is not onboarded to Codecov; because fork HEAD is a strict ancestor of
+# upstream/master, upstream's number is the best available proxy.
+totals.coverage = 28.66
+totals.files    = 4028
+totals.lines    = 428660
+totals.hits     = 122880
+totals.misses   = 305780
+branch          = master
+updatestamp     = 2026-08-07T06:02:21.549611Z
+
+# Prior audit run (2026-07-21) recorded 27.53% (files=3950, lines=422697, hits=116390).
+# Delta over ~17 days: +1.13 percentage points.

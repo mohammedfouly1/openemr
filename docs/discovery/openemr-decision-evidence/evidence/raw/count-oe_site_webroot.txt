@@ -1,0 +1,20 @@
+# slug: oe_site_webroot
+# description: OE_SITE_WEBROOT sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e OE_SITE_WEBROOT -- *.php HEAD
+# generated: 2026-08-07T06:30:03Z
+#
+interface/globals.php:335:$globalsBag->set('OE_SITE_WEBROOT', $web_root . "/sites/" . $session->get('site_id'));
+interface/globals.php:688:$logocode = "<img class='img-responsive' src='" . $GLOBALS['OE_SITE_WEBROOT'] . "/images/login_logo.gif' />";
+interface/globals.php:691:$tinylogocode1 = "<img class='img-responsive d-block mx-auto' src='" . $GLOBALS['OE_SITE_WEBROOT'] . "/images/logo_1.png'>";
+interface/globals.php:692:$tinylogocode2 = "<img class='img-responsive d-block mx-auto' src='" . $GLOBALS['OE_SITE_WEBROOT'] . "/images/logo_2.png'>";
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EmailClient.php:45:        $this->uriDir = OEGlobalsBag::getInstance()->get('OE_SITE_WEBROOT');
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:52:        $this->uriDir = OEGlobalsBag::getInstance()->get('OE_SITE_WEBROOT');
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:52:        $this->uriDir = OEGlobalsBag::getInstance()->get('OE_SITE_WEBROOT');
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:63:        $this->uriDir = $globals->getString('OE_SITE_WEBROOT');
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/TwilioSMSClient.php:50:        $this->uriDir = OEGlobalsBag::getInstance()->get('OE_SITE_WEBROOT');
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/VoiceClient.php:63:        $this->uriDir = OEGlobalsBag::getInstance()->get('OE_SITE_WEBROOT');
+interface/patient_file/front_payment.php:558:                        <?php if (file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_WEBROOT') . "/images/logo_1.png")) { ?>
+interface/patient_file/front_payment.php:559:                            <img src=<?php echo OEGlobalsBag::getInstance()->get('OE_SITE_WEBROOT') . "/images/logo_1.png" ?> alt="facility_logo" class="img-fluid">
+interface/patient_file/report/custom_report.php:211:                    $logo = OEGlobalsBag::getInstance()->get('OE_SITE_WEBROOT') . "/images/" . basename((string) $practice_logo);
+src/Services/LogoService.php:121:            OEGlobalsBag::getInstance()->get('OE_SITE_DIR') => OEGlobalsBag::getInstance()->get('OE_SITE_WEBROOT'),

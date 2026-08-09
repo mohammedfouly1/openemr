@@ -1,0 +1,37 @@
+# Deployment / orchestration artifact search at 631f2b38cf633769c305233f88cdf9c73ca80657
+## Files matching helm/k8s/nomad/swarm naming:
+(none)
+## docker-compose files:
+.github/workflows/docker-compose-lint.yml
+ci/apache_82_118/docker-compose.yml
+ci/apache_82_118_redis_sentinel_mtls/docker-compose.yml
+ci/apache_82_118_upgrade/docker-compose.yml
+ci/apache_83_118/docker-compose.yml
+ci/apache_84_118/docker-compose.yml
+ci/apache_85_1011/docker-compose.yml
+ci/apache_85_106/docker-compose.yml
+ci/apache_85_114/docker-compose.yml
+ci/apache_85_118/docker-compose.yml
+ci/apache_85_118_redis_sentinel/docker-compose.yml
+ci/apache_85_118_redis_sentinel_mtls/docker-compose.yml
+ci/apache_85_118_redis_sentinel_tls/docker-compose.yml
+ci/apache_85_118_upgrade/docker-compose.yml
+ci/apache_85_122/docker-compose.yml
+ci/apache_85_57/docker-compose.yml
+ci/apache_85_80/docker-compose.yml
+ci/apache_85_84/docker-compose.yml
+ci/apache_85_93/docker-compose.yml
+ci/compose-shared-redis-sentinel/docker-compose.yml
+ci/compose-shared-selenium/docker-compose.yml
+ci/nginx_82/docker-compose.yml
+ci/nginx_83/docker-compose.yml
+ci/nginx_84/docker-compose.yml
+ci/nginx_85/docker-compose.yml
+ci/nginx_86/docker-compose.yml
+docker/binary/docker-compose.test.yml
+docker/container_benchmarking/docker-compose.yml
+docker/development-easy-light/docker-compose.yml
+docker/development-easy-redis/docker-compose.yml
+docker/development-easy/docker-compose.yml
+docker/development-insane/docker-compose.yml
+docker/production/docker-compose.yml

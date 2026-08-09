@@ -1,0 +1,6 @@
+D:\OpenEmr\interface\modules\zend_modules\module\Application\src\Application\Controller\IndexController.php:141:$sql .= "LIMIT $limitStart, $limitEnd";
+D:\OpenEmr\interface\modules\zend_modules\module\Application\src\Application\Controller\IndexController.php:154:$sql .= "LIMIT $limitStart, $limitEnd";
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncountermanagerTable.php:341:ORDER BY cc.id DESC LIMIT $limit";
+D:\OpenEmr\src\Common\Database\QueryPagination.php:40:public function __construct(int $limit = self::DEFAULT_LIMIT, int $offsetId = 0)
+D:\OpenEmr\tests\Tests\Isolated\Common\Database\QueryPaginationTest.php:27:$this->assertSame(QueryPagination::DEFAULT_LIMIT, $pagination->getLimit());
+D:\OpenEmr\tests\Tests\Isolated\Common\Database\QueryPaginationTest.php:43:$this->assertSame(QueryPagination::MAX_LIMIT, $pagination->getLimit());

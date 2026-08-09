@@ -1,0 +1,30 @@
+custom/code_types.inc.php:565:"ORDER BY d.name, dt.selector, dt.drug_id $limit_query";
+interface/drugs/drug_inventory.php:103:"$where ORDER BY d.active DESC, $orderby",
+interface/forms/CAMOS/new.php:623:"SELECT category, subcategory, item, content FROM {$tbl_camos} JOIN forms ON ({$tbl_camos}.id = forms.form_id) WHERE forms.encounter = ? AND {$tbl_camos}.pid = ? ORDER BY {$tbl_camos}.id",
+interface/main/calendar/modules/PostCalendar/common.api.php:562:ORDER BY $topics_column[topictext]";
+interface/main/calendar/modules/PostCalendar/pnuserapi.php:900:$sql .= "GROUP BY a.pc_eid ORDER BY a.$sort";
+interface/main/calendar/modules/PostCalendar/pnuserapi.php:1222:$sql .= "GROUP BY a.pc_eid ORDER BY a.$sort";
+interface/main/finder/patient_select.php:232:"WHERE $where ORDER BY $orderby LIMIT " . escape_limit($fstart) . ", " . escape_limit($sqllimit);
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/EncountermanagerTable.php:341:ORDER BY cc.id DESC LIMIT $limit";
+interface/orders/list_reports.php:505:"ORDER BY pd.lname, pd.fname, pd.mname, po.patient_id, $orderby";
+interface/orders/orders_results.php:497:"ORDER BY pd.lname, pd.fname, pd.mname, po.patient_id, $orderby";
+interface/orders/orders_results.php:504:"ORDER BY $orderby";
+interface/reports/encounters_report.php:143:$query .= "ORDER BY $orderby";
+interface/reports/inventory_list.php:654:"GROUP BY d.name, d.drug_id, lo.option_value ORDER BY $orderby, lo.option_value";
+interface/reports/inventory_list.php:669:"ORDER BY $orderby, lo.title, di.warehouse_id, di.lot_number, di.inventory_id";
+interface/reports/inventory_list.php:679:"GROUP BY $orderby ORDER BY $orderby";
+library/appointments.inc.php:181:"ORDER BY $order_by";
+library/calendar.inc.php:32:"ORDER BY $orderby"
+library/calendar.inc.php:42:"ORDER BY f.$orderby",
+library/options.inc.php:233:$lres = sqlStatement("SELECT * FROM list_options WHERE list_id = ? AND activity = ? ORDER BY $order_by_sql", [$list_id, $active]);
+library/options.inc.php:244:ORDER BY {$order_by_sql}";
+library/patient.inc.php:574:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:658:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:693:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:764:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:930:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:955:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:980:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+portal/get_lab_results.php:42:"ORDER BY $orderby", [$pid]);
+src/Services/DrugSalesService.php:325:$query .= "ORDER BY $orderby";
+src/Services/FormService.php:49:$sql .= "ORDER BY $orderby";

@@ -1,0 +1,3 @@
+library/globals.inc.php:1028:'database_encryption' => [
+src/BC/Crypto/Crypto.php:65:shouldEncryptForDatabase: OEGlobalsBag::getInstance()->getBoolean('database_encryption'),
+src/Common/Crypto/CryptoGen.php:82:?? $bag->getBoolean('database_encryption');

@@ -1,0 +1,128 @@
+{
+  "schema": "openemr-decision-evidence/run-metadata/v2",
+  "run": {
+    "utc_started": "2026-08-07T00:00:00Z",
+    "auditor": "Claude Code (claude-opus-5)",
+    "mode": "READ_ONLY_DISCOVERY",
+    "output_scope": [
+      "docs/discovery/openemr-decision-evidence/",
+      "tools/discovery/openemr-decision-evidence/"
+    ],
+    "run_sequence": 2,
+    "note": "Run 2 completes the package begun by run 1 (see previous_run). Run 1's report files were retained and are cited unchanged; run 2 added the missing deliverables (00, 03, 04, 11, 15, 20, 21, 23, 24), re-verified the baseline independently, and obtained evidence run 1 could not because this machine has a populated vendor/ tree and a native PHP toolchain."
+  },
+  "host": {
+    "os": "Microsoft Windows Server 2025 Datacenter 10.0.26100",
+    "shell": "Git Bash (POSIX sh) + PowerShell 7",
+    "php_version": "8.3.33 (ZTS Visual C++ 2019 x64), native at C:\\openemr-stack\\php",
+    "composer_version": "2.10.2",
+    "node_version": "v24.18.1",
+    "npm_version": "11.16.0",
+    "python_version": "3.14.6",
+    "docker_cli_version": "29.6.2",
+    "docker_engine_usable": false,
+    "docker_note": "Docker CLI is installed but the engine CANNOT run: this is a Google Compute Engine VM without nested virtualization (VirtualizationFirmwareEnabled=False, VMMonitorModeExtensions=False), so WSL2 and the Docker Desktop engine VM never boot. Every openemr-cmd / docker compose workflow in CLAUDE.md is unusable here. Consequence for this audit: DB-backed, API, E2E and Selenium suites could not be executed; the isolated suite and all static analysis are unaffected.",
+    "filesystem_note": "Repository lives on a Google Drive mount (G:). Measured ~28 KB/s effective throughput with ~92% of I/O spent on Drive metadata round-trips. All repository searches therefore use `git grep <pattern> HEAD`, which reads blobs from packfiles (~1s) instead of walking the filesystem (minutes, frequently timing out). This also pins every citation to an exact commit."
+  },
+  "repository_baseline": {
+    "root": "G:/My Drive/OpenEMR",
+    "branch": "master",
+    "fork_sha": "631f2b38cf633769c305233f88cdf9c73ca80657",
+    "fork_commit_date_utc": "2026-07-04T04:57:07Z",
+    "fork_commit_author": "Jerry Padgett <sjpadgett@gmail.com>",
+    "fork_commit_subject": "refactor(oe-module-faxsms): Fix SignalWire fax support in oe-module-faxsms (#12526)",
+    "fork_commit_author_note": "The fork tip is authored by an upstream OpenEMR maintainer and is an upstream PR merge - the first indication that this fork carries no local work.",
+    "openemr_version_from_version_php": {
+      "v_major": 8,
+      "v_minor": 3,
+      "v_patch": 0,
+      "v_tag": "-dev",
+      "v_database": 541,
+      "v_acl": 13
+    },
+    "working_tree_status": "DIRTY (pre-existing, untouched by this audit)",
+    "working_tree_detail": {
+      "deleted": ["Documentation/EHI_Export/docs/diagrams/tables/lists_medication.2degrees.dot"],
+      "modified": ["sites/default/sqlconf.php"],
+      "untracked": [
+        "Documentation/EHI_Export/docs/diagrams/tables/lists_medication.2degrees.docx",
+        "SETUP-STATUS.md",
+        "docs/00-discovery/",
+        "docs/discovery/",
+        "fix-docker-virtualization.ps1",
+        "tools/discovery/"
+      ],
+      "handling": "No pre-existing changed or untracked file was edited, staged, stashed, reset or removed. sites/default/sqlconf.php contains local DB credentials and was NEVER read into any artifact. Audit output was confined to docs/discovery/openemr-decision-evidence/ and tools/discovery/openemr-decision-evidence/."
+    },
+    "submodules": [
+      "ci/inferno/onc-certification-g10-test-kit",
+      "ci/inferno/inferno-files"
+    ],
+    "git_lfs_installed": true,
+    "git_lfs_used_by_repo": false,
+    "sparse_checkout_enabled": false,
+    "is_shallow_repository": true,
+    "shallow_note": "The clone is shallow. This does not weaken the central ancestry finding: `git merge-base HEAD upstream/master` resolves to HEAD itself and `git rev-list --count upstream/master..HEAD` is 0, both computed from refs present locally. It does limit deep historical archaeology (full blame across all history).",
+    "vendor_populated": true,
+    "vendor_package_count": 95,
+    "composer_installed_package_count": 247,
+    "node_modules_populated": false,
+    "node_modules_note": "node_modules/ has 3 entries (effectively empty). Per the machine's local setup, npm ci cannot run on the Drive mount (EBADF / EPERM cascade); the front-end build runs off-mount at C:\\openemr-stack\\build and only artifacts are copied back."
+  },
+  "remotes": {
+    "origin": {
+      "url_redacted": "https://github.com/mohammedfouly1/openemr",
+      "credentials_in_url": false
+    },
+    "upstream": {
+      "url_redacted": "https://github.com/openemr/openemr.git",
+      "credentials_in_url": false,
+      "verified_official": true,
+      "pre_existing": true,
+      "note": "The upstream remote already existed and points at the official repository; it was not modified."
+    }
+  },
+  "upstream_refs_established": {
+    "UPSTREAM_STABLE_TAG": "v8_2_0",
+    "UPSTREAM_STABLE_SHA": "6125a2fd8089c8bcc3848071c1293c60e27a7585",
+    "UPSTREAM_STABLE_TAG_OBJECT": "225033dcca1eeab8e7dbb44cf85ff2dc82af5a98",
+    "UPSTREAM_STABLE_TAG_DATE": "2026-07-08",
+    "UPSTREAM_STABLE_SUBJECT": "chore(release): prep 8.2.0 (#12742)",
+    "UPSTREAM_MASTER_SHA": "dad282635495c98ea9ab9c3577277933725d13eb",
+    "UPSTREAM_MASTER_SHA_RUN1": "608f9ae37ccaea5d5c251a0aad84793e801ca485",
+    "UPSTREAM_MASTER_NOTE": "upstream/master advanced between run 1 (2026-07-21) and run 2 (2026-08-07). The stable tag is immutable, which is why all production drift conclusions are anchored to v8_2_0 and master is used only as supplementary evidence.",
+    "FORK_SHA": "631f2b38cf633769c305233f88cdf9c73ca80657",
+    "MERGE_BASE_STABLE_SHA": "b91c12aee3f6022954dd071c53917b2047eabf95",
+    "MERGE_BASE_MASTER_SHA": "631f2b38cf633769c305233f88cdf9c73ca80657",
+    "tag_selection_method": "Tags were ranked by creatordate, not lexically. v8_2_0 (2026-07-08) is the newest tag that is not a prerelease; the v8_1_*-test.<sha> tags are release-candidate builds and were excluded. Corroborated by the existence of upstream release branches rel-820 and release-prep/rel-820.",
+    "fork_is_ancestor_of_upstream_master": true,
+    "fork_only_commit_count": 0,
+    "commits_upstream_ahead_of_fork": 373,
+    "commits_fork_ahead_of_stable_tag": 17
+  },
+  "central_finding": "The fork has ZERO commits of its own. `git rev-list --count upstream/master..HEAD` returns 0 and the merge-base with upstream/master is the fork SHA itself. Every file difference against upstream is upstream moving forward, never a local edit. Consequently `git diff HEAD upstream/master` must NOT be read as 'our changes' - the usual downstream-fork mental model is inverted here.",
+  "network_use": {
+    "permitted_read_only_operations_performed": [
+      "git fetch upstream --tags --prune (succeeded; full tag set retrieved)",
+      "git ls-remote --heads upstream (release-branch discovery)",
+      "GET https://api.codecov.io/api/v2/github/openemr/repos/openemr/ (Q51 live coverage)"
+    ],
+    "third_party_blogs_used_as_evidence": false
+  },
+  "secrets_policy": {
+    "hardcoded_secrets_found": true,
+    "locations_recorded_without_values": true,
+    "values_written_to_any_artifact": false,
+    "detail": "See 15-security-compliance-code-evidence.md section 2 (Q43). Four docker-compose files x three GITHUB_COMPOSER_TOKEN* variables. All values [REDACTED] everywhere. sites/default/sqlconf.php (locally modified, contains DB credentials) was never read into any artifact."
+  },
+  "previous_run": {
+    "run_sequence": 1,
+    "utc_started": "2026-07-20T16:30:00Z",
+    "auditor": "opencode (github-copilot/claude-opus-4.7)",
+    "root": "D:/OpenEmr",
+    "fork_sha": "631f2b38cf633769c305233f88cdf9c73ca80657",
+    "same_fork_commit_as_run_2": true,
+    "environment_limitations": "vendor/ and node_modules/ were both EMPTY and no PHP/Composer toolchain was present, so Q31/Q37/Q55/Q70 could only be inferred from composer.json and composer.lock. Run 2 re-verified all four against the installed vendor/ tree and confirmed them.",
+    "codecov_reading": "27.53% on 2026-07-21T07:07:16Z (superseded by run 2's live 28.66% reading)"
+  }
+}

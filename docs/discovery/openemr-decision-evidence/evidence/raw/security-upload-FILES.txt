@@ -1,0 +1,89 @@
+.phpstan/baseline/isset.variable.php:5:'message' => '#^Variable \\$_FILES in isset\\(\\) always exists and is not nullable\\.$#',
+.phpstan/baseline/isset.variable.php:100:'message' => '#^Variable \\$_FILES in isset\\(\\) always exists and is not nullable\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:10:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:75:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:420:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:430:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:460:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:570:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:700:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:1370:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:1455:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:1980:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:1990:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:2000:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:2130:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:2140:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:2180:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:2195:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:2250:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:3190:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:3315:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:3325:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:3335:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:3350:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:3760:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:3875:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:3890:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:3905:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:4030:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+.phpstan/baseline/openemr.forbiddenRequestGlobals.php:4150:'message' => '#^Direct access to \\$_FILES is forbidden\\. Use Symfony\'s Request object or filter_input\\(\\) instead\\.$#',
+apis/routes/_rest_routes_standard.inc.php:500:$return = $controller->postWithPath($pid, $request->query->get('path'), $_FILES['document'], $request->query->get('eid'));
+controllers/C_Document.class.php:135:foreach ($_FILES['dicom_folder']['name'] as $i => $name) {
+controllers/C_Document.class.php:154:move_uploaded_file($_FILES['dicom_folder']['tmp_name'][$i], $zfn);
+controllers/C_Document.class.php:212:if (!$skipUpload && !empty($_FILES['dicom_folder']['name'][0])) {
+controllers/C_Document.class.php:221:$_FILES['file'] = $zipped;
+controllers/C_Document.class.php:228:if (!$skipUpload && count($_FILES['file']['name']) > 0) {
+controllers/C_Document.class.php:231:foreach ($_FILES['file']['name'] as $key => $value) {
+controllers/C_Document.class.php:234:if ($_FILES['file']['error'][$key] > 0 || empty($fname) || $_FILES['file']['size'][$key] == 0) {
+controllers/C_Document.class.php:239:$error = xl("Error number") . ": " . $_FILES['file']['error'][$key] . " " . xl("occurred while uploading file named") . ": " . $fname . "\n";
+controllers/C_Document.class.php:240:if ($_FILES['file']['size'][$key] == 0) {
+controllers/C_Document.class.php:243:} elseif (OEGlobalsBag::getInstance()->getBoolean('secure_upload') && !isWhiteFile($_FILES['file']['tmp_name'][$key])) {
+controllers/C_Document.class.php:244:$error = xl("The system does not permit uploading files with MIME content type") . " - " . mime_content_type($_FILES['file']['tmp_name'][$key]) . ".\n";
+controllers/C_Document.class.php:247:if (stripos((string) $_FILES['file']['type'][$key], 'zip') !== false) {
+controllers/C_Document.class.php:249:$handler = $za->open($_FILES['file']['tmp_name'][$key]);
+controllers/C_Document.class.php:278:$_FILES['file']['size'][$key] = filesize($_FILES['file']['tmp_name'][$key]); // file may have grown.
+controllers/C_Document.class.php:282:$tmpfile = fopen($_FILES['file']['tmp_name'][$key], "r");
+controllers/C_Document.class.php:283:$filetext = fread($tmpfile, $_FILES['file']['size'][$key]);
+controllers/C_Document.class.php:308:$mimetype = mime_content_type($_FILES['file']['tmp_name'][$key]);
+controllers/C_Document.class.php:312:$error = xl("Unable to discover mimetype, so did not upload " . $_FILES['file']['tmp_name'][$key]) . ".\n";
+controllers/C_Document.class.php:325:$_FILES['file']['tmp_name'][$key]
+interface/billing/edi_271.php:42:if (isset($_FILES) && !empty($_FILES)) {
+interface/billing/edi_271.php:43:$uploadedName = (string) $_FILES['uploaded']['name'];
+interface/billing/edi_271.php:46:if ($_FILES['uploaded']['size'] > 350000) {
+interface/billing/edi_271.php:49:if (mime_content_type($_FILES['uploaded']['tmp_name']) != "text/plain") {
+interface/billing/edi_271.php:58:$uploadedFile = file_get_contents($_FILES['uploaded']['tmp_name']);
+interface/billing/edih_main.php:149:if (isset($_POST['NewFiles']) && isset($_FILES['fileUplMulti'])) {
+interface/billing/edih_main.php:152:} elseif (isset($_POST['viewx12Files']) && isset($_FILES['fileUplx12'])) {
+interface/billing/era_payments.php:117:elseif (!empty($_FILES['form_erafile']['size'])) {
+interface/billing/era_payments.php:120:$tmp_name = $_FILES['form_erafile']['tmp_name'] ?? null;
+interface/billing/era_payments.php:126:if (strtolower(substr((string) $_FILES['form_erafile']['name'], -4)) == '.zip') {
+interface/billing/era_payments.php:217:$shouldOpenPopup = (!empty($_FILES['form_erafile']['size']) && !$showOverwriteConfirm)
+interface/billing/sl_eob_search.php:689:<?php if (isset($_FILES['form_erafile']['size']) && !$_FILES['form_erafile']['size']) { ?>
+interface/billing/sl_eob_search.php:965:if ($_FILES['form_erafile']['size']) {
+interface/billing/sl_eob_search.php:966:$tmp_name = $_FILES['form_erafile']['tmp_name'] ?? null;
+interface/billing/sl_eob_search.php:972:if (strtolower(substr((string) $_FILES['form_erafile']['name'], -4)) == '.zip') {
+interface/forms/CAMOS/admin.php:90:$userfile = $_FILES['userfile'] ?? null;
+interface/language/csv/validate_csv.php:31:if (!isset($_FILES['language_file'])) {
+interface/language/csv/validate_csv.php:44:$handle = utf8_fopen_read($_FILES["language_file"]["tmp_name"]);
+interface/main/backup.php:970:if (is_uploaded_file($_FILES['userfile']['tmp_name'])) {
+interface/main/backup.php:971:if (move_uploaded_file($_FILES['userfile']['tmp_name'], $EXPORT_FILE)) {
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:122:$upload = $_FILES['fax'] ?? null;
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:72:$upload = $_FILES['fax'] ?? null;
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:876:$upload = $_FILES['fax'] ?? null;
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:79:* Process a single uploaded file entry (a slice of $_FILES). MIME-
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:86:* Callers pass `$_FILES['fax']` directly; the service never reads
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Controller/CarecoordinationController.php:78:'file_location' => basename($_FILES['file']['name'] ?? ''),
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Controller/CarecoordinationController.php:211:'file_location' => basename($_FILES['file']['name'] ?? ''),
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Controller/CarecoordinationController.php:956:$tmpFile = reset($_FILES);
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Controller/CcdController.php:77:'file_location' => basename($_FILES['file']['name'] ?? ''),
+interface/modules/zend_modules/module/Ccr/src/Ccr/Controller/CcrController.php:75:'file_location' => basename($_FILES['file']['name'] ?? ''),
+interface/modules/zend_modules/module/Documents/src/Documents/Controller/DocumentsController.php:54:if ($request->isPost() && count($_FILES) > 0) {
+interface/modules/zend_modules/module/Documents/src/Documents/Controller/DocumentsController.php:56:$filePtr = reset($_FILES);
+interface/modules/zend_modules/module/Documents/src/Documents/Controller/DocumentsController.php:87:foreach ($_FILES as $file) {
+interface/orders/load_compendium.php:170:if (is_uploaded_file($_FILES['userfile']['tmp_name'])) {
+interface/orders/load_compendium.php:179:$fhcsv = fopen($_FILES['userfile']['tmp_name'], "r");
+interface/reports/receipts_by_method_report.php:342:<?php if (isset($_FILES['form_erafile']['size']) && !$_FILES['form_erafile']['size']) { ?>
+interface/super/layout_service_codes.php:75:$tmp_name = $_FILES['form_file']['tmp_name'];
+interface/super/layout_service_codes.php:77:if (is_uploaded_file($tmp_name) && $_FILES['form_file']['size']) {
+interface/super/load_codes.php:69:$tmp_na

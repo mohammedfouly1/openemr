@@ -1,0 +1,141 @@
+interface/billing/edit_payment.php:214:$resPayment = sqlStatement("SELECT * from ar_activity $where");
+interface/billing/edit_payment.php:247:$resPayment = sqlStatement("SELECT  * from ar_activity $where");
+interface/billing/edit_payment.php:274:$resPayment = sqlStatement("SELECT  * from ar_activity $where");
+interface/billing/edit_payment.php:300:$resPayment = sqlStatement("SELECT  * from ar_activity $where");
+interface/billing/edit_payment.php:325:$resPayment = sqlStatement("SELECT  * from ar_activity $where");
+interface/forms/CAMOS/admin.php:48:$statement1 = QueryUtils::sqlStatementThrowException("SELECT id, category FROM {$tbl_camos_category}");
+interface/forms/CAMOS/admin.php:52:$statement2 = QueryUtils::sqlStatementThrowException("SELECT id, subcategory FROM {$tbl_camos_subcategory} WHERE category_id = ?", [$result1['id']]);
+interface/forms/CAMOS/admin.php:56:$statement3 = QueryUtils::sqlStatementThrowException("SELECT item, content FROM {$tbl_camos_item} WHERE subcategory_id = ?", [$result2['id']]);
+interface/forms/CAMOS/admin.php:113:$statement = QueryUtils::sqlStatementThrowException("SELECT id FROM {$tbl_camos_category} WHERE category LIKE ?", [$category]);
+interface/forms/CAMOS/admin.php:119:$statement = QueryUtils::sqlStatementThrowException("SELECT id FROM {$tbl_camos_category} WHERE category LIKE ?", [$category]);
+interface/forms/CAMOS/admin.php:128:$statement = QueryUtils::sqlStatementThrowException("SELECT id FROM {$tbl_camos_subcategory} WHERE subcategory LIKE ? AND category_id = ?", [$subcategory, $category_id]);
+interface/forms/CAMOS/admin.php:134:$statement = QueryUtils::sqlStatementThrowException("SELECT id FROM {$tbl_camos_subcategory} WHERE subcategory LIKE ? AND category_id = ?", [$subcategory, $category_id]);
+interface/forms/CAMOS/admin.php:150:$statement = QueryUtils::sqlStatementThrowException("SELECT id FROM {$tbl_camos_item} WHERE item LIKE ? AND subcategory_id = ?", [$value, $subcategory_id]);
+interface/forms/CAMOS/admin.php:157:$inner_statement = QueryUtils::sqlStatementThrowException("SELECT id FROM {$tbl_camos_item} WHERE item LIKE ? AND subcategory_id = ?", [$insert_value, $subcategory_id]);
+interface/forms/CAMOS/admin.php:173:$statement = QueryUtils::sqlStatementThrowException("SELECT id FROM {$tbl_camos_item} WHERE item LIKE ? AND subcategory_id = ?", [$insert_value, $subcategory_id]);
+interface/forms/CAMOS/content_parser.php:127:$query = "SELECT content FROM {$tbl_camos_item} WHERE item like ?";
+interface/forms/CAMOS/new.php:100:$tmp = QueryUtils::querySingleRow("SELECT content FROM {$tbl_camos_item} WHERE id = ?", [$item_id]);
+interface/forms/CAMOS/new.php:113:$statement1 = QueryUtils::sqlStatementThrowException("SELECT id FROM {$tbl_camos_subcategory} WHERE category_id = ?", [$to_delete_id]);
+interface/forms/CAMOS/new.php:177:$tmp = QueryUtils::querySingleRow("SELECT max(id) AS max FROM {$tbl_camos} WHERE pid = ?", [$session->get('pid')]);
+interface/forms/CAMOS/new.php:180:$statement = QueryUtils::sqlStatementThrowException("SELECT category, subcategory, item FROM {$tbl_camos} WHERE id = ?", [$maxid]);
+interface/forms/CAMOS/new.php:388:$statement = QueryUtils::sqlStatementThrowException("SELECT id, category FROM {$tbl_camos_category} ORDER BY category");
+interface/forms/CAMOS/new.php:397:$statement = QueryUtils::sqlStatementThrowException("SELECT id, subcategory, category_id FROM {$tbl_camos_subcategory} ORDER BY subcategory");
+interface/forms/CAMOS/new.php:405:$statement = QueryUtils::sqlStatementThrowException("SELECT id, item, content, subcategory_id FROM {$tbl_camos_item} ORDER BY item");
+interface/forms/CAMOS/new.php:509:$statement1 = QueryUtils::sqlStatementThrowException("SELECT id, category FROM {$tbl_camos_category}");
+interface/forms/CAMOS/new.php:515:$statement2 = QueryUtils::sqlStatementThrowException("SELECT id, subcategory FROM {$tbl_camos_subcategory} WHERE category_id = ?", [$result1['id']]);
+interface/forms/CAMOS/new.php:521:$statement3 = QueryUtils::sqlStatementThrowException("SELECT item, content FROM {$tbl_camos_item} WHERE subcategory_id = ?", [$result2['id']]);
+interface/forms/CAMOS/new.php:589:$statement = QueryUtils::sqlStatementThrowException("SELECT id, category, subcategory, item, content FROM {$tbl_camos}{$where} ORDER BY id DESC LIMIT ?", $params);
+interface/forms/CAMOS/new.php:623:"SELECT category, subcategory, item, content FROM {$tbl_camos} JOIN forms ON ({$tbl_camos}.id = forms.form_id) WHERE forms.encounter = ? AND {$tbl_camos}.pid = ? ORDER BY {$tbl_camos}.id",
+interface/forms/CAMOS/new.php:627:$statement = QueryUtils::sqlStatementThrowException("SELECT date(date) AS date, subcategory, item, content FROM {$tbl_camos} WHERE category LIKE ? AND pid = ? ORDER BY id DESC", [$clone_category, $pid]);
+interface/forms/CAMOS/rx_print.php:136:$query = QueryUtils::sqlStatementThrowException("SELECT content FROM $tbl_camos WHERE id = ? AND pid = ?", [$chId, $session->get('pid')]);
+interface/forms/CAMOS/rx_print.php:517:$query = QueryUtils::sqlStatementThrowException("SELECT x.id AS id, x.category, x.subcategory, x.item FROM $tbl_camos AS x JOIN forms AS y ON (x.id = y.form_id) WHERE y.pid = ? AND y.form_name LIKE 'CAMOS%' AND x.activity = 1", [$session->get('pid')]);
+interface/forms/CAMOS/rx_print.php:519:$query = QueryUtils::sqlStatementThrowException("SELECT x.id AS id, x.category, x.subcategory, x.item FROM $tbl_camos AS x JOIN forms AS y ON (x.id = y.form_id) WHERE y.encounter = ? AND y.pid = ? AND y.form_name LIKE 'CAMOS%' AND x.activity = 1", [$session->get('encounter'), $session->get('pid')]);
+interface/forms/CAMOS/view.php:103:$query = "SELECT t1.id, t1.content FROM $tbl_camos AS t1 JOIN forms AS t2 ON (t1.id = t2.form_id) WHERE t2.form_name LIKE 'CAMOS%' AND t2.encounter LIKE ? AND t2.pid = ?";
+interface/forms/eye_mag/php/eye_mag_functions.php:2038:$query = "SELECT $given from " . $ROS_table . " where id = ?";
+interface/main/calendar/add_edit_event.php:885:// $row = sqlQuery("SELECT * FROM openemr_postcalendar_events WHERE pc_eid = $eid");
+interface/main/calendar/includes/pnAPI.php:106:$query = "SELECT $columns[name],
+interface/main/calendar/includes/pnAPI.php:156:$query = "SELECT $columns[value]
+interface/main/calendar/includes/pnMod.php:53:$query = "SELECT $modulevarscolumn[value]
+interface/main/calendar/includes/pnMod.php:138:$query = "SELECT $modulescolumn[id]
+interface/main/calendar/includes/pnMod.php:179:$query = "SELECT $modulescolumn[name],
+interface/main/calendar/includes/pnMod.php:231:$query = "SELECT $modulescolumn[name],
+interface/main/calendar/includes/pnMod.php:291:$sql = "SELECT $modulescolumn[directory]
+interface/main/calendar/includes/pnMod.php:345:$query = "SELECT $modulescolumn[directory],
+interface/main/calendar/includes/pnMod.php:537:$query = "SELECT $modulescolumn[state]
+interface/main/calendar/modules/PostCalendar/common.api.php:560:$sql = "SELECT $topics_column[topicid], $topics_column[topictext], $topics_column[topicname]
+interface/main/finder/dynamic_finder_ajax.php:233:$row = sqlQuery("SELECT COUNT(id) AS count FROM patient_data WHERE $customWhere", $boundFilter->getBoundValues());
+interface/main/finder/dynamic_finder_ajax.php:239:$row = sqlQuery("SELECT COUNT(id) AS count FROM patient_data WHERE $where", $srch_bind);
+interface/main/finder/dynamic_finder_ajax.php:259:$query = "SELECT $sellist FROM patient_data WHERE $where $orderby $limit";
+interface/main/finder/patient_select.php:231:$sql = "SELECT $given FROM patient_data " .
+interface/modules/custom_modules/oe-module-dashboard-context/ModuleManagerListener.php:211:$sql = "SELECT $col FROM modules WHERE mod_id = ?";
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextAdminService.php:91:"SELECT id FROM {$this->contextTable} WHERE context_key = ?",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextAdminService.php:216:(SELECT COUNT(*) FROM {$this->userContextConfigTable} ucc WHERE ucc.user_id = u.id) as custom_config_count,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextAdminService.php:297:"SELECT active_context FROM {$this->userContextTable} WHERE user_id = ?",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextAdminService.php:316:"SELECT id FROM {$this->userContextTable} WHERE user_id = ?",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextAdminService.php:363:"SELECT id FROM {$this->assignmentTable} WHERE user_id = ? AND is_active = 1",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextAdminService.php:408:"SELECT id FROM {$this->roleDefaultsTable} WHERE role_type = ?",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextAdminService.php:431:"SELECT context_key FROM {$this->roleDefaultsTable} WHERE role_type = ?",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextAdminService.php:463:"SELECT id FROM {$this->facilityDefaultsTable} WHERE facility_id = ?",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextAdminService.php:486:"SELECT is_locked FROM {$this->assignmentTable} WHERE user_id = ? AND is_active = 1",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextAdminService.php:564:"SELECT * FROM {$this->contextTable} WHERE id = ?",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextService.php:255:$sql = "SELECT active_context FROM {$this->tableName} WHERE user_id = ? LIMIT 1";
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextService.php:272:"SELECT id FROM {$this->tableName} WHERE user_id = ?",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextService.php:305:$sql = "SELECT widget_config FROM {$this->configTableName} WHERE user_id = ? AND context_key = ?";
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextService.php:317:"SELECT widget_config FROM {$this->contextTableName} WHERE context_key = ? AND (user_id = ? OR is_global = 1)",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextService.php:342:"SELECT id FROM {$this->configTableName} WHERE user_id = ? AND context_key = ?",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextService.php:425:$sql = "SELECT * FROM {$this->contextTableName} WHERE user_id = ? OR is_global = 1 ORDER BY context_name";
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/DashboardContextService.php:484:"SELECT is_locked FROM {$this->assignmentTableName} WHERE user_id = ? AND is_active = 1",
+interface/modules/custom_modules/oe-module-dashboard-context/src/Services/ModuleService.php:37:$sql = "SELECT $col FROM modules WHERE mod_id = ? OR `mod_directory` = ?";
+interface/modules/custom_modules/oe-module-dorn/ModuleManagerListener.php:176:$sql = "SELECT $col FROM modules WHERE mod_id = ?";
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportClinicalNotesFormTableDefinition.php:32:$sql = "SELECT $selectQuery FROM `" . self::TABLE_NAME . "` WHERE `" . self::TABLE_NAME
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportContactTableDefinition.php:32:$sql = "SELECT $selectQuery FROM `" . self::TABLE_NAME . "` WHERE `foreign_table_name`='patient_data' AND `foreign_id` IN ( "
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportContactTableDefinition.php:39:$personContactIdsSql = "SELECT $selectQuery  FROM " . self::TABLE_NAME . " WHERE foreign_table_name='person' AND foreign_id IN ( "
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportEsignatureTableDefinition.php:31:$sql = "SELECT $selectQuery FROM `" . self::TABLE_NAME . "` WHERE `table`='forms' AND `tid` IN (select `id` FROM `forms` WHERE `pid` IN ( "
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportEsignatureTableDefinition.php:35:$encounterSql = "SELECT $selectQuery FROM `" . self::TABLE_NAME . "` WHERE `table`='form_encounter' AND `tid` IN (select `encounter` FROM `form_encounter` WHERE `pid` IN ( "
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportFormsGroupsEncounterTableDefinition.php:32:$sql = "SELECT $selectQuery FROM `" . self::TABLE_NAME . "` WHERE `group_id` IN (select DISTINCT `group_id` "
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportOnsiteMailTableDefinition.php:33:$query = "SELECT $selectQuery FROM onsite_mail
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportOnsiteMessagesTableDefinition.php:42:$query = "SELECT $selectQuery FROM onsite_messages WHERE $likeClause";
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportOnsiteMessagesTableDefinition.php:66:$senderSql = "SELECT $selectQuery FROM onsite_messages WHERE sender_id IN (" . str_repeat('?,', count($patientPids) - 1) . "?)";
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportOpenEmrPostCalendarEventsTableDefinition.php:33:$sql = "SELECT $selectQuery FROM `" . self::TABLE_NAME . "` WHERE `pc_gid` IN (select DISTINCT `group_id` "
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportPersonTableDefinition.php:36:$sql = "SELECT $selectQuery FROM `" . self::TABLE_NAME . "` JOIN contact_relation cr ON " . self::TABLE_NAME
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportTableDefinition.php:151:$sql = "SELECT {$this->getSelectClause()} FROM {$this->table} WHERE $whereClause";
+interface/modules/custom_modules/oe-module-ehi-exporter/src/TableDefinitions/ExportTrackAnythingFormTableDefinition.php:32:$sql = "SELECT $selectQuery FROM `" . self::TABLE_NAME . "` WHERE `" . self::TABLE_NAME
+interface/modules/custom_modules/oe-module-faxsms/library/rc_sms_notification_helpers.php:155:"SELECT pc_eid, pc_eventDate FROM notification_log WHERE type = ? AND pc_eventDate = ? AND pc_eid IN ($placeholders)",
+interface/modules/custom_modules/oe-module-faxsms/src/BootstrapService.php:117:$sql = "SELECT $col FROM modules WHERE mod_id = ?";
+interface/modules/custom_modules/oe-module-weno/ModuleManagerListener.php:226:$sql = "SELECT $col FROM modules WHERE mod_id = ?";
+interface/modules/custom_modules/oe-module-weno/src/Bootstrap.php:347:$this->eventDispatcher->addListener(RenderPharmacySectionEvent::RENDER_AFTER_SELECTED_PHARMACY_SECTION, $this->renderSelectedWenoPharmacies(...));
+interface/modules/custom_modules/oe-module-weno/src/Services/ModuleService.php:156:$sql = "SELECT $col FROM modules WHERE mod_id = ? OR `mod_directory` = ?";
+interface/modules/zend_modules/module/Ccr/src/Ccr/Model/CcrTable.php:189:$query      = "SELECT * FROM audit_master am LEFT JOIN audit_details ad ON ad.audit_master_id = am.id AND ad.table_name IN ($table_qry)
+interface/new/new_search_popup.php:144:$sql = "SELECT *, ( $relevance ) AS relevance, " .
+interface/orders/orders_results.php:500:$query = "SELECT $selects " .
+interface/orders/orders_results.php:565:$query = "(SELECT $selects FROM procedure_type AS pt2 " .
+interface/orders/orders_results.php:570:"SELECT $selects FROM procedure_result AS ps " .
+interface/orders/patient_match_dialog.php:104:$sql = "SELECT $clsql AS closeness, " .
+interface/patient_file/encounter/find_code_dynamic_ajax.php:296:$iTotal = sqlNumRows(sqlStatement("SELECT $sellist FROM $from $where1 $orderby"));
+interface/patient_file/encounter/find_code_dynamic_ajax.php:298:$iFilteredTotal = sqlNumRows(sqlStatement("SELECT $sellist FROM $from $where1 " . ($where2 ?? '') . " $orderby"));
+interface/patient_file/encounter/find_code_dynamic_ajax.php:382:$query = "SELECT $sellist FROM $from $where1 " . ($where2 ?? '') . " $orderby $limit";
+interface/patient_file/manage_dup_patients.php:373:$query = "SELECT p2.*, ($score_calculate) AS myscore " .
+interface/patient_file/summary/add_edit_issue.php:111:"SELECT diagnosis FROM lists WHERE pid = ? AND enddate is NULL AND type IN ($qs2)",
+interface/patient_file/summary/stats_full.php:263:$pres = sqlStatement("SELECT * FROM lists WHERE pid = ? AND type = ? $condition ORDER BY begdate", [$pid, $t]);
+interface/reports/ippf_statistics.php:355:$query = "SELECT $what " .
+library/options.inc.php:233:$lres = sqlStatement("SELECT * FROM list_options WHERE list_id = ? AND activity = ? ORDER BY $order_by_sql", [$list_id, $active]);
+library/options.inc.php:3443:$gres = sqlStatement("SELECT $sel FROM layout_group_properties WHERE grp_form_id = ? " .
+library/patient.inc.php:489:$tmp = sqlQuery("SELECT count(*) AS count FROM patient_data WHERE $where", $whereBindArray);
+library/patient.inc.php:574:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:658:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:693:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:764:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:930:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:955:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/patient.inc.php:980:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+library/pnotes.inc.php:130:$row = QueryUtils::querySingleRow("SELECT COUNT(*) AS cnt $fromWhere", $sqlBindArray);
+portal/get_lab_results.php:39:$res = sqlStatement("SELECT $selects " .
+portal/get_lab_results.php:83:$query = "(SELECT $selects FROM procedure_type AS pt2 " .
+portal/get_lab_results.php:87:"SELECT $selects FROM procedure_result AS ps " .
+src/Common/Logging/EventAuditLogger.php:356:$sql = "SELECT $columns FROM extended_log WHERE date >= ? AND date <= ?";
+src/Common/Logging/EventAuditLogger.php:382:$sql = "SELECT $cols FROM `log_comment_encrypt` as el " .
+src/Core/AbstractModuleActionListener.php:148:$sql = "SELECT $col FROM modules WHERE mod_id = ?";
+src/Gacl/GaclApi.php:957:$acl_section_order_value = $this->db->GetOne("SELECT min(order_value) from $acl_sections_table");
+src/Gacl/GaclApi.php:3217:$query = "SELECT acl_id FROM $object_map_table WHERE value=" . $this->db->Quote($value) . " AND section_value=" . $this->db->Quote($section_value);
+src/Gacl/GaclApi.php:3695:$query="SELECT value FROM $object_sections_table WHERE id=" . $this->db->Quote($object_section_id);
+src/Gacl/GaclApi.php:3789:$query = "SELECT id, value, order_value, name, hidden FROM $table WHERE value=" . $this->db->Quote($section_value);
+src/Services/BaseService.php:179:$sql = "SELECT $value from $this->table";
+src/Services/BaseService.php:389:$sql = "SELECT $field from $table WHERE uuid = ?";
+src/Services/BaseService.php:405:$sql = "SELECT uuid from $table WHERE $field = ?";
+src/Services/BaseService.php:446:$resultId = sqlQuery("SELECT MAX($idField)+1 AS $idField FROM $table");
+src/Services/CareTeamService.php:184:$sql = "SELECT DISTINCT $selectColumns
+src/Services/ContactRelationService.php:453:$entitySql = "SELECT *, id as {$targetTable}_id FROM {$targetTable} WHERE id = ?";
+src/Services/DemographicsRelatedPersonsService.php:94:$row = sqlQuery("SELECT $colList FROM `{$this->table}` WHERE `pid` = ?", [$pid]);
+src/Services/SDOH/HistorySdohService.php:1484:SELECT codes AS {$col}_codes
+src/Services/Utils/SQLUpgradeService.php:979:$row = sqlQuery("SELECT COUNT(*) AS count FROM $tblname WHERE " .
+src/Services/Utils/SQLUpgradeService.php:995:$row = sqlQuery("SELECT COUNT(*) AS count FROM $tblname WHERE " .
+src/Services/Utils/SQLUpgradeService.php:1013:$row = sqlQuery("SELECT COUNT(*) AS count FROM $tblname WHERE " .
+src/Services/Utils/SQLUpgradeService.php:1033:$row = sqlQuery("SELECT COUNT(*) AS count FROM $tblname WHERE " .
+src/Services/Utils/SQLUpgradeService.php:1055:$row = sqlQuery("SELECT COUNT(*) AS count FROM $tblname WHERE " .
+src/Validators/BaseValidator.php:115:"SELECT $field FROM $table WHERE $field = ?",
+src/Validators/BaseValidator.php:135:$sql = "SELECT option_id FROM $table WHERE list_id = ? AND option_id = ?";
+tests/Tests/Api/AuthorizationGrantFlowTest.php:94:$this->assertStringEndsWith(SMARTAuthorizationController::PATIENT_SELECT_PATH, $patientSelectPage, 'Redirect location should end with SMART on FHIR patient select path');
+tests/Tests/Api/AuthorizationGrantFlowTest.php:373://$this->assertStringContainsString(SMARTAuthorizationController::PATIENT_SELECT_PATH, $patientSelectionResponse->getContent(), 'Patient selection page should contain patient select path');
+tests/Tests/Fixtures/BaseFixtureManager.php:90:$idQuery = "SELECT IFNULL(MAX($idField), 0) + 1 FROM $tableName";
+tests/Tests/Fixtures/BaseFixtureManager.php:222:$sql = "( SELECT $referenceColumn FROM $table_name WHERE $column = " . $fragment->getFragment() . " ";
+tests/Tests/Fixtures/BaseFixtureManager.php:225:$sql = "( SELECT $referenceColumn FROM $table_name WHERE $column = ? )";

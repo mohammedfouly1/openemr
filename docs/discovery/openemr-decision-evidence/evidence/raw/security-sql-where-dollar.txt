@@ -1,0 +1,92 @@
+D:\OpenEmr\interface\billing\sl_eob_search.php:396:"WHERE $where " .
+D:\OpenEmr\interface\billing\sl_eob_search.php:1086:"WHERE $where " .
+D:\OpenEmr\interface\drugs\dispense_drug.php:119:* "WHERE inventory_id = $inventory_id");
+D:\OpenEmr\interface\forms\CAMOS\new.php:623:"SELECT category, subcategory, item, content FROM {$tbl_camos} JOIN forms ON ({$tbl_camos}.id = forms.form_id) WHERE forms.encounter = ? AND {$tbl_camos}.pid = ? ORDER BY {$tbl_camos}.id",
+D:\OpenEmr\interface\forms\eye_mag\save.php:1324:$query = "SELECT * FROM " . escape_table_name($table) . " WHERE $where";
+D:\OpenEmr\interface\forms\eye_mag\save.php:1347:$query = "DELETE FROM " . escape_table_name($table) . " WHERE $where";
+D:\OpenEmr\interface\main\calendar\add_edit_event.php:885:// $row = sqlQuery("SELECT * FROM openemr_postcalendar_events WHERE pc_eid = $eid");
+D:\OpenEmr\interface\main\calendar\includes\pnAPI.php:109:WHERE $columns[modname]= ?";
+D:\OpenEmr\interface\main\calendar\includes\pnAPI.php:158:WHERE $columns[modname]= ?
+D:\OpenEmr\interface\main\calendar\includes\pnMod.php:55:WHERE $modulevarscolumn[modname] = ?
+D:\OpenEmr\interface\main\calendar\includes\pnMod.php:103:WHERE $modulevarscolumn[modname] = ?
+D:\OpenEmr\interface\main\calendar\includes\pnMod.php:140:WHERE $modulescolumn[name] = ?";
+D:\OpenEmr\interface\main\calendar\includes\pnMod.php:187:WHERE $modulescolumn[id] = ?";
+D:\OpenEmr\interface\main\calendar\includes\pnMod.php:235:WHERE $modulescolumn[name] = ?";
+D:\OpenEmr\interface\main\calendar\includes\pnMod.php:293:WHERE $modulescolumn[name] = ?";
+D:\OpenEmr\interface\main\calendar\includes\pnMod.php:348:WHERE $modulescolumn[name] = ?";
+D:\OpenEmr\interface\main\calendar\includes\pnMod.php:539:WHERE $modulescolumn[name] = ?";
+D:\OpenEmr\interface\main\calendar\modules\PostCalendar\pnadmin.php:387:$delete = "DELETE FROM $pntable[postcalendar_categories] WHERE pc_catid IN ($safeDels)";
+D:\OpenEmr\interface\main\finder\dynamic_finder_ajax.php:233:$row = sqlQuery("SELECT COUNT(id) AS count FROM patient_data WHERE $customWhere", $boundFilter->getBoundValues());
+D:\OpenEmr\interface\main\finder\dynamic_finder_ajax.php:239:$row = sqlQuery("SELECT COUNT(id) AS count FROM patient_data WHERE $where", $srch_bind);
+D:\OpenEmr\interface\main\finder\dynamic_finder_ajax.php:259:$query = "SELECT $sellist FROM patient_data WHERE $where $orderby $limit";
+D:\OpenEmr\interface\main\finder\patient_select.php:232:"WHERE $where ORDER BY $orderby LIMIT " . escape_limit($fstart) . ", " . escape_limit($sqllimit);
+D:\OpenEmr\interface\modules\custom_modules\oe-module-ehi-exporter\src\TableDefinitions\ExportOnsiteMessagesTableDefinition.php:42:$query = "SELECT $selectQuery FROM onsite_messages WHERE $likeClause";
+D:\OpenEmr\interface\modules\custom_modules\oe-module-ehi-exporter\src\TableDefinitions\ExportTableDefinition.php:151:$sql = "SELECT {$this->getSelectClause()} FROM {$this->table} WHERE $whereClause";
+D:\OpenEmr\interface\modules\custom_modules\oe-module-faxsms\library\rc_sms_notification_helpers.php:155:"SELECT pc_eid, pc_eventDate FROM notification_log WHERE type = ? AND pc_eventDate = ? AND pc_eid IN ($placeholders)",
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncounterccdadispatchTable.php:1984:WHERE $wherCon b.pid = ? and b.activity = ?";
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncounterccdadispatchTable.php:2023:WHERE $wherCon (po.procedure_order_type = 'order' OR po.procedure_order_type = 'procedure') AND po.patient_id = ? AND po.activity = ?";
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncounterccdadispatchTable.php:2105:WHERE $wherCon po.patient_id = ? AND prs.result NOT IN ('DNR','TNP')";
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncounterccdadispatchTable.php:2222:WHERE $wherCon fe.pid = ? ORDER BY fe.date";
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncounterccdadispatchTable.php:3149:FROM form_vitals WHERE id IN ($placeholders)";
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncounterccdadispatchTable.php:4237:WHERE f.pid = ? AND f.formdir = ? AND f.deleted = ? $wherCon
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncounterccdadispatchTable.php:4604:WHERE $wherCon f.pid = ? AND f.formdir = ? AND f.deleted = ?";
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncounterccdadispatchTable.php:4664:WHERE $wherCon f.`pid` = ? AND f.`formdir` = ? AND f.`deleted` = ? Order By fnote.`encounter`, fnote.`date`, fnote.`clinical_notes_type` DESC";
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncounterccdadispatchTable.php:4735:WHERE $wherCon f.pid = ? AND f.formdir = ? AND f.deleted = ?";
+D:\OpenEmr\interface\modules\zend_modules\module\Carecoordination\src\Carecoordination\Model\EncounterccdadispatchTable.php:4769:WHERE pid = ? $wherCon";
+D:\OpenEmr\interface\new\new_search_popup.php:146:"FROM patient_data WHERE $where " .
+D:\OpenEmr\interface\orders\list_reports.php:504:"WHERE $where " .
+D:\OpenEmr\interface\orders\orders_results.php:503:"WHERE po.patient_id = ? AND $where " .
+D:\OpenEmr\interface\orders\orders_results.php:568:"WHERE $pt2cond" .
+D:\OpenEmr\interface\orders\orders_results.php:573:"WHERE $pscond) " .
+D:\OpenEmr\interface\patient_file\deleter.php:61:$tres = QueryUtils::sqlStatementThrowException("SELECT * FROM " . escape_table_name($table) . " WHERE $where", $binds);
+D:\OpenEmr\interface\patient_file\deleter.php:82:$query = "DELETE FROM " . escape_table_name($table) . " WHERE $where";
+D:\OpenEmr\interface\patient_file\deleter.php:101:if (QueryUtils::querySingleRow("SELECT * FROM " . escape_table_name($table) . " WHERE $where", $binds)) {
+D:\OpenEmr\interface\patient_file\deleter.php:103:$query = "UPDATE " . escape_table_name($table) . " SET $set WHERE $where";
+D:\OpenEmr\interface\patient_file\summary\add_edit_issue.php:111:"SELECT diagnosis FROM lists WHERE pid = ? AND enddate is NULL AND type IN ($qs2)",
+D:\OpenEmr\interface\patient_file\summary\stats_full.php:263:$pres = sqlStatement("SELECT * FROM lists WHERE pid = ? AND type = ? $condition ORDER BY begdate", [$pid, $t]);
+D:\OpenEmr\interface\reports\collections_report.php:787:"WHERE $where " .
+D:\OpenEmr\interface\reports\daily_summary_report.php:289:WHERE $whereTotalVisitConditions
+D:\OpenEmr\interface\reports\daily_summary_report.php:317:WHERE $wherePaidConditions
+D:\OpenEmr\interface\reports\destroyed_drugs_report.php:213:"WHERE $where " .
+D:\OpenEmr\interface\reports\inventory_list.php:653:"WHERE 1 = 1 $fwcond $actcond " .
+D:\OpenEmr\interface\reports\inventory_list.php:668:"WHERE 1 = 1 $fwcond $actcond " .
+D:\OpenEmr\interface\reports\inventory_list.php:678:"WHERE 1 = 1 $fwcond $actcond " .
+D:\OpenEmr\interface\reports\message_list.php:234:"WHERE $where " .
+D:\OpenEmr\interface\reports\prescriptions_report.php:254:"WHERE $where " .
+D:\OpenEmr\interface\reports\services_by_category.php:196:"WHERE $where ORDER BY lo.title, c.code_type, c.code, c.modifier", $sqlBindArray);
+D:\OpenEmr\interface\super\edit_layout.php:593:"UPDATE layout_options SET group_id = ? WHERE form_id = ? AND field_id IN ($placeholders)",
+D:\OpenEmr\interface\super\edit_layout.php:649:"DELETE FROM layout_options WHERE form_id = ? AND field_id IN ($placeholders)",
+D:\OpenEmr\library\appointments.inc.php:180:"WHERE $where " .
+D:\OpenEmr\library\daysheet.inc.php:97:"WHERE 1=1 $query_part AND billing.fee!=0 " . " $auth " . " $billstring " .
+D:\OpenEmr\library\daysheet.inc.php:111:"WHERE ar_activity.deleted IS NULL $query_part_day AND payer_type = 0 ORDER BY fulname ASC, date ASC, pid");
+D:\OpenEmr\library\daysheet.inc.php:122:"WHERE ar_activity.deleted IS NULL $query_part_day AND payer_type != 0 ORDER BY fulname ASC, date ASC, pid");
+D:\OpenEmr\library\options.inc.php:233:$lres = sqlStatement("SELECT * FROM list_options WHERE list_id = ? AND activity = ? ORDER BY $order_by_sql", [$list_id, $active]);
+D:\OpenEmr\library\options.inc.php:4723:$pdrow = sqlQuery("SELECT `$field_id` AS field_value FROM " . escape_table_name($table) . " WHERE pid = ? $orderby", [$pid]);
+D:\OpenEmr\library\patient.inc.php:489:$tmp = sqlQuery("SELECT count(*) AS count FROM patient_data WHERE $where", $whereBindArray);
+D:\OpenEmr\library\patient.inc.php:574:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+D:\OpenEmr\library\patient.inc.php:658:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+D:\OpenEmr\library\patient.inc.php:693:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+D:\OpenEmr\library\patient.inc.php:764:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+D:\OpenEmr\library\patient.inc.php:930:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+D:\OpenEmr\library\patient.inc.php:955:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+D:\OpenEmr\library\patient.inc.php:980:$sql = "SELECT $given FROM patient_data WHERE $where ORDER BY $orderby";
+D:\OpenEmr\library\payment.inc.php:237:$tres = sqlStatement("SELECT * FROM " . escape_table_name($table) . " WHERE $where");
+D:\OpenEmr\library\payment.inc.php:261:$query = "DELETE FROM " . escape_table_name($table) . " WHERE $where";
+D:\OpenEmr\library\payment.inc.php:276:if (sqlQuery("SELECT * FROM " . escape_table_name($table) . " WHERE $where")) {
+D:\OpenEmr\library\payment.inc.php:285:$query = "UPDATE $table SET $set WHERE $where";
+D:\OpenEmr\library\pnotes.inc.php:119:LEFT JOIN patient_data ON pnotes.pid = patient_data.pid) WHERE $activity_query
+D:\OpenEmr\portal\get_lab_results.php:41:"WHERE po.patient_id = ? AND $where " .
+D:\OpenEmr\portal\get_lab_results.php:85:"WHERE $pt2cond" .
+D:\OpenEmr\portal\get_lab_results.php:89:"WHERE $pscond) " .
+D:\OpenEmr\src\Billing\BillingReport.php:146:"WHERE 1=1 $query_part  " . " $auth " . " $billstring " .
+D:\OpenEmr\src\Billing\BillingReport.php:179:"WHERE 1=1 $query_part  " . " $auth " . " $billstring " .
+D:\OpenEmr\src\ClinicalDecisionRules\Interface\RuleLibrary\CodeManager.php:65:$row = sqlQuery(self::SQL_SELECT . " " . self::SQL_WHERE_GET, [$id]);
+D:\OpenEmr\src\Services\BaseService.php:405:$sql = "SELECT uuid from $table WHERE $field = ?";
+D:\OpenEmr\src\Services\BaseService.php:589:FROM $table WHERE $primaryId = ?", [$field]);
+D:\OpenEmr\src\Services\ClinicalNotesService.php:407:WHERE cnd.clinical_note_id IN ($placeholders)
+D:\OpenEmr\src\Services\ClinicalNotesService.php:458:WHERE cnpr.clinical_note_id IN ($placeholders)
+D:\OpenEmr\src\Services\DocumentTemplates\DocumentTemplateService.php:145:$sql = "SELECT * FROM `document_templates` WHERE ($pid_where) $cat_where_add ORDER BY pid, category";
+D:\OpenEmr\src\Services\VitalsCalculatedService.php:408:FROM form_vitals WHERE id IN ($placeholders)";
+D:\OpenEmr\src\Validators\BaseValidator.php:115:"SELECT $field FROM $table WHERE $field = ?",
+D:\OpenEmr\tests\Tests\Fixtures\BaseFixtureManager.php:222:$sql = "( SELECT $referenceColumn FROM $table_name WHERE $column = " . $fragment->getFragment() . " ";
+D:\OpenEmr\tests\Tests\Fixtures\BaseFixtureManager.php:225:$sql = "( SELECT $referenceColumn FROM $table_name WHERE $column = ? )";

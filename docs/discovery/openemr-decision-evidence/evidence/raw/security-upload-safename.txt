@@ -1,0 +1,34 @@
+.phpstan/baseline/missingType.parameter.php:24945:'message' => '#^Function check_file_dir_name\\(\\) has parameter \\$label with no type specified\\.$#',
+.phpstan/baseline/missingType.parameter.php:24955:'message' => '#^Function convert_safe_file_dir_name\\(\\) has parameter \\$label with no type specified\\.$#',
+.phpstan/baseline/missingType.return.php:16005:'message' => '#^Function check_file_dir_name\\(\\) has no return type specified\\.$#',
+.phpstan/baseline/missingType.return.php:16015:'message' => '#^Function convert_safe_file_dir_name\\(\\) has no return type specified\\.$#',
+controllers/C_Prescription.class.php:874:$pFName = convert_safe_file_dir_name($pFirstName);
+custom/ajax_download.php:33:$fileName = filter_input(INPUT_GET, 'fileName') ?: '';  // validated later by check_file_dir_name()
+custom/ajax_download.php:55:check_file_dir_name($eachFile);
+custom/ajax_download.php:64:check_file_dir_name($fileList[0]);
+custom/qrda_download.php:37:check_file_dir_name($qrda_fname);
+interface/billing/get_claim_file.php:34:$fname = convert_safe_file_dir_name($_GET['key']);
+interface/billing/sl_eob_search.php:277:$aPatFName = convert_safe_file_dir_name($aPatFirstName); //modified for statement title name
+interface/code_systems/list_staged.php:46:$mainPATH = OEGlobalsBag::getInstance()->getProjectDir() . "/contrib/" . strtolower((string) check_file_dir_name($db));
+interface/fax/fax_dispatch.php:37:check_file_dir_name($filename);
+interface/fax/fax_dispatch.php:47:check_file_dir_name($filename);
+interface/fax/fax_dispatch.php:92:check_file_dir_name($inbase);
+interface/fax/fax_dispatch.php:124:$docdir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/" . check_file_dir_name($patient_id);
+interface/fax/fax_dispatch.php:131:$ffname = (string) check_file_dir_name(trim((string) $_POST['form_filename']));
+interface/fax/fax_dispatch.php:241:$imagedir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/" . check_file_dir_name($patient_id) . "/encounters";
+interface/fax/fax_dispatch.php:242:$imagepath = "$imagedir/" . check_file_dir_name($encounter_id) . "_" . check_file_dir_name($formid) . ".jpg";
+interface/fax/fax_dispatch.php:346:check_file_dir_name($inbase);
+interface/fax/fax_view.php:25:$jfname = OEGlobalsBag::getInstance()->getString('hylafax_basedir') . "/sendq/q" . check_file_dir_name($jobid);
+interface/fax/fax_view.php:27:$jfname = OEGlobalsBag::getInstance()->getString('hylafax_basedir') . "/doneq/q" . check_file_dir_name($jobid);
+interface/fax/fax_view.php:52:$ffname = OEGlobalsBag::getInstance()->getString('scanner_output_directory') . '/' . check_file_dir_name($_GET['scan']);
+interface/fax/fax_view.php:54:$ffname = OEGlobalsBag::getInstance()->getString('hylafax_basedir') . '/recvq/' . check_file_dir_name($_GET['file']);
+interface/forms/CAMOS/notegen.php:266:$safeName = convert_safe_file_dir_name($user_id);
+interface/forms/CAMOS/notegen.php:395:$safeName = convert_safe_file_dir_name($user_id);
+interface/forms/LBF/new.php:219:$fname = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/LBF/" . check_file_dir_name($formname) . ".plugin.php";
+interface/forms/procedure_order/common.php:265:$log_file = OEGlobalsBag::getInstance()->get("OE_SITE_DIR") . "/documents/labs/" . check_file_dir_name($lab_name) . "/logs/" . check_file_dir_name($formid) . "_order_log.log";
+interface/forms/procedure_order/common.php:497:$log_file = OEGlobalsBag::getInstance()->get("OE_SITE_DIR") . "/documents/labs/" . check_file_dir_name($lab_name) . "/logs/";
+interface/forms/procedure_order/common.php:505:$log_file .= check_file_dir_name($formid) . '_order_log.log';
+interface/logview/erx_logview.php:38:check_file_dir_name($filename);
+interface/logview/erx_logview.php:47:check_file_dir_name($start_date); // this is incorporated into filename when seeking, so will check it
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:134:$sanitized = convert_safe_file_dir_name(pathinfo($origName, PATHINFO_FILENAME));
+interface/modules/custom_modules/oe-module-faxsms/src/Service/F

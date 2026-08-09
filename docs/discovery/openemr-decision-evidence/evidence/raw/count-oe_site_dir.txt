@@ -1,0 +1,208 @@
+# slug: oe_site_dir
+# description: OE_SITE_DIR file-path sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e OE_SITE_DIR -- *.php HEAD
+# generated: 2026-08-07T06:30:00Z
+#
+.phpstan/baseline/encapsedStringPart.nonString.php:485:    'message' => '#^Part \\$OE_SITE_DIR \\(mixed\\) of encapsed string cannot be cast to string\\.$#',
+.phpstan/baseline/encapsedStringPart.nonString.php:2515:    'message' => '#^Part \\$OE_SITE_DIR \\(mixed\\) of encapsed string cannot be cast to string\\.$#',
+.phpstan/baseline/encapsedStringPart.nonString.php:2535:    'message' => '#^Part \\$OE_SITE_DIR \\(mixed\\) of encapsed string cannot be cast to string\\.$#',
+.phpstan/baseline/openemr.forbiddenGlobalKeyword.php:265:    'message' => '#^Use of the "global" keyword is forbidden \\(\\$OE_SITE_DIR\\)\\. Use dependency injection instead\\.$#',
+.phpstan/baseline/openemr.forbiddenGlobalKeyword.php:1695:    'message' => '#^Use of the "global" keyword is forbidden \\(\\$OE_SITE_DIR\\)\\. Use dependency injection instead\\.$#',
+.phpstan/baseline/variable.undefined.php:2035:    'message' => '#^Variable \\$OE_SITE_DIR might not be defined\\.$#',
+controllers/C_Document.class.php:99:        $templatedir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/doctemplates';
+controllers/C_Document.class.php:338:                $upload_plugin = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documentUpload.plugin.php";
+controllers/C_Document.class.php:392:                $temp_couchdb_url = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/temp/couch_' . date("YmdHis") . $d->get_url_file();
+controllers/C_Document.class.php:408:                $temp_url = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/' . $from_pathname . '/' . $from_filename;
+controllers/C_Document.class.php:834:                $temp_url = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/temp/' . $d->get_foreign_id() . '_' . $from_filename;
+controllers/C_Document.class.php:836:                $temp_url = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/' . $from_pathname . '/' . $from_filename;
+controllers/C_Document.class.php:906:            $url = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/' . $from_pathname . '/' . $convertedFile;
+controllers/C_Document.class.php:1005:            $file_path = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/temp/';
+controllers/C_Document.class.php:1037:                $temp_url = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/' . $from_pathname . '/' . $from_filename;
+controllers/C_Document.class.php:1260:        $log_path = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/couchdb/";
+controllers/C_Prescription.class.php:1199:                $fileName = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/" . $p->get_id() .
+custom/export_qrda_xml.php:1489:$qrda_file_path = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/cqm_qrda/";
+custom/qrda_category1.inc.php:58:    $qrda_file_path = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/cqm_qrda/";
+custom/qrda_download.php:40:    $qrda_file_path = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/cqm_qrda/";
+interface/billing/clear_log.php:31:$filename = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/edi/process_bills.log';
+interface/billing/clear_log.php:33:    $newlog = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/edi/' . date("Y-m-d-His") . '_process_bills.log';
+interface/billing/customize_log.php:27:$filename = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/edi/process_bills.log';
+interface/billing/edih_main.php:91:if (OEGlobalsBag::getInstance()->has('OE_SITE_DIR')) {
+interface/billing/era_payments.php:34:require_once(OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . '/statement.inc.php');
+interface/billing/era_payments.php:84:    $eraDir = OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . "/documents/era";
+interface/billing/era_payments.php:101:    $eraDir = OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . "/documents/era";
+interface/billing/era_payments.php:151:        $eraDir = OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . "/documents/era";
+interface/billing/get_claim_file.php:16:require_once \OpenEMR\Core\OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/config.php";
+interface/billing/get_claim_file.php:80:    $claim_file_dir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/edi/";
+interface/billing/sl_eob_process.php:749:$eraDir = OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . "/documents/era";
+interface/billing/sl_eob_search.php:54:require_once(OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . '/statement.inc.php');
+interface/billing/sl_eob_search.php:99:        $builddir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/onsite_portal_documents/templates/' . $thispid;
+interface/billing/sl_eob_search.php:998:                                    $erafullname = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/era/$eraname.edi";
+interface/billing/sl_eob_search.php:999:                                    $edihname = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/edi/history/f835/$eraname.835";
+interface/billing/sl_eob_search.php:1003:                                        if (is_file(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/era/$eraname.html")) {
+interface/billing/ub04_dispose.php:125:    $form_filename = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/edi/$filename";
+interface/couchdb/couchdb_log.php:18:$filename = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/couchdb/log.txt';
+interface/eRxGlobals.php:61:        return $this->getGlobalValue('OE_SITE_DIR');
+interface/eRx_xml.php:1000:    if (!is_dir(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/erx_error')) {
+interface/eRx_xml.php:1001:        mkdir(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/erx_error', 0777, true);
+interface/eRx_xml.php:1004:    $filename = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/erx_error/erx_error" . "-" . $date . ".log";
+interface/fax/fax_dispatch.php:57:$faxcache = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/faxcache/$mode/$filebase";
+interface/fax/fax_dispatch.php:124:        $docdir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/" . check_file_dir_name($patient_id);
+interface/fax/fax_dispatch.php:241:                $imagedir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/" . check_file_dir_name($patient_id) . "/encounters";
+interface/fax/fax_dispatch.php:303:        $fh = fopen(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/faxcover.txt", 'r');
+interface/forms/LBF/new.php:219:    $fname = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/LBF/" . check_file_dir_name($formname) . ".plugin.php";
+interface/forms/eye_mag/php/eye_mag_functions.php:4330:    global $OE_SITE_DIR;
+interface/forms/eye_mag/php/eye_mag_functions.php:4355:                    if (file_exists($OE_SITE_DIR . "/images/practice_logo.gif")) {
+interface/forms/eye_mag/php/eye_mag_functions.php:4359:                    $practice_logo = "$OE_SITE_DIR/images/practice_logo.gif";
+interface/forms/eye_mag/php/eye_mag_functions.php:4363:                        $practice_logo = "$OE_SITE_DIR/images/login_logo.gif";
+interface/forms/eye_mag/report.php:537:                                $from_file_tmp_web_name = tempnam(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/temp', "oer");
+interface/forms/eye_mag/report.php:2563:            $from_file_tmp_web_name = tempnam(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/temp', "oer");
+interface/forms/eye_mag/save.php:416:        $tmpdir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/temp/'; // Best to get a known system temp directory to ensure a writable directory.
+interface/forms/procedure_order/common.php:265:    $log_file = OEGlobalsBag::getInstance()->get("OE_SITE_DIR") . "/documents/labs/" . check_file_dir_name($lab_name) . "/logs/" . check_file_dir_name($formid) . "_order_log.log";
+interface/forms/procedure_order/common.php:497:    $log_file = OEGlobalsBag::getInstance()->get("OE_SITE_DIR") . "/documents/labs/" . check_file_dir_name($lab_name) . "/logs/";
+interface/globals.php:332:$globalsBag->set('OE_SITE_DIR', $globalsBag->getString('OE_SITES_BASE') . "/" . $session->get('site_id'));
+interface/globals.php:368:$globalsBag->set('edi_271_file_path', $globalsBag->getString('OE_SITE_DIR') . "/documents/edi/");
+interface/globals.php:649:require_once($globalsBag->getString('OE_SITE_DIR') . "/config.php");
+interface/logview/erx_logview.php:31:$error_log_path = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/erx_error';
+interface/main/backup.php:72:$dbOptions = DatabaseConnectionOptions::forSite($globalsBag->getString('OE_SITE_DIR'));
+interface/main/messages/save.php:111:        $practice_logo = OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . "/images/practice_logo.gif";
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:54:        $resultPath = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/procedure_results";
+interface/modules/custom_modules/oe-module-dorn/src/ReceiveHl7Results.php:87:        $logpath = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/procedure_results/logs/$lab_npi";
+interface/modules/custom_modules/oe-module-faxsms/library/faxMedia.php:74:    $dir = \OpenEMR\Core\OEGlobalsBag::getInstance()->get('OE_SITE_DIR')
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/FaxDocumentService.php:46:        $this->sitePath = $globals->get('OE_SITE_DIR') ?? ($globals->get('OE_SITES_BASE') . '/' . $this->siteId);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:53:        $this->cacheDir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/logs_and_misc/_cache';
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:316:            $siteDir = $globals->get('OE_SITE_DIR') ?? (dirname(__DIR__, 5) . '/sites/' . $siteId);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/VoiceClient.php:64:        $this->cacheDir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/logs_and_misc/_cache';
+interface/modules/custom_modules/oe-module-weno/scripts/file_download.php:54:$storeLocation = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/logs_and_misc/weno/weno_pharmacy.zip";
+interface/modules/custom_modules/oe-module-weno/scripts/file_download.php:55:$path_to_extract = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/logs_and_misc/weno/";
+interface/modules/custom_modules/oe-module-weno/src/Services/LogImportBuild.php:29:        $this->rxsynclog = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/logs_and_misc/weno/logsync.csv";
+interface/modules/custom_modules/oe-module-weno/src/Services/LogProperties.php:74:        $this->rxsynclog = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/logs_and_misc/weno/logsync.csv";
+interface/modules/custom_modules/oe-module-weno/src/Services/LogProperties.php:75:        $logDir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/logs_and_misc/weno";
+interface/modules/custom_modules/oe-module-weno/src/Services/WenoPharmaciesJson.php:64:        $storageLocation = $storeLocation = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/logs_and_misc/weno/";
+interface/modules/custom_modules/oe-module-weno/templates/synch.php:115:    $wenoDirectory = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/logs_and_misc/weno/";
+interface/modules/zend_modules/module/Carecoordination/src/Carecoordination/Model/CcdaServiceRequestModelGenerator.php:130:        $this->data .= "<document_location>" . OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "</document_location>";
+interface/modules/zend_modules/module/Documents/src/Documents/Controller/DocumentsController.php:77:            $uploaddir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/' . $request->getPost('file_location');
+interface/orders/receive_hl7_results.inc.php:1549:        $logpath = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/procedure_results/logs/$lab_npi";
+interface/orders/receive_hl7_results.inc.php:1596:                $prpath = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/procedure_results";
+interface/orders/receive_hl7_results.inc.php:1728:                $prpath = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/procedure_results";
+interface/orders/receive_hl7_results.inc.php:1860:                $prpath = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/procedure_results";
+interface/patient_file/download_template.php:357:$templatedir   = \OpenEMR\Core\OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . "/documents/doctemplates";
+interface/patient_file/education.php:23:$educationdir = \OpenEMR\Core\OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . "/documents/education";
+interface/patient_file/letter.php:29:$template_dir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/letter_templates";
+interface/patient_file/letter.php:171:        if (file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/custom_pdf.php")) {
+interface/patient_file/letter.php:172:            include(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/custom_pdf.php");
+interface/patient_file/letter.php:530:$tpldir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/letter_templates";
+interface/patient_file/merge_patients.php:458:            $tdocdir = \OpenEMR\Core\OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . "/documents/" . check_file_dir_name($target_pid);
+interface/patient_file/merge_patients.php:459:            $sdocdir = \OpenEMR\Core\OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . "/documents/" . check_file_dir_name($source_pid);
+interface/patient_file/pos_checkout_ippf.php:1755:        require_once(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/" . OEGlobalsBag::getInstance()->get('gbl_custom_receipt'));
+interface/patient_file/report/custom_report.php:202:                $plogo = glob(\OpenEMR\Core\OEGlobalsBag::getInstance()->getString('OE_SITE_DIR') . "/images/*");// let's give the user a little say in image format.
+interface/patient_file/report/custom_report.php:555:                                    $from_file_tmp_web_name = tempnam(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/temp', "oer");
+interface/patient_file/report/custom_report.php:629:                                        $from_file_tmp_web_name = tempnam(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/temp', "oer");
+interface/patient_file/transaction/add_transaction.php:39:$fname = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/LBF/" . convert_safe_file_dir_name($form_id) . ".plugin.php";
+interface/patient_file/transaction/print_referral.php:26:$template_file = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/referral_template.html";
+interface/super/edit_globals.php:71:        if (!is_dir(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/temp/')) {
+interface/super/edit_globals.php:72:            $directory_created = mkdir(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/temp/', 0777, true);
+interface/super/manage_document_templates.php:35:$templatedir = \OpenEMR\Core\OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/doctemplates";
+interface/super/manage_site_files.php:30:$educationdir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/education";
+library/classes/CouchDB.class.php:111:                file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/couchdb-ca") &&
+library/classes/CouchDB.class.php:112:                file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/couchdb-cert") &&
+library/classes/CouchDB.class.php:113:                file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/couchdb-key")
+library/classes/CouchDB.class.php:120:                                'cafile' => OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/couchdb-ca",
+library/classes/CouchDB.class.php:121:                                'local_cert' => OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/couchdb-cert",
+library/classes/CouchDB.class.php:122:                                'local_pk' => OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/couchdb-key"
+library/classes/CouchDB.class.php:127:            } elseif (file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/couchdb-ca")) {
+library/classes/CouchDB.class.php:133:                                'cafile' => OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/couchdb-ca"
+library/classes/Document.class.php:703:        $filepath = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/' . $from_pathname . '/' . $from_filename;
+library/classes/Installer.class.php:115:        $GLOBALS['OE_SITE_DIR'] = $GLOBALS['OE_SITES_BASE'] . '/' . $this->site;
+library/classes/Installer.class.php:116:        $this->conffile  =  $GLOBALS['OE_SITE_DIR'] . '/sqlconf.php';
+library/classes/Installer.class.php:715:   * @global string $GLOBALS['OE_SITE_DIR'] contains the name of the site directory to create
+library/classes/Installer.class.php:720:        if (!$this->fileExists($GLOBALS['OE_SITE_DIR'])) {
+library/classes/Installer.class.php:722:            $destination_directory = $GLOBALS['OE_SITE_DIR'];
+library/classes/Installer.class.php:749:        if (!$this->fileExists($GLOBALS['OE_SITE_DIR'])) {
+library/classes/OFX.class.php:5:require_once OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/config.php";
+library/classes/thumbnail/ThumbnailGenerator.php:139:        $temp_url = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/' . $from_pathname . '/' . $from_filename;
+library/edihistory/edih_csv_inc.php:332:    if (OEGlobalsBag::getInstance()->has('OE_SITE_DIR')) {
+library/edihistory/edih_csv_inc.php:334:        //echo 'csv_edih_basedir OE_SITE_DIR '.$GLOBALS['OE_SITE_DIR'].'<br />'.PHP_EOL;
+library/edihistory/edih_csv_inc.php:335:        return OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . DS . 'documents' . DS . 'edi' . DS . 'history';
+library/edihistory/edih_csv_inc.php:387:    // $GLOBALS['OE_SITE_DIR'] should be like /var/www/htdocs/openemr/sites/default
+library/edihistory/edih_csv_inc.php:388:    $sitedir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR');
+library/edihistory/edih_csv_inc.php:733:    //$edihist_dir = $GLOBALS['OE_SITE_DIR'].'/documents/edi/history';
+library/edihistory/edih_csv_inc.php:740:    $p_ar['f837'] = ['type' => 'f837', 'directory' => OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . DS . 'documents' . DS . 'edi', 'claims_csv' => $edihist_dir . DS . 'csv' . DS . 'claims_f837.csv',
+library/edihistory/edih_csv_inc.php:780:    $edihist_dir = csv_edih_basedir();  // $GLOBALS['OE_SITE_DIR'].'/documents/edi/history'
+library/sql.inc.php:59:    $config = DatabaseConnectionOptions::forSite($GLOBALS['OE_SITE_DIR']);
+library/sql.inc.php:512:    if (file_exists($GLOBALS['OE_SITE_DIR'] . "/secure_sqlconf.php")) {
+library/sqlconf.php:17:$siteDir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') ?? '';
+portal/patient/fwk/libs/verysimple/DB/DataDriver/MySQLi.php:73:        $config = DatabaseConnectionOptions::forSite($globalsBag->getString('OE_SITE_DIR'));
+portal/report/portal_custom_report.php:441:    $plogo = glob("$OE_SITE_DIR/images/*");// let's give the user a little say in image format.
+rector-bootstrap.php:15:$GLOBALS['OE_SITE_DIR'] = __DIR__ . '/sites/default';
+setup.php:257:global $OE_SITE_DIR; // The Installer sets this
+setup.php:259:$docsDirectory = "$OE_SITE_DIR/documents";
+setup.php:263:if (is_dir($OE_SITE_DIR)) {
+setup.php:508:                <li>Reviewing <code> <?php echo text($OE_SITE_DIR); ?>/config.php </code> is a good idea. This file
+setup.php:1347:                        require("$OE_SITE_DIR/sqlconf.php");
+sites/default/config.php:25:$GLOBALS['oer_config']['documents']['repopath'] = $GLOBALS['OE_SITE_DIR'] . "/documents/";
+sites/default/statement.inc.php:87:                $practice_logo = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/images/" . convert_safe_file_dir_name(OEGlobalsBag::getInstance()->getString('statement_logo'));
+sites/default/statement.inc.php:89:                    $practice_logo = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/images/practice_logo.gif"; // can see is safe...
+sites/default/statement.inc.php:457:    $practice_cards = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/images/visa_mc_disc_credit_card_logos_176x35.gif";
+sites/default/statement.inc.php:458:    if (file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/images/visa_mc_disc_credit_card_logos_176x35.gif")) {
+sites/default/statement.inc.php:1142:    $practice_cards = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/images/visa_mc_disc_credit_card_logos_176x35.gif";
+sites/default/statement.inc.php:1143:    if (file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/images/visa_mc_disc_credit_card_logos_176x35.gif")) {
+src/BC/Crypto/LegacyKeychainLoader.php:53:            $bag->getString('OE_SITE_DIR')
+src/BC/Database.php:86:        $siteDir = $bag->getString('OE_SITE_DIR');
+src/BC/Database.php:89:                'OE_SITE_DIR not set. Was interface/globals.php included?'
+src/BC/DatabaseConnectionOptions.php:96:     * @param string $siteDir Site directory path (e.g., OE_SITE_DIR)
+src/BC/ServiceContainer.php:182:                $siteDir = OEGlobalsBag::getInstance()->getString('OE_SITE_DIR');
+src/Billing/BillingProcessor/BillingClaimBatch.php:65:        $this->bat_filedir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . DIRECTORY_SEPARATOR . "documents" . DIRECTORY_SEPARATOR . "edi";
+src/Billing/BillingProcessor/Tasks/GeneratorHCFA_PDF.php:220:        $fh = @fopen(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/edi/{$this->batch->getBatFilename()}", 'a');
+src/Billing/BillingProcessor/X12RemoteTracker.php:77:                $claim_file = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/edi/" . $x12_remote['x12_filename'];
+src/Common/Auth/AuthUtils.php:914:                file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/ldap-ca") &&
+src/Common/Auth/AuthUtils.php:915:                file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/ldap-cert") &&
+src/Common/Auth/AuthUtils.php:916:                file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/ldap-key")
+src/Common/Auth/AuthUtils.php:919:                if (!ldap_set_option(null, LDAP_OPT_X_TLS_CACERTFILE, OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/ldap-ca")) {
+src/Common/Auth/AuthUtils.php:922:                if (!ldap_set_option(null, LDAP_OPT_X_TLS_CERTFILE, OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/ldap-cert")) {
+src/Common/Auth/AuthUtils.php:925:                if (!ldap_set_option(null, LDAP_OPT_X_TLS_KEYFILE, OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/ldap-key")) {
+src/Common/Auth/AuthUtils.php:932:            } elseif (file_exists(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/ldap-ca")) {
+src/Common/Auth/AuthUtils.php:934:                if (!ldap_set_option(null, LDAP_OPT_X_TLS_CACERTFILE, OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/certificates/ldap-ca")) {
+src/Common/Auth/OAuth2KeyConfig.php:57:            $siteDir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR');
+src/Common/Command/GenerateAccessTokenCommand.php:163:            $oauth2KeyConfig = new OAuth2KeyConfig($this->globalsBag->get('OE_SITE_DIR'));
+src/Common/Crypto/CryptoGen.php:80:        $this->siteDir = $siteDir ?? $bag->getString('OE_SITE_DIR');
+src/Common/Http/oeOAuth.php:102:        $token_path = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/logs_and_misc/methods/' .
+src/Common/Logging/EventAuditLogger.php:40:        $site = $bag->getString('OE_SITE_DIR');
+src/Common/System/MissingSiteException.php:19:    public function __construct(string $message = "Site directory is not configured. OE_SITE_DIR must be set.", int $code = 0, ?\Throwable $previous = null)
+src/Cqm/QrdaControllers/QrdaReportController.php:126:        $directory = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . '/documents/' . 'cat1_reports';
+src/Cqm/QrdaControllers/QrdaReportController.php:281:        $directory = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . DIRECTORY_SEPARATOR . 'documents' . DIRECTORY_SEPARATOR . 'cat3_reports';
+src/Gacl/Gacl.php:138:        $site = $bag->getString('OE_SITE_DIR');
+src/Health/Check/FilesystemCheck.php:32:            $siteDir = $globals->get('OE_SITE_DIR');
+src/Health/Check/OAuthKeysCheck.php:32:            $siteDir = $globals->get('OE_SITE_DIR');
+src/Menu/MainMenuRole.php:55:            $menu_parsed = json_decode(file_get_contents(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/custom_menus/" . $mainMenuRole));
+src/Menu/MainMenuRole.php:89:        $customMenuDir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/custom_menus";
+src/Menu/PatientMenuRole.php:65:            $menu_parsed = json_decode(file_get_contents(OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/custom_menus/patient_menus/" . $patientMenuRole));
+src/Menu/PatientMenuRole.php:102:        $customMenuDir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/custom_menus/patient_menus/";
+src/Pdf/PdfCreator.php:59:        $this->tempPath = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/documents/temp";
+src/RestControllers/AuthorizationController.php:227:            $oauth2KeyConfig = new OAuth2KeyConfig($this->globalsBag->get('OE_SITE_DIR'));
+src/RestControllers/Subscriber/SiteSetupListener.php:235:            $oauth2KeyConfig = new OAuth2KeyConfig($globalsBag->get('OE_SITE_DIR'));
+src/RestControllers/TokenIntrospectionRestController.php:201:            $this->oauth2KeyConfig = new OAuth2KeyConfig($this->getGlobalsBag()->get('OE_SITE_DIR'));
+src/Services/HolidayService.php:108:            siteDir: OEGlobalsBag::getInstance()->getString('OE_SITE_DIR'),
+src/Services/LogoService.php:77:        $siteDir = OEGlobalsBag::getInstance()->get('OE_SITE_DIR') . "/images/logos/" . $type . "/";
+src/Services/LogoService.php:121:            OEGlobalsBag::getInstance()->get('OE_SITE_DIR') => OEGlobalsBag::getInstance()->get('OE_SITE_WEBROOT'),
+tests/Tests/Fixtures/CryptoFixtureManager.php:154:            if (!$globalsBag->has('OE_SITE_DIR')) {
+tests/Tests/Fixtures/CryptoFixtureManager.php:155:                throw new \RuntimeException('OE_SITE_DIR must be configured to install crypto fixtures');
+tests/Tests/Fixtures/CryptoFixtureManager.php:157:            $siteDir = $globalsBag->getString('OE_SITE_DIR');
+tests/Tests/Fixtures/CryptoFixtureManager.php:160:            throw new \RuntimeException('OE_SITE_DIR must not be empty');
+tests/Tests/Isolated/library/classes/InstallerTest.php:1928:        $GLOBALS['OE_SITE_DIR'] = '/path/to/existing/site';
+tests/Tests/Isolated/library/classes/InstallerTest.php:1961:        $GLOBALS['OE_SITE_DIR'] = '/path/to/new/site';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2008:        $GLOBALS['OE_SITE_DIR'] = '/path/to/new/site';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2044:        $GLOBALS['OE_SITE_DIR'] = '/path/to/new/site';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2084:        $GLOBALS['OE_SITE_DIR'] = '/path/to/new/site';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2123:        $GLOBALS['OE_SITE_DIR'] = '/path/to/new/site';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2162:        $GLOBALS['OE_SITE_DIR'] = '/custom/site/path';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2209:            $GLOBALS['OE_SITE_DIR'] = '/test/site';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2242:        $GLOBALS['OE_SITE_DIR'] = '/test/site/dir';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2290:        $GLOBALS['OE_SITE_DIR'] = '/test/new/site/dir';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2319:        $GLOBALS['OE_SITE_DIR'] = '/test/site/dir';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2347:        $GLOBALS['OE_SITE_DIR'] = '/test/site/dir';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2389:        $GLOBALS['OE_SITE_DIR'] = '/test/site/dir';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2435:        $GLOBALS['OE_SITE_DIR'] = '/test/site/dir';
+tests/Tests/Isolated/library/classes/InstallerTest.php:2471:        $GLOBALS['OE_SITE_DIR'] = '/test/site/dir';
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:60:        $GLOBALS['OE_SITE_DIR'] = $this->testSiteDir;
+tests/Tests/Unit/Common/Crypto/CryptoGenTest.php:840:        $GLOBALS['OE_SITE_DIR'] = $this->testSiteDir;

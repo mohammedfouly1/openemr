@@ -1,0 +1,11 @@
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/FaxDocumentService.php:127:// Store in unassigned directory, honoring the drive_encryption
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/FaxDocumentService.php:130:// no-op when drive_encryption is off.
+interface/modules/custom_modules/oe-module-faxsms/src/Service/FaxUploadStaging.php:81:* contents encrypted at rest (when drive_encryption is on) under a
+library/classes/Document.class.php:991:// was removed in #12000. drive_encryption now controls all files.
+library/classes/Document.class.php:992:if (OEGlobalsBag::getInstance()->getBoolean('drive_encryption')) {
+library/globals.inc.php:1035:'drive_encryption' => [
+library/globals.inc.php:1047:xl('This setting has no effect! Use `drive_encryption` instead.'),
+src/BC/Crypto/Crypto.php:66:shouldEncryptForFilesystem: OEGlobalsBag::getInstance()->getBoolean('drive_encryption'),
+src/Common/Crypto/CryptoGen.php:84:?? $bag->getBoolean('drive_encryption');
+tests/Tests/Isolated/Billing/BillingLoggerTest.php:24:$GLOBALS['drive_encryption'] = false;
+tests/Tests/Isolated/Billing/BillingLoggerTest.php:29:unset($GLOBALS['billing_log_option'], $GLOBALS['drive_encryption']);

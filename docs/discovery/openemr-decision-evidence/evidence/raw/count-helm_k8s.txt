@@ -1,0 +1,6 @@
+# slug: helm_k8s
+# description: helm / kubernetes artifacts
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -iln -e apiVersion: apps/v1 -e kind: Deployment -- *.yml *.yaml HEAD
+# generated: 2026-08-07T06:31:22Z
+#

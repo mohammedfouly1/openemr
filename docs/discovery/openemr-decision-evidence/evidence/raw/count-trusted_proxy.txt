@@ -1,0 +1,6 @@
+# slug: trusted_proxy
+# description: trusted proxy configuration
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -in -e trustedproxies -e trusted_proxy -- *.php *.yml HEAD
+# generated: 2026-08-07T06:31:19Z
+#

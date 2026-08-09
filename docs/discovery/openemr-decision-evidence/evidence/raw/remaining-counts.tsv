@@ -1,0 +1,33 @@
+sqlstatement	2025	sqlStatement( call sites
+sqlquery	1454	sqlQuery( call sites
+sqlfetcharray	1354	sqlFetchArray( call sites
+sqlinsert	251	sqlInsert( call sites
+queryutils	1653	QueryUtils:: static call sites
+doctrine_dbal	48	Doctrine DBAL usage sites
+oe_site_dir	202	OE_SITE_DIR file-path sites
+oe_site_webroot	14	OE_SITE_WEBROOT sites
+echo_text	2054	echo text( sites
+echo_attr	2060	echo attr( sites
+echo_xlt	9476	echo xlt( sites
+htmlspecialchars	369	htmlspecialchars( sites
+twig_raw	32	Twig |raw filter sites
+smarty_nofilter	0	Smarty nofilter sites
+js_innerhtml	390	innerHTML assignment sites
+js_docwrite	18	document.write sites
+encryptstandard	36	encryptStandard( sites
+decryptstandard	54	decryptStandard( sites
+cryptogen	289	CryptoGen usage sites
+encrypt_fs	63	encryptForFilesystem sites
+createdocument	26	createDocument( call sites
+iswhitefile	3	isWhiteFile( call sites
+move_uploaded	4	move_uploaded_file sites
+finfo	22	finfo / mime detection sites
+log_checksum	139	log checksum references
+fhir_services	72	FHIR service class files
+search_params	491	FhirSearchParameterDefinition sites
+rest_controllers	90	RestController class files
+rate_limit	17	rate limiting references
+api_version_seg	0	/v1/ style version segments
+xforwardedfor	12	X-Forwarded-For handling
+trusted_proxy	0	trusted proxy configuration
+helm_k8s	0	helm / kubernetes artifacts

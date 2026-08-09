@@ -1,0 +1,9 @@
+# Inferno ONC certification artifacts at 631f2b38cf633769c305233f88cdf9c73ca80657
+.github/workflows/inferno-test.yml
+ci/inferno/README.md
+ci/inferno/compose.yml
+ci/inferno/inferno-files
+ci/inferno/onc-certification-g10-test-kit
+ci/inferno/run.sh
+ci/inferno/test_configs/standalone-full-access.yml
+tests/Tests/Certification/HIT1/US_Core_311/InfernoSinglePatientAPITest.php

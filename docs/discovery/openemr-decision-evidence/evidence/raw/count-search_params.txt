@@ -1,0 +1,497 @@
+# slug: search_params
+# description: FhirSearchParameterDefinition sites
+# ref: HEAD (631f2b38cf633769c305233f88cdf9c73ca80657)
+# command: git grep -n -e FhirSearchParameterDefinition -- src/Services/FHIR/*.php HEAD
+# generated: 2026-08-07T06:31:12Z
+#
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:33:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:66:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:68:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:71:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:73:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated_time']);
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:84:            'encounter' => new FhirSearchParameterDefinition('encounter', SearchFieldType::REFERENCE, [new ServiceField('encounter_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:85:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['diagnosis']),
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:86:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:89:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('lists_uuid', ServiceField::TYPE_UUID), new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:92://            'clinical-status' => new FhirSearchParameterDefinition('clinical-status', SearchFieldType::TOKEN, ['clinical_status']),
+src/Services/FHIR/Condition/FhirConditionEncounterDiagnosisService.php:93://            'verification-status' => new FhirSearchParameterDefinition('verification-status', SearchFieldType::TOKEN, ['verification_status'])
+src/Services/FHIR/Condition/FhirConditionHealthConcernService.php:32:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Condition/FhirConditionHealthConcernService.php:101:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Condition/FhirConditionHealthConcernService.php:103:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Condition/FhirConditionHealthConcernService.php:106:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Condition/FhirConditionHealthConcernService.php:108:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['modifydate']);
+src/Services/FHIR/Condition/FhirConditionHealthConcernService.php:115:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['diagnosis']),
+src/Services/FHIR/Condition/FhirConditionHealthConcernService.php:116:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['subtype']),
+src/Services/FHIR/Condition/FhirConditionHealthConcernService.php:117:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Condition/FhirConditionHealthConcernService.php:119:            'onset-date' => new FhirSearchParameterDefinition('onset-date', SearchFieldType::DATE, ['begdate'])
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:29:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:84:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:86:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:89:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:91:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated_time']);
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:98:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['diagnosis']),
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:99:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:100:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:102:            'clinical-status' => new FhirSearchParameterDefinition('clinical-status', SearchFieldType::TOKEN, ['clinical_status']),
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:103:            'verification-status' => new FhirSearchParameterDefinition('verification-status', SearchFieldType::TOKEN, ['verification_status']),
+src/Services/FHIR/Condition/FhirConditionProblemListItemService.php:104:            'onset-date' => new FhirSearchParameterDefinition('onset-date', SearchFieldType::DATE, ['begdate'])
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportClinicalNotesService.php:34:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportClinicalNotesService.php:76:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportClinicalNotesService.php:77:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category_code']),
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportClinicalNotesService.php:78:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportClinicalNotesService.php:79:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportClinicalNotesService.php:84:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportClinicalNotesService.php:86:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated']);
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportLaboratoryService.php:35:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportLaboratoryService.php:77:            'code' => new FhirSearchParameterDefinition('type', SearchFieldType::TOKEN, ['standard_code']),
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportLaboratoryService.php:79:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportLaboratoryService.php:80:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['report_date']),
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportLaboratoryService.php:81:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('report_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportLaboratoryService.php:86:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/DiagnosticReport/FhirDiagnosticReportLaboratoryService.php:88:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['report_date']);
+src/Services/FHIR/DocumentReference/FhirClinicalNotesService.php:31:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/DocumentReference/FhirClinicalNotesService.php:77:            'type' => new FhirSearchParameterDefinition('type', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/DocumentReference/FhirClinicalNotesService.php:78:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/DocumentReference/FhirClinicalNotesService.php:79:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATE, ['date']),
+src/Services/FHIR/DocumentReference/FhirClinicalNotesService.php:80:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/DocumentReference/FhirClinicalNotesService.php:85:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/DocumentReference/FhirClinicalNotesService.php:87:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/DocumentReference/FhirDocumentReferenceAdvanceCareDirectiveService.php:24:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/DocumentReference/FhirDocumentReferenceAdvanceCareDirectiveService.php:87:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/DocumentReference/FhirDocumentReferenceAdvanceCareDirectiveService.php:88:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/DocumentReference/FhirDocumentReferenceAdvanceCareDirectiveService.php:90:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category_codes']),
+src/Services/FHIR/DocumentReference/FhirDocumentReferenceAdvanceCareDirectiveService.php:95:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/DocumentReference/FhirDocumentReferenceAdvanceCareDirectiveService.php:97:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/DocumentReference/FhirPatientDocumentReferenceService.php:34:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/DocumentReference/FhirPatientDocumentReferenceService.php:85:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/DocumentReference/FhirPatientDocumentReferenceService.php:86:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::DATETIME, ['category_codes']),
+src/Services/FHIR/DocumentReference/FhirPatientDocumentReferenceService.php:87:            'type' => new FhirSearchParameterDefinition('type', SearchFieldType::DATETIME, ['category_codes']),
+src/Services/FHIR/DocumentReference/FhirPatientDocumentReferenceService.php:88:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/DocumentReference/FhirPatientDocumentReferenceService.php:94:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/DocumentReference/FhirPatientDocumentReferenceService.php:96:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/FhirAllergyIntoleranceService.php:20:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirAllergyIntoleranceService.php:63:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('allergy_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirAllergyIntoleranceService.php:68:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirAllergyIntoleranceService.php:70:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['modifydate']);
+src/Services/FHIR/FhirAllergyIntoleranceService.php:262:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirAllergyIntoleranceService.php:264:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/FhirAppointmentService.php:30:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirAppointmentService.php:70:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('pc_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirAppointmentService.php:71:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATE, ['pc_eventDate']),
+src/Services/FHIR/FhirAppointmentService.php:76:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirAppointmentService.php:78:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['pc_time']);
+src/Services/FHIR/FhirCarePlanService.php:31:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirCarePlanService.php:68:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['care_plan_type']),
+src/Services/FHIR/FhirCarePlanService.php:69:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['plan_status']),
+src/Services/FHIR/FhirCarePlanService.php:70:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, ['uuid']),
+src/Services/FHIR/FhirCarePlanService.php:78:     * @return FhirSearchParameterDefinition|null
+src/Services/FHIR/FhirCarePlanService.php:80:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirCarePlanService.php:83:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['creation_date']);
+src/Services/FHIR/FhirCarePlanService.php:89:     * @return FhirSearchParameterDefinition
+src/Services/FHIR/FhirCarePlanService.php:91:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirCarePlanService.php:93:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/FhirCareTeamService.php:28:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirCareTeamService.php:84:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['status']),
+src/Services/FHIR/FhirCareTeamService.php:85:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirCareTeamService.php:90:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirCareTeamService.php:92:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date_updated']);
+src/Services/FHIR/FhirCareTeamService.php:327:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirCareTeamService.php:329:        return new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirConditionService.php:15:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirConditionService.php:72:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('condition_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirConditionService.php:77:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirConditionService.php:79:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated_time']);
+src/Services/FHIR/FhirConditionService.php:144:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirConditionService.php:146:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/FhirCoverageService.php:28:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirCoverageService.php:101:            'payor' => new FhirSearchParameterDefinition('payor', SearchFieldType::TOKEN, ['provider']),
+src/Services/FHIR/FhirCoverageService.php:102:            'type' => new FhirSearchParameterDefinition('type', SearchFieldType::TOKEN, ['type']),
+src/Services/FHIR/FhirCoverageService.php:103:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['status']),
+src/Services/FHIR/FhirCoverageService.php:104:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirCoverageService.php:109:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirCoverageService.php:111:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/FhirCoverageService.php:456:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirCoverageService.php:458:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/FhirDeviceService.php:24:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirDeviceService.php:58:        '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirDeviceService.php:63:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirDeviceService.php:65:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['modifydate']);
+src/Services/FHIR/FhirDeviceService.php:184:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirDeviceService.php:186:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/FhirDiagnosticReportService.php:23:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirDiagnosticReportService.php:62:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/FhirDiagnosticReportService.php:63:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/FhirDiagnosticReportService.php:66:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/FhirDiagnosticReportService.php:67:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirDiagnosticReportService.php:72:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirDiagnosticReportService.php:74:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/FhirDocRefService.php:26:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirDocRefService.php:60:            'start' => new FhirSearchParameterDefinition('start', SearchFieldType::DATETIME, ['start']),
+src/Services/FHIR/FhirDocRefService.php:61:            'end' => new FhirSearchParameterDefinition('end', SearchFieldType::DATETIME, ['end']),
+src/Services/FHIR/FhirDocRefService.php:62:            'type' => new FhirSearchParameterDefinition('type', SearchFieldType::TOKEN, ['type']),
+src/Services/FHIR/FhirDocumentReferenceService.php:24:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirDocumentReferenceService.php:68:            'type' => new FhirSearchParameterDefinition('type', SearchFieldType::TOKEN, ['type']),
+src/Services/FHIR/FhirDocumentReferenceService.php:69:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/FhirDocumentReferenceService.php:72:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/FhirDocumentReferenceService.php:74:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirDocumentReferenceService.php:79:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirDocumentReferenceService.php:81:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/FhirEncounterService.php:41:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirEncounterService.php:89:            '_id' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirEncounterService.php:100:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/FhirEncounterService.php:105:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirEncounterService.php:107:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_update']);
+src/Services/FHIR/FhirGoalService.php:28:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirGoalService.php:64:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, ['uuid']),
+src/Services/FHIR/FhirGoalService.php:66:            'lifecycle-status' => new FhirSearchParameterDefinition('lifecycle-status', SearchFieldType::TOKEN, ['plan_status']),
+src/Services/FHIR/FhirGoalService.php:67:            'target-date' => new FhirSearchParameterDefinition('target-date', SearchFieldType::DATE, ['date_end']),
+src/Services/FHIR/FhirGoalService.php:68:            'description' => new FhirSearchParameterDefinition('description', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/FhirGoalService.php:72:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirGoalService.php:75:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['creation_date']);
+src/Services/FHIR/FhirGoalService.php:380:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirGoalService.php:382:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/FhirGroupService.php:21:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirGroupService.php:50:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirGroupService.php:55:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirGroupService.php:57:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/FhirImmunizationService.php:22:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirImmunizationService.php:65:            '_id' => new FhirSearchParameterDefinition('uuid', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirImmunizationService.php:70:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirImmunizationService.php:72:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['update_date']);
+src/Services/FHIR/FhirImmunizationService.php:277:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirImmunizationService.php:279:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/FhirLocationService.php:36:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirLocationService.php:108:            '_id' => new FhirSearchParameterDefinition('uuid', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirLocationService.php:109:            'address' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirLocationService.php:114:            'name' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirLocationService.php:119:            'address-city' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirLocationService.php:124:            'address-state' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirLocationService.php:129:            'address-postalcode' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirLocationService.php:138:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirLocationService.php:140:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated']);
+src/Services/FHIR/FhirMediaService.php:22:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirMediaService.php:62:            '_id' => new FhirSearchParameterDefinition('uuid', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirMediaService.php:65:            'content-type' => new FhirSearchParameterDefinition('content-type', SearchFieldType::STRING, ['mimetype']),
+src/Services/FHIR/FhirMediaService.php:66:            'title' => new FhirSearchParameterDefinition('title', SearchFieldType::STRING, ['name']),
+src/Services/FHIR/FhirMediaService.php:71:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirMediaService.php:73:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/FhirMediaService.php:76:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirMediaService.php:78:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/FhirMedicationDispenseService.php:24:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirMedicationDispenseService.php:71:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['status']),
+src/Services/FHIR/FhirMedicationDispenseService.php:72:            'type' => new FhirSearchParameterDefinition('type', SearchFieldType::TOKEN, ['type']),
+src/Services/FHIR/FhirMedicationDispenseService.php:73:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, ['uuid']),
+src/Services/FHIR/FhirMedicationDispenseService.php:78:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirMedicationDispenseService.php:80:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date_modified']);
+src/Services/FHIR/FhirMedicationRequestService.php:28:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirMedicationRequestService.php:113:            'intent' => new FhirSearchParameterDefinition('intent', SearchFieldType::TOKEN, ['intent']),
+src/Services/FHIR/FhirMedicationRequestService.php:114:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['status']),
+src/Services/FHIR/FhirMedicationRequestService.php:115:            '_id' => new FhirSearchParameterDefinition('uuid', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirMedicationRequestService.php:120:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirMedicationRequestService.php:122:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date_modified']);
+src/Services/FHIR/FhirMedicationService.php:16:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirMedicationService.php:57:            '_id' => new FhirSearchParameterDefinition('uuid', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirMedicationService.php:62:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirMedicationService.php:64:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['drug_last_updated']);
+src/Services/FHIR/FhirObservationService.php:26:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirObservationService.php:83:            'code' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/FhirObservationService.php:84:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/FhirObservationService.php:85:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/FhirObservationService.php:86:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, ['uuid']),
+src/Services/FHIR/FhirObservationService.php:91:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirObservationService.php:93:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date_modified']);
+src/Services/FHIR/FhirOrganizationService.php:16:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirOrganizationService.php:88:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirOrganizationService.php:89:            'email' => new FhirSearchParameterDefinition('email', SearchFieldType::TOKEN, ['email']),
+src/Services/FHIR/FhirOrganizationService.php:90:            'phone' => new FhirSearchParameterDefinition('phone', SearchFieldType::TOKEN, ['phone']),
+src/Services/FHIR/FhirOrganizationService.php:91:            'telecom' => new FhirSearchParameterDefinition('telecom', SearchFieldType::TOKEN, ['email', 'phone']),
+src/Services/FHIR/FhirOrganizationService.php:92:            'address' => new FhirSearchParameterDefinition('address', SearchFieldType::STRING, ["street", "postal_code", "city", "state", "country_code","line1", "line2"]),
+src/Services/FHIR/FhirOrganizationService.php:93:            'address-city' => new FhirSearchParameterDefinition('address-city', SearchFieldType::STRING, ['city']),
+src/Services/FHIR/FhirOrganizationService.php:94:            'address-postalcode' => new FhirSearchParameterDefinition('address-postalcode', SearchFieldType::STRING, ['postal_code', "zip"]),
+src/Services/FHIR/FhirOrganizationService.php:95:            'address-state' => new FhirSearchParameterDefinition('address-state', SearchFieldType::STRING, ['state']),
+src/Services/FHIR/FhirOrganizationService.php:96:            'name' => new FhirSearchParameterDefinition('name', SearchFieldType::STRING, ['name']),
+src/Services/FHIR/FhirOrganizationService.php:101:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirOrganizationService.php:103:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/FhirPatientService.php:29:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirPatientService.php:129:            'identifier' => new FhirSearchParameterDefinition('identifier', SearchFieldType::TOKEN, ['ss', 'pubpid']),
+src/Services/FHIR/FhirPatientService.php:130:            'name' => new FhirSearchParameterDefinition('name', SearchFieldType::STRING, ['fname', 'mname', 'lname', 'title']),
+src/Services/FHIR/FhirPatientService.php:131:            'birthdate' => new FhirSearchParameterDefinition('birthdate', SearchFieldType::DATE, ['DOB']),
+src/Services/FHIR/FhirPatientService.php:132:            'gender' => new FhirSearchParameterDefinition('gender', SearchFieldType::TOKEN, [self::FIELD_NAME_GENDER]),
+src/Services/FHIR/FhirPatientService.php:133:            'address' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirPatientService.php:144:            'address-city' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirPatientService.php:149:            'address-postalcode' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirPatientService.php:154:            'address-state' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirPatientService.php:160:            'email' => new FhirSearchParameterDefinition('email', SearchFieldType::TOKEN, ['email','email_direct']),
+src/Services/FHIR/FhirPatientService.php:161:            'family' => new FhirSearchParameterDefinition('family', SearchFieldType::STRING, ['lname']),
+src/Services/FHIR/FhirPatientService.php:162:            'given' => new FhirSearchParameterDefinition('given', SearchFieldType::STRING, ['fname', 'mname']),
+src/Services/FHIR/FhirPatientService.php:163:            'phone' => new FhirSearchParameterDefinition('phone', SearchFieldType::TOKEN, ['phone_home', 'phone_biz', 'phone_cell']),
+src/Services/FHIR/FhirPatientService.php:164:            'telecom' => new FhirSearchParameterDefinition('telecom', SearchFieldType::TOKEN, ['email','email_direct', 'phone_home', 'phone_biz', 'phone_cell']),
+src/Services/FHIR/FhirPatientService.php:166:            'generalPractitioner' => new FhirSearchParameterDefinition('generalPractitioner', SearchFieldType::REFERENCE, ['provider_uuid'])
+src/Services/FHIR/FhirPatientService.php:184:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirPatientService.php:186:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated']);
+src/Services/FHIR/FhirPatientService.php:986:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirPatientService.php:988:        return new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/FhirPersonService.php:22:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirPersonService.php:55:            'active' => new FhirSearchParameterDefinition('active', SearchFieldType::TOKEN, ['active']),
+src/Services/FHIR/FhirPersonService.php:57:            'email' => new FhirSearchParameterDefinition('email', SearchFieldType::TOKEN, ['email']),
+src/Services/FHIR/FhirPersonService.php:58:            'phone' => new FhirSearchParameterDefinition('phone', SearchFieldType::TOKEN, ["phonew1", "phone", "phonecell"]),
+src/Services/FHIR/FhirPersonService.php:59:            'telecom' => new FhirSearchParameterDefinition('telecom', SearchFieldType::TOKEN, ["email", "phone", "phonew1", "phonecell"]),
+src/Services/FHIR/FhirPersonService.php:60:            'address' => new FhirSearchParameterDefinition('address', SearchFieldType::STRING, ["street", "streetb", "zip", "city", "state"]),
+src/Services/FHIR/FhirPersonService.php:61:            'address-city' => new FhirSearchParameterDefinition('address-city', SearchFieldType::STRING, ['city']),
+src/Services/FHIR/FhirPersonService.php:62:            'address-postalcode' => new FhirSearchParameterDefinition('address-postalcode', SearchFieldType::STRING, ['zip']),
+src/Services/FHIR/FhirPersonService.php:63:            'address-state' => new FhirSearchParameterDefinition('address-state', SearchFieldType::STRING, ['state']),
+src/Services/FHIR/FhirPersonService.php:65:            'family' => new FhirSearchParameterDefinition('family', SearchFieldType::STRING, ["lname"]),
+src/Services/FHIR/FhirPersonService.php:66:            'given' => new FhirSearchParameterDefinition('given', SearchFieldType::STRING, ["fname", "mname"]),
+src/Services/FHIR/FhirPersonService.php:67:            'name' => new FhirSearchParameterDefinition('name', SearchFieldType::STRING, ["users.title", "fname", "mname", "lname"]),
+src/Services/FHIR/FhirPersonService.php:69:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirPersonService.php:74:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirPersonService.php:76:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated']);
+src/Services/FHIR/FhirPractitionerRoleService.php:13:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirPractitionerRoleService.php:53:            'specialty' => new FhirSearchParameterDefinition('specialty', SearchFieldType::TOKEN, ['specialty_code']),
+src/Services/FHIR/FhirPractitionerRoleService.php:54:            'practitioner' => new FhirSearchParameterDefinition('practitioner', SearchFieldType::REFERENCE, [new ServiceField('provider_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirPractitionerRoleService.php:55:            '_id' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirPractitionerRoleService.php:64:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirPractitionerRoleService.php:67:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['role_last_updated']);
+src/Services/FHIR/FhirPractitionerService.php:17:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirPractitionerService.php:59:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirPractitionerService.php:60:            'active' => new FhirSearchParameterDefinition('active', SearchFieldType::TOKEN, ['active']),
+src/Services/FHIR/FhirPractitionerService.php:61:            'email' => new FhirSearchParameterDefinition('email', SearchFieldType::TOKEN, ['email']),
+src/Services/FHIR/FhirPractitionerService.php:62:            'phone' => new FhirSearchParameterDefinition('phone', SearchFieldType::TOKEN, ["phonew1", "phone", "phonecell"]),
+src/Services/FHIR/FhirPractitionerService.php:63:            'telecom' => new FhirSearchParameterDefinition('telecom', SearchFieldType::TOKEN, ["email", "phone", "phonew1", "phonecell"]),
+src/Services/FHIR/FhirPractitionerService.php:64:            'address' => new FhirSearchParameterDefinition('address', SearchFieldType::STRING, ["street", "streetb", "zip", "city", "state"]),
+src/Services/FHIR/FhirPractitionerService.php:65:            'address-city' => new FhirSearchParameterDefinition('address-city', SearchFieldType::STRING, ['city']),
+src/Services/FHIR/FhirPractitionerService.php:66:            'address-postalcode' => new FhirSearchParameterDefinition('address-postalcode', SearchFieldType::STRING, ['zip']),
+src/Services/FHIR/FhirPractitionerService.php:67:            'address-state' => new FhirSearchParameterDefinition('address-state', SearchFieldType::STRING, ['state']),
+src/Services/FHIR/FhirPractitionerService.php:68:            'family' => new FhirSearchParameterDefinition('family', SearchFieldType::STRING, ["lname"]),
+src/Services/FHIR/FhirPractitionerService.php:69:            'given' => new FhirSearchParameterDefinition('given', SearchFieldType::STRING, ["fname", "mname"]),
+src/Services/FHIR/FhirPractitionerService.php:70:            'name' => new FhirSearchParameterDefinition('name', SearchFieldType::STRING, ["title", "fname", "mname", "lname"]),
+src/Services/FHIR/FhirPractitionerService.php:75:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirPractitionerService.php:79:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['users.last_updated']);
+src/Services/FHIR/FhirProcedureService.php:28:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirProcedureService.php:89:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['report_date']),
+src/Services/FHIR/FhirProcedureService.php:90:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('order_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirProcedureService.php:95:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirProcedureService.php:97:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated']);
+src/Services/FHIR/FhirProvenanceService.php:31:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirProvenanceService.php:201:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, ['_id']),
+src/Services/FHIR/FhirProvenanceService.php:471:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirQuestionnaireResponseService.php:23:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirQuestionnaireResponseService.php:133:            '_id' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirQuestionnaireResponseService.php:138:            ,'questionnaire' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirQuestionnaireResponseService.php:144:            ,'authored' => new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirQuestionnaireService.php:24:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirQuestionnaireService.php:50:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)])
+src/Services/FHIR/FhirQuestionnaireService.php:53:            ,'title' => new FhirSearchParameterDefinition('title', SearchFieldType::STRING, [new ServiceField('name', ServiceField::TYPE_STRING)])
+src/Services/FHIR/FhirQuestionnaireService.php:54:            ,'questionnaire-code' => new FhirSearchParameterDefinition('questionnaire-code', SearchFieldType::TOKEN, [new ServiceField('code', ServiceField::TYPE_STRING)])
+src/Services/FHIR/FhirRelatedPersonService.php:13:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirRelatedPersonService.php:38:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('person_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirRelatedPersonService.php:151:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirRelatedPersonService.php:153:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/FhirRelatedPersonService.php:166:    public function getLastModifiedSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirRelatedPersonService.php:168:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['updated_date']);
+src/Services/FHIR/FhirServiceBase.php:12:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirServiceBase.php:49:     * @var array<string, FhirSearchParameterDefinition> Hashmap of FHIR Resource search parameters to OpenEMR search parameters
+src/Services/FHIR/FhirServiceBase.php:121:     * @return array<string, FhirSearchParameterDefinition> Hashmap of FHIR Resource search parameters to OpenEMR search parameters
+src/Services/FHIR/FhirServiceBase.php:329:    * @return array<string, FhirSearchParameterDefinition> Hashmap of FHIR Resource search parameters to OpenEMR search parameters
+src/Services/FHIR/FhirServiceRequestService.php:31:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirServiceRequestService.php:153:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['procedure_order_type']),
+src/Services/FHIR/FhirServiceRequestService.php:154:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['procedure_code']),
+src/Services/FHIR/FhirServiceRequestService.php:155:            'authored' => new FhirSearchParameterDefinition('authored', SearchFieldType::DATETIME, ['date_ordered']),
+src/Services/FHIR/FhirServiceRequestService.php:156:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['order_status', 'order_activity']),
+src/Services/FHIR/FhirServiceRequestService.php:157:            'intent' => new FhirSearchParameterDefinition('intent', SearchFieldType::TOKEN, ['order_intent']),
+src/Services/FHIR/FhirServiceRequestService.php:158:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('order_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirServiceRequestService.php:164:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirServiceRequestService.php:166:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date_ordered']);
+src/Services/FHIR/FhirSpecimenService.php:29:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirSpecimenService.php:65:            'identifier' => new FhirSearchParameterDefinition('identifier', SearchFieldType::TOKEN, ['ps.specimen_identifier']),
+src/Services/FHIR/FhirSpecimenService.php:66:            'accession' => new FhirSearchParameterDefinition('accession', SearchFieldType::TOKEN, ['ps.accession_identifier']),
+src/Services/FHIR/FhirSpecimenService.php:67:            'type' => new FhirSearchParameterDefinition('type', SearchFieldType::TOKEN, ['ps.specimen_type_code']),
+src/Services/FHIR/FhirSpecimenService.php:68:            'collected' => new FhirSearchParameterDefinition('collected', SearchFieldType::DATETIME, ['ps.collected_date']),
+src/Services/FHIR/FhirSpecimenService.php:69:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['ps.deleted']),
+src/Services/FHIR/FhirSpecimenService.php:70:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('ps.uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/FhirSpecimenService.php:71:            '_lastUpdated' => new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['ps.updated_at'])
+src/Services/FHIR/FhirSpecimenService.php:496:     * @return FhirSearchParameterDefinition
+src/Services/FHIR/FhirSpecimenService.php:498:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/FhirSpecimenService.php:500:        return new FhirSearchParameterDefinition(
+src/Services/FHIR/FhirValueSetService.php:25:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/FhirValueSetService.php:105:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('id', ServiceField::TYPE_STRING)]),
+src/Services/FHIR/FhirValueSetService.php:110:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/FhirValueSetService.php:112:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['sublist_updated_date', 'last_updated']);
+src/Services/FHIR/FhirValueSetService.php:117:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['pc_last_updated']);
+src/Services/FHIR/Group/FhirPatientProviderGroupService.php:22:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Group/FhirPatientProviderGroupService.php:48:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Group/FhirPatientProviderGroupService.php:53:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Group/FhirPatientProviderGroupService.php:55:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['patient_last_updated']);
+src/Services/FHIR/IFhirExportableResourceService.php:21:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/IFhirExportableResourceService.php:71:    function getLastModifiedSearchField(): ?FhirSearchParameterDefinition;
+src/Services/FHIR/IPatientCompartmentResourceService.php:17:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/IPatientCompartmentResourceService.php:21:    public function getPatientContextSearchField(): FhirSearchParameterDefinition;
+src/Services/FHIR/MedicationDispense/FhirMedicationDispenseLocalDispensaryService.php:42:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/MedicationDispense/FhirMedicationDispenseLocalDispensaryService.php:212:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['status']),
+src/Services/FHIR/MedicationDispense/FhirMedicationDispenseLocalDispensaryService.php:213:            'type' => new FhirSearchParameterDefinition('type', SearchFieldType::TOKEN, ['type']),
+src/Services/FHIR/MedicationDispense/FhirMedicationDispenseLocalDispensaryService.php:215:            'context' => new FhirSearchParameterDefinition('context', SearchFieldType::TOKEN, [new ServiceField('encounter_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/MedicationDispense/FhirMedicationDispenseLocalDispensaryService.php:216:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/MedicationDispense/FhirMedicationDispenseLocalDispensaryService.php:221:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/MedicationDispense/FhirMedicationDispenseLocalDispensaryService.php:223:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('patient_uuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/MedicationDispense/FhirMedicationDispenseLocalDispensaryService.php:226:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/MedicationDispense/FhirMedicationDispenseLocalDispensaryService.php:228:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['sale_date']);
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:36:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:126:     * @return array<string, FhirSearchParameterDefinition>
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:132:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:133:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:134:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:135:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:142:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:144:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:147:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationAdvanceDirectiveService.php:149:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_modified']);
+src/Services/FHIR/Observation/FhirObservationCareExperiencePreferenceService.php:25:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationCareExperiencePreferenceService.php:64:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['observation_code']),
+src/Services/FHIR/Observation/FhirObservationCareExperiencePreferenceService.php:65:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Observation/FhirObservationCareExperiencePreferenceService.php:66:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['effective_datetime']),
+src/Services/FHIR/Observation/FhirObservationCareExperiencePreferenceService.php:67:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['p.status']),
+src/Services/FHIR/Observation/FhirObservationCareExperiencePreferenceService.php:68:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('p.uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Observation/FhirObservationCareExperiencePreferenceService.php:73:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationCareExperiencePreferenceService.php:75:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('pd.uuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Observation/FhirObservationCareExperiencePreferenceService.php:78:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationCareExperiencePreferenceService.php:80:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['effective_datetime']);
+src/Services/FHIR/Observation/FhirObservationEmployerService.php:22:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationEmployerService.php:85:     * @return array<string, FhirSearchParameterDefinition>
+src/Services/FHIR/Observation/FhirObservationEmployerService.php:91:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/Observation/FhirObservationEmployerService.php:92:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Observation/FhirObservationEmployerService.php:93:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['start_date']),
+src/Services/FHIR/Observation/FhirObservationEmployerService.php:94:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [
+src/Services/FHIR/Observation/FhirObservationEmployerService.php:101:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationEmployerService.php:103:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/Observation/FhirObservationHistorySdohService.php:21:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationHistorySdohService.php:101:     * @return array<string, FhirSearchParameterDefinition>
+src/Services/FHIR/Observation/FhirObservationHistorySdohService.php:107:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/Observation/FhirObservationHistorySdohService.php:108:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Observation/FhirObservationHistorySdohService.php:109:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['created_at']),
+src/Services/FHIR/Observation/FhirObservationHistorySdohService.php:110:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [
+src/Services/FHIR/Observation/FhirObservationHistorySdohService.php:117:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationHistorySdohService.php:119:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['updated_at']);
+src/Services/FHIR/Observation/FhirObservationHistorySdohService.php:212:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationHistorySdohService.php:214:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Observation/FhirObservationLaboratoryService.php:32:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationLaboratoryService.php:114:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['result_code']),
+src/Services/FHIR/Observation/FhirObservationLaboratoryService.php:115:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Observation/FhirObservationLaboratoryService.php:116:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['report_date']),
+src/Services/FHIR/Observation/FhirObservationLaboratoryService.php:117:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('result_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Observation/FhirObservationLaboratoryService.php:122:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationLaboratoryService.php:124:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['report_date']);
+src/Services/FHIR/Observation/FhirObservationLaboratoryService.php:401:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationLaboratoryService.php:403:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Observation/FhirObservationObservationFormService.php:24:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationObservationFormService.php:60:     * @return array<string, FhirSearchParameterDefinition>
+src/Services/FHIR/Observation/FhirObservationObservationFormService.php:66:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['ob_code']),
+src/Services/FHIR/Observation/FhirObservationObservationFormService.php:67:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['ob_type']),
+src/Services/FHIR/Observation/FhirObservationObservationFormService.php:68:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/Observation/FhirObservationObservationFormService.php:69:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [
+src/Services/FHIR/Observation/FhirObservationObservationFormService.php:76:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationObservationFormService.php:78:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/Observation/FhirObservationObservationFormService.php:167:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationObservationFormService.php:169:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Observation/FhirObservationPatientService.php:23:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationPatientService.php:74:     * @return array<string, FhirSearchParameterDefinition>
+src/Services/FHIR/Observation/FhirObservationPatientService.php:80:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/Observation/FhirObservationPatientService.php:81:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Observation/FhirObservationPatientService.php:82:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/Observation/FhirObservationPatientService.php:83:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [
+src/Services/FHIR/Observation/FhirObservationPatientService.php:90:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationPatientService.php:92:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('uuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Observation/FhirObservationPatientService.php:95:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationPatientService.php:97:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/Observation/FhirObservationQuestionnaireItemService.php:17:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationQuestionnaireItemService.php:39:     * @return array<string, FhirSearchParameterDefinition>
+src/Services/FHIR/Observation/FhirObservationQuestionnaireItemService.php:45:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['result_code']),
+src/Services/FHIR/Observation/FhirObservationQuestionnaireItemService.php:46:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Observation/FhirObservationQuestionnaireItemService.php:47:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['report_date']),
+src/Services/FHIR/Observation/FhirObservationQuestionnaireItemService.php:48:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('result_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Observation/FhirObservationQuestionnaireItemService.php:53:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationQuestionnaireItemService.php:55:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Observation/FhirObservationQuestionnaireItemService.php:58:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationQuestionnaireItemService.php:60:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['report_date']);
+src/Services/FHIR/Observation/FhirObservationSocialHistoryService.php:23:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationSocialHistoryService.php:122:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/Observation/FhirObservationSocialHistoryService.php:123:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Observation/FhirObservationSocialHistoryService.php:124:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/Observation/FhirObservationSocialHistoryService.php:125:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Observation/FhirObservationSocialHistoryService.php:130:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationSocialHistoryService.php:132:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date']);
+src/Services/FHIR/Observation/FhirObservationSocialHistoryService.php:287:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationSocialHistoryService.php:289:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Observation/FhirObservationTreatmentInterventionPreferenceService.php:24:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationTreatmentInterventionPreferenceService.php:64:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['observation_code']),
+src/Services/FHIR/Observation/FhirObservationTreatmentInterventionPreferenceService.php:65:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Observation/FhirObservationTreatmentInterventionPreferenceService.php:66:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['effective_datetime']),
+src/Services/FHIR/Observation/FhirObservationTreatmentInterventionPreferenceService.php:67:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['p.status']),
+src/Services/FHIR/Observation/FhirObservationTreatmentInterventionPreferenceService.php:68:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('p.uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Observation/FhirObservationTreatmentInterventionPreferenceService.php:73:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationTreatmentInterventionPreferenceService.php:75:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('pd.uuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Observation/FhirObservationTreatmentInterventionPreferenceService.php:78:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationTreatmentInterventionPreferenceService.php:80:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['effective_datetime']);
+src/Services/FHIR/Observation/FhirObservationVitalsService.php:40:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/FhirObservationVitalsService.php:380:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['code']),
+src/Services/FHIR/Observation/FhirObservationVitalsService.php:381:            'category' => new FhirSearchParameterDefinition('category', SearchFieldType::TOKEN, ['category']),
+src/Services/FHIR/Observation/FhirObservationVitalsService.php:382:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['date']),
+src/Services/FHIR/Observation/FhirObservationVitalsService.php:383:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Observation/FhirObservationVitalsService.php:388:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationVitalsService.php:390:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated']);
+src/Services/FHIR/Observation/FhirObservationVitalsService.php:958:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/FhirObservationVitalsService.php:960:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Observation/Trait/FhirObservationTrait.php:41:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Observation/Trait/FhirObservationTrait.php:646:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Observation/Trait/FhirObservationTrait.php:648:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:26:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:96:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:97:            'email' => new FhirSearchParameterDefinition('email', SearchFieldType::TOKEN, ['email']),
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:98:            'phone' => new FhirSearchParameterDefinition('phone', SearchFieldType::TOKEN, ['phone']),
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:99:            'telecom' => new FhirSearchParameterDefinition('telecom', SearchFieldType::TOKEN, ['email', 'phone']),
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:100:            'address' => new FhirSearchParameterDefinition('address', SearchFieldType::STRING, ["street", "postal_code", "city", "state", "country_code","line1"]),
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:101:            'address-city' => new FhirSearchParameterDefinition('address-city', SearchFieldType::STRING, ['city']),
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:102:            'address-postalcode' => new FhirSearchParameterDefinition('address-postalcode', SearchFieldType::STRING, ['postal_code', "zip"]),
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:103:            'address-state' => new FhirSearchParameterDefinition('address-state', SearchFieldType::STRING, ['state']),
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:104:            'name' => new FhirSearchParameterDefinition('name', SearchFieldType::STRING, ['name']),
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:109:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Organization/FhirOrganizationFacilityService.php:111:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated']);
+src/Services/FHIR/Organization/FhirOrganizationInsuranceService.php:24:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Organization/FhirOrganizationInsuranceService.php:56:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Organization/FhirOrganizationInsuranceService.php:57:            'address' => new FhirSearchParameterDefinition('address', SearchFieldType::STRING, ["street", "postal_code", "city", "state", "country","line1", "line2"]),
+src/Services/FHIR/Organization/FhirOrganizationInsuranceService.php:58:            'address-city' => new FhirSearchParameterDefinition('address-city', SearchFieldType::STRING, ['city']),
+src/Services/FHIR/Organization/FhirOrganizationInsuranceService.php:59:            'address-postalcode' => new FhirSearchParameterDefinition('address-postalcode', SearchFieldType::STRING, ["zip"]),
+src/Services/FHIR/Organization/FhirOrganizationInsuranceService.php:60:            'address-state' => new FhirSearchParameterDefinition('address-state', SearchFieldType::STRING, ['state']),
+src/Services/FHIR/Organization/FhirOrganizationInsuranceService.php:61:            'name' => new FhirSearchParameterDefinition('name', SearchFieldType::STRING, ['name']),
+src/Services/FHIR/Organization/FhirOrganizationInsuranceService.php:66:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Organization/FhirOrganizationInsuranceService.php:68:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated']);
+src/Services/FHIR/Organization/FhirOrganizationProcedureProviderService.php:23:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Organization/FhirOrganizationProcedureProviderService.php:56:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Organization/FhirOrganizationProcedureProviderService.php:57:            'name' => new FhirSearchParameterDefinition('name', SearchFieldType::STRING, ['name']),
+src/Services/FHIR/Organization/FhirOrganizationProcedureProviderService.php:62:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Organization/FhirOrganizationProcedureProviderService.php:64:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['last_updated']);
+src/Services/FHIR/Procedure/FhirProcedureOEProcedureService.php:36:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Procedure/FhirProcedureOEProcedureService.php:81:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['report_date']),
+src/Services/FHIR/Procedure/FhirProcedureOEProcedureService.php:82:            'code' => new FhirSearchParameterDefinition('code', SearchFieldType::TOKEN, ['procedure_code', 'standard_code']),
+src/Services/FHIR/Procedure/FhirProcedureOEProcedureService.php:83:            'status' => new FhirSearchParameterDefinition('status', SearchFieldType::TOKEN, ['result_status']),
+src/Services/FHIR/Procedure/FhirProcedureOEProcedureService.php:85:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('order_uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Procedure/FhirProcedureOEProcedureService.php:91:     * @return FhirSearchParameterDefinition|null
+src/Services/FHIR/Procedure/FhirProcedureOEProcedureService.php:93:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Procedure/FhirProcedureOEProcedureService.php:95:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['report_date']);
+src/Services/FHIR/Procedure/FhirProcedureSurgeryService.php:28:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Procedure/FhirProcedureSurgeryService.php:63:            'date' => new FhirSearchParameterDefinition('date', SearchFieldType::DATETIME, ['begdate']),
+src/Services/FHIR/Procedure/FhirProcedureSurgeryService.php:64:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)]),
+src/Services/FHIR/Procedure/FhirProcedureSurgeryService.php:69:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Procedure/FhirProcedureSurgeryService.php:71:        return new FhirSearchParameterDefinition('_lastUpdated', SearchFieldType::DATETIME, ['date_modified']);
+src/Services/FHIR/Questionnaire/FhirQuestionnaireFormService.php:31:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Questionnaire/FhirQuestionnaireFormService.php:145:            '_id' => new FhirSearchParameterDefinition('_id', SearchFieldType::TOKEN, [new ServiceField('uuid', ServiceField::TYPE_UUID)])
+src/Services/FHIR/Questionnaire/FhirQuestionnaireFormService.php:148:            ,'title' => new FhirSearchParameterDefinition('title', SearchFieldType::STRING, [new ServiceField('name', ServiceField::TYPE_STRING)])
+src/Services/FHIR/Questionnaire/FhirQuestionnaireFormService.php:149:            ,'questionnaire-code' => new FhirSearchParameterDefinition('questionnaire-code', SearchFieldType::TOKEN, [new ServiceField('code', ServiceField::TYPE_STRING)])
+src/Services/FHIR/QuestionnaireResponse/FhirQuestionnaireResponseFormService.php:43:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/QuestionnaireResponse/FhirQuestionnaireResponseFormService.php:272:            '_id' => new FhirSearchParameterDefinition(
+src/Services/FHIR/QuestionnaireResponse/FhirQuestionnaireResponseFormService.php:277:            ,'questionnaire' => new FhirSearchParameterDefinition(
+src/Services/FHIR/QuestionnaireResponse/FhirQuestionnaireResponseFormService.php:283:            ,'authored' => new FhirSearchParameterDefinition(
+src/Services/FHIR/Traits/FhirBulkExportDomainResourceTrait.php:25:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Traits/FhirBulkExportDomainResourceTrait.php:88:    public function getLastModifiedSearchField(): ?FhirSearchParameterDefinition
+src/Services/FHIR/Traits/PatientSearchTrait.php:14:use OpenEMR\Services\Search\FhirSearchParameterDefinition;
+src/Services/FHIR/Traits/PatientSearchTrait.php:20:    public function getPatientContextSearchField(): FhirSearchParameterDefinition
+src/Services/FHIR/Traits/PatientSearchTrait.php:22:        return new FhirSearchParameterDefinition('patient', SearchFieldType::REFERENCE, [new ServiceField('puuid', ServiceField::TYPE_UUID)]);

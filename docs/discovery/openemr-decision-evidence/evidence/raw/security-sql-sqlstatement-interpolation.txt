@@ -1,0 +1,33 @@
+interface/billing/edit_payment.php:214:$resPayment = sqlStatement("SELECT * from ar_activity $where");
+interface/billing/edit_payment.php:216:sqlStatement("UPDATE ar_activity SET deleted = NOW() $where");
+interface/billing/edit_payment.php:233:sqlStatement("UPDATE ar_activity SET deleted = NOW() $where");
+interface/billing/edit_payment.php:247:$resPayment = sqlStatement("SELECT  * from ar_activity $where");
+interface/billing/edit_payment.php:249:sqlStatement("update ar_activity set deleted = NOW() $where");
+interface/billing/edit_payment.php:267:sqlStatement("update ar_activity set deleted = NOW() $where");
+interface/billing/edit_payment.php:274:$resPayment = sqlStatement("SELECT  * from ar_activity $where");
+interface/billing/edit_payment.php:276:sqlStatement("update ar_activity set deleted = NOW() $where");
+interface/billing/edit_payment.php:293:sqlStatement("delete from ar_activity $where");
+interface/billing/edit_payment.php:300:$resPayment = sqlStatement("SELECT  * from ar_activity $where");
+interface/billing/edit_payment.php:302:sqlStatement("update ar_activity set deleted = NOW() $where");
+interface/billing/edit_payment.php:318:sqlStatement("delete from ar_activity $where");
+interface/billing/edit_payment.php:325:$resPayment = sqlStatement("SELECT  * from ar_activity $where");
+interface/billing/edit_payment.php:327:sqlStatement("update ar_activity set deleted = NOW() $where");
+interface/billing/edit_payment.php:344:sqlStatement("delete from ar_activity $where");
+interface/billing/edit_payment.php:713:$ResultSearch = sqlStatement("SELECT billing.id,last_level_closed,billing.encounter,form_encounter.`date`,$sql_select_part_codetype billing.code,billing.modifier,fee
+interface/main/messages/lab_results_messages.php:34:$rez = sqlStatement("select id, username from users where username != '' AND active = '1' $where", $sqlBindArray);
+interface/orders/types_edit.php:281:sqlStatement("UPDATE procedure_type SET $sets WHERE procedure_type_id = ?", $bindValues);
+interface/patient_file/encounter/find_code_dynamic_ajax.php:296:$iTotal = sqlNumRows(sqlStatement("SELECT $sellist FROM $from $where1 $orderby"));
+interface/patient_file/encounter/find_code_dynamic_ajax.php:298:$iFilteredTotal = sqlNumRows(sqlStatement("SELECT $sellist FROM $from $where1 " . ($where2 ?? '') . " $orderby"));
+interface/patient_file/summary/stats.php:240:if (sqlNumRows(sqlStatement("SHOW TABLES LIKE 'form_{$formname}'")) > 0) {
+interface/patient_file/summary/stats_full.php:263:$pres = sqlStatement("SELECT * FROM lists WHERE pid = ? AND type = ? $condition ORDER BY begdate", [$pid, $t]);
+interface/patient_file/transaction/add_transaction.php:61:sqlStatement("UPDATE transactions SET $sets WHERE id = ?", $sqlBindArray);
+library/FeeSheet.class.php:1140:sqlStatement("UPDATE billing SET `$key` = ? WHERE id = ?", [$value, $id]);
+library/amc.php:238:$rez = sqlStatement("SELECT `id`, `date` FROM `transactions` WHERE `title` = 'LBTref' AND `pid` = ? $where ORDER BY `date` DESC", $sqlBindArray);
+library/amc.php:279:$rez = sqlStatement("SELECT `encounter`, `date` FROM `form_encounter` WHERE `pid`=? $where ORDER BY `date` DESC", $sqlBindArray);
+library/ippf_issues.inc.php:75:sqlStatement("REPLACE INTO lists_ippf_gcac SET $sets");
+library/ippf_issues.inc.php:217:sqlStatement("REPLACE INTO lists_ippf_con SET $sets");
+library/options.inc.php:233:$lres = sqlStatement("SELECT * FROM list_options WHERE list_id = ? AND activity = ? ORDER BY $order_by_sql", [$list_id, $active]);
+library/options.inc.php:3443:$gres = sqlStatement("SELECT $sel FROM layout_group_properties WHERE grp_form_id = ? " .
+portal/get_lab_results.php:39:$res = sqlStatement("SELECT $selects " .
+src/Billing/BillingReport.php:237:sqlStatement("update billing set billed=1 where id in ($in)", $sqlBindArray);
+src/Common/Auth/AuthUtils.php:1140:return sqlStatement("SELECT `id`, `ip_string`, `ip_force_block`, `ip_no_prevent_timing_attack`, `total_ip_login_fail_counter`, `ip_login_fail_counter`, `ip_last_login_fail`, TIMESTAMPDIFF(SECOND, `ip_last_login_fail`, NOW()) as `seconds_last_ip_login_fail` FROM `ip_tracking` $where ORDER BY `ip_last_login_fail` DESC, `total_ip_login_fail_counter` DESC", $sqlBind);

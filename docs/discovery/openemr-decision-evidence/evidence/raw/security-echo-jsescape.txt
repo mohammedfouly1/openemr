@@ -1,0 +1,763 @@
+ccr/createCCR.php:341:echo '<script>alert(' . js_escape((string) $message) . ');</script>';
+contrib/util/dupecheck/index.php:279:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+contrib/util/dupecheck/mergerecords.php:209:window.opener.removedupe(<?php echo js_escape($parameters['dupecount']); ?>);
+controllers/C_Prescription.class.php:99:js_escape($row['name'])       . ","  . //  0
+controllers/C_Prescription.class.php:100:js_escape($row['form'])       . ","  . //  1
+controllers/C_Prescription.class.php:101:js_escape($row['dosage'])     . "," . //  2
+controllers/C_Prescription.class.php:102:js_escape($row['size'])       . ","  . //  3
+controllers/C_Prescription.class.php:103:js_escape($row['unit'])       . ","   . //  4
+controllers/C_Prescription.class.php:104:js_escape($row['route'])      . ","   . //  5
+controllers/C_Prescription.class.php:105:js_escape($row['period'])     . ","   . //  6
+controllers/C_Prescription.class.php:106:js_escape($row['substitute']) . ","   . //  7
+controllers/C_Prescription.class.php:107:js_escape($row['quantity'])   . ","   . //  8
+controllers/C_Prescription.class.php:108:js_escape($row['refills'])    . ","   . //  9
+controllers/C_Prescription.class.php:109:js_escape($row['quantity'])   . ","   . //  10 quantity per_refill
+controllers/C_Prescription.class.php:110:js_escape($row['drug_code'])  . "]";    //  11 rxnorm drug code
+controllers/C_Prescription.class.php:422:echo "<script>alert(" . js_escape($dispenseError) . "); ";
+custom/download_qrda.php:43:var reportID = <?php echo js_escape($report_id); ?>;
+custom/download_qrda.php:44:var provider_id = <?php echo js_escape($provider_id);?>;
+custom/download_qrda.php:88:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+custom/download_qrda.php:110:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+custom/import_xml.php:197:echo " alert(" . js_escape((string) $alertmsg) . ");\n";
+interface/batchcom/batchcom.php:292:if (process.value !== <?php echo js_escape($process_choices[1]); ?>) { email.style.display = 'none'; } else { email.style.display = ''; }
+interface/billing/billing_report.php:1055:EncounterIdArray[<?php echo attr($iter['enc_pid']); ?>][Count] = <?php echo js_escape($rowresult4['encounter']); ?>;
+interface/billing/billing_report.php:1056:EncounterDateArray[<?php echo attr($iter['enc_pid']); ?>][Count] = <?php echo js_escape(oeFormatShortDate(date("Y-m-d", strtotime((string) $rowresult4['date'])))); ?>;
+interface/billing/billing_report.php:1057:CalendarCategoryArray[<?php echo attr($iter['enc_pid']); ?>][Count] = <?php echo js_escape(xl_appt_category($rowresult4['pc_catname'])); ?>;
+interface/billing/billing_report.php:1058:EncounterNoteArray[<?php echo attr($iter['enc_pid']); ?>][Count] = <?php echo js_escape($rowresult4['billing_note']); ?>;
+interface/billing/billing_report.php:1419:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/billing/billing_report.php:1431:dlgopen("clear_log.php?csrf_token_form=" + <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>, '_blank', 500, 400);
+interface/billing/billing_tracker.php:96:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/billing/edi_270.php:471:echo " alert(" . js_escape($alertmsg) . ");\n";
+interface/billing/edih_view.php:407:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/billing/edih_view.php:423:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/billing/edih_view.php:450:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/billing/edih_view.php:474:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/billing/edih_view.php:816:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/billing/edih_view.php:879:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/billing/edih_view.php:898:$.post(noteURL, { putnotes: 'yes', tnotes: notetxt, csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?> },
+interface/billing/edih_view.php:957:data: { archivereport: 'yes', period: sprd, csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?> },
+interface/billing/era_payments.php:222:var debug = <?php echo js_escape(($_REQUEST['form_without'] ?? null) * 1); ?> ;
+interface/billing/era_payments.php:228:eraname: <?php echo js_escape($eraname); ?>,
+interface/billing/era_payments.php:234:InsId: <?php echo js_escape($hidden_type_code); ?>,
+interface/billing/era_payments.php:235:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/billing/indigent_patients_report.php:304:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/billing/sl_eob_invoice.php:61:const adjDisable = <?php echo js_escape($posting_adj_disable); ?>;
+interface/billing/sl_eob_invoice.php:418:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/billing/sl_eob_patient_note.php:52:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/billing/sl_eob_process.php:874:echo "<script>alert(" . js_escape($StringIssue) . ")</script>";
+interface/billing/sl_eob_process.php:887:echo " alert(" . js_escape($alertmsg) . ");\n";
+interface/billing/sl_eob_search.php:719:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/billing/sl_eob_search.php:1303:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/billing/sl_eob_search.php:1305:eraname: <?php echo js_escape($eraname); ?>,
+interface/billing/sl_eob_search.php:1378:echo "alert(" . js_escape((string) $alertmsg) . ");\n";
+interface/billing/ub04_form.php:208:payerid = <?php echo js_escape($payerid ?? ''); ?>;
+interface/billing/ub04_form.php:209:pid = <?php echo js_escape($pid);?>;
+interface/billing/ub04_form.php:210:encounter = <?php echo js_escape($encounter);?>;
+interface/billing/ub04_helpers.php:33:let parentId = <?php echo js_escape($_GET['formid']); ?>;
+interface/drugs/add_edit_drug.php:401:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/drugs/add_edit_drug.php:486:<input class="form-control w-100" size="40" name="form_ndc_number" maxlength="20" value='<?php echo attr($row['ndc_number']) ?>' onkeyup='maskkeyup(this,<?php echo attr(js_escape(OEGlobalsBag::getInstance()->getString('gbl_mask_product_id'))); ?>)' onblur='maskblur(this,<?php echo attr(js_escape(OEGlobalsBag::getInstance()->getString('gbl_mask_product_id'))); ?>)' />
+interface/drugs/add_edit_drug.php:702:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/drugs/add_edit_lot.php:168:if (f.form_sale_date.value > <?php echo js_escape(date('Y-m-d')) ?> || f.form_sale_date.value < '2000-01-01') {
+interface/drugs/add_edit_lot.php:577:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/drugs/add_edit_lot.php:786:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/drugs/destroy_lot.php:105:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/drugs/drug_inventory.php:144:echo "<td title='" . xla('Click to edit') . "' onclick='dodclick(" . attr(js_escape((string) $lastid)) . ")'>" .
+interface/easipro/pro.php:59:'csrf_token_form': <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/easipro/pro.php:212:'csrf_token_form': <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/easipro/pro.php:243:'csrf_token_form': <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/easipro/pro.php:336:let listId = '#' + <?php echo js_escape($list_id); ?>;
+interface/expand_contract_js.php:40:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/expand_contract_js.php:55:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/fax/fax_dispatch.php:401:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/fax/faxq.php:232:echo "     <td onclick='dodclick(" . attr(js_escape($ffname)) . ")'>";
+interface/fax/faxq.php:234:echo "     <td onclick='domclick(" . attr(js_escape($ffname)) . ")'>";
+interface/fax/faxq.php:273:echo "     <td onclick='dojclick(" . attr(js_escape($jobid)) . ")'>" .
+interface/fax/faxq.php:303:echo "     <td onclick='dosvclick(" . attr(js_escape($sfname)) . ")'>" .
+interface/fax/faxq.php:306:echo "     <td onclick='dosdclick(" . attr(js_escape($sfname)) . ")'>";
+interface/forms/CAMOS/new.php:298:if (f4.cols == <?php echo js_escape((string) $textarea_cols); ?>) {
+interface/forms/CAMOS/new.php:299:f4.cols = <?php echo js_escape((string) $textarea_cols); ?>*2;
+interface/forms/CAMOS/new.php:300:f4.rows = <?php echo js_escape((string) $textarea_rows); ?>;
+interface/forms/CAMOS/new.php:302:f4.cols = <?php echo js_escape((string) $textarea_cols); ?>;
+interface/forms/CAMOS/new.php:303:f4.rows = <?php echo js_escape((string) $textarea_rows); ?>;
+interface/forms/CAMOS/new.php:384:$code_list = "icd10_list=" . js_escape($code_list . "\n") . ";\n";
+interface/forms/CAMOS/new.php:392:echo "array1[" . $i . "] = new Array(" . js_escape($categoryRow['category'] ?? '') . ", " . js_escape(strval($categoryRow['id'])) . ", new Array());\n";
+interface/forms/CAMOS/new.php:400:echo "array2[" . $i . "] = new Array(" . js_escape($subcategoryRow['subcategory'] ?? '') . ", " . js_escape(strval($subcategoryRow['category_id'])) . ", " . js_escape(strval($subcategoryRow['id'])) . ", new Array());\n";
+interface/forms/CAMOS/new.php:411:echo "array3[" . $i . "] = new Array(" . js_escape($itemRow['item'] ?? '') . ", " . js_escape($content) . ", " . js_escape(strval($itemRow['subcategory_id'])) .
+interface/forms/CAMOS/new.php:412:"," . js_escape(strval($itemRow['id'])) . ");\n";
+interface/forms/CAMOS/new.php:720:if (select_word(<?php echo js_escape($temp_preselect_mode) . ", " . js_escape($preselect_category); ?> ,f2.select_category)) {
+interface/forms/CAMOS/new.php:730:echo "f2.textarea_content.value = f2.textarea_content.value + " . js_escape($val) . " + \"\\n" . $break . "\\n\"" . ";\n";
+interface/forms/CAMOS/new.php:762:if (select_word(<?php echo js_escape($temp_preselect_mode) . ", " . js_escape($preselect_subcategory); ?> ,f2.select_subcategory)) {
+interface/forms/CAMOS/new.php:790:if (select_word(<?php echo js_escape($temp_preselect_mode) . ", " . js_escape($preselect_item); ?> ,f2["select_item[]"])) {
+interface/forms/CAMOS/new.php:1037:myarray['csrf_token_form'] = <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>;
+interface/forms/LBF/new.php:592:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>,
+interface/forms/LBF/new.php:736:<?php echo js_escape((string) $fs->genProviderOptionList('-- ' . xl('Default') . ' --')) ?> +
+interface/forms/LBF/new.php:813:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>,
+interface/forms/LBF/new.php:841:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>,
+interface/forms/LBF/new.php:870:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>,
+interface/forms/LBF/new.php:882:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>,
+interface/forms/LBF/new.php:1891:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/forms/LBF/new.php:1918:let portal_form_pid = Number(<?php echo js_escape($portal_form_pid); ?>);
+interface/forms/LBF/printable.php:617:echo js_escape($content);
+interface/forms/eye_mag/SpectacleRx.php:492:onclick="delete_me(<?php echo attr(js_escape((string) $row['id'])); ?>);"
+interface/forms/eye_mag/a_issue.php:226:echo " aopts['" . attr($key) . "'][aopts['" . attr($key) . "'].length] = new Option(" . js_escape(xl_list_label(trim((string) $res['title']))) . ", " . js_escape(trim((string) $res['option_id'])) . ", false, false);\n";
+interface/forms/eye_mag/php/eye_mag_functions.php:5441:labels: <?php echo js_escape($times_OU); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5446:data: <?php echo js_escape($OD_time_values); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5465:data: <?php echo js_escape($OS_time_values); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5536:labels: <?php echo js_escape($date_OU); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5542:data: <?php echo js_escape($ODIOPTARGET_values); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5562:data: <?php echo js_escape($OSIOPTARGET_values); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5583:data: <?php echo js_escape($OD_values); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5603:data: <?php echo js_escape($OS_values); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5625:data: <?php echo js_escape($VF_values); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5633:data: <?php echo js_escape($OCT_values); ?>, //0/null is not done, 1 if performed.
+interface/forms/eye_mag/php/eye_mag_functions.php:5641:data: <?php echo js_escape($GONIO_values); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5949:labels: '<?php echo js_escape($VA_dates); ?>',
+interface/forms/eye_mag/php/eye_mag_functions.php:5957:data: <?php echo js_escape($VA_SCODVA); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:5977:data: <?php echo js_escape($VA_SCOSVA); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:6000:data: <?php echo js_escape($VA_CCODVA); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:6020:data: <?php echo js_escape($VA_CCOSVA); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:6043:data: <?php echo js_escape($VA_MRODVA); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:6063:data: <?php echo js_escape($VA_MROSVA); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:6086:data: <?php echo js_escape($VA_CTLODVA); ?>,
+interface/forms/eye_mag/php/eye_mag_functions.php:6106:data: <?php echo js_escape($VA_CTLOSVA); ?>,
+interface/forms/eye_mag/view.php:4490:form_id: <?php echo js_escape($form_id); ?>,
+interface/forms/eye_mag/view.php:4519:codetype: <?php echo js_escape(collect_codetypes("medical_problem", "csv")); ?>
+interface/forms/eye_mag/view.php:4528:codetype: <?php echo js_escape(collect_codetypes("diagnosis", "csv")); ?>
+interface/forms/fee_sheet/new.php:81:echo "diags.push(" . js_escape($code_type . "|" . $code) . ");\n";
+interface/forms/fee_sheet/new.php:1793:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/forms/fee_sheet/review/initialize_review.php:35:var webroot = <?php echo js_escape($web_root); ?>;
+interface/forms/fee_sheet/review/initialize_review.php:45:var csrf_token_js = <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>;
+interface/forms/gad7/new.php:46:var text = document.createTextNode(jsAttr(<?php echo js_escape($str_q8); ?>));
+interface/forms/gad7/new.php:50:var question_2 = document.createTextNode(jsAttr(<?php echo js_escape($str_q8_2); ?>));
+interface/forms/gad7/new.php:56:menu.options[0] = new Option ( <?php echo js_escape($str_default);  ?>, "undef");
+interface/forms/gad7/new.php:57:menu.options[1] = new Option ( <?php echo js_escape($str_not); ?>, "0");
+interface/forms/gad7/new.php:58:menu.options[2] = new Option ( <?php echo js_escape($str_somewhat); ?>, "1");
+interface/forms/gad7/new.php:59:menu.options[3] = new Option ( <?php echo js_escape($str_very); ?>, "2");
+interface/forms/gad7/new.php:60:menu.options[4] = new Option ( <?php echo js_escape($str_extremely);?>, "3");
+interface/forms/gad7/new.php:202:conf = confirm (<?php echo js_escape($str_nosave_confirm) ; ?>);
+interface/forms/gad7/view.php:48:var text = document.createTextNode(jsAttr(<?php echo js_escape($str_q8); ?>));
+interface/forms/gad7/view.php:52:var question_2 = document.createTextNode(jsAttr(<?php echo js_escape($str_q8_2); ?>));
+interface/forms/gad7/view.php:59:menu.options[0] = new Option ( <?php echo js_escape($str_default);  ?>, "undef");
+interface/forms/gad7/view.php:60:menu.options[1] = new Option ( <?php echo js_escape($str_not); ?>, "0");
+interface/forms/gad7/view.php:61:menu.options[2] = new Option ( <?php echo js_escape($str_somewhat); ?>, "1");
+interface/forms/gad7/view.php:62:menu.options[3] = new Option ( <?php echo js_escape($str_very); ?>, "2");
+interface/forms/gad7/view.php:63:menu.options[4] = new Option ( <?php echo js_escape($str_extremely);?>, "3");
+interface/forms/gad7/view.php:64:/*  menu.options[5] = new Option ( <?php echo js_escape($str_default);  ?>, "4"); */
+interface/forms/gad7/view.php:73:conf = confirm ( <?php echo js_escape($str_nosave_confirm); ?> );
+interface/forms/gad7/view.php:105:document.my_form.nervous_score.options[<?php echo js_escape($obj['nervous_score']); ?>].defaultSelected=true;
+interface/forms/gad7/view.php:106:var i = <?php echo js_escape($obj['nervous_score']); ?> ; //the value from last time
+interface/forms/gad7/view.php:125:var i = <?php echo js_escape($obj['control_worry_score']); ?>; //the value from last time
+interface/forms/gad7/view.php:145:var i = <?php echo js_escape($obj['worry_score']); ?> ; //the value from last time
+interface/forms/gad7/view.php:164:var i = <?php echo js_escape($obj['relax_score']); ?> ; //the value from last time
+interface/forms/gad7/view.php:183:var i = <?php echo js_escape($obj['restless_score']); ?> ; //the value from last time
+interface/forms/gad7/view.php:202:var i = <?php echo js_escape($obj['irritable_score']); ?> ; //the value from last time
+interface/forms/gad7/view.php:221:var i = <?php echo js_escape($obj['fear_score']);?> ; //the value from last time
+interface/forms/gad7/view.php:250:manage_question_8 (<?php echo js_escape($obj["difficulty"]); ?>); //do we need q8
+interface/forms/newGroupEncounter/common.php:114:var pid=<?php echo js_escape($pid);?>;
+interface/forms/newGroupEncounter/common.php:392:echo "duplicateVisit(" . js_escape($erow['encounter']) . ", " .
+interface/forms/newGroupEncounter/common.php:393:js_escape(oeFormatShortDate(substr((string) $erow['date'], 0, 10))) . ");\n";
+interface/forms/newGroupEncounter/save.php:187:EncounterIdArray[Count]=<?php echo js_escape($rowresult4['encounter']); ?>;
+interface/forms/newGroupEncounter/save.php:188:EncounterDateArray[Count]=<?php echo js_escape(oeFormatShortDate(date("Y-m-d", strtotime((string) $rowresult4['date'])))); ?>;
+interface/forms/newGroupEncounter/save.php:189:CalendarCategoryArray[Count]=<?php echo js_escape(xl_appt_category($rowresult4['pc_catname'])); ?>;
+interface/forms/newGroupEncounter/save.php:200:parent.left_nav.setEncounter(<?php echo js_escape(oeFormatShortDate($date)) . ", " . js_escape($encounter) . ", window.name"; ?>);
+interface/forms/newGroupEncounter/save.php:204:parent.parent.frames["left_nav"].setEncounter(<?php echo js_escape(oeFormatShortDate($date)) . ", " . js_escape($encounter) . ", window.name"; ?>);
+interface/forms/newGroupEncounter/save.php:209:parent.left_nav.loadFrame('enc2', window.name, <?php echo js_escape($nexturl); ?>);
+interface/forms/newGroupEncounter/save.php:213:parent.parent.frames["left_nav"].loadFrame('enc2', parent.name, <?php echo js_escape($nexturl); ?>);
+interface/forms/newpatient/save.php:208:EncounterIdArray[Count] =<?php echo js_escape($rowresult4['encounter']); ?>;
+interface/forms/newpatient/save.php:209:EncounterDateArray[Count] =<?php echo js_escape(oeFormatShortDate(date("Y-m-d", strtotime((string) $rowresult4['date'])))); ?>;
+interface/forms/newpatient/save.php:210:CalendarCategoryArray[Count] =<?php echo js_escape(xl_appt_category($rowresult4['pc_catname'])); ?>;
+interface/forms/newpatient/save.php:227:my_left_nav.setEncounter(<?php echo js_escape(oeFormatShortDate($date)) . ", " . js_escape($encounter) . ", window.name"; ?>);
+interface/forms/note/view.php:65:newwin = window.open(<?php echo js_escape($rootdir . "/forms/" . $form_name . "/print.php?id=" . urlencode((string) $_GET["id"])); ?>,"mywin");
+interface/forms/phq9/common.php:70:var text = document.createTextNode(jsAttr("10" + ". "+<?php echo js_escape($str_q10); ?>));
+interface/forms/phq9/common.php:74:var question_2 = document.createTextNode(jsAttr(<?php echo   js_escape($str_q10_2); ?>));
+interface/forms/phq9/common.php:80:menu.options[0] = new Option( <?php echo js_escape($str_not); ?>, "0");
+interface/forms/phq9/common.php:81:menu.options[1] = new Option( <?php echo js_escape($str_somewhat); ?>, "1");
+interface/forms/phq9/common.php:82:menu.options[2] = new Option( <?php echo js_escape($str_very); ?>, "2");
+interface/forms/phq9/common.php:83:menu.options[3] = new Option( <?php echo js_escape($str_extremely);?>, "3");
+interface/forms/phq9/common.php:84:menu.options[4] = new Option( <?php echo js_escape($str_default);  ?>, "undef");
+interface/forms/phq9/common.php:110:var i = <?php echo js_escape($obj['interest_score']); ?>; //the value from last time
+interface/forms/phq9/common.php:132:var i = <?php echo js_escape($obj['hopeless_score']); ?>; //the value from last time
+interface/forms/phq9/common.php:155:var i = <?php echo js_escape($obj['sleep_score']); ?> ; //the value from last time
+interface/forms/phq9/common.php:178:var i = <?php echo js_escape($obj['fatigue_score']); ?> ; //the value from last time
+interface/forms/phq9/common.php:201:var i = <?php echo js_escape($obj['appetite_score']); ?> ; //the value from last time
+interface/forms/phq9/common.php:224:var i = <?php echo js_escape($obj['failure_score']); ?> ; //the value from last time
+interface/forms/phq9/common.php:247:var i = <?php echo js_escape($obj['focus_score']);?> ; //the value from last time
+interface/forms/phq9/common.php:270:var i = <?php echo js_escape($obj['psychomotor_score']);?> ; //the value from last time
+interface/forms/phq9/common.php:293:var i = <?php echo js_escape($obj['suicide_score']);?> ; //the value from last time
+interface/forms/phq9/common.php:331:var conf = confirm(<?php echo js_escape($str_nosave_confirm); ?>);
+interface/forms/phq9/common.php:348:manage_question_10 (<?php echo js_escape($obj["difficulty"]); ?>);
+interface/forms/physical_exam/edit_diagnoses.php:73:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/forms/procedure_order/common.php:278:echo "\n<script>alert(" . js_escape($msg) . ")</script>\n";
+interface/forms/procedure_order/common.php:519:let currentLabId = <?php echo js_escape($row['lab_id'] ?? ''); ?>;
+interface/forms/procedure_order/common.php:520:let currentLab = <?php echo js_escape($gbl_lab); ?>;
+interface/forms/procedure_order/common.php:521:let currentLabTitle = <?php echo js_escape($gbl_lab_title); ?>;
+interface/forms/procedure_order/common.php:523:let refreshForm = <?php echo js_escape($reload_url); ?>;
+interface/forms/procedure_order/common.php:607:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/forms/procedure_order/common.php:662:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/forms/procedure_order/common.php:735:formid: <?php echo js_escape($formid); ?>,
+interface/forms/procedure_order/common.php:1036:<?php echo js_escape($row['date_transmitted']) ?> +'. ' +
+interface/forms/procedure_order/common.php:1114:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/forms/procedure_order/common.php:1166:let acctid = <?php echo js_escape($gbl_client_acct); ?>;
+interface/forms/procedure_order/common.php:1168:let patient = <?php echo js_escape($patient['lname'] . ', ' . $patient['fname'] . ' ' . $patient['mname']); ?>;
+interface/forms/procedure_order/common.php:1169:let dob = <?php echo js_escape($patient['DOB']); ?>;
+interface/forms/procedure_order/common.php:1170:let pid = <?php echo js_escape($patient['pid']);  ?>;
+interface/forms/procedure_order/common.php:1177:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/forms/procedure_order/delete.php:131:$("#cancel").on("click", function() { location.href=<?php echo js_escape("$rootdir/patient_file/encounter/$returnurl");?>; });
+interface/forms/questionnaire_assessments/questionnaire_assessments.php:198:let isPortal = <?php echo js_escape((int) $isPortal); ?>;
+interface/forms/questionnaire_assessments/questionnaire_assessments.php:199:let portalOther = <?php echo js_escape((int) $patientPortalOther); ?>;
+interface/forms/questionnaire_assessments/questionnaire_assessments.php:200:let allowCopyright = <?php echo js_escape((int) !((OEGlobalsBag::getInstance()->get('questionnaire_display_LOINCnote') ?? 0) == '3')); ?>;
+interface/forms/questionnaire_assessments/questionnaire_assessments.php:309:let lform = <?php echo js_escape($lform); ?>;
+interface/forms/questionnaire_assessments/questionnaire_assessments.php:310:let qFhir = <?php echo js_escape($q_json); ?>;
+interface/forms/questionnaire_assessments/questionnaire_assessments.php:311:let formName = <?php echo js_escape($form_name); ?>;
+interface/forms/questionnaire_assessments/questionnaire_assessments.php:588:let formMode = <?php echo js_escape($mode); ?>;
+interface/forms/track_anything/history.php:119:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/main/calendar/add_edit_event.php:848:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/main/calendar/add_edit_event.php:1793:var submit = submitme(1, event, <?php echo js_escape($form_id); ?>, collectvalidation);
+interface/main/calendar/add_edit_event.php:1814:$("#" + <?php echo js_escape($form_id); ?>).children().attr("disabled", "true");
+interface/main/calendar/add_edit_event.php:1818:$("#" + <?php echo js_escape($form_id); ?>).children().removeAttr("disabled");
+interface/main/dated_reminders/dated_reminders.php:115:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/main/dated_reminders/dated_reminders_add.php:199:$('#dueDate').val(moment(fullDate).format(<?php echo js_escape(DateFormatRead('validateJS'))?>));
+interface/main/finder/multi_patients_finder.php:153:'<td><i class="fas fa-trash-alt remove-patient" onclick="removePatient(' . attr(js_escape((string) $result['pid'])) . ')"></i></td>' .
+interface/main/main_screen.php:84:<?php echo js_escape($appId); ?>,
+interface/main/messages/messages.php:462:<a class="patLink" onclick="goPid(<?php echo attr(js_escape((string) $result['pid'])); ?>)" title='<?php echo xla('Click me to Open Patient Dashboard') ?>'><?php echo xlt('Patient'); ?>:</a><label for="form_patient">&nbsp</label>
+interface/main/messages/messages.php:684:attr($myrow['id']) . "\" onclick=\"if(this.checked==true){ selectRow(" . attr(js_escape('row' . $count)) . "); }else{ deselectRow(" . attr(js_escape('row' . $count)) . "); }\"></td>
+interface/main/messages/messages.php:846:var webRoot = <?php echo js_escape(OEGlobalsBag::getInstance()->getWebRoot()); ?>;
+interface/main/messages/messages.php:861:request.append("csrf_token_form", <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>);
+interface/main/messages/messages.php:1105:const attachment = <?php echo js_escape($_REQUEST['jobId'] ?? '') ?>;
+interface/main/messages/messages.php:1106:const attach = <?php echo js_escape($_REQUEST['attach'] ?? '') ?>;
+interface/main/messages/templates/linked_documents.php:259:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/main/tabs/main.php:132:var csrf_token_js = <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>;
+interface/main/tabs/main.php:134:var api_csrf_token_js = <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'api')); ?>;
+interface/main/tabs/main.php:139:var site_id_js = <?php echo js_escape($sessionSiteIdString); ?>;
+interface/main/tabs/main.php:140:var userDebug = <?php echo js_escape((string)OEGlobalsBag::getInstance()->getBoolean('user_debug')); ?>;
+interface/main/tabs/main.php:141:var webroot_url = <?php echo js_escape(OEGlobalsBag::getInstance()->getWebRoot()); ?>;
+interface/main/tabs/main.php:142:var jsLanguageDirection = <?php echo js_escape($session->get('language_direction')); ?> ||
+interface/main/tabs/main.php:146:jsGlobals.enable_group_therapy = <?php echo js_escape((int) OEGlobalsBag::getInstance()->getBoolean('enable_group_therapy')); ?>;
+interface/main/tabs/main.php:148:jsGlobals.date_display_format = <?php echo js_escape(OEGlobalsBag::getInstance()->get('date_display_format')); ?>;
+interface/main/tabs/main.php:149:jsGlobals.time_display_format = <?php echo js_escape(OEGlobalsBag::getInstance()->get('time_display_format')); ?>;
+interface/main/tabs/main.php:150:jsGlobals.timezone = <?php echo js_escape(OEGlobalsBag::getInstance()->get('gbl_time_zone') ?? ''); ?>;
+interface/main/tabs/main.php:151:jsGlobals.assetVersion = <?php echo js_escape(OEGlobalsBag::getInstance()->get('v_js_includes')); ?>;
+interface/main/tabs/main.php:153:var WindowTitleBase = <?php echo js_escape(OEGlobalsBag::getInstance()->getString('openemr_name')); ?>;
+interface/main/tabs/main.php:157:var telemetryEnabled = <?php echo js_escape((new TelemetryService())->isTelemetryEnabled()); ?>;
+interface/main/tabs/main.php:175:let csrf_token_js = <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>;
+interface/main/tabs/main.php:323:return fetch(<?php echo js_escape(OEGlobalsBag::getInstance()->getWebRoot()) ?> +"/library/ajax/i18n_generator.php?lang_id=" + encodeURIComponent(lang_id) + "&csrf_token_form=" + encodeURIComponent(csrf_token_js), {
+interface/main/tabs/main.php:335:setupI18n(<?php echo js_escape($session->get('language_choice')); ?>).then(translationsJson => {
+interface/modules/custom_modules/oe-module-dashboard-context/public/admin.php:286:ajaxUrl: <?php echo js_escape($moduleUrl . '/public/admin_ajax.php'); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/public/admin.php:287:csrfToken: <?php echo js_escape($csrfToken); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:153:ajaxUrl: <?php echo js_escape($moduleUrl . '/public/ajax.php'); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:154:csrfToken: <?php echo js_escape($csrfToken); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:155:currentContext: <?php echo js_escape($activeContext); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:156:contexts: <?php echo js_escape($contexts); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:157:widgets: <?php echo js_escape($currentWidgets); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:158:manageableWidgets: <?php echo js_escape($manageableWidgets); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:159:customContexts: <?php echo js_escape($customContexts); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:160:canSwitch: <?php echo js_escape((int) $canSwitch); ?>
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:831:ajaxUrl: <?php echo js_escape($moduleUrl . '/public/ajax.php'); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:832:csrfToken: <?php echo js_escape($csrfToken); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:833:currentContext: <?php echo js_escape($activeContext); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:834:contexts: <?php echo js_escape($contexts); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:835:widgets: <?php echo js_escape($currentWidgets); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:836:manageableWidgets: <?php echo js_escape($manageableWidgets); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:837:customContexts: <?php echo js_escape($customContexts); ?>,
+interface/modules/custom_modules/oe-module-dashboard-context/src/Controller/ContextWidgetController.php:838:canSwitch: <?php echo js_escape((int) $canSwitch); ?>
+interface/modules/custom_modules/oe-module-faxsms/contact.php:86:echo "<script>var pid=" . js_escape($interface_pid ?: $pid) . ";var isFax=" . js_escape($isFax) . ";var isOnetime=" . js_escape($isOnetime) . ";var isEmail=" . js_escape($isEmail) . ";var isSms=" . js_escape($isSMS) . ";var isForward=" . js_escape($isForward) . ";var recipient=" . js_escape($recipient_phone) . ";var isUniversal=" . js_escape($isUniversal) . ";</script>";
+interface/modules/custom_modules/oe-module-faxsms/contact.php:92:const serviceType = <?php echo js_escape($serviceType); ?>;
+interface/modules/custom_modules/oe-module-faxsms/library/api_onetime.php:114:echo js_escape($rtn);
+interface/modules/custom_modules/oe-module-faxsms/library/setup_services.php:251:let ServiceFax = <?php echo js_escape($faxVendor->stringValue()); ?>;
+interface/modules/custom_modules/oe-module-faxsms/library/setup_services.php:252:let ServiceSMS = <?php echo js_escape($smsVendor->stringValue()); ?>;
+interface/modules/custom_modules/oe-module-faxsms/library/setup_services.php:253:let ServiceEmail = <?php echo js_escape($emailVendor->stringValue()); ?>;
+interface/modules/custom_modules/oe-module-faxsms/library/setup_services.php:254:let ServiceVoice = <?php echo js_escape($voiceVendor->stringValue()); ?>;
+interface/modules/custom_modules/oe-module-faxsms/library/utility.php:215:let url = <?php echo js_escape(OEGlobalsBag::getInstance()->getWebRoot() . '/interface/new/new_search_popup.php'); ?>;
+interface/modules/custom_modules/oe-module-faxsms/messageUI.php:66:echo "<script>let pid=" . js_escape($pid ?? 0) . ";let portalUrl=" . js_escape($clientApp->portalUrl ?? '') .
+interface/modules/custom_modules/oe-module-faxsms/messageUI.php:67:";let currentService=" . js_escape($service) . ";let serviceType=" . js_escape($serviceType) . ";let csrfToken=" . js_escape(CsrfUtils::collectCsrfToken($session, 'contact-form')) . "</script>";
+interface/modules/custom_modules/oe-module-faxsms/setup.php:48:echo "<script>let currentService=" . js_escape($service) . "</script>";
+interface/modules/custom_modules/oe-module-faxsms/setup.php:57:let actionUrl = 'saveSetup?type=' + encodeURIComponent(<?php echo js_escape($serviceType) ?>);
+interface/modules/custom_modules/oe-module-faxsms/setup_rc.php:41:echo "<script>var pid=" . js_escape($pid) . "</script>";
+interface/modules/custom_modules/oe-module-faxsms/setup_rc.php:49:echo "<script>let Service=" . js_escape($serviceType) . "</script>";
+interface/modules/custom_modules/oe-module-faxsms/setup_rc.php:57:let url = 'saveSetup?type=' + encodeURIComponent(<?php echo js_escape($serviceType) ?>);
+interface/modules/custom_modules/oe-module-faxsms/setup_voice.php:36:echo "<script>var pid=" . js_escape($pid) . "</script>";
+interface/modules/custom_modules/oe-module-faxsms/setup_voice.php:44:echo "<script>let Service=" . js_escape($serviceType) . ";let csrfToken=" . js_escape(CsrfUtils::collectCsrfToken($session, 'contact-form')) . "</script>";
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AppDispatch.php:721:return js_escape($statusMsg);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AuthenticateTrait.php:153:return js_escape(['error' => "API Error: " . text($e->getMessage()) . " - " . text($e->getCode())]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AuthenticateTrait.php:155:return js_escape(['error' => "Error: " . text($e->getMessage())]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/AuthenticateTrait.php:159:return js_escape(['error' => "Login with JWT failed after {$maxRetries} attempts."]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/ClickatellSMSClient.php:34:return text(js_escape($authErrorMsg));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EmailClient.php:87:return js_escape(xlt("Error: Missing email address. Try again."));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EmailClient.php:90:return js_escape($statusMsg);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:355:return js_escape(xlt("Error: Nothing to forward. Try again."));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:360:return js_escape('Error: ' . xlt("Fax fetch failed."));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:372:return js_escape('Error: ' . xlt('Failed to stage fax payload for forwarding'));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:379:return js_escape('Error: ' . xlt('Failed to prepare fax payload for forwarding'));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:390:return js_escape('Error: ' . $fax->Message . ' ' . FaxResult::getFaxResult($fax->Result));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:404:return js_escape('Error: ' . xlt('fax operation failed'));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/EtherFaxActions.php:411:return js_escape($statusMsg);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:89:return text(js_escape($authErrorMsg));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:135:return js_escape((string)$response->text());
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:162:return text(js_escape($authErrorMsg)); // goes to alert
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:177:return js_escape(xlt("Error: Nothing to forward. Try again."));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:198:return js_escape('Error: ' . xlt('Failed to stage fax payload for forwarding'));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:205:return js_escape('Error: ' . xlt('Failed to prepare fax payload for forwarding'));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:222:return js_escape('Error: ' . text($e->getMessage()));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:228:return js_escape($statusMsg);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:230:return js_escape('Error: ' . text($e->getMessage()));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:247:return text(js_escape($authErrorMsg)); // goes to alert
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:371:return 'Error: ' . text(js_escape($e->getMessage()));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:465:return text(js_escape($authErrorMsg));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:535:return text(js_escape($authErrorMsg)); // goes to alert
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:585:return text(js_escape($authErrorMsg)); // goes to alert
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:737:return text(js_escape($authErrorMsg)); // goes to alert
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:854:return text(js_escape($authErrorMsg));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:910:return json_encode(['error' => js_escape($authErrorMsg)]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:983:return json_encode(['error' => js_escape($authErrorMsg)]);
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:1156:return text(js_escape($authErrorMsg)); // goes to alert
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/RCFaxClient.php:1187:return text(js_escape($authErrorMsg)); // goes to alert
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:286:return 'Error: ' . text(js_escape($e->getMessage()));
+interface/modules/custom_modules/oe-module-faxsms/src/Controller/SignalWireClient.php:443:return text(js_escape(xlt('Not authorized')));
+interface/modules/custom_modules/oe-module-faxsms/src/Enums/ServiceType.php:56:* js_escape(), so JS code can use strict equality (===).
+interface/modules/custom_modules/oe-module-faxsms/src/Enums/ServiceType.php:138:* Get the enum value as a string, suitable for js_escape() and similar string-expecting functions
+interface/modules/custom_modules/oe-module-weno/scripts/file_download.php:100:die(js_escape($isError['messageText']));
+interface/modules/custom_modules/oe-module-weno/scripts/file_download.php:105:die(js_escape('Pharmacy download failed.'));
+interface/modules/custom_modules/oe-module-weno/scripts/file_download.php:148:die(js_escape('Pharmacy download zip open failed.'));
+interface/modules/custom_modules/oe-module-weno/src/Services/LogProperties.php:215:echo(js_escape($error));
+interface/modules/custom_modules/oe-module-weno/src/Services/LogProperties.php:219:echo(js_escape($error));
+interface/modules/custom_modules/oe-module-weno/src/Services/TransmitProperties.php:73:$this->csrf = js_escape(CsrfUtils::collectCsrfToken(session: $session));
+interface/modules/custom_modules/oe-module-weno/templates/indexrx.php:134:window.location.href = <?php echo js_escape($demographicsUrl); ?>;
+interface/modules/custom_modules/oe-module-weno/templates/indexrx.php:159:debugInfo += '\n\n- URL:\n <?php echo js_escape($urlOut); ?>';
+interface/modules/custom_modules/oe-module-weno/templates/indexrx.php:160:debugInfo += '\n\n- Data Raw:\n <?php echo js_escape($urlParam); ?>';
+interface/modules/custom_modules/oe-module-weno/templates/indexrx.php:161:debugInfo += '\n\n- Encoded Data:\n <?php echo js_escape(urlencode($urlParam)); ?>';
+interface/modules/custom_modules/oe-module-weno/templates/pharmacy_list_form.php:59:$prev_prim_pharmacy = js_escape($prev_prim_pharmacy);
+interface/modules/custom_modules/oe-module-weno/templates/pharmacy_list_form.php:60:$prev_alt_pharmacy = js_escape($prev_alt_pharmacy);
+interface/modules/custom_modules/oe-module-weno/templates/pharmacy_list_form.php:233:const defaultFilters = <?php echo js_escape($defaultFilters); ?>;
+interface/modules/custom_modules/oe-module-weno/templates/pharmacy_list_form.php:241:const pid = <?php echo js_escape($pid); ?>;
+interface/modules/custom_modules/oe-module-weno/templates/pharmacy_list_form.php:242:const prevPrimPharmacy = <?php echo js_escape($prev_prim_pharmacy); ?>;
+interface/modules/custom_modules/oe-module-weno/templates/pharmacy_list_form.php:243:const prevAltPharmacy = <?php echo js_escape($prev_alt_pharmacy); ?>;
+interface/modules/custom_modules/oe-module-weno/templates/weno_fragment.php:156:echo "<script>sync_report(" . js_escape($pid) . ")</script>";
+interface/modules/custom_modules/oe-module-weno/templates/weno_setup.php:103:let isValidKey = <?php echo js_escape((int) $isValidKey); ?>;
+interface/modules/custom_modules/oe-module-weno/templates/weno_setup.php:104:let saveAction = <?php echo js_escape((int) $saveAction); ?>;
+interface/modules/custom_modules/oe-module-weno/templates/weno_setup.php:106:let saveActionPersist = <?php echo js_escape((int) $saveActionPersist); ?>;
+interface/modules/zend_modules/module/Application/ajax/reporting_period_handler.php:43:echo js_escape($response);
+interface/new/new_comprehensive.php:266:elem.style.backgroundColor = <?php echo js_escape($searchcolor); ?>;
+interface/new/new_comprehensive.php:856:$mflist .= js_escape($field_id);
+interface/new/new_comprehensive.php:900:$sel = js_escape("#form_" . $field_id);
+interface/new/new_comprehensive_save.php:232:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/new/new_patient_save.php:168:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/orders/find_order_popup.php:66:echo "opener.set_proc_type(" . js_escape($typeid) . ", " . js_escape($name) . ", " . js_escape($codes) . ", " . js_escape($transport) . ", " . js_escape($proctype_name) . ", " . js_escape($testid) . ", '0');\n";
+interface/orders/find_order_popup.php:75:echo "opener.set_proc_type(" . js_escape($typeid) . ", " . js_escape($name) . ", " . js_escape($codes) . ", " . js_escape($transport) . ", " . js_escape($proctype_name) . ", " . js_escape($testid) . ", " . js_escape($t) . ");\n";
+interface/orders/find_order_popup.php:116:echo "order: " . js_escape($order) . ", ";
+interface/orders/find_order_popup.php:117:echo "labid: " . js_escape($labid);
+interface/orders/find_order_popup.php:119:echo ", addfav: " . js_escape($_GET['addfav']);
+interface/orders/find_order_popup.php:122:echo ", formid: " . js_escape($_GET['formid']);
+interface/orders/find_order_popup.php:125:echo ", formseq: " . js_escape($_GET['formseq']);
+interface/orders/orders_results.php:55:parent.left_nav.setPatient(<?php echo js_escape($result['fname'] . " " . $result['lname']) . "," . js_escape($pid) . "," . js_escape($result['pubpid']) . ",''," . js_escape(" " . xl('DOB') . ": " . oeFormatShortDate($result['DOB_YMD']) . " " . xl('Age') . ": " . getPatientAge($result['DOB_YMD'])); ?>);
+interface/orders/patient_match_dialog.php:60:var ename = <?php echo js_escape("select[$form_key]"); ?>;
+interface/orders/procedure_provider_edit.php:134:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/orders/procedure_provider_list.php:64:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/orders/procedure_provider_list.php:76:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/orders/single_order_results.php:89:let stayHere = './single_order_results.php?orderid=' + <?php echo js_escape($orderid); ?>;
+interface/orders/types.php:51:opener.set_proc_type(<?php echo js_escape($form_order) . ", " . js_escape($name); ?>);
+interface/orders/types_ajax.php:159:$rendered .= js_escape($render) . ");";
+interface/orders/types_edit.php:307:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/orders/types_edit.php:311:echo " if (opener.refreshFamily) opener.refreshFamily(" . js_escape($parent) . ",'true');\n";
+interface/patient_file/birthday_alert/birthday_pop.php:49:var pid = <?php echo js_escape($_GET['pid'])?>;
+interface/patient_file/birthday_alert/birthday_pop.php:50:var user_id = <?php echo js_escape($_GET['user_id'])?>;
+interface/patient_file/birthday_alert/birthday_pop.php:52:var csrf_token_form = <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>;
+interface/patient_file/deleter.php:440:echo "let message = " . js_escape($info_msg) . ";
+interface/patient_file/deleter.php:457:echo " dlgclose('imdeleted', " . js_escape($encounterid) . ");\n";
+interface/patient_file/deleter.php:459:echo " opener.dlgSetCallBack('imdeleted', " . js_escape($encounterid) . ");\n";
+interface/patient_file/education.php:68:echo "document.location.href = " . js_escape($url) . ";\n";
+interface/patient_file/encounter/delete_form.php:130:$("#cancel").on("click", function() { location.href=<?php echo js_escape("$rootdir/patient_file/encounter/$returnurl");?>; });
+interface/patient_file/encounter/find_code_dynamic.php:68:var singleCodeSelection = <?php echo (isset($_GET['singleCodeSelection'])) ? js_escape($_GET['singleCodeSelection']) : 0 ?>;
+interface/patient_file/encounter/find_code_dynamic.php:89:aoData.push({"name": "what", "value": <?php echo js_escape($what); ?>});
+interface/patient_file/encounter/find_code_dynamic.php:94:aoData.push({"name": "source", "value": <?php echo js_escape($source); ?>});
+interface/patient_file/encounter/find_code_dynamic.php:96:aoData.push({"name": "layout_id", "value": <?php echo js_escape($layout_id); ?>});
+interface/patient_file/encounter/find_code_dynamic.php:178:var limit = <?php echo js_escape($limit); ?>;
+interface/patient_file/encounter/find_code_dynamic.php:179:var target_element = <?php echo js_escape($target_element); ?>;
+interface/patient_file/encounter/forms.php:89:var csrf_token_js = <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>;
+interface/patient_file/encounter/forms.php:182:patient_id: <?php echo js_escape($pid); ?>,
+interface/patient_file/encounter/forms.php:184:object_id: <?php echo js_escape($encounter); ?>,
+interface/patient_file/encounter/forms.php:185:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/encounter/forms.php:202:patient_id: <?php echo js_escape($pid); ?>,
+interface/patient_file/encounter/forms.php:204:object_id: <?php echo js_escape($encounter); ?>,
+interface/patient_file/encounter/forms.php:205:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/encounter/forms.php:230:patient_id: <?php echo js_escape($pid); ?>,
+interface/patient_file/encounter/forms.php:232:object_id: <?php echo js_escape($encounter); ?>,
+interface/patient_file/encounter/forms.php:233:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/encounter/forms.php:250:patient_id: <?php echo js_escape($pid); ?>,
+interface/patient_file/encounter/forms.php:252:object_id: <?php echo js_escape($encounter); ?>,
+interface/patient_file/encounter/forms.php:253:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/encounter/forms.php:269:patient_id: <?php echo js_escape($pid); ?>,
+interface/patient_file/encounter/forms.php:271:object_id: <?php echo js_escape($encounter); ?>,
+interface/patient_file/encounter/forms.php:272:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/encounter/forms.php:297:echo "  if (confirm(" . xlj('There is a lab order') . " + ' ' + " . js_escape($orderid) . " + ' ' + " .
+interface/patient_file/encounter/forms.php:298:xlj('dated') . " + ' ' + " . js_escape($orderdate) . " + ' ' + " .
+interface/patient_file/encounter/forms.php:300:xlj('Assign it to this one?') . ")) attachid += " . js_escape($orderid . ",") . ";\n";
+interface/patient_file/encounter/forms.php:311:$(".title:first").text(<?php echo xlj("Review Encounter"); ?> +" (" + <?php echo js_escape($encounter); ?> +")");
+interface/patient_file/encounter/forms.php:318:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/patient_file/encounter/forms.php:319:encounterid: <?php echo js_escape($encounter); ?>
+interface/patient_file/encounter/forms.php:356:const url = <?php echo js_escape($rootdir); ?> +'/patient_file/encounter/view_form.php?' + params;
+interface/patient_file/encounter/forms.php:368:location.href = <?php echo js_escape($rootdir); ?> +'/patient_file/encounter/forms.php';
+interface/patient_file/encounter/superbill_custom_full.php:468:echo " if (ctid == " . js_escape($ctid) . ") return " . js_escape($ctmask) . ";\n";
+interface/patient_file/encounter/superbill_custom_full.php:847:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/patient_file/encounter/trend_form.php:95:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/encounter/trend_form.php:141:$(".graph").on("click", function(e){ show_graph(<?php echo js_escape($formname); ?>, this.id.substring(9), $(this).text()) });
+interface/patient_file/encounter/trend_form.php:159:show_graph(<?php echo js_escape($formname); ?>,<?php echo js_escape($default['field_id']); ?>,<?php echo js_escape($default['title']); ?>);
+interface/patient_file/front_payment.php:406:payment: <?php echo js_escape($payment_key); ?>,
+interface/patient_file/front_payment.php:407:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/front_payment.php:1070:alert(<?php echo js_escape($alertmsg); ?>);
+interface/patient_file/front_payment_terminal.php:19:let amount = <?php echo js_escape(str_replace('.', '', $total)); ?>;
+interface/patient_file/history/encounters.php:240:patient_id: <?php echo js_escape($pid); ?>,
+interface/patient_file/history/encounters.php:925:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/patient_file/history/history.php:150:var listId = '#' + <?php echo js_escape($list_id); ?>;
+interface/patient_file/history/history.php:157:var skipArray = [<?php echo !empty($condition_str) ? js_escape($condition_str) : ''; ?>];
+interface/patient_file/history/history_full.php:63:echo "code_options_js" . "[" . js_escape($val) . "]=" . js_escape($code) . ";\n";
+interface/patient_file/letter.php:368:$ulist .= "ulist[" . attr($i) . "] = " . js_escape($uname . "|" . $urow['id'] . "|" . $urow['specialty']) . ";\n";
+interface/patient_file/pos_checkout_ippf.php:589:billing: <?php echo js_escape($patient_id . "." . $encounter); ?>,
+interface/patient_file/pos_checkout_ippf.php:590:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/pos_checkout_ippf.php:609:ptid: <?php echo js_escape($patient_id); ?>,
+interface/patient_file/pos_checkout_ippf.php:610:form_checksum: <?php echo js_escape($current_checksum); ?>,
+interface/patient_file/pos_checkout_ippf.php:614:params.append(voidaction, <?php echo js_escape($encounter); ?>);
+interface/patient_file/pos_checkout_ippf.php:1116:echo " alert(" . js_escape($alertmsg) . ");\n";
+interface/patient_file/pos_checkout_ippf.php:1892:echo "            && adjreason != " . js_escape($tmprow['option_id']) . "\n";
+interface/patient_file/pos_checkout_ippf.php:2027:echo "  if (customer == " . js_escape($tmprow['option_id']) . ") ret = " . js_escape($matches[1]) . ";\n";
+interface/patient_file/pos_checkout_ippf.php:2203:echo "                || chargecat == " . js_escape($lrow['option_id']) . "\n";
+interface/patient_file/pos_checkout_ippf.php:2224:echo "                || method == " . js_escape($lrow['option_id']) . "\n";
+interface/patient_file/pos_checkout_ippf.php:2708:onkeyup='maskkeyup(this,<?php echo attr(js_escape(OEGlobalsBag::getInstance()->getString('gbl_mask_invoice_number'))); ?>)'
+interface/patient_file/pos_checkout_ippf.php:2709:onblur='maskblur(this,<?php echo attr(js_escape(OEGlobalsBag::getInstance()->getString('gbl_mask_invoice_number'))); ?>)'
+interface/patient_file/pos_checkout_ippf.php:2804:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/patient_file/pos_checkout_ippf.php:2859:echo " alert(" . js_escape($warningMessage) . ");\n";
+interface/patient_file/pos_checkout_normal.php:220:billing: <?php echo js_escape($patient_id . "." . $encounter); ?>,
+interface/patient_file/pos_checkout_normal.php:221:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/pos_checkout_normal.php:856:tax = parseFloat(tax.toFixed(<?php echo js_escape($currdecimals); ?>));
+interface/patient_file/pos_checkout_normal.php:858:f[pfx + '[price]'].value  = cumtax.toFixed(<?php echo js_escape($currdecimals); ?>); // requires JS 1.5
+interface/patient_file/pos_checkout_normal.php:860:f[pfx + '[amount]'].value = cumtax.toFixed(<?php echo js_escape($currdecimals); ?>); // requires JS 1.5
+interface/patient_file/pos_checkout_normal.php:885:total += parseFloat(price.toFixed(<?php echo js_escape($currdecimals); ?>));
+interface/patient_file/pos_checkout_normal.php:890:amount = parseFloat(amount.toFixed(<?php echo js_escape($currdecimals); ?>));
+interface/patient_file/pos_checkout_normal.php:892:f['line[' + lino + '][amount]'].value = amount.toFixed(<?php echo js_escape($currdecimals); ?>);
+interface/patient_file/pos_checkout_normal.php:922:f.form_amount.value = total.toFixed(<?php echo js_escape($currdecimals); ?>);
+interface/patient_file/problem_encounter.php:83:echo " alert(" . js_escape($alertmsg) . ");\n";
+interface/patient_file/problem_encounter.php:314:$endjs .= "pselected[" . js_escape($rowid) . "] = '';\n";
+interface/patient_file/problem_encounter.php:340:$endjs .= "eselected[" . js_escape($rowid) . "] = '';\n";
+interface/patient_file/problem_encounter.php:371:echo "doclick('p', " . js_escape($_REQUEST['issue']) . ");\n";
+interface/patient_file/problem_encounter.php:375:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/patient_file/reminder/clinical_reminders.php:242:patient_id: <?php echo js_escape($patient_id); ?>,
+interface/patient_file/reminder/clinical_reminders.php:243:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/reminder/clinical_reminders.php:253:patient_id: <?php echo js_escape($patient_id); ?>,
+interface/patient_file/reminder/clinical_reminders.php:254:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/reminder/clinical_reminders.php:264:patient_id: <?php echo js_escape($patient_id); ?>,
+interface/patient_file/reminder/clinical_reminders.php:265:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/reminder/patient_reminders.php:377:patient_id: <?php echo js_escape($patient_id); ?>,
+interface/patient_file/reminder/patient_reminders.php:378:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/reminder/patient_reminders.php:393:{ csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?> },
+interface/patient_file/reminder/patient_reminders.php:406:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/reminder/patient_reminders.php:420:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/report/patient_report.php:823:var listId = '#' + <?php echo js_escape($list_id); ?>;
+interface/patient_file/summary/add_edit_issue.php:167:js_escape($text) .
+interface/patient_file/summary/add_edit_issue.php:168:", " . js_escape($code) .
+interface/patient_file/summary/add_edit_issue.php:301:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/patient_file/summary/add_edit_issue.php:305:echo " if (myboss.refreshIssue) myboss.refreshIssue(" . js_escape($issue) . "," . js_escape($tmp_title) . ");\n";
+interface/patient_file/summary/add_edit_issue.php:382:echo " aitypes[" . attr($i) . "] = " . js_escape($value[3]) . ";\n";
+interface/patient_file/summary/add_edit_issue.php:390:js_escape(xl_list_label(trim((string) $res['title']))) .
+interface/patient_file/summary/add_edit_issue.php:392:js_escape(trim((string) $res['option_id'])) .
+interface/patient_file/summary/add_edit_issue.php:399:echo " codeTexts.set(" . js_escape($code) . ", " . js_escape($text) . ");\n";
+interface/patient_file/summary/add_edit_issue.php:401:echo " opt.setAttribute('codes'," . js_escape(trim((string) $res['codes'])) . ");\n";
+interface/patient_file/summary/add_edit_issue.php:617:dlgopen(<?php echo js_escape($url); ?>, '_blank', 985, 800, '', <?php echo xlj("Select Codes"); ?>);
+interface/patient_file/summary/add_edit_issue.php:1042:newtype(<?php echo js_escape($type_index); ?>);
+interface/patient_file/summary/browse.php:106:patientUuid: <?php echo js_escape(UuidRegistry::uuidToString($result['uuid'])); ?>,
+interface/patient_file/summary/browse.php:107:insuranceUuid: <?php echo js_escape(UuidRegistry::uuidToString($result3['uuid'])); ?>
+interface/patient_file/summary/browse.php:120:df.i<?php echo attr($browsenum);?>subscriber_fname.value=<?php echo js_escape($result3['subscriber_fname']);?>;
+interface/patient_file/summary/browse.php:121:df.i<?php echo attr($browsenum);?>subscriber_mname.value=<?php echo js_escape($result3['subscriber_mname']);?>;
+interface/patient_file/summary/browse.php:122:df.i<?php echo attr($browsenum);?>subscriber_lname.value=<?php echo js_escape($result3['subscriber_lname']);?>;
+interface/patient_file/summary/browse.php:123:df.i<?php echo attr($browsenum);?>subscriber_street.value=<?php echo js_escape($result3['subscriber_street']);?>;
+interface/patient_file/summary/browse.php:124:df.i<?php echo attr($browsenum);?>subscriber_city.value=<?php echo js_escape($result3['subscriber_city']);?>;
+interface/patient_file/summary/browse.php:125:df.form_i<?php echo attr($browsenum);?>subscriber_state.value=<?php echo js_escape($result3['subscriber_state']);?>;
+interface/patient_file/summary/browse.php:126:df.i<?php echo attr($browsenum);?>subscriber_postal_code.value=<?php echo js_escape($result3['subscriber_postal_code']);?>;
+interface/patient_file/summary/browse.php:128:df.form_i<?php echo attr($browsenum);?>subscriber_country.value=<?php echo js_escape($result3['subscriber_country']);?>;
+interface/patient_file/summary/browse.php:129:df.i<?php echo attr($browsenum);?>subscriber_phone.value=<?php echo js_escape($result3['subscriber_phone']);?>;
+interface/patient_file/summary/browse.php:130:df.i<?php echo attr($browsenum);?>subscriber_DOB.value=<?php echo js_escape(oeFormatShortDate($result3['subscriber_DOB']));?>;
+interface/patient_file/summary/browse.php:131:df.i<?php echo attr($browsenum);?>subscriber_ss.value=<?php echo js_escape($result3['subscriber_ss']);?>;
+interface/patient_file/summary/browse.php:132:df.form_i<?php echo attr($browsenum);?>subscriber_sex.value=<?php echo js_escape($result3['subscriber_sex']);?>;
+interface/patient_file/summary/browse.php:134:df.i<?php echo attr($browsenum);?>plan_name.value=<?php echo js_escape($result3['plan_name']);?>;
+interface/patient_file/summary/browse.php:135:df.i<?php echo attr($browsenum);?>policy_number.value=<?php echo js_escape($result3['policy_number']);?>;
+interface/patient_file/summary/browse.php:136:df.i<?php echo attr($browsenum);?>group_number.value=<?php echo js_escape($result3['group_number']);?>;
+interface/patient_file/summary/browse.php:137:df.i<?php echo attr($browsenum);?>provider.value=<?php echo js_escape($result3['provider']);?>;
+interface/patient_file/summary/browse.php:141:df.i<?php echo attr($browsenum);?>subscriber_employer.value=<?php echo js_escape($result3['subscriber_employer']);?>;
+interface/patient_file/summary/browse.php:142:df.i<?php echo attr($browsenum);?>subscriber_employer_street.value=<?php echo js_escape($result3['subscriber_employer_street']);?>;
+interface/patient_file/summary/browse.php:143:df.i<?php echo attr($browsenum);?>subscriber_employer_city.value=<?php echo js_escape($result3['subscriber_employer_city']);?>;
+interface/patient_file/summary/browse.php:144:df.form_i<?php echo attr($browsenum);?>subscriber_employer_state.value=<?php echo js_escape($result3['subscriber_employer_state']);?>;
+interface/patient_file/summary/browse.php:145:df.i<?php echo attr($browsenum);?>subscriber_employer_postal_code.value=<?php echo js_escape($result3['subscriber_employer_postal_code']);?>;
+interface/patient_file/summary/browse.php:146:df.form_i<?php echo attr($browsenum);?>subscriber_employer_country.value=<?php echo js_escape($result3['subscriber_employer_country']);?>;
+interface/patient_file/summary/demographics.php:115:$pod_warnings .= js_escape($new_allergy_alert) . ' + "\n"';
+interface/patient_file/summary/demographics.php:420:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/patient_file/summary/demographics.php:421:patient: <?php echo js_escape($pid); ?>
+interface/patient_file/summary/demographics.php:440:patientid: <?php echo js_escape($pid); ?>
+interface/patient_file/summary/demographics.php:456:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/summary/demographics.php:464:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/summary/demographics.php:501:csrf.append("csrf_token_form", <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>);
+interface/patient_file/summary/demographics.php:557:patient: <?php echo js_escape($row_soapstatus['pid']); ?>,
+interface/patient_file/summary/demographics.php:577:patient: <?php echo js_escape($row_soapstatus['pid']); ?>,
+interface/patient_file/summary/demographics.php:616:csrf.append("csrf_token_form", <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>);
+interface/patient_file/summary/demographics.php:655:let pid = <?php echo js_escape($pid); ?>;
+interface/patient_file/summary/demographics.php:656:let csrfToken = <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>;
+interface/patient_file/summary/demographics.php:729:$(<?php echo js_escape("#" . $gfrow['grp_form_id'] . "_ps_expand"); ?>).load("lbf_fragment.php?formname=" + <?php echo js_url($gfrow['grp_form_id']); ?>, {
+interface/patient_file/summary/demographics.php:730:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/summary/demographics.php:901:formData.append("csrf_token_form", <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>);
+interface/patient_file/summary/demographics.php:924:parent.left_nav.setPatient(<?php echo js_escape($result['fname'] . " " . $result['lname']) .
+interface/patient_file/summary/demographics.php:925:"," . js_escape($pid) . "," . js_escape($result['pubpid']) . ",'',";
+interface/patient_file/summary/demographics.php:927:echo js_escape(" " . xl('DOB') . ": " . oeFormatShortDate($result['DOB_YMD']) . " " . xl('Age') . ": " . getPatientAgeDisplay($result['DOB_YMD']));
+interface/patient_file/summary/demographics.php:929:echo js_escape(" " . xl('DOB') . ": " . oeFormatShortDate($result['DOB_YMD']) . " " . xl('Age at death') . ": " . oeFormatAge($result['DOB_YMD'], $date_of_death));
+interface/patient_file/summary/demographics.php:941:EncounterIdArray[Count] = <?php echo js_escape($rowresult4['encounter']); ?>;
+interface/patient_file/summary/demographics.php:942:EncounterDateArray[Count] = <?php echo js_escape(oeFormatShortDate(date("Y-m-d", strtotime((string) $rowresult4['date'])))); ?>;
+interface/patient_file/summary/demographics.php:943:CalendarCategoryArray[Count] = <?php echo js_escape(xl_appt_category($rowresult4['pc_catname'])); ?>;
+interface/patient_file/summary/demographics.php:958:pid: <?php echo js_escape($pid); ?>,
+interface/patient_file/summary/demographics.php:959:set_encounter: <?php echo js_escape($encounter); ?>
+interface/patient_file/summary/demographics.php:962:parent.left_nav.setEncounter(<?php echo js_escape(oeFormatShortDate(date("Y-m-d", strtotime((string) $query_result['date'])))); ?>, <?php echo js_escape($encounter); ?>, 'enc');
+interface/patient_file/summary/demographics.php:2068:var isPost = <?php echo js_escape($showEligibility ?? false); ?>;
+interface/patient_file/summary/demographics.php:2069:var listId = '#' + <?php echo js_escape($list_id); ?>;
+interface/patient_file/summary/demographics_full.php:118:doData.append('csrf_token_form', <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>);
+interface/patient_file/summary/demographics_full.php:510:parent.left_nav.setPatient(<?php echo js_escape($result['fname'] . " " . $result['lname']) . "," . js_escape($pid) . "," . js_escape($result['pubpid']) . ",''," . js_escape(" " . xl('DOB') . ": " . oeFormatShortDate($result['DOB_YMD']) . " " . xl('Age') . ": " . getPatientAgeDisplay($result['DOB_YMD'])); ?>);
+interface/patient_file/summary/demographics_full.php:571:$mflist .= js_escape($field_id);
+interface/patient_file/summary/immunizations.php:1100:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/summary/immunizations.php:1221:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/summary/immunizations.php:1251:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/patient_file/summary/labdata.php:339:var thedates = JSON.stringify(<?php echo js_escape($date_array); ?>);
+interface/patient_file/summary/labdata.php:340:var thevalues =  JSON.stringify(<?php echo js_escape($value_array); ?>);
+interface/patient_file/summary/labdata.php:341:var theitem = JSON.stringify(<?php echo js_escape([$the_item]); ?>);
+interface/patient_file/summary/labdata.php:342:var thetitle = JSON.stringify(<?php echo js_escape($the_item); ?>);
+interface/patient_file/summary/labdata.php:343:var checkboxfake = JSON.stringify(<?php echo js_escape([0]); ?>);
+interface/patient_file/summary/labdata.php:352:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/summary/labdata.php:357:document.getElementById(<?php echo js_escape('graph_item_' . $item_graph) ?>),
+interface/patient_file/summary/pnotes_full.php:240:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/summary/pnotes_full.php:246:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/summary/pnotes_full.php:738:parent.left_nav.setPatient(<?php echo js_escape($ndata['fname'] . " " . $ndata['lname']) . "," .
+interface/patient_file/summary/pnotes_full.php:739:js_escape($patient_id) . "," . js_escape($ndata['pubpid']) . ",window.name"; ?>);
+interface/patient_file/summary/pnotes_full_add.php:365:parent.left_nav.setPatient(<?php echo js_escape($ndata['fname'] . " " . $ndata['lname']) . "," . js_escape($patient_id) . "," . js_escape($ndata['pubpid']) . ",window.name"; ?>);
+interface/patient_file/summary/stats_full.php:138:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/summary/stats_full.php:156:language: <?php echo js_escape($language); ?>
+interface/patient_file/summary/stats_full.php:491:patient_id: <?php echo js_escape($pid); ?>,
+interface/patient_file/summary/stats_full.php:492:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/transaction/add_transaction.php:317:transaction: <?php echo js_escape((string) $transid); ?>,
+interface/patient_file/transaction/add_transaction.php:318:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/transaction/record_request.php:44:patient_id: <?php echo js_escape($pid); ?>,
+interface/patient_file/transaction/record_request.php:45:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/patient_file/transaction/transactions.php:173:var listId = '#' + <?php echo js_escape($list_id); ?>;
+interface/patient_tracker/patient_tracker.php:872:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>
+interface/patient_tracker/patient_tracker.php:884:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>
+interface/patient_tracker/patient_tracker.php:925:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>
+interface/patient_tracker/patient_tracker.php:1038:var from = <?php echo js_escape($from_date ?? ''); ?>;
+interface/patient_tracker/patient_tracker.php:1039:var to = <?php echo js_escape($to_date ?? ''); ?>;
+interface/patient_tracker/patient_tracker.php:1040:var oefrom = <?php echo js_escape(oeFormatShortDate($from_date ?? null)); ?>;
+interface/patient_tracker/patient_tracker.php:1041:var oeto = <?php echo js_escape(oeFormatShortDate($to_date ?? null)); ?>;
+interface/patient_tracker/patient_tracker.php:1108:var reftime = <?php echo js_escape(OEGlobalsBag::getInstance()->get('pat_trkr_timer')); ?>;
+interface/patient_tracker/patient_tracker.php:1139:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>
+interface/patient_tracker/patient_tracker.php:1149:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken($session)); ?>
+interface/practice/ins_search.php:76:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/practice/ins_search.php:218:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/practice/ins_search.php:222:echo " set_insurance(" . js_escape($ins_id) . "," . js_escape($ins_name) . ");\n";
+interface/reports/amc_tracking.php:81:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/reports/amc_tracking.php:106:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/reports/amc_tracking.php:125:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/reports/amc_tracking.php:145:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/reports/appointments_report.php:679:echo " alert(" . js_escape($alertmsg) . ");\n";
+interface/reports/appt_encounter_report.php:581:echo " alert(" . js_escape($alertmsg) . ");\n";
+interface/reports/collections_report.php:1491:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/reports/destroyed_drugs_report.php:67:echo "<div onclick='doclick(" . attr(js_escape((string) $row['drug_id'])) . "," . attr(js_escape((string) $row['inventory_id'][$key])) . ")'>" .
+interface/reports/encounters_report.php:545:echo " alert(" . js_escape($alertmsg) . ");\n";
+interface/reports/immunization_report.php:267:let msg = <?php echo js_escape(xlt('This step will generate a file which you have to save for future use.') .
+interface/reports/immunization_report.php:492:let csrf_token = <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>;
+interface/reports/ip_tracker.php:68:request.append("csrf_token_form", <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'counter')); ?>);
+interface/reports/ip_tracker.php:87:request.append("csrf_token_form", <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'counter')); ?>);
+interface/reports/ip_tracker.php:100:request.append("csrf_token_form", <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'counter')); ?>);
+interface/reports/pat_ledger.php:922:var listId = '#' + <?php echo js_escape($list_id ?? null); ?>;
+interface/reports/patient_edu_web_lookup.php:110:searchResultsPopup(<?php echo js_escape($form_diagnosis); ?>,<?php echo js_escape($websites[$form_lookup_at]) ?>);
+interface/reports/referrals_report.php:233:<a href='#' onclick="return show_referral(<?php echo js_escape($row['id']); ?>)">
+interface/smart/register-app.php:363:})(window, <?php echo js_escape($fhirRegisterURL); ?>, <?php echo json_encode($dsiTypesStringNames); ?>);
+interface/super/edit_globals.php:380:window.oeUI.api.setApiUrlAndCsrfToken(<?php echo js_escape($apiUrl); ?>, <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'api')); ?>);
+interface/super/edit_globals.php:841:echo "<script>alert(" . js_escape($post_srch_desc . " - " . xl('search term was not found, please try another search')) . ");</script>";
+interface/super/edit_layout.php:1381:<?php echo js_escape(genFieldOptionList()) ?> +
+interface/super/edit_layout.php:1443:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/super/edit_layout.php:1462:layout_id: <?php echo js_escape($layout_id); ?>
+interface/super/edit_layout.php:1896:echo 'var langDirection = ' . js_escape($session->get('language_direction')) . ';';
+interface/super/edit_layout.php:2010:$("#layout_id").val(<?php echo js_escape($layout_id); ?>);
+interface/super/edit_layout.php:2296:var form = <?php echo js_escape($layout_id);?>;
+interface/super/edit_layout.php:2323:echo "  if (datatype == " . js_escape($mytype) . ") return true;\n";
+interface/super/edit_layout_props.php:205:echo " alert(" . js_escape($alertmsg) . ");\n";
+interface/super/edit_layout_props.php:207:echo " if (opener.refreshme) opener.refreshme(" . js_escape($layout_id) . ");\n";
+interface/super/edit_layout_props.php:549:echo " alert(" . js_escape($alertmsg) . ");\n";
+interface/super/edit_list.php:312:echo "<script>let error=" . xlj("The new list") . " + ' [' + " . js_escape($newlistname) . " + '] ' + " . xlj("already exists! Please try again.") . ";</script>";
+interface/super/edit_list.php:1646:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/super/layout_listitems_ajax.php:33:echo "var itemsel = document.forms[0][" . js_escape($target) . "];\n";
+interface/super/layout_listitems_ajax.php:35:echo "itemsel.options[j++] = new Option(" . js_escape("-- " . xl('Please Select') . " --") . ",'',false,false);\n";
+interface/super/layout_listitems_ajax.php:37:$tmp = js_escape($row['option_id']);
+interface/therapy_groups/therapy_groups_views/appointmentComponent.php:98:var url = <?php echo js_escape(OEGlobalsBag::getInstance()->getKernel()->getRootDir()); ?> + '/main/calendar/add_edit_event.php?group=true&groupid=' + <?php echo js_url($groupId); ?>;
+interface/therapy_groups/therapy_groups_views/groupDetailsGeneralData.php:231:location.href = <?php echo js_escape(OEGlobalsBag::getInstance()->getWebRoot()); ?> + '/interface/therapy_groups/index.php?method=groupDetails&group_id=' + <?php echo js_url($groupId); ?>;
+interface/therapy_groups/therapy_groups_views/groupDetailsGeneralData.php:239:parent.left_nav.setTherapyGroup(<?php echo js_escape($groupData['group_id'])?>, <?php echo js_escape($groupData['group_name'])?>);
+interface/therapy_groups/therapy_groups_views/groupDetailsGeneralData.php:257:EncounterIdArray[Count]=<?php echo js_escape($rowresult4['encounter']); ?>;
+interface/therapy_groups/therapy_groups_views/groupDetailsGeneralData.php:258:EncounterDateArray[Count]=<?php echo js_escape(oeFormatShortDate(date("Y-m-d", strtotime((string) $rowresult4['date'])))); ?>;
+interface/therapy_groups/therapy_groups_views/groupDetailsGeneralData.php:259:CalendarCategoryArray[Count]=<?php echo js_escape(xl_appt_category($rowresult4['pc_catname'])); ?>;
+interface/therapy_groups/therapy_groups_views/groupDetailsParticipants.php:254:var url = <?php echo js_escape(OEGlobalsBag::getInstance()->getWebRoot()); ?> + '/interface/main/calendar/find_patient_popup.php';
+interface/therapy_groups/therapy_groups_views/groupDetailsParticipants.php:267:location.href = <?php echo js_escape(OEGlobalsBag::getInstance()->getWebRoot()); ?> + '/interface/therapy_groups/index.php?method=groupParticipants&group_id=' + <?php echo js_url($groupId); ?>;
+interface/therapy_groups/therapy_groups_views/groupDetailsParticipants.php:289:EncounterIdArray[Count]=<?php echo js_escape($rowresult4['encounter']); ?>;
+interface/therapy_groups/therapy_groups_views/groupDetailsParticipants.php:290:EncounterDateArray[Count]=<?php echo js_escape(oeFormatShortDate(date("Y-m-d", strtotime((string) $rowresult4['date'])))); ?>;
+interface/therapy_groups/therapy_groups_views/groupDetailsParticipants.php:291:CalendarCategoryArray[Count]=<?php echo js_escape(xl_appt_category($rowresult4['pc_catname'])); ?>;
+interface/usergroup/addrbook_edit.php:113:echo "type_options_js[" . js_escape($row_query['option_id']) . "]=" . js_escape($row_query['option_value']) . ";\n";
+interface/usergroup/addrbook_edit.php:180:csrf_token: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/usergroup/addrbook_edit.php:546:echo " alert(" . js_escape($info_msg) . ");\n";
+interface/usergroup/addrbook_edit.php:569:typeSelect(<?php echo js_escape($row['abook_type'] ?? null); ?>);
+interface/usergroup/addrbook_list.php:255:let rtn_selection = <?php echo js_escape($rtn_selection); ?>;
+interface/usergroup/adminacl.php:100:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/usergroup/adminacl.php:172:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/usergroup/adminacl.php:222:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/usergroup/adminacl.php:271:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/usergroup/adminacl.php:377:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+interface/usergroup/facilities.php:245:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/usergroup/mfa_u2f.php:50:<?php echo js_escape($appId); ?>,
+interface/usergroup/user_info.php:46:var webroot=<?php echo js_escape(OEGlobalsBag::getInstance()->getWebRoot()); ?>;
+interface/usergroup/user_info.php:59:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+interface/usergroup/usergroup_admin.php:602:request.append("csrf_token_form", <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'counter')); ?>);
+interface/usergroup/usergroup_admin.php:807:echo "alert(" . js_escape($alertmsg) . ");\n";
+interface/usergroup/usergroup_admin_add.php:669:echo "alert('" . js_escape($alertmsg) . "');\n";
+library/ESign/views/encounter/esign_form.php:79:gsi.init(<?php echo js_escape($this->form->googleSigninClientID); ?>, {
+library/ESign/views/form/esign_form.php:78:gsi.init(<?php echo js_escape($this->form->googleSigninClientID); ?>, {
+library/ajax/addlistitem.php:82:echo '{"id":' . js_escape($lrow['option_id']) . ',';
+library/ajax/addlistitem.php:88:echo '"title":' . js_escape($lrow['title']) . '}';
+library/ajax/code_attributes_ajax.php:102:js_escape($codetype) . "," .
+library/ajax/code_attributes_ajax.php:103:js_escape($code) . "," .
+library/ajax/code_attributes_ajax.php:104:js_escape($desc) . "," .
+library/ajax/code_attributes_ajax.php:105:js_escape($price) . "," .
+library/ajax/code_attributes_ajax.php:106:js_escape($wh) . ");";
+library/ajax/facility_ajax_jav.inc.php:33:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+library/ajax/payment_ajax_jav.inc.php:102:csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>
+library/ajax/set_pt.php:37:echo text(js_escape($current));
+library/ajax/specialty_form_ajax.php:37:echo js_escape($is_ok);
+library/ajax/specialty_form_ajax.php:57:echo js_escape($ret);
+library/api.inc.php:102:echo "location.href = " . js_escape($address) . ";\n";
+library/classes/TreeMenu.php:613:js_escape($nodeObj->text),
+library/classes/TreeMenu.php:614:!empty($nodeObj->icon) ?  js_escape($nodeObj->icon) : 'null',
+library/classes/TreeMenu.php:615:!empty($nodeObj->link) ? js_escape($nodeObj->link) : 'null',
+library/classes/TreeMenu.php:620:!empty($nodeObj->expandedIcon) ? js_escape($nodeObj->expandedIcon) : 'null'
+library/custom_template/add_template.php:61:list_id: <?php echo js_escape($list_id);?>,
+library/custom_template/custom_template.php:98:const csrfToken = <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>;
+library/custom_template/custom_template.php:135:let initialData = getCallingDocumentEditorContent(<?php echo js_escape($type); ?>, <?php echo js_escape($cc_flag); ?>);
+library/custom_template/custom_template.php:177:SelectToSave(<?php echo js_escape($type); ?>, <?php echo js_escape($cc_flag); ?>, insertValue);
+library/custom_template/share_template.php:58:list_id: <?php echo js_escape($list_id); ?>,
+library/dated_reminder_functions.php:254:<a onclick="openAddScreen(' . attr(js_escape((string) $r['messageID'])) . ')" class="dnForwarder btn btn-secondary btn-send-msg" id="' . attr($r['messageID']) . '" href="#"> ' . xlt('Forward') . ' </a>
+library/dated_reminder_functions.php:255:<a class="dnRemover btn btn-secondary btn-save" onclick="updateme(' . attr(js_escape((string) $r['messageID'])) . ')" id="' . attr($r['messageID']) . '" href="#">
+library/dated_reminder_functions.php:260:<span onclick="goPid(' . attr(js_escape((string) $r['PatientID'])) . ')" class="patLink" id="' . attr($r['PatientID']) . '">' .
+library/formatting_DateToYYYYMMDD_js.js.php:26:var date_display_format = <?php echo js_escape((empty(OEGlobalsBag::getInstance()->get('date_display_format')) ? 0 : OEGlobalsBag::getInstance()->get('date_display_format'))) ?>;
+library/htmlspecialchars.inc.php:46:function js_escape($text)
+library/htmlspecialchars.inc.php:135:return js_escape(urlencode($text ?? ''));
+library/htmlspecialchars.inc.php:340:* Translate via xl() and then escape via js_escape() for use with JavaScript literals.
+library/htmlspecialchars.inc.php:347:return js_escape(hsc_private_xl_or_warn($key));
+library/js/xl/datatables-net.js.php:46:echo ', ' . js_escape($key) . ': ' . js_escape($value);
+library/js/xl/select2.js.php:30:"dir":<?php echo js_escape($session->get('language_direction')); ?>,
+library/js/xl/select2.js.php:67:echo ', ' . js_escape($key) . ': function () { return ' . js_escape($value) . '}';
+library/options.inc.php:3301:"target:"   . js_escape($field_id)              . ", " .
+library/options.inc.php:3302:"action:"   . js_escape($action)                . ", " .
+library/options.inc.php:3303:"id:"       . js_escape($condition['id'])       . ", " .
+library/options.inc.php:3304:"itemid:"   . js_escape($condition['itemid'])   . ", " .
+library/options.inc.php:3305:"operator:" . js_escape($condition['operator']) . ", " .
+library/options.inc.php:3306:"value:"    . js_escape($condition['value'])    . ", ";
+library/options.inc.php:3312:$condition_str .= "andor:" . js_escape($andor) . "}";
+library/options.inc.php:4358:" var canfld = f[" . js_escape($fldid) . "];\n" .
+library/options.inc.php:4359:" if (canfld) canfld.value = lbfCanvasGetData(" . js_escape($fldid) . ");\n";
+library/options.inc.php:4365:echo " lbfSetSignature(" . js_escape($fldid) . ");\n";
+library/options.inc.php:4383:"\":\\n\" + " . js_escape(xl_layout_label($fldtitle)) . ");\n" .
+library/options.inc.php:4392:"       errMsgs[errMsgs.length] = " . js_escape(xl_layout_label($fldtitle)) . "; \n" .
+library/options.inc.php:4401:"\":\\n\" + " . js_escape(xl_layout_label($fldtitle)) . ");\n" .
+library/options.inc.php:4414:"       errMsgs[errMsgs.length] = " . js_escape(xl_layout_label($fldtitle)) . "; \n" .
+library/options.inc.php:4428:errMsgs[errMsgs.length] = " . js_escape(xl_layout_label($fldtitle)) . "; \n" .
+library/options.js.php:380:url += "&csrf_token_form=" + <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>;
+library/options_listadd.inc.php:176:{csrf_token_form: <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>,
+library/restoreSession.php:36:var oemr_scp_lifetime = <?php echo js_escape($scparams['lifetime']); ?>;
+library/restoreSession.php:37:var oemr_scp_path = <?php echo js_escape($scparams['path']); ?>;
+library/restoreSession.php:38:var oemr_scp_domain = <?php echo js_escape($scparams['domain']); ?>;
+library/restoreSession.php:39:var oemr_scp_secure = <?php echo js_escape((int) $scparams['secure']); ?>;
+library/restoreSession.php:40:var oemr_scp_samesite = <?php echo empty($scparams['samesite']) ? 'false' : js_escape($scparams['samesite']); ?>;
+library/specialty_forms.php:28:echo "<script>var form=" . js_escape($form) . "</script>";
+library/spreadsheet.inc.php:345:var startDate = <?php echo js_escape(($start_date ?: date('Y-m-d'))); ?>;
+library/spreadsheet.inc.php:769:echo " alert(" . js_escape($alertmsg) . ");\n";
+library/validation/validate_core.php:71:echo('if(document.getElementsByName(' . js_escape($key) . ').length>0)');
+library/validation/validate_core.php:75:echo('var form = document.getElementsByName(' . js_escape($key) . ');');
+library/validation/validate_core.php:77:echo('form[0].setAttribute("id",' . js_escape($key) . ');');
+library/validation/validate_core.php:83:echo('$(' . js_escape("#" . $key) . ').on("submit", function(event){');
+library/validation/validate_core.php:87:echo ('var submitvalue = submitme(' . js_escape($use_validate_js) . ',event,' . js_escape($key) . ',' . json_sanitize($collectThis[$key]['rules']) . ');');
+portal/account/account.php:118:echo js_escape($rtn);
+portal/import_template.php:565:const profiles = <?php echo js_escape($profile_list); ?>;
+portal/import_template_ui.php:103:const profiles = <?php echo js_escape($profile_list); ?>;
+portal/import_template_ui.php:136:let searchTerm = <?php echo js_escape($searchTerm); ?>;
+portal/import_template_ui.php:356:handleTemplate(id, 'delete', '', false, template, <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'import-template-delete')); ?>)
+portal/index.php:710:var webroot_url = <?php echo js_escape($globalsBag->get('web_root')) ?>;
+portal/lib/doc_lib.php:94:echo js_escape(['success' => true]);
+portal/lib/doc_lib.php:99:echo js_escape(['success' => false, 'message' => 'Failed to update or delete record.']);
+portal/lib/doc_lib.php:104:echo js_escape(['success' => false, 'message' => $e->getMessage()]);
+portal/lib/doc_lib.php:107:echo js_escape(['success' => false, 'message' => 'Failed Action']);
+portal/lib/doc_lib.php:154:echo js_escape("ERROR " . xla("Missing Patient ID"));
+portal/lib/patient_groups.php:124:const groups = <?php echo js_escape($group_list); ?>;
+portal/lib/patient_groups.php:125:const profiles = <?php echo js_escape($profile_list); ?>;
+portal/lib/patient_groups.php:126:const demoPatient = <?php echo js_escape($_REQUEST['from_demo_pid'] ?? '0'); ?>;
+portal/lib/patient_groups.php:376:const groups = <?php echo js_escape($group_list); ?>;
+portal/lib/patient_groups.php:377:const profiles = <?php echo js_escape($profile_list); ?>;
+portal/lib/patient_groups.php:378:const demoPatient = <?php echo js_escape($_REQUEST['from_demo_pid'] ?? '0'); ?>;
+portal/messaging/messages.php:138:userproper: <?php echo !empty($session->get('ptName', null)) ? js_escape($session->get('ptName')) : js_escape($dashuser['fname'] . ' ' . $dashuser['lname']); ?>,
+portal/messaging/messages.php:142:csrf: <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'messages-portal')); ?>,
+portal/patient/templates/OnsiteDocumentListView.tpl.php:89:$csrf_php = js_escape(CsrfUtils::collectCsrfToken(session: $session));
+portal/patient/templates/OnsiteDocumentListView.tpl.php:92:echo "<script>var cpid=" . js_escape($pid) . ";var cuser=" . js_escape($cuser) . ";var ptName=" . js_escape($ptName) .
+portal/patient/templates/OnsiteDocumentListView.tpl.php:93:";var autoRender=" . js_escape($auto_render) . ";var auditRender=" . js_escape($audit_render) . ";var renderDocumentName=" . js_escape($auto_render_name) .
+portal/patient/templates/OnsiteDocumentListView.tpl.php:94:";var catid=" . js_escape($category) . ";var catname=" . js_escape($catname) . ";</script>";
+portal/patient/templates/OnsiteDocumentListView.tpl.php:95:echo "<script>var recid=" . js_escape($recid) . ";var docid=" . js_escape($docid) . ";var isNewDoc=" . js_escape((int) $isnew) . ";var newFilename=" . js_escape($new_filename) .
+portal/patient/templates/OnsiteDocumentListView.tpl.php:96:";var help_id=" . js_escape($help_id) . ";</script>";
+portal/patient/templates/OnsiteDocumentListView.tpl.php:97:echo "<script>var isPortal=" . js_escape($is_portal) . ";var isModule=" . js_escape($is_module) . ";var isDashboard=" . js_escape((int) $is_dashboard) .
+portal/patient/templates/OnsiteDocumentListView.tpl.php:98:";var webRoot=" . js_escape($webroot) . ";var doc_edit=" . js_escape($doc_edit) . ";var webroot_url = webRoot;</script>";
+portal/patient/templates/OnsiteDocumentListView.tpl.php:134:translation: <?php echo js_escape($this->language_defs ?? []); ?>
+portal/patient/templates/OnsiteDocumentListView.tpl.php:281:let csrf_token_js = <?php echo js_escape(CsrfUtils::collectCsrfToken(session: $session)); ?>;
+portal/patient/templates/PatientListView.tpl.php:53:const exclude = <?php echo js_escape($exclude); ?>;
+portal/portal_payment.php:97:echo "<script>var jsondata=" . js_escape($edata['table_args']) . ";var ccdata=" . js_escape($edata['checksum']) . "</script>";
+portal/portal_payment.php:358:let pid = <?php echo js_escape($pid); ?>;
+portal/portal_payment.php:361:let owner = <?php echo js_escape($adminUser['recip_id']); ?>;
+portal/portal_payment.php:362:let sn = <?php echo js_escape($adminUser['username']); ?>;
+portal/portal_payment.php:363:let rid = <?php echo js_escape($portalPatient['recip_id']); ?>;
+portal/portal_payment.php:364:let rn = <?php echo js_escape($portalPatient['username']); ?>;
+portal/portal_payment.php:369:'csrf_token_form': <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'messages-portal')); ?>,
+portal/questionnaire_render.php:190:let formMode = <?php echo js_escape($mode); ?>;
+portal/sign/assets/signer_modal.php:66:echo js_escape($modal);
+portal/sign/lib/show-signature.php:112:echo js_escape($info_query);
+portal/sign/lib/show-signature.php:115:echo js_escape($row['sig_image']);
+portal/sign/lib/show-signature.php:118:echo js_escape($info_query);
+sphere/process_response.php:68:$msg = js_escape(xl("Transaction Error") . $description);
+sphere/process_response.php:72:$msg = js_escape(xl("Transaction Declined") . $description);
+sphere/process_response.php:92:echo "<script>opener.sphereSuccess(" . js_escape($_POST['transid']) . ");dlgclose();</script>";
+sphere/process_response.php:96:$msg = js_escape(xl("Transaction Not Successful") . $description);
+sphere/process_revert_response.php:46:$msg = js_escape(xl("Aborted since unable to submit transaction") . ": " . $_POST['status'] . " " . $_POST['error'] . " " . $_POST['offenders']);
+sphere/process_revert_response.php:72:$msg = js_escape(xl("Aborted since unable to complete transaction") . ": " . $completeRevertToString);
+sphere/process_revert_response.php:79:$msg = js_escape(xl("Successful") . " " . $_POST['action']);
+sphere/process_revert_response.php:85:$msg = js_escape(xl("Revert Error") . ": " . $_POST['querystring']);
+sql_upgrade.php:152:data.append("csrf_token_form", <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'sqlupgrade')); ?>);
+sql_upgrade.php:386:$sqlUpgradeService->flush_echo("<script>serverStatus(" . js_escape($version) . ", 1);</script>");
+src/Billing/BillingProcessor/Tasks/AbstractGenerator.php:113:echo "<script type='text/JavaScript'>window.location = " . js_escape($url) . "</script>";
+src/Common/Forms/CoreFormToPortalUtility.php:104:$ret .= 'parent.postMessage({formid:' . js_escape($formid) . '}, window.location.origin);';
+src/Common/Forms/CoreFormToPortalUtility.php:121:$ret .= "parent.postMessage({formid:" . js_escape($formid) . "}, window.location.origin);";
+src/Common/Forms/CoreFormToPortalUtility.php:133:$ret .= "parent.postMessage({formid:" . js_escape($formid) .
+src/Common/Forms/CoreFormToPortalUtility.php:134:",questionnaireId:" . js_escape($qId) .
+src/Common/Forms/CoreFormToPortalUtility.php:135:",responseId:" . js_escape($qrId) .
+src/Common/Forms/CoreFormToPortalUtility.php:136:",formEncounter:" . js_escape($encounter) .
+src/Common/Forms/Types/BillingCodeType.php:30:return "valdesc:" . js_escape(getCodeDescription($tmp[1])) . ", ";
+src/Common/Twig/TwigExtension.php:300:new TwigFilter('js_escape', js_escape(...)),
+src/OeUI/OemrUI.php:421:$collectToken = js_escape(CsrfUtils::collectCsrfToken(session: $session));
+src/PaymentProcessing/Sphere/SpherePayment.php:201:let backupTicket = " . js_escape(RandomGenUtils::createUniqueToken(12)) . ";
+src/PaymentProcessing/Sphere/SpherePayment.php:210:let responseUrl = " . js_escape($this->serverSite) . " + '/sphere/initial_response.php';
+src/PaymentProcessing/Sphere/SpherePayment.php:211:let cancelUrl = " . js_escape($this->serverSite) . " + '/sphere/initial_response.php?cancel=cancel&ticket=' + encodeURIComponent(ticket) + '&front=' + encodeURIComponent(front) + '&patient_id_cc=' + " . js_escape($this->patientIdCc) . " + '&csrf_token=' + " . js_escape(CsrfUtils::collectCsrfToken($session, 'sphere')) .  ";
+src/PaymentProcessing/Sphere/SpherePayment.php:215:mainUrl = " . js_escape($this->mainUrl) . " + mainUrlEnd;
+src/PaymentProcessing/Sphere/SpherePayment.php:217:mainUrl = " . js_escape($this->mainUrlRetail ?? '') . " + mainUrlEnd;
+src/PaymentProcessing/Sphere/SphereRevert.php:242:request.append("csrf_token", ' . js_escape(CsrfUtils::collectCsrfToken($session, 'sphere_revert_token')) . ');
+src/PaymentProcessing/Sphere/SphereRevert.php:273:let returnUrl = ' . js_escape(OEGlobalsBag::getInstance()->get("site_addr_oath") . OEGlobalsBag::getInstance()->getKernel()->getWebRoot()) . ' + "/sphere/initial_response.php?action=" + encodeURIComponent(action) + "&front=" + encodeURIComponent(front) + "&uuid_tx=" + encodeURIComponent(uuidTx) + "&revert=1&csrf_token=" + ' . js_url(CsrfUtils::collectCsrfToken($session, 'sphere_revert')) . ';
+src/PaymentProcessing/Sphere/SphereRevert.php:274:let mainUrl = ' . js_escape(Sphere::TRUSTEE_API_URL) . ' + "payment.php?aggregators=1&aggregator1=" + ' . js_escape(Sphere::AGGREGATOR_ID) . ' + "&transid=" + encodeURIComponent(transId) + "&token=" + encodeURIComponent(token) + "&action=" + encodeURIComponent(action) + "&returnurl=" + encodeURIComponent(returnUrl);
+src/Pdf/PatientPortalPDFDocumentCreator.php:65:echo js_escape("ERROR " . xla("Missing Patient ID"));
+src/Services/DocumentTemplates/DocumentTemplateRender.php:184:$sigfld = "<script>page.isFrameForm=1;page.isQuestionnaire=1;page.encounterFormName=" . js_escape($q_id) . "</script>";
+src/Services/DocumentTemplates/DocumentTemplateRender.php:194:$sigfld = "<script>page.isFrameForm=1;page.isQuestionnaire=1;page.encounterFormName=" . js_escape($form_name) . "</script>";
+src/Services/DocumentTemplates/DocumentTemplateRender.php:209:$sigfld = '<script>page.pdfFormName=' . js_escape($formname) . '</script>';
+src/Services/DocumentTemplates/DocumentTemplateRender.php:231:$sigfld = "<script>page.isFrameForm=1;page.encounterFormName=" . js_escape($formname) . "</script>";
+templates/super/rules/controllers/edit/custom.php:23:var custom = new custom( { selectedColumn: <?php echo js_escape($criteria->column); ?> } );
+tests/api/InternalApiTest.php:47:'apicsrftoken': <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'api')); ?>
+tests/api/InternalApiTest.php:63:'apicsrftoken': <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'api')); ?>
+tests/api/InternalFhirTest.php:51:'apicsrftoken': <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'api')); ?>
+tests/api/InternalFhirTest.php:67:'apicsrftoken': <?php echo js_escape(CsrfUtils::collectCsrfToken($session, 'api')); ?>
