@@ -1,0 +1,7 @@
+﻿# Diff generated 2026-08-09T13:31:25.7326347+00:00
+# INSERT: 0  UPDATE: 5  DELETE: 0
+UPDATE  def_id=120492  cons_id=39  eng=[A provider or warehouse can be selected in the dropwdown box. For this option to be displayed 'Support provider in line item in fee sheet' box must be checked in Administration > Globals> Billing page]  old=[ يمكن اختيار مقدم أو مستودع في القائمة المنسدلة. لكي يتم عرض هذا الخيار "مزود تقديم الدعم في البند في صحيفة الرسوم" يجب تحديد المربع في الإدارة> العامة> صفحة الفواتير]  new=[يمكن اختيار مقدم أو مستودع في القائمة المنسدلة. لكي يتم عرض هذا الخيار "مزود تقديم الدعم في البند في صحيفة الرسوم" يجب تحديد المربع في الإدارة> العامة> صفحة الفواتير]
+UPDATE  def_id=120552  cons_id=115  eng=[Access not allowed]  old=[ الوصول غير مسموح]  new=[الوصول غير مسموح]
+UPDATE  def_id=122130  cons_id=3414  eng=[Edit is not authorized!]  old=[ تحرير المحتوى غير مسموح  ]  new=[تحرير المحتوى غير مسموح]
+UPDATE  def_id=122958  cons_id=5101  eng=[If all data for all columns are complete for this form]  old=[أذا كانت كل البيانات من كل الأعمدة مكتملة لهذا النموذج ]  new=[أذا كانت كل البيانات من كل الأعمدة مكتملة لهذا النموذج]
+UPDATE  def_id=125290  cons_id=10047  eng=[Sensory exam normal]  old=[الكشف الحِسِّيّ‎ طبيعي  ]  new=[الكشف الحِسِّيّ‎ طبيعي]
