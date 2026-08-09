@@ -51,3 +51,18 @@ docker/development-easy-redis/docker-compose.override.yml
 compose.override.yml
 tmp/
 .webpack-cache/
+
+# ===== Thiqa SaaS fork — begin fork-owned rules =====
+# Archives: opaque to git and duplicated by their extracted contents, which are
+# tracked (brand/ holds everything distilled from the design handoff).
+docs/Thiqa_Group_1_5B_Handoff/*.zip
+docs/discovery/**/*.zip
+
+# Bulk discovery output: raw grep dumps, regenerable from the tooling in tools/.
+# ~31 MB across three files; the derived findings live in docs/rebranding.md.
+docs/discovery/**/react-consumer-search-hits.txt
+docs/discovery/**/count-js_innerhtml.txt
+
+# Local stack helper output
+SETUP-STATUS.local.md
+# ===== Thiqa SaaS fork — end fork-owned rules =====
