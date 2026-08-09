@@ -1,0 +1,2 @@
+de8548a37c192b0fdbb746e596285a94e3a0529400bc32346429a49b26830def  OpenEMR-SaaS-Locked-Decisions-UPDATED-2026-08-09.md
+cb2367ad82be21f724d64dd82246efae0087529210407fb2dafa7aaf96ff9887  OpenEMR-SaaS-Implementation-Backlog-and-Acceptance-Criteria-UPDATED-2026-08-09.md
