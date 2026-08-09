@@ -1,0 +1,55 @@
+{
+  "family": {
+    "latin": "Inter",
+    "arabic": "IBM Plex Sans Arabic",
+    "arabicPdf": "Amiri",
+    "stack": "'Inter','IBM Plex Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif",
+    "stackLatin": "'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif",
+    "stackArabic": "'IBM Plex Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif",
+    "stackArabicPdf": "'Amiri','IBM Plex Sans Arabic',sans-serif",
+    "license": "SIL Open Font License 1.1"
+  },
+  "weight": {
+    "regular": 400,
+    "medium": 500,
+    "semibold": 600,
+    "bold": 700
+  },
+  "weightUsage": {
+    "400": ["body copy", "table cell data", "form input text", "helper text"],
+    "500": ["field labels", "secondary nav items", "card titles", "badges"],
+    "600": ["section headings", "active/selected nav item", "table column headers", "primary button labels", "emphasized status"],
+    "700": ["page H1", "wordmark", "dashboard hero KPI numbers", "critical alert headlines"]
+  },
+  "scale": {
+    "display":     { "size": 40, "lineHeight": 48, "weight": 700 },
+    "h1":          { "size": 32, "lineHeight": 40, "weight": 700 },
+    "h2":          { "size": 24, "lineHeight": 32, "weight": 600 },
+    "h3":          { "size": 20, "lineHeight": 28, "weight": 600 },
+    "h4":          { "size": 18, "lineHeight": 24, "weight": 600 },
+    "bodyLarge":   { "size": 16, "lineHeight": 24, "weight": 400 },
+    "body":        { "size": 14, "lineHeight": 20, "weight": 400 },
+    "bodySmall":   { "size": 13, "lineHeight": 18, "weight": 400 },
+    "label":       { "size": 13, "lineHeight": 16, "weight": 500 },
+    "caption":     { "size": 12, "lineHeight": 16, "weight": 400 },
+    "button":      { "size": 14, "lineHeight": 20, "weight": 600 },
+    "tableHeader": { "size": 12, "lineHeight": 16, "weight": 600 },
+    "tableBody":   { "size": 13, "lineHeight": 18, "weight": 400 }
+  },
+  "numeric": {
+    "featureSettings": "'tnum' 1, 'lnum' 1",
+    "usage": "Use tabular lining figures for patient identifiers, claim numbers, invoice numbers, monetary values, dates, clinical values, and table cells."
+  },
+  "files": [
+    { "path": "brand/typography/fonts/Inter-Regular.woff2",             "family": "Inter",                "weight": 400 },
+    { "path": "brand/typography/fonts/Inter-Medium.woff2",              "family": "Inter",                "weight": 500 },
+    { "path": "brand/typography/fonts/Inter-SemiBold.woff2",            "family": "Inter",                "weight": 600 },
+    { "path": "brand/typography/fonts/Inter-Bold.woff2",                "family": "Inter",                "weight": 700 },
+    { "path": "brand/typography/fonts/IBMPlexSansArabic-Regular.woff2", "family": "IBM Plex Sans Arabic", "weight": 400 },
+    { "path": "brand/typography/fonts/IBMPlexSansArabic-Medium.woff2",  "family": "IBM Plex Sans Arabic", "weight": 500 },
+    { "path": "brand/typography/fonts/IBMPlexSansArabic-SemiBold.woff2","family": "IBM Plex Sans Arabic", "weight": 600 },
+    { "path": "brand/typography/fonts/IBMPlexSansArabic-Bold.woff2",    "family": "IBM Plex Sans Arabic", "weight": 700 },
+    { "path": "brand/typography/fonts/pdf/Amiri-Regular.ttf",           "family": "Amiri",                "weight": 400, "usage": "pdf" },
+    { "path": "brand/typography/fonts/pdf/Amiri-Bold.ttf",              "family": "Amiri",                "weight": 700, "usage": "pdf" }
+  ]
+}

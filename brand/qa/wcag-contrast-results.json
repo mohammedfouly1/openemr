@@ -1,0 +1,387 @@
+{
+  "status": "COMPUTED",
+  "standard": "WCAG 2.2",
+  "source": "brand/tokens/thiqa-tokens.json",
+  "results": [
+    {
+      "theme": "light",
+      "label": "body text on background",
+      "fg": "#0B1B4D",
+      "bg": "#FAFAF8",
+      "ratio": 15.72,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "body text on surface",
+      "fg": "#0B1B4D",
+      "bg": "#FFFFFF",
+      "ratio": 16.43,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "secondary text on background",
+      "fg": "#4B5266",
+      "bg": "#FAFAF8",
+      "ratio": 7.45,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "secondary text on surface",
+      "fg": "#4B5266",
+      "bg": "#FFFFFF",
+      "ratio": 7.78,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "disabled text on background",
+      "fg": "#9CA0AC",
+      "bg": "#FAFAF8",
+      "ratio": 2.5,
+      "required": 3.0,
+      "criterion": "SC 1.4.11 UI 3:1 (disabled exempt from 1.4.3)",
+      "status": "ADVISORY"
+    },
+    {
+      "theme": "light",
+      "label": "link default on background",
+      "fg": "#2C5F94",
+      "bg": "#FAFAF8",
+      "ratio": 6.34,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "link default on surface",
+      "fg": "#2C5F94",
+      "bg": "#FFFFFF",
+      "ratio": 6.62,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "link hover on background",
+      "fg": "#1E4574",
+      "bg": "#FAFAF8",
+      "ratio": 9.31,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "link hover on surface",
+      "fg": "#1E4574",
+      "bg": "#FFFFFF",
+      "ratio": 9.73,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "primary CTA text on primary bg (interactive.primary)",
+      "fg": "#FFFFFF",
+      "bg": "#C43F2E",
+      "ratio": 5.12,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "secondary CTA text on secondary bg",
+      "fg": "#FFFFFF",
+      "bg": "#0B1B4D",
+      "ratio": 16.43,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "focus ring on background (UI)",
+      "fg": "#3E7FBD",
+      "bg": "#FAFAF8",
+      "ratio": 4.04,
+      "required": 3.0,
+      "criterion": "SC 1.4.11 UI 3:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "success text on success bg",
+      "fg": "#2F6B45",
+      "bg": "#E9F5EE",
+      "ratio": 5.67,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "warning text on warning bg",
+      "fg": "#8A5314",
+      "bg": "#FCEFE0",
+      "ratio": 5.58,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "critical text on critical bg",
+      "fg": "#8E271D",
+      "bg": "#FBE9E7",
+      "ratio": 7.29,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "info text on info bg",
+      "fg": "#264C74",
+      "bg": "#E8F0FA",
+      "ratio": 7.72,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "border.default on background (UI)",
+      "fg": "#E4E2DC",
+      "bg": "#FAFAF8",
+      "ratio": 1.24,
+      "required": 3.0,
+      "criterion": "SC 1.4.11 UI 3:1 (advisory)",
+      "status": "ADVISORY"
+    },
+    {
+      "theme": "light",
+      "label": "borderStrong on background (UI)",
+      "fg": "#4B5266",
+      "bg": "#FAFAF8",
+      "ratio": 7.45,
+      "required": 3.0,
+      "criterion": "SC 1.4.11 UI 3:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "light",
+      "label": "borderStrong on surface (UI)",
+      "fg": "#4B5266",
+      "bg": "#FFFFFF",
+      "ratio": 7.78,
+      "required": 3.0,
+      "criterion": "SC 1.4.11 UI 3:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "body text on background",
+      "fg": "#F5F6F8",
+      "bg": "#0B1220",
+      "ratio": 17.31,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "body text on surface",
+      "fg": "#F5F6F8",
+      "bg": "#121A2E",
+      "ratio": 16.01,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "body text on raised surface",
+      "fg": "#F5F6F8",
+      "bg": "#17213A",
+      "ratio": 14.77,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "secondary text on background",
+      "fg": "#AEB5C4",
+      "bg": "#0B1220",
+      "ratio": 9.1,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "secondary text on surface",
+      "fg": "#AEB5C4",
+      "bg": "#121A2E",
+      "ratio": 8.41,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "disabled text on background",
+      "fg": "#6B7280",
+      "bg": "#0B1220",
+      "ratio": 3.87,
+      "required": 3.0,
+      "criterion": "SC 1.4.11 UI 3:1 (disabled exempt from 1.4.3)",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "link default on background",
+      "fg": "#8FC1EE",
+      "bg": "#0B1220",
+      "ratio": 9.83,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "link default on surface",
+      "fg": "#8FC1EE",
+      "bg": "#121A2E",
+      "ratio": 9.09,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "link hover on background",
+      "fg": "#B7D9F5",
+      "bg": "#0B1220",
+      "ratio": 12.71,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "primary CTA text on primary bg (interactive.primary)",
+      "fg": "#0B1220",
+      "bg": "#FF6F5E",
+      "ratio": 6.85,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "secondary CTA text on secondary bg",
+      "fg": "#0B1220",
+      "bg": "#F5F6F8",
+      "ratio": 17.31,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "focus ring on background (UI)",
+      "fg": "#8FC1EE",
+      "bg": "#0B1220",
+      "ratio": 9.83,
+      "required": 3.0,
+      "criterion": "SC 1.4.11 UI 3:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "success text on success bg",
+      "fg": "#8FD1A6",
+      "bg": "#173425",
+      "ratio": 7.62,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "warning text on warning bg",
+      "fg": "#F0B45C",
+      "bg": "#3A2A12",
+      "ratio": 7.49,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "critical text on critical bg",
+      "fg": "#F29088",
+      "bg": "#3A1815",
+      "ratio": 6.9,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "info text on info bg",
+      "fg": "#8FC1EE",
+      "bg": "#132437",
+      "ratio": 8.26,
+      "required": 4.5,
+      "criterion": "SC 1.4.3 normal 4.5:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "border.default on background (UI)",
+      "fg": "#26314A",
+      "bg": "#0B1220",
+      "ratio": 1.44,
+      "required": 3.0,
+      "criterion": "SC 1.4.11 UI 3:1 (advisory)",
+      "status": "ADVISORY"
+    },
+    {
+      "theme": "dark",
+      "label": "borderStrong on background (UI)",
+      "fg": "#AEB5C4",
+      "bg": "#0B1220",
+      "ratio": 9.10,
+      "required": 3.0,
+      "criterion": "SC 1.4.11 UI 3:1",
+      "status": "PASS"
+    },
+    {
+      "theme": "dark",
+      "label": "borderStrong on surface (UI)",
+      "fg": "#AEB5C4",
+      "bg": "#121A2E",
+      "ratio": 8.41,
+      "required": 3.0,
+      "criterion": "SC 1.4.11 UI 3:1",
+      "status": "PASS"
+    }
+  ]
+}

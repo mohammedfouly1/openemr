@@ -1,0 +1,6 @@
+# Byte-exact storage: files in this tree are covered by SHA-256 manifests
+# (brand/manifests/SHA256SUMS and the governance manifest). The repository has
+# core.autocrlf=true, which would rewrite LF to CRLF on checkout and break every
+# recorded hash on a fresh clone. -text disables all line-ending conversion so
+# the working tree always matches the bytes the hashes were computed over.
+* -text
