@@ -254,31 +254,6 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
     'message' => '#^Raw curl_\\* function curl_close\\(\\) is forbidden\\. Use GuzzleHttp\\\\Client or OpenEMR\\\\Common\\\\Http\\\\oeHttp instead\\.$#',
     'count' => 1,
-    'path' => __DIR__ . '/../../src/Services/ProductRegistrationService.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Raw curl_\\* function curl_exec\\(\\) is forbidden\\. Use GuzzleHttp\\\\Client or OpenEMR\\\\Common\\\\Http\\\\oeHttp instead\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../src/Services/ProductRegistrationService.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Raw curl_\\* function curl_getinfo\\(\\) is forbidden\\. Use GuzzleHttp\\\\Client or OpenEMR\\\\Common\\\\Http\\\\oeHttp instead\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../src/Services/ProductRegistrationService.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Raw curl_\\* function curl_init\\(\\) is forbidden\\. Use GuzzleHttp\\\\Client or OpenEMR\\\\Common\\\\Http\\\\oeHttp instead\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../src/Services/ProductRegistrationService.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Raw curl_\\* function curl_setopt\\(\\) is forbidden\\. Use GuzzleHttp\\\\Client or OpenEMR\\\\Common\\\\Http\\\\oeHttp instead\\.$#',
-    'count' => 5,
-    'path' => __DIR__ . '/../../src/Services/ProductRegistrationService.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Raw curl_\\* function curl_close\\(\\) is forbidden\\. Use GuzzleHttp\\\\Client or OpenEMR\\\\Common\\\\Http\\\\oeHttp instead\\.$#',
-    'count' => 1,
     'path' => __DIR__ . '/../../src/Telemetry/TelemetryService.php',
 ];
 $ignoreErrors[] = [

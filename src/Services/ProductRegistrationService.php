@@ -15,7 +15,6 @@
 
 namespace OpenEMR\Services;
 
-use OpenEMR\Core\OEGlobalsBag;
 use OpenEMR\Services\VersionService;
 
 require_once(__DIR__ . '/../../interface/product_registration/exceptions/generic_product_registration_exception.php');
@@ -108,40 +107,18 @@ class ProductRegistrationService
         }
     }
 
+    // Remote product registration is disabled in this distribution: the preference is recorded
+    // locally only. No registration endpoint is contacted, so none has to exist or be operated.
     private function optInStrategy($email)
     {
-        // build the information array
-        $info = ['email' => $email, 'version' => (string) (new VersionService())->getSoftwareVersion()];
-        if (!empty(getenv('OPENEMR_DOCKER_ENV_TAG', true))) {
-            // this will add standard package information if it exists
-            $info['distribution'] = getenv('OPENEMR_DOCKER_ENV_TAG', true);
-        }
-
-        $httpVerifySsl = (bool) (OEGlobalsBag::getInstance()->get('http_verify_ssl') ?? true);
-        $curl = curl_init('https://reg.open-emr.org/api/registration');
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($info));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $httpVerifySsl);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        $responseBodyRaw = curl_exec($curl);
-        $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-
         $currentVersion = (string) (new VersionService())->getSoftwareVersion();
-        switch ($responseCode) {
-            case 201:
-                $entry = $this->entryExist();
-                if ($entry) {
-                    sqlStatement("UPDATE `product_registration` SET `email` = ?, `opt_out` = 0, `last_ask_version` = ? WHERE `id` = ?", [$email, $currentVersion, $entry]);
-                } else {
-                    sqlStatement("INSERT INTO `product_registration` (`email`, `opt_out`, `last_ask_version`) VALUES (?, 0, ?)", [$email, $currentVersion]);
-                }
-                return $email;
-                break;
-            default:
-                throw new \GenericProductRegistrationException(xl("Server error: try again later"));
+        $entry = $this->entryExist();
+        if ($entry) {
+            sqlStatement("UPDATE `product_registration` SET `email` = ?, `opt_out` = 0, `last_ask_version` = ? WHERE `id` = ?", [$email, $currentVersion, $entry]);
+        } else {
+            sqlStatement("INSERT INTO `product_registration` (`email`, `opt_out`, `last_ask_version`) VALUES (?, 0, ?)", [$email, $currentVersion]);
         }
+        return $email;
     }
 
     // void... don't bother checking for success/failure.

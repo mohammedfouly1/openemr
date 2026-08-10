@@ -12,6 +12,7 @@
 namespace OpenEMR\RestControllers\FHIR;
 
 use OpenApi\Attributes as OA;
+use OpenEMR\Core\OEGlobalsBag;
 use OpenEMR\FHIR\Config\ServerConfig;
 use OpenEMR\FHIR\R4\FHIRDomainResource\FHIRCapabilityStatement;
 use OpenEMR\FHIR\R4\FHIRElement\FHIRCanonical;
@@ -39,11 +40,16 @@ class FhirMetaDataRestController
 {
     private readonly RestControllerHelper $restHelper;
     private readonly ServerConfig $config;
+    private readonly OEGlobalsBag $globalsBag;
 
-    public function __construct()
+    public function __construct(?OEGlobalsBag $globalsBag = null)
     {
         $this->config = new ServerConfig();
         $this->restHelper = new RestControllerHelper($this->config->getFhirUrl());
+        // Constructor-injected per the project's DI standard (never call static service
+        // locators from business logic); defaults to the shared instance because this
+        // controller's sole call site is route dispatch with no DI container involved.
+        $this->globalsBag = $globalsBag ?? OEGlobalsBag::getInstance();
     }
 
     protected function buildCapabilityStatement(): FHIRCapabilityStatement
@@ -65,9 +71,11 @@ class FhirMetaDataRestController
         $capabilityStatement->addFormat(new FHIRCode("application/json"));
         $resturl = new FHIRUrl();
         $resturl->setValue($this->config->getFhirUrl());
+        // Product name is operator-configurable via the openemr_name global; the literal is only a fallback.
+        $productName = $this->globalsBag->getString('openemr_name') ?: 'Thiqa';
         $implementation = new FHIRCapabilityStatementImplementation();
         $implementation->setUrl($resturl);
-        $implementation->setDescription(new FHIRString("OpenEMR FHIR API"));
+        $implementation->setDescription(new FHIRString($productName . " FHIR API"));
         $capabilityStatement->setImplementation($implementation);
         $dateTime = new FHIRDateTime();
         $dateTime->setValue(date("Y-m-d", time()));
@@ -81,7 +89,7 @@ class FhirMetaDataRestController
         $composerStr = file_get_contents($this->config->getWebServerRoot() . "/composer.json");
         $composerObj = json_decode($composerStr, true);
         $software = new FHIRCapabilityStatementSoftware();
-        $software->setName(new FHIRString("OpenEMR"));
+        $software->setName(new FHIRString($productName));
         $software->setVersion($composerObj["version"]);
         $capabilityStatement->setSoftware($software);
 

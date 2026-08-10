@@ -105,7 +105,7 @@ class OAuth2AuthorizationListener implements EventSubscriberInterface
         ) {
             $logger->debug("api disabled exiting call");
             $session->invalidate();
-            throw new NotFoundHttpException("OpenEMR Error: API is disabled");
+            throw new NotFoundHttpException("Thiqa Error: API is disabled");
         }
         // site is already valid from previous listener
 

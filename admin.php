@@ -37,7 +37,7 @@ function adminSqlQuery($statement, $link)
 ?>
 <html>
 <head>
-    <title>OpenEMR Site Administration</title>
+    <title>Thiqa Site Administration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="public/assets/bootstrap/dist/css/bootstrap.min.css">
     <script src="public/assets/jquery/dist/jquery.min.js"></script>
@@ -50,7 +50,7 @@ function adminSqlQuery($statement, $link)
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h2>OpenEMR Multi Site Administration</h2>
+                    <h2>Thiqa Multi-Site Administration</h2>
                     <a class="text-secondary" data-target="#myModal" data-toggle="modal" href="#" id="help-href" name="help-href">
                         <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Click to view Help"></i>
                     </a>

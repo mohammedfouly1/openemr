@@ -90,14 +90,14 @@ $handler->installExceptionHandler();
 if (!(extension_loaded('openssl'))) {
     http_response_code(500);
     $logger->critical('OpenEMR is not working since the php openssl module is not installed');
-    echo "OpenEMR Error : OpenEMR is not working since the php openssl module is not installed.";
+    echo "Thiqa Error: Thiqa is not working since the php openssl module is not installed.";
     exit(1);
 }
 // Throw error if the openssl aes-256-cbc cipher is not available.
 if (!(in_array('aes-256-cbc', openssl_get_cipher_methods()))) {
     http_response_code(500);
     $logger->critical('OpenEMR is not working since the openssl aes-256-cbc cipher is not available');
-    echo "OpenEMR Error : OpenEMR is not working since the openssl aes-256-cbc cipher is not available.";
+    echo "Thiqa Error: Thiqa is not working since the openssl aes-256-cbc cipher is not available.";
     exit(1);
 }
 

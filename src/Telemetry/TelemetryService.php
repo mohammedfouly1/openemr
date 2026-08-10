@@ -56,6 +56,31 @@ class TelemetryService
      */
     public function isTelemetryEnabled(): int
     {
+        // BRAND-113 / decision D-10: this product does not contact OpenEMR infrastructure.
+        //
+        // Registration's phone-home was removed from ProductRegistrationService, but usage
+        // telemetry is a second, independent caller -- reportUsageData() posts to
+        // reg.open-emr.org/api/usage, and reportClickEvent()/trackApiRequestEvent() reach the
+        // same host. All of them are gated on this method, so one guard here closes every
+        // call site rather than unpicking each.
+        //
+        // Telemetry was already inert, but only by accident: product_registration is empty,
+        // so the query below matched nothing. Any code path inserting a row with
+        // telemetry_disabled = 0 would silently switch the callouts back on. This makes the
+        // guarantee explicit, and expresses it as configuration rather than a hardcoded
+        // return so no branch below becomes unreachable.
+        //
+        // The global is absent by default, so getBoolean() answers false and telemetry stays
+        // off. A deployment whose operator has consented re-enables it by setting
+        // `enable_usage_telemetry` to 1; the upstream table-driven logic then applies
+        // unchanged, so an operator can still opt out through the normal mechanism.
+        //
+        // The gate is applied at the END of this method rather than as an early return, so
+        // the upstream lookup still runs and its behaviour is unchanged. An early return
+        // skipped the query entirely and broke two upstream tests that assert it is
+        // performed -- the gate is meant to withhold the result, not to alter the logic
+        // that produces it.
+
         // Check if telemetry is disabled in the product registration table.
         $result = $this->fetchRecords("SELECT `telemetry_disabled` FROM `product_registration` WHERE `telemetry_disabled` = 0", []);
         $isEnabled = !empty($result) ? $result[0]['telemetry_disabled'] ?? null : null;
@@ -66,6 +91,12 @@ class TelemetryService
             // If telemetry_disabled is not 0, it means telemetry is disabled.
             $isEnabled = 0;
         }
+
+        if ($isEnabled === 1 && !OEGlobalsBag::getInstance()->getBoolean('enable_usage_telemetry')) {
+            // BRAND-113: the operator has not opted this deployment in, so nothing is sent.
+            return 0;
+        }
+
         return $isEnabled;
     }
 
