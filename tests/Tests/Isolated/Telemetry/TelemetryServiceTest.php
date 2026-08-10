@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace OpenEMR\Tests\Isolated\Telemetry;
 
 use OpenEMR\Core\Kernel;
+use OpenEMR\Core\OEGlobalsBag;
 use OpenEMR\Services\SoftwareVersion;
 use OpenEMR\Services\VersionServiceInterface;
 use OpenEMR\Telemetry\GeoTelemetryInterface;
@@ -62,9 +63,44 @@ class TelemetryServiceTest extends TestCase
             ->with("SELECT `telemetry_disabled` FROM `product_registration` WHERE `telemetry_disabled` = 0", [])
             ->willReturn([['telemetry_disabled' => 0]]);
 
-        $result = $telemetryService->isTelemetryEnabled();
+        // BRAND-113 / D-10: this product does not contact OpenEMR infrastructure unless the
+        // operator has opted in, so `enable_usage_telemetry` gates the upstream result. The
+        // opt-in is set here to keep testing what this test is about -- that
+        // telemetry_disabled = 0 yields an enabled result. Without it the gate would return 0
+        // and the upstream contract would go untested.
+        OEGlobalsBag::getInstance()->set('enable_usage_telemetry', '1');
+
+        try {
+            $result = $telemetryService->isTelemetryEnabled();
+        } finally {
+            OEGlobalsBag::getInstance()->set('enable_usage_telemetry', '0');
+        }
 
         $this->assertEquals(1, $result);
+    }
+
+    /**
+     * The BRAND-113 gate itself: consent absent means nothing is reported, even when the
+     * upstream table says telemetry is enabled.
+     */
+    public function testTelemetryStaysDisabledWithoutTheOperatorOptIn(): void
+    {
+        $telemetryService = $this->getMockBuilder(TelemetryService::class)
+            ->setConstructorArgs([
+                $this->createMock(TelemetryRepository::class),
+                $this->createMock(VersionServiceInterface::class),
+                $this->createMock(LoggerInterface::class),
+            ])
+            ->onlyMethods(['fetchRecords'])
+            ->getMock();
+
+        // Upstream says enabled...
+        $telemetryService->method('fetchRecords')->willReturn([['telemetry_disabled' => 0]]);
+
+        OEGlobalsBag::getInstance()->set('enable_usage_telemetry', '0');
+
+        // ...and the gate still refuses.
+        $this->assertEquals(0, $telemetryService->isTelemetryEnabled());
     }
 
     public function testIsTelemetryEnabledReturnsFalseWhenTelemetryDisabledIsNotZero(): void

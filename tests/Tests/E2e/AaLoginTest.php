@@ -88,7 +88,7 @@ class AaLoginTest extends PantherTestCase
         try {
             $this->crawler = $this->client->request('GET', '/admin.php');
             $title = $this->client->getTitle();
-            $this->assertSame('OpenEMR Site Administration', $title, 'FAILED to load admin.php');
+            $this->assertSame('Thiqa Site Administration', $title, 'FAILED to load admin.php');
         } catch (\Throwable $e) {
             $this->client->quit();
             throw $e;

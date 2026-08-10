@@ -51,6 +51,7 @@ class TwigTemplateCompilationTest extends TestCase
         'interface/modules/custom_modules/oe-module-comlink-telehealth/templates',
         'interface/modules/custom_modules/oe-module-ehi-exporter/templates',
         'interface/modules/custom_modules/oe-module-faxsms/templates',
+        'interface/modules/custom_modules/oe-module-thiqa-branding/templates',
     ];
 
     /**
@@ -120,7 +121,12 @@ class TwigTemplateCompilationTest extends TestCase
                 }
 
                 $absolutePath = $file->getPathname();
-                $relativePath = substr($absolutePath, strlen($fileroot) + 1);
+                // RecursiveDirectoryIterator yields OS-native separators; normalize to
+                // forward slashes before prefix matching in resolveTemplateName(), since
+                // EXTRA_TEMPLATE_DIRS/SEARCH_DIRS and the 'templates/' literal are all
+                // forward-slash. Without this, every dataset falls through to the
+                // unresolvable fallback on Windows, where getPathname() returns backslashes.
+                $relativePath = str_replace('\\', '/', substr($absolutePath, strlen($fileroot) + 1));
                 $templateName = self::resolveTemplateName($relativePath);
 
                 // Use the relative path as the dataset key for readable --testdox output
