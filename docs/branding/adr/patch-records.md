@@ -427,8 +427,7 @@ not a generic defect fix.
 
 ## PR-10 — `setup.php`
 
-**BRAND ID:** 007, 008, 009. **Commit:** working tree at time of writing (see the note at the end of this
-document). **Locked decision satisfied:** Invariant 4 residual-edit exception. `docs/rebranding.md` §16.2
+**BRAND ID:** 007, 008, 009. **Commit:** `2ec72e6ff`. **Locked decision satisfied:** Invariant 4 residual-edit exception. `docs/rebranding.md` §16.2
 classifies all three as **PATCH**; `docs/rebranding.md` §15.2 additionally marks them *conditional*
 (operator-only screens), and `docs/RebrandingPlan.md` §5.4 recommends patching them "before customer-facing
 installs, as one grouped commit".
@@ -466,7 +465,7 @@ configurable installer brand is a larger change than this fork needs.
 
 ## PR-11 — `sql_patch.php`
 
-**BRAND ID:** 010. **Commit:** working tree. **Locked decision satisfied:** Invariant 4 residual-edit
+**BRAND ID:** 010. **Commit:** `2ec72e6ff`. **Locked decision satisfied:** Invariant 4 residual-edit
 exception (operator-only upgrade screen, conditional per §15.2).
 
 **What changed:** three occurrences of the product name in the patch screen's title, banner and version line.
@@ -492,7 +491,7 @@ HTML.
 
 ## PR-12 — `sql_upgrade.php`
 
-**BRAND ID:** 011. **Commit:** working tree. **Locked decision satisfied:** Invariant 4 residual-edit
+**BRAND ID:** 011. **Commit:** `2ec72e6ff`. **Locked decision satisfied:** Invariant 4 residual-edit
 exception (operator-only upgrade screen, conditional per §15.2).
 
 **What changed:** the `<title>` (raw HTML) and the `<h2>` (translation-wrapped).
@@ -532,7 +531,7 @@ would make this file rebrandable with no patch at all.
 
 ## PR-13 — `ippf_upgrade.php`
 
-**BRAND ID:** 012. **Commit:** working tree. **Locked decision satisfied:** Invariant 4 residual-edit
+**BRAND ID:** 012. **Commit:** `2ec72e6ff`. **Locked decision satisfied:** Invariant 4 residual-edit
 exception (operator-only, IPPF-specific upgrade screen, conditional per §15.2).
 
 **What changed:** three raw strings — `<title>`, `<h2>`, and one sentence of body copy.
@@ -604,6 +603,8 @@ it never looked at — including `setup.php` and `sql_upgrade.php`, the two most
 the set. Until that re-run happens, `RebrandingPlan.md` risk R-1 ("upstream rebase conflicts in the 6
 patched core files") understates the exposure.
 
-**Commit status.** PR-10…PR-13 describe edits that were in the working tree when this record was written,
-not yet committed. Their commit reference must be filled in when they land; a patch record naming no commit
-satisfies Q1's letter but not its purpose.
+**Commit status — resolved 2026-08-10.** PR-10…PR-13 landed in `2ec72e6ff`
+(*fix(branding): rebrand operator screens and deliver SET-TRANSLATION via the catalogue*) and their
+references above are filled in. Every one of the 17 core files now has a numbered record naming a real
+commit, which is what `Q1` asks for — a patch record citing no commit satisfies its letter but not its
+purpose.

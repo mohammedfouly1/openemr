@@ -48,7 +48,7 @@
 | RB-14 | Amiri not wired into mpdf/dompdf (D-9) | Medium | Claude | **NOT FIXABLE AS SPECIFIED — D-9 re-scoped** |
 | RB-15 | `BrandingServiceInterface` drifts from plan §4.2 | Medium | Claude | **FIXED (deviation accepted + documented)** |
 | RB-16 | Profile writes a `saas_branding_*` key it says it won't | Medium | Claude | **WITHDRAWN — not a defect** |
-| RB-17 | Phase 5 deliverables uncommitted | Medium | — | NEEDS DECISION (user must authorise a commit) |
+| RB-17 | Phase 5 deliverables uncommitted | Medium | Claude | **FIXED** |
 | RB-18 | SMART template header overstates the CI gate | Low | Claude | **FIXED** |
 | RB-19 | Data providers missing `@codeCoverageIgnore` | Low | Claude | **FIXED** |
 | RB-20 | Two `interface/themes/thiqa/` files absent from folder map | Low | Claude | **FIXED** |
@@ -1431,6 +1431,38 @@ The last commit on the branch (`c6c3f9e6e`, *"docs(branding): record the Phase 3
 
 **Advice / fix:** commit `docs/branding/` as its own `docs(branding):` commit **before** touching any more
 code, and after applying RB-02's PR-10…PR-19 additions. Untracked governance evidence is not evidence.
+
+#### ✅ RESOLUTION — FIXED (Claude, 2026-08-10, on the user's explicit authorisation)
+
+Committed as three reviewable commits rather than one, each self-consistent:
+
+| Commit | Scope |
+|---|---|
+| `2ec72e6ff` | `fix(branding)` — operator screens (BRAND-007…012) + the SET-TRANSLATION catalogue mechanism (BRAND-127…129) |
+| `b3b821ffa` | `fix(branding)` — module hardening, dark-variant assets, font collapse, manifest verifier |
+| `b2fe8bad1` | `docs(branding)` — the Phase 5 set, patch records and this audit report (~5,400 lines) |
+
+**Boundaries chosen so no commit is internally inconsistent.** `brand/manifests/SHA256SUMS` was placed in
+the same commit as *both* files whose hashes it re-issues (`typography-tokens.json` and
+`14-string-replacement-map.md`), so the release gate verifies at every commit rather than only at the tip.
+
+**Deliberately excluded:** `Documentation/EHI_Export/.../lists_medication.2degrees.docx` — a stray
+untracked file predating this work and unrelated to branding. It remains untracked. `sites/default/sqlconf.php`
+was confirmed unmodified; it carries local database credentials and must never be committed
+(`CLAUDE.local.md` §7).
+
+**The circularity in RB-02 is now closed.** PR-10…PR-13 previously described working-tree edits and could
+not name their commit; they now cite `2ec72e6ff`, and the "Commit status" note in `patch-records.md` is
+resolved. **All 17 core files have a numbered patch record naming a real commit**, which is what `Q1`
+asks for — a record citing no commit satisfies its letter but not its purpose.
+
+**Verified after committing:** manifest **123/123**; generator drift **0**; branding isolated suite
+**OK (1314 tests, 3779 assertions)**; live login page still renders `<title>Thiqa Login</title>`.
+`git status` is clean apart from the excluded stray.
+
+**Not done, and not this finding's to do:** nothing has been pushed and no PR exists. The work is now
+**12 local commits** on `feat/thiqa-branding-foundation`. `closure-evidence-pack.md` §3's instruction
+stands — do not cite a PR number anywhere until one has actually been opened.
 
 ---
 

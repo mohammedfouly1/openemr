@@ -14,10 +14,11 @@ actual controls, not inferred capabilities") and this project's evidence discipl
 
 **Bottom line, stated first so it cannot be missed:** **MVP-010 and MVP-014 closure is NOT justified
 today.** The branding *code* is substantially built and unit/isolated-tested, but the thing `Q76`
-actually requires — a real, live token/logo materialisation executing against a tenant's database — has
-never run, not even once, against the only tenant that exists on this system. Cross-tenant isolation
-(A1/A2) has not been exercised at all, because no second tenant exists. Both are stated as open below,
-not glossed over.
+actually requires — a real token/logo overlay reaching a rendered page — still has not happened.
+*(Updated 2026-08-10, RB-11: a materialisation HAS now run — revision 1 — but with an **empty** Tier-2
+overlay, so the transaction and revision bump were exercised and no tenant tokens reached a page.)*
+Cross-tenant isolation (A1/A2) has not been exercised at all, because no second tenant exists. Both are
+stated as open below, not glossed over.
 
 ---
 
@@ -34,8 +35,8 @@ tests A1–A8, checks V-01–V-10) and `docs/branding/multi-tenant-white-label-r
 | 3 | No tenant-uploaded CSS/JS is executed | **MET** | A4 PASS — PHPStan guardrail suite `tests\Tests\Isolated\PHPStan\ThiqaBranding`: **54/54 tests, 80 assertions, OK**, covering `ForbiddenBrandingHttpClientRule`, `ForbiddenBrandingSiteConfigRule`, `ForbiddenBrandingTwigPathRule`, `ForbiddenBrandingPlaceholderDomainRule` |
 | 4 | Cache keys/revisions prevent one tenant's branding from appearing in another tenant | **NOT MET — unexercised** | The mechanism (`BrandingRevision` in every branding URL) is built and code-reviewed, but A1/A2 (the acceptance tests that actually prove no cross-tenant bleed) are **BLOCKED**: `remaining-dependencies.md` §2 — "D-6 — `ls sites/` shows only `default`. Not attempted." See §4 below for the full tenant-isolation review |
 | 5 | (Q76) No Control Plane network request during ordinary page rendering | **MET (source + static guardrail), no live network trace** | V-01 VERIFIED (source + static guardrail): `ForbiddenBrandingHttpClientRule` tests pass (same 54/54 as row 3); `sqlQuery`/`QueryUtils::` calls confined to the writer/CLI tier, not the render path. No instrumented page-load network capture was run (out of scope for a docs pass) |
-| 6 | (Q76) Branding reaches the tenant only via tenant-scoped, idempotent materialisation; `globals` is a materialisation target, never authoritative | **PARTIAL — code proven, never run live** | V-02: `Materialisation` isolated suite 50/51 pass first run (1 timeout attributed to this host's Google-Drive-mount I/O contention, re-ran alone → 1/1 pass in 9.4s — see `remaining-dependencies.md` Surprise 7). **No live tenant has ever been materialised even once** (Surprise 8) — idempotence is proven only against test doubles, not a real `writeAll()` transaction |
-| 7 | (Q76) CP unavailable → last-good branding retained; failed materialisation leaves the previous revision intact | **PARTIAL — code proven, live behaviour unexercised** | V-03: `MaterialiserKillRecoveryTest` passes in isolation. Live: `thiqa-branding:verify --site=default` reports `never materialised` / `revision 0` — there is no live revision n-1 to protect yet, so this criterion cannot be observed live until a first materialisation happens |
+| 6 | (Q76) Branding reaches the tenant only via tenant-scoped, idempotent materialisation; `globals` is a materialisation target, never authoritative | **PARTIAL — code proven, never run live** | V-02: `Materialisation` isolated suite 50/51 pass first run (1 timeout attributed to this host's Google-Drive-mount I/O contention, re-ran alone → 1/1 pass in 9.4s — see `remaining-dependencies.md` Surprise 7). *(Updated 2026-08-10, RB-11: a first materialisation has now run — revision 1, `2026-08-10T18:50:40+00:00` — but with an empty Tier-2 overlay, so idempotence against a real overlay is still proven only against test doubles.)* |
+| 7 | (Q76) CP unavailable → last-good branding retained; failed materialisation leaves the previous revision intact | **PARTIAL — code proven, live behaviour unexercised** | V-03: `MaterialiserKillRecoveryTest` passes in isolation. *(Updated 2026-08-10, RB-11: revision 1 now exists, so a revision n-1 to protect exists for the first time — but no kill test has been run against real tenant state, and no Control Plane exists to be unreachable from.)* |
 | 8 | (Q77) Deployed `public/themes/` holds only Saudi Light/Dark (+ required non-selectable artefacts); the 4 surplus themes absent/unselectable including via stale globals/user_settings | **MET** | V-04 partially, plus direct evidence: `webpack.themes.js` entry map restricted to the Q77 set, 17-18 compiled CSS files present, zero `solar`/`manila`/`cobalt_blue`/`forest_green` output files (`changes.md` BRAND-076, `remaining-dependencies.md` area #10/#43). The forced-stale-global fallback path itself (setting `css_header=style_solar.css` and confirming the fallback) was **not** live-exercised — avoided as a write against shared live state |
 | 9 | (R-SMART-DARK) SMART style endpoint returns dark tokens for a dark theme | ~~**NOT MET**~~ → **MET in mechanism, not live-verified on this host** *(corrected 2026-08-10, RB-09)* | **This row's original conclusion was wrong.** It inferred "nothing returns dark tokens" from `smartStyleTokens()` having no caller — but that is not the delivery path. R-SMART-DARK is delivered by the **Twig template route**: `SMARTAuthorizationController::smartAppStyles()` (`:419-434`) composes `/api/smart/smart-<coreTheme>.json.twig` and dispatches `TemplatePageEvent` **unnamed**; `TwigOverrideListener::onTemplatePage()` (registered on `TemplatePageEvent::class`, `Bootstrap.php:125`) matches `oauth2/authorize/smart-style`, resolves the variant from `css_header`, and rewrites to `@oe-module-thiqa-branding/api/smart/smart-style_dark.json.twig`. That file exists and carries genuinely dark values (`color_background: #0B1220`, `color_text: #F5F6F8`, `color_error: #F29088`). **Live verification is blocked on this host only** — `GET /oauth2/default/smart-style-url` returns 500 with `Unable to create/recreate oauth2 keys … OPEN_SSL: no such file`, the pre-existing `OPENSSL_CONF` environment quirk already recorded in `docs/rebranding.md` §11.2/§17.2, not a branding defect. What *is* genuinely true, and is a different and smaller finding: `smartStyleTokens()`/`SmartStyleContract` is a second, parallel implementation with no caller and no dedicated test — see RB-09 |
 
@@ -43,10 +44,10 @@ tests A1–A8, checks V-01–V-10) and `docs/branding/multi-tenant-white-label-r
 
 | Item | Status | Detail |
 |---|---|---|
-| PR/commit or infrastructure change reference recorded | **Commits only, no PR** | See §3 below — 8 commits exist locally on this branch; none have been pushed to `origin`, and no PR has been opened. Do not represent this as "PR #NNN" anywhere else in this documentation set |
+| PR/commit or infrastructure change reference recorded | **MET for commits, no PR** *(updated 2026-08-10)* | See §3 — **12** commits exist locally; every core edit now has a numbered patch record naming a real commit (`patch-records.md` PR-01…PR-13). None pushed to `origin`, no PR opened. Do not represent this as "PR #NNN" anywhere in this documentation set |
 | Automated/manual test evidence attached | **Attached, see §2** | Real, cited pass counts — no estimates |
 | Relevant security/tenant-isolation impact reviewed | **NOT MET** | See §4 — the cross-tenant guard is unit-tested against fakes only; no integration test with two real database connections exists |
-| Documentation/runbook updated | **Partial** | `docs/branding/architecture.md`, `changes.md`, `remaining-dependencies.md`, `coverage-matrix.md`, `multi-tenant-white-label-readiness.md` all exist. `docs/branding/runbook.md` (F5) — see §5 below |
+| Documentation/runbook updated | **MET** *(updated 2026-08-10)* | `architecture.md`, `changes.md`, `remaining-dependencies.md`, `coverage-matrix.md`, `multi-tenant-white-label-readiness.md`, the four ADRs and `patch-records.md` all exist and are committed. **`docs/branding/runbook.md` (F5) now exists**, superseding §5 below |
 
 **MVP-010 bottom line:** 4 of 9 acceptance criteria fully MET, 1 explicitly NOT MET (criterion 9,
 SMART dark tokens not actually returned by anything), 1 NOT MET (criterion 4, cross-tenant, blocked on
@@ -96,8 +97,14 @@ c6a2f65b3 feat(branding): add the brand token generator and asset installer
 a1c22b6a1 feat(branding): add the Thiqa branding layer module
 ```
 
-All 8 commits above exist only on the local `feat/thiqa-branding-foundation` branch and have not been
-pushed to `origin`. **There is no PR to cite.** Any future revision of this document that claims a PR
+All commits above exist only on the local `feat/thiqa-branding-foundation` branch and have not been
+pushed to `origin`. **There is no PR to cite.**
+
+> **Updated 2026-08-10.** The branch now carries **12** commits, not 8. The audit remediation added
+> `2ec72e6ff`, `b3b821ffa` and `b2fe8bad1` (see `docs/RebrandingBugs.md` RB-17), and this document's own
+> "PR/commit reference recorded" checklist row is now satisfiable — every core edit has a numbered patch
+> record naming a real commit. **Still nothing pushed and still no PR**, so the instruction below stands
+> unchanged. Any future revision of this document that claims a PR
 number must first confirm one has actually been opened (`gh pr view` or equivalent) — do not infer one
 from branch existence.
 
