@@ -1,0 +1,74 @@
+{
+    "schema": "thiqa-brand-strings/1",
+    "description": "Source of truth for BRAND items whose action is SET-TRANSLATION (docs/rebranding.md §16.2), plus catalogue carry-forward for PATCH items whose literal happened to be xl()/xlt()-wrapped. Consumed by tools/branding/apply-brand-strings.php.",
+    "why_this_file_exists": "In OpenEMR the English source string IS the catalogue key (library/translation.inc.php:39-77 looks the literal up in lang_constants by exact match). Editing the literal inside xlt() therefore ORPHANS every existing translation of that string. RebrandingBugs.md RB-01 measured 59 translations destroyed that way. SET-TRANSLATION items must be delivered as catalogue data, never as a source edit. xl() consults lang_id=1 (English (Standard)) exactly like any other language -- there is no English short-circuit -- so an English row rebrands the UI while leaving every other locale intact.",
+    "product_name": "Thiqa",
+    "upstream_name": "OpenEMR",
+
+    "english_overrides": [
+        {
+            "constant": "OpenEMR Authorization",
+            "english": "Thiqa Authorization",
+            "brand_ids": ["BRAND-127"],
+            "consumers": [
+                "templates/oauth2/oauth2-login.html.twig",
+                "templates/oauth2/patient-select.html.twig",
+                "templates/oauth2/scope-authorize.html.twig"
+            ]
+        },
+        {
+            "constant": "OpenEMR Login",
+            "english": "Thiqa Login",
+            "brand_ids": ["BRAND-128"],
+            "consumers": ["templates/oauth2/oauth2-login.html.twig"]
+        },
+        {
+            "constant": "OpenEMR Application",
+            "english": "Thiqa Application",
+            "brand_ids": ["BRAND-129"],
+            "consumers": ["interface/modules/zend_modules/module/Application/view/layout/layout.phtml"]
+        },
+        {
+            "constant": "Welcome to OpenEMR",
+            "english": "Welcome to Thiqa",
+            "brand_ids": ["BRAND-129"],
+            "consumers": ["interface/modules/zend_modules/module/Documents/view/layout/layout.phtml"]
+        },
+        {
+            "constant": "OpenEMR",
+            "english": "Thiqa",
+            "brand_ids": ["BRAND-129"],
+            "consumers": ["interface/modules/zend_modules/module/Application/view/layout/sendto.phtml"],
+            "note": "The bare product name as a translation constant. Distinct from the SessionUtil session-cookie name 'OpenEMR', which is a frozen machine identifier under locked Q17/C6 and is NOT a translation constant -- nothing here touches it."
+        }
+    ],
+
+    "carry_forward": [
+        {
+            "from_constant": "OpenEMR Database Upgrade",
+            "to_constant": "Thiqa Database Upgrade",
+            "substitute": { "OpenEMR": "Thiqa" },
+            "brand_ids": ["BRAND-011"],
+            "consumers": ["sql_upgrade.php"],
+            "note": "BRAND-011's action is PATCH, so the source literal is legitimately edited. But the literal was xlt()-wrapped and carried 28 translations, which the rename orphaned. This copies each existing translation onto the new constant with the product proper noun substituted, so no locale loses the string."
+        }
+    ],
+
+    "deliberately_not_changed": [
+        {
+            "constant": "Patient Portal Login",
+            "brand_ids": ["BRAND-132"],
+            "reason": "Contains no product name. Its Arabic translation ('الولوج الي بوابة المريض') is a pre-existing upstream row and is already correct. Nothing to rebrand."
+        },
+        {
+            "constant": "Database Patch",
+            "brand_ids": ["BRAND-010"],
+            "reason": "sql_patch.php places the product name OUTSIDE the xlt() call, so the constant itself never contained a brand name and the rename did not touch the catalogue. This is the pattern the other call sites should have followed."
+        },
+        {
+            "constant": "OpenEMR 400 Error / OpenEMR 404 Error / OpenEMR Error",
+            "brand_ids": ["BRAND-101"],
+            "reason": "Already edited in source by commit b866c5358. Verified against the live catalogue: these constants have ZERO rows in lang_definitions in any language, so the rename destroyed nothing. Left as-is rather than reverted, but recorded here so the mechanism inconsistency is visible and is not cited as precedent."
+        }
+    ]
+}

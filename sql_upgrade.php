@@ -156,7 +156,7 @@ header('Content-type: text/html; charset=utf-8');
 <!-- @todo Adding DOCTYPE html breaks BS width/height percentages. Why? -->
 <html>
 <head>
-    <title>OpenEMR Database Upgrade</title>
+    <title>Thiqa Database Upgrade</title>
     <?php Header::setupHeader(); ?>
     <link rel="shortcut icon" href="public/images/favicon.ico" />
     <script>
@@ -411,7 +411,7 @@ header('Content-type: text/html; charset=utf-8');
         <div class="text-center">
             <div class="row">
                 <div class="col-12">
-                    <h2><?php echo xlt("OpenEMR Database Upgrade"); ?></h2>
+                    <h2><?php echo xlt("Thiqa Database Upgrade"); ?></h2>
                 </div>
             </div>
             <div class="row">

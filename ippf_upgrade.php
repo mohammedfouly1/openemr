@@ -101,14 +101,14 @@ function do_visit_form($irow, $encounter, $first)
 ?>
 <html>
 <head>
-    <title>OpenEMR IPPF Upgrade</title>
+    <title>Thiqa IPPF Upgrade</title>
     <?php Header::setupHeader(); ?>
 </head>
 <body>
     <div class="container mt-3">
         <div class="row">
             <div class="col-12">
-                <h2>OpenEMR IPPF Upgrade</h2>
+                <h2>Thiqa IPPF Upgrade</h2>
             </div>
         </div>
         <div class="jumbotron p-4">
@@ -174,7 +174,7 @@ function do_visit_form($irow, $encounter, $first)
             }
             ?>
             <p>
-                This converts your OpenEMR database to UTF-8 encoding if it is not already,
+                This converts your Thiqa database to UTF-8 encoding if it is not already,
                 and also converts GCAC issues to the corresponding visit forms.  Both of these
                 steps are needed for IPPF sites upgrading from releases prior to 2009-08-27.
             </p>

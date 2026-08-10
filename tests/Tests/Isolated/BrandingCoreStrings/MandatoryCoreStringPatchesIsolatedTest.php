@@ -141,6 +141,37 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
             'error page 400 JSON location' => ['templates/error/400.json.twig', 1],
             'error page 404 JSON location' => ['templates/error/404.json.twig', 1],
             'general HTTP error page title' => ['templates/error/general_http_error.html.twig', 1],
+            // The six SET-TRANSLATION consumers below are asserted at ZERO deliberately.
+            //
+            // BRAND-127/128/129 carry the action SET-TRANSLATION in docs/rebranding.md §16.2
+            // (Trk = NO), which means the rebrand is catalogue data, not a source edit. An
+            // earlier attempt edited the literal inside xl()/xlt() instead. Because the
+            // English source string IS the catalogue key (library/translation.inc.php:39-77
+            // matches lang_constants.constant_name exactly), that renamed the key and
+            // orphaned 59 existing translations across the shipped locales, Arabic included
+            // — measured and recorded as docs/RebrandingBugs.md RB-01.
+            //
+            // These rows are therefore a regression guard, not an omission: a "Thiqa"
+            // literal reappearing in any of these files means someone has re-broken the
+            // catalogue. The rebrand for these six files lives in
+            // tools/branding/brand-strings.json and is applied by
+            // tools/branding/apply-brand-strings.php.
+            'oauth2 login (SET-TRANSLATION: must stay clean)' => ['templates/oauth2/oauth2-login.html.twig', 0],
+            'oauth2 patient-select (SET-TRANSLATION: must stay clean)' => [
+                'templates/oauth2/patient-select.html.twig', 0,
+            ],
+            'oauth2 scope-authorize (SET-TRANSLATION: must stay clean)' => [
+                'templates/oauth2/scope-authorize.html.twig', 0,
+            ],
+            'zend Application layout (SET-TRANSLATION: must stay clean)' => [
+                'interface/modules/zend_modules/module/Application/view/layout/layout.phtml', 0,
+            ],
+            'zend Application sendto layout (SET-TRANSLATION: must stay clean)' => [
+                'interface/modules/zend_modules/module/Application/view/layout/sendto.phtml', 0,
+            ],
+            'zend Documents layout (SET-TRANSLATION: must stay clean)' => [
+                'interface/modules/zend_modules/module/Documents/view/layout/layout.phtml', 0,
+            ],
         ];
     }
 
@@ -209,6 +240,62 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
                 'templates/error/general_http_error.html.twig',
                 ['"Thiqa Error"|xlt'],
                 ['"OpenEMR Error"'],
+            ],
+            // BRAND-127/128/129 are NOT listed here. Their action is SET-TRANSLATION, so the
+            // source literal must remain the upstream English string — it is the catalogue
+            // key. Asserting a "Thiqa" literal in those files would enshrine the RB-01
+            // regression. Their guard is the zero-count row in
+            // hardcodedProductNameInventoryProvider(), and their rebrand is verified against
+            // the catalogue, not the source.
+            'setup.php titles and navbar (BRAND-007, BRAND-008)' => [
+                'setup.php',
+                [
+                    '<title>Thiqa Setup Tool</title>',
+                    '<a class="navbar-brand" href="#">Thiqa Setup</a>',
+                ],
+                ['OpenEMR Setup Tool', '>OpenEMR Setup<'],
+            ],
+            'setup.php body copy and legend (BRAND-009)' => [
+                'setup.php',
+                [
+                    'The initial Thiqa user is',
+                    'The initial Thiqa user name and password is the same',
+                    'before following below Thiqa link',
+                    '>Thiqa Initial User Details<',
+                    'To ensure proper functioning of Thiqa you must make sure',
+                    'Select a theme for Thiqa...',
+                ],
+                [
+                    'The initial OpenEMR user is',
+                    'The initial OpenEMR user name and password is the same',
+                    'before following below OpenEMR link',
+                    '>OpenEMR Initial User Details<',
+                    'To ensure proper functioning of OpenEMR you must make sure',
+                    'Select a theme for OpenEMR...',
+                ],
+            ],
+            'sql_patch.php title and banner (BRAND-010)' => [
+                'sql_patch.php',
+                [
+                    "<title>Thiqa <?php echo attr(\$EMRversion)",
+                    'font-size:1.8em; text-align:center">Thiqa <?php echo text($EMRversion)',
+                    'font-size:1.8em;">Thiqa \',xlt(\'Version\')',
+                ],
+                [
+                    "<title>OpenEMR <?php echo attr(\$EMRversion)",
+                    'font-size:1.8em; text-align:center">OpenEMR <?php echo text($EMRversion)',
+                    'font-size:1.8em;">OpenEMR \',xlt(\'Version\')',
+                ],
+            ],
+            'sql_upgrade.php title and heading (BRAND-011)' => [
+                'sql_upgrade.php',
+                ['<title>Thiqa Database Upgrade</title>', 'xlt("Thiqa Database Upgrade")'],
+                ['<title>OpenEMR Database Upgrade</title>', 'xlt("OpenEMR Database Upgrade")'],
+            ],
+            'ippf_upgrade.php title and heading (BRAND-012)' => [
+                'ippf_upgrade.php',
+                ['<title>Thiqa IPPF Upgrade</title>', '<h2>Thiqa IPPF Upgrade</h2>', 'converts your Thiqa database'],
+                ['<title>OpenEMR IPPF Upgrade</title>', '<h2>OpenEMR IPPF Upgrade</h2>', 'converts your OpenEMR database'],
             ],
         ];
     }

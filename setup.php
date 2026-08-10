@@ -142,7 +142,7 @@ if (empty($_REQUEST['site']) && $allow_multisite_setup && empty($state)) {
     <!DOCTYPE html>
     <html>
     <head>
-        <title>OpenEMR Setup Tool</title>
+        <title>Thiqa Setup Tool</title>
         <link rel="stylesheet" href="public/assets/bootstrap/dist/css/bootstrap.min.css">
         <script src="public/assets/jquery/dist/jquery.min.js"></script>
         <script src="public/assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -157,7 +157,7 @@ if (empty($_REQUEST['site']) && $allow_multisite_setup && empty($state)) {
     <body>
         <nav class="navbar navbar-expand navbar-light bg-light">
            <div class="container">
-           <a class="navbar-brand" href="#">OpenEMR Setup</a>
+           <a class="navbar-brand" href="#">Thiqa Setup</a>
            <div class="collapse navbar-collapse justify-content-end">
                <ul class="navbar-nav">
                    <li class="nav-item active">
@@ -353,7 +353,7 @@ if (empty($state)) {
 ?>
 <html>
 <head>
-<title>OpenEMR Setup Tool</title>
+<title>Thiqa Setup Tool</title>
 <!--<link rel=stylesheet href="interface/themes/style_blue.css">-->
 <link rel="stylesheet" href="public/assets/bootstrap/dist/css/bootstrap.min.css">
 <script src="public/assets/jquery/dist/jquery.min.js"></script>
@@ -449,7 +449,7 @@ function cloneClicked() {
 <body>
     <nav class="navbar navbar-expand navbar-light bg-light">
        <div class="container">
-        <a class="navbar-brand" href="#">OpenEMR Setup</a>
+        <a class="navbar-brand" href="#">Thiqa Setup</a>
             <div class="collapse navbar-collapse justify-content-end">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
@@ -519,11 +519,11 @@ function cloneClicked() {
                 echo "<p> The selected theme is :</p>";
                 $installer->displayNewThemeDiv();
                 if (empty($installer->clone_database)) {
-                    echo "<p><b>The initial OpenEMR user is <span class='text-primary'>'" . text($installer->iuser) . "'</span> and the password is <span class='text-primary'>'" . text($installer->iuserpass) . "'</span></b></p>";
+                    echo "<p><b>The initial Thiqa user is <span class='text-primary'>'" . text($installer->iuser) . "'</span> and the password is <span class='text-primary'>'" . text($installer->iuserpass) . "'</span></b></p>";
                 } else {
-                    echo "<p>The initial OpenEMR user name and password is the same as that of source site <b>'" . text($installer->source_site_id) . "'</span></b></p>";
+                    echo "<p>The initial Thiqa user name and password is the same as that of source site <b>'" . text($installer->source_site_id) . "'</span></b></p>";
                 }
-                echo "<p>If you edited the PHP or Apache configuration files during this installation process, then we recommend you restart your Apache server before following below OpenEMR link.</p>";
+                echo "<p>If you edited the PHP or Apache configuration files during this installation process, then we recommend you restart your Apache server before following below Thiqa link.</p>";
                 echo "<p>In Linux use the following command:</p>";
                 echo "<p><code>sudo apachectl -k restart</code></p>";
 
@@ -973,7 +973,7 @@ SOURCESITEBOT;
                 </fieldset>
                 <br />
                 <fieldset class='noclone'>
-                    <legend name="form_legend" id="form_legend" class='oe-setup-legend'>OpenEMR Initial User Details<i id="enter-details-tooltip" class="fa fa-info-circle oe-text-black oe-superscript enter-details-tooltip" aria-hidden="true"></i></legend>
+                    <legend name="form_legend" id="form_legend" class='oe-setup-legend'>Thiqa Initial User Details<i id="enter-details-tooltip" class="fa fa-info-circle oe-text-black oe-superscript enter-details-tooltip" aria-hidden="true"></i></legend>
                     <div class="ml-2 row">
                         <div class="col-sm-4">
                             <div class="clearfix form-group">
@@ -1527,7 +1527,7 @@ STP4TOP;
                     $mysqli_allow_local_infile = ini_get('mysqli.allow_local_infile') ? 'On' : 'Off';
                     $mysqli_allow_local_infile_style = (strcmp($mysqli_allow_local_infile, 'On')  === 0) ? '' : 'text-danger';
 
-                    echo   "<li>To ensure proper functioning of OpenEMR you must make sure that PHP settings include:
+                    echo   "<li>To ensure proper functioning of Thiqa you must make sure that PHP settings include:
                             <table class='phpset'>
                                 <tr>
                                     <th>Setting</th>
@@ -1744,7 +1744,7 @@ STP4TOP;
                     $session->set('bootstrapStateInSetup', 7);
                     echo "<h3 class='mb-3 border-bottom'>Step " . text($state) . " - Select a Theme</h3>";
                     echo "<div class='jumbotron p-5'>";
-                    echo "<p>Select a theme for OpenEMR...</p>\n";
+                    echo "<p>Select a theme for Thiqa...</p>\n";
                     $btn_text = "Proceed to Final Step";
                     $installer->displaySelectedThemeDiv();
                     echo "<div class='row'>
