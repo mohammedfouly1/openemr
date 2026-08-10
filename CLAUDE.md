@@ -456,8 +456,10 @@ $this->logger->error('Failed to send message', [
 ]);
 ```
 
-**Catch `\Throwable`, not `\Exception`.** `\Exception` misses `\TypeError`,
-`\ParseError`, and other `\Error` subclasses.
+**Catch the narrowest documented throwable type the caller can recover from.**
+Project PHPStan forbids broad `\Throwable` and `\Exception` catches because they
+can suppress programming errors. Use a broad cleanup boundary only where an
+explicitly reviewed static-analysis exception permits it, and rethrow after cleanup.
 
 **Let exceptions propagate.** Only catch when the caller can meaningfully
 recover. Do not catch-log-continue — it hides failures from callers.

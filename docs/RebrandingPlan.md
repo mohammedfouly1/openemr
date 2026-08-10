@@ -838,9 +838,9 @@ per request by `BrandingConfigFactory` from the already-loaded `OEGlobalsBag` �
 5. Apply (ordered, each step individually reversible):
       a. rename staged assets into place (atomic per file)
       b. rename tokens.css.tmp → tokens.css     (atomic)
-      c. write globals delta in a single DB transaction
-      d. write saas_branding_revision = target_revision   ← LAST
-6. On any failure before (d): delete staged files, roll back the DB transaction,
+      c. in one DB transaction, write the globals delta and materialisation timestamp
+      d. in that same transaction, write saas_branding_revision = target_revision   ← LAST
+6. On any failure through (d): delete staged files, roll back the DB transaction,
    log MaterialisationResult::failed(), leave revision n−1 fully active, mark retryable
 7. Emit an audit event to the Control Plane (best-effort; failure here does not fail the job)
 ```
@@ -931,7 +931,7 @@ The starting position is 18 PATCH-actioned IDs across ~11 files. Applying the ex
 
 | BRAND | Item | Mechanism after minimisation | Tracked-file change? |
 |---|---|---|---|
-| 053 | Empty `alt=""` on login logo | **Module template override** (E4) — CR-8 | **No** |
+| 053 | Empty `alt=""` on login logo | ~~Module template override (E4) — CR-8~~ → **core edit, see K-21 below** | **Yes** (1 file) |
 | 121–123 (TOKENIZE, delivered under §15.1 #4) | SMART light + **dark** contract | **Module template override** (E4) — CR-7 | **No** |
 | 119 | Duplicate favicon `<link>` | Cosmetic; `Header::setupHeader()` emits one and a template emits another. Defer unless the duplicate breaks a client | **No (deferred)** |
 | 030 | Eye-Magic hardcodes `sites/default` | Conditional — only if the Eye Magic form is enabled. Not enabled in the Saudi product ⇒ **not patched** | **No** |
@@ -943,7 +943,33 @@ The starting position is 18 PATCH-actioned IDs across ~11 files. Applying the ex
 | **135, 136** | Pre-bootstrap fatals (openssl / aes-256-cbc) | Emitted before translation exists | **Yes** (1 file) |
 | **130** | Zend Module Installer wiki links ×2 | Hardcoded `open-emr.org/wiki` in admin UI | **Yes** (1 file) |
 
-**Residual mandatory core edits: 9 BRAND IDs / 10 strings / 6 files.**
+**Residual mandatory core edits: 10 BRAND IDs / 12 strings / 7 files.**
+
+> **Correction K-21 (2026-08-10) — BRAND-053 could never have worked as a module override.**
+> This table claimed the login logo's accessible name was deliverable through the E4 module
+> template override, with no tracked-file change. **That was wrong, and the live page proved it:**
+> the login logo rendered `alt=""` with the module fully active.
+>
+> Two independent reasons the mechanism cannot reach this template. First,
+> `TwigOverrideListener::onTemplatePage()` returns early for every page except the SMART style
+> contract, deliberately — its comment states the login page keeps the core layout. Second, and
+> decisive even if that guard were lifted: `primary_logo.html.twig` is a **partial**, pulled in by
+> `{% include "login/partials/html/primary_logo.html.twig" %}` from five core parents. An
+> `{% include %}` resolves by name through the Twig loader, and `TemplatePageEvent` name-rewriting
+> substitutes only the **top-level** template. There is no seam at an include boundary, and the
+> only construct that would create one — `prependPath()` into the main namespace — is prohibited by
+> locked Q38.
+>
+> The module's copy of the partial was therefore dead code: rendered by nothing, while five render
+> tests exercised it and passed, which is what kept the gap invisible. Resolution: core's
+> `templates/login/partials/html/primary_logo.html.twig` now reads
+> `alt="{{ primaryLogoAlt|default('')|attr }}"` (and the secondary equivalent); the module's dead
+> duplicate is deleted and those tests now drive the **core** template so they guard the real
+> path. `LoginTemplateListener` already supplied both variables and needed no change.
+> Verified live: `alt="Thiqa logo"`, zero `alt=""` remaining on the login page.
+>
+> Upstream-PR intent is **strong** — hardcoding `alt=""` on a logo is an accessibility defect in
+> upstream, and the fix is two lines that default to today's behaviour.
 
 > **Count correction (2026-08-09).** An earlier revision stated *"6 files / 9 strings"*. The 9 is the count
 > of **BRAND IDs** (005, 006, 087, 113, 126, 130, 134, 135, 136); the **string** count is **10**, because
@@ -957,6 +983,7 @@ The starting position is 18 PATCH-actioned IDs across ~11 files. Applying the ex
 | 4 | `src/RestControllers/Subscriber/OAuth2AuthorizationListener.php` | 1 | Low | Message should not embed the product name |
 | 5 | `interface/globals.php` | 2 | **Medium** — hot bootstrap file | Yes — messages should use a constant |
 | 6 | Zend `Installer/.../index.phtml` | 2 | Low | Configurable docs URL |
+| 7 | `templates/login/partials/html/primary_logo.html.twig` | 2 | Low | **Strong** — see K-21; `alt=""` hardcoded on a logo is an upstream a11y defect, and the fix defaults to current behaviour |
 
 Each patch gets a numbered downstream patch record (`Q1`: *"any unavoidable core change requires a numbered
 ADR/patch record and an upstream-first path"*), a minimal diff, and a rebase test. **Down from the 24
