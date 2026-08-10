@@ -47,6 +47,8 @@ parameters:
   - src
   - templates
   - tests
+  - tools/branding/bin
+  - tools/branding/src
   - tools/release/bin
   - tools/release/src
   - version.php

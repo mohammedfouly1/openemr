@@ -195,6 +195,7 @@
     "autoload-dev": {
         "psr-4": {
             "OpenEMR\\": "tests",
+            "OpenEMR\\Branding\\": "tools/branding/src",
             "OpenEMR\\Release\\": "tools/release/src"
         }
     },
@@ -285,6 +286,7 @@
             "@php-syntax-check",
             "@phpcbf",
             "@phpcs",
+            "@branding-tokens-check",
             "@phpstan",
             "@rector-check",
             "@require-checker"
@@ -303,6 +305,7 @@
             "@php .phpstan/reset-baseline.php",
             "@phpstan-baseline"
         ],
+        "branding-tokens-check": "php tools/branding/bin/generate-tokens.php --check",
         "phpunit-isolated": "phpunit -c phpunit-isolated.xml",
         "rector-check": "php -d memory_limit=4g ./vendor/bin/rector process --dry-run",
         "rector-fix": "php -d memory_limit=4g ./vendor/bin/rector process",

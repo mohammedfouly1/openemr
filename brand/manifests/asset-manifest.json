@@ -138,10 +138,10 @@
     "variant": "default",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 14714,
-    "sha256": "693e851dfa5087d3200457b23d69f67194fe1b084b782896b7f1c7273e358984",
+    "byte_size": 1972,
+    "sha256": "5e78270147dde279c40c061da34f667883168a836bd1de5478dfffdb0f5aae71",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-009",
@@ -192,10 +192,10 @@
     "variant": "default",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 25109,
-    "sha256": "743a9e5ca5bf582760bd6ad992ef0754eeb577071799cf7f3697b91f68a76769",
+    "byte_size": 4087,
+    "sha256": "12976489c81d7b7a30506e849727eb0abed0c2cf709d588ea286b8a04bf33a39",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-012",
@@ -210,10 +210,10 @@
     "variant": "default",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 17880,
-    "sha256": "377173b115a369fed1cc561a8319ef48eba75696a600819b2ce2c34e13685738",
+    "byte_size": 5138,
+    "sha256": "8880cf3d495bc605cc2642e3253930217ba759cd7cea9fde3f781932617c9b59",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-013",
@@ -480,10 +480,10 @@
     "variant": "black",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 17608,
-    "sha256": "2251c21f37cdf44be49ddc7b11238b84e344ea47f50b92ae518f0e65337c6771",
+    "byte_size": 4866,
+    "sha256": "d807e8ed4ce7b6e3fcd5888c620f4d6d460bb81db694c846626848eb178c28ff",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-028",
@@ -498,10 +498,10 @@
     "variant": "dark",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 24936,
-    "sha256": "4f81cc2d678cb0d51ee7fc4cb5edbdcb808702a59a28fd2f10cddfe224fc8ce1",
+    "byte_size": 3914,
+    "sha256": "2c7516d232b7504f63f413ef55889d007fe0704b1c473222ff3e705653b2aa30",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-029",
@@ -516,10 +516,10 @@
     "variant": "white",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 17571,
-    "sha256": "6651054fe107d06aa693fb629d28549e907efc44a02d145e45adbf8847802bbf",
+    "byte_size": 4832,
+    "sha256": "baa9628046e04fa8c7e54389e62952641dad7b597cffc8da7316efbef057a79b",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-030",
@@ -606,10 +606,10 @@
     "variant": "default",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 25251,
-    "sha256": "0c712047fa77e4573308fa48e04046b87a94005cbbd33ebe60f2cb221134651d",
+    "byte_size": 4229,
+    "sha256": "72b706e624e789a3c50ace316a8ba162212fb1b1e2a52e514cfa3aeafcd70d9d",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-035",
@@ -624,10 +624,10 @@
     "variant": "dark",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 25211,
-    "sha256": "ab4cd7f5a479d17ccd90fe22eacfd5c40bac93bcf5e02deefba380a72fd02b53",
+    "byte_size": 4189,
+    "sha256": "74fbe7ff5dae52d0e82b693aba9a89a62b61e27d55da0f646201583c7fefa3c4",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-036",
@@ -642,10 +642,10 @@
     "variant": "default",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 17703,
-    "sha256": "08be679643a78c46cd38697fb2d9b01c052a4a66ae4d03dd1bfa9e3ec9661d31",
+    "byte_size": 4961,
+    "sha256": "927499f76a45239f7d75df179db245497afafb7cf72a80971fa2eec705c552ff",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-037",
@@ -696,10 +696,10 @@
     "variant": "black",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 31524,
-    "sha256": "2bd04257a3eda2664fd66eb3d2e87c3cb787f791e3860fd317a8618608cb90db",
+    "byte_size": 1778,
+    "sha256": "53ce75bf24d433ceefe90f09dd9ba924c07eae4d74d3d8cfe9385495879560f3",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-040",
@@ -714,10 +714,10 @@
     "variant": "default",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 23050,
-    "sha256": "61354d082e8b01a273e03a5c9d50e86e999895fe61fc1dda8d57fc7c10a1847f",
+    "byte_size": 2028,
+    "sha256": "cf0808d47fd840650a42350fd3efdf54bfb8230ca339a65b2c1fd3d2b2ac1988",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-041",
@@ -732,10 +732,10 @@
     "variant": "white",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 31776,
-    "sha256": "68abe709d6aa8b515f6c630d04a96c7bd15f0a487f480c2e6201502e7239efee",
+    "byte_size": 2030,
+    "sha256": "43e5e5abf6cc594793cfd9616ff44d7198f7632ded02c8bbc342c747b4cdcf62",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-042",
@@ -750,10 +750,10 @@
     "variant": "default",
     "rtl_ltr_relevance": "LTR",
     "master_source": "brand/master/",
-    "byte_size": 14714,
-    "sha256": "693e851dfa5087d3200457b23d69f67194fe1b084b782896b7f1c7273e358984",
+    "byte_size": 1972,
+    "sha256": "5e78270147dde279c40c061da34f667883168a836bd1de5478dfffdb0f5aae71",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-043",
@@ -768,10 +768,10 @@
     "variant": "black",
     "rtl_ltr_relevance": "LTR",
     "master_source": "(self)",
-    "byte_size": 17608,
-    "sha256": "2251c21f37cdf44be49ddc7b11238b84e344ea47f50b92ae518f0e65337c6771",
+    "byte_size": 4866,
+    "sha256": "d807e8ed4ce7b6e3fcd5888c620f4d6d460bb81db694c846626848eb178c28ff",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-044",
@@ -786,10 +786,10 @@
     "variant": "default",
     "rtl_ltr_relevance": "LTR",
     "master_source": "(self)",
-    "byte_size": 17880,
-    "sha256": "377173b115a369fed1cc561a8319ef48eba75696a600819b2ce2c34e13685738",
+    "byte_size": 5138,
+    "sha256": "8880cf3d495bc605cc2642e3253930217ba759cd7cea9fde3f781932617c9b59",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-045",
@@ -804,10 +804,10 @@
     "variant": "dark",
     "rtl_ltr_relevance": "LTR",
     "master_source": "(self)",
-    "byte_size": 25211,
-    "sha256": "ab4cd7f5a479d17ccd90fe22eacfd5c40bac93bcf5e02deefba380a72fd02b53",
+    "byte_size": 4189,
+    "sha256": "74fbe7ff5dae52d0e82b693aba9a89a62b61e27d55da0f646201583c7fefa3c4",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-046",
@@ -822,10 +822,10 @@
     "variant": "default",
     "rtl_ltr_relevance": "LTR",
     "master_source": "(self)",
-    "byte_size": 17703,
-    "sha256": "08be679643a78c46cd38697fb2d9b01c052a4a66ae4d03dd1bfa9e3ec9661d31",
+    "byte_size": 4961,
+    "sha256": "927499f76a45239f7d75df179db245497afafb7cf72a80971fa2eec705c552ff",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-047",
@@ -840,10 +840,10 @@
     "variant": "white",
     "rtl_ltr_relevance": "LTR",
     "master_source": "(self)",
-    "byte_size": 17571,
-    "sha256": "6651054fe107d06aa693fb629d28549e907efc44a02d145e45adbf8847802bbf",
+    "byte_size": 4832,
+    "sha256": "baa9628046e04fa8c7e54389e62952641dad7b597cffc8da7316efbef057a79b",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-048",
@@ -858,10 +858,10 @@
     "variant": "black",
     "rtl_ltr_relevance": "LTR",
     "master_source": "(self)",
-    "byte_size": 31524,
-    "sha256": "2bd04257a3eda2664fd66eb3d2e87c3cb787f791e3860fd317a8618608cb90db",
+    "byte_size": 1778,
+    "sha256": "53ce75bf24d433ceefe90f09dd9ba924c07eae4d74d3d8cfe9385495879560f3",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-049",
@@ -876,10 +876,10 @@
     "variant": "white",
     "rtl_ltr_relevance": "LTR",
     "master_source": "(self)",
-    "byte_size": 31776,
-    "sha256": "68abe709d6aa8b515f6c630d04a96c7bd15f0a487f480c2e6201502e7239efee",
+    "byte_size": 2030,
+    "sha256": "43e5e5abf6cc594793cfd9616ff44d7198f7632ded02c8bbc342c747b4cdcf62",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-050",
@@ -894,10 +894,10 @@
     "variant": "default",
     "rtl_ltr_relevance": "LTR",
     "master_source": "(self)",
-    "byte_size": 14714,
-    "sha256": "693e851dfa5087d3200457b23d69f67194fe1b084b782896b7f1c7273e358984",
+    "byte_size": 1972,
+    "sha256": "5e78270147dde279c40c061da34f667883168a836bd1de5478dfffdb0f5aae71",
     "validation_status": "PASS",
-    "notes": ""
+    "notes": "Revision 3 (2026-08-10): embedded C2PA provenance metadata removed; artwork unchanged."
   },
   {
     "asset_id": "THIQA-051",

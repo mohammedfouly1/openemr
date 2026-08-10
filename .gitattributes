@@ -59,3 +59,20 @@ Documentation/EHI_Export/schemaspy/schemas/* export-ignore
 Documentation/EHI_Export/schemaspy/schemas/openemr.meta.xml -export-ignore
 .phpstan/**/*.* text eol=lf
 .phpstan/*.* text eol=lf
+
+# Binary asset types, declared explicitly rather than left to Git's content
+# heuristics. core.autocrlf is enabled on some contributor machines (including
+# Windows checkouts of this repo), and a heuristic misfire on a font or an icon
+# corrupts the file silently -- it still commits, it just no longer renders.
+# SVG is genuinely text and benefits from LF normalisation.
+*.woff2 binary
+*.woff  binary
+*.ttf   binary
+*.eot   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.pdf   binary
+*.svg   text eol=lf

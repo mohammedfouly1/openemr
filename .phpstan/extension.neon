@@ -10,6 +10,10 @@
 # 6. Forbid shell execution functions and eval()
 #    Note: the backtick operator is enforced by phpstan-strict-rules
 #    (backtick.notAllowed), not by a custom rule registered here.
+# 7. Thiqa branding guardrails (RebrandingPlan WP-2.7). These four rules are
+#    scoped to the OpenEMR\Modules\ThiqaBranding\ namespace only and are inert
+#    for the rest of the codebase, which uses Guzzle, curl and
+#    sites/<site>/config.php legitimately.
 #
 # Include this in phpstan.github.neon with:
 #   includes:
@@ -72,6 +76,18 @@ services:
   tags:
   - phpstan.rules.rule
 - class: OpenEMR\PHPStan\Rules\ForbiddenEvalRule
+  tags:
+  - phpstan.rules.rule
+- class: OpenEMR\PHPStan\Rules\ForbiddenBrandingHttpClientRule
+  tags:
+  - phpstan.rules.rule
+- class: OpenEMR\PHPStan\Rules\ForbiddenBrandingSiteConfigRule
+  tags:
+  - phpstan.rules.rule
+- class: OpenEMR\PHPStan\Rules\ForbiddenBrandingTwigPathRule
+  tags:
+  - phpstan.rules.rule
+- class: OpenEMR\PHPStan\Rules\ForbiddenBrandingPlaceholderDomainRule
   tags:
   - phpstan.rules.rule
 - class: OpenEMR\PHPStan\Rules\Sql\ReservedWordRegistry
