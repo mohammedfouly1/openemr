@@ -1,0 +1,86 @@
+/*
+*
+*   Thiqa — Dark theme entry point.
+*
+*   Fork-owned. Compiles to public/themes/style_dark.css and, via the
+*   sass-bsimport-loader `?variant=` queries in webpack.themes.js, to
+*   compact_style_dark.css, rtl_style_dark.css and rtl_compact_style_dark.css.
+*
+*   The upstream oe-styles/style_dark.scss is left byte-identical for rebase
+*   safety; only the webpack entry map points here instead (RebrandingPlan
+*   §3.5.3, §3.7.2).
+*
+*   Two structural constraints, both load-bearing:
+*     1. This file must live in oe-styles/ — webpack/loaders/sass-bsimport-loader.js
+*        lines 28-31 decide relative import depth by testing the path for
+*        "/oe-styles/" or "/colors/".
+*     2. This file must carry the `// bs4import` marker below. The loader
+*        substitutes the per-variant Bootstrap import for that exact text, and it
+*        only processes the entry file — never anything the entry imports.
+*
+*   @package   OpenEMR
+*   @link      https://www.open-emr.org
+*   @license   https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
+*
+*/
+
+/* Thiqa design tokens — variables only, emits no CSS. */
+@import "../thiqa/tokens-dark";
+
+/* Typography — @font-face blocks plus the family, weight and scale variables. */
+@import "../thiqa/typography";
+
+/*
+ * Which token is genuinely dark and which is genuinely light in this variant.
+ * Inverted relative to the light entry: in the dark palette the near-black is
+ * the page background and the near-white is the primary text colour.
+ */
+$ovr-dark: $thiqa-background;
+$ovr-light: $thiqa-text-primary;
+
+/*
+ * Bootstrap / OpenEMR variable bridge. Must precede ../default-variables,
+ * whose declarations — including $font-family-sans-serif — are all !default,
+ * so no upstream file needs editing.
+ */
+@import "../thiqa/bootstrap-bridge";
+
+/* Upstream defaults fill in whatever the bridge left alone. */
+@import "../default-variables";
+
+/*
+ * default-variables assigns $theme-colors without !default, so the Thiqa map
+ * has to be applied after that import and before Bootstrap reads it.
+ */
+@import "../thiqa/theme-colors";
+
+// Import Bootstrap 4 SCSS Files before doing anything
+// This gets replaced by the webpack sass-bsimport-loader -- do not touch
+// bs4import
+
+// Fix Font Awesome fonts path
+$fa-font-path: "../assets/@fortawesome/fontawesome-free/webfonts";
+// Font Awesome Import
+@import "../../../public/assets/@fortawesome/fontawesome-free/scss/fontawesome";
+@import "../../../public/assets/@fortawesome/fontawesome-free/scss/brands";
+@import "../../../public/assets/@fortawesome/fontawesome-free/scss/regular";
+@import "../../../public/assets/@fortawesome/fontawesome-free/scss/solid";
+
+/* Core OpenEMR imports (includes Select2 BS4 theme etc.) */
+@import "../core";
+
+/* Core defaults for themes */
+@import "../theme-defaults";
+
+@import "../navigation-slide/future-bootstrap";
+
+/* :root custom properties — --thiqa-* plus the --oe-* compatibility aliases. */
+$thiqa-css-variables-variant: 'dark';
+@import "../thiqa/css-variables";
+
+/* Component corrections that a variable alone cannot reach. */
+@import "../thiqa/overrides";
+
+/* Last: BS4/OpenEMR helper overrides */
+/* search any */
+@import "../oe-bootstrap";

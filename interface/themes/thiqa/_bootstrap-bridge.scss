@@ -1,0 +1,211 @@
+// -----------------------------------------------------------------------------
+// Thiqa → Bootstrap 4 / OpenEMR variable bridge (hand-authored, fork-owned).
+//
+// Maps the generated $thiqa-* design tokens onto the variable names Bootstrap 4,
+// `interface/themes/default-variables.scss` and the OpenEMR core partials read.
+//
+// This partial declares variables only — it emits no CSS — and MUST be imported
+// *before* `../default-variables`, whose declarations are all `!default`. The
+// same file serves both variants: every value is expressed as a token, and the
+// two genuinely variant-specific anchors ($ovr-dark / $ovr-light) are `!default`
+// here so each entry file can set them first.
+//
+// Requires: one of `thiqa/_tokens-light.scss` or `thiqa/_tokens-dark.scss`, plus
+// `thiqa/_typography.scss`, already imported.
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// Variant anchors
+//
+// OpenEMR uses $ovr-dark for "a colour that is genuinely dark" and $ovr-light for
+// "a colour that is genuinely light", irrespective of which variant is being
+// built (compare upstream style_light.scss:25-26 with style_dark.scss:23-24).
+// The light entry leaves these at the defaults below; the dark entry inverts
+// them before importing this file.
+// -----------------------------------------------------------------------------
+$ovr-dark: $thiqa-text-primary !default;
+$ovr-light: $thiqa-surface !default;
+
+// -----------------------------------------------------------------------------
+// Typography
+// -----------------------------------------------------------------------------
+$font-family-sans-serif: $thiqa-font-family;
+
+// -----------------------------------------------------------------------------
+// Greyscale ramp
+//
+// Anchored on real tokens at both ends; the three intermediate steps Bootstrap
+// needs but the palette does not name are interpolated from tokens with mix(),
+// never hand-picked. The ramp runs light→dark in the light variant and
+// dark→light in the dark variant, which is exactly how upstream inverts.
+// -----------------------------------------------------------------------------
+$white: $thiqa-surface;
+$black: $thiqa-text-primary;
+
+$gray-100: $thiqa-surface-sunken;
+$gray-200: $thiqa-divider;
+$gray-300: $thiqa-border;
+$gray-400: $thiqa-text-disabled;
+$gray-500: mix($thiqa-text-secondary, $thiqa-text-disabled, 50%);
+$gray-600: $thiqa-text-secondary;
+$gray-700: mix($thiqa-text-primary, $thiqa-text-secondary, 40%);
+$gray-800: mix($thiqa-text-primary, $thiqa-text-secondary, 75%);
+$gray-900: $thiqa-text-primary;
+$gray-dark: $gray-800;
+$gray: $gray-600;
+
+// -----------------------------------------------------------------------------
+// Named hues (feed default-variables' $colors map)
+// -----------------------------------------------------------------------------
+$blue: $thiqa-brand-sky;
+$cyan: $thiqa-brand-sky;
+$teal: $thiqa-brand-sage;
+$green: $thiqa-brand-sage;
+$yellow: $thiqa-brand-amber;
+$orange: $thiqa-brand-coral;
+$red: $thiqa-brand-critical;
+$pink: $thiqa-brand-coral;
+
+// -----------------------------------------------------------------------------
+// Semantic roles
+// -----------------------------------------------------------------------------
+$primary: $thiqa-interactive-primary-default;
+$secondary: $thiqa-interactive-secondary-default;
+$success: $thiqa-brand-sage;
+$info: $thiqa-brand-sky;
+$warning: $thiqa-brand-amber;
+$danger: $thiqa-brand-critical;
+$light: $thiqa-surface-sunken;
+$dark: $thiqa-text-primary;
+$secondary-color: $secondary;
+
+$body-bg: $thiqa-background;
+$body-color: $thiqa-text-primary;
+
+// -----------------------------------------------------------------------------
+// Contrast selection
+//
+// Bootstrap's color-yiq() picks between these two for text on a coloured
+// surface. Upstream's dark theme inverts $white/$gray-900, which leaves yiq
+// choosing the wrong end and forces a long tail of manual `.btn-* { color: }`
+// patches (style_dark.scss:62-88). Pinning yiq to the variant anchors makes the
+// choice correct in both variants and removes the need for those patches.
+// -----------------------------------------------------------------------------
+$yiq-text-dark: $ovr-dark;
+$yiq-text-light: $ovr-light;
+
+// -----------------------------------------------------------------------------
+// Links
+// -----------------------------------------------------------------------------
+$link-color: $thiqa-link-default;
+$link-hover-color: $thiqa-link-hover;
+
+// -----------------------------------------------------------------------------
+// Components
+// -----------------------------------------------------------------------------
+$border-color: $thiqa-border;
+$component-active-bg: $thiqa-interactive-primary-default;
+$component-active-color: $thiqa-interactive-primary-text-on;
+
+$btn-link-disabled-color: $thiqa-text-disabled;
+$close-color: $thiqa-text-primary;
+$close-text-shadow: none;
+
+$input-bg: $thiqa-surface-input;
+$input-disabled-bg: $thiqa-surface-sunken;
+$input-color: $thiqa-text-primary;
+$input-border-color: $thiqa-border-strong;
+$input-placeholder-color: $thiqa-text-disabled;
+$input-group-addon-bg: $thiqa-surface-sunken;
+$input-group-addon-color: $thiqa-text-secondary;
+$input-focus-bg: $thiqa-surface-input;
+$input-focus-color: $thiqa-text-primary;
+$input-focus-border-color: $thiqa-interactive-focus-ring;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($thiqa-interactive-focus-ring, 0.35);
+$input-btn-focus-color: rgba($thiqa-interactive-focus-ring, 0.35);
+$input-btn-focus-box-shadow: 0 0 0 0.2rem rgba($thiqa-interactive-focus-ring, 0.35);
+$custom-control-indicator-checked-bg: $thiqa-interactive-primary-default;
+$custom-select-bg: $thiqa-surface-input;
+$custom-select-color: $thiqa-text-primary;
+
+$card-bg: $thiqa-surface;
+$card-border-color: $thiqa-border;
+$card-cap-bg: $thiqa-surface-sunken;
+
+$modal-content-bg: $thiqa-surface;
+$modal-content-border-color: $thiqa-border;
+$modal-header-border-color: $thiqa-divider;
+$modal-footer-border-color: $thiqa-divider;
+
+$dropdown-bg: $thiqa-surface;
+$dropdown-border-color: $thiqa-border;
+$dropdown-divider-bg: $thiqa-divider;
+$dropdown-link-color: $thiqa-text-primary;
+$dropdown-link-hover-bg: $thiqa-surface-sunken;
+$dropdown-link-hover-color: $thiqa-text-primary;
+$dropdown-link-active-bg: $thiqa-interactive-primary-default;
+$dropdown-link-active-color: $thiqa-interactive-primary-text-on;
+
+$table-color: $thiqa-text-primary;
+$table-bg: $thiqa-surface;
+$table-accent-bg: $thiqa-surface-sunken;
+$table-hover-bg: $thiqa-divider;
+$table-hover-color: $thiqa-text-primary;
+$table-border-color: $thiqa-border;
+$table-head-bg: $thiqa-surface-sunken;
+$table-head-color: $thiqa-text-secondary;
+
+$list-group-bg: $thiqa-surface;
+$list-group-color: $thiqa-text-primary;
+$list-group-border-color: $thiqa-border;
+$list-group-hover-bg: $thiqa-surface-sunken;
+$list-group-active-bg: $thiqa-interactive-primary-default;
+$list-group-active-border-color: $thiqa-interactive-primary-default;
+$list-group-active-color: $thiqa-interactive-primary-text-on;
+$list-group-disabled-color: $thiqa-text-disabled;
+$list-group-action-color: $thiqa-text-primary;
+
+$nav-tabs-border-color: $thiqa-border;
+$nav-tabs-link-active-bg: $thiqa-surface;
+$nav-tabs-link-active-color: $thiqa-text-primary;
+$nav-tabs-link-active-border-color: $thiqa-border $thiqa-border $thiqa-surface;
+$nav-pills-link-active-bg: $thiqa-interactive-primary-default;
+$nav-pills-link-active-color: $thiqa-interactive-primary-text-on;
+
+$pagination-bg: $thiqa-surface;
+$pagination-color: $thiqa-link-default;
+$pagination-border-color: $thiqa-border;
+$pagination-hover-bg: $thiqa-surface-sunken;
+$pagination-active-bg: $thiqa-interactive-primary-default;
+$pagination-active-border-color: $thiqa-interactive-primary-default;
+$pagination-active-color: $thiqa-interactive-primary-text-on;
+
+$breadcrumb-bg: $thiqa-surface-sunken;
+$breadcrumb-divider-color: $thiqa-text-secondary;
+$breadcrumb-active-color: $thiqa-text-secondary;
+
+$popover-bg: $thiqa-surface;
+$popover-border-color: $thiqa-border;
+$popover-header-bg: $thiqa-surface-sunken;
+$popover-body-color: $thiqa-text-primary;
+
+$tooltip-bg: $thiqa-text-primary;
+$tooltip-color: $thiqa-text-inverse;
+
+$progress-bg: $thiqa-surface-sunken;
+$progress-bar-bg: $thiqa-interactive-primary-default;
+
+$badge-color: $thiqa-interactive-primary-text-on;
+
+$hr-border-color: $thiqa-divider;
+$text-muted: $thiqa-text-secondary;
+$mark-bg: $thiqa-semantic-warning-bg;
+
+// -----------------------------------------------------------------------------
+// Login page (all declared !default in interface/themes/login_page.scss)
+// -----------------------------------------------------------------------------
+$login-color-1: $thiqa-surface;
+$login-color-2: $thiqa-brand-sky;
+$login-color-3: $thiqa-brand-navy;
+$login-text-color: $thiqa-text-primary;
+$login-form-bg-color: $thiqa-surface;

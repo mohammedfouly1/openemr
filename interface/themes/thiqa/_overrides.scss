@@ -1,0 +1,431 @@
+// -----------------------------------------------------------------------------
+// Thiqa component corrections (hand-authored, fork-owned).
+//
+// Everything here is expressed in $thiqa-* tokens, so the same partial produces
+// the correct result in both variants. It is imported near the end of each entry
+// file — after `../core`, `../theme-defaults` and the CSS custom properties, and
+// before `../oe-bootstrap` — which is the same slot upstream's light and dark
+// themes use for their own corrections.
+//
+// Scope is deliberately narrow: the places where an OpenEMR partial hard-codes a
+// colour or a Bootstrap default survives the variable bridge. Anything that can
+// be fixed by a variable belongs in `_bootstrap-bridge.scss` instead.
+//
+// Requires: a Thiqa token partial and `thiqa/_typography.scss` already imported.
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// Canvas and type
+// -----------------------------------------------------------------------------
+html,
+body {
+  background-color: $thiqa-background;
+  color: $thiqa-text-primary;
+  font-family: $thiqa-font-family;
+}
+
+body,
+input,
+select,
+textarea,
+button,
+.btn,
+table {
+  font-feature-settings: $thiqa-font-feature-numeric;
+}
+
+h1,
+.h1 {
+  font-family: $thiqa-font-family;
+  font-size: $thiqa-font-size-h1;
+  font-weight: $thiqa-font-weight-h1;
+  line-height: $thiqa-line-height-h1;
+}
+
+h2,
+.h2 {
+  font-family: $thiqa-font-family;
+  font-size: $thiqa-font-size-h2;
+  font-weight: $thiqa-font-weight-h2;
+  line-height: $thiqa-line-height-h2;
+}
+
+h3,
+.h3 {
+  font-family: $thiqa-font-family;
+  font-size: $thiqa-font-size-h3;
+  font-weight: $thiqa-font-weight-h3;
+  line-height: $thiqa-line-height-h3;
+}
+
+h4,
+.h4 {
+  font-family: $thiqa-font-family;
+  font-size: $thiqa-font-size-h4;
+  font-weight: $thiqa-font-weight-h4;
+  line-height: $thiqa-line-height-h4;
+}
+
+label,
+.col-form-label,
+.control-label {
+  font-weight: $thiqa-font-weight-label;
+}
+
+.btn {
+  font-weight: $thiqa-font-weight-button;
+}
+
+// Arabic content picks the Arabic face first; the Latin faces stay in the stack
+// as a fallback for Latin runs embedded in Arabic text.
+[lang="ar"],
+[dir="rtl"] {
+  font-family: $thiqa-font-family-arabic;
+}
+
+// -----------------------------------------------------------------------------
+// Main wrappers
+// -----------------------------------------------------------------------------
+.body_main,
+.body_main_widescreen {
+  background-color: var(--oe-body-bg, #{$thiqa-background}) !important;
+}
+
+.bgcolor2 {
+  background-color: $thiqa-surface;
+}
+
+// -----------------------------------------------------------------------------
+// Links
+// -----------------------------------------------------------------------------
+a,
+.link,
+.link_submit,
+.more,
+.back {
+  color: $thiqa-link-default;
+}
+
+a:hover,
+a:focus {
+  color: $thiqa-link-hover;
+}
+
+// -----------------------------------------------------------------------------
+// Buttons
+// -----------------------------------------------------------------------------
+.btn-primary {
+  background-color: $thiqa-interactive-primary-default;
+  border-color: $thiqa-interactive-primary-default;
+  color: $thiqa-interactive-primary-text-on;
+
+  &:hover,
+  &:focus {
+    background-color: $thiqa-interactive-primary-hover;
+    border-color: $thiqa-interactive-primary-hover;
+    color: $thiqa-interactive-primary-text-on;
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    background-color: $thiqa-interactive-primary-active;
+    border-color: $thiqa-interactive-primary-active;
+    color: $thiqa-interactive-primary-text-on;
+  }
+
+  &:disabled,
+  &.disabled {
+    background-color: $thiqa-interactive-primary-disabled;
+    border-color: $thiqa-interactive-primary-disabled;
+    color: $thiqa-interactive-primary-text-on;
+  }
+}
+
+.btn-secondary {
+  background-color: $thiqa-interactive-secondary-default;
+  border-color: $thiqa-interactive-secondary-default;
+  color: $thiqa-interactive-secondary-text-on;
+
+  &:hover,
+  &:focus {
+    background-color: $thiqa-interactive-secondary-hover;
+    border-color: $thiqa-interactive-secondary-hover;
+    color: $thiqa-interactive-secondary-text-on;
+  }
+}
+
+.btn-outline-primary {
+  border-color: $thiqa-interactive-primary-default;
+  color: $thiqa-interactive-primary-default;
+
+  &:hover,
+  &:focus {
+    background-color: $thiqa-interactive-primary-default;
+    color: $thiqa-interactive-primary-text-on;
+  }
+}
+
+.btn-outline-secondary {
+  border-color: $thiqa-border-strong;
+  color: $thiqa-text-secondary;
+
+  &:hover,
+  &:focus {
+    background-color: $thiqa-interactive-secondary-default;
+    border-color: $thiqa-interactive-secondary-default;
+    color: $thiqa-interactive-secondary-text-on;
+  }
+}
+
+.btn:focus,
+.btn.focus {
+  box-shadow: 0 0 0 0.2rem rgba($thiqa-interactive-focus-ring, 0.35);
+}
+
+// -----------------------------------------------------------------------------
+// Focus visibility — one ring colour everywhere
+// -----------------------------------------------------------------------------
+:focus-visible {
+  outline: 2px solid $thiqa-interactive-focus-ring;
+  outline-offset: 1px;
+}
+
+// -----------------------------------------------------------------------------
+// Forms
+// -----------------------------------------------------------------------------
+.form-control,
+select,
+textarea,
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="date"],
+input[type="datetime-local"],
+.input-group-text {
+  background-color: $thiqa-surface-input;
+  border-color: $thiqa-border-strong;
+  color: $thiqa-text-primary;
+}
+
+.card .form-control,
+.modal-content .form-control,
+.card select,
+.modal-content select,
+.card textarea,
+.modal-content textarea {
+  background-color: $thiqa-surface-input-on-raised;
+}
+
+.form-control:focus,
+select:focus,
+textarea:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  background-color: $thiqa-surface-input;
+  border-color: $thiqa-interactive-focus-ring;
+  box-shadow: 0 0 0 0.2rem rgba($thiqa-interactive-focus-ring, 0.35);
+  color: $thiqa-text-primary;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: $thiqa-surface-sunken;
+  color: $thiqa-text-disabled;
+}
+
+::placeholder {
+  color: $thiqa-text-disabled;
+  opacity: 1;
+}
+
+fieldset {
+  background-color: var(--oe-fieldset-bg, #{$thiqa-surface-sunken});
+  border-color: $thiqa-border;
+  color: var(--oe-fieldset-color, #{$thiqa-text-primary});
+}
+
+// -----------------------------------------------------------------------------
+// Tables
+// -----------------------------------------------------------------------------
+.table {
+  background-color: $thiqa-surface;
+  color: $thiqa-text-primary;
+}
+
+.table th {
+  font-size: $thiqa-font-size-table-header;
+  font-weight: $thiqa-font-weight-table-header;
+  line-height: $thiqa-line-height-table-header;
+}
+
+.table td {
+  font-size: $thiqa-font-size-table-body;
+  line-height: $thiqa-line-height-table-body;
+}
+
+.table thead th {
+  background-color: $thiqa-surface-sunken;
+  border-bottom-color: $thiqa-border;
+  color: $thiqa-text-secondary;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: $thiqa-surface-sunken;
+}
+
+.table-hover tbody tr:hover {
+  background-color: $thiqa-divider;
+  color: $thiqa-text-primary;
+}
+
+.table td,
+.table th {
+  border-top-color: $thiqa-divider;
+}
+
+// -----------------------------------------------------------------------------
+// Surfaces
+// -----------------------------------------------------------------------------
+.card,
+.panel,
+.modal-content {
+  background-color: var(--oe-surface-bg, #{$thiqa-surface});
+  border-color: $thiqa-border;
+  color: $thiqa-text-primary;
+}
+
+input.list-group-item,
+.list-group-item {
+  background-color: $thiqa-surface;
+  border-color: $thiqa-border;
+  color: $thiqa-text-primary;
+}
+
+#searchBar,
+#searchBar input[type="text"],
+#searchBar input[type="search"] {
+  background-color: var(--oe-search-bg, #{$thiqa-divider});
+  color: $thiqa-text-primary;
+}
+
+#oe-nav-sidebar,
+#oe-nav-sidebar .list-group-item {
+  background-color: $thiqa-surface;
+  color: $thiqa-text-primary;
+}
+
+// -----------------------------------------------------------------------------
+// Navigation
+// -----------------------------------------------------------------------------
+.appMenu .appMenu > span:hover,
+.appMenu li:hover,
+.appMenu > span:hover {
+  background-color: var(--oe-navbar-link-hover-bg, #{$thiqa-surface-sunken}) !important;
+  color: var(--oe-navbar-link-hover-color, #{$thiqa-text-primary}) !important;
+}
+
+.menuEntries li .menuLabel:hover {
+  color: $thiqa-link-hover !important;
+}
+
+.menuDisabled {
+  color: $thiqa-text-disabled;
+}
+
+ul.tabNav a {
+  color: $thiqa-text-primary;
+}
+
+ul.tabNav li.current a {
+  color: $thiqa-interactive-primary-default;
+}
+
+.documents_list a {
+  color: $thiqa-link-default;
+}
+
+// -----------------------------------------------------------------------------
+// Select2 — the multi-select search field ignores the theme variables
+// -----------------------------------------------------------------------------
+.select2-container--bootstrap4 .select2-selection--multiple .select2-search__field {
+  background-color: $thiqa-surface-input !important;
+  color: $thiqa-text-primary !important;
+}
+
+.select2-container--bootstrap4 .select2-selection {
+  background-color: $thiqa-surface-input;
+  border-color: $thiqa-border-strong;
+  color: $thiqa-text-primary;
+}
+
+.select2-container--bootstrap4 .select2-dropdown {
+  background-color: $thiqa-surface;
+  border-color: $thiqa-border;
+  color: $thiqa-text-primary;
+}
+
+// -----------------------------------------------------------------------------
+// Status / alerts — the semantic token triples
+// -----------------------------------------------------------------------------
+.alert-success {
+  background-color: $thiqa-semantic-success-bg;
+  border-color: $thiqa-semantic-success-border;
+  color: $thiqa-semantic-success-text;
+}
+
+.alert-warning {
+  background-color: $thiqa-semantic-warning-bg;
+  border-color: $thiqa-semantic-warning-border;
+  color: $thiqa-semantic-warning-text;
+}
+
+.alert-danger,
+.alert-critical {
+  background-color: $thiqa-semantic-critical-bg;
+  border-color: $thiqa-semantic-critical-border;
+  color: $thiqa-semantic-critical-text;
+}
+
+.alert-info,
+.alert-primary,
+.alert-secondary {
+  background-color: $thiqa-semantic-info-bg;
+  border-color: $thiqa-semantic-info-border;
+  color: $thiqa-semantic-info-text;
+}
+
+.alert-custom {
+  background-color: $thiqa-semantic-critical-bg !important;
+  color: $thiqa-semantic-critical-text !important;
+}
+
+// -----------------------------------------------------------------------------
+// Text helpers
+// -----------------------------------------------------------------------------
+.text-muted {
+  color: $thiqa-text-secondary !important;
+}
+
+.lhc-item-question-text {
+  color: $thiqa-text-primary;
+}
+
+hr {
+  border-top-color: $thiqa-divider;
+}
+
+// -----------------------------------------------------------------------------
+// Inline SVG marks that inherit a theme colour
+// -----------------------------------------------------------------------------
+.about-review-image > #color {
+  fill: $thiqa-text-primary;
+}
+
+#mainBox .logo .emr-menu-logo > #blue-color,
+#mainBox_vertical .logo .emr-menu-logo > #blue-color {
+  fill: $thiqa-brand-navy;
+}

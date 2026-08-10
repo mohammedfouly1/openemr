@@ -150,44 +150,27 @@ module.exports = (env, argv) => {
     mode: argv.mode || "development",
     entry: {
     // ── oe-styles base themes (LTR) ──────────────────────────────────────────
-    style_light:         entry("oe-styles/style_light.scss"),
-    style_dark:          entry("oe-styles/style_dark.scss"),
-    style_solar:         entry("oe-styles/style_solar.scss"),
-    style_manila:        entry("oe-styles/style_manila.scss"),
+    //
+    // Entry NAME drives the output filename, which is what css_header,
+    // config/config.yaml and the interface/globals.php file_exists() fallback
+    // depend on — so the Thiqa sources keep emitting style_light.css and
+    // style_dark.css. The upstream style_light.scss / style_dark.scss stay in
+    // the tree, byte-identical, and are simply no longer entry points
+    // (RebrandingPlan §3.5.3, §3.7.2; CR-9).
+    style_light:         entry("oe-styles/style_thiqa_light.scss"),
+    style_dark:          entry("oe-styles/style_thiqa_dark.scss"),
 
     // ── oe-styles compact themes ─────────────────────────────────────────────
-    compact_style_light:  entry("oe-styles/style_light.scss",  "compact"),
-    compact_style_dark:   entry("oe-styles/style_dark.scss",   "compact"),
-    compact_style_solar:  entry("oe-styles/style_solar.scss",  "compact"),
-    compact_style_manila: entry("oe-styles/style_manila.scss", "compact"),
+    compact_style_light:  entry("oe-styles/style_thiqa_light.scss",  "compact"),
+    compact_style_dark:   entry("oe-styles/style_thiqa_dark.scss",   "compact"),
 
     // ── oe-styles RTL themes ─────────────────────────────────────────────────
-    rtl_style_light:  entry("oe-styles/style_light.scss",  "rtl"),
-    rtl_style_dark:   entry("oe-styles/style_dark.scss",   "rtl"),
-    rtl_style_solar:  entry("oe-styles/style_solar.scss",  "rtl"),
-    rtl_style_manila: entry("oe-styles/style_manila.scss", "rtl"),
+    rtl_style_light:  entry("oe-styles/style_thiqa_light.scss",  "rtl"),
+    rtl_style_dark:   entry("oe-styles/style_thiqa_dark.scss",   "rtl"),
 
     // ── oe-styles RTL compact themes ─────────────────────────────────────────
-    rtl_compact_style_light:  entry("oe-styles/style_light.scss",  "rtl_compact"),
-    rtl_compact_style_dark:   entry("oe-styles/style_dark.scss",   "rtl_compact"),
-    rtl_compact_style_solar:  entry("oe-styles/style_solar.scss",  "rtl_compact"),
-    rtl_compact_style_manila: entry("oe-styles/style_manila.scss", "rtl_compact"),
-
-    // ── color variant themes (LTR) ───────────────────────────────────────────
-    style_cobalt_blue:  entry("colors/style_cobalt_blue.scss"),
-    style_forest_green: entry("colors/style_forest_green.scss"),
-
-    // ── color variant themes (compact) ───────────────────────────────────────
-    compact_style_cobalt_blue:  entry("colors/style_cobalt_blue.scss",  "compact"),
-    compact_style_forest_green: entry("colors/style_forest_green.scss", "compact"),
-
-    // ── color variant themes (RTL) ───────────────────────────────────────────
-    rtl_style_cobalt_blue:  entry("colors/style_cobalt_blue.scss",  "rtl"),
-    rtl_style_forest_green: entry("colors/style_forest_green.scss", "rtl"),
-
-    // ── color variant themes (RTL compact) ───────────────────────────────────
-    rtl_compact_style_cobalt_blue:  entry("colors/style_cobalt_blue.scss",  "rtl_compact"),
-    rtl_compact_style_forest_green: entry("colors/style_forest_green.scss", "rtl_compact"),
+    rtl_compact_style_light:  entry("oe-styles/style_thiqa_light.scss",  "rtl_compact"),
+    rtl_compact_style_dark:   entry("oe-styles/style_thiqa_dark.scss",   "rtl_compact"),
 
     // ── tabs themes (LTR) ────────────────────────────────────────────────────
     tabs_style_full:    entry("tabs_style_full.scss"),

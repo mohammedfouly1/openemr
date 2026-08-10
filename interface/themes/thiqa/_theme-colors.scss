@@ -1,0 +1,27 @@
+// -----------------------------------------------------------------------------
+// Thiqa $theme-colors map (hand-authored, fork-owned).
+//
+// `interface/themes/default-variables.scss:42-54` assigns $theme-colors WITHOUT
+// `!default`, so the Thiqa map has to be applied *after* that import and
+// *before* the `// bs4import` marker — Bootstrap merges whatever $theme-colors
+// holds at the moment its own variables are read, and the caller's map wins.
+//
+// The key set is exactly upstream's: the extra `ovr-dark`, `ovr-light` and
+// `body-color` keys generate utility classes OpenEMR templates already use.
+//
+// Requires: `thiqa/_bootstrap-bridge.scss` and `../default-variables` imported.
+// -----------------------------------------------------------------------------
+
+$theme-colors: (
+  primary: $thiqa-interactive-primary-default,
+  secondary: $thiqa-interactive-secondary-default,
+  success: $thiqa-brand-sage,
+  info: $thiqa-brand-sky,
+  warning: $thiqa-brand-amber,
+  danger: $thiqa-brand-critical,
+  light: $light,
+  dark: $dark,
+  ovr-dark: $ovr-dark,
+  ovr-light: $ovr-light,
+  body-color: $body-color
+);
