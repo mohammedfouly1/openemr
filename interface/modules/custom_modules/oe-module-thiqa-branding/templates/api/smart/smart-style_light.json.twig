@@ -10,8 +10,11 @@ core file is neither modified nor removed.
 
 The twelve keys and their values are the SMART Style contract, copied verbatim
 from the generator output (tools/branding/bin/generate-tokens.php over
-brand/tokens/thiqa-tokens.json, light). Regenerate rather than hand-edit; the
-generator is the authority and CI fails on a diff.
+brand/tokens/thiqa-tokens.json, light). Regenerate rather than hand-edit: the
+generator is the authority for the JSON body below, and CI fails on a body diff
+(tools/branding/src/DeployedArtefacts.php compares payloads with this leading
+comment stripped, so this prose may differ from the generator banner but the JSON
+may not).
 
 Wire format is the core one, unchanged: `logo_primary` is interpolated from the
 `logo.primary` variable supplied by SMARTAuthorizationController::smartAppStyles(),

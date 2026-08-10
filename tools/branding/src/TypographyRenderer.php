@@ -52,22 +52,77 @@ final readonly class TypographyRenderer
         return new GeneratedFile('_typography.scss', $body);
     }
 
+    /**
+     * Emit one `@font-face` per physical file, not per declared weight.
+     *
+     * Several declared weights can resolve to the SAME file. That is not a packaging
+     * mistake when the file is a variable font: Inter ships as one variable face carrying
+     * `fvar`/`gvar`/`avar`/`HVAR`/`MVAR`/`STAT` (verified by decoding the WOFF2 table
+     * directory), and one file legitimately covers 400 through 700.
+     *
+     * Emitting it four times under four filenames, as this renderer previously did, made
+     * the browser fetch the same 48 KB face four times — ~145 KB of pure waste on every
+     * cold load, and on the login page, which is the one page an unauthenticated user
+     * always pays for. Recorded as docs/RebrandingBugs.md RB-22.
+     *
+     * Collapsing to a `font-weight: <min> <max>` range is the CSS Fonts 4 mechanism for
+     * exactly this, and it is safe here **because the shared file is variable**: the UA
+     * instantiates the `wght` axis at the used value, so 500 and 600 still render as 500
+     * and 600. A single-value descriptor is still emitted when only one weight maps to the
+     * file, so a genuinely static face (IBM Plex Sans Arabic, which has no `fvar` and ships
+     * four distinct files) is unaffected and keeps its four separate rules.
+     */
     private function renderFontFaces(Typography $typography): string
     {
         $out = "\n// " . str_repeat('=', 76) . "\n// Font faces\n// " . str_repeat('=', 76) . "\n";
 
-        foreach ($typography->fontFaces() as $face) {
+        foreach ($this->groupByFile($typography->fontFaces()) as $group) {
+            $first = $group[0];
+
+            $weights = array_map(static fn (FontFace $face): int => $face->weight, $group);
+            $descriptor = count($weights) === 1
+                ? (string) $weights[0]
+                : min($weights) . ' ' . max($weights);
+
             $out .= "\n@font-face {\n"
-                . self::INDENT . "font-family: '" . $face->family . "';\n"
+                . self::INDENT . "font-family: '" . $first->family . "';\n"
                 . self::INDENT . "font-style: normal;\n"
-                . self::INDENT . 'font-weight: ' . $face->weight . ";\n"
+                . self::INDENT . 'font-weight: ' . $descriptor . ";\n"
                 . self::INDENT . "font-display: swap;\n"
-                . self::INDENT . "src: url('" . $this->fontUrl($face->fileName) . "') format('woff2');\n"
-                . self::INDENT . 'unicode-range: ' . $face->unicodeRange . ";\n"
+                . self::INDENT . "src: url('" . $this->fontUrl($first->fileName) . "') format('woff2');\n"
+                . self::INDENT . 'unicode-range: ' . $first->unicodeRange . ";\n"
                 . "}\n";
         }
 
         return $out;
+    }
+
+    /**
+     * Group faces by family + file, preserving declaration order.
+     *
+     * Keyed on the file as well as the family because two families must never merge even
+     * if a kit ever pointed both at one file — that would silently drop a family from the
+     * stylesheet.
+     *
+     * Every group is non-empty by construction — a key exists only because a face was
+     * appended under it — and the return type says so, because `min()`/`max()` in the
+     * caller require it. Widening those to accept an empty array, or asserting the type
+     * away, would be describing the code less accurately than it can be described.
+     *
+     * @param list<FontFace> $faces
+     *
+     * @return list<non-empty-list<FontFace>>
+     */
+    private function groupByFile(array $faces): array
+    {
+        /** @var array<string, non-empty-list<FontFace>> $groups */
+        $groups = [];
+
+        foreach ($faces as $face) {
+            $groups[$face->family . "\0" . $face->fileName][] = $face;
+        }
+
+        return array_values($groups);
     }
 
     private function renderFamilies(Typography $typography): string

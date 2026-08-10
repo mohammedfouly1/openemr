@@ -65,4 +65,10 @@ docs/discovery/**/count-js_innerhtml.txt
 
 # Local stack helper output
 SETUP-STATUS.local.md
+
+# Per-tenant branding runtime state, written by thiqa-branding:materialise.
+# This is one tenant's materialised output, not source: on a multi-tenant deployment
+# there is one directory per site here. Without this rule a routine `git add -A`
+# commits tenant runtime state into the source tree (docs/RebrandingBugs.md RB-04).
+interface/modules/custom_modules/oe-module-thiqa-branding/public/branding/
 # ===== Thiqa SaaS fork — end fork-owned rules =====

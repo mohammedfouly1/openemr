@@ -319,7 +319,7 @@
         {
             "map_row": null,
             "inventory_id": "saas_branding_revision / saas_branding_materialised_at / saas_branding_tokens_*",
-            "reason": "Materialiser-owned. thiqa-branding:materialise writes them; a declarative profile must never forge a revision or a materialisation timestamp."
+            "reason": "Materialiser-owned. thiqa-branding:materialise writes them; a declarative profile must never forge a revision or a materialisation timestamp. NOTE the seven saas_branding_* globals split into two groups, and only this group is off-limits here: MATERIALISER-OWNED = saas_branding_revision, saas_branding_materialised_at, saas_branding_tokens_light, saas_branding_tokens_dark (runtime state, per-tenant, never declarative). PRODUCT-LEVEL and legitimately profile-writable = saas_branding_product_name_ar (the Arabic product name is the same for every tenant, exactly like openemr_name). TENANT-LEVEL and set by provisioning, not by this profile = saas_branding_tenant_display_name, saas_branding_tenant_display_name_ar. This split was made explicit on 2026-08-10 after an audit pass (docs/RebrandingBugs.md RB-16) misread the sentence above as covering all seven keys and reported a contradiction that does not exist."
         }
     ]
 }

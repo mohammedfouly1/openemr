@@ -418,7 +418,103 @@ final class InstallAssetsCommand
                 $siteImages . '/practice_logo.gif',
                 'referenced by statement.inc.php but never shipped',
             ),
+            ...self::darkVariantLogoMappings(),
+            ...self::pdfFontMappings(),
             ...self::fontMappings(),
+        ];
+    }
+
+    /**
+     * Arabic PDF faces, for the two PDF engines (locked Q25, dependency D-9).
+     *
+     * `Q25` names **Amiri and/or Noto Naskh Arabic** for print and requires the engines to
+     * be configured explicitly. Amiri was chosen and vendored (resolution CR-16), but until
+     * now the TTFs sat in `brand/` and nothing referenced them — a repository-wide grep for
+     * `Amiri` across PHP returned zero hits.
+     *
+     * They are installed under `public/assets/fonts/thiqa/pdf/` rather than read straight
+     * out of `brand/`, for one deployment reason: `brand/` is **source**. Plan section 3.5.2
+     * is explicit that the build copies derived artefacts out of it, so `brand/` cannot be
+     * assumed present in a release image — and an mPDF `fontDir` pointing at a directory
+     * that does not exist at runtime fails silently back to a non-Arabic face, which is the
+     * worst possible failure mode for this (an Arabic PDF that renders as boxes, with no
+     * error). `public/assets/` is already where this installer puts the web faces.
+     *
+     * The licence travels with the fonts. SIL OFL 1.1 requires the notice to accompany the
+     * font files, and a deployment that ships the TTFs without `OFL.txt` is out of
+     * compliance — so it is installed alongside them rather than left behind in `brand/`.
+     *
+     * @return list<AssetMapping>
+     */
+    private static function pdfFontMappings(): array
+    {
+        $pdfFonts = 'public/assets/fonts/thiqa/pdf';
+
+        return [
+            new AssetMapping(
+                'BRAND-111',
+                'brand/typography/fonts/pdf/Amiri-Regular.ttf',
+                $pdfFonts . '/Amiri-Regular.ttf',
+                'Q25 Arabic PDF face; registered with mPDF in src/Pdf/Config_Mpdf.php',
+            ),
+            new AssetMapping(
+                'BRAND-111',
+                'brand/typography/fonts/pdf/Amiri-Bold.ttf',
+                $pdfFonts . '/Amiri-Bold.ttf',
+                'Q25 Arabic PDF face, bold',
+            ),
+            new AssetMapping(
+                'BRAND-111',
+                'brand/typography/fonts/pdf/OFL.txt',
+                $pdfFonts . '/OFL.txt',
+                'SIL OFL 1.1 requires the licence to ship with the fonts',
+            ),
+        ];
+    }
+
+    /**
+     * Dark-variant marks for LogoOverrideListener (extension point E3).
+     *
+     * Without these the listener is a permanent no-op: it resolves
+     * `<module>/public/logos/dark/<slot>/logo.*`, that directory did not exist, so every
+     * lookup returned null and the Saudi Dark theme rendered the light-optimised marks —
+     * a navy wordmark on a `#0B1220` surface. Recorded as docs/RebrandingBugs.md RB-10.
+     *
+     * They must be installed **inside the module** rather than under `public/images/`,
+     * and that is not a preference: `LogoService::getLogo()` re-filters any
+     * listener-supplied path through `ModulesApplication::filterSafeLocalModuleFiles()`,
+     * which keeps only paths resolving under `interface/modules/`. A path anywhere else is
+     * replaced with the empty string and the logo disappears entirely.
+     *
+     * Only the three slots a dark surface actually shows are covered. The favicon is
+     * chrome-rendered and never sits on the app surface; the portal has its own light shell
+     * (`portal_css_header`), so its marks are resolved by the light path.
+     *
+     * @return list<AssetMapping>
+     */
+    private static function darkVariantLogoMappings(): array
+    {
+        $darkRoot = 'interface/modules/custom_modules/oe-module-thiqa-branding/public/logos/dark';
+
+        return [
+            new AssetMapping(
+                'BRAND-018',
+                'brand/master/brand-symbol-white.svg',
+                $darkRoot . '/core/menu/primary/logo.svg',
+                'dark-variant navbar mark (E3); light uses brand-symbol.svg',
+            ),
+            new AssetMapping(
+                'BRAND-014',
+                'brand/master/brand-logo-white.svg',
+                $darkRoot . '/core/login/primary/logo.svg',
+                'dark-variant login wordmark (E3)',
+            ),
+            new AssetMapping(
+                'BRAND-015',
+                'brand/logos/monochrome/brand-logo-white.svg',
+                $darkRoot . '/core/login/secondary/logo.svg',
+                'dark-variant secondary login mark (E3)',
+            ),
         ];
     }
 

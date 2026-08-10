@@ -209,6 +209,36 @@ placeholder in revision 1 has been replaced:
 Before flipping any of these strings live:
 
 1. Native Arabic proofreader must review all Arabic values in Parts 2–5.
-2. Arabic PDF rendering must be verified with the vendored `IBM Plex Sans Arabic` font from [brand/typography/fonts/](../../brand/typography/fonts/).
+2. Arabic PDF rendering must be verified with **`Amiri`** (Noto Naskh Arabic is the accepted alternative), vendored at [brand/typography/fonts/pdf/](../../brand/typography/fonts/pdf/), with **both** PDF engines (`mpdf/mpdf`, `dompdf/dompdf`) explicitly configured to use it.
+   **Corrected 2026-08-10 (RB-13).** This item previously named `IBM Plex Sans Arabic` for PDF. That conflicts with locked decision **`Q25`**, which names *Amiri and/or Noto Naskh Arabic* for print and requires explicit engine configuration — the conflict was raised as **CR-16** and accepted in `docs/RebrandingPlan.md` §1.0.2 and §3.7.4. IBM Plex Sans Arabic remains the **web** face, where no locked decision governs the choice; it does **not** satisfy `Q25` for PDF. Tracking dependency: **D-9**.
 3. Right-to-left CSS mirror-tests must pass for the login, navbar, patient portal, clinical form, and data table surfaces documented in [docs/Thiqa_Group_1_5B_Handoff/inputs/design_evidence/](../Thiqa_Group_1_5B_Handoff/inputs/design_evidence/).
 4. Numeric fields (patient ID, claim number, monetary values, dates) must render Western Arabic numerals `0–9` LTR inside RTL text runs.
+
+---
+
+## Phase 5 status check (2026-08-10)
+
+Checked as Phase 5 deliverable F8 (`docs/RebrandingPlan.md` §7.1: "Fix CR-1/CR-2 section references and
+the CR-3 rows in `14-string-replacement-map.md`; lift its status from DRAFT once D-4 completes").
+
+**Amended 2026-08-10 (RB-13): this check originally concluded "nothing stale was found". That was wrong.**
+The F8 pass verified cross-reference *numbering* and missed a substantive conflict with a locked decision
+two screens above it: Part 7 item 2 named `IBM Plex Sans Arabic` for Arabic **PDF** rendering, which
+contradicts **`Q25`** (Amiri and/or Noto Naskh Arabic, engines explicitly configured) and the already-accepted
+correction **CR-16**. Item 2 has now been corrected in place. Recorded here rather than silently amended,
+because a "nothing stale was found" statement that missed a locked-decision conflict is worse than no
+statement — `docs/rebranding.md` §18's corrections-register rule applies to this document too.
+
+**CR-1/CR-2/CR-3 re-verified, no further correction needed.** Every cross-reference this document makes
+into `docs/rebranding.md` (§3, §9.4, §15.1, §15.2, §15.3, §16.1 — see the "Cross-reference correction"
+table near the top of this file and the RTL note at rows 25/28) was checked directly against
+`docs/rebranding.md`'s actual section headers during this pass and matches exactly. Revision 2
+(2026-08-09, recorded above) already applied the CR-1/CR-2/CR-3 corrections per
+[`docs/branding-production/15-decision-record.md`](15-decision-record.md); nothing stale was found.
+
+**Status remains DRAFT — this is correct, not an oversight.** The header of this document ties lifting
+DRAFT status to completion of the native-Arabic linguistic proofing pass. That dependency is **D-4** in
+the blocking-dependency register, and `docs/branding/remaining-dependencies.md` §4 (this session's Phase 4
+verification) confirms D-4 is still **OPEN — no proofreading evidence found**. Per F8's own condition
+("lift its status from DRAFT once D-4 completes"), that condition is not yet met, so the DRAFT status at
+the top of this document is left unchanged by this check.

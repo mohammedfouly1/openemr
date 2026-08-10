@@ -51,6 +51,28 @@ use Psr\Log\LoggerInterface;
  * an out-of-scope mutation of a core key in every other. The branded values are published
  * under their own names instead, and templates that want them ask for them.
  *
+ * ## The four logo URLs ARE rewritten, and why that is not a contradiction
+ *
+ * `primaryLogo`, `secondaryLogo`, `smallLogoOne` and `smallLogoTwo` are core-owned too,
+ * but the rewrite here is **additive**: the same `LogoService` path core resolved, with
+ * `&rev=<branding revision>` appended (BrandAssetResolver preserves core's `?t=<mtime>`
+ * and fixes the parameter order). Nothing about which file is served changes.
+ *
+ * This exists because locked Q76 requires that "cache keys for branding resources MUST
+ * incorporate a tenant-safe revision", and nothing was satisfying it: core call sites go
+ * straight to LogoService::getLogo(), so BrandAssetResolver -- which does append the
+ * revision correctly -- was never in the path of a rendered page. A live login render
+ * showed `logo.png?t=1786356307` with no revision at all (docs/RebrandingBugs.md RB-03).
+ *
+ * It has to happen here rather than in LogoOverrideListener because LogoService re-filters
+ * any listener-modified path through ModulesApplication::filterSafeLocalModuleFiles(),
+ * which keeps only paths under interface/modules/ -- a rev-stamped `/public/images/...`
+ * path would be replaced with the empty string and the logo would vanish. The template
+ * variable is the only seam that can carry a revision on a core-resolved asset.
+ *
+ * Each key is rewritten only when the branding layer actually resolved that slot, so an
+ * unresolved slot leaves core's own value untouched rather than blanking it.
+ *
  * Plane 3 constraint (locked Q76 / C5): every value comes from data already in memory.
  * No network call, no database query.
  */
@@ -58,6 +80,22 @@ final readonly class LoginTemplateListener
 {
     /** Page name interface/login/login.php dispatches under. */
     public const LOGIN_PAGE = 'login/login.php';
+
+    /**
+     * Login view variable => the slot whose revision-stamped URL replaces it.
+     *
+     * These four names are core's own (interface/login/login.php:246-263). The mapping is
+     * explicit rather than derived so that adding a slot to LogoSlot cannot silently start
+     * rewriting a template variable nobody intended.
+     *
+     * @var array<string, LogoSlot>
+     */
+    private const LOGO_VIEW_KEYS = [
+        'primaryLogo' => LogoSlot::CoreLoginPrimary,
+        'secondaryLogo' => LogoSlot::CoreLoginSecondary,
+        'smallLogoOne' => LogoSlot::CoreLoginSmallPrimary,
+        'smallLogoTwo' => LogoSlot::CoreLoginSmallSecondary,
+    ];
 
     public function __construct(
         private BrandingServiceInterface $branding,
@@ -118,6 +156,16 @@ final readonly class LoginTemplateListener
             'brandProductName' => $this->branding->productName($arabic),
             'brandTagline' => $this->branding->tagline($arabic) ?? '',
         ];
+
+        // C8 / MVP-010 AC-4: re-publish each logo URL carrying the branding revision.
+        // Same file, same core-resolved path, plus &rev= — see the class docblock for why
+        // this cannot be done from LogoOverrideListener.
+        foreach (self::LOGO_VIEW_KEYS as $viewKey => $slot) {
+            $asset = $this->branding->logo($slot);
+            if ($asset->isResolved()) {
+                $candidates[$viewKey] = $asset->url();
+            }
+        }
 
         return array_filter($candidates, static fn (string $value): bool => $value !== '');
     }

@@ -150,7 +150,39 @@ final class Bootstrap
         $logger = ServiceContainer::getLogger();
         $projectDir = $globals->getProjectDir();
 
-        $site = SiteId::tryFrom(basename($globals->getString('OE_SITE_DIR'))) ?? new SiteId('default');
+        // Never guess the tenant.
+        //
+        // This used to read `SiteId::tryFrom(...) ?? new SiteId('default')`. That fallback
+        // was a cross-tenant write path: interface/globals.php:304 permits `.` in a site id
+        // while SiteId deliberately does not (see its docblock — excluding `.` is what makes
+        // `..` unrepresentable rather than merely filtered). So for a tenant legitimately
+        // named e.g. `clinic.one`, $bootstrappedSite silently became `default`,
+        // ApplyProfileCommand's `--site` equality guard then ACCEPTED `--site=default`, and
+        // the profile was written into clinic.one's database while every log line said
+        // `default`. Recorded as docs/RebrandingBugs.md RB-05.
+        //
+        // Widening SiteId to accept dots was considered and rejected: relaxing a security
+        // guard to fix a binding bug is the wrong trade, and SiteId's own docblock warns
+        // against exactly that. The branding layer instead treats a dotted site id as
+        // unsupported and says so loudly — no commands are registered at all, so there is no
+        // command that could act on the wrong tenant.
+        $siteDirectory = basename($globals->getString('OE_SITE_DIR'));
+        $site = SiteId::tryFrom($siteDirectory);
+
+        if (!$site instanceof SiteId) {
+            $logger->error(
+                'Thiqa branding console commands were not registered: this site id is outside the '
+                . 'character set the branding layer supports, so no tenant can be bound safely.',
+                [
+                    'siteDirectory' => $siteDirectory,
+                    'permitted' => 'one alphanumeric character, then alphanumerics, underscores and hyphens; '
+                        . 'maximum ' . SiteId::MAX_LENGTH . ' characters; no dots',
+                    'remedy' => 'Rename the site directory, or provision tenants within the supported set.',
+                ]
+            );
+
+            return;
+        }
 
         $paths = new TenantBrandingPaths(
             $this->moduleDirectory . '/public/branding',

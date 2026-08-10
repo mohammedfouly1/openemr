@@ -385,7 +385,38 @@ class TokenGeneratorIsolatedTest extends TestCase
         $this->assertStringContainsString('unicode-range: U+0600-06FF,', $typography);
         $this->assertStringContainsString("font-family: 'Inter';", $typography);
         $this->assertStringContainsString("font-family: 'IBM Plex Sans Arabic';", $typography);
-        $this->assertSame(8, substr_count($typography, '@font-face {'), 'Four weights per web family.');
+        // One @font-face per PHYSICAL face, not per declared weight.
+        //
+        // Inter is a variable font — its WOFF2 carries fvar/gvar/avar/HVAR/MVAR/STAT — so a
+        // single file covers 400 through 700 and is emitted once with a weight RANGE. It was
+        // previously emitted four times under four filenames that were byte-identical, which
+        // cost ~145 KB of duplicate download on every cold load (docs/RebrandingBugs.md RB-22).
+        //
+        // IBM Plex Sans Arabic is static (no fvar) and ships four genuinely distinct files, so
+        // it keeps four rules. That asymmetry is the point of the assertion: 1 + 4 = 5.
+        $this->assertSame(
+            5,
+            substr_count($typography, '@font-face {'),
+            'Expected 1 Inter rule (variable, 400-700) + 4 IBM Plex Sans Arabic rules (static).',
+        );
+        $this->assertStringContainsString(
+            'font-weight: 400 700;',
+            $typography,
+            'The variable Inter face must declare a weight range, not a single weight.',
+        );
+        $this->assertSame(
+            1,
+            substr_count($typography, "src: url('../assets/fonts/thiqa/Inter-Regular.woff2')"),
+            'Inter must be fetched from exactly one URL.',
+        );
+        foreach (['Inter-Medium', 'Inter-SemiBold', 'Inter-Bold'] as $duplicate) {
+            $this->assertStringNotContainsString(
+                $duplicate . '.woff2',
+                $typography,
+                $duplicate . '.woff2 is a byte-identical copy of Inter-Regular.woff2; referencing it '
+                . 'makes the browser download the same face twice.',
+            );
+        }
 
         $this->assertStringContainsString('$thiqa-font-weight-semibold: 600;', $typography);
         $this->assertStringContainsString('$thiqa-font-size-body:', $typography);

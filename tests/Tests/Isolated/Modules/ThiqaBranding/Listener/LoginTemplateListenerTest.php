@@ -47,6 +47,20 @@ final class LoginTemplateListenerTest extends TestCase
         'showLabels' => false,
     ];
 
+    /**
+     * The four core view variables the listener is permitted to rewrite, and the slot each
+     * one is rewritten from. Mirrors LoginTemplateListener::LOGO_VIEW_KEYS deliberately:
+     * if that map grows, this test must be updated consciously rather than following along.
+     *
+     * @var array<string, LogoSlot>
+     */
+    private const REWRITTEN_LOGO_KEYS = [
+        'primaryLogo' => LogoSlot::CoreLoginPrimary,
+        'secondaryLogo' => LogoSlot::CoreLoginSecondary,
+        'smallLogoOne' => LogoSlot::CoreLoginSmallPrimary,
+        'smallLogoTwo' => LogoSlot::CoreLoginSmallSecondary,
+    ];
+
     public static function setUpBeforeClass(): void
     {
         self::registerModuleAutoload();
@@ -74,8 +88,14 @@ final class LoginTemplateListenerTest extends TestCase
         $this->assertSame('Thiqa secondary logo', $event->getTwigVariables()['secondaryLogoAlt']);
     }
 
-    /** Merge, never replace: the core variable set must come through untouched. */
-    public function testEveryCoreVariableSurvivesTheMerge(): void
+    /**
+     * Merge, never replace -- with exactly four deliberate exceptions.
+     *
+     * The four logo URL variables ARE rewritten, to carry the branding revision that locked
+     * Q76 / constraint C8 require in every branding cache key (docs/RebrandingBugs.md RB-03).
+     * Everything else core supplied must come through byte-for-byte.
+     */
+    public function testEveryCoreVariableExceptTheLogoUrlsSurvivesTheMerge(): void
     {
         $event = $this->loginEvent();
 
@@ -84,8 +104,58 @@ final class LoginTemplateListenerTest extends TestCase
         $variables = $event->getTwigVariables();
         foreach (self::CORE_VARIABLES as $key => $value) {
             $this->assertArrayHasKey($key, $variables);
+
+            if (array_key_exists($key, self::REWRITTEN_LOGO_KEYS)) {
+                continue;
+            }
+
             $this->assertSame($value, $variables[$key], "Core variable {$key} was altered.");
         }
+    }
+
+    /**
+     * A rewritten logo URL is the branding layer's own URL for that slot -- nothing else.
+     *
+     * This is the property that makes the rewrite safe: the listener may not invent a path,
+     * only republish what BrandAssetResolver produced (which is core's resolved path with
+     * `&rev=` appended -- proven separately in BrandAssetResolverTest).
+     */
+    public function testARewrittenLogoUrlIsExactlyTheBrandingServiceUrl(): void
+    {
+        $branding = $this->brandedTenant();
+        $event = $this->loginEvent();
+
+        $this->listener($branding)->onTemplatePage($event);
+
+        $variables = $event->getTwigVariables();
+        foreach (self::REWRITTEN_LOGO_KEYS as $viewKey => $slot) {
+            $asset = $branding->logo($slot);
+            if (!$asset->isResolved()) {
+                continue;
+            }
+
+            $this->assertSame($asset->url(), $variables[$viewKey], "Logo URL {$viewKey} is not the service's.");
+        }
+    }
+
+    /**
+     * An unresolved slot must leave core's own URL in place.
+     *
+     * Publishing an empty string here would blank the logo on the one page a locked-out
+     * administrator has to be able to read.
+     */
+    public function testAnUnresolvedLogoSlotLeavesTheCoreUrlUntouched(): void
+    {
+        $branding = new StubBrandingService();
+        $branding->productName = 'Thiqa';
+        $event = $this->loginEvent();
+
+        $this->listener($branding)->onTemplatePage($event);
+
+        $this->assertSame(
+            self::CORE_VARIABLES['primaryLogo'],
+            $event->getTwigVariables()['primaryLogo'],
+        );
     }
 
     /** The branding contribution is additive and named, so it cannot collide with core. */
@@ -96,7 +166,7 @@ final class LoginTemplateListenerTest extends TestCase
         $this->listener($this->brandedTenant())->onTemplatePage($event);
 
         $this->assertSame(
-            ['brandProductName', 'brandTagline', 'primaryLogoAlt', 'secondaryLogoAlt'],
+            ['brandProductName', 'brandTagline', 'primaryLogoAlt', 'secondaryLogo', 'secondaryLogoAlt'],
             $this->addedKeys($event),
         );
     }

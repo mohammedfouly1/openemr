@@ -42,9 +42,9 @@
   },
   "files": [
     { "path": "brand/typography/fonts/Inter-Regular.woff2",             "family": "Inter",                "weight": 400 },
-    { "path": "brand/typography/fonts/Inter-Medium.woff2",              "family": "Inter",                "weight": 500 },
-    { "path": "brand/typography/fonts/Inter-SemiBold.woff2",            "family": "Inter",                "weight": 600 },
-    { "path": "brand/typography/fonts/Inter-Bold.woff2",                "family": "Inter",                "weight": 700 },
+    { "path": "brand/typography/fonts/Inter-Regular.woff2",             "family": "Inter",                "weight": 500 },
+    { "path": "brand/typography/fonts/Inter-Regular.woff2",             "family": "Inter",                "weight": 600 },
+    { "path": "brand/typography/fonts/Inter-Regular.woff2",             "family": "Inter",                "weight": 700 },
     { "path": "brand/typography/fonts/IBMPlexSansArabic-Regular.woff2", "family": "IBM Plex Sans Arabic", "weight": 400 },
     { "path": "brand/typography/fonts/IBMPlexSansArabic-Medium.woff2",  "family": "IBM Plex Sans Arabic", "weight": 500 },
     { "path": "brand/typography/fonts/IBMPlexSansArabic-SemiBold.woff2","family": "IBM Plex Sans Arabic", "weight": 600 },

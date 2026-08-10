@@ -40,6 +40,52 @@ use OpenEMR\Modules\ThiqaBranding\Token\CssVariableRenderer;
 use OpenEMR\Modules\ThiqaBranding\Token\TokenSetParser;
 use OpenEMR\Services\LogoService;
 
+require_once __DIR__ . '/../../../../../vendor/autoload.php';
+
+// Locked Q12: "Public `?site=` tenant selection is prohibited."
+//
+// interface/globals.php:273-281 gives $_GET['site'] precedence over the session on EVERY
+// $ignoreAuth entry point, so inheriting that would make this endpoint a tenant selector —
+// and worse, a logout vector: with a valid session, a mismatched ?site= makes
+// globals.php:305-317 call SessionUtil::clearSession() and redirect. A stylesheet URL is a
+// natural cross-origin embed target (<link href="https://tenant/…/branding-tokens.php">),
+// so a third-party page could have used that to sign a user out. Recorded as
+// docs/RebrandingBugs.md RB-06.
+//
+// The request is REFUSED rather than silently stripped. Nothing legitimate ever produces
+// such a URL — BrandingService::tokenStylesheetUrl() only ever appends `?rev=` — so a
+// `site` parameter here is always either a mistake or an attempt, and answering 400 says
+// so instead of quietly serving something the caller did not ask for. The response is the
+// same whether or not the named site exists, so this is not a site-enumeration oracle.
+//
+// (Stripping via unset($_GET['site']) was the first implementation. Refusing is both
+// stricter and avoids writing to a superglobal, which ForbiddenRequestGlobalsRule forbids
+// outside the three designated request-abstraction classes.)
+if (filter_input(INPUT_GET, 'site') !== null) {
+    http_response_code(400);
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Cache-Control: no-store');
+    echo 'This endpoint does not accept a site parameter.';
+    exit;
+}
+
+// Whether this request already carries a session, decided BEFORE bootstrap starts one.
+//
+// globals.php unconditionally starts a session, so a request that arrives without one —
+// a cold browser, a crawler, a CDN revalidation — was being handed a brand-new session
+// cookie on a text/css response. That is session churn on a URL designed to be embedded
+// in a <link>, and it is pointless: an anonymous stylesheet fetch has no session state
+// worth keeping.
+//
+// Note ini_set('session.use_cookies', '0') does NOT work here and was tried first:
+// SessionConfiguration::toSessionStartOptions() passes 'use_cookies' => true explicitly to
+// session_start(), and per-call options override ini settings. The cookie is therefore
+// suppressed after the fact instead, below.
+$arrivedWithSession = filter_input(
+    INPUT_COOKIE,
+    \OpenEMR\Common\Session\SessionUtil::CORE_SESSION_ID
+) !== null;
+
 // Branding applies to the login page, which is unauthenticated, so this stylesheet has to
 // be fetchable without a session — exactly as interface/login/login.php does it. Without
 // this flag globals.php cannot resolve a site for an anonymous request and answers
@@ -48,12 +94,6 @@ use OpenEMR\Services\LogoService;
 // $ignoreAuth only relaxes the *authentication* requirement. It grants no data access:
 // everything below reads branding globals and a product token file, and the response is a
 // CSS custom-property block. No patient data is reachable from here.
-//
-// Tenant scope is then resolved by globals.php itself, from the session or the host, on
-// exactly the same code path as every other unauthenticated entry point. This endpoint
-// introduces no tenant-selection mechanism of its own; keeping a query parameter from
-// switching tenant context is the platform routing guarantee under locked Q12 / BLK-005,
-// and is not weakened or strengthened here.
 $ignoreAuth = true;
 
 require_once __DIR__ . '/../../../../globals.php';
@@ -70,6 +110,16 @@ $branding = new BrandingService(
 );
 
 $config = $branding->config();
+
+// Drop the session cookie core's bootstrap just minted for an anonymous request. Only the
+// response header is removed, and only when the request arrived without a session, so a
+// real authenticated request is completely untouched. The throwaway session file core
+// created still exists, but nothing references it and PHP's own gc_maxlifetime reaps it;
+// removing that too would mean changing core's bootstrap, which locked Invariant 4 forbids
+// for a branding concern.
+if (!$arrivedWithSession) {
+    header_remove('Set-Cookie');
+}
 
 header('Content-Type: text/css; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
