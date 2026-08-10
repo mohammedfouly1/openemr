@@ -1,0 +1,172 @@
+// -----------------------------------------------------------------------------
+// GENERATED FILE — DO NOT EDIT.
+//
+// Thiqa typography — families, weights, type scale and @font-face blocks.
+//
+// Produced by tools/branding/bin/generate-tokens.php from:
+//   brand/typography/typography-tokens.json
+//   brand/typography/thiqa-fonts.scss
+//
+// Change the token sources and re-run the generator. CI re-runs it and fails on
+// any diff, so an edit made here cannot survive.
+// -----------------------------------------------------------------------------
+
+// Fonts are licensed under SIL Open Font License 1.1.
+// Faces are resolved against "../assets/fonts/thiqa"; pass --font-url-base to change it.
+
+// ============================================================================
+// Font faces
+// ============================================================================
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../assets/fonts/thiqa/Inter-Regular.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('../assets/fonts/thiqa/Inter-Medium.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('../assets/fonts/thiqa/Inter-SemiBold.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('../assets/fonts/thiqa/Inter-Bold.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../assets/fonts/thiqa/IBMPlexSansArabic-Regular.woff2') format('woff2');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0898-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('../assets/fonts/thiqa/IBMPlexSansArabic-Medium.woff2') format('woff2');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0898-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('../assets/fonts/thiqa/IBMPlexSansArabic-SemiBold.woff2') format('woff2');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0898-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('../assets/fonts/thiqa/IBMPlexSansArabic-Bold.woff2') format('woff2');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0898-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+// ============================================================================
+// Families
+// ============================================================================
+
+$thiqa-font-family:            'Inter','IBM Plex Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif;
+$thiqa-font-family-latin:      'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+$thiqa-font-family-arabic:     'IBM Plex Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif;
+$thiqa-font-family-arabic-pdf: 'Amiri','IBM Plex Sans Arabic',sans-serif;
+$thiqa-font-name-latin:        'Inter';
+$thiqa-font-name-arabic:       'IBM Plex Sans Arabic';
+$thiqa-font-name-arabic-pdf:   'Amiri';
+
+// Weights
+
+$thiqa-font-weight-regular:  400;
+$thiqa-font-weight-medium:   500;
+$thiqa-font-weight-semibold: 600;
+$thiqa-font-weight-bold:     700;
+
+// Type scale
+
+$thiqa-font-size-display:        40px;
+$thiqa-line-height-display:      48px;
+$thiqa-font-weight-display:      700;
+$thiqa-font-size-h1:             32px;
+$thiqa-line-height-h1:           40px;
+$thiqa-font-weight-h1:           700;
+$thiqa-font-size-h2:             24px;
+$thiqa-line-height-h2:           32px;
+$thiqa-font-weight-h2:           600;
+$thiqa-font-size-h3:             20px;
+$thiqa-line-height-h3:           28px;
+$thiqa-font-weight-h3:           600;
+$thiqa-font-size-h4:             18px;
+$thiqa-line-height-h4:           24px;
+$thiqa-font-weight-h4:           600;
+$thiqa-font-size-body-large:     16px;
+$thiqa-line-height-body-large:   24px;
+$thiqa-font-weight-body-large:   400;
+$thiqa-font-size-body:           14px;
+$thiqa-line-height-body:         20px;
+$thiqa-font-weight-body:         400;
+$thiqa-font-size-body-small:     13px;
+$thiqa-line-height-body-small:   18px;
+$thiqa-font-weight-body-small:   400;
+$thiqa-font-size-label:          13px;
+$thiqa-line-height-label:        16px;
+$thiqa-font-weight-label:        500;
+$thiqa-font-size-caption:        12px;
+$thiqa-line-height-caption:      16px;
+$thiqa-font-weight-caption:      400;
+$thiqa-font-size-button:         14px;
+$thiqa-line-height-button:       20px;
+$thiqa-font-weight-button:       600;
+$thiqa-font-size-table-header:   12px;
+$thiqa-line-height-table-header: 16px;
+$thiqa-font-weight-table-header: 600;
+$thiqa-font-size-table-body:     13px;
+$thiqa-line-height-table-body:   18px;
+$thiqa-font-weight-table-body:   400;
+
+// Type scale as a map, for programmatic consumers.
+$thiqa-type-scale: (
+    'display': (size: 40px, line-height: 48px, weight: 700),
+    'h1': (size: 32px, line-height: 40px, weight: 700),
+    'h2': (size: 24px, line-height: 32px, weight: 600),
+    'h3': (size: 20px, line-height: 28px, weight: 600),
+    'h4': (size: 18px, line-height: 24px, weight: 600),
+    'body-large': (size: 16px, line-height: 24px, weight: 400),
+    'body': (size: 14px, line-height: 20px, weight: 400),
+    'body-small': (size: 13px, line-height: 18px, weight: 400),
+    'label': (size: 13px, line-height: 16px, weight: 500),
+    'caption': (size: 12px, line-height: 16px, weight: 400),
+    'button': (size: 14px, line-height: 20px, weight: 600),
+    'table-header': (size: 12px, line-height: 16px, weight: 600),
+    'table-body': (size: 13px, line-height: 18px, weight: 400),
+);
+
+// Tabular lining figures for identifiers, money, dates and table cells.
+$thiqa-font-feature-numeric: 'tnum' 1, 'lnum' 1;

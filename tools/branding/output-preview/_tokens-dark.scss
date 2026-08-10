@@ -1,0 +1,66 @@
+// -----------------------------------------------------------------------------
+// GENERATED FILE — DO NOT EDIT.
+//
+// Thiqa colour tokens — Dark variant.
+//
+// Produced by tools/branding/bin/generate-tokens.php from:
+//   brand/tokens/thiqa-tokens.json
+//
+// Change the token sources and re-run the generator. CI re-runs it and fails on
+// any diff, so an edit made here cannot survive.
+// -----------------------------------------------------------------------------
+
+// Brand palette
+$thiqa-brand-navy:                    #7C8CE0;
+$thiqa-brand-coral:                   #FF6F5E;
+$thiqa-brand-coral-deep:              #FF8B7C;
+$thiqa-brand-sage:                    #8FD1A6;
+$thiqa-brand-sky:                     #8FC1EE;
+$thiqa-brand-amber:                   #F0B45C;
+$thiqa-brand-critical:                #F29088;
+
+// Surfaces, borders and lines
+$thiqa-background:                    #0B1220;
+$thiqa-surface:                       #121A2E;
+$thiqa-surface-raised:                #17213A;
+$thiqa-surface-sunken:                #0E1526;
+$thiqa-surface-input:                 #121A2E;
+$thiqa-surface-input-on-raised:       #0B1220;
+$thiqa-border:                        #26314A;
+$thiqa-border-strong:                 #AEB5C4;
+$thiqa-divider:                       #1E2740;
+
+// Text
+$thiqa-text-primary:                  #F5F6F8;
+$thiqa-text-secondary:                #AEB5C4;
+$thiqa-text-disabled:                 #6B7280;
+$thiqa-text-inverse:                  #0B1220;
+
+// Semantic status
+$thiqa-semantic-success-bg:           #173425;
+$thiqa-semantic-success-text:         #8FD1A6;
+$thiqa-semantic-success-border:       #2B5A3E;
+$thiqa-semantic-warning-bg:           #3A2A12;
+$thiqa-semantic-warning-text:         #F0B45C;
+$thiqa-semantic-warning-border:       #5C4520;
+$thiqa-semantic-critical-bg:          #3A1815;
+$thiqa-semantic-critical-text:        #F29088;
+$thiqa-semantic-critical-border:      #5C2A24;
+$thiqa-semantic-info-bg:              #132437;
+$thiqa-semantic-info-text:            #8FC1EE;
+$thiqa-semantic-info-border:          #254361;
+
+// Interactive
+$thiqa-interactive-primary-default:   #FF6F5E;
+$thiqa-interactive-primary-hover:     #FF8672;
+$thiqa-interactive-primary-active:    #E85C4C;
+$thiqa-interactive-primary-disabled:  #5A3530;
+$thiqa-interactive-primary-text-on:   #0B1220;
+$thiqa-interactive-secondary-default: #F5F6F8;
+$thiqa-interactive-secondary-hover:   #D8DCE6;
+$thiqa-interactive-secondary-text-on: #0B1220;
+$thiqa-interactive-focus-ring:        #8FC1EE;
+
+// Links
+$thiqa-link-default:                  #8FC1EE;
+$thiqa-link-hover:                    #B7D9F5;
