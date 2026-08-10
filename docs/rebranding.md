@@ -1707,3 +1707,89 @@ Governing decisions `Q76` and `Q77` are binding via
 `Locked Desicions/OpenEMR-SaaS-Locked-Decisions-UPDATED-2026-08-09.md` (Section L) and the re-issued
 `OpenEMR-SaaS-Decision-Documents-SHA256-UPDATED-2026-08-09.txt` manifest. Where this report and the
 governing register differ, the register is authoritative.*
+
+---
+
+## 23. GROUP 2/3 OUTCOMES CROSS-REFERENCE (added Phase 5)
+
+**Added 2026-08-10, as Phase 5 documentation deliverable F7 (`docs/RebrandingPlan.md` §7.1: "Updated
+`docs/rebranding.md` cross-reference note — A short appendix mapping Group 1 IDs to Group 2 outcomes.
+Group 1 evidence itself is not rewritten — it is a certified artifact").** This section is a pointer
+appended after the fact. It does not alter, reinterpret, or supersede anything in §0 through §22 above —
+the Group 1 certification and the FINAL VERDICT stand exactly as written on 2026-08-09. What has changed
+since that verdict is that Group 2/3 (implementation) has now run against the 136 BRAND-ID inventory this
+document certifies, and that implementation's outcomes are recorded in a separate, independently
+maintained document set under `docs/branding/`, not in this file.
+
+### 23.1 Outcome summary (sourced from `docs/branding/changes.md`, not recomputed here)
+
+`docs/branding/changes.md` is a Phase 4 verification pass that checked all 136 BRAND-001…136 items
+against the committed state of branch `feat/thiqa-branding-foundation` (commits `a1c22b6a1`..`c6c3f9e6e`)
+and assigned each item exactly one of four statuses. The counts below are quoted verbatim from that
+document's own "Status-count summary" table — they are not recalculated here:
+
+| Status | Count | % of 136 |
+|---|---:|---:|
+| DONE | 128 | 94.1% |
+| PARTIAL | 2 | 1.5% |
+| NOT DONE | 4 | 2.9% |
+| BLOCKED | 2 | 1.5% |
+
+*(All 8 DEFER-action items are counted inside DONE, since for a DEFER action "done" means "correctly left
+untouched." Reading them as unimplemented instead gives DONE 120 / PARTIAL 2 / NOT DONE 4 / BLOCKED 2 /
+DEFERRED 8 — both readings sum to 136.)*
+
+> **Figures corrected 2026-08-10 (`docs/RebrandingBugs.md` RB-12).** This section originally quoted
+> DONE 111 / PARTIAL 2 / NOT DONE 14 / BLOCKED 2 verbatim from `docs/branding/changes.md`, on the stated
+> basis that they were "not recalculated here". They should have been: that table totalled **129**, not
+> 136, and its accompanying "integrity check" validated the *action-category* counts rather than the status
+> counts it sat beneath. The corrected figures above also reflect the subsequent remediation of
+> BRAND-007…012 and BRAND-127…129. Quoting a downstream document verbatim does not transfer responsibility
+> for its arithmetic — that is the lesson worth carrying, and it is why this note exists rather than a
+> silent substitution.
+
+### 23.2 Where to find per-ID detail
+
+This appendix is intentionally not a second copy of the 136-row mapping. For any individual BRAND-ID's
+Group 2/3 implementation status, mechanism, artefact and evidence, see
+[`docs/branding/changes.md`](branding/changes.md) directly — it is organised by the same eleven Group 2
+action categories this document's own §16.2 assigns (SET-CONFIG, REPLACE-ASSET, PATCH, PRESERVE,
+NO-ACTION, BUILD-SHARED-THEME, SET-TRANSLATION, DEFER, TOKENIZE, HIDE, PROHIBITED), and every row cites
+either a live database query, a `git log`/`git diff` result, or a direct file read performed in that
+verification pass.
+
+### 23.3 The two largest open items
+
+A reader of this certification should not have to already know `docs/branding/` exists to learn that the
+certification is now partially superseded, in the "not yet implemented" sense, by two implementation
+gaps larger than the rest combined:
+
+> **Both items below were closed on 2026-08-10.** They are kept, with their resolutions, because a
+> superseded gap that simply vanishes from a certification appendix teaches a later reader nothing. Full
+> analysis: `docs/RebrandingBugs.md` RB-01 and RB-02.
+
+1. ~~**The SET-TRANSLATION gap.**~~ **CLOSED.** BRAND-127/128/129 (the OAuth2 authorization screens and the
+   Zend module admin screens) now render "Thiqa Authorization" / "Thiqa Login" / "Thiqa Application" /
+   "Welcome to Thiqa" — delivered through the **translation catalogue**, which is the action §16.2 assigns
+   them (`Trk = NO`). The source literals are deliberately unchanged.
+
+   **The route matters more than the outcome here.** An interim attempt rebranded them by editing the
+   literal inside `xl()`/`xlt()`. In OpenEMR the English source string *is* the catalogue key
+   (`library/translation.inc.php:39-77` matches `lang_constants.constant_name` exactly), so that renamed
+   the key and orphaned **59** existing translations across the shipped locales, Arabic included. It was
+   reverted and re-done as `lang_id = 1` rows via `tools/branding/brand-strings.json`. Zero translations
+   lost; a zero-occurrence test guard now prevents the regression recurring.
+
+2. ~~**The installer/upgrade PATCH gap.**~~ **CLOSED.** `setup.php`, `sql_patch.php`, `sql_upgrade.php` and
+   `ippf_upgrade.php` (BRAND-007…012) are patched, each with a numbered patch record (PR-10…PR-13) as `Q1`
+   requires. One of them needed care: `sql_upgrade.php`'s `<h2>` literal *was* `xlt()`-wrapped and carried
+   28 translations, so those were carried forward onto the new constant rather than orphaned.
+
+Their existence never invalidated anything this document (§0–§22) certified about Group 1 discovery —
+discovery correctly identified these 136 items and their required actions. What was incomplete was the
+Group 2/3 *execution*, and for these two categories it no longer is.
+
+**What remains open** (per `docs/branding/changes.md`'s corrected gap table): BRAND-030 (Eye-Magic
+hardcode, unreachable in this product), BRAND-102/103 (the bulk `xl()`-wrapped and catalogue strings),
+BRAND-119 (duplicate favicon link, reclassified to DEFER), BRAND-104/111 (partial, gated on D-4 and D-9),
+and BRAND-070/110 (blocked on tenant provisioning, D-6/D-7).

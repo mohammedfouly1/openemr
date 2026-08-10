@@ -509,8 +509,19 @@ interface/themes/
     ├── _tokens-dark.scss           # GENERATED
     ├── _typography.scss            # GENERATED from typography-tokens.json + @font-face
     ├── _css-variables.scss         # :root custom properties (both --oe-* compat and --thiqa-*)
+    ├── _theme-colors.scss          # hand-authored — Bootstrap $theme-colors map            (as-built)
+    ├── _bootstrap-bridge.scss      # hand-authored — maps tokens onto Bootstrap 4 variables (as-built)
     └── _overrides.scss             # hand-authored component corrections
 ```
+
+> **Two files added to this map on 2026-08-10 (`docs/RebrandingBugs.md` RB-20).** `_theme-colors.scss`
+> (27 lines) and `_bootstrap-bridge.scss` (211 lines) exist in the shipped tree but were absent from this
+> plan, so a maintainer reading §3.5.3 would not know they exist — or, more importantly, that they are
+> **hand-authored**. Only the four files marked GENERATED are produced by
+> `tools/branding/bin/generate-tokens.php` and guarded against drift by
+> `DeployedArtefacts::DEPLOYMENT_MAP`; regenerating tokens will never recreate the other three, and
+> editing a GENERATED file will be reverted by the next generator run. The distinction is the one that
+> matters when someone goes looking for where a colour is decided.
 
 **Why new entry files rather than editing the upstream themes:** `webpack.themes.js` maps entry *name* →
 output filename, so `style_light: entry("oe-styles/style_thiqa_light.scss")` still produces
@@ -933,7 +944,7 @@ The starting position is 18 PATCH-actioned IDs across ~11 files. Applying the ex
 |---|---|---|---|
 | 053 | Empty `alt=""` on login logo | ~~Module template override (E4) — CR-8~~ → **core edit, see K-21 below** | **Yes** (1 file) |
 | 121–123 (TOKENIZE, delivered under §15.1 #4) | SMART light + **dark** contract | **Module template override** (E4) — CR-7 | **No** |
-| 119 | Duplicate favicon `<link>` | Cosmetic; `Header::setupHeader()` emits one and a template emits another. Defer unless the duplicate breaks a client | **No (deferred)** |
+| 119 | Duplicate favicon `<link>` | Cosmetic; `Header::setupHeader()` emits one and a template emits another. **Formally reclassified PATCH → DEFER on 2026-08-10** (`docs/RebrandingBugs.md` RB-23): R4 §16.2 assigns PATCH while this row deferred it, and a live contradiction between the inventory and the plan is worse than either answer. DEFER is the right one — a duplicate `<link rel="icon">` is well-defined in every current browser (last wins, identical here), it is invisible to users, and patching it would add a core edit for no behavioural change, against Invariant 4. Revisit only if a real client is shown to mishandle it | **No (deferred, reclassified)** |
 | 030 | Eye-Magic hardcodes `sites/default` | Conditional — only if the Eye Magic form is enabled. Not enabled in the Saudi product ⇒ **not patched** | **No** |
 | 007–012 | Installer / `sql_patch` / `sql_upgrade` / `ippf_upgrade` titles | Operator-only surfaces. **Conditional** (R4 §15.2). Recommend patching before customer-facing installs, as one grouped commit with an upstream-PR intent | Yes (6 files) — **conditional** |
 | **005, 006** | `admin.php` title + heading | **Unauthenticated and runtime-verified.** Must patch | **Yes** |
@@ -989,6 +1000,32 @@ Each patch gets a numbered downstream patch record (`Q1`: *"any unavoidable core
 ADR/patch record and an upstream-first path"*), a minimal diff, and a rebase test. **Down from the 24
 NEEDS-PATCH items and ~11 files implied by the raw inventory to 6 files** — this is the concrete measure of
 the "minimise core modifications" objective.
+
+> **Count correction (2026-08-10, `docs/RebrandingBugs.md` RB-02). The "6 files" / "7 files" figures in
+> this section are the *mandatory WS-C* subset only, and were being read as the whole footprint.**
+>
+> The complete set of core files this project edits outside the branding module is **17**, enumerated as
+> PR-01…PR-13 in [`docs/branding/adr/patch-records.md`](branding/adr/patch-records.md), which is the
+> authoritative reconciliation. The difference is not scope creep — it is three groups this table was never
+> written to cover:
+>
+> | Group | Files | Why it is outside this table |
+> |---|---:|---|
+> | Mandatory WS-C set (this table) | 7 | — |
+> | `src/Telemetry/TelemetryService.php` | 1 | Same BRAND ID (113) as `ProductRegistrationService.php`; a second, independent caller the table never listed |
+> | `templates/error/*.twig` | 5 | Filed under SET-TRANSLATION (WS-D), not PATCH — but still a tracked-file diff |
+> | Conditional installer/upgrade set (BRAND-007…012) | 4 | §15.2 "conditional"; this table recommends patching them but never counted them |
+>
+> **Two consequences that matter more than the number.** First, **V-09 must be re-run against all 17
+> files**: its existing dry-run examined six and cannot speak for the other eleven, two of which
+> (`setup.php`, `sql_upgrade.php`) are among the most upstream-churned files in the tree. Second, risk
+> **R-1** ("upstream rebase conflicts in the 6 patched core files") understates the exposure by the same
+> margin and should be re-scoped.
+>
+> §5.9's exit criterion *"the residual core-edit set is exactly the 6 recorded files"* is therefore
+> **superseded**: read it as *"the residual core-edit set is exactly the files recorded in
+> `patch-records.md`, and every one of them has a numbered record"*, which is the property `Q1` actually
+> requires.
 
 ## 5.5 WS-D — SET-TRANSLATION (8 items)
 
@@ -1093,7 +1130,7 @@ Group 1 used as certification gate 6.
 | V-03 | CP unreachable → tenant renders last-good; `kill -9` mid-materialisation → revision *n−1* fully intact | AC-7 |
 | V-04 | `public/themes/` has only the approved set; a `globals` row forced to `style_solar.css` falls back to `style_light.css` | AC-8, `Q77` |
 | V-05 | All 33 WCAG pairs recomputed by `ContrastCalculator`; **zero FAIL** after D-1 is applied | D-1 |
-| V-06 | `brand/manifests/SHA256SUMS` verifies 117/117 at release time | R5 `12-…md` |
+| V-06 | `brand/manifests/SHA256SUMS` verifies **fully** at release time — run `php tools/branding/verify-brand-manifest.php` (exit 0 = every entry verifies). *Corrected 2026-08-10 (RB-21/RB-25): the manifest holds **123** entries, not the 117 this row previously hardcoded; it was re-issued and expanded by `d9757fc55`. The check is now "every entry verifies", not a fixed count, so a legitimate kit re-issue cannot make the gate stale again.* | R5 `12-…md`; `tools/branding/verify-brand-manifest.php` |
 | V-07 | Arabic session serves `rtl_style_light.css` **and** `rtl_compact_style_light.css` (the CR-3 regression test) | CR-3 |
 | V-08 | `SessionUtil` identity constants unchanged; `sites/*/config.php` unreferenced by branding code | C6, C1 |
 | V-09 | Rebase dry-run against upstream `master` reports conflicts only in the 6 recorded core files | `Q1`, `Q2` |
@@ -1167,9 +1204,15 @@ not inferred capabilities* — applies to this plan's own output as much as to G
 
 ## 7.3 Release gate
 
-A release of the branding layer requires: `brand/manifests/SHA256SUMS` 117/117; the token generator
-producing no diff; the `Q77` entry-map assertion passing; V-01…V-10 green; the D-register showing no
-open **Blocking-for-release** item; and R3 re-verifying the two governance documents.
+A release of the branding layer requires: `php tools/branding/verify-brand-manifest.php` exiting 0 (every
+`brand/manifests/SHA256SUMS` entry verifies — currently 123 entries; **do not hardcode the count**, see
+RB-21); the token generator producing no diff; the `Q77` entry-map assertion passing; V-01…V-10 green; the
+D-register showing no open **Blocking-for-release** item; and R3 re-verifying the two governance documents.
+
+> **Run the manifest check before *and* after any edit to `docs/branding-production/`.** Sixteen of the
+> manifest's entries are those design documents, so editing one turns the gate red — by design. An
+> uncommitted documentation edit did exactly that and went unnoticed until the audit caught it
+> (`docs/RebrandingBugs.md` RB-25). Re-issue the affected entry and record why; never delete it.
 
 ---
 
