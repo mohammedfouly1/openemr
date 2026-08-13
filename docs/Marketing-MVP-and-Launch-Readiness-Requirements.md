@@ -1790,6 +1790,68 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-039 (2026-08-13) — IOP added, a misleading coerced value caught, human review packs issued
+
+### Correction to PB-038: the missing IOP was my gap, not a product limitation
+
+PB-038 flagged *"no intraocular pressure is recorded anywhere"* as the likely FAIL. **It did not say
+why, and the reason matters:** `form_eye_vitals` carries `ODIOPAP`/`OSIOPAP` (applanation),
+`ODIOPTARGET`/`OSIOPTARGET`, `IOPTIME` and post-dilation pressures. **The form supports IOP fully —
+the seeder simply never wrote it.**
+
+Since exam 3's own presenting complaint is a *"pressure check"*, shipping it without a pressure was a
+certain FAIL that a round-trip through a clinician would only have confirmed at their expense. IOP is
+now seeded on all eight, coherent with each diagnosis: 13-16 mmHg normals, and **17/18 with a
+recorded target of 16/16 on the treated glaucoma case**.
+
+### ⚠ A misleading value was written and then removed, rather than left in
+
+The same change first tried to record confrontation visual fields as text
+(`'Early superior arcuate defect'`). **`ODVF1`/`OSVF1` are `tinyint`.** MySQL silently coerced the
+text to **`0`**, and all eight exams were left carrying `ODVF1 = 0`.
+
+**A reviewer could read that as a recorded defect in every quadrant of every eye** — a clinical
+assertion nobody made, produced entirely by a type coercion. Caught by inspecting the stored values
+rather than trusting the write, which is the same rule that caught PB-032's vacuous scan and PB-034's
+`created_by = 0`.
+
+**Resolution: the visual-field write was removed entirely and the columns left NULL.** The quadrant
+encoding is not documented in this codebase, and **writing a value whose clinical meaning cannot be
+verified into a patient record is worse than leaving the field empty.** The absence of perimetry is
+now disclosed to the reviewer (HR-01 §4 #1) instead of being papered over with an invented value.
+
+**Full validation re-run after both changes: unchanged, all PASS.**
+
+### Human review packs issued — `# PHASE 2B — HUMAN REVIEW & SIGN-OFF PACKS`
+
+| Pack | For | Contents |
+|---|---|---|
+| **HR-01** | RDY-0021, qualified ophthalmologist | Header with dataset fingerprint · blank reviewer identity · 18 global criteria · **10 disclosed known issues** · full 8-exam findings table · a 13-item A-M checklist per exam with three-way verdict · diagnosis-specific prompts · closure rule |
+| **HR-02** | RDY-0028, named Legal/Compliance | Header with explicit scope limit · blank reviewer identity · 18-item evidence package · 14-section checklist A-N · **three disclosed limitations inline** · one-of-three verdict with mandatory disclaimer · closure rule |
+| **HR-03** | Product Owner | Two decision cards (RPT-0009, RPT-0028), each with data sensitivity, live-vs-documented grants, why they disagree, three options with benefits/risks/blast radius, **one recommendation with evidence**, and a blank decision block |
+| **HR-04** | — | Sign-off evidence register. **All four rows read AWAITING; none is closure-eligible** |
+| **HR-05** | — | Outcome processing rules, the RDY-0044-B gate and the D-7 gate |
+
+**The locked billing-cohort decision is recorded** at the head of the section and is not re-opened.
+
+### Three disclosures placed in the packs that weaken the case
+
+Recorded here because the temptation in a review pack is to present only what passes:
+
+1. **The check-digit property is intended, not proven.** EV-028 §3.1 wants identifiers that fail the
+   Saudi check-digit algorithm; that algorithm has not been verified against a primary source. Only
+   the leading-digit property is verified. **HR-02 §4 C says so.**
+2. **No seeded phone number has been dialled.** The control is structural invalidity, and Saudi
+   Arabia publishes no reserved fiction range. **HR-02 §4 D says so.**
+3. **"No external transmission" is an argument from configuration, not a packet capture.**
+   **HR-02 §4 K says so, and invites the reviewer to demand more.**
+
+A fourth is disclosed in HR-01 §4 #9: **IOP was added in response to internal criticism**, so the
+reviewer knows the record was adjusted to satisfy the criteria they are applying.
+
+**RDY-0021 and RDY-0028 both remain OPEN. No verdict has been recorded, no signature exists, and no
+gate count moves.**
+
 ## PB-038 (2026-08-13) — Ophthalmology exams rebuilt before clinical review; review pack issued (§5)
 
 **§5 requires a qualified clinician, which I am not.** What engineering can do is make sure the data
@@ -2866,6 +2928,537 @@ decision. **Recorded as a new gap for RDY-0045.**
 **RDY-0014** (ophthalmology taxonomy) and **RDY-0015** (per-user facility) remain **BLOCKED** —
 their evidence lives on `user_admin.php`, which the agent could not open. Both were verified at the
 data layer, but a database value is not accepted as a browser result.
+
+---
+
+# PHASE 2B — HUMAN REVIEW & SIGN-OFF PACKS
+
+> **Engineering has reached the human-validation gate.** Everything below exists so that named
+> reviewers can reach an **independent** conclusion efficiently. Nothing here is pre-filled, no
+> verdict is implied, and every known weakness is disclosed rather than smoothed over.
+>
+> **No signature in this section may be completed by anyone other than the named human reviewer.**
+
+### LOCKED DECISION — billing cohort (Owner, 2026-08-13)
+
+**This is settled and is not to be re-opened unless implementation evidence contradicts it.**
+
+| | |
+|---|---|
+| Encounters total | **72** |
+| Billing-expected cohort | **37** |
+| Cohort encounters carrying a charge | **36** |
+| Planted billing-expected encounter with **no charge record** | **1** |
+| Remaining encounters | **35 — clinical / no-charge. NOT billing failures** |
+
+**Implemented and verified** (PB-037, re-verified after every subsequent re-seed): cohort window
+2026-05-15 … 2026-08-13; planted case is **encounter 36, patient SYN-0019, 2026-06-29**, which has
+no `billing` row at all rather than a charge flagged unbilled. RPT-0012 identifies it.
+
+---
+
+## HR-01 — Ophthalmology Clinical Review Pack
+
+### 1. Header
+
+| Field | Value |
+|---|---|
+| **Review ID** | **HR-01** |
+| Requirement | **RDY-0021** |
+| Dataset | Marketing MVP Seed v1 |
+| Seeder / profile version | **`marketing-mvp-seed-v1`**, deterministic seed `20260813` |
+| Dataset fingerprint | `thiqa-hr-review-fingerprint-20260813-232638.sql`, **SHA-256 `ad6ea86d64440478fe2ab4ada466aa516b0a58250aceaed099e4be1fe1858ce2`**, 283 tables, verified |
+| Companion evidence | `docs/evidence/EV-021-clinical-review-pack.md` |
+| Number of examinations | **8** |
+| Preferred reviewer | **A qualified ophthalmologist.** *(This document does not assert that any reviewer is qualified. Qualification is established when identity and role are supplied in §2.)* |
+
+**Review purpose:** *"Determine whether each synthetic ophthalmology examination is clinically
+plausible, internally consistent and suitable for a commercial demonstration."*
+
+> **⚠ Read this before reviewing.** These records were **intentionally authored to satisfy
+> clinical-plausibility criteria** — the same criteria you are about to apply. An earlier version
+> was rejected internally as filler and rebuilt specifically to pass this review. **That is a reason
+> to scrutinise them, not to assume they are sound.** Where a finding looks convenient, it may be
+> convenient because someone wrote it to be.
+
+### 2. Reviewer identity — to be completed by the reviewer
+
+| Field | Entry |
+|---|---|
+| Reviewer name | |
+| Professional role | |
+| Specialty | |
+| Organization | |
+| Qualification / licence reference *(if the reviewer chooses, or project policy requires)* | |
+| Review date | |
+| Review start time | |
+| Review completion time | |
+| Dataset / profile version reviewed | |
+| Signature / approval method | |
+| Evidence reference | |
+
+### 3. Global clinical review criteria
+
+Assess whether:
+
+1. Age is plausible for the diagnosis/context.
+2. Presenting complaint is compatible with the recorded examination.
+3. Medical history and ocular diagnosis do not contradict each other.
+4. Visual acuity is plausible relative to the ocular findings.
+5. Right-eye / left-eye findings are internally consistent.
+6. Findings are not obviously duplicated filler.
+7. Disease-specific findings are plausible.
+8. Important expected observations are not conspicuously absent **for that scenario**.
+9. Examination findings support rather than contradict the stated diagnosis.
+10. OCT / macular data, where present, agree with the macular findings.
+11. Refraction and acuity response, where relevant, are plausible.
+12. Lens findings are compatible with the visual impairment where cataract is represented.
+13. Optic-disc / cup findings are plausible where glaucoma is represented.
+14. IOP availability or absence is clinically appropriate for the scenario.
+15. Dry-eye findings, where represented, are mutually consistent.
+16. Systemic conditions are not artificially forced into an ocular diagnosis when incidental.
+17. No impossible or contradictory values appear.
+18. The record is sufficiently realistic for a physician-facing product demonstration.
+
+**You are not asked whether this is a complete real-world diagnostic workup.** The question is
+whether the synthetic record is clinically plausible and **not misleading**.
+
+### 4. Known issues — disclosed before review
+
+| # | Concern | Detail |
+|---|---|---|
+| 1 | **No formal visual fields are recorded, on any exam** | The form has confrontation-field quadrant flags (`ODVF1..4`), but they are `tinyint` and their encoding is undocumented in this codebase. A first attempt wrote a text description and MySQL silently coerced it to **0**, which could read as a defect in every quadrant of every eye. The values were removed and left NULL rather than invented. **Perimetry is therefore absent — most consequential for exam 3 (glaucoma).** |
+| 2 | **POAG at age 44** (exam 3) | Real but atypical; POAG is usually a diagnosis of >50s |
+| 3 | **Diabetic retinopathy with macular oedema at age 37** (exam 6) | Plausible for long-duration type 1 diabetes — but see #4 |
+| 4 | **No diabetes type or duration is recorded** (exams 1, 6) | The problem list says only *"Type 2 diabetes mellitus"* and *"Diabetic retinopathy"*. The record does not itself justify exam 6's age |
+| 5 | **Coherence of the diabetic retinal/macular picture** | Please judge whether CMT 412 µm, centre-involving oedema, hard exudates, dot-blot haemorrhages and venous beading are mutually coherent, and coherent with acuity 20/60 |
+| 6 | **Type 2 diabetes at 78 with a completely normal exam** (exam 1) | Plausible for well-controlled disease; a reviewer may expect some background change |
+| 7 | **Asthma as the only recorded problem on a cataract exam** (exam 5) | Deliberate — an unrelated comorbidity must not drive eye findings. Confirm it reads as intentional |
+| 8 | **Exams 7 and 8 have no recorded problem at all** | Cataract and dry eye are the ocular diagnoses but appear on no problem list |
+| 9 | **IOP was added late** | It was absent in the first prepared version, which was flagged internally as a likely FAIL for exam 3. It is now populated on all eight. **Disclosed because you should know it was added in response to that criticism** |
+| 10 | **No gonioscopy, pachymetry or OCT-RNFL** | Not represented anywhere |
+
+**No weakness has been removed from this list because it might produce a FAIL.**
+
+### 5. The eight examinations
+
+`OD` = right, `OS` = left. `SC` = uncorrected, `MR` = manifest refraction. IOP by applanation (mmHg).
+Anterior chamber deep and quiet, conjunctiva white and quiet, discs pink with distinct margins
+unless stated. All refraction beyond MR acuity, and all gonioscopy/pachymetry, are absent (§4).
+
+| Ex | Pt | Age/Sex | Complaint | Systemic problem | Ophthalmic diagnosis | SC VA | MR VA | IOP | C/D | Ant. seg / lens | Retina / vessels | Macula / OCT | Other | Known concern |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | SYN-0001 | 78 F | Diabetic screening, no visual complaint | Type 2 diabetes | Screening — no retinopathy | 20/25 / 20/25 | 20/20 / 20/20 | 14 / 15 | 0.3 / 0.3 | Cornea clear; lens clear | Normal calibre | Flat, no oedema, no exudate | — | #4, #6 |
+| 2 | SYN-0002 | 61 M | Routine review, hypertension | Essential hypertension | Hypertensive retinopathy gr. 1 | 20/30 / 20/25 | 20/20 / 20/20 | 16 / 15 | 0.35 / 0.3 | Lens trace NS both | **Arteriolar narrowing, AV nicking** (OD); narrowing (OS) | Flat, no oedema | — | — |
+| 3 | SYN-0003 | 44 F | **Glaucoma follow-up, pressure check** | POAG | POAG, stable on treatment | 20/30 / 20/40 | 20/25 / 20/25 | **17 / 18** (target 16 / 16) | **0.7 / 0.75** | Lens clear / trace NS | Normal | Flat | — | **#1, #2** |
+| 4 | SYN-0004 | 71 M | Routine examination | Hyperlipidaemia | Corneal arcus, no ocular sequelae | 20/25 / 20/30 | 20/20 / 20/20 | 13 / 14 | 0.3 / 0.3 | **Cornea: arcus senilis**; lens clear | Normal | Flat | — | — |
+| 5 | SYN-0005 | 55 F | Gradual blurring of distance vision | Asthma *(incidental)* | Early nuclear sclerotic cataract | 20/40 / 20/40 | 20/25 / 20/25 | 15 / 14 | 0.3 / 0.35 | **Lens NS 1+ both** | Normal | Flat | — | #7 |
+| 6 | SYN-0006 | 37 M | Blurred central vision, R worse than L | Diabetic retinopathy | Moderate NPDR **with macular oedema** | 20/80 / 20/60 | 20/60 / 20/50 | 16 / 16 | 0.35 / 0.3 | Lens NS 1+ both | **Dot-blot haemorrhages, venous beading** (OD); scattered microaneurysms (OS) | **Centre-involving oedema, hard exudates** (OD); microaneurysms, no oedema (OS) | **CMT 412 / 268 µm** | **#3, #4, #5** |
+| 7 | SYN-0007 | 66 F | Glare at night, difficulty reading | none recorded | Visually significant cataract | 20/100 / 20/80 | 20/60 / 20/50 | 14 / 15 | 0.3 / 0.3 | **Lens NS 3+ / NS 2+** | Normal | No view of detail (OD); flat (OS) | — | #8 |
+| 8 | SYN-0008 | 49 M | Gritty, burning, worse in air conditioning | none recorded | Dry eye disease | 20/25 / 20/25 | 20/20 / 20/20 | 13 / 13 | 0.3 / 0.3 | Cornea clear; lens clear | Normal | Flat | **Schirmer 4 / 5 mm; TBUT 5 / 6 s** | #8 |
+
+**Source tables:** `form_eye_base`, `form_eye_acuity`, `form_eye_postseg`, `form_eye_antseg`,
+`form_eye_vitals`, `form_eye_hpi`. **Screen:** Eye Exam form (`eye_mag`) within each encounter.
+**Evidence reference:** dataset fingerprint in §1.
+
+### 6. Per-examination checklist — one per exam
+
+**Copy this block for each of the eight examinations.** Mark each item `PASS`, `FAIL` or `N/A`.
+
+#### Exam [ ] — patient SYN-[ ]
+
+| Item | Area | PASS | FAIL | N/A | Comments |
+|---|---|:--:|:--:|:--:|---|
+| A | Patient context — age/context plausible | ☐ | ☐ | ☐ | |
+| B | Chief complaint vs findings | ☐ | ☐ | ☐ | |
+| C | Visual acuity | ☐ | ☐ | ☐ | |
+| D | Refraction | ☐ | ☐ | ☐ | |
+| E | IOP / glaucoma-related evaluation | ☐ | ☐ | ☐ | |
+| F | Anterior segment / cornea | ☐ | ☐ | ☐ | |
+| G | Lens | ☐ | ☐ | ☐ | |
+| H | Optic disc / cup-to-disc ratio | ☐ | ☐ | ☐ | |
+| I | Retina | ☐ | ☐ | ☐ | |
+| J | Macula / OCT | ☐ | ☐ | ☐ | |
+| K | Diagnosis-to-findings consistency | ☐ | ☐ | — | |
+| L | Internal consistency | ☐ | ☐ | — | |
+| M | Commercial-demo realism | ☐ | ☐ | — | |
+
+**FINAL EXAM VERDICT:**  ☐ PASS   ☐ PASS WITH COMMENT   ☐ FAIL — CORRECTION REQUIRED
+
+**Mandatory correction if FAIL:**
+
+**Optional improvement:**
+
+**Reviewer initials:**
+
+### 7. Diagnosis-specific review prompts
+
+**These are prompts, not findings.** They do not assert a clinical verdict; they indicate where to
+look.
+
+| Scenario | Exam(s) | Please inspect |
+|---|---|---|
+| **Glaucoma / pressure check** | 3 | IOP presence and value against target · optic-disc and cup findings · visual acuity · anterior-segment context · consistency with the stated diagnosis · **the absence of perimetry (§4 #1)** |
+| **Diabetic retinopathy / macular oedema** | 6 | Retinal findings · macular findings · CMT/OCT · visual acuity · diabetes context (type and duration are absent) · **whether the severity grading is coherent across all of these** |
+| **Cataract** | 5, 7 | Visual acuity · degree of refractive improvement · lens opacity type and grade · anterior segment · whether the visual limitation is coherent with the lens finding |
+| **Dry eye** | 8 | Symptoms · Schirmer · TBUT · corneal and tear-film findings · internal consistency |
+| **Systemic hypertension / hyperlipidaemia** | 2, 4 | Whether the ocular finding is plausible **but not over-engineered** for the systemic condition |
+| **Asthma** | 5 | Confirm that **no ocular manifestation has been forced** merely because asthma is present |
+
+### 8. RDY-0021 closure rule
+
+RDY-0021 may close **only** when all of the following hold:
+
+- all 8 examinations were reviewed by the **named qualified reviewer**;
+- every examination has a recorded final verdict;
+- there are **zero unresolved FAIL verdicts**;
+- any required corrections were incorporated into the **deterministic seeder**;
+- corrected data were **re-seeded from the controlled baseline**, not hand-patched into the accepted dataset;
+- failed or corrected examinations were **re-reviewed**;
+- the final reviewed dataset version is identified;
+- reviewer sign-off evidence exists.
+
+**Seven of eight passing does not close RDY-0021.**
+
+---
+
+## HR-02 — Synthetic Data Legal / Compliance Review Pack
+
+### 1. Header
+
+| Field | Value |
+|---|---|
+| **Review ID** | **HR-02** |
+| Requirement | **RDY-0028** |
+| Dataset | Marketing MVP Seed v1 (`marketing-mvp-seed-v1`) |
+| Dataset fingerprint | SHA-256 `ad6ea86d64440478fe2ab4ada466aa516b0a58250aceaed099e4be1fe1858ce2` |
+| Control document | `docs/evidence/EV-028-synthetic-data-control.md` |
+
+**Purpose:** *"Confirm that the demonstration dataset is synthetic, does not contain real
+patient/personal data, and that the controls used to prevent PHI from entering the demo are adequate
+for the intended controlled marketing/demo use."*
+
+> **Scope limit, stated up front.** This review concerns **the demo dataset**. It is **not**
+> certification that OpenEMR/Thiqa is compliant with Saudi PDPL, NPHIES, ZATCA or any other
+> regulation. Do not let it be cited as such.
+
+**Reviewer should be a named person accountable for privacy, data protection, compliance or
+legal/compliance governance, as appropriate to the organization.**
+
+### 2. Reviewer identity — to be completed by the reviewer
+
+| Field | Entry |
+|---|---|
+| Reviewer name | |
+| Role | |
+| Department | |
+| Organization | |
+| Basis of authority / responsibility | |
+| Review date | |
+| Dataset version | |
+| EV-028 version | |
+| Approval method | |
+| Evidence reference | |
+
+### 3. Evidence package
+
+| Evidence | Where |
+|---|---|
+| Seed manifest (per-category counts, profile, author, baseline) | Console output of `thiqa-branding:seed-demo`; summarised in PB-036/PB-037 |
+| EV-028 control description | `docs/evidence/EV-028-synthetic-data-control.md` |
+| Planted-violation test results | EV-028 §5.1 — 4 scans, each fired on its own planted violation, none over-matched the clean row |
+| Post-seed scan results | PB-037 — all four scans **0**, with 30 rows asserted present first |
+| Identifier generation | 10 digits, leading `9` — not a valid Saudi National ID (`1`) or Iqama (`2`) class. `SeedDemoCommand::insertPatient()` |
+| Phone generation | `+966 5 000 nnn` — 10 digits, structurally undialable on the E.164 Saudi mobile plan |
+| Name generation | Fixed synthetic given/family tables in the seeder; no real-person source |
+| Duplicate-pair rule | 2 deliberate pairs sharing name and DOB, different `pubpid` and identifier |
+| Address / email | Addresses fictional (`nnnn Fictional Street`); **no email is seeded at all** (verified: 0 rows with `@`) |
+| Document generation | `\Document::createDocument()`, content authored in-seeder |
+| Document marking | Every specimen carries **`SYNTHETIC DEMO / NOT A REAL PATIENT`** on the rendered face *and* in the filename |
+| Prescription generation | `PrescriptionService::insert()`, 12 records, ophthalmic drugs |
+| Payer generation | 2 fictional payers, names suffixed `(SYNTHETIC)` |
+| Ophthalmology generation | 8 diagnosis-matched profiles — see HR-01 |
+| Git key safety | PB-035 — `.gitignore` rules + 6 proofs |
+| Git document safety | PB-037 §2 — `sites/*/documents/[0-9]*/`, 6 acceptance criteria + 2 negative controls |
+| Git history checks | 0 key files and 0 patient-document paths have ever been committed on any ref |
+| Export controls | CSV export exercised on RPT-0009; output contains only synthetic data |
+| Source-data provenance | **No real patient dataset was used.** Every value is generated in `SeedDemoCommand.php`, which is readable and committed |
+| External integrations | See §4 K |
+
+**No secrets are included in this pack.** Credentials live only in a protected store outside the
+repository.
+
+### 4. Legal / Compliance checklist
+
+Mark each box only if you are satisfied it holds.
+
+**A. Data origin**
+☐ All patient identities were generated synthetically.
+☐ No patient record was copied from a real individual.
+☐ No production/clinical database was used as the source of the synthetic patient identities.
+☐ No real medical record was anonymized or pseudonymized and then used as a demo patient without explicit disclosure.
+Comments:
+
+**B. Names**
+☐ Names are synthetic.
+☐ No known real patient names were deliberately used.
+Comments:
+
+**C. Identification numbers**
+☐ National/Iqama-like identifiers are synthetic.
+☐ The generation method avoids valid real identifiers.
+☐ No real identifier was copied from another dataset.
+Comments:
+
+> **Disclosed limitation.** The identifier rule relies on a leading `9`, which is not an issued
+> Saudi ID class. EV-028 §3.1 additionally intends the values to **fail the national check-digit
+> algorithm**, but **that algorithm has not been verified against a primary source**, so the
+> check-digit property is *intended*, not *proven*. The leading-digit property is verified.
+
+**D. Contact data**
+☐ Phone numbers are synthetic / structurally non-contactable as designed.
+☐ Email data are synthetic/non-operational where applicable.
+☐ Addresses do not identify a real patient.
+Comments:
+
+> **Disclosed limitation.** Saudi Arabia publishes **no reserved fiction number range** equivalent to
+> North American `555`. The control is *structural invalidity* (too few digits), not a guaranteed
+> unassigned range. **No sample has been dialled to confirm non-connectability.**
+
+**E. Health records**
+☐ Diagnoses/findings are invented clinical scenarios.
+☐ No real patient's health history was reproduced.
+☐ No source document contains a real patient identity.
+Comments:
+
+**F. Documents**
+☐ All uploaded demo documents are synthetic.
+☐ Each appropriate specimen visibly says **SYNTHETIC DEMO / NOT A REAL PATIENT**.
+☐ No real scanned ID, referral, consent or report is present.
+Comments:
+
+**G. Prescriptions**
+☐ Prescriptions belong only to synthetic patients.
+☐ They do not represent live prescribing transactions.
+Comments:
+
+**H. Payers / financial data**
+☐ Payers are fictional.
+☐ No real insurer contract/pricing was copied.
+☐ Financial events are demonstration data.
+Comments:
+
+**I. Duplicate patients**
+☐ Planted duplicate pairs are synthetic.
+☐ They are deliberate demo cases, not duplicate real persons.
+Comments:
+
+**J. Filesystem / Git**
+☐ Runtime patient documents are prevented from accidental Git staging.
+☐ Cryptographic runtime keys are prevented from accidental Git staging.
+☐ Git history review found no demo PHI / live keys requiring incident response.
+Comments:
+
+**K. External transmission**
+☐ Demo seeding did not transmit data to real eRx, laboratory, clearinghouse, NPHIES, SMS, email or other external clinical endpoints.
+Comments:
+
+> **Basis for K, so you can test it rather than take it on trust.** Seeding runs entirely through
+> local service-layer calls against `127.0.0.1`; no integration is configured (`x12_partners` 0 rows
+> before seeding, 2 fictional payers after, with no clearinghouse credentials); the instance is
+> HTTP-only on `localhost:8300`; email is unconfigured. **This has not been independently verified
+> by packet capture** — it is an argument from configuration, and you may wish to require more.
+
+**L. EV-028 controls**
+☐ Technical negative scans executed successfully.
+☐ Planted violations proved the scans can detect known failures.
+☐ Final scans returned zero prohibited findings.
+Comments:
+
+**M. Re-identification / linkage**
+☐ There is no hidden lookup table mapping synthetic identities to real persons.
+☐ There is no source-key relationship allowing re-identification of a real patient.
+Comments:
+
+**N. Demo disclosure**
+☐ The dataset is clearly identified internally as synthetic.
+☐ Appropriate visible materials are marked synthetic where a viewer could otherwise misunderstand their status.
+Comments:
+
+> **Disclosed gap for N.** Patient **records** carry the `SYN-nnnn` identifier and documents carry a
+> visible watermark, but **screens themselves display no "synthetic data" banner**. A screenshot of a
+> patient chart would not, on its own, announce that it is not real.
+
+### 5. Compliance reviewer verdict
+
+Choose **exactly one**:
+
+☐ **APPROVED FOR CONTROLLED SYNTHETIC DEMO USE**
+☐ **APPROVED WITH CONDITIONS**
+☐ **REJECTED — CORRECTION REQUIRED**
+
+**Conditions / corrections:**
+
+**Scope of approval:**
+
+**Explicit disclaimer (must accompany any approval):**
+
+> *"This approval relates to the synthetic demonstration dataset reviewed above. It does not
+> constitute certification of overall application, hosting, cybersecurity, PDPL, health-data,
+> NPHIES, ZATCA or other regulatory compliance."*
+
+**Reviewer name:**   **Date:**   **Approval / signature reference:**
+
+### 6. RDY-0028 closure rule
+
+RDY-0028 closes **only** when:
+
+- a **named** reviewer completed the checklist;
+- the dataset was **approved**;
+- **all mandatory conditions were resolved**;
+- the reviewed dataset version **exactly matches** the version intended for RDY-0044-B;
+- EV-028 remains passing after any correction.
+
+**If the reviewer requires a data change:** do **not** patch the accepted dataset. Modify the
+deterministic seeder or control, reset and re-seed, re-run validation, and obtain **renewed**
+approval.
+
+---
+
+## HR-03 — RPT-0009 / RPT-0028 Product Owner Decision Pack
+
+**No ACL grant has been changed.** Two decision sheets follow; each needs a Product Owner decision
+before any implementation or documentation change.
+
+### Decision card 1 — RPT-0009 Appointments Report
+
+| Field | Value |
+|---|---|
+| Report | **RPT-0009 Appointments Report**, `interface/reports/appointments_report.php` |
+| Business purpose | Daily/weekly schedule by provider — the front-desk and clinic-manager working view |
+| Data displayed | Patient **name**, `pubpid`, **DOB**, home and cell **phone**, provider, date/time, appointment type and status |
+| Sensitivity | **Patient-identifying.** Not clinical, but directly identifying, and **CSV-exportable** |
+| Export | **CSV** — verified working, 39 lines |
+| Documented expectation (§24.3) | `patients\|appt` — Front Office **yes**, Clinician **no** |
+| Live ACL required | `patients\|appt` |
+| Current grants | `patients\|appt` is held by **admin, front, back, clin, doc** — every populated role |
+| Administrator | **ALLOW** · Physician **ALLOW** · Front Office **ALLOW** · Accounting **ALLOW** · Clinical Assistant **ALLOW** |
+| Why they disagree | §24.3 was written **before** the live grants were measured. `patients\|appt` is OpenEMR's general appointment permission and is broadly held by design; the document assumed it was narrower |
+| Security implications | A patient-identifying, exportable list is reachable by **every** populated role. Defensible for a clinic schedule; less so for the DOB and phone columns |
+| Workflow implications | Removing it from Clinical Assistant would stop that role seeing the day's schedule — likely a genuine workflow regression |
+| Marketing/demo implications | **This report currently has no negative case**, so it cannot serve as an authorization demonstration. Any claim that it shows least-privilege access would be false |
+| Upstream behaviour | `patients\|appt` is upstream OpenEMR's own permission for this screen; the grant breadth is upstream's model, not a Thiqa change |
+
+**OPTION A — change grants to match the document** (remove `patients|appt` from Clinical Assistant).
+*Benefits:* creates a real negative case; tightens access to an identifying export.
+*Risks:* a clinical assistant cannot see the schedule — a plausible daily-workflow break.
+*Blast radius:* `patients|appt` also gates the calendar and the three chart-tracking reports; removing it from `clin` affects all of them, not just this report.
+
+**OPTION B — correct §24.3 to match the grants** (document that all roles may view the schedule).
+*Benefits:* zero implementation risk; matches how clinics actually work.
+*Risks:* the demo loses one intended authorization story; the identifying columns stay broadly visible.
+*Marketing impact:* RPT-0009 must be dropped from any least-privilege claim. **MC-01 must not cite it.**
+
+**OPTION C — a dedicated permission for the identifying export** (keep view for all; gate the CSV, or gate DOB/phone columns, behind a narrower ACO such as the existing `patients|bulk_rep`).
+*Benefits:* preserves workflow **and** creates a genuine negative case, on the part that actually matters — bulk export of identifying data.
+*Risks:* a core edit to the report, therefore a numbered patch record; more work than A or B.
+*Implementation scope:* one ACL check around the CSV branch, plus a patch record; the ACO already exists.
+
+**CLAUDE RECOMMENDATION: OPTION C.** The evidence is that the sensitivity is concentrated in the
+**export**, not the view: a schedule containing names is ordinary clinic information, whereas a
+downloadable CSV of names, DOBs and phone numbers is the artefact that leaves the building. Option A
+breaks a real workflow to manufacture a demo case; Option B abandons the case entirely and leaves the
+export broadly reachable. C is the only option where the control lands where the risk is. It costs
+one patch record, and `patients|bulk_rep` — already provisioned and already restricted to admin and
+physicians — is the natural gate.
+
+**PRODUCT OWNER DECISION:**  ☐ A   ☐ B   ☐ C
+**Decision rationale:**
+**Accepted by:**   **Date:**
+
+### Decision card 2 — RPT-0028 Patient Ledger by Date
+
+| Field | Value |
+|---|---|
+| Report | **RPT-0028 Patient Ledger by Date**, `interface/reports/pat_ledger.php` |
+| Business purpose | Per-patient financial ledger — charges, payments, adjustments, balance |
+| Data displayed | Patient name, service codes and descriptions, fees, payments, adjustments, running balance |
+| Sensitivity | **Financial + clinical-inferential** — service codes reveal what was done |
+| Export | **CSV** (`form_csvexport`) |
+| Documented expectation (§24.3) | `acct\|rep` — Accounting **yes**, Physician **no** |
+| Live ACL required | `acct\|rep` |
+| Current grants | `acct\|rep` held by **admin, back, doc, breakglass** |
+| Administrator | **ALLOW** · Physician **ALLOW** · Front Office **DENY** · Accounting **ALLOW** · Clinical Assistant **DENY** |
+| Why they disagree | §24.3 expected physicians excluded from financial reporting. The live grant gives `doc` **`acct\|rep`** — and it is not a Thiqa addition; `doc` also holds `acct\|disc`. This is OpenEMR's default physician role, which assumes the physician sees their own financial performance |
+| Security implications | Physicians can view patient financial ledgers. In many clinics that is intended; in others billing is strictly segregated |
+| Workflow implications | Removing it would stop physicians reviewing their own billing — significant if the pilot's physicians expect it, irrelevant if they do not |
+| Marketing/demo implications | **The intended "Physician cannot see financials" demonstration does not currently work.** Front Office and Clinical Assistant **are** denied, so a negative case does exist — just not the documented one |
+| Upstream behaviour | The `doc` → `acct\|rep` grant is upstream OpenEMR's default ACL, inherited, not introduced here |
+
+**OPTION A — change grants to match the document** (remove `acct|rep` from `doc`).
+*Benefits:* delivers exactly the documented demonstration; stricter financial segregation.
+*Risks:* diverges from upstream's default role model, so every future ACL reset must re-apply it; physicians lose their own billing view.
+*Blast radius:* `acct|rep` also gates `services_by_category` and other standard financial reports for physicians.
+
+**OPTION B — correct §24.3 to match the grants** (document that physicians may view ledgers, and use Front Office / Clinical Assistant as the negative case).
+*Benefits:* zero implementation risk; stays aligned with upstream; **a valid negative case already exists** (2 of 5 roles denied).
+*Risks:* the specific "physician cannot see money" story is lost.
+*Marketing impact:* the least-privilege claim remains demonstrable, just with different roles.
+
+**OPTION C — separate own-patient from all-patient financial access** (physicians keep a ledger scoped to their own patients; the all-patient ledger needs `acct|rep_a`).
+*Benefits:* clinically and commercially the most defensible model.
+*Risks:* OpenEMR does not scope this report by provider today — this is **new development**, not configuration.
+*Implementation scope:* substantial; well beyond Phase 2B.
+
+**CLAUDE RECOMMENDATION: OPTION B.** The physician grant is **upstream's own default**, not a
+misconfiguration this project introduced, and Option A would fight that default forever — every ACL
+reprovision would need re-applying, which is exactly the kind of drift the reproducible
+`provision-report-acl` command exists to avoid. Crucially, **a real negative case already exists**:
+Front Office and Clinical Assistant are both hard-denied, so the least-privilege demonstration
+survives intact with a corrected script. Option C is the right long-term model but is new
+development and does not belong in Phase 2B.
+
+**PRODUCT OWNER DECISION:**  ☐ A   ☐ B   ☐ C
+**Decision rationale:**
+**Accepted by:**   **Date:**
+
+---
+
+## HR-04 — Human Sign-Off Evidence Register
+
+**No row may record a verdict before real human input exists.**
+
+| HR ID | RDY | Reviewer | Role | Dataset Version | Review Date | Verdict | Conditions | Evidence Ref | Closure Eligible |
+|---|---|---|---|---|---|---|---|---|---|
+| **HR-01** | RDY-0021 | *(not yet assigned)* | Qualified ophthalmologist | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **AWAITING REVIEW** | — | — | **NO** |
+| **HR-02** | RDY-0028 | *(not yet assigned)* | Legal / Compliance | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **AWAITING REVIEW** | — | — | **NO** |
+| **HR-03a** | RPT-0009 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
+| **HR-03b** | RPT-0028 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
+
+---
+
+## HR-05 — Human Review Outcome Processing Rules
+
+| Outcome | Action |
+|---|---|
+| **HR-01 PASS and HR-02 PASS** | Proceed toward RDY-0044-B, subject to the HR-03 decisions and the §8 gate below |
+| **HR-01 FAIL** | Identify the exact failed exam(s) · capture reviewer comments verbatim · **correct the deterministic seeder** · reset and re-seed from the RDY-0044-A baseline · re-run the full technical validation · **re-review the corrected exam(s)** · **never hand-patch the accepted dataset** |
+| **HR-02 FAIL** | **Stop RDY-0044-B** · identify the exact data or control issue · fix the generator or the control · reset and re-seed if a data change is required · re-run EV-028 in full · obtain **fresh** Legal/Compliance approval |
+| **Either APPROVED WITH CONDITIONS** | Determine whether **every** condition is satisfied before closure. **A conditional approval is not a PASS** and must not be recorded as one |
+
+### RDY-0044-B gate
+
+RDY-0044-B is **not** created until **all** of:
+
+1. **RDY-0021 = CLOSED**, and
+2. **RDY-0028 = CLOSED**, and
+3. required report / export acceptance complete, and
+4. the locked billing-cohort decision implemented **and verified** — *(already satisfied: PB-037, re-verified after every re-seed)*.
+
+### D-7 gate
+
+**D-7 is not executed in this phase.** After RDY-0044-B: reset proof → baseline verification →
+D-7 #1 → reset → baseline verification → D-7 #2.
 
 ---
 

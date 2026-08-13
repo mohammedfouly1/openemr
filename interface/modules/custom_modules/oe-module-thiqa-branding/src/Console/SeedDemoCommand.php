@@ -143,7 +143,8 @@ final class SeedDemoCommand extends Command
             'macod' => 'Flat, no oedema, no exudate', 'macos' => 'Flat, no oedema, no exudate',
             'vesod' => 'Normal calibre', 'vesos' => 'Normal calibre',
             'lensod' => 'Clear', 'lensos' => 'Clear',
-            'cc' => 'Diabetic eye screening, no visual complaint'],
+            'cc' => 'Diabetic eye screening, no visual complaint',
+            'iopod' => '14', 'iopos' => '15'],
         // 2 — Hypertension. Arteriolar narrowing and AV nicking, vision preserved.
         ['dx' => 'Essential hypertension — hypertensive retinopathy grade 1',
             'scod' => '20/30', 'scos' => '20/25', 'mrod' => '20/20', 'mros' => '20/20',
@@ -151,7 +152,8 @@ final class SeedDemoCommand extends Command
             'macod' => 'Flat, no oedema', 'macos' => 'Flat, no oedema',
             'vesod' => 'Arteriolar narrowing, AV nicking', 'vesos' => 'Arteriolar narrowing',
             'lensod' => 'Trace nuclear sclerosis', 'lensos' => 'Trace nuclear sclerosis',
-            'cc' => 'Routine review, hypertension'],
+            'cc' => 'Routine review, hypertension',
+            'iopod' => '16', 'iopos' => '15'],
         // 3 — Primary open-angle glaucoma. Enlarged cup, preserved central acuity.
         ['dx' => 'Primary open-angle glaucoma — stable on treatment',
             'scod' => '20/30', 'scos' => '20/40', 'mrod' => '20/25', 'mros' => '20/25',
@@ -159,7 +161,9 @@ final class SeedDemoCommand extends Command
             'macod' => 'Flat', 'macos' => 'Flat',
             'vesod' => 'Normal', 'vesos' => 'Normal',
             'lensod' => 'Clear', 'lensos' => 'Trace nuclear sclerosis',
-            'cc' => 'Glaucoma follow-up, pressure check'],
+            'cc' => 'Glaucoma follow-up, pressure check',
+            'iopod' => '17', 'iopos' => '18',
+            'ioptargetod' => '16', 'ioptargetos' => '16'],
         // 4 — Hyperlipidaemia. Corneal arcus, otherwise unremarkable.
         ['dx' => 'Hyperlipidaemia — corneal arcus, no ocular sequelae',
             'scod' => '20/25', 'scos' => '20/30', 'mrod' => '20/20', 'mros' => '20/20',
@@ -167,7 +171,8 @@ final class SeedDemoCommand extends Command
             'macod' => 'Flat', 'macos' => 'Flat',
             'vesod' => 'Normal', 'vesos' => 'Normal',
             'lensod' => 'Clear', 'lensos' => 'Clear',
-            'cc' => 'Routine examination'],
+            'cc' => 'Routine examination',
+            'iopod' => '13', 'iopos' => '14'],
         // 5 — Asthma is not an ocular condition. Age-related lens change only.
         ['dx' => 'Early nuclear sclerotic cataract — asthma is incidental',
             'scod' => '20/40', 'scos' => '20/40', 'mrod' => '20/25', 'mros' => '20/25',
@@ -175,7 +180,8 @@ final class SeedDemoCommand extends Command
             'macod' => 'Flat', 'macos' => 'Flat',
             'vesod' => 'Normal', 'vesos' => 'Normal',
             'lensod' => 'Nuclear sclerosis 1+', 'lensos' => 'Nuclear sclerosis 1+',
-            'cc' => 'Gradual blurring of distance vision'],
+            'cc' => 'Gradual blurring of distance vision',
+            'iopod' => '15', 'iopos' => '14'],
         // 6 — Diabetic retinopathy WITH macular oedema: reduced acuity, raised CMT.
         ['dx' => 'Moderate non-proliferative diabetic retinopathy with macular oedema',
             'scod' => '20/80', 'scos' => '20/60', 'mrod' => '20/60', 'mros' => '20/50',
@@ -184,7 +190,8 @@ final class SeedDemoCommand extends Command
             'vesod' => 'Dot-blot haemorrhages, venous beading', 'vesos' => 'Scattered microaneurysms',
             'lensod' => 'Nuclear sclerosis 1+', 'lensos' => 'Nuclear sclerosis 1+',
             'cc' => 'Blurred central vision, right worse than left',
-            'cmtod' => '412', 'cmtos' => '268'],
+            'cmtod' => '412', 'cmtos' => '268',
+            'iopod' => '16', 'iopos' => '16'],
         // 7 — Visually significant cataract: poor unaided, limited refractive improvement.
         ['dx' => 'Visually significant nuclear sclerotic cataract, bilateral',
             'scod' => '20/100', 'scos' => '20/80', 'mrod' => '20/60', 'mros' => '20/50',
@@ -192,7 +199,8 @@ final class SeedDemoCommand extends Command
             'macod' => 'No view of detail, no gross abnormality', 'macos' => 'Flat',
             'vesod' => 'Normal', 'vesos' => 'Normal',
             'lensod' => 'Nuclear sclerosis 3+', 'lensos' => 'Nuclear sclerosis 2+',
-            'cc' => 'Glare at night, difficulty reading'],
+            'cc' => 'Glare at night, difficulty reading',
+            'iopod' => '14', 'iopos' => '15'],
         // 8 — Dry eye: good acuity, abnormal tear film. Schirmer/TBUT carry the diagnosis.
         ['dx' => 'Dry eye disease — reduced tear film stability',
             'scod' => '20/25', 'scos' => '20/25', 'mrod' => '20/20', 'mros' => '20/20',
@@ -201,7 +209,8 @@ final class SeedDemoCommand extends Command
             'vesod' => 'Normal', 'vesos' => 'Normal',
             'lensod' => 'Clear', 'lensos' => 'Clear',
             'cc' => 'Gritty, burning sensation worse in air conditioning',
-            'schirmerod' => '4', 'schirmeros' => '5', 'tbutod' => '5', 'tbutos' => '6'],
+            'schirmerod' => '4', 'schirmeros' => '5', 'tbutod' => '5', 'tbutos' => '6',
+            'iopod' => '13', 'iopos' => '13'],
     ];
 
     /** @var array<int, array{code: string, text: string, fee: float}> */
@@ -898,6 +907,28 @@ final class SeedDemoCommand extends Command
                 'Deep and quiet', 'Deep and quiet',
                 $profile['schirmerod'] ?? '', $profile['schirmeros'] ?? '',
                 $profile['tbutod'] ?? '', $profile['tbutos'] ?? '',
+                $formId,
+            ]
+        );
+
+        // Intraocular pressure by applanation, plus a treatment target where the diagnosis calls
+        // for one. IOP belongs in any eye examination, and its absence was conspicuous on the
+        // glaucoma case whose own presenting complaint is a pressure check.
+        //
+        // Confrontation visual fields (ODVF1..4 / OSVF1..4) are deliberately NOT written.
+        // They are `tinyint` quadrant flags, not free text, and their encoding is not documented
+        // in this codebase. Writing a value whose clinical meaning cannot be verified into a
+        // patient record is worse than leaving the field empty — a first attempt wrote a text
+        // description and MySQL coerced it to 0, which a reviewer could read as a recorded
+        // defect in every quadrant of every eye. Formal perimetry is therefore not represented,
+        // and that limitation is disclosed to the clinical reviewer rather than papered over.
+        QueryUtils::sqlStatementThrowException(
+            'UPDATE form_eye_vitals SET ODIOPAP = ?, OSIOPAP = ?, IOPTIME = ?, '
+            . 'ODIOPTARGET = ?, OSIOPTARGET = ? WHERE id = ?',
+            [
+                $profile['iopod'], $profile['iopos'],
+                date('H:i', strtotime($enc['date'])),
+                $profile['ioptargetod'] ?? '', $profile['ioptargetos'] ?? '',
                 $formId,
             ]
         );
