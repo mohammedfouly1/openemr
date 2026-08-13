@@ -43,6 +43,7 @@ use OpenEMR\Modules\ThiqaBranding\Console\ApplyProfileCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\BackupCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\MaterialiseCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\ProvisionReportAclCommand;
+use OpenEMR\Modules\ThiqaBranding\Console\SeedDemoCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\VerifyCommand;
 use OpenEMR\Modules\ThiqaBranding\Listener\LoginTemplateListener;
 use OpenEMR\Modules\ThiqaBranding\Listener\LogoOverrideListener;
@@ -224,6 +225,7 @@ final class Bootstrap
             new VerifyCommand($health),
             new ProvisionReportAclCommand(),
             new BackupCommand(),
+            new SeedDemoCommand(),
             new MaterialiseCommand($materialiser, $health, new MaterialisationLogger($logger), $logoValidator),
         ] as $command) {
             $event->setCommand($command::class, $command);

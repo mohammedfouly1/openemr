@@ -1790,6 +1790,152 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-036 (2026-08-13) — **MARKETING MVP SEED v1 EXECUTED** — full dataset seeded, validated, three defects found and fixed
+
+The database has clinical data for the first time. `patient_data` **0 → 30**, `form_encounter`
+**0 → 72**. Owner-locked targets, Owner-approved architecture.
+
+### The seeder is a console command, not a script
+
+`thiqa-branding:seed-demo`, registered through the module's existing command subscriber
+(`SeedDemoCommand.php`). Owner requirements and how each is met:
+
+| Requirement | Implementation |
+|---|---|
+| Application/service layers | `PatientService`, `EncounterService` (+`insertSoapNote`), `AppointmentService`, `InsuranceCompanyService`, `PrescriptionService`, `BillingUtilities::addBilling()`, `\Document::createDocument()`, `addForm()` |
+| Deterministic | Fixed `RANDOM_SEED = 20260813` and fixed name tables — two runs from the same baseline produce the same dataset, which is what makes RDY-0044-B's "identical counts" test meaningful |
+| Explicit profile version | `marketing-mvp-seed-v1`, printed in the manifest |
+| Fail-closed preconditions | Wrong site · missing facility · installer-default facility · missing demo physicians · **baseline file absent or hash mismatch** · missing EV-028 control · data already present |
+| `--dry-run` | Validates and reports the plan, writes nothing |
+| No secrets printed | No credential is read or emitted |
+| No real PHI | EV-028 conventions implemented **in the generator** |
+| Raw-SQL only where documented | **Five documented exceptions**, below |
+| Seed manifest | Profile, seed, marker, author, baseline hash, per-category counts |
+| Refuses duplicate re-seeding | **Proven** — the first `--dry-run` aborted because the PB-034 pilot row was still present |
+
+**The five documented service-layer exceptions**, each with its reason in the source: `lists`
+(allergies/problems — the FHIR services want FHIR-shaped payloads to write the same row);
+`prices`/`codes` (no fee-schedule service exists); `form_vitals` (`VitalsService::create()` is an
+empty stub in this release); `form_eye_base` + 11 satellites (legacy form module, no service);
+`ar_session`/`ar_activity` (no payment-posting service — the billing screens write these directly).
+
+### The `created_by` hard blocker — acceptance sequence, in the Owner's order
+
+| # | Step | Result |
+|---|---|---|
+| 1 | Rollback to the RDY-0044-A baseline | **PASS** — hash verified first, restore 11.28 s |
+| 2 | Clinical tables back at pre-seed counts | **PASS** — all 14 at **0**; foundation intact (10 users, 7 groups, 19 rules, `Thiqa Demo Eye Clinic`, 495 globals) |
+| 3 | One-patient verification through the corrected command | **PASS** |
+| 4 | `created_by` is the intended demo user | **PASS** — `1` → `admin` |
+| 5 | Patients with `created_by = 0` | **0 — PASS** |
+| 6 | Rollback again, then full seed | Done — so the final state is **exactly** the target dataset, not verification + target |
+
+**The fix.** `PatientService` reads the author from `SessionWrapperFactory::getActiveSession()`.
+The pilot wrote the raw `$_SESSION` superglobal, which that wrapper never reads. The command sets
+it through the wrapper. **Verified independently in SQL, not from the command's own reporting** —
+a command self-certifying its own correctness is not evidence.
+
+**The pilot row was not patched to hide the defect**, per instruction. It was destroyed by rollback
+and the corrected path re-proved from a clean baseline.
+
+### §7 validation — every required check
+
+| Check | Target | Actual | Verdict |
+|---|---:|---:|---|
+| Patients | 30 | **30** | PASS |
+| Encounters | 72 | **72** | PASS |
+| Appointments | 36 | **36** | PASS |
+| Documents | 10 | **10** | PASS |
+| Prescriptions | 12 | **12** | PASS |
+| Charges | 36 | **36** | PASS |
+| Fictional payers | 2 | **2** | PASS |
+| SOAP notes | ≥18 | **18** | PASS |
+| Vitals | ≥12 | **12** | PASS |
+| Ophthalmology exams | 8 | **8** | PASS |
+| Allergy patients | 5 | **5** | PASS |
+| Chronic-problem patients | 6 | **6** | PASS |
+| Planted duplicate pairs | 2 | **2** — `Hessa Alharthi` (SYN-0001/0029), `Talal Alsubaie` (SYN-0008/0030), matching name **and** DOB | PASS |
+| EV-028 §5 scans | 0 each | **0, 0, 0, 0** (asserted 30 rows present first) | PASS |
+| No real PHI pattern | 0 each | every `ss` leading-9, every patient `SYN-` marked, no US SSN format, no emails | PASS |
+| Author attribution | 0 unattributed | patients, forms, encounters **all attributed**; only author is `1 → admin` | PASS |
+| Appointment shape | — | 2 no-show · 3 cancelled · 1 recurring series · **16 today** for the flow board | PASS |
+| Financial variation | — | 12 payments · 4 adjustments · **3 ageing bands** (13/12/11) · 35 billed + **1 deliberately unbilled** · 4 priced services · 1 price level | PASS |
+| Document marking | 10 | **10** carry `SYNTHETIC DEMO / NOT A REAL PATIENT` on the document face **and** in the filename | PASS |
+
+### Three defects the validation caught — all fixed, none papered over
+
+**The first validation run FAILED three checks.** They are recorded because a validation set that
+never fails anything is not evidence that the data is right, only that the checks are weak.
+
+1. **18 SOAP notes were authored by nobody.** `EncounterService::insertSoapNote()` builds its own
+   `forms` insert **without `user` or `groupname`** — unlike `addForm()`, which every other form
+   path uses. Eye Exam, Vitals and Encounter rows were all correctly attributed; only SOAP was not.
+   **This is an upstream defect**, not a seeder one: *any* OpenEMR SOAP note created through that
+   service is unattributed in `forms`. Worked around in the seeder with a documented post-insert
+   update. Left unfixed, D-1 would have shown 18 clinical notes created by nobody.
+2. **All 36 charges sat in a single ageing band.** `addBilling()` hard-codes `date = NOW()`, so the
+   A/R ageing report would have shown one bucket. Charges are now backdated to their encounter
+   date: **three bands (0-30: 13, 31-60: 12, 61-90: 11)**.
+3. **No charge was marked billed.** All 36 were `billed = 0`, so "one deliberately unbilled
+   encounter" was indistinguishable from "nothing has ever been billed". Now **35 billed, 1 not**.
+
+### ⚠ An arithmetic tension in the locked targets — flagged, not silently resolved
+
+The locked targets specify **72 encounters, 36 charges, and "one deliberately unbilled
+encounter."** Those cannot all hold on the obvious reading: 36 charges spread over 72 encounters
+leaves **36 encounters with no charge at all**, not one.
+
+**Interpretation applied**, and it is an interpretation: "unbilled" is implemented as the *billing
+state* of a charge — exactly one charge row left at `billed = 0`, so the pending/unbilled report
+has exactly one hit. The 36 encounters with no charge row are treated as ordinary non-billable
+visits (reviews, post-ops), which is clinically normal.
+
+**If the intent was instead 36 encounters visibly missing charges, or 72 charges, say so and the
+seeder re-runs** — it is deterministic and the rollback is one command. **This is recorded rather
+than decided quietly because the two readings produce materially different demo reports.**
+
+### Two false failures caught, neither reported as a defect
+
+> **A 403 is not self-describing, and it caught me twice more.** The role probe initially returned
+> **403 for all seven accounts including `admin`**, and the **D-1 tamper report also returned 403
+> to `admin`** — who holds `admin|super`. Read carelessly, that is "the flagship demo is broken."
+> Both were **CSRF**, not authorization: `patient_list.php` checks ACL first then CSRF with
+> `dieOnFail`, and the tamper report validates a token even on GET. The error log settled it —
+> `OpenEMR CSRF token authentication error`. With a harvested token the tamper report returns
+> **HTTP 200, 7,316 bytes, "No audit log tampering detected"** — byte-identical to PB-026/PB-027's
+> clean result. **No D-1 regression. Nothing was fixed, because nothing was broken.**
+
+### The authorization matrix, now against 30 real patients
+
+Re-run across all seven accounts: **7 of 7 as designed.** The four `patients|bulk_rep` holders see
+the seeded patients; Front Office, Accounting and Clinical Assistant get a hard 403. The positive
+case is now 30 patients deep rather than one.
+
+### Report population — partial, and honestly bounded
+
+| Report | Result |
+|---|---|
+| Patient List | **200, 17,160 bytes, seeded patients rendered** |
+| Unique Seen Patients | **200, 15,556 bytes, seeded patients rendered** |
+| Audit Log Tamper Report | **200, clean** (with CSRF token) |
+| Appointments · Flow Board · Receipts · Prescriptions | **INCONCLUSIVE — not "empty"** |
+
+**The four inconclusive reports are a limitation of the probe, not a finding about the data.** Each
+OpenEMR report has its own form-field names and my generic `form_from_date`/`form_to_date` POST does
+not drive them. The underlying rows exist and were counted directly: **16 appointments today, 12
+prescriptions, 36 charges.** Calling these reports empty would have been a fabricated defect.
+**Proper per-report acceptance is the §8 post-seed step and has not been done.**
+
+### Status — nothing closed on row counts
+
+**No RDY is closed by this entry**, per instruction. RDY-0020…0027 have their volumes but each still
+needs its own acceptance criteria run; RDY-0028 remains open on the **named Legal/Compliance
+reviewer** (§6.1 of EV-028 states the minimum decision); RDY-0044-B does not exist yet.
+**No gate count moves.**
+
+**Rollback:** one command to the PB-031 baseline, exercised **four times** during this entry and
+correct every time.
+
 ## PB-035 (2026-08-13) — Cryptographic key exposure CLOSED by a tracked `.gitignore` control (Owner-authorised)
 
 PB-033 found four untracked key files protected by nothing but careful staging discipline. **A

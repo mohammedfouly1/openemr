@@ -215,6 +215,38 @@ is a document, not a control.
 §7 of the readiness register records that the *role* is assigned while the *person* is not. **That
 unassigned person is currently the binding blocker on this requirement**, not any engineering task.
 
+### 6.1 THE MINIMUM HUMAN DECISION — surfaced before full-volume seeding
+
+RDY-0028 needs **one decision and one action from a person**. Nothing else about it is open, and no
+amount of further engineering will substitute:
+
+> **DECISION:** Name the individual who holds Legal/Compliance authority to accept synthetic-data
+> provenance for this product.
+>
+> **ACTION:** That named individual reviews the completed dataset against §1 and §2 and signs §6.
+
+**What is already done for them**, so the review is a review and not an investigation:
+
+- the prohibition list is written and is specific, not a principle (§1);
+- the safe-value conventions are implemented **in the generator**, so compliance is structural
+  rather than spot-checked (§3);
+- the post-seed scans are written, validated against the live schema, and **proven to fire against
+  planted violations** (§5, §5.1);
+- the rollback if they reject the dataset is one command against a rehearsed baseline (§7).
+
+**The reviewer's judgement is genuinely required for exactly two things** that no scan can settle:
+
+1. **§3.1 — the Saudi ID check-digit algorithm** must be confirmed against a primary source. Until
+   then the identifier convention is *intended*, not *verified*. A convention believed to produce
+   invalid identifiers that actually produces valid ones would be **worse than no convention**,
+   because it would be trusted.
+2. **Whether the dataset as a whole reads as synthetic to an informed outsider** — the P-02
+   "recognisable name" and P-09 "figure implying real volume" judgements, which are contextual and
+   not machine-checkable.
+
+**This is not a formality being routed around.** The signature is what converts a set of technical
+controls into an accountable acceptance, and RDY-0028 is explicitly held open until it exists.
+
 ---
 
 ## 7. ROLLBACK — if provenance is ever in doubt
