@@ -21,6 +21,7 @@ namespace OpenEMR\Services;
 use OpenEMR\Common\Acl\AclMain;
 use OpenEMR\Common\Database\QueryUtils;
 use OpenEMR\Common\Database\SqlQueryException;
+use OpenEMR\Common\Session\SessionWrapperFactory;
 use OpenEMR\Common\Uuid\UuidRegistry;
 use OpenEMR\Services\Search\{
     DateSearchField,
@@ -511,6 +512,14 @@ class EncounterService extends BaseService
             return false;
         }
 
+        // `user` and `groupname` are recorded here because every other form-registration path
+        // sets them via addForm(); omitting them left each SOAP note created through this
+        // service unattributed in `forms`, so the audit trail showed a clinical note authored
+        // by nobody. Reachable from the live REST route
+        // `POST /api/patient/:pid/encounter/:eid/soap_note`, not only from internal callers.
+        // See docs/branding/adr/patch-records.md PR-14.
+        $session = SessionWrapperFactory::getInstance()->getActiveSession();
+
         $formSql = "INSERT INTO forms SET";
         $formSql .= "     date=NOW(),";
         $formSql .= "     encounter=?,";
@@ -518,6 +527,8 @@ class EncounterService extends BaseService
         $formSql .= "     authorized='1',";
         $formSql .= "     form_id=?,";
         $formSql .= "     pid=?,";
+        $formSql .= "     user=?,";
+        $formSql .= "     groupname=?,";
         $formSql .= "     formdir='soap'";
 
         $formResults = sqlInsert(
@@ -525,7 +536,9 @@ class EncounterService extends BaseService
             [
                 $eid,
                 $soapResults,
-                $pid
+                $pid,
+                $session->get('authUser'),
+                $session->get('authProvider'),
             ]
         );
 

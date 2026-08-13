@@ -595,6 +595,87 @@ catalogue key. They are now delivered as catalogue data via `tools/branding/bran
 are correctly **absent** from this document — a SET-TRANSLATION item that needs a patch record is a
 SET-TRANSLATION item done wrong. Full analysis: `docs/RebrandingBugs.md` RB-01.
 
+---
+
+## PR-14 — `src/Services/EncounterService.php`
+
+**BRAND ID:** none — **this is not a branding edit.** It is a **correctness/defect fix**, the first
+non-branding core edit in this document, recorded here because Invariant 4 / Q1 governs *every* core
+edit regardless of motive. **Readiness ref:** Phase 2B PB-037, RDY-0021. **Commit:** see below.
+
+**Locked decision satisfied:** Invariant 4 residual-edit exception. **No extension point can reach
+this.** The defect is a missing pair of columns inside a hand-built `INSERT` in a service method.
+There is no event, no filter and no override surface between the caller and that statement — a module
+cannot repair it, and the only alternatives were to leave the product defective or to correct every
+row afterwards, which is a workaround, not a fix.
+
+**Classification:** `SOURCE-CONFIRMED REL-820 SERVICE-LAYER ATTRIBUTION DEFECT`.
+
+**What was wrong.** `EncounterService::insertSoapNote()` registers its `forms` row with a hand-built
+`INSERT` that omits `user` and `groupname`. Every other form-registration path in the product goes
+through `addForm()` → `FormService::addForm()`, which fills both from the session. A SOAP note created
+through this service is therefore **unattributed in `forms`** — the audit trail shows a clinical note
+authored by nobody.
+
+```diff
++        $session = SessionWrapperFactory::getInstance()->getActiveSession();
++
+         $formSql = "INSERT INTO forms SET";
+         $formSql .= "     date=NOW(),";
+         $formSql .= "     encounter=?,";
+         $formSql .= "     form_name='SOAP',";
+         $formSql .= "     authorized='1',";
+         $formSql .= "     form_id=?,";
+         $formSql .= "     pid=?,";
++        $formSql .= "     user=?,";
++        $formSql .= "     groupname=?,";
+         $formSql .= "     formdir='soap'";
+ 
+         $formResults = sqlInsert(
+             $formSql,
+             [
+                 $eid,
+                 $soapResults,
+                 $pid,
++                $session->get('authUser'),
++                $session->get('authProvider'),
+             ]
+         );
+```
+
+**The fix mirrors the canonical path exactly rather than inventing behaviour.**
+`FormService::addForm()` (lines 76-83) defaults these same two columns from
+`$session->get('authUser')` and `$session->get('authProvider')`. This uses the identical keys, so a
+SOAP note registered through the service is now attributed the same way as one registered through any
+other form — no new convention is introduced.
+
+### Reachability analysis — why this had to be fixed rather than worked around
+
+| Caller | Reaches the defect? | Evidence |
+|---|---|---|
+| **Normal staff UI** | **NO** | `interface/forms/soap/save.php` → `C_FormSOAP::default_action_process()` → `addForm()` at `C_FormSOAP.class.php:78`. Correctly attributed |
+| **REST / API** | **YES — live, registered route** | `POST /api/patient/:pid/encounter/:eid/soap_note`, registered at `apis/routes/_rest_routes_standard.inc.php:173-179`, gated `encounters\|notes`, dispatching to `EncounterRestController::postSoapNote()` (`:737`) → `insertSoapNote()` (`:747`) |
+| **Module / service callers** | Only the Thiqa seeder | `insertSoapNote` has exactly two callers in the tree: the REST controller and `SeedDemoCommand` |
+| **Thiqa seeder** | YES (by design) | Now redundant — the service is correct, so the seeder's compensating update is removed |
+
+**The REST route is the finding that forced the fix.** Had the path been seeder-only, §3 permits a
+deterministic seeder-side correction plus recorded technical debt. It is not seeder-only: it is a
+registered, authenticated, ACL-gated endpoint in the shipping API surface, so **any pilot customer
+writing SOAP notes over the API would silently accumulate unattributed clinical notes.** That is a
+data-integrity defect in the product, not a demo inconvenience, and it is exactly the kind of thing
+the audit-trail claim (MC-01, D-1) cannot afford.
+
+**Upstream-first path (Q1).** This is an upstream `rel-820` defect, not Thiqa-introduced — the omission
+is present in unmodified upstream source. **It should be contributed upstream**, which would also
+retire this patch record. Not done in this phase: the branch is 418 commits behind and divergent, and
+the upstream maintenance target (`master` vs `rel-820`) is still undecided under RDY-0045. Recorded as
+the intended disposition rather than left implicit.
+
+**Verification:** the accepted demo dataset must contain **zero unattributed seeded SOAP form
+registrations**, verified by query, not by inspection — see PB-037.
+
+---
+
 ### Required before release
 
 **V-09 must be re-run against all 17 files.** The existing dry-run examined only the six the plan listed
