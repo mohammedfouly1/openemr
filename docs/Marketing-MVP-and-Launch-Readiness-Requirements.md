@@ -1790,6 +1790,84 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-043 (2026-08-14) — v3 fail-fast worked; the real cause found; **dataset made idempotent under viewing**
+
+Report: `docs/ScreenShoots/HR-01-BrowserVerification-v3.md` · 12 artefacts.
+
+**The fail-fast rule paid for itself.** The run halted after **exam 1** on the first CLINHASH
+mismatch instead of losing all eight. One record, cheap to restore.
+
+### The dialog fix was necessary but not sufficient — and my diagnosis was incomplete
+
+The v3 run installed `dismiss()` as the first executable line and recorded **zero dialog events**.
+The record was mutated anyway. So PB-042's root cause was only half of it: **`view.php`'s JavaScript
+lock-acquire path itself persists the form's defaults over any NULL column**, with no dialog and no
+user action. The dialog was merely the *second* way in.
+
+This reconciles with my own earlier test: two authenticated HTTP `GET`s mutated nothing, because a
+plain fetch never runs the page JavaScript. **Any real browser opening one of these exams rewrites
+it.** That includes the clinical reviewer's browser.
+
+### ⚠ TWO CORRECTIONS TO WHAT I PREVIOUSLY RECORDED
+
+**1. `0` in the visual-field flags does NOT mean "a defect". I had it backwards.**
+`view.php:1145-1167` is explicit:
+
+```php
+if (${$ODzone} == '1') { $ODVF[$z] = 'checked value=1'; $bad++; }  // 1 = DEFECT
+else                   { $ODVF[$z] = 'value=0'; }                   // 0 = no defect
+if (!$bad) { $VFFTCF = "checked"; }                                 // none → FTCF ticked
+```
+
+**`1` is a defect; `0` and NULL are both "no defect" and take the same branch.** Amsler is the same
+(`if (!$AMSLEROD) $AMSLEROD = "0"`, `:1084`). So PB-039's and PB-040's claim that a coerced `0`
+"reads as a recorded defect in every quadrant of every eye" was **wrong** — `0` and NULL render
+identically, and the mutation of those columns was **clinically inert**.
+
+**2. The only mutation with real clinical content was `ODIOPTARGET` → 21.** `alert`/`oriented`/
+`confused` moving from the legacy strings `'yes'`/`'TPP'`/`'nml'` to `1` is an encoding change that
+renders the same. The corruption was narrower than I twice described it.
+
+**HR-01 §4 #1 is corrected accordingly.** The honest residual concern is weaker but still real: the
+form **cannot distinguish "examined and normal" from "not examined"** — both render as `FTCF ☑`. That
+is worth the reviewer knowing on a glaucoma case; it is not a fabricated assertion.
+
+### Fix: seed exactly what the form writes
+
+Rather than fight a write path that fires on every view, the seeder now writes the form's own
+normalised values up front — `ODIOPTARGET`/`OSIOPTARGET` (**21** default, **16** on the treated
+glaucoma case), `AMSLEROD/OS = 0`, `ODVF1..4`/`OSVF1..4 = 0`, `alert`/`oriented`/`confused = 1`.
+
+**Verified byte-identical to what `view.php` wrote to exam 1 during the v3 run.** With nothing left
+NULL, the form has nothing to default, so **opening an exam no longer changes it.**
+
+That matters beyond this capture: a demo dataset that mutates when looked at cannot satisfy
+RDY-0044-B's *"a second reset produces identical counts"*, and every rehearsal would drift.
+
+### A stale test of mine, caught and fixed
+
+The post-reseed validation reported **cohort 36, charged 35 — FAIL**. **The data was correct; my
+check was stale.** `validate-cohort.sql` hard-coded the window `2026-05-15…2026-08-13`, and the clock
+had rolled to 2026-08-14. Re-run rank-based (*the 37 most recent encounters*): **37 / 36 / 1 / 35,
+all PASS.** The validation is now date-independent.
+
+Noted in passing: the cohort now runs to **2026-08-14** while MySQL `CURDATE()` returns
+**2026-08-13** — the PHP/MySQL timezone split PB-030 documented, surfacing in a third place.
+
+### State
+
+| | |
+|---|---|
+| Dataset | Re-seeded, **full validation all PASS** |
+| **New fingerprint** | `thiqa-hr-review-v2-fingerprint-20260814-024849.sql`, SHA-256 **`de6e513ceb9a47ffab329a236e4c7ab55b54e33f7146f847cd59f03612bbdcdb`** |
+| **New CLINHASH** | **`fab7947785d853d04b431932cf5c45ab`** |
+| Locks | `LOCKED = NULL` on all 8 |
+| v3 artefacts | 12 files, **not evidence** — exam 1 only, post-mutation, and its `-retina` image is mis-clipped (the run used `fullPage:true` against the §6 recipe) |
+
+**Supersedes fingerprint `ad6ea86d…`.** Any review must now cite `de6e513c…`.
+
+**RDY-0021 remains OPEN.** No evidence pack exists against the shipped dataset.
+
 ## PB-042 (2026-08-13) — HR-01 v2: run **self-detected** its own corruption and stopped. Root cause identified; a live hazard for the clinical review
 
 Report: `docs/ScreenShoots/HR-01-BrowserVerification-v2.md` · 71 files in `HR-01-exams-v2/`.

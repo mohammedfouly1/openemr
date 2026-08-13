@@ -911,24 +911,35 @@ final class SeedDemoCommand extends Command
             ]
         );
 
-        // Intraocular pressure by applanation, plus a treatment target where the diagnosis calls
-        // for one. IOP belongs in any eye examination, and its absence was conspicuous on the
-        // glaucoma case whose own presenting complaint is a pressure check.
+        // Intraocular pressure by applanation, plus a treatment target. IOP belongs in any eye
+        // examination, and its absence was conspicuous on the glaucoma case whose own presenting
+        // complaint is a pressure check.
         //
-        // Confrontation visual fields (ODVF1..4 / OSVF1..4) are deliberately NOT written.
-        // They are `tinyint` quadrant flags, not free text, and their encoding is not documented
-        // in this codebase. Writing a value whose clinical meaning cannot be verified into a
-        // patient record is worse than leaving the field empty — a first attempt wrote a text
-        // description and MySQL coerced it to 0, which a reviewer could read as a recorded
-        // defect in every quadrant of every eye. Formal perimetry is therefore not represented,
-        // and that limitation is disclosed to the clinical reviewer rather than papered over.
+        // **Every field the eye_mag form would otherwise default is written here explicitly, in
+        // the form's own encoding.** Opening `view.php` in a browser runs a JS lock-acquire path
+        // that persists the form's in-memory defaults over any NULL column — so a record left
+        // partly NULL is silently rewritten the first time anyone looks at it (PB-043). Seeding
+        // the same values the form would write makes the record **idempotent under viewing**:
+        // there is nothing left for it to fill in, so the dataset stays byte-stable across demos,
+        // clinical review, and the RDY-0044-B reset proof.
+        //
+        // Semantics, verified in `view.php:1145-1167` and `:1084`: for the visual-field quadrant
+        // flags **1 means a defect and 0 means no defect** — 0 and NULL take the same branch and
+        // render identically, and with no defects the form ticks `FTCF` (full to confrontation).
+        // Amsler behaves the same way (`if (!$AMSLEROD) $AMSLEROD = "0"`). So writing 0 asserts
+        // *no recorded defect*, which is exactly what this dataset means. `21` is the form's own
+        // default target pressure, retained for the non-glaucoma exams and overridden with the
+        // treated target on the glaucoma case.
         QueryUtils::sqlStatementThrowException(
             'UPDATE form_eye_vitals SET ODIOPAP = ?, OSIOPAP = ?, IOPTIME = ?, '
-            . 'ODIOPTARGET = ?, OSIOPTARGET = ? WHERE id = ?',
+            . 'ODIOPTARGET = ?, OSIOPTARGET = ?, alert = 1, oriented = 1, confused = 1, '
+            . 'AMSLEROD = 0, AMSLEROS = 0, '
+            . 'ODVF1 = 0, ODVF2 = 0, ODVF3 = 0, ODVF4 = 0, '
+            . 'OSVF1 = 0, OSVF2 = 0, OSVF3 = 0, OSVF4 = 0 WHERE id = ?',
             [
                 $profile['iopod'], $profile['iopos'],
                 date('H:i', strtotime($enc['date'])),
-                $profile['ioptargetod'] ?? '', $profile['ioptargetos'] ?? '',
+                $profile['ioptargetod'] ?? '21', $profile['ioptargetos'] ?? '21',
                 $formId,
             ]
         );
