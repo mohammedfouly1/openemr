@@ -17,10 +17,19 @@ require_once("../globals.php");
 require_once(\OpenEMR\Core\OEGlobalsBag::getInstance()->getSrcDir() . "/patient.inc.php");
 require_once(\OpenEMR\Core\OEGlobalsBag::getInstance()->getSrcDir() . "/options.inc.php");
 
+use OpenEMR\Common\Acl\AccessDeniedHelper;
+use OpenEMR\Common\Acl\AclMain;
 use OpenEMR\Common\Csrf\CsrfUtils;
 use OpenEMR\Common\Session\SessionWrapperFactory;
 use OpenEMR\Core\Header;
 use OpenEMR\Core\OEGlobalsBag;
+
+if (!AclMain::aclCheckCore('patients', 'bulk_rep')) {
+    AccessDeniedHelper::denyWithTemplate(
+        "ACL check failed for patients/bulk_rep: Patient List",
+        xl("Patient List")
+    );
+}
 
 $session = SessionWrapperFactory::getInstance()->getActiveSession();
 if (!empty($_POST)) {

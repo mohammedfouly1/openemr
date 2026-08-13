@@ -15,11 +15,19 @@
 
 require_once("../globals.php");
 
+use OpenEMR\Common\Acl\AccessDeniedHelper;
+use OpenEMR\Common\Acl\AclMain;
 use OpenEMR\Common\Csrf\CsrfUtils;
 use OpenEMR\Common\Session\SessionWrapperFactory;
 
 $session = SessionWrapperFactory::getInstance()->getActiveSession();
 CsrfUtils::checkCsrfInput(INPUT_GET, dieOnFail: true);
+
+// CSRF proves the request came from our page; it does not prove the caller is
+// permitted. This endpoint serves edit_layout.php, which gates on admin|super.
+if (!AclMain::aclCheckCore('admin', 'super')) {
+    AccessDeniedHelper::deny('ACL check failed for admin/super: layout list items (ajax)');
+}
 
 $listid  = $_GET['listid'];
 $target  = $_GET['target'];

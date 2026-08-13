@@ -16,11 +16,20 @@ require_once("../globals.php");
 require_once(\OpenEMR\Core\OEGlobalsBag::getInstance()->getSrcDir() . "/patient.inc.php");
 require_once(\OpenEMR\Core\OEGlobalsBag::getInstance()->getSrcDir() . "/options.inc.php");
 
+use OpenEMR\Common\Acl\AccessDeniedHelper;
+use OpenEMR\Common\Acl\AclMain;
 use OpenEMR\Common\Csrf\CsrfUtils;
 use OpenEMR\Common\Session\SessionWrapperFactory;
 use OpenEMR\Core\Header;
 use OpenEMR\Services\PatientService;
 use OpenEMR\Services\Utils\DateFormatterUtils;
+
+if (!AclMain::aclCheckCore('patients', 'op_rep')) {
+    AccessDeniedHelper::denyWithTemplate(
+        "ACL check failed for patients/op_rep: Chart Location Activity",
+        xl("Chart Location Activity")
+    );
+}
 
 $session = SessionWrapperFactory::getInstance()->getActiveSession();
 if (!empty($_POST)) {

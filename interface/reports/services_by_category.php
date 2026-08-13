@@ -17,10 +17,19 @@ require_once("../../custom/code_types.inc.php");
 
 /** @var array<string, array<string, mixed>> $code_types */
 
+use OpenEMR\Common\Acl\AccessDeniedHelper;
+use OpenEMR\Common\Acl\AclMain;
 use OpenEMR\Common\Csrf\CsrfUtils;
 use OpenEMR\Common\Session\SessionWrapperFactory;
 use OpenEMR\Common\Utils\FormatMoney;
 use OpenEMR\Core\Header;
+
+if (!AclMain::aclCheckCore('acct', 'rep')) {
+    AccessDeniedHelper::denyWithTemplate(
+        "ACL check failed for acct/rep: Services by Category",
+        xl("Services by Category")
+    );
+}
 
 $session = SessionWrapperFactory::getInstance()->getActiveSession();
 if (!empty($_POST)) {

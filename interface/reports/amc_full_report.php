@@ -15,8 +15,17 @@ require_once("../../library/classes/rulesets/Amc/AmcReportFactory.php");
 
 use OpenEMR\BC\ServiceContainer;
 use OpenEMR\ClinicalDecisionRules\AMC\CertificationReportTypes;
+use OpenEMR\Common\Acl\AccessDeniedHelper;
+use OpenEMR\Common\Acl\AclMain;
 use OpenEMR\Common\Twig\TwigContainer;
 use OpenEMR\Core\OEGlobalsBag;
+
+if (!AclMain::aclCheckCore('patients', 'med')) {
+    AccessDeniedHelper::denyWithTemplate(
+        "ACL check failed for patients/med: AMC Detailed Report",
+        xl("AMC Detailed Report")
+    );
+}
 
 function formatPatientReportData($report_id, &$data, $type_report, $amc_report_types = [])
 {
@@ -64,7 +73,6 @@ function formatPatientReportData($report_id, &$data, $type_report, $amc_report_t
         $row['failed_items'] = $failed_items;
         $formatted[] = $row;
     }
-
 
     return $formatted;
 }

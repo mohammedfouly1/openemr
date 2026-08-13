@@ -15,9 +15,18 @@
 require_once("../globals.php");
 require_once(\OpenEMR\Core\OEGlobalsBag::getInstance()->getSrcDir() . "/patient.inc.php");
 
+use OpenEMR\Common\Acl\AccessDeniedHelper;
+use OpenEMR\Common\Acl\AclMain;
 use OpenEMR\Core\Header;
 use OpenEMR\Services\PatientService;
 use OpenEMR\Services\Utils\DateFormatterUtils;
+
+if (!AclMain::aclCheckCore('patients', 'op_rep')) {
+    AccessDeniedHelper::denyWithTemplate(
+        "ACL check failed for patients/op_rep: Charts Checked Out",
+        xl("Charts Checked Out")
+    );
+}
 
 ?>
 <html>

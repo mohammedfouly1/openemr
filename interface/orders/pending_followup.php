@@ -24,8 +24,12 @@ use OpenEMR\Core\Header;
 use OpenEMR\Core\OEGlobalsBag;
 use OpenEMR\Services\FacilityService;
 
-if (! AclMain::aclCheckCore('acct', 'rep')) {
-    AccessDeniedHelper::denyWithTemplate("ACL check failed for acct/rep: Pending Followup from Results", xl("Pending Followup from Results"));
+// RDY-0054: the menu declares acl_req ["patients","lab"] for this screen while the
+// file enforced acct|rep. That mismatch let an acct|rep holder reach it by direct URL
+// without ever seeing the menu entry, and denied the clinical staff the menu offered it
+// to. Enforce what the menu declares — this is abnormal-result follow-up, clinical work.
+if (! AclMain::aclCheckCore('patients', 'lab')) {
+    AccessDeniedHelper::denyWithTemplate("ACL check failed for patients/lab: Pending Followup from Results", xl("Pending Followup from Results"));
 }
 
 $facilityService = new FacilityService();
