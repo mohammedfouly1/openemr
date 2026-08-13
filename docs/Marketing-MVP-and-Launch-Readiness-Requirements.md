@@ -1790,6 +1790,35 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-041 (2026-08-13) — Dr Mohamed Taha named; PASS asserted on all 8; recorded but **not closed**
+
+**Reviewer named:** **Dr Mohamed Taha**, ophthalmologist. **Asserted verdict: PASS on all eight
+examinations, no comments.** Recorded in HR-04 exactly as given.
+
+**RDY-0021 does not close on it, for one factual reason:** the state Dr Taha reviewed is not the
+state that exists. PB-040 established that the verification session wrote a **target IOP of 21** onto
+seven exams and **zeroed visual-field quadrant flags** onto all eight, and that the screenshot pack
+**stops before the retina section** — so the diabetic case's macular oedema, hard exudates and CMT
+412 were not in the images. The dataset has since been restored to fingerprint `ad6ea86d…`, which
+means the reviewed artefact and the current artefact differ in clinical content.
+
+**HR-01 §8 requires "the final reviewed dataset version is identified."** It can be — it is simply
+not the current one.
+
+**This is not a challenge to the clinical judgement.** A PASS from a named ophthalmologist is exactly
+what RDY-0021 needs; it needs to be given against the data that will ship. The path is short: the
+re-capture prompt has been issued (per-section captures including retina, with mutation guards), and
+**on Dr Taha's confirmation against `ad6ea86d…` the verdict is recorded and RDY-0021 closes
+immediately.**
+
+**One point to put to him explicitly at re-affirmation**, because it is the item most likely to
+change a verdict and he may not have seen it: **the form displays `Fields: FTCF ☑` — normal visual
+fields — on exam 3, a treated-glaucoma patient with cup/disc 0.7/0.75.** That is unseeded form
+default state, not a recorded finding (HR-01 §4 #1, corrected in PB-040). A blanket PASS given
+without that disclosure was given without a material fact.
+
+**Status: RDY-0021 OPEN — verdict asserted, re-affirmation pending. No gate count moves.**
+
 ## PB-040 (2026-08-13) — HR-01 browser verification reviewed: **the session mutated the dataset**; RDY-0021 cannot close on it
 
 Agent report: `docs/ScreenShoots/HR-01-BrowserVerification.md` (15,555 bytes) · 18 screenshots in
@@ -3556,7 +3585,7 @@ development and does not belong in Phase 2B.
 
 | HR ID | RDY | Reviewer | Role | Dataset Version | Review Date | Verdict | Conditions | Evidence Ref | Closure Eligible |
 |---|---|---|---|---|---|---|---|---|---|
-| **HR-01** | RDY-0021 | **name not supplied** | Qualified ophthalmologist | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **AWAITING REVIEW** — an approval was asserted 2026-08-13 but **cannot be recorded**: no reviewer name, no per-exam verdicts, and the state reviewed was the mutated one (PB-040) | — | — | **NO** |
+| **HR-01** | RDY-0021 | **Dr Mohamed Taha** | Ophthalmologist | **reviewed the MUTATED state, not `ad6ea86d…`** | 2026-08-13 | **ASSERTED: PASS, all 8, no comments** — recorded as asserted. **NOT closure-eligible:** the reviewed state was the one PB-040 found corrupted (target IOP 21, zeroed VF quadrants on all 8), and the screenshot pack omits the retina findings. **Re-affirmation required against the restored dataset** | Re-review vs `ad6ea86d…` after re-capture | verbal, via Owner | **NO — pending re-affirmation** |
 | **HR-01-BV** | RDY-0021 (supporting) | *(automated agent — not a reviewer)* | Browser UI/data verification | mutated during the session | 2026-08-13 | **C1-C5, C7 PASS · C6 FAIL** (upstream `eye_mag` warnings) · **session wrote to all 8 exams** · retina absent from screenshots | Re-capture required | `docs/ScreenShoots/HR-01-BrowserVerification.md` + 18 PNG | **NO — evidence only, never a clinical verdict** |
 | **HR-02** | RDY-0028 | **Mohammed Elfouly** | Legal / Compliance *(basis of authority to be stated by the reviewer)* | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **ASSIGNED — AWAITING REVIEW.** Assignment recorded 2026-08-13; checklist not yet worked, no verdict issued | — | — | **NO** |
 | **HR-03a** | RPT-0009 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
