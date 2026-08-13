@@ -1790,6 +1790,69 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-038 (2026-08-13) — Ophthalmology exams rebuilt before clinical review; review pack issued (§5)
+
+**§5 requires a qualified clinician, which I am not.** What engineering can do is make sure the data
+is worth a clinician's time. It was not, so it was rebuilt first.
+
+### The seeded exams would have failed the review, and I checked before sending them
+
+Inspected against §5's own four criteria, the original eight examinations were:
+
+| Criterion | Original state | Verdict |
+|---|---|---|
+| Clinically plausible | Individually defensible in isolation | Marginal |
+| Internally consistent | Consistent within each row | Pass |
+| **Not random filler** | **All eight carried identical acuity** — 20/40, 20/50, 20/20, 20/25 | **FAIL** |
+| **Appropriate to age / history / problem** | **A glaucoma patient and an asthma patient had identical eyes; the diabetic-retinopathy patient had a normal macula and no retinopathy findings at all** | **FAIL** |
+
+Two further tells: every satellite table except acuity was **empty**, so an examination Source B
+calls a product strength rendered as a blank shell; and dates of birth ran in a strict descending
+sequence, putting the eight exam patients at exactly 71, 70, 69, 68, 67, 66, 65, 64.
+
+**Sending that to a reviewer would have wasted their time and produced eight predictable FAILs.**
+
+### Rebuilt: eight diagnosis-specific examinations
+
+Each exam now carries findings that follow from its patient's recorded problem, with acuity
+consistent with those findings:
+
+| # | Patient / age | Problem | Distinguishing findings |
+|---|---|---|---|
+| 1 | SYN-0001, 78 | Type 2 diabetes | Screening exam, clean macula, no retinopathy |
+| 2 | SYN-0002, 61 | Hypertension | **Arteriolar narrowing, AV nicking** |
+| 3 | SYN-0003, 44 | POAG | **Cup/disc 0.7 / 0.75**, central acuity preserved |
+| 4 | SYN-0004, 71 | Hyperlipidaemia | **Corneal arcus senilis** |
+| 5 | SYN-0005, 55 | Asthma | Early cataract; **asthma deliberately incidental** |
+| 6 | SYN-0006, 37 | Diabetic retinopathy | **Centre-involving oedema, hard exudates, dot-blot haemorrhages, CMT 412 µm**, acuity 20/60 |
+| 7 | SYN-0007, 66 | — | **NS 3+ cataract**, 20/100 unaided improving only to 20/60 |
+| 8 | SYN-0008, 49 | — | **Schirmer 4/5 mm, TBUT 5/6 s** — dry eye carried by tear-film metrics |
+
+Dates of birth now use a coprime stride, so ages scatter (78, 61, 44, 71, 55, 37, 66, 49) instead of
+counting down. Still fully deterministic.
+
+**Full validation re-run after the rebuild: unchanged, all PASS** — 30/72/36/10/12/36/2, cohort 37 =
+36 + 1 planted, 0 unattributed anything, all EV-028 scans 0, 2 duplicate pairs.
+
+### Review pack issued: `docs/evidence/EV-021-clinical-review-pack.md`
+
+A prepared document so the review is an inspection rather than an investigation: every finding
+tabulated, how to open each exam in the application, and a per-exam PASS/FAIL grid with a signature
+block.
+
+**It discloses that the data was rebuilt to satisfy the criteria the reviewer is about to apply** —
+that is a reason to scrutinise it, not to trust it — and it flags eight specific weak points rather
+than leaving the reviewer to find them, including:
+
+- **no intraocular pressure is recorded anywhere**, which is conspicuous on exam 3 whose own
+  presenting complaint is a *"pressure check"* — **flagged as the most likely FAIL**;
+- POAG at 44 and diabetic retinopathy at 37 are both real but atypical, and the record carries no
+  diabetes type or duration to justify the latter;
+- cataract and dry eye (exams 7, 8) are not on the problem list at all.
+
+**RDY-0021 remains OPEN.** I have not marked any exam as passing and have not simulated a clinical
+opinion. The determination is the clinician's, and a FAIL costs one deterministic re-seed.
+
 ## PB-037 (2026-08-13) — Post-seed decisions executed: billing cohort, PHI git control, PR-14 service fix, six-report acceptance
 
 Owner's post-seed decisions §1–§6. **Two more defects found and fixed, both by the acceptance work

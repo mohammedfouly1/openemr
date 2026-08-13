@@ -123,6 +123,87 @@ final class SeedDemoCommand extends Command
         'form_eye_acuity', 'form_eye_refraction', 'form_eye_biometrics', 'form_eye_external',
         'form_eye_antseg', 'form_eye_postseg', 'form_eye_neuro', 'form_eye_locking'];
 
+    /**
+     * Ophthalmology examination profiles, one per seeded exam, **each matched to that patient's
+     * problem list** (see seedAllergiesAndProblems: problems are assigned to patients 1..6 in
+     * this order, and exams are seeded onto the first eight encounters, i.e. patients 1..8).
+     *
+     * Eight identical exams would be filler: a glaucoma patient and an asthma patient cannot
+     * plausibly have the same eyes, and a diabetic-retinopathy patient with a normal macula is
+     * a contradiction a clinician spots instantly. Each profile therefore carries findings that
+     * follow from the diagnosis, and acuity consistent with those findings.
+     *
+     * @var array<int, array<string, string>>
+     */
+    private const EYE_PROFILES = [
+        // 1 — Type 2 diabetes, no retinopathy yet. Screening exam, near-normal.
+        ['dx' => 'Type 2 diabetes mellitus — annual screening',
+            'scod' => '20/25', 'scos' => '20/25', 'mrod' => '20/20', 'mros' => '20/20',
+            'cupod' => '0.3', 'cupos' => '0.3',
+            'macod' => 'Flat, no oedema, no exudate', 'macos' => 'Flat, no oedema, no exudate',
+            'vesod' => 'Normal calibre', 'vesos' => 'Normal calibre',
+            'lensod' => 'Clear', 'lensos' => 'Clear',
+            'cc' => 'Diabetic eye screening, no visual complaint'],
+        // 2 — Hypertension. Arteriolar narrowing and AV nicking, vision preserved.
+        ['dx' => 'Essential hypertension — hypertensive retinopathy grade 1',
+            'scod' => '20/30', 'scos' => '20/25', 'mrod' => '20/20', 'mros' => '20/20',
+            'cupod' => '0.35', 'cupos' => '0.3',
+            'macod' => 'Flat, no oedema', 'macos' => 'Flat, no oedema',
+            'vesod' => 'Arteriolar narrowing, AV nicking', 'vesos' => 'Arteriolar narrowing',
+            'lensod' => 'Trace nuclear sclerosis', 'lensos' => 'Trace nuclear sclerosis',
+            'cc' => 'Routine review, hypertension'],
+        // 3 — Primary open-angle glaucoma. Enlarged cup, preserved central acuity.
+        ['dx' => 'Primary open-angle glaucoma — stable on treatment',
+            'scod' => '20/30', 'scos' => '20/40', 'mrod' => '20/25', 'mros' => '20/25',
+            'cupod' => '0.7', 'cupos' => '0.75',
+            'macod' => 'Flat', 'macos' => 'Flat',
+            'vesod' => 'Normal', 'vesos' => 'Normal',
+            'lensod' => 'Clear', 'lensos' => 'Trace nuclear sclerosis',
+            'cc' => 'Glaucoma follow-up, pressure check'],
+        // 4 — Hyperlipidaemia. Corneal arcus, otherwise unremarkable.
+        ['dx' => 'Hyperlipidaemia — corneal arcus, no ocular sequelae',
+            'scod' => '20/25', 'scos' => '20/30', 'mrod' => '20/20', 'mros' => '20/20',
+            'cupod' => '0.3', 'cupos' => '0.3',
+            'macod' => 'Flat', 'macos' => 'Flat',
+            'vesod' => 'Normal', 'vesos' => 'Normal',
+            'lensod' => 'Clear', 'lensos' => 'Clear',
+            'cc' => 'Routine examination'],
+        // 5 — Asthma is not an ocular condition. Age-related lens change only.
+        ['dx' => 'Early nuclear sclerotic cataract — asthma is incidental',
+            'scod' => '20/40', 'scos' => '20/40', 'mrod' => '20/25', 'mros' => '20/25',
+            'cupod' => '0.3', 'cupos' => '0.35',
+            'macod' => 'Flat', 'macos' => 'Flat',
+            'vesod' => 'Normal', 'vesos' => 'Normal',
+            'lensod' => 'Nuclear sclerosis 1+', 'lensos' => 'Nuclear sclerosis 1+',
+            'cc' => 'Gradual blurring of distance vision'],
+        // 6 — Diabetic retinopathy WITH macular oedema: reduced acuity, raised CMT.
+        ['dx' => 'Moderate non-proliferative diabetic retinopathy with macular oedema',
+            'scod' => '20/80', 'scos' => '20/60', 'mrod' => '20/60', 'mros' => '20/50',
+            'cupod' => '0.35', 'cupos' => '0.3',
+            'macod' => 'Centre-involving oedema, hard exudates', 'macos' => 'Microaneurysms, no oedema',
+            'vesod' => 'Dot-blot haemorrhages, venous beading', 'vesos' => 'Scattered microaneurysms',
+            'lensod' => 'Nuclear sclerosis 1+', 'lensos' => 'Nuclear sclerosis 1+',
+            'cc' => 'Blurred central vision, right worse than left',
+            'cmtod' => '412', 'cmtos' => '268'],
+        // 7 — Visually significant cataract: poor unaided, limited refractive improvement.
+        ['dx' => 'Visually significant nuclear sclerotic cataract, bilateral',
+            'scod' => '20/100', 'scos' => '20/80', 'mrod' => '20/60', 'mros' => '20/50',
+            'cupod' => '0.3', 'cupos' => '0.3',
+            'macod' => 'No view of detail, no gross abnormality', 'macos' => 'Flat',
+            'vesod' => 'Normal', 'vesos' => 'Normal',
+            'lensod' => 'Nuclear sclerosis 3+', 'lensos' => 'Nuclear sclerosis 2+',
+            'cc' => 'Glare at night, difficulty reading'],
+        // 8 — Dry eye: good acuity, abnormal tear film. Schirmer/TBUT carry the diagnosis.
+        ['dx' => 'Dry eye disease — reduced tear film stability',
+            'scod' => '20/25', 'scos' => '20/25', 'mrod' => '20/20', 'mros' => '20/20',
+            'cupod' => '0.3', 'cupos' => '0.3',
+            'macod' => 'Flat', 'macos' => 'Flat',
+            'vesod' => 'Normal', 'vesos' => 'Normal',
+            'lensod' => 'Clear', 'lensos' => 'Clear',
+            'cc' => 'Gritty, burning sensation worse in air conditioning',
+            'schirmerod' => '4', 'schirmeros' => '5', 'tbutod' => '5', 'tbutos' => '6'],
+    ];
+
     /** @var array<int, array{code: string, text: string, fee: float}> */
     private const SERVICES = [
         ['code' => '99213', 'text' => 'Office visit, established patient', 'fee' => 250.00],
@@ -373,7 +454,7 @@ final class SeedDemoCommand extends Command
                 ? self::GIVEN_F[$i % count(self::GIVEN_F)]
                 : self::GIVEN_M[$i % count(self::GIVEN_M)];
             $family = self::FAMILY[$i % count(self::FAMILY)];
-            $dob = sprintf('19%02d-%02d-%02d', 55 + ($i % 40), 1 + ($i % 12), 1 + ($i % 28));
+            $dob = $this->birthDate($i);
 
             $pid = $this->insertPatient($i, $given, $family, $female ? 'Female' : 'Male', $dob);
             if ($pid !== null) {
@@ -390,7 +471,7 @@ final class SeedDemoCommand extends Command
                 ? self::GIVEN_F[$sourceIndex % count(self::GIVEN_F)]
                 : self::GIVEN_M[$sourceIndex % count(self::GIVEN_F)];
             $family = self::FAMILY[$sourceIndex % count(self::FAMILY)];
-            $dob = sprintf('19%02d-%02d-%02d', 55 + ($sourceIndex % 40), 1 + ($sourceIndex % 12), 1 + ($sourceIndex % 28));
+            $dob = $this->birthDate($sourceIndex);
 
             $pid = $this->insertPatient($unique + $d, $given, $family, $female ? 'Female' : 'Male', $dob);
             if ($pid !== null) {
@@ -407,6 +488,24 @@ final class SeedDemoCommand extends Command
         ));
 
         return $pids;
+    }
+
+    /**
+     * Deterministic but non-monotonic date of birth.
+     *
+     * The previous formula (`1955 + index % 40`) walked the years in order, so the first eight
+     * patients — the ones that receive the ophthalmology examinations — came out as a strict
+     * 71, 70, 69, 68 … run. That reads as generated at a glance. Multiplying by a coprime stride
+     * scatters the years across 1948-1992 while staying fully reproducible, and still leaves the
+     * eye-exam patients in a plausible ophthalmology age range.
+     */
+    private function birthDate(int $index): string
+    {
+        $year = 1948 + (($index * 17) % 45);
+        $month = 1 + (($index * 7) % 12);
+        $day = 1 + (($index * 11) % 28);
+
+        return sprintf('%04d-%02d-%02d', $year, $month, $day);
     }
 
     private function insertPatient(int $index, string $given, string $family, string $sex, string $dob): ?int
@@ -655,7 +754,7 @@ final class SeedDemoCommand extends Command
             $this->insertVitals($encounters[$i]);
         }
         for ($i = 0; $i < self::TARGET_EYE_EXAMS && isset($encounters[$i]); $i++) {
-            $this->insertEyeExam($encounters[$i]);
+            $this->insertEyeExam($encounters[$i], self::EYE_PROFILES[$i]);
         }
 
         $this->counts['soap_notes'] = self::TARGET_SOAP;
@@ -742,8 +841,9 @@ final class SeedDemoCommand extends Command
      * them, so a base row alone renders as a broken exam.
      *
      * @param array{eid: int, pid: int, provider: int, date: string} $enc
+     * @param array<string, string> $profile one entry from EYE_PROFILES
      */
-    private function insertEyeExam(array $enc): void
+    private function insertEyeExam(array $enc, array $profile): void
     {
         if ($this->dryRun) {
             return;
@@ -761,11 +861,51 @@ final class SeedDemoCommand extends Command
             QueryUtils::sqlInsert("INSERT INTO `{$table}` SET `id` = ?, `pid` = ?", [$formId, $enc['pid']]);
         }
 
-        // Give the exam actual findings rather than an empty shell: uncorrected and
-        // manifest-refraction visual acuity for both eyes.
+        // Visual acuity, uncorrected and with manifest refraction.
         QueryUtils::sqlStatementThrowException(
             'UPDATE form_eye_acuity SET SCODVA = ?, SCOSVA = ?, MRODVA = ?, MROSVA = ? WHERE id = ?',
-            ['20/40', '20/50', '20/20', '20/25', $formId]
+            [$profile['scod'], $profile['scos'], $profile['mrod'], $profile['mros'], $formId]
+        );
+
+        // Posterior segment: cup/disc, macula, vessels — the findings that make the diagnosis
+        // legible to a reviewer rather than implied by the problem list alone.
+        QueryUtils::sqlStatementThrowException(
+            'UPDATE form_eye_postseg SET ODCUP = ?, OSCUP = ?, ODMACULA = ?, OSMACULA = ?, '
+            . 'ODVESSELS = ?, OSVESSELS = ?, ODDISC = ?, OSDISC = ?, ODCMT = ?, OSCMT = ?, '
+            . 'RETINA_COMMENTS = ? WHERE id = ?',
+            [
+                $profile['cupod'], $profile['cupos'],
+                $profile['macod'], $profile['macos'],
+                $profile['vesod'], $profile['vesos'],
+                'Pink, distinct margins', 'Pink, distinct margins',
+                $profile['cmtod'] ?? '', $profile['cmtos'] ?? '',
+                'SYNTHETIC DEMO — ' . $profile['dx'],
+                $formId,
+            ]
+        );
+
+        // Anterior segment: lens grade carries the cataract picture; Schirmer/TBUT carry dry eye.
+        QueryUtils::sqlStatementThrowException(
+            'UPDATE form_eye_antseg SET ODLENS = ?, OSLENS = ?, ODCORNEA = ?, OSCORNEA = ?, '
+            . 'ODCONJ = ?, OSCONJ = ?, ODAC = ?, OSAC = ?, '
+            . 'ODSCHIRMER1 = ?, OSSCHIRMER1 = ?, ODTBUT = ?, OSTBUT = ? WHERE id = ?',
+            [
+                $profile['lensod'], $profile['lensos'],
+                // Corneal arcus belongs with the lipid profile, nowhere else.
+                str_contains($profile['dx'], 'Hyperlipidaemia') ? 'Arcus senilis' : 'Clear',
+                str_contains($profile['dx'], 'Hyperlipidaemia') ? 'Arcus senilis' : 'Clear',
+                'White and quiet', 'White and quiet',
+                'Deep and quiet', 'Deep and quiet',
+                $profile['schirmerod'] ?? '', $profile['schirmeros'] ?? '',
+                $profile['tbutod'] ?? '', $profile['tbutos'] ?? '',
+                $formId,
+            ]
+        );
+
+        // Presenting complaint, so the record reads as a consultation rather than a data dump.
+        QueryUtils::sqlStatementThrowException(
+            'UPDATE form_eye_hpi SET CC1 = ?, HPI1 = ? WHERE id = ?',
+            [$profile['cc'], 'SYNTHETIC DEMO. ' . $profile['dx'] . '.', $formId]
         );
     }
 
