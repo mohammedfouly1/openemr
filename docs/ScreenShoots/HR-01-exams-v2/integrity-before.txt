@@ -1,0 +1,12 @@
++----+---------+-------------+----------+-------+-------+----------+
+| id | ODIOPAP | ODIOPTARGET | AMSLEROD | ODVF1 | alert | oriented |
++----+---------+-------------+----------+-------+-------+----------+
+|  1 | 14      |             |     NULL |  NULL | yes   | TPP      |
+|  2 | 16      |             |     NULL |  NULL | yes   | TPP      |
+|  3 | 17      | 16          |     NULL |  NULL | yes   | TPP      |
+|  4 | 13      |             |     NULL |  NULL | yes   | TPP      |
+|  5 | 15      |             |     NULL |  NULL | yes   | TPP      |
+|  6 | 16      |             |     NULL |  NULL | yes   | TPP      |
+|  7 | 14      |             |     NULL |  NULL | yes   | TPP      |
+|  8 | 13      |             |     NULL |  NULL | yes   | TPP      |
++----+---------+-------------+----------+-------+-------+----------+

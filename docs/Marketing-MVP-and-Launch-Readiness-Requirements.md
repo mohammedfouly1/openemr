@@ -1790,6 +1790,76 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-042 (2026-08-13) — HR-01 v2: run **self-detected** its own corruption and stopped. Root cause identified; a live hazard for the clinical review
+
+Report: `docs/ScreenShoots/HR-01-BrowserVerification-v2.md` · 71 files in `HR-01-exams-v2/`.
+
+**The integrity guard worked.** The run computed the before/after hash it was required to, found a
+mismatch, **stopped, refused to self-repair, and wrote an incident report instead of evidence.** It
+also declined to fill in the capture and values matrices on the grounds that tabulating a corrupted
+dataset would mislead. That is the correct call, and it is the reason the root cause is now known.
+
+### Root cause — identified by the agent, verified by me
+
+```js
+page.on('dialog', d => d.accept());   // registered to clear beforeunload prompts
+```
+
+The eye_mag form raises a JavaScript `confirm()`:
+`"LOCKED by another user: Select OK to take ownership or CANCEL to enter READ-ONLY mode."`
+**On a confirm, `.accept()` is OK — "take ownership" — which is eye_mag's write path.** It re-saves
+the encounter from in-memory state, persisting defaults over previously-NULL fields. The blanket
+handler committed a defaults-save on every exam it opened.
+
+**This also explains PB-040 retrospectively**, where the v1 run mutated the data and reported itself
+read-only. Same mechanism, undiagnosed at the time. **v1's claim was wrong but not dishonest.**
+
+### Verified independently — the precise trigger
+
+| Test | Result |
+|---|---|
+| Clean fingerprint lock state | `LOCKED = NULL` on all 8 — **the seeded dataset ships unlocked** |
+| **Two** successive authenticated HTTP `GET`s of `view.php` (no JS engine) | **No mutation, no lock.** `ODIOPTARGET` `''`/`16`, `AMSLEROD` NULL, `ODVF1` NULL, `alert` `'yes'`, `oriented` `'TPP'` — all unchanged |
+| Post-v2 live state | `ODIOPTARGET` **21** on 7 exams, `AMSLEROD`/`ODVF1` **0**, `alert`/`oriented` coerced to **1**, `LOCKED = 1` with a session token on all 8 |
+
+**The lock is taken by the page's JavaScript, not by the HTTP request.** A plain fetch cannot
+reproduce it; a real browser can. That is why my earlier single-GET test in PB-040 correctly found no
+mutation and why that test, on its own, was not sufficient to clear the browser path.
+
+> **A measurement error of my own, corrected.** My first attempt at this verification used a
+> PowerShell hash helper that returned an empty string, so its comparison reported
+> `hash-changed: True` on both opens. **That was a broken probe, not a mutation** — direct column
+> reads showed the values were untouched. Recorded because an empty-string comparison silently
+> asserting "changed" is the same class of false signal as PB-032's vacuous scan.
+
+### ⚠ This is a hazard for the human review itself, not only for agents
+
+**Dr Taha, or anyone, opening these exams in a browser will lock them.** On any subsequent open the
+ownership dialog appears, and **clicking OK writes form defaults into the record** — a target IOP of
+21 and zeroed field flags. Clicking **CANCEL** enters read-only and is safe.
+
+**Instruction that must accompany any human review:** *open the exam, read it, and if the "LOCKED by
+another user — take ownership?" dialog appears, click **CANCEL**. Never OK. Do not click Save.*
+
+**Product finding, upstream, not fixed here:** a clinician can silently alter a patient record by
+opening a chart twice and accepting a dialog whose wording is about *ownership*, not about *saving*.
+Raised against RDY-0055 and the RDY-0045 upstream backlog.
+
+### State
+
+**Dataset restored from fingerprint `ad6ea86d…` and verified clean** — `ODIOPTARGET` `''`/`16`,
+`AMSLEROD` NULL, `ODVF1` NULL, `alert` `'yes'`, `oriented` `'TPP'`, `LOCKED` NULL on all 8.
+
+**The 71 v2 files are NOT HR-01 evidence** — they document the mutated state, as the report itself
+says. They are retained for traceability and must not be given to the clinical reviewer.
+
+**Delivered by the failed run, and genuinely valuable:** a proven per-section capture pattern with
+confirmed selectors (`#RETINA_1`, `#ANTSEG_1`, `#LayerVision`, `#LayerTension`,
+`#LayerTechnical_sections_1`), confirmation that the retina panel captures cleanly in a single
+bounding box, and the exact dialog-handler fix. The v3 attempt starts from a working recipe.
+
+**RDY-0021 remains OPEN.** No evidence pack exists yet against the shipped dataset.
+
 ## PB-041 (2026-08-13) — Dr Mohamed Taha named; PASS asserted on all 8; recorded but **not closed**
 
 **Reviewer named:** **Dr Mohamed Taha**, ophthalmologist. **Asserted verdict: PASS on all eight
