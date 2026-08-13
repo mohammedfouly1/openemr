@@ -1790,6 +1790,131 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-040 (2026-08-13) — HR-01 browser verification reviewed: **the session mutated the dataset**; RDY-0021 cannot close on it
+
+Agent report: `docs/ScreenShoots/HR-01-BrowserVerification.md` (15,555 bytes) · 18 screenshots in
+`docs/ScreenShoots/HR-01-exams/`. **A careful, well-written report — and its central read-only claim
+is false.** Three findings, in order of consequence.
+
+### FINDING 1 — the verification session wrote to all eight examinations
+
+The report states: *"No attempt was made to unlock, save, edit, or otherwise mutate any exam. This is
+consistent with the task rule 'read-only'."* **It is not.** Comparing the live database against the
+fingerprint taken immediately after seeding:
+
+| Field | Reviewed fingerprint `ad6ea86d…` | After the session | Seeded by me? |
+|---|---|---|---|
+| `ODIOPTARGET` (exams 1,2,4-8) | `''` | **`21`** | **No — I wrote `''`** |
+| `ODIOPTARGET` (exam 3) | `'16'` | `16` | Yes |
+| `AMSLEROD` / `AMSLEROS` | `NULL` | **`0`** | No |
+| `ODVF1..4` / `OSVF1..4` | `NULL` | **`0`** | **No — removed deliberately in PB-039** |
+| `alert` / `oriented` | `'yes'` / `'TPP'` (column defaults) | **`1` / `1`** | No |
+
+**`21` is the eye_mag form's own default target IOP.** It is a clinical value that no one recorded
+and that I never wrote — the form supplied it and it was persisted.
+
+**The most damaging part: `ODVF1..4` are back at `0`.** PB-039 removed exactly those values because a
+coerced `0` reads as a recorded defect in every quadrant of every eye. The verification session
+reintroduced them, so the state a reviewer looked at asserts **visual-field defects in all four
+quadrants of both eyes on all eight patients**, plus a **target IOP of 21** on seven of them.
+
+**Diagnosed precisely rather than assumed.** I restored the fingerprint and issued a single
+authenticated `GET` of `view.php?id=1` — the exact page load the report describes:
+
+| | `ODIOPTARGET` | `AMSLEROD` | `ODVF1` | `alert` |
+|---|---|---|---|---|
+| Before the view | `''` | NULL | NULL | `'yes'` |
+| **After one view** | `''` | **NULL** | **NULL** | **`'yes'`** |
+
+**Viewing does not mutate.** The corruption came from a **form submit** — the coercion of the string
+defaults `'yes'`/`'TPP'` into integer `1` is the signature of the checkbox POST handler, not a read.
+The eye_mag form renders a live **Save** button and carries a `beforeunload` store path
+(`save.php:355`), either of which fires on an automated pass through the page.
+
+**Resolution:** the dataset has been **restored from the fingerprint and re-validated in full — all
+checks PASS**, and all eight exams are back to `ODIOPTARGET ''/16`, `AMSLEROD NULL`, `ODVF1 NULL`.
+
+**Product finding worth keeping, separate from this phase:** an automated or careless pass over the
+Eye Exam form **persists form defaults into the patient record**. On a live system that means a
+clinician opening a chart and navigating away can silently write a target IOP of 21 and a full set of
+zeroed field flags into a real record. **Not a Thiqa defect — upstream `eye_mag` behaviour — and not
+fixed here.** Raised against RDY-0055 (audit/PHI determination) and the RDY-0045 upstream backlog.
+
+### FINDING 2 — the screenshots do not show the retina, and that is where the clinical content is
+
+Verified by opening the images directly, not from the report's description. `EXAM-6-SYN-0006-full.png`
+renders header → HPI → Vision → Tension → External → Anterior Segment, and **stops at "Anterior
+Segment / Comments"**. Exam 6 is the diabetic macular oedema case, so the image omits:
+
+- `ODMACULA` "Centre-involving oedema, hard exudates"
+- `ODVESSELS` "Dot-blot haemorrhages, venous beading"
+- **CMT 412 / 268**
+- the entire `RETINA_COMMENTS` line
+
+**Those four items are the diagnosis.** The report discloses the truncation honestly (§C5, limitation
+2) and correctly attributes it to a `window.scrollTo` override interacting with `fullPage` capture —
+but it then records C5 as PASS on the grounds that a live reviewer would scroll. **That is right about
+the form and wrong about the evidence:** the PNG pack cannot support a screenshot-based clinical
+review of the one exam whose findings matter most.
+
+### FINDING 3 — the form asserts "normal" findings that were never recorded
+
+Visible in `EXAM-3-SYN-0003-findings.png`, the glaucoma case: **`Fields: FTCF ☑`** (full to
+confrontation — i.e. **normal visual fields**), `Amsler: Normal ☑`, `Pupils: Normal ☑`, `Mental
+Status: Alert ☑ Oriented TPP ☑ Mood/Affect Nml ☑`. **None of these was seeded.**
+
+> **This corrects HR-01 §4 #1, which I wrote.** I told the reviewer *"no formal visual fields are
+> recorded, on any exam"* and that the fields were left NULL. **That was true of the database and
+> misleading about the screen.** The rendered form positively asserts *fields full to confrontation*
+> — on a patient with cup/disc 0.7/0.75 and a treated-glaucoma diagnosis. A reviewer reading the
+> screen sees a normal-fields claim; a reviewer reading my disclosure expects no fields at all. The
+> disclosure is corrected in HR-01 §4 #1 rather than left standing.
+
+### Findings the report got right, verified independently
+
+| Claim | Verified |
+|---|---|
+| C6 FAIL — 9 PHP warnings per page load in `eye_mag_functions.php` | **Confirmed at source.** Line 1820 guards the first offset access with `?? ''` but **not the second** (`$result1[$field_id] == ''`), so a `false` result set warns. Upstream defect, non-fatal, unrelated to seeded data |
+| C3 values match | Spot-checked against the fingerprint: acuity, IOP and cup/disc all correct as seeded |
+| C4 distinctness | Distinctive findings differ per exam; no collision |
+| Exam 3's IOP target is behind the Glaucoma Zone panel | Plausible and well-evidenced; a genuinely useful note for the reviewer |
+| 18 screenshots present | Confirmed on disk |
+
+**The report's honesty is why these findings exist.** It disclosed the fallback navigation, the
+truncation and the console error rather than hiding them. The read-only claim was wrong, but it was
+wrong because the form wrote without being asked — not because the agent misreported what it did.
+
+### Consequence for RDY-0021 — cannot close
+
+**A clinical approval has been asserted, but the closure conditions in HR-01 §8 are not met:**
+
+| HR-01 §8 condition | State |
+|---|---|
+| Reviewed by a **named** qualified reviewer | **NO NAME PROVIDED.** HR-01 §8 requires the named reviewer; HR-04 has no entry |
+| Every exam has a recorded final verdict | **No per-exam verdicts exist** — no PASS / PASS WITH COMMENT / FAIL recorded for any of the eight |
+| Zero unresolved FAILs | Cannot be evaluated without verdicts |
+| Final reviewed dataset version identified | **The version reviewed was the mutated one** — target IOP 21, all VF quadrants 0 — not fingerprint `ad6ea86d…` |
+| Sign-off evidence exists | None on file |
+
+**And the substantive problem, independent of paperwork:** whatever was reviewed either (a) was the
+screenshots, which omit the retina findings for the diabetic case, or (b) was the live app in its
+mutated state, which asserted a target IOP of 21 and zeroed visual fields on every patient. **Neither
+supports a clinical sign-off on the dataset now standing.**
+
+**RDY-0021 remains OPEN.** No verdict has been recorded and no signature fabricated.
+
+### RDY-0028 — named reviewer assigned
+
+**Mohammed Elfouly** is recorded in HR-04 as the **assigned** Legal/Compliance reviewer. That closes
+the outstanding *assignment* action surfaced in EV-028 §6.1 and PB-032.
+
+**It does not close RDY-0028.** Per HR-02 §6 the requirement needs the reviewer to work the §4
+checklist, issue one of the three verdicts, resolve any conditions, and confirm the reviewed dataset
+version. **Still required from him:** role and basis of authority, verdict, date, conditions, and
+confirmation that the version reviewed is fingerprint `ad6ea86d…`.
+
+**No gate count moves.**
+
 ## PB-039 (2026-08-13) — IOP added, a misleading coerced value caught, human review packs issued
 
 ### Correction to PB-038: the missing IOP was my gap, not a product limitation
@@ -3027,7 +3152,8 @@ whether the synthetic record is clinically plausible and **not misleading**.
 
 | # | Concern | Detail |
 |---|---|---|
-| 1 | **No formal visual fields are recorded, on any exam** | The form has confrontation-field quadrant flags (`ODVF1..4`), but they are `tinyint` and their encoding is undocumented in this codebase. A first attempt wrote a text description and MySQL silently coerced it to **0**, which could read as a defect in every quadrant of every eye. The values were removed and left NULL rather than invented. **Perimetry is therefore absent — most consequential for exam 3 (glaucoma).** |
+| 1 | **The form asserts "normal" findings that were never recorded — READ THIS ONE CAREFULLY** | **Corrected 2026-08-13 (PB-040); my earlier wording was misleading.** The *database* stores nothing for confrontation fields (`ODVF1..4` are NULL — a text value was once written and silently coerced to `0`, so it was removed rather than invented). **But the rendered screen is not blank.** It displays **`Fields: FTCF ☑`** — full to confrontation, i.e. **normal visual fields** — plus `Amsler: Normal ☑`, `Pupils: Normal ☑` and `Mental Status: Alert / Oriented TPP / Mood-Affect Nml ☑`. **None of that was seeded; it is form default state rendering as though it were a finding.** On exam 3 this means the screen claims *normal fields* on a patient with cup/disc 0.7/0.75 and treated glaucoma. **Please judge the screen, and treat those four "normal" assertions as unrecorded rather than observed.** No formal perimetry, gonioscopy, pachymetry or OCT-RNFL exists anywhere. |
+| 1b | **Do not save, and beware of anything that submits the form** | An automated pass over these exams **persisted form defaults into the records** — a target IOP of **21** on seven exams and zeroed field flags on all eight (PB-040). The dataset has been restored. **Viewing is safe; submitting is not.** If you open an exam, navigate away without saving. |
 | 2 | **POAG at age 44** (exam 3) | Real but atypical; POAG is usually a diagnosis of >50s |
 | 3 | **Diabetic retinopathy with macular oedema at age 37** (exam 6) | Plausible for long-duration type 1 diabetes — but see #4 |
 | 4 | **No diabetes type or duration is recorded** (exams 1, 6) | The problem list says only *"Type 2 diabetes mellitus"* and *"Diabetic retinopathy"*. The record does not itself justify exam 6's age |
@@ -3430,8 +3556,9 @@ development and does not belong in Phase 2B.
 
 | HR ID | RDY | Reviewer | Role | Dataset Version | Review Date | Verdict | Conditions | Evidence Ref | Closure Eligible |
 |---|---|---|---|---|---|---|---|---|---|
-| **HR-01** | RDY-0021 | *(not yet assigned)* | Qualified ophthalmologist | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **AWAITING REVIEW** | — | — | **NO** |
-| **HR-02** | RDY-0028 | *(not yet assigned)* | Legal / Compliance | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **AWAITING REVIEW** | — | — | **NO** |
+| **HR-01** | RDY-0021 | **name not supplied** | Qualified ophthalmologist | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **AWAITING REVIEW** — an approval was asserted 2026-08-13 but **cannot be recorded**: no reviewer name, no per-exam verdicts, and the state reviewed was the mutated one (PB-040) | — | — | **NO** |
+| **HR-01-BV** | RDY-0021 (supporting) | *(automated agent — not a reviewer)* | Browser UI/data verification | mutated during the session | 2026-08-13 | **C1-C5, C7 PASS · C6 FAIL** (upstream `eye_mag` warnings) · **session wrote to all 8 exams** · retina absent from screenshots | Re-capture required | `docs/ScreenShoots/HR-01-BrowserVerification.md` + 18 PNG | **NO — evidence only, never a clinical verdict** |
+| **HR-02** | RDY-0028 | **Mohammed Elfouly** | Legal / Compliance *(basis of authority to be stated by the reviewer)* | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **ASSIGNED — AWAITING REVIEW.** Assignment recorded 2026-08-13; checklist not yet worked, no verdict issued | — | — | **NO** |
 | **HR-03a** | RPT-0009 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
 | **HR-03b** | RPT-0028 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
 
