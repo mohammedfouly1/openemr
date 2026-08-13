@@ -1790,6 +1790,166 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-037 (2026-08-13) — Post-seed decisions executed: billing cohort, PHI git control, PR-14 service fix, six-report acceptance
+
+Owner's post-seed decisions §1–§6. **Two more defects found and fixed, both by the acceptance work
+itself.** §4, §5, §7 and §8 remain blocked on named humans — see the end of this entry.
+
+### §2 — Patient-document git safety control (P0, Owner-authorised)
+
+**Inventory before:** 16 **tracked** structural files under `sites/default/documents` (`.htaccess`,
+category READMEs, the five onsite-portal templates, `custom_menus` JSON) and 10 untracked per-patient
+payload directories holding 20 files.
+
+Rule added, scoped to the numeric per-patient directories only:
+
+```gitignore
+sites/*/documents/[0-9]*/
+```
+
+| Acceptance criterion | Result |
+|---|---|
+| 1 · every seeded patient-document file ignored | **PASS — 20 of 20** |
+| 2 · `git check-ignore -v` proves the exact rule | **PASS** — `.gitignore:105:sites/*/documents/[0-9]*/` |
+| 3 · `git add -A --dry-run` contains zero payloads | **PASS — 0** |
+| 4 · tracked structural content unaffected | **PASS** — still 16 tracked, **0** now ignored; `.htaccess`, `edi/`, `era/`, `certificates/README.md`, portal templates all individually confirmed visible |
+| 5 · no patient document in git history | **PASS — 0** |
+| 6 · no document content printed here | **PASS** — filenames and counts only |
+
+**Two negative controls**, because a rule that only matches today's ten directories would decay
+silently: future patients (`/31/`, `/9999/`, `/100/`) and a second tenant (`sites/tenant2/`) are all
+ignored, while `temp/`, `couchdb/`, `custom_menus/` and `procedure_results/` are **not** over-caught.
+Key-material controls from PB-035 re-verified unregressed.
+
+**Recorded as a production-PHI prevention control under RDY-0048**, not demo cleanup: on this
+instance those files are synthetic and marked, but the identical path on a live instance holds real
+patient records, and git history does not forget.
+
+### §1 — BILLING-EXPECTED DEMO COHORT, replacing the `billed = 0` stand-in
+
+The locked totals are unchanged (72 encounters, 36 charges). The cohort makes them coherent:
+
+| | |
+|---|---|
+| **Cohort** | **37 encounters**, the most recent contiguous window **2026-05-15 … 2026-08-13** |
+| **Charged** | **36** |
+| **Planted missing charge** | **1 — encounter `36`, patient `SYN-0019` (Dalal Alshamrani), 2026-06-29.** Genuinely **no `billing` row at all** |
+| **Outside the cohort** | **35** clinical / no-charge encounters — reviews and post-ops, **explicitly not billing defects** |
+
+**Why a date window:** it is the filter the reconciliation reports actually expose
+(`appt_encounter_report.php`, `encounters_report.php`). A cohort no report can isolate would not be
+demonstrable, which was the point of the requirement.
+
+**The `billed = 0` stand-in is gone.** All 36 charges are now `billed = 1` (verified: `billed=0`
+count is **0**). A charge flagged unbilled and an encounter with no charge are different findings,
+and conflating them would misrepresent what the reconciliation detects.
+
+**Verified — the report finds it.** RPT-0012 over the cohort window returns 52,854 bytes and its
+output contains **`SYN-0019` / `Alshamrani` and encounter `36`**. Query-level confirmation: 37 in
+window, 36 with charges, **exactly 1 without**.
+
+### §3 — `SOURCE-CONFIRMED REL-820 SERVICE-LAYER ATTRIBUTION DEFECT` → **service fixed** (PR-14)
+
+**Reachability analysis, as required:**
+
+| Caller | Reaches it? | Evidence |
+|---|---|---|
+| Normal staff UI | **NO** | `interface/forms/soap/save.php` → `C_FormSOAP.class.php:78` uses `addForm()` — correctly attributed |
+| **REST / API** | **YES — live registered route** | `POST /api/patient/:pid/encounter/:eid/soap_note`, `apis/routes/_rest_routes_standard.inc.php:173-179`, gated `encounters\|notes` → `EncounterRestController::postSoapNote()` → `insertSoapNote()` |
+| Module / service callers | Only the Thiqa seeder | `insertSoapNote` has exactly two callers in the tree |
+| Thiqa seeder | Yes, by design | Compensation now **removed** |
+
+**Because the REST route is live, §3's first branch applies: the service was fixed, not worked
+around.** Any pilot customer writing SOAP notes over the API would otherwise accumulate clinical
+notes attributed to nobody — a data-integrity defect in the shipping product, directly against the
+audit-trail claim (MC-01, D-1).
+
+**Core-file edit, so it carries a numbered patch record: `PR-14` in
+`docs/branding/adr/patch-records.md`** — the first non-branding entry in that document, recorded
+there because Invariant 4 / Q1 governs every core edit regardless of motive. The fix mirrors
+`FormService::addForm()` exactly (same two session keys), introducing no new convention. Upstream-first
+disposition recorded: it is an upstream `rel-820` defect and should be contributed back, which RDY-0045's
+undecided maintenance target currently blocks.
+
+**Proven by removing the compensation first.** The seeder no longer patches attribution, so the
+result tests the service itself: **18 SOAP rows, 0 unattributed**, all `admin`/`Default` — matching
+Eye Exam, Vitals and Encounter rows. Dataset-wide, **0 forms of any kind are unattributed.**
+
+### §6 — Per-report acceptance for the six locked demo reports
+
+Each report driven with **its own** parameters, method and CSRF handling. The previous generic probe
+is retired.
+
+| # | Report | Result |
+|---|---|---|
+| 1 | **RPT-0009** Appointments | **PASS** — 50,247 bytes, 81 rows, seeded patients. **CSV export PASS** — `application/Csv`, `attachment; filename=appts.Csv`, 39 lines, quoted header, real provider/patient/status values |
+| 2 | **RPT-0011** Encounters | **PASS** — 51,622 bytes, 77 rows, seeded |
+| 3 | **RPT-0012** Appointments and Encounters | **PASS** — 52,854 bytes; **identifies the planted missing-charge case** |
+| 4 | **RPT-0028** Patient Ledger | **PASS** — requires `?form=` **and** `patient_id=`; with both, 27,678 bytes / 27 rows for `SYN-0001`, showing codes `99213`+`92014` and `250.00`+`350.00`, **reconciling exactly** to that patient's 2 charges / 600.00 SAR in the database |
+| 5 | **RPT-0027** Collections and Aging | **PASS** — 54,132 bytes, 53 rows, seeded |
+| 6 | **RPT-0053** Audit Log Tamper | **PASS** — both Administrators HTTP 200, 7,316 bytes, **"No audit log tampering detected"**; **all five non-admin accounts ACL-denied** |
+
+> **The four previously "inconclusive" reports are resolved, and none was empty for the reason a
+> generic probe implied.** RPT-0028 needed two GET parameters it never received. RPT-0053 needed a
+> CSRF token even on GET. RPT-0011 and RPT-0027 were always fine. **RPT-0009 was genuinely broken —
+> see below.**
+
+#### A real defect the per-report work caught: the seeded recurring appointment killed RPT-0009
+
+RPT-0009 returned only its table headers. Cause, from the error log rather than inference:
+
+```
+PHP Fatal error: Allowed memory size of 536870912 bytes exhausted
+  in library/appointments.inc.php on line 250
+```
+
+**My seeded recurring series set `event_repeat_freq_type = 5`.** The calendar's own form
+(`add_edit_event.php:1476`) offers `0 day, 4 workday, 1 week, 2 month, 3 year`, and comments that
+**5 and 6 are reserved** for dynamically-built recurrences carrying extra spec fields. With type 5
+and the ordinary spec, `__increment()` never advances the date, so the expansion loop at
+`appointments.inc.php:243` appends forever until PHP dies.
+
+**This is a seeder defect I introduced, not an upstream one**, and it broke a locked demo report
+outright. Fixed to `1` (weekly — what a weekly post-operative review is), with `exdate` present so
+the expansion stops warning. After the fix RPT-0009 returns 81 rows. **A generic probe recorded this
+as "inconclusive"; the per-report workflow found a fatal.** That is the argument for §6.
+
+#### ⚠ Two authorization expectations in §24.3 do not match the live ACL configuration
+
+Measured across all seven accounts. Both are **discrepancies in the document's expectation, not
+defects in the fix** — but they change what can be demonstrated:
+
+| Report | §24.3 expects | Measured | Consequence |
+|---|---|---|---|
+| **RPT-0009** | Front Office **yes**, Clinician **no** | **All seven ALLOW** | `patients\|appt` is held by `front`, `clin`, `doc`, `back` and `admin` alike, so this report has **no negative case** and cannot serve as an authorization demo |
+| **RPT-0028** | Accounting **yes**, Physician **no** | **Physician ALLOW** | `doc` holds `acct\|rep` (confirmed in the live grant matrix), so the intended physician denial does not occur |
+
+**Neither is reported as an authorization failure**, because the ACL grants are the ones design A+
+deliberately provisioned. **§24.3's expectations were written before those grants were measured.**
+Either the document is corrected, or the grants change — that is an Owner decision, recorded here
+rather than resolved by editing whichever side is more convenient.
+
+> **A 403 was decomposed every time, never recorded bare.** RPT-0053 returns 403 to *everyone*
+> including `admin` when no CSRF token accompanies the GET. The decisive evidence is the application's
+> own audit log, which names ACL denials: during the run it recorded `admin/super: Audit Log Tamper
+> Report` denials for exactly `y.alharbi`, `s.almutairi`, `r.aldosari`, `k.alotaibi`, `m.alzahrani`
+> — **and neither Administrator.** That is an ACL verdict, not a status code guess.
+
+### Status — what is and is not closed
+
+**No RDY is closed by this entry. No gate count moves.** RDY-0058's six reports now all return
+non-empty output and two reconcile to the manifest, and RDY-0059 has one CSV export proven
+end-to-end — but both remain open pending the clinical and human sign-offs below.
+
+**Blocked on named humans, and no further engineering will clear them:**
+
+| Item | The single action required |
+|---|---|
+| **§4 · RDY-0028** | **Assign a named Legal/Compliance reviewer and obtain sign-off on the synthetic-data control.** EV-028 §6.1 states the minimum decision. The technical controls are PASS evidence; they are **not** the sign-off, and RDY-0028 stays open |
+| **§5 · RDY-0021** | **A qualified clinical reviewer must inspect all 8 ophthalmology examinations** and record PASS/FAIL each for plausibility, internal consistency, non-filler content and fit to the patient's age/history. **No clinician sign-off, no closure.** I am not qualified to give this and have not simulated it |
+| **§7 · RDY-0044-B** | Blocked on both of the above completing |
+| **§8 · D-7** | Blocked on RDY-0044-B's reset proof |
+
 ## PB-036 (2026-08-13) — **MARKETING MVP SEED v1 EXECUTED** — full dataset seeded, validated, three defects found and fixed
 
 The database has clinical data for the first time. `patient_data` **0 → 30**, `form_encounter`

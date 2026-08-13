@@ -84,6 +84,19 @@ final class SeedDemoCommand extends Command
     private const TARGET_ADJUSTMENTS = 4;
     private const DUPLICATE_PAIRS = 2;
 
+    /**
+     * The billing-expected demo cohort: 37 encounters for which a charge is legitimately
+     * expected. 36 carry charges; the one at PLANTED_MISSING_CHARGE_INDEX has none.
+     * The other 35 encounters in the dataset are clinical / no-charge visits, not defects.
+     */
+    private const COHORT_SIZE = 37;
+
+    /**
+     * Deliberately mid-cohort rather than first or last, so finding it requires the
+     * reconciliation report rather than looking at either end of the list.
+     */
+    private const PLANTED_MISSING_CHARGE_INDEX = 18;
+
     /** The pre-seed rollback baseline this seed depends on (RDY-0044-A / PB-031). */
     private const BASELINE_SHA256 = '18564f74b01dc505a3bc70e5674837ae89b9f61061b728772235ad5933661e71';
     private const BASELINE_PATH = 'C:/openemr-stack/backups/protected/rdy0044a/'
@@ -126,6 +139,9 @@ final class SeedDemoCommand extends Command
     /** @var array<string, int> */
     private array $counts = [];
     private bool $dryRun = false;
+    private string $plantedMissingCharge = '(not seeded)';
+    private string $cohortFrom = '';
+    private string $cohortTo = '';
 
     protected function configure(): void
     {
@@ -670,15 +686,14 @@ final class SeedDemoCommand extends Command
                 . 'progress. (SYNTHETIC DEMO)',
         ]);
 
-        // UPSTREAM DEFECT WORKAROUND — see EncounterService::insertSoapNote(), which builds its
-        // `forms` insert without `user` or `groupname` (unlike addForm(), which every other form
-        // path uses). Every SOAP note created through that service is therefore unattributed in
-        // `forms`. Left alone, the demo would show 18 clinical notes authored by nobody, which is
-        // exactly the detail an alert IT gatekeeper notices in the audit trail.
+        // Attribution is no longer corrected here: the service itself now records `user` and
+        // `groupname` (patch record PR-14). Only the date is adjusted, because
+        // `insertSoapNote()` hard-codes `date = NOW()` and a note must carry its encounter's date
+        // for the six-month clinical history to read correctly.
         if (is_array($result) && isset($result[1])) {
             QueryUtils::sqlStatementThrowException(
-                'UPDATE forms SET user = ?, groupname = ?, date = ? WHERE id = ?',
-                ['admin', 'Default', $enc['date'], $result[1]]
+                'UPDATE forms SET date = ? WHERE id = ?',
+                [$enc['date'], $result[1]]
             );
         }
     }
@@ -867,9 +882,23 @@ final class SeedDemoCommand extends Command
                 $this->facilityId,
                 $this->authUserId,
                 $this->providerIds[0],
-                'a:5:{s:17:"event_repeat_freq";s:1:"1";s:22:"event_repeat_freq_type";s:1:"5";'
-                . 's:19:"event_repeat_on_num";s:1:"1";s:19:"event_repeat_on_day";s:1:"0";'
-                . 's:20:"event_repeat_on_freq";s:1:"0";}',
+                // event_repeat_freq_type MUST be one of the regular types the calendar emits:
+                // 0 day, 1 week, 2 month, 3 year, 4 workday (add_edit_event.php:1476).
+                // 5 and 6 are reserved for the dynamically-built recurrences and carry extra
+                // spec fields; with type 5 and these values __increment() never advances the
+                // date, so fetchEvents() loops forever and the Appointments Report dies with
+                // "Allowed memory size exhausted". This is weekly (1), which is what a weekly
+                // post-operative review actually is.
+                //
+                // `exdate` is present-but-empty because the expansion reads it unconditionally.
+                serialize([
+                    'event_repeat_freq' => '1',
+                    'event_repeat_freq_type' => '1',
+                    'event_repeat_on_num' => '1',
+                    'event_repeat_on_day' => '0',
+                    'event_repeat_on_freq' => '0',
+                    'exdate' => '',
+                ]),
             ]
         );
     }
@@ -994,10 +1023,43 @@ final class SeedDemoCommand extends Command
     {
         $io->section('Billing');
 
-        $charges = 0;
-        $billable = array_slice($encounters, 0, self::TARGET_CHARGES);
+        // ---- BILLING-EXPECTED DEMO COHORT (Owner decision, 2026-08-13) -------------------
+        //
+        // 37 encounters are "billing-expected": a charge is legitimately expected for each.
+        // 36 carry charges; **exactly one is planted with no charge record at all** — that is
+        // the missing-charge case the Appointments-and-Encounters reconciliation must find.
+        //
+        // The remaining 35 encounters are clinical / no-charge visits (reviews, post-ops) and
+        // are NOT billing defects. That distinction is the whole point: a demo where every
+        // uncharged encounter is an error teaches the viewer the wrong thing.
+        //
+        // The cohort is the **most recent 37 encounters**, i.e. a contiguous date window, because
+        // date range is the filter `appt_encounter_report.php` and `encounters_report.php`
+        // actually expose. A cohort that no report can isolate would not be demonstrable.
+        $cohort = array_slice($encounters, 0, self::COHORT_SIZE);
+        $plantedIndex = self::PLANTED_MISSING_CHARGE_INDEX;
+        $this->cohortFrom = end($cohort)['date'];
+        $this->cohortTo = $cohort[0]['date'];
 
-        foreach ($billable as $i => $enc) {
+        $charges = 0;
+
+        foreach ($cohort as $i => $enc) {
+            if ($i === $plantedIndex) {
+                // THE PLANTED CASE. No addBilling() call at all — genuinely no charge record,
+                // not a charge flagged unbilled. Recorded in the manifest by synthetic id.
+                $this->plantedMissingCharge = sprintf(
+                    'encounter %d / patient %s (%s)',
+                    $enc['eid'],
+                    (string) QueryUtils::fetchSingleValue(
+                        'SELECT pubpid FROM patient_data WHERE pid = ?',
+                        'pubpid',
+                        [$enc['pid']]
+                    ),
+                    substr($enc['date'], 0, 10)
+                );
+                continue;
+            }
+
             $svc = self::SERVICES[$i % count(self::SERVICES)];
 
             if (!$this->dryRun) {
@@ -1023,30 +1085,34 @@ final class SeedDemoCommand extends Command
                 // same ageing bucket and the A/R ageing report would show a single band. Backdate
                 // to the encounter's own date, which is what makes the ageing report meaningful.
                 //
-                // The last charge is deliberately left `billed = 0` so the unbilled/pending
-                // report has exactly one hit; the rest are marked billed.
-                $isLast = ($i === count($billable) - 1);
+                // All 36 are marked billed. `billed = 0` is deliberately NOT used to stand in for
+                // the missing-charge case (Owner decision): a charge flagged unbilled and an
+                // encounter with no charge at all are different findings, and conflating them
+                // would misrepresent what the reconciliation report detects.
                 QueryUtils::sqlStatementThrowException(
-                    'UPDATE billing SET date = ?, billed = ? WHERE id = ?',
-                    [$enc['date'], $isLast ? 0 : 1, $billingId]
+                    'UPDATE billing SET date = ?, billed = 1 WHERE id = ?',
+                    [$enc['date'], $billingId]
                 );
             }
             $charges++;
         }
 
         $this->counts['charges'] = $charges;
-        $this->counts['unbilled_encounters'] = 1;
+        $this->counts['billing_expected_cohort'] = self::COHORT_SIZE;
+        $this->counts['planted_missing_charge'] = 1;
+        $this->counts['clinical_no_charge_encounters'] = count($encounters) - self::COHORT_SIZE;
 
         $payments = $this->seedFinancialEvents($encounters, $payers);
         $this->counts['payments'] = $payments['payments'];
         $this->counts['adjustments'] = $payments['adjustments'];
 
         $io->writeln(sprintf(
-            '  %d charges (1 encounter left deliberately unbilled), %d payments, %d adjustments',
+            '  cohort %d = %d charged + 1 planted missing-charge; %d clinical/no-charge encounters',
+            self::COHORT_SIZE,
             $charges,
-            $payments['payments'],
-            $payments['adjustments']
+            count($encounters) - self::COHORT_SIZE
         ));
+        $io->writeln(sprintf('  %d payments, %d adjustments', $payments['payments'], $payments['adjustments']));
     }
 
     /**
@@ -1154,6 +1220,13 @@ final class SeedDemoCommand extends Command
         $io->writeln('  Marker:     ' . self::MARKER . 'nnnn in patient_data.pubpid');
         $io->writeln('  Author:     user id ' . $this->authUserId);
         $io->writeln('  Baseline:   RDY-0044-A ' . substr(self::BASELINE_SHA256, 0, 16) . '… (hash verified this run)');
+        $io->newLine();
+        $io->writeln('  <comment>BILLING-EXPECTED DEMO COHORT</comment>');
+        $io->writeln(sprintf('    Size:              %d encounters', self::COHORT_SIZE));
+        $io->writeln(sprintf('    Date window:       %s … %s', substr($this->cohortFrom, 0, 10), substr($this->cohortTo, 0, 10)));
+        $io->writeln(sprintf('    Charged:           %d', self::TARGET_CHARGES));
+        $io->writeln('    PLANTED MISSING CHARGE: ' . $this->plantedMissingCharge);
+        $io->writeln('    Outside the cohort: clinical / no-charge visits — NOT billing defects');
         $io->newLine();
 
         $rows = [];
