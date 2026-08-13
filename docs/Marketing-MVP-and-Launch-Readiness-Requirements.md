@@ -1936,6 +1936,38 @@ reviewer** (§6.1 of EV-028 states the minimum decision); RDY-0044-B does not ex
 **Rollback:** one command to the PB-031 baseline, exercised **four times** during this entry and
 correct every time.
 
+### ⚠ NEW EXPOSURE, surfaced by the seed itself: patient documents are not gitignored
+
+Seeding the 10 specimen documents created `sites/default/documents/1/` … `/10/`, containing the
+stored files. **They are untracked and not covered by any ignore rule.**
+
+```
+git add -A --dry-run  →  20 patient-document files would be staged
+```
+
+**This is the same landmine PB-035 just removed for key material, in a different directory** — and
+in production this one is worse, because that path holds **real patient documents**, not synthetic
+ones. Today the contents are marked `SYNTHETIC DEMO / NOT A REAL PATIENT`, so committing them would
+be untidy rather than a disclosure. On a live instance it would be a PHI breach in the git history.
+
+> **A misleading measurement, corrected immediately.** `git check-ignore -v` run against the
+> *directory* `sites/default/documents/1/` printed a `.gitignore:74` match, which reads as "already
+> ignored." **Line 74 is the branding-output rule and has nothing to do with documents.** The
+> file-level check is unambiguous — `FILE NOT IGNORED` — and `git add -A --dry-run` agrees by
+> listing all 20. **The directory-level check answered a question I had not asked.** Recorded
+> because the misleading form of the check is the one most people would reach for first.
+
+**NOT fixed here.** The Owner's §4 authorisation was explicitly scoped to *"the current untracked
+cryptographic key files"*, and patient-document storage is a different category with a larger blast
+radius. **It needs its own decision.** Recommended rule, by symmetry with PB-035 and narrow to the
+storage path:
+
+```gitignore
+sites/*/documents/[0-9]*/
+```
+
+Carried as a second open finding under **RDY-0048**, beside the `sqlconf.php` credential posture.
+
 ## PB-035 (2026-08-13) — Cryptographic key exposure CLOSED by a tracked `.gitignore` control (Owner-authorised)
 
 PB-033 found four untracked key files protected by nothing but careful staging discipline. **A
