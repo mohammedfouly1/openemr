@@ -88,4 +88,19 @@ interface/modules/custom_modules/oe-module-thiqa-branding/public/branding/
 sites/*/documents/certificates/*.key
 sites/*/documents/logs_and_misc/methods/*
 !sites/*/documents/logs_and_misc/methods/README.md
+
+# Patient document payloads. OpenEMR stores each patient's uploaded documents in a
+# directory named for their patient id, so `sites/<site>/documents/1/`, `/2/`, …
+# hold the actual file contents.
+#
+# **This is a production-PHI prevention control, not demo housekeeping.** On this
+# instance the payloads are synthetic and marked; on a live instance the same paths
+# hold real patient records, and a single `git add -A` would write them into git
+# history permanently, where deletion does not remove them.
+#
+# Deliberately matches only the numeric per-patient directories. The tracked
+# structural content of this tree — .htaccess, the category READMEs, the onsite
+# portal templates, custom_menus JSON — must stay visible, so the whole
+# `sites/*/documents` tree is NOT ignored.
+sites/*/documents/[0-9]*/
 # ===== Thiqa SaaS fork — end fork-owned rules =====
