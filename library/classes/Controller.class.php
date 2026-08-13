@@ -49,9 +49,37 @@ class Controller extends Smarty implements ControllerInterface
      * ACL requirements for controllers.
      * Maps controller name to [section, value, display_name].
      */
+    /**
+     * Every controller in VALID_CONTROLLERS must appear here. checkControllerAcl()
+     * now treats an absent entry as a configuration error and denies, so adding a
+     * controller to the whitelist without a permission fails closed rather than
+     * silently exposing it (RDY-0052).
+     *
+     * Permissions are taken from the menu's own acl_req where the screen is
+     * menu-linked, and otherwise from the ACO whose documented purpose matches the
+     * controller's function. No new ACO is introduced here.
+     */
     private const CONTROLLER_ACL_MAP = [
+        // Menu-declared: standard.json "Practice Settings" -> admin|practice
         'practice_settings' => ['admin', 'practice', 'Practice Settings'],
+        // Pre-existing mapping, retained.
         'prescription' => ['patients', 'rx', 'Prescriptions'],
+        // Menu-declared: standard.json "New Documents" -> patients|docs
+        'document' => ['patients', 'docs', 'Documents'],
+        // Document taxonomy is a system-wide configuration surface.
+        'document_category' => ['admin', 'super', 'Document Categories'],
+        // Patient lookup returns demographics; same permission the finder screens use.
+        'patient_finder' => ['patients', 'demo', 'Patient Finder'],
+        // Drug/pharmacy catalogue maintenance -> "Inventory Administration".
+        'pharmacy' => ['admin', 'drugs', 'Pharmacy'],
+        // Payer records are billing reference data.
+        'insurance_company' => ['acct', 'bill', 'Insurance Companies'],
+        // Per-provider payer identifiers are practice configuration.
+        'insurance_numbers' => ['admin', 'practice', 'Insurance Numbers'],
+        // X12 clearinghouse partners are billing-transport configuration.
+        'x12_partner' => ['acct', 'bill', 'X12 Partners'],
+        // HL7 message handling is an interface/administration surface.
+        'hl7' => ['admin', 'super', 'HL7 Interface'],
     ];
 
     public $template_mod;
@@ -131,7 +159,13 @@ class Controller extends Smarty implements ControllerInterface
     private function checkControllerAcl(string $controllerName): void
     {
         if (!isset(self::CONTROLLER_ACL_MAP[$controllerName])) {
-            return;
+            // RDY-0052: previously this returned, leaving any controller absent from the
+            // map completely ungated. Fail closed instead — a whitelisted controller with
+            // no declared permission is a configuration error, not a public endpoint.
+            $this->throwAccessDenied(
+                "No ACL mapping declared for controller '$controllerName'",
+                xl('Access Denied')
+            );
         }
 
         [$section, $value, $displayName] = self::CONTROLLER_ACL_MAP[$controllerName];
