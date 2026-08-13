@@ -71,4 +71,21 @@ SETUP-STATUS.local.md
 # there is one directory per site here. Without this rule a routine `git add -A`
 # commits tenant runtime state into the source tree (docs/RebrandingBugs.md RB-04).
 interface/modules/custom_modules/oe-module-thiqa-branding/public/branding/
+
+# Runtime-generated cryptographic key material. These are created by the running
+# application, never by a developer, and must never enter version control.
+#
+#   certificates/*.key                 OAuth2 keypair, written by setupOAuthKeys()
+#   logs_and_misc/methods/<version><a|b>   site encryption keys (AES + HMAC pair)
+#                                      per OpenEMR\Common\Crypto\KeyVersion
+#
+# Without these rules the files appear in `git status` as ordinary untracked files,
+# indistinguishable from a document someone forgot to add, and a single `git add -A`
+# commits live private keys (Phase 2B PB-033/PB-035, RDY-0048).
+#
+# Scoped deliberately to these two directories. A blanket `*.pem`, `*.key` or
+# `sites/**` rule would risk hiding legitimate repository content.
+sites/*/documents/certificates/*.key
+sites/*/documents/logs_and_misc/methods/*
+!sites/*/documents/logs_and_misc/methods/README.md
 # ===== Thiqa SaaS fork — end fork-owned rules =====

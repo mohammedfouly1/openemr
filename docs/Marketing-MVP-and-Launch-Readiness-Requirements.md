@@ -350,7 +350,7 @@ debt is carried forward explicitly so that no downstream phase mistakes it for c
 | `upstream` | `https://github.com/openemr/openemr.git` | Unchanged | EV-001 §A1 | NO DRIFT |
 | Fork divergence | **0 ahead / 373 behind `upstream/master`**; HEAD a plain ancestor of upstream | **33 ahead / 418 behind** the *local* `upstream/master` ref (`feaf85c14`, ref last updated 2026-08-10); **HEAD is NO LONGER an ancestor of upstream** | EV-001 §A2 | **DRIFT — REGRESSED** (distance grew; branch has diverged) |
 | Current remote `upstream/master` | not observed | **`6f019d2fcb887e112bc099c0b7383d3f8f59e6dd`** via `git ls-remote` — **differs from the local ref, so the local ref is itself stale** | EV-001 §A2 | Observed; no fetch performed |
-| Branch push state | not observed | `origin/feat/thiqa-branding-foundation` = **`203f24de5`** — **13 local commits unpushed** | EV-001 §A2 | Newly observed |
+| Branch push state | not observed | `origin/feat/thiqa-branding-foundation` = **`203f24de5`** — ~~13 local commits unpushed~~ **CORRECTED 2026-08-13 (PB-033): the count at that same origin ref was **12**, not 13.** Now **16 unpushed** after PB-033's four commits. Still unpushed, so still a single-machine risk | EV-001 §A2 | Newly observed; count corrected |
 | Working tree | 1 modified tracked file (`sqlconf.php`), 1 staged deletion, 8 untracked paths | **0 modified, 0 staged, 4 untracked** (1 `.docx` + the 3 marketing documents) | EV-001 §A3 | **DRIFT — IMPROVED** |
 | `sites/default/sqlconf.php` | tracked, carries local credentials, **shows as modified** | tracked, still carries local credentials in the working tree, but **`skip-worktree` is set** so it no longer appears in `git status`; **the committed blob is pristine (`$config = 0`, blob `e6be847`) — no credential has ever been committed** | EV-001 §A4 | **DRIFT — IMPROVED** (see §45 for the caveat) |
 | Untracked / gitignored module | `oe-module-claimrev-connect` — composer-installed, source not under version control | Unchanged — directory present, **0 files tracked**, required in `composer.json` as `claimrevolution/oe-module-claimrev-connect: ^2.1` and pinned in `composer.lock` | EV-001 §C1 | NO DRIFT |
@@ -1789,6 +1789,251 @@ Authenticated sessions, real page fetches, string-level confirmation that config
 a real session. They prove the value reaches the rendered page. They do **not** prove visual
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
+
+## PB-035 (2026-08-13) — Cryptographic key exposure CLOSED by a tracked `.gitignore` control (Owner-authorised)
+
+PB-033 found four untracked key files protected by nothing but careful staging discipline. **A
+discipline fails the first time someone is in a hurry.** Owner authorised a narrow tracked
+`.gitignore` change; this records the enumeration, classification, rule and proofs.
+
+### 1. Enumeration and classification — four paths, types only, no key bytes read
+
+| Path | Bytes | Classification |
+|---|---:|---|
+| `sites/default/documents/certificates/oaprivate.key` | 1,874 | **PEM PRIVATE KEY** — OAuth2, written by the `setupOAuthKeys()` path PB-029's FIX-2 repaired |
+| `sites/default/documents/certificates/oapublic.key` | 451 | PEM public key (the pair) |
+| `sites/default/documents/logs_and_misc/methods/sevena` | 155 | **Site encryption key** — `KeyVersion::SEVEN` (`src/Common/Crypto/KeyVersion.php:55`), AES/HMAC pair |
+| `sites/default/documents/logs_and_misc/methods/sevenb` | 155 | **Site encryption key** — the other half of that pair |
+
+Classification was by file header and by tracing `seven` to the `KeyVersion` enum in source —
+**not by reading key material.** No key contents were printed at any point.
+
+### 2. Confirmed again before editing: never tracked, never committed
+
+| Check | Result |
+|---|---|
+| `git ls-files` on both directories | Only the two tracked `README.md` files. **No key tracked** |
+| `git log --all` per path | **0 commits** for all four |
+| Repo-wide scan for any added key-like path | See §5 — one upstream finding, not ours |
+
+### 3. The rule
+
+Added inside the existing fork-owned block in `.gitignore`:
+
+```gitignore
+sites/*/documents/certificates/*.key
+sites/*/documents/logs_and_misc/methods/*
+!sites/*/documents/logs_and_misc/methods/README.md
+```
+
+Scoped to **two specific directories whose purpose is key storage**. No `*.pem`, no `*.key`
+repo-wide, no `sites/**` — each of which could hide legitimate repository content. The negation
+keeps the tracked `README.md` visible.
+
+### 4. Proofs
+
+| # | Proof | Result |
+|---|---|---|
+| 1 | `git check-ignore -v` on each of the four observed paths | **All four return a rule** — `.gitignore:88` for the two `.key`, `.gitignore:89` for `sevena`/`sevenb` |
+| 2 | Tracked `README.md` must remain visible | **Correctly NOT ignored** — the negation works |
+| 3 | `git add -A --dry-run` | Stages `.gitignore`, this document and one `.docx`. **No key material.** Grep for `\.key|methods/seven` over the staging set: **none** |
+| 4 | **Generalises to future keys** — `newoauth.key`, a second tenant's `oaprivate.key`, `eighta`, `ninea` | **All ignored.** The control covers key *classes*, not four literal filenames — it will still hold when the next key version is generated |
+| 5 | **Does not over-catch** — `CryptoGen.php`, `sqlconf.php`, `certificates/README.md`, `EV-028…md` | **None ignored** |
+| 6 | History re-checked after the change | **0 commits** for all four |
+
+Proof 4 is the one that matters for durability: a rule matching only today's filenames would silently
+stop protecting the moment OpenEMR rotates to `KeyVersion::EIGHT`.
+
+### 5. One incidental finding, and it is upstream's, not ours
+
+The repo-wide history scan (proof 6b) found SSL certificate and **private key** `.pem` files under
+`contrib/util/docker/couchdb-config-ssl-cert-keys/`.
+
+> **A wrong verdict was produced and is corrected here rather than deleted.** The automated check
+> `git merge-base --is-ancestor <commit> upstream/master` returned non-zero and the script printed
+> **"introduced by this fork — investigate."** That conclusion was **wrong.** The commit is
+> `3490687bc`, *"Support for ssl couchdb added (#3807)"*, authored by **Brady Miller** (OpenEMR
+> maintainer) on **2020-08-02**, and `git branch -a --contains` shows it on `upstream/rel-600`,
+> `rel-610`, `rel-700`, `rel-701`, `rel-702` and others. It is unambiguously upstream. The
+> ancestor test failed because **the local `upstream/master` ref is stale** (`feaf85c14`, §3.1) —
+> the known measurement limitation, biting a different check this time.
+
+The files were **deleted upstream** in `2790d4b35` *"docker reorg (#4004)"* and are absent from the
+working tree. They remain in the object store, as deleted history always does. **Dev-only CouchDB
+test certificates from 2020, not Thiqa key material, no action for this phase** — noted under
+RDY-0048 so the next secrets scan does not re-discover it as new.
+
+### 6. Keys are NOT rotated, deliberately
+
+Per the Owner's instruction and the evidence: **all four were proven never committed and never
+pushed**, so there is no exposure to remediate. Rotating working keys on the strength of "they were
+untracked" would be theatre, and would invalidate every encrypted value in the database for no
+security gain.
+
+**Status:** the `git add -A` hazard is **CLOSED**. **RDY-0048 remains OPEN** — it also covers the
+`sqlconf.php` credential posture and a full history scan, and its acceptance is broader than this
+one control.
+
+## PB-034 (2026-08-13) — FIRST DATA SEEDED: pilot batch of 1 patient + 1 encounter, EV-028 clean, and the authorization matrix finally has a positive case
+
+**Owner-authorised: pilot batch first, then stop for review.** The first `INSERT` of the project.
+`patient_data` moved **0 → 1** for the first time since installation.
+
+### EV-028 pre-seed check, run before the first `INSERT`
+
+| # | Check | Result |
+|---|---|---|
+| 1 | RDY-0044-A baseline exists, hash verified, rollback rehearsed | ✅ `18564f74…` re-verified at seed time, read-only |
+| 2 | Operator has read the prohibitions in full | ✅ |
+| 3 | Every data value authored, none copied from a real system | ✅ |
+| 4 | Specimen-document `SYNTHETIC DEMO` marking | **N/A** — no documents in this batch |
+| 5 | Identifier and phone conventions implemented **in the generator** | ✅ in the seed script, not applied by hand afterwards |
+
+### Method — the application's own service layer, not raw SQL
+
+Seeded through `PatientService::insert()` and `EncounterService::insertEncounter()` so pid
+sequencing, UUID registration, validation and the create events all behave exactly as they will at
+full volume. **Raw `INSERT`s would have proved nothing about the pipeline**, which is the entire
+point of a pilot.
+
+| Field | Value | EV-028 rule |
+|---|---|---|
+| `pubpid` | `SYN-0001` | §2 / §5.4 — visible provenance marker |
+| `ss` | `9990000001` | §3.1 — leading `9`, not a real ID class |
+| `phone_cell` | `+966 5 000 000` | §3.2 — 10 digits, structurally undialable |
+| Name | Hessa Alharthi | §3.3 — generic, not a notable person |
+| Encounter | `AMB`, facility 3 `Thiqa Demo Eye Clinic`, provider 6 `y.alharbi`, reason carries `(SYNTHETIC DEMO)` | — |
+
+Resulting state: `patient_data` **1**, `form_encounter` **1**, `forms` **1** (the encounter's
+`New Patient Encounter` form registered correctly).
+
+### EV-028 §5 post-seed scans — clean, and not vacuously so
+
+**Row counts were asserted before the scans were trusted**, per the rule PB-032 had to learn the
+hard way. With `patient_data = 1` confirmed present, all four scans returned **0**: no valid-class
+identifier, no dialable number, no prohibited phrase, no unattributed row. **These same four scans
+were proven to fire against planted violations in PB-032**, so a clean result here is informative
+rather than vacuous.
+
+### The authorization matrix has a positive case for the first time
+
+**This is the most valuable thing the pilot produced, and it was not the objective.** Until now every
+report was empty, so a role that "saw nothing" was indistinguishable from a role that was correctly
+denied — the negative control problem, structural rather than accidental. With one real patient in
+the database, `patient_list.php` (gated `patients|bulk_rep`) was exercised across all seven accounts:
+
+| Role | Account | Expected | ACL verdict | Sees the seeded patient |
+|---|---|---|---|---|
+| Administrator | `admin` | ALLOW | **200** | **YES** |
+| Administrator | `n.alqahtani` | ALLOW | **200** | **YES** |
+| Physician | `y.alharbi` | ALLOW | **200** | **YES** |
+| Physician | `s.almutairi` | ALLOW | **200** | **YES** |
+| Front Office | `r.aldosari` | DENY | **403** | — |
+| Accounting | `k.alotaibi` | DENY | **403** | — |
+| Clinical Assistant | `m.alzahrani` | DENY | **403** | — |
+
+**7 of 7 match the design-A+ intent.** The four `bulk_rep` holders see an actual patient name; the
+three non-holders get a hard 403. **The lead claim MC-01 now has a positive case behind it, not only
+an absence of rows** — which is a materially different quality of evidence, and it materially
+advances **RDY-0016**, recorded as blocked on Track D since PB-014.
+
+> **A false failure was caught and not reported as a defect.** The first run of this probe returned
+> **403 for all seven accounts, including `admin`** — which, read carelessly, looks like the
+> authorization fix is broken. It is not. `patient_list.php` checks ACL *first* and CSRF *second*
+> with `dieOnFail`, so a POST without a valid `csrf_token_form` returns 403 **from the CSRF gate, for
+> reasons that have nothing to do with permissions.** The corrected probe does a GET first (a pure
+> ACL verdict, no CSRF involved), extracts the token, then POSTs. **A 403 is not self-describing** —
+> the same status code covers two entirely different refusals, and the harness must separate them or
+> it will manufacture defects. Recorded because PB-020's bad detector made the mirror-image error.
+
+### ⚠ One real defect found: seeded patients are recorded as `created_by = 0`
+
+`patient_data.created_by` is **0**, not the administrator's id. `PatientService::databaseInsert()`
+reads the author from `SessionWrapperFactory::…->getActiveSession()->get('authUserID')`, and the seed
+script had set the raw `$_SESSION['authUserID']` superglobal, which that wrapper does not read. The
+encounter script proved the fix: setting through `$session->set('authUserID', …)` reads back
+correctly.
+
+**Consequence if left unfixed at volume:** every seeded patient would carry a null author, so the
+audit trail — **D-1, the flagship demo** — would show the entire dataset created by nobody. That is
+exactly the kind of detail an alert IT gatekeeper notices, and it would undermine the one capability
+Source B calls proven end-to-end.
+
+**Must be fixed in the seeder before the full run.** The single pilot row is left as-is for now
+rather than patched by hand, so the fix can be verified against a re-seed instead of masked.
+
+### Status
+
+**Nothing is closed by this entry.** RDY-0020 (patients) and RDY-0021 (encounters) each have exactly
+one row against target volumes not yet met, RDY-0028's signed check still needs a named reviewer, and
+RDY-0016's matrix has one report of eleven exercised against data. **No gate count moves.**
+
+**Rollback remains one command.** `patient_data` was 0 at the pre-seed baseline; the PB-031 snapshot
+returns it there, and the procedure is `ROLLBACK.md` §3.
+
+**Stopped here for Owner review, as instructed.** The pipeline, the safety controls and the
+authorization design are all now demonstrated on real data; scaling to full volume needs the
+`created_by` fix and a decision on target counts per category.
+
+## PB-033 (2026-08-13) — Phase 2B work committed (not pushed); a live secret-exposure risk found; one count corrected
+
+**Owner-authorised: commit, do not push.** Four commits on `feat/thiqa-branding-foundation`, none
+pushed. The working tree had carried 15 modified source files and 2 new console commands
+**uncommitted since Phase 2B began** — real work existing in exactly one place, with data seeding
+about to begin on top of it.
+
+| Commit | Contents |
+|---|---|
+| `7b16a0dda` | `fix(security)` — ACL gates on 11 reports, `pending_followup`, `layout_listitems_ajax` (RDY-0050/0051/0053/0054) |
+| `a091f8d05` | `fix(security)` — `CONTROLLER_ACL_MAP` fails closed and covers all 10 controllers (RDY-0052) |
+| `adbd88327` | `feat(thiqa-branding)` — `thiqa-branding:backup` and `:provision-report-acl` (RDY-0081, 0050, 0052) |
+| `c9a1d7bcb` | `docs(readiness)` — this register, its two source documents, 53 browser captures, EV-028 |
+
+### ⚠ A live secret-exposure risk was found while staging, and it is not closed
+
+Four untracked files in the working tree are **cryptographic key material**:
+
+| Path | What it is |
+|---|---|
+| `sites/default/documents/certificates/oaprivate.key` | **OAuth2 private key** (generated by the `setupOAuthKeys()` path that PB-029's FIX-2 repaired) |
+| `sites/default/documents/certificates/oapublic.key` | OAuth2 public key |
+| `sites/default/documents/logs_and_misc/methods/sevena`, `sevenb` | **OpenEMR site encryption keys** |
+
+**None is covered by `.gitignore`** — verified with `git check-ignore`, which matches nothing. They
+appear in `git status` as ordinary untracked files, indistinguishable from a document someone
+forgot to add. **A single `git add -A` or `git add .` would commit live site encryption keys and an
+OAuth private key**, and the branch is one `git push` from a GitHub fork.
+
+**The good news, verified rather than assumed:** `git log --all` over those paths returns nothing.
+**No key material has ever been committed.** The exposure is latent, not realised.
+
+**Mitigation applied here:** every commit above was staged by **explicit path**; `git add -A` was
+never used, and the staged set was scanned for `*.key`, `methods/seven*` and `sqlconf` before each
+commit, plus a credential-value scan across all staged Markdown. All clean.
+
+**That is a discipline, not a control, and a discipline fails the first time someone is in a hurry.**
+The durable fix is `.gitignore` entries for these paths. It is **not applied here** because
+`.gitignore` is a tracked upstream file and the change belongs to the Owner, not to an
+end-of-task edit. **Recorded as an open item against RDY-0048** (*"Secrets handling record + history
+scan — no credential in version control"*), which now has a second concrete finding beside the
+`sqlconf.php` one.
+
+### Correction: the unpushed-commit count was 12, not 13
+
+§3.1 and §45 recorded **13 local commits unpushed** at `origin/… = 203f24de5`. Measured directly at
+that same ref: **`git rev-list --count origin/feat/thiqa-branding-foundation..a4ae30356` = 12.**
+
+Corrected in place at §3.1 and §45.1. The figure also appears in derivative prose at §4 (GTM-006),
+§7 (RDY-0045 row), §8.6, §24, §47 and §48.B, all citing the same §3.1 observation; **those inherit
+this correction** rather than each being restated. **It changes no verdict** — 12 unpushed and 13
+unpushed carry the identical G3 risk — which is precisely why it is corrected rather than argued
+about. **The count is now 16.**
+
+**The single-machine risk is reduced but not removed.** Committing ends the "uncommitted working
+tree" exposure. It does not end the unpushed exposure: 16 commits, including every report
+authorization fix and this entire register, still exist on one disk. **Pushing was explicitly
+declined by the Owner and is not second-guessed here** — it is recorded so the residual risk is not
+mistaken for a closed one.
 
 ## PB-032 (2026-08-13) — RDY-0028 synthetic-data control ISSUED (1 of 3 criteria); scans proven to fire
 
@@ -5243,7 +5488,7 @@ above as history.
 | 9 | **`log` rows** | 4,280 (~2 days, 93 % noise) | **13,370** (2026-08-07 → 2026-08-13, 82 % noise) | **NEUTRAL** | Confirms the audit's growth estimate; reset scope (RDY-0060s) grows |
 | 10 | **`globals` rows** | 490 | **495** | **NEUTRAL** | Schema/seed delta between versions |
 | 11 | **Languages** | 47 languages, 237,509 definitions | **59 languages, 237,542 definitions** | **NEUTRAL** | Arabic coverage itself unchanged at ≈47.5 % |
-| 12 | **Branch push state** | not observed | `origin/…` at `203f24de5`; **13 local commits unpushed** | **REGRESSED** | **G3.** 13 commits of branding work exist only on this machine — an unbacked-up single point of failure |
+| 12 | **Branch push state** | not observed | `origin/…` at `203f24de5`; ~~13~~ **12** local commits unpushed — **count corrected 2026-08-13, PB-033**; now **16** after PB-033's four commits | **REGRESSED** | **G3.** 16 commits — including the report-authorization fixes and the entire readiness register — exist only on this machine. **Committing removed the "uncommitted working tree" risk but not this one:** an unpushed commit is still one disk failure from gone |
 | 13 | **`Locked Desicions/`** | recorded as unavailable to the Phase 2 environment | **Present in the repo** (3 files) | **IMPROVED** | Unblocks RDY-0092's input; the item itself stays open |
 | 14 | **GTM + competitor sources** | recorded as unavailable in-repo | **Both present** under `docs/` | **IMPROVED** | Unblocks RDY-0002's input; the item itself stays open |
 | 15 | **Brand asset kit** | did not exist | **`brand/` present** — colors, logos, tokens, typography, favicon, RTL, email, SMART, QA | **IMPROVED** | **G4.** Real Phase 3 input now exists on disk |
