@@ -1868,6 +1868,56 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-085 (2026-08-14) — RDY-0004 control instrument issued. **Its blocker moved from "nobody to name" to "nothing yet to bind"**
+
+Evidence: **`docs/evidence/EV-004-prohibited-claims-control.md`**.
+
+### §32 is incorporated by reference, deliberately not copied
+
+**A second copy of a 26-row control list is how two versions come to exist**, and the moment they
+differ the weaker one gets cited. §32 is already complete — every row carries its prohibition,
+reason, source ID and separate Phase 3/4/5 impact. **So EV-004 is the *adoption instrument*, not a
+second copy**: it makes §32 binding downstream, names who enforces it, and records that each phase
+received it.
+
+**With an anti-drift check, verified to run as printed:**
+
+```bash
+awk '/^## 32\. Prohibited Claims/,/^---$/' docs/Marketing-MVP-and-Launch-Readiness-Requirements.md | sha256sum
+# current: bfa195dd0acd2cbe13cb3578…
+```
+
+A brief records the hash it embedded. **If it later differs, §32 has changed and every downstream
+brief needs re-issuing** — which is the failure this design exists to make visible rather than
+silent.
+
+### Per phase, the prohibitions that actually bite
+
+- **Phase 3:** #1 no brand cue implying hospital scale · #2 the name and tagline must not imply
+  "HIS" · #14 no certification badge · **#15 the brand must not imply proprietary software — fork
+  divergence is zero.**
+- **Phase 4:** #16 tamper-evident, never *immutable*/*blockchain* · #17 MFA is voluntary and cannot
+  be mandated · #18 Arabic is 47.5 % chrome-only (and **16.1 % on picklists** — PB-083) · #24 banned
+  adjectives · **#25 no manufactured trust: no uptime figure has ever been measured** · #26 publish
+  the mechanism, not the number.
+- **Phase 5:** the full *pages that must not exist* list, including **a "customers" page with no
+  customers**.
+
+**#23 binds all three with no exceptions: the `admin` credential must never appear in any material,
+ever** — not in a screenshot, not in a recording.
+
+### Not closed, and the reason is sequencing rather than a gap
+
+RDY-0004's acceptance is *"each downstream phase brief contains §32 verbatim, and each names the
+reviewer"* — **and no phase brief exists.** G4 is blocked on RDY-0095 and G5 on proof assets. The
+adoption record is a three-row form with nothing pre-ticked; **RDY-0004 closes the day those briefs
+are issued.**
+
+**Its dependency is now satisfied:** the card lists RDY-0003, and **Mohammed Elfouly was named at
+PB-077**. The blocker has moved from *"nobody to name"* to *"nothing yet to bind"*.
+
+**`Blocks`: G0 G4 G5 G6.** No gate count moved (§0.0 Rule 3).
+
 ## PB-084 (2026-08-14) — RDY-0065 / 0066 / 0069 issued: qualify → scope → instrument. **All three blocked on a human, none on engineering**
 
 Evidence: **`docs/evidence/EV-065-066-069-commercial-artefacts.md`**. One file, because the three run

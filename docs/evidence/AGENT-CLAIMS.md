@@ -143,6 +143,13 @@ the seeded dataset or the RDY-0044-B baseline without a claim recorded here firs
 
 ---
 
+| 0047 | Deployment runbook | Agent B | **DONE (not closed)** | PB-082; `EV-047`. Needs an independent provisioner |
+| 0086 | Arabic / RTL coverage | Agent B | **DONE (not closed)** | PB-083; `EV-086`. Picklists measured at 16.1 %; needs the screen walk + a **named Arabic Reviewer, who does not exist** |
+| 0065 0066 0069 | Qualification, scope, cost instrumentation | Agent B | **DONE (not closed)** | PB-084; `EV-065-066-069`. Three calls / legal review / a pilot |
+| 0004 | Prohibited-claim control | Agent B | **DONE (not closed)** | PB-085; `EV-004`. Waits on the phase briefs existing |
+
+---
+
 ## Standing constraints that bind both agents
 
 - **Do not recalculate gate counts inside a closure entry** (`§0.0` Rule 3). Record which gates the
