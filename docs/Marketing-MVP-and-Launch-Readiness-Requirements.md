@@ -1790,6 +1790,80 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-044 (2026-08-14) — **HR-01 EVIDENCE PACK COMPLETE.** v4 PASS, independently verified; idempotence fix held
+
+Report: `docs/ScreenShoots/HR-01-BrowserVerification-v4.md` · **78 artefacts** in `HR-01-exams-v4/`
+— 8 exams × 9 sections, 3 extras, login context, 2 integrity captures. **Exactly the expected set.**
+
+### The idempotence fix held. Verified by me, not taken on report.
+
+| Check | Result |
+|---|---|
+| CLINHASH at all **nine** checkpoints (pre-flight + after each exam) | Report: all matched |
+| **Live CLINHASH re-measured after the run** | **`fab7947785d853d04b431932cf5c45ab` — identical to pre-flight** |
+| Retina images distinct (the v3 clip-didn't-move signature) | **All 8 differ**: 38,871 – 55,917 bytes |
+| Lock state | `LOCKED = 1` on all 8 — the form's normal edit lock, acquired once per visit. Expected and acceptable |
+
+**Three runs corrupted this dataset; the fourth did not touch it.** The fix was in the data, not the
+harness: with every previously-defaulted field pre-seeded, `view.php` has nothing left to write.
+
+### Visual verification of the two files that matter
+
+**`EXAM-6-SYN-0006-retina.png`** — the file that was absent in v1, truncated in v2 and mis-clipped in
+v3. Opened and read directly. It shows, legibly: disc *"Pink, distinct margins"*; **macula OD
+"Centre-involving oedema, hard exudates"**, OS *"Microaneurysms, no oedema"*; **vessels OD "Dot-blot
+haemorrhages, venous beading"**, OS *"Scattered microaneurysms"*; **C/D 0.35 / 0.3**; **CMT 412 /
+268**; and *"SYNTHETIC DEMO — Moderate non-proliferative diabetic retinopathy with macular oedema"*.
+**Every clinical value of the diabetic case is now in the evidence pack.**
+
+**`EXAM-3-SYN-0003-glaucoma-zone.png`** — shows **Current Targets OD 16 / OS 16**, and, unprompted,
+resolves a concern I have now raised three times.
+
+### ✅ The "form asserts normal fields" concern is resolved — the form does distinguish
+
+The Glaucoma Zone panel explicitly reads **"Not documented"** against **Visual Fields**, **Optic
+Nerve Analysis**, **Gonioscopy** and **Optic Discs**.
+
+So the picture is: the header checkbox row shows `FTCF ☑` because no *defect* is recorded
+(`view.php:1166` ticks it when `$bad == 0`), while the **clinically authoritative panel for a
+glaucoma patient states plainly that fields were not documented.** A reviewing ophthalmologist has
+the correct signal where it counts.
+
+**HR-01 §4 #1 is corrected a third and final time.** The progression is recorded rather than tidied
+away, because each step was wrong in a different direction:
+
+| | What I said | Status |
+|---|---|---|
+| PB-039 | A coerced `0` "reads as a defect in every quadrant" | **Wrong** — `1` is the defect; `0` and NULL are identical (PB-043) |
+| PB-040 | The form "asserts normal visual fields" on the glaucoma case | **Overstated** — the header ticks FTCF, but the Glaucoma Zone says *Not documented* |
+| **PB-044** | The form distinguishes absent data in the panel that matters; the residual limitation is only that the *header* row cannot | **Verified in the image** |
+
+### Disclosures the report made that I would not have caught
+
+The run disclosed, unprompted, three things that weaken its own result — the mark of a report worth
+trusting:
+
+1. **IOP targets are DOM-confirmed but NOT-VISIBLE-IN-IMAGE for 7 of 8 exams.** They live in the
+   hidden `#LayerVision_IOP` panel, opened only for exam 3. Correctly recorded as NOT-VISIBLE rather
+   than claimed.
+2. **Warning locations beyond the known nine** — `view.php:218-220`, `a_issue.php` (~41 lines) and
+   `FeeSheet.class.php:114`. Same upstream `array offset on false` class, non-fatal, but not
+   previously enumerated. Flagged for completeness.
+3. **A ~4px fixed-navbar sliver** at the top of some clips. Obscures no content.
+
+It also investigated the cross-exam identical byte sizes on `-external` and `-impression` rather than
+reporting them as a defect, and correctly concluded both panels are genuinely unpopulated for every
+patient — External has no seeded findings, and `#IMPPLAN_1` is a static plan-builder widget.
+
+### Status
+
+**The HR-01 evidence pack is complete and usable**, against dataset
+**`de6e513ceb9a47ffab329a236e4c7ab55b54e33f7146f847cd59f03612bbdcdb`**.
+
+**RDY-0021 still requires Dr Mohamed Taha's verdict** — per-exam, against **`de6e513c…`**, not
+against the earlier `ad6ea86d…` state he saw. That is the only outstanding item. **No gate count
+moves.**
+
 ## PB-043 (2026-08-14) — v3 fail-fast worked; the real cause found; **dataset made idempotent under viewing**
 
 Report: `docs/ScreenShoots/HR-01-BrowserVerification-v3.md` · 12 artefacts.
@@ -3329,8 +3403,8 @@ whether the synthetic record is clinically plausible and **not misleading**.
 
 | # | Concern | Detail |
 |---|---|---|
-| 1 | **The form asserts "normal" findings that were never recorded — READ THIS ONE CAREFULLY** | **Corrected 2026-08-13 (PB-040); my earlier wording was misleading.** The *database* stores nothing for confrontation fields (`ODVF1..4` are NULL — a text value was once written and silently coerced to `0`, so it was removed rather than invented). **But the rendered screen is not blank.** It displays **`Fields: FTCF ☑`** — full to confrontation, i.e. **normal visual fields** — plus `Amsler: Normal ☑`, `Pupils: Normal ☑` and `Mental Status: Alert / Oriented TPP / Mood-Affect Nml ☑`. **None of that was seeded; it is form default state rendering as though it were a finding.** On exam 3 this means the screen claims *normal fields* on a patient with cup/disc 0.7/0.75 and treated glaucoma. **Please judge the screen, and treat those four "normal" assertions as unrecorded rather than observed.** No formal perimetry, gonioscopy, pachymetry or OCT-RNFL exists anywhere. |
-| 1b | **Do not save, and beware of anything that submits the form** | An automated pass over these exams **persisted form defaults into the records** — a target IOP of **21** on seven exams and zeroed field flags on all eight (PB-040). The dataset has been restored. **Viewing is safe; submitting is not.** If you open an exam, navigate away without saving. |
+| 1 | **The header checkbox row cannot distinguish "examined and normal" from "not examined"** | **Final wording, corrected twice (PB-043, PB-044) — earlier versions of this note overstated the problem in two different directions.** The header shows `Fields: FTCF ☑` (full to confrontation), `Amsler: Normal ☑`, `Pupils: Normal ☑`, `Mental Status: Alert / Oriented TPP / Mood-Affect Nml ☑`. `FTCF` is ticked because **no defect is recorded** — in this form `1` means a defect and `0`/NULL mean none — so the tick is not a false assertion, but it also does not tell you whether an examination happened. **Where it matters clinically the form is explicit:** the Glaucoma Zone panel on exam 3 reads **"Not documented"** against Visual Fields, Optic Nerve Analysis, Gonioscopy and Optic Discs (see `EXAM-3-SYN-0003-glaucoma-zone.png`). **No formal perimetry, gonioscopy, pachymetry or OCT-RNFL exists in this dataset.** |
+| 1b | **If a "take ownership" dialog appears, click CANCEL** | Opening an exam takes an edit lock. Re-opening one raises *"LOCKED by another user: OK to take ownership / CANCEL for READ-ONLY."* **OK is a write path** and previously corrupted the dataset three times (PB-040, PB-042, PB-043). **CANCEL is safe.** Never click Save. The records themselves are now stable under simple viewing (PB-043/PB-044). |
 | 2 | **POAG at age 44** (exam 3) | Real but atypical; POAG is usually a diagnosis of >50s |
 | 3 | **Diabetic retinopathy with macular oedema at age 37** (exam 6) | Plausible for long-duration type 1 diabetes — but see #4 |
 | 4 | **No diabetes type or duration is recorded** (exams 1, 6) | The problem list says only *"Type 2 diabetes mellitus"* and *"Diabetic retinopathy"*. The record does not itself justify exam 6's age |
@@ -3734,7 +3808,8 @@ development and does not belong in Phase 2B.
 | HR ID | RDY | Reviewer | Role | Dataset Version | Review Date | Verdict | Conditions | Evidence Ref | Closure Eligible |
 |---|---|---|---|---|---|---|---|---|---|
 | **HR-01** | RDY-0021 | **Dr Mohamed Taha** | Ophthalmologist | **reviewed the MUTATED state, not `ad6ea86d…`** | 2026-08-13 | **ASSERTED: PASS, all 8, no comments** — recorded as asserted. **NOT closure-eligible:** the reviewed state was the one PB-040 found corrupted (target IOP 21, zeroed VF quadrants on all 8), and the screenshot pack omits the retina findings. **Re-affirmation required against the restored dataset** | Re-review vs `ad6ea86d…` after re-capture | verbal, via Owner | **NO — pending re-affirmation** |
-| **HR-01-BV** | RDY-0021 (supporting) | *(automated agent — not a reviewer)* | Browser UI/data verification | mutated during the session | 2026-08-13 | **C1-C5, C7 PASS · C6 FAIL** (upstream `eye_mag` warnings) · **session wrote to all 8 exams** · retina absent from screenshots | Re-capture required | `docs/ScreenShoots/HR-01-BrowserVerification.md` + 18 PNG | **NO — evidence only, never a clinical verdict** |
+| **HR-01-BV** | RDY-0021 (supporting) | *(automated agent — not a reviewer)* | Browser UI/data verification | **`de6e513c…`** | 2026-08-14 | **PASS (attempt 4).** 78 artefacts; all 8 retina captures legible incl. exam 6's macula/CMT; CLINHASH identical at all 9 checkpoints and re-verified live afterwards; **dataset not mutated** | IOP targets DOM-confirmed only on 7 of 8 (hidden panel) | `docs/ScreenShoots/HR-01-BrowserVerification-v4.md` + 78 files | **NO — evidence only, never a clinical verdict** |
+| *(superseded)* | RDY-0021 | — | Attempts 1-3 | mutated states | 2026-08-13/14 | Corrupted the dataset (PB-040/042/043). **Not evidence.** Retained for traceability only | — | `…-BrowserVerification.md`, `-v2.md`, `-v3.md` | **NO** |
 | **HR-02** | RDY-0028 | **Mohammed Elfouly** | Legal / Compliance *(basis of authority to be stated by the reviewer)* | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **ASSIGNED — AWAITING REVIEW.** Assignment recorded 2026-08-13; checklist not yet worked, no verdict issued | — | — | **NO** |
 | **HR-03a** | RPT-0009 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
 | **HR-03b** | RPT-0028 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
