@@ -1868,6 +1868,38 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-072 (2026-08-14) — **RDY-0042 FIXED (PR-16)** — the front-office menu had no route to register a patient when the short form is configured
+
+Patch record: **`docs/branding/adr/patch-records.md` PR-16**. Complements Agent A's PB-052, which
+fixed the other half of the same demo-surface pair.
+
+`front_office.json` declared `Add Patient` gated on `full_new_patient_form` with **no negated
+counterpart**, while `standard.json` carries a matched pair. `MenuRole.php:129-132` skips an entry
+whose non-negated global is unset or false, so at `full_new_patient_form = 0` a Front Office user had
+**no menu route to register a patient** — the first action of the D-7 reception segment, by the
+account that exists to perform it. Fixed by mirroring `standard.json`'s pattern; no new convention.
+
+**Proven before and after, with a negative control** (`scratchpad/rdy0042-probe.php` applies
+`MenuRole`'s own `global_req` rule, transcribed from source, to the real JSON):
+
+| `full_new_patient_form` | Before (HEAD) | After |
+|---|---:|---:|
+| `1` | 1 visible — PASS | 1 visible — PASS |
+| `0` | **0 visible — FAIL** | **1 visible — PASS** |
+| negative control (bogus label) | 0 — PASS | 0 — PASS |
+
+**The live global is `1`, so the current demo instance was never affected** — which is exactly why
+no rehearsal would have caught it. The fix removes a latent hazard that fires on any instance
+preferring the short registration form, a plausible pilot configuration.
+
+**RDY-0042: FIXED and proven at the menu layer. NOT closed.** Its acceptance is *"under the reception
+account with the `front_office` menu role, `Add Patient` is reachable and **completes a
+registration**, tested twice — once with the global on and once off"*. That is a live walk under
+`r.aldosari`, and the curl harness cannot reach `main.php` (PB-016). **It needs the same manual
+browser session already outstanding for RDY-0013/0014/0015** — one session can discharge all four.
+
+**`Blocks`: G1 G2.** No gate count moved (§0.0 Rule 3) — nothing closed.
+
 ## PB-071 (2026-08-14) — **⚠ CURRENT-STATE CORRECTION: the background-service runner HAS executed.** Trigger built and proven; held disabled on one decision
 
 Evidence: **`docs/evidence/EV-083-background-service-trigger.md`**.

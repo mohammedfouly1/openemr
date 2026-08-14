@@ -747,6 +747,72 @@ reconciles it against `registry`; before/after runs are quoted above. `php -l` a
 
 ---
 
+## PR-16 — `interface/main/tabs/menu/menus/front_office.json`
+
+**BRAND ID:** none — **a correctness/defect fix, not branding.** Third non-branding entry, recorded
+because Invariant 4 / Q1 governs every core edit regardless of motive.
+**Readiness ref:** Phase 2B PB-072, RDY-0042. **Gates:** G1 G2. **Agent B.**
+
+**Locked decision satisfied:** Invariant 4 residual-edit exception. **No extension point can reach
+it** — the menu is a static JSON data file read by `MenuRole::menuApplyRestrictions()`. There is no
+event, filter or override that can add a missing entry; the only alternative is a whole-file
+replacement menu, which is a larger and more fragile divergence than a two-entry data fix.
+
+**Classification:** `SOURCE-CONFIRMED UPSTREAM MENU DEFECT — present in rel-820 AND master`.
+
+### What was wrong
+
+`front_office.json` declares `Add Patient` gated on `full_new_patient_form` and — unlike
+`standard.json`, which carries a matched pair — ships **no negated counterpart**:
+
+```diff
+                 "global_req": "full_new_patient_form"
+             },
++            {
++                "label": "Add Patient",
++                ... identical acl_req / url / target ...
++                "global_req": "!full_new_patient_form"
++            },
+```
+
+`MenuRole.php:129-132` skips an entry whose non-negated global is unset or false. So with
+`full_new_patient_form = 0`, **a Front Office user has no menu route to register a patient at all** —
+the first action of the D-7 reception segment, performed by the account that exists to perform it.
+
+`standard.json` gets this right with two entries (`New/Search` for the full form, `New` for the
+short one). The fix mirrors that pattern exactly; **no new convention is introduced.**
+
+### Measured impact, before and after
+
+`scratchpad/rdy0042-probe.php` applies `MenuRole`'s own `global_req` rule, transcribed from source,
+to the real JSON at both global values, and carries a negative control (a label that must never
+match, proving the collector can return 0).
+
+| `full_new_patient_form` | Before (HEAD) | After |
+|---|---:|---:|
+| `1` | 1 entry visible — PASS | 1 entry visible — PASS |
+| `0` | **0 entries visible — FAIL** | **1 entry visible — PASS** |
+| negative control | 0 — PASS | 0 — PASS |
+
+Exit status `1` before, `0` after.
+
+### Live exposure today, stated precisely
+
+**The live global is `full_new_patient_form = 1`**, so the current demo instance is **not** affected
+and no rehearsal would have caught this. The fix removes a **latent** hazard that fires on any
+instance where the short registration form is preferred — which is a plausible pilot configuration,
+since the full form is the longer of the two.
+
+**Upstream-first path (Q1):** an upstream defect affecting every OpenEMR installation using the
+`front_office` menu role, and it **should be contributed upstream**, which would retire this record.
+Not done in this phase — the upstream maintenance target is undecided (RDY-0045, EV-045). Recorded
+as the intended disposition.
+
+**Verification:** JSON re-parsed and validated (`json_last_error_msg()` → *No error*); both
+counterparts confirmed present; before/after probe quoted above.
+
+---
+
 ### Required before release
 
 **V-09 must be re-run against all 17 files.** The existing dry-run examined only the six the plan listed

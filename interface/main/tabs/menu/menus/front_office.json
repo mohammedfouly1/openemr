@@ -119,6 +119,22 @@
                 "global_req": "full_new_patient_form"
             },
             {
+                "label": "Add Patient",
+                "icon": "fa-group",
+                "menu_id": "new0",
+                "target": "pat",
+                "url": "/interface/new/new.php",
+                "children": [],
+                "requirement": 0,
+                "acl_req": [
+                    "patients",
+                    "demo",
+                    "write",
+                    "addonly"
+                ],
+                "global_req": "!full_new_patient_form"
+            },
+            {
                 "label": "Report Generator",
                 "menu_id": "rep0",
                 "target": "rep",
