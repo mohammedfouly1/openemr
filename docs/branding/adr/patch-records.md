@@ -676,6 +676,77 @@ registrations**, verified by query, not by inspection — see PB-037.
 
 ---
 
+## PR-15 — `src/Menu/MainMenuRole.php`
+
+**BRAND ID:** none — **a correctness/defect fix, not branding.** Second non-branding entry in this
+document, recorded here because Invariant 4 / Q1 governs every core edit regardless of motive.
+**Readiness ref:** Phase 2B PB-052, RDY-0043. **Gates:** G1 G2.
+
+**Locked decision satisfied:** Invariant 4 residual-edit exception. **No extension point can reach
+it** — the defect is an inverted guard inside a `protected` method that builds the menu object
+in-memory. There is no event, filter or override between the loop and the `array_push`.
+
+**Classification:** `SOURCE-CONFIRMED UPSTREAM MENU DEFECT — present in rel-820 AND master`.
+
+### What was wrong
+
+`updateVisitForms()` creates each category with `$catEntry->children = []` and then pushes each form
+**only if `children` is already non-empty**:
+
+```diff
+-            if (!empty($catEntry->children)) {
+-                array_push($catEntry->children, $formEntry);
+-            }
++            array_push($catEntry->children, $formEntry);
+```
+
+Because `children` starts empty, the guard is false on the **first** iteration — and since nothing is
+ever pushed, it stays empty and the guard is false on **every** subsequent iteration too.
+
+**The result is not "the first form is dropped". No form is ever added to any category.**
+
+### Measured impact, before and after
+
+Verified by invoking `updateVisitForms()` directly through reflection against the live registry:
+
+| | Categories rendered | Forms rendered | Missing |
+|---|---:|---:|---:|
+| **Before** | 4 | **0** | **16 of 16** |
+| **After** | 4 | **16** | **0** |
+
+Every active encounter form was unreachable from the menu, including **Eye Exam** — the ophthalmology
+form the entire beachhead demo rests on — plus **Vitals**, **SOAP**, **Fee Sheet**, **Procedure
+Order** and **New Questionnaire**.
+
+> **This corrects the audit.** Audit §14.4 and RDY-0043 both describe the defect as *"silently drops
+> the first form in every category."* That understates it by a factor of sixteen. The audit read the
+> code correctly for one iteration and did not carry the consequence forward to the next.
+
+### Why this is upstream's, and why no workaround was possible
+
+`src/Menu/MainMenuRole.php` is **byte-identical to both `upstream/rel-820` and `upstream/master`** —
+this fork had not modified it. **The defect is present in both**, so RDY-0043's hope that *"the fix
+may already exist in the 418 commits not yet taken"* is false: taking every upstream commit would not
+fix it.
+
+RDY-0043 offers *"work around by category placement"* as the fallback. **That cannot work.** With no
+form ever pushed, there is no ordering, priority or category arrangement that produces a non-empty
+menu. The guard has to go.
+
+**`updateBlankForms()` in this same class performs the equivalent push with no guard** (line ~214),
+which is what the correct behaviour looks like and is strong evidence the guard is an error rather
+than an intent.
+
+**Upstream-first path (Q1):** this is an upstream defect affecting every OpenEMR installation and
+**should be contributed upstream**, which would retire this patch record. Not done in this phase —
+the upstream maintenance target is still undecided (RDY-0045, EV-045). Recorded as the intended
+disposition.
+
+**Verification:** `scratchpad/menu-verify.php` builds the menu through the real code path and
+reconciles it against `registry`; before/after runs are quoted above. `php -l` and `phpcs` clean.
+
+---
+
 ### Required before release
 
 **V-09 must be re-run against all 17 files.** The existing dry-run examined only the six the plan listed

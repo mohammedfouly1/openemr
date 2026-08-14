@@ -166,9 +166,16 @@ class MainMenuRole extends MenuRole
                     $formEntry->acl_req = [$tmp[0], $tmp[1], 'write', 'addonly'];
                 }
             }
-            if (!empty($catEntry->children)) {
-                array_push($catEntry->children, $formEntry);
-            }
+            // The push is unconditional. It was previously guarded by
+            // `if (!empty($catEntry->children))`, but a new category is created a few lines
+            // above with `$catEntry->children = []`, so that guard was false for the first
+            // form of every category and silently dropped it. Categories holding a single
+            // form disappeared from the menu entirely.
+            //
+            // `updateBlankForms()` in this same class performs the equivalent push with no
+            // guard, which is what the correct behaviour looks like.
+            // See docs/branding/adr/patch-records.md PR-15.
+            array_push($catEntry->children, $formEntry);
         }
         // Close out last category.
         if ($reglastcat) {
