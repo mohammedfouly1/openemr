@@ -174,10 +174,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **23** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045) |
-| **Requirements still open** | **91** |
-| **Open P0** | **50** — 71 P0 less the 21 closed P0 IDs (0001, 0010-0015, 0017, 0021, 0028, 0032, 0036-0038, 0044, 0050-0052, 0058, 0059, 0080). **Recalculated at PB-045** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 23 · G2 23 · G3 21 · G4 3 · G5 13 · G6 21** — recalculated at **PB-045** after closing 0021, 0028, 0044, 0058, 0059. G2 fell 28 → 23, the largest movement of Phase 2B |
+| **Requirements CLOSED** | **24** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045); **0040** (PB-046) |
+| **Requirements still open** | **90** |
+| **Open P0** | **49** — 71 P0 less the 22 closed P0 IDs (0001, 0010-0015, 0017, 0021, 0028, 0032, 0036-0038, 0040, 0044, 0050-0052, 0058, 0059, 0080). **Recalculated at PB-046** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 23 · G2 22 · G3 21 · G4 3 · G5 13 · G6 21** — recalculated at **PB-046**. Across PB-045/046 **G2 fell 28 → 22**, the largest movement of Phase 2B |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -1789,6 +1789,69 @@ Authenticated sessions, real page fetches, string-level confirmation that config
 a real session. They prove the value reaches the rendered page. They do **not** prove visual
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
+
+## PB-046 (2026-08-14) — **RDY-0040 CLOSED** — D-7 script written and bound to the real dataset; one step found broken
+
+`docs/evidence/EV-040-d7-demo-script.md`. §15 already carried the nine-field specification for all
+16 steps; what did not exist was the **instantiation** — which patient, which encounter, which
+account, which numbers on screen, and what to say. That is what this is.
+
+**Bound to real seeded data throughout**, so a presenter is never improvising: the duplicate pair is
+`SYN-0001`/`SYN-0029` (Hessa Alharthi, matching DOB); the ophthalmology proof is `SYN-0006`
+encounter 23 with its actual acuity, IOP, cup/disc and CMT 412/268; the reconciliation finds
+encounter 36 / `SYN-0019`; the ledger totals 600.00 SAR against `SYN-0001`.
+
+### ⚠ Writing the script found a step that cannot work
+
+**Step 11's allergy alert will not fire.** Traced to source rather than assumed —
+`allergy_conflict()` at `library/clinical_rules.php:354` matches with a literal SQL `IN`:
+
+```sql
+SELECT `drug` FROM `prescriptions` WHERE `active`=1 AND `drug` IN (<allergy titles>) AND `patient_id`=?
+```
+
+`prescriptions.drug` must be **byte-identical** to a `lists.title` allergy. Seeded allergies are
+Penicillin, Sulfa drugs, Latex, Peanuts, Iodine contrast; seeded drugs are Latanoprost, Timolol,
+Artificial tears, Prednisolone acetate. **No pair matches, so there is no constructed case** — which
+is precisely step 11's stated failure condition. Both gating globals (`enable_allergy_check`,
+`enable_alert_log`) are already on, so the mechanism is live and simply has nothing to catch.
+
+**The fix is one row:** add an allergy titled exactly `Timolol 0.5% eye drops` to `SYN-0002`, who
+already holds that prescription. As a *second* allergy on an existing patient it keeps
+`allergy_pts = 5`, so no locked target moves.
+
+**Deliberately NOT applied.** It changes the dataset, and the dataset was signed off hours ago by
+Dr Taha and Mohammed Elfouly and baselined as RDY-0044-B. **Quietly re-seeding an accepted artefact
+to fix a demo step is exactly the kind of churn the closure contract exists to prevent.** Recorded as
+an Owner decision: apply the fix and re-baseline + re-affirm, or run D-7 without the alert step.
+
+### Other open items carried into the script rather than glossed
+
+| Step | Item | Handling |
+|---|---|---|
+| 2 | RDY-0042 Add-Patient defect — **open**, but absent on two browser rounds | Confirm in rehearsal 1 before relying on it |
+| 9 | RDY-0043 first-form-dropped | Confirm Vitals is menu-reachable; fall back to the encounter |
+| 4, 15 | §24.3 expects denials for Clinician on RPT-0009 and Physician on RPT-0028; **live, both are allowed** | **Do not claim those two denials** until HR-03 is decided |
+| D-1 | PB-030 API-row false positive | No `/apis/*` call during the demo window |
+
+### What the script adds beyond §15
+
+The two **segment-boundary moments** are written as explicit beats rather than left implicit —
+Front Office being denied the note the physician just wrote, and Accounting able to code but not read
+the encounter. §15.4 says these land harder inside a story than inside a permissions matrix; the
+script now makes them steps rather than a footnote. The closing role-separation matrix is included,
+with the two disputed cells marked.
+
+It also carries the operational hazards a presenter would otherwise meet cold: **answer the
+"take ownership" dialog with CANCEL**, and the reason mixed appointment statuses matter (a board
+where everyone is in one status reads as synthetic).
+
+**RDY-0040: VERIFIED READY — CLOSED.** It blocks **G2** only.
+
+**Gate recalculation:** **G2 23 → 22.** All other gates unchanged. **Open P0 50 → 49.**
+
+**RDY-0041 remains OPEN** — it needs two rehearsals *driven by a person*, with real elapsed time
+recorded. V-8 and PRC-003 both consume that number and nobody has ever run this journey.
 
 ## PB-045 (2026-08-14) — **RDY-0021, 0028, 0044, 0058, 0059 CLOSED.** Human verdicts received; RDY-0044-B built and reset proven
 
