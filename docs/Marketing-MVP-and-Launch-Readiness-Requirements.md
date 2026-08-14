@@ -252,10 +252,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **30** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045); **0040** (PB-046); **0046** (PB-048); **0021**, **0022**, **0027** (PB-055); **0024**, **0026** (PB-058) |
-| **Requirements still open** | **84** |
-| **Open P0** | **43** — 71 P0 less the 28 closed P0 IDs (0001, 0010-0015, 0017, 0021, 0022, 0024, 0026, 0027, 0028, 0032, 0036-0038, 0040, 0044, 0046, 0050-0052, 0058, 0059, 0080). **Recalculated at the PB-058 gate sync** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 23 · G2 17 · G3 20 · G4 3 · G5 13 · G6 21** — **PB-058 gate sync**. Across Phase 2B **G2 has fallen 28 → 17 and G3 22 → 20** |
+| **Requirements CLOSED** | **31** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045); **0040** (PB-046); **0046** (PB-048); **0021**, **0022**, **0027** (PB-055); **0024**, **0026** (PB-058); **0020** (PB-059) |
+| **Requirements still open** | **83** |
+| **Open P0** | **42** — 71 P0 less the 29 closed P0 IDs (0001, 0010-0015, 0017, 0020, 0021, 0022, 0024, 0026, 0027, 0028, 0032, 0036-0038, 0040, 0044, 0046, 0050-0052, 0058, 0059, 0080). **Recalculated at the PB-059 gate sync** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 22 · G2 16 · G3 20 · G4 3 · G5 13 · G6 21** — **PB-059 gate sync**. Across Phase 2B **G2 has fallen 28 → 16 and G3 22 → 20** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -2420,6 +2420,84 @@ pre-filled and no verdict assumed.** RDY-0067 closes the moment a name is record
 passes that person's review.
 
 **RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
+
+## PB-059 (2026-08-14) — **RDY-0020 CLOSED** — duplicate detection and the merge workflow executed, then reset
+
+The criterion prescribes the whole sequence — *"a duplicate search returns the two planted pairs; the
+merge workflow completes on one pair **and is then reset**"* — so it was executed, not inspected. The
+reset made it safe: RDY-0044-B has now been exercised six times.
+
+### 1. Duplicate detection — and a fact worth knowing before a demo
+
+`manage_dup_patients.php` lists patients with **`dupscore > 12`**, and **`calculateScores()` runs on
+every load of that screen** (`:198`). In the baseline every patient carries the unscored default
+**`dupscore = -9`**, so **a duplicate search finds nothing until the screen has been opened once.**
+Opening it *is* the demo action, so this works naturally — but a presenter who expects the list to be
+pre-populated will be surprised, and **D-7 step 3 should open the screen rather than navigate past
+it.**
+
+After one load:
+
+| Patient | dupscore |
+|---|---:|
+| `SYN-0029` Hessa Alharthi | **20** |
+| `SYN-0030` Talal Alsubaie | **20** |
+| *the other 28 patients* | **≤ 8** |
+
+**Both planted pairs are found and nothing else is** — the 28 non-duplicates sit well below the
+threshold, so the detection has a built-in negative control and produces **no false positives**. The
+screen renders both surnames.
+
+### 2. The merge, executed
+
+Merged `SYN-0029` (source) into `SYN-0001` (target), both *Hessa Alharthi*, DOB 1948-01-01:
+
+| | Before | After |
+|---|---:|---:|
+| Patients | 30 | **29** |
+| `pid 29` exists | yes | **no** |
+| Encounters on `pid 1` | 3 | **5** |
+| Encounters on `pid 29` | 2 | **0** |
+
+**The duplicate was absorbed, its clinical history transferred, and the redundant record removed** —
+98 `patient-record-update` events logged. The workflow completes.
+
+### 3. The reset, verified
+
+Restored from RDY-0044-B v2 with both hashes checked first:
+
+| Check | Result |
+|---|---|
+| Patients | **30** |
+| `pid 29` | **restored** |
+| Encounters `pid 1` / `pid 29` | **3 / 2** — as before the merge |
+| Duplicate pairs | **2** |
+| `dupscore` | **back to −9** — even the scoring run was undone |
+| **Full state signature** | **identical to accepted** |
+
+### Closure
+
+| Criterion | Result |
+|---|---|
+| 25–30 patients exist | ✅ **30** |
+| A duplicate search returns the two planted pairs | ✅ **both, and only them** |
+| The merge workflow completes on one pair **and is then reset** | ✅ **executed and reversed, signature-verified** |
+| No name, ID or phone matches a real person or a real number format | ✅ EV-028 scans, all zero |
+
+**RDY-0020: VERIFIED READY — CLOSED.** It blocks **G1 (D-2 realism)** and **G2**.
+
+### GATE SYNC (Rule 3, dedicated pass)
+
+| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| At PB-058 | 3 | 23 | 17 | 20 | 3 | 13 | 21 |
+| **After** | **3** | **22** | **16** | **20** | **3** | **13** | **21** |
+
+**Open P0: 43 → 42.** Across Phase 2B **G2 has fallen 28 → 16**.
+
+**Track D's seeded data is now 6 of 8 closed.** The two remaining both need a person: a clinician on
+the SOAP notes plus a growth chart (**0023**), and the document marking confirmed through a browser
+(**0025**).
 
 ## PB-058 (2026-08-14) — **Data fixes APPLIED under renewed approval. RDY-0024 and RDY-0026 CLOSED. Baseline v2.**
 
