@@ -1868,6 +1868,72 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-080 (2026-08-14) — **CORRECTION to PB-078**, and a better result than the one it claimed: the trigger **self-heals** the UUID population
+
+### What PB-078 got wrong
+
+PB-078 recorded the 13 UUIDs as populated and RDY-0083 as meeting every T-18 criterion. **Both were
+true when measured. Neither survived the next four minutes.**
+
+A **second database restore** — Agent A is mid-cycle on Track D — reverted `background_services`
+*and* the UUID work:
+
+| Time (UTC) | `form_vitals` missing `uuid` | `UUID_Service.next_run` |
+|---|---:|---|
+| 03:49 (PB-078 applied) | **0** | 2026-08-14 07:49:30 |
+| 03:57:41 | **12 — reverted** | 2026-08-13 17:02:38 — **overdue again** |
+
+**PB-078's status claim is therefore corrected, not defended.** It was accurate at the instant of
+measurement and stale minutes later, which is precisely the failure mode this document keeps
+catching in other people's evidence.
+
+### The better result: no manual step is needed
+
+Because the trigger was **enabled**, `UUID_Service` was overdue and the next tick ran it
+**unattended**:
+
+| Time (UTC) | `form_vitals` missing | `UUID_Service.next_run` |
+|---|---:|---|
+| 03:59:30 | **0 — restored automatically** | **2026-08-14 07:59:29** |
+| 04:00:15 | 0 | 07:59:29 |
+| 04:01:01 | 0 | 07:59:29 |
+
+**The 13 UUIDs re-populate themselves after any restore, with no human action**, provided the trigger
+is enabled. That is strictly better than the handoff instruction PB-078 left in the ledger, and it
+removes a manual step from Agent A's re-baseline sequence.
+
+### ⚠ The one window where it does not self-heal — this is the handoff
+
+`UUID_Service` runs on a **240-minute** interval. After a restore it is overdue and the next tick
+catches it — **but if the RDY-0044-B baseline is taken inside the gap between the restore and that
+tick, the baseline captures NULL UUIDs** and ships the defect.
+
+**Agent A: immediately before taking the baseline, run**
+
+```bash
+C:/openemr-stack/php/php.exe bin/console background:services run --name UUID_Service --force
+# then confirm, and only then baseline:
+mariadb -u root -h 127.0.0.1 openemr -N -B -e \
+  "SELECT SUM(uuid IS NULL OR uuid='') FROM form_vitals;"   # expect 0
+```
+
+### RDY-0083 — status restated honestly
+
+**The trigger is proven, including unattended.** Across this window it fired on schedule every 2
+minutes without intervention (`Email_Service` advanced 03:53:48 → 03:56:05 → 03:59:51 with no manual
+run), and it recovered `UUID_Service` from a restore on its own.
+
+**"No overdue active service" is a *cyclical* state, not a permanent one**, and PB-078 overstated it
+by quoting a single instant. `Email_Service` has a 2-minute interval and the tick is 2 minutes, so it
+oscillates between *just ran* and *due* by design. **A monitor that alerted on any overdue moment
+would alert constantly** — which is exactly why `EV-084`'s **M-6 threshold is 2 × the service's own
+`execute_interval`** rather than "any overdue". **That derivation is now empirically validated rather
+than merely argued.**
+
+**RDY-0083: recommended for closure on the corrected basis** — a recurring trigger exists, is
+enabled, fires unattended, advances both active services, and self-heals after a restore. **Agent B
+does not close its own work**; the gate sync is Agent A's (§0.0 Rule 3). **`Blocks`: G2 (disclosure), G3.**
+
 ## PB-079 (2026-08-14) — D-1 and D-2 actioned: claim-review procedure issued, licence determination commissioned. **Neither closes anything — naming is not reviewing**
 
 Evidence: **`EV-003-claim-review-procedure.md`** (new), **`EV-095`** §0.0 (revised). HR-04 gains

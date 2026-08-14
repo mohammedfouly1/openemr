@@ -17,10 +17,19 @@
 > "the three dataset changes" does not name it. **Do not read it in.** Owner has been asked whether it
 > rides along; if yes it is change 4 under the same single re-baseline.
 >
-> **⚠ A restore reverts `background_services`.** Confirmed by two snapshots: a restore between PB-071
-> and PB-078 put both active services back to overdue. So (a) **every demo reset does the same** — add a
-> post-reset service check to `EV-044`; and (b) **any restore before your re-baseline loses Agent B's 13
-> UUIDs**, which must then be re-applied before you baseline.
+> **⚠ A restore reverts `background_services` AND the UUID population.** Observed twice. **But the
+> enabled trigger self-heals it** — verified at PB-080: after a restore wiped the 13 UUIDs at 03:57,
+> the next tick re-ran `UUID_Service` unattended and they were back by 03:59:30. **So there is no
+> manual step for you to remember — with one exception:**
+>
+> **`UUID_Service` runs every 240 minutes.** If you take the RDY-0044-B baseline inside the gap
+> between a restore and that tick, **the baseline captures NULL UUIDs and ships the defect.**
+> Immediately before baselining, run:
+> `php bin/console background:services run --name UUID_Service --force`
+> then confirm `SELECT SUM(uuid IS NULL OR uuid='') FROM form_vitals;` returns **0**.
+>
+> Also: **add a post-reset background-service check to `EV-044`** — every demo reset returns both
+> active services to overdue until the trigger catches up.
 >
 > **Also:** claim reviewer named — **Mohammed Elfouly** (RDY-0003). Licence determination commissioned
 > to **SkyEagle** (RDY-0095). Neither closes anything yet: naming is not reviewing.
