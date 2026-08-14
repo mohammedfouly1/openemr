@@ -2016,6 +2016,59 @@ passes that person's review.
 
 **RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
 
+## PB-054 (2026-08-14) — V-09 conflict dry-run re-run against **all 16** patch records: **one conflict, and it is not a patched file**
+
+Addendum in **`EV-045`**. Action 3 of its own recommendation, now done. Analysis only —
+`git merge-tree --write-tree --name-only HEAD upstream/rel-820` computes the merge in memory. **No
+fetch, no merge, no working-tree change.**
+
+### Result
+
+```
+exit=1 (conflicts present)
+conflicted files: 1
+  composer.json
+```
+
+**Cross-referenced against every file in `patch-records.md` (PR-01 … PR-16, including Agent B's new
+PR-16): zero conflict.** `admin.php`, `interface/globals.php`, `setup.php`, `sql_patch.php`,
+`sql_upgrade.php`, `ippf_upgrade.php`, the four `src/` services and controllers,
+`EncounterService.php`, `MainMenuRole.php`, the login logo and error templates, and
+`front_office.json` — **none of them conflicts.**
+
+### Risk R-1 is measurably unfounded against this target
+
+R-1 reads *"upstream rebase conflicts in the 6 patched core files"*, and `patch-records.md` itself
+flags that **V-09 had only ever examined six**, leaving eleven unchecked — *including `setup.php` and
+`sql_upgrade.php`, which it calls the two most upstream-churned files in the set*.
+
+**All sixteen are now checked. None conflicts.** That caveat is discharged.
+
+### The single conflict is mechanical
+
+`composer.json`. `rel-820` adds `symfony/mime`, an `OpenEMR\Tests\Acceptance\` namespace and an
+`acceptance` script; this branch adds the `OpenEMR\Branding\` namespace and `@branding-tokens-check`.
+**Adjacent lines in the same JSON blocks, no semantic disagreement — resolution is to keep both
+sides.** A one-file, few-line manual merge.
+
+**This corroborates PB-048's decision not to remove `oe-module-claimrev-connect`:** `composer.json` is
+*already* the sole conflict file, so deliberately adding a divergence there to delete an inert package
+would convert a trivial merge into a recurring one.
+
+### What this means, and what it still does not
+
+The catch-up to `rel-820` is now characterised end to end: **83 commits behind, three lines of runtime
+code, no security patches, one mechanical conflict.** **R-03 (*"severe — security and reputational"*)
+and R-1 should both be re-derived** — that is now two risk ratings this analysis has undermined with
+measurement.
+
+**Unchanged caveats, and they matter:** the local ref is still **ten days stale**, so this is a floor;
+**a clean `merge-tree` proves the text merges, not that the result runs** — RDY-0045's regression check
+is still outstanding; and nothing was applied, HEAD is untouched.
+
+**RDY-0045 remains OPEN** — update method, rollback, regression check and cadence are still required.
+**Per Rule 3, no gate count moved.**
+
 ## PB-053 (2026-08-14) — RDY-0061 capture rules written; **not closed** — the per-image check needs RDY-0060's captures
 
 Artefact: **`docs/evidence/EV-061-capture-rules.md`**. Claimed in `AGENT-CLAIMS.md` before starting,

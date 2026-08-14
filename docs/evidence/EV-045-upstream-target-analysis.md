@@ -115,3 +115,69 @@ than conflating it with routine patching now.
 **RDY-0045 is not closed by this document.** Its acceptance requires an established update method, a
 rollback approach, a regression check and a named cadence. This settles only the first and most
 blocking question — *which upstream* — and it settles it with measurements rather than assumption.
+
+---
+
+# ADDENDUM — V-09 conflict dry-run, re-run against ALL patch records (2026-08-14)
+
+**This is action 3 of §5, now done.** No fetch, no merge, no working-tree change —
+`git merge-tree --write-tree --name-only HEAD upstream/rel-820`, which computes the merge in memory.
+
+## Result: one conflict in the entire merge, and it is not a patched file
+
+```
+exit=1 (conflicts present)
+conflicted files: 1
+  composer.json
+```
+
+**Cross-referenced against every file in `patch-records.md` (PR-01 … PR-16): zero conflict.**
+
+| Patched core file | Conflicts with `rel-820`? |
+|---|---|
+| `admin.php` · `interface/globals.php` · `setup.php` · `sql_patch.php` · `sql_upgrade.php` · `ippf_upgrade.php` | **No** |
+| `FhirMetaDataRestController.php` · `OAuth2AuthorizationListener.php` · `ProductRegistrationService.php` · `TelemetryService.php` | **No** |
+| `EncounterService.php` (PR-14) · `MainMenuRole.php` (PR-15) | **No** |
+| `primary_logo.html.twig` · `templates/error/*.twig` | **No** |
+| `front_office.json` (PR-16) | **No** |
+
+## Risk R-1 is measurably unfounded against this target
+
+R-1 reads *"upstream rebase conflicts in the 6 patched core files"*, and `patch-records.md` flags that
+**V-09 had only ever examined six of them** — leaving eleven unchecked, including `setup.php` and
+`sql_upgrade.php`, described as the two most upstream-churned files in the set.
+
+**All sixteen are now checked. None conflicts.** The earlier caveat is discharged.
+
+## The single conflict is mechanical, and both sides are simply kept
+
+`composer.json`. Both branches edited adjacent lines of the same JSON blocks:
+
+| Side | Adds |
+|---|---|
+| `upstream/rel-820` | `symfony/mime` dev dependency · `OpenEMR\Tests\Acceptance\` autoload namespace · an `acceptance` script |
+| This branch | `OpenEMR\Branding\` autoload namespace · `@branding-tokens-check` in the code-quality chain |
+
+**No semantic disagreement — neither side removes or redefines anything the other needs.** Resolution
+is to keep both. It is a one-file, few-line manual merge.
+
+**This corroborates EV-046's decision not to remove `oe-module-claimrev-connect`.** `composer.json` is
+*already* the single conflict file; deliberately adding a further divergence there — to delete an
+inert package — would turn a trivial merge into a recurring one.
+
+## Caveats, unchanged
+
+- **Still measured against a ten-day-old local ref** (`87dcd0fbc`, 2026-08-04). A fetch could add
+  commits and therefore conflicts. **This is a floor.**
+- **A clean `merge-tree` is not a passing test suite.** It proves the *text* merges, not that the
+  result runs. The regression check RDY-0045 requires is still outstanding.
+- Nothing here was applied. HEAD is unchanged.
+
+## Revised recommendation
+
+The catch-up to `rel-820` is now characterised end to end: **83 commits behind, three lines of runtime
+code, no security patches, and a single mechanical `composer.json` conflict.** That is a small,
+well-understood operation — not the *"severe, security and reputational"* risk the register carries.
+
+**R-03 and R-1 should both be re-derived.** The remaining unknown is not the conflict surface; it is
+the ten-day gap and the regression check.
