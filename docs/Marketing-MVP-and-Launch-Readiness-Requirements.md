@@ -1868,6 +1868,62 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-083 (2026-08-14) — RDY-0086: Arabic coverage **measured** across three layers. **The picklist gap is 16.1 %, and one documented gap turns out not to exist**
+
+Evidence: **`docs/evidence/EV-086-arabic-rtl-coverage.md`**.
+
+| Layer | Total | Arabic | Coverage |
+|---|---:|---:|---:|
+| **UI chrome** (`lang_constants`) | 13,235 | 6,291 | **47.5 %** — confirms Source B exactly |
+| **Picklists** (`list_options`, distinct titles) | 4,346 | 700 | **16.1 %** |
+| **Layout field labels** (`layout_options`, distinct titles) | 157 | 124 | **79.0 %** |
+
+**The headline 47.5 % is the *best* of the three layers, not the average** — and a demo audience sees
+all three at once.
+
+### ⚠ Two corrections, cutting in opposite directions
+
+**1. The picklist gap is quantified for the first time — and it is the real problem.** §3.7 and
+RDY-0086 both say the visible gap *"is larger than 47.5 % implies"*; **neither source ever measured
+it.** It is **16.1 % — 83.9 % of picklist values have no Arabic definition at all.** This is the
+layer a prospect notices, because picklists are what you *click*: specialties, remit codes,
+appointment statuses. **A screen can be 47.5 % translated in its chrome and still hand the user an
+entirely English dropdown.**
+
+**2. "`layout_options` field labels are untranslated" is wrong.** §3.7 lists them alongside picklists
+as untranslated. **Measured: 124 of 157 = 79.0 %, the best-covered layer.** **Overstating a gap is
+still a documentation defect** — it makes the disclosure script inaccurate in the product's
+disfavour, and R-04's point is that credibility comes from saying the true thing first, which
+requires the true thing to be measured.
+
+**3. RTL stylesheets are 7, not 13** — and this is **not** a regression. It is the deliberate **Q77
+theme pruning** (`solar`, `manila`, `cobalt_blue`, `forest_green` removed so a stale `globals` value
+cannot select them). Recorded so nobody reads 7-vs-13 as breakage.
+
+### The qualification script is written and numerically grounded
+
+Spoken **before** the switch, never as a recovery. It gives numbers rather than "partially
+translated" — *"about half the interface, roughly one in six dropdowns, four in five field labels…
+an Arabic frame around a largely English clinical vocabulary"* — states that ICD/CPT descriptions are
+English **because those code sets are English**, and closes by refusing to demonstrate Arabic PDF at
+all, since no Arabic-shaping font ships (L-10).
+
+### Not closed — and honestly bounded
+
+The acceptance wants **a per-screen record for every D-1…D-5 and D-7 screen walked in Arabic**.
+**That was not performed and is not claimed.** The data-layer measurement is stronger evidence for
+*coverage* — exhaustive and reproducible rather than sampled — but it cannot answer **where RTL
+visually breaks** (Source B found hard-coded left alignment across `patient_file/`, `reports/` and
+`billing/`, and which demo screens break is still unmeasured). **Blocked on the same manual browser
+session** as RDY-0013/0014/0015, RDY-0042 and RDY-0016's UI legs — one session, walked in Arabic,
+discharges all of them.
+
+**⚠ A fourth naming decision exists and has not been asked for.** RDY-0086's owner is *"Arabic
+Reviewer"*, and **no such person is named anywhere in the register** — unlike RDY-0003 and RDY-0095,
+which the Owner has now filled. It also gates **RDY-0063** (Arabic captures) and **RDY-0089**.
+
+**`Blocks`: G1 G5.** No gate count moved (§0.0 Rule 3).
+
 ## PB-082 (2026-08-14) — RDY-0047 deployment runbook issued. **Its acceptance is an execution by someone else, and it has never been run**
 
 Evidence: **`docs/evidence/EV-047-deployment-runbook.md`**.
