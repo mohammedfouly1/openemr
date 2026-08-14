@@ -1868,6 +1868,60 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-084 (2026-08-14) — RDY-0065 / 0066 / 0069 issued: qualify → scope → instrument. **All three blocked on a human, none on engineering**
+
+Evidence: **`docs/evidence/EV-065-066-069-commercial-artefacts.md`**. One file, because the three run
+in sequence on a single deal.
+
+### RDY-0065 — qualification checklist
+
+**Payer mix is asked first**, because it is the one answer that ends the conversation on its own.
+**Eight disqualifiers, every one citing its source ID** — the acceptance criterion is specifically
+*"every disqualifier cites a source ID"*, so each carries its GAP/L/CAP/CLM reference **and the
+sentence to say out loud**: NPHIES (GAP-0046) · ZATCA/VAT (GAP-0052/0053, L-11) · inpatient and
+ancillary (GAP-0001…0014) · enforced MFA (L-03, CAP-0218) · multi-tenant SaaS (GAP-0043) · analytics
+(GAP-0040/0041) · Arabic as the complete interface (CLM-0030) · patient mobile app (GAP-0023/0024).
+
+**One thing worth doing on every call regardless of outcome:** if a prospect raises access,
+traceability or ownership **unprompted**, record it verbatim. **That is V-3's data point arriving
+free** (RDY-0077) — A-05, the assumption POS-003 rests on, is still unvalidated.
+
+**NOT CLOSED — needs three real calls.**
+
+### RDY-0066 — scope template
+
+The exclusions are written **in customer-facing language**, not as a register reference:
+*"This system does not issue your tax invoice, and it does not submit your insurance claims."* Then
+invoicing/VAT/ZATCA, claims/NPHIES/eligibility/pre-auth, inpatient and ancillary, analytics, mobile,
+enforced MFA, migration-into-another-vendor, and third-party integrations — each needing a contract
+**the customer** holds. **The four status registers (`EV-067`) are attached as part of the
+agreement**, not as an appendix.
+
+Two required pre-signature steps: a **separate signed scope acknowledgement**, and **the P-4 finance
+conversation held and recorded** — finance must hear the invoicing and claims exclusions from us, in
+their own meeting, **not from their accountant afterwards**.
+
+**NOT CLOSED — needs the legal/compliance review.** *(It does satisfy RDY-0073's requirement that
+the scope template reference the termination procedure.)*
+
+### RDY-0069 — cost instrumentation
+
+Ten measures, C-1…C-10, each with unit, owner and the reason it is captured **separately** —
+configuration hours are split from implementation because configuration recurs and implementation
+does not; migration is split because it is quoted after inspection and needs its own basis.
+**Support hours per clinic per month is one of the two highest-value figures in the plan.**
+
+**The rule that makes it worth doing:** record actuals, never estimates, and **discard an entry with
+no recorded date rather than keep it** — a plausible wrong number is worse than a missing one,
+because it will be used.
+
+**NOT CLOSED, and not startable** — it depends on a pilot existing (RDY-0068 → 0065, 0066, 0073).
+
+**⚠ One measure is capturable today and needs no customer: C-10, the provisioning time from
+`EV-047`.** Whoever executes the runbook records it, and it feeds PRC-003 directly.
+
+**`Blocks`:** 0065 → G3 G6 · 0066 → G3 G6 · 0069 → G6. No gate count moved (§0.0 Rule 3).
+
 ## PB-083 (2026-08-14) — RDY-0086: Arabic coverage **measured** across three layers. **The picklist gap is 16.1 %, and one documented gap turns out not to exist**
 
 Evidence: **`docs/evidence/EV-086-arabic-rtl-coverage.md`**.
@@ -2664,6 +2718,45 @@ pre-filled and no verdict assumed.** RDY-0067 closes the moment a name is record
 passes that person's review.
 
 **RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
+
+## PB-061 (2026-08-14) — Owner names **Mohammed Elfouly** to every outstanding reviewer role
+
+**Owner instruction, 2026-08-14:** name Mohammed Elfouly against every item in the "needs a person
+named" set. Recorded as given. **The appointments are made; not one verdict is recorded.**
+
+| HR | RDY | Role | State |
+|---|---|---|---|
+| HR-02 | 0028 | Legal / Compliance | *(already assigned 2026-08-13)* — **awaiting review since** |
+| HR-06 | 0003 | Claim reviewer | *(appointed by PB-077)* — awaiting first review |
+| **HR-07** | 0095 | Licence / attribution | **individual now named**, superseding the organisation-level entry |
+| **HR-08** | 0055 | **Security Reviewer** | **new** — awaiting determination |
+| **HR-09** | 0086 / 0087 / 0063 / 0089 | **Arabic / RTL reviewer** | **new** — four items, one appointment |
+| **HR-10** | 0002 | GTM currency acceptance | **new** — awaiting acceptance record |
+
+### Nothing closed, and the count did not move
+
+**Naming a reviewer is not a review.** Every row above reads `AWAITING`, every Closure Eligible cell
+reads **NO**, and **no gate count changed** (Rule 3). Eight RDY items now have a name attached and
+**zero have an outcome**. HR-02 has been awaiting review since 2026-08-13.
+
+### Three things the Owner should see, stated once and not repeated
+
+These are recorded because the register is a control document, not because the instruction is being
+queried — **it is the Owner's call and it has been executed as given.**
+
+1. **All independent review now sits with one person.** Claim review, Legal/Compliance,
+   Security Reviewer, Arabic/RTL and GTM acceptance are held by a single individual who is also on
+   the vendor side. That is workable for a pilot, but **it means no marketing sentence may describe
+   any of this as "independent" or "third-party" review.** HR-07 already carries a self-review
+   warning; it now applies across the set.
+2. **The Arabic role needs a competence basis.** HR-09 assesses whether Arabic and RTL output is
+   adequate. **This document holds no evidence either way about the reviewer's Arabic**, so the first
+   review record should state the basis of authority — exactly what HR-02 already asks for.
+3. **RDY-0002 is registered to Founder / Product Owner.** If the named reviewer does not hold that
+   role, this is a **delegation** and should be an intentional one.
+
+**No verdict, date, or condition has been written on behalf of any of these roles**, per the standing
+instruction not to fabricate human review results.
 
 ## PB-060 (2026-08-14) — ⚠ RDY-0023's growth-chart criterion is **unsatisfiable with the locked dataset**
 
@@ -5678,7 +5771,10 @@ development and does not belong in Phase 2B.
 | *(superseded)* | RDY-0021 | — | Attempts 1-3 | mutated states | 2026-08-13/14 | Corrupted the dataset (PB-040/042/043). **Not evidence.** Retained for traceability only | — | `…-BrowserVerification.md`, `-v2.md`, `-v3.md` | **NO** |
 | **HR-02** | RDY-0028 | **Mohammed Elfouly** | Legal / Compliance *(basis of authority to be stated by the reviewer)* | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **ASSIGNED — AWAITING REVIEW.** Assignment recorded 2026-08-13; checklist not yet worked, no verdict issued | — | — | **NO** |
 | **HR-06** | RDY-0003 | **Mohammed Elfouly** | **Claim reviewer** *(also holds HR-02 — same person, both roles)* | n/a — procedure, not dataset | — | **APPOINTED 2026-08-14 (PB-077) — AWAITING FIRST REVIEW.** Procedure written at `EV-003`; §5 review record is **empty**. Recommended sample artefact: `EV-067` | — | `docs/evidence/EV-003-claim-review-procedure.md` | **NO — naming is not reviewing** |
-| **HR-07** | RDY-0095 | **SkyEagle** *(organisation; individual reviewer not yet named)* | Licence / attribution determination | n/a — determination, not dataset | — | **COMMISSIONED 2026-08-14 (PB-077) — DETERMINATION OUTSTANDING.** 8 closed-form questions; §6 block blank. **⚠ Self-review — SkyEagle is the vendor; independent counter-read recommended** | — | `docs/evidence/EV-095-licence-attribution-pack.md` | **NO** |
+| **HR-07** | RDY-0095 | **Mohammed Elfouly** *(named 2026-08-14, PB-061; supersedes the organisation-level "SkyEagle" assignment)* | Licence / attribution determination | n/a — determination, not dataset | — | **COMMISSIONED 2026-08-14 (PB-077) — DETERMINATION OUTSTANDING.** 8 closed-form questions; §6 block blank. **⚠ Self-review — the named reviewer is on the vendor side; independent counter-read recommended** | — | `docs/evidence/EV-095-licence-attribution-pack.md` | **NO** |
+| **HR-08** | RDY-0055 | **Mohammed Elfouly** | **Security Reviewer** — audit-trail PHI determination | n/a — determination, not dataset | — | **APPOINTED 2026-08-14 (PB-061) — AWAITING DETERMINATION.** Finding to accept or reject is measured, not asserted: **6,073 audit rows contain patient surnames**, `log.comments` is **base64, not encrypted**, and **no retention policy exists**. Evidence: `EV-055` | — | `docs/evidence/EV-055-audit-phi-determination.md` | **NO — naming is not determining** |
+| **HR-09** | RDY-0086 / 0087 / 0063 / 0089 | **Mohammed Elfouly** | **Arabic / RTL reviewer** (four items, one appointment) | demo-surface screens; capture set | — | **APPOINTED 2026-08-14 (PB-061) — AWAITING REVIEW.** **⚠ Competence not evidenced by this document.** The role assesses Arabic and RTL adequacy, so the reviewer should **state their Arabic-language basis of authority** in the first review record, as HR-02 already requires | — | — | **NO** |
+| **HR-10** | RDY-0002 | **Mohammed Elfouly** | GTM currency acceptance | `Product-Positioning-and-GTM-Locked-Strategy.md` 2026-08-11 | — | **APPOINTED 2026-08-14 (PB-061) — AWAITING ACCEPTANCE RECORD.** **⚠ Category check for the Owner:** the register assigns RDY-0002 to **Founder / Product Owner**. If the named reviewer does not hold that role, this appointment delegates it — legitimate, but it should be a deliberate delegation rather than a filing accident | — | — | **NO** |
 | **HR-03a** | RPT-0009 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
 | **HR-03b** | RPT-0028 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
 
