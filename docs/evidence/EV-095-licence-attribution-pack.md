@@ -1,8 +1,43 @@
 # EV-095 — LICENCE / ATTRIBUTION DETERMINATION PACK
 
 **Requirement:** RDY-0095 · **Gates:** G1, G4 · **Owner:** Legal / Compliance
-**Status of the requirement:** **BLOCKED — DECISION.** This pack does **not** determine anything.
+**Status of the requirement:** **COMMISSIONED 2026-08-14 — determination outstanding.** This pack
+does **not** determine anything.
 **Prepared:** 2026-08-14 · **Agent B**, Phase 2B
+
+---
+
+## 0.0 Commissioning record
+
+| Field | Value |
+|---|---|
+| **Commissioned to** | **SkyEagle** |
+| Commissioned by | The Owner, 2026-08-14 (PB-077) |
+| Route | Relayed by the Owner |
+| Scope | The eight questions in §4, answered in the block at §6 |
+| Determination received | **No — outstanding** |
+
+> ### ⚠ Read this before answering: this is a self-review
+>
+> **SkyEagle is the vendor.** `skyeagle.uk` is the branding target already live across
+> `main_menu_logo_link`, `online_support_link` and `user_manual_link` (§2, S-7/S-9). So the party
+> determining the licence obligations is the party that benefits from the answer.
+>
+> **That is not a reason to refuse the instruction, and it is not being treated as one.** It is a
+> reason to be explicit about which answers are load-bearing, because **the two questions most likely
+> to be answered conveniently are exactly the two that matter most**:
+>
+> - **Q1** — whether suppressing the acknowledgements page (a change *we* made) is lawful. The
+>   convenient answer is "yes, §5(d) covers it." The safe answer is to restore it.
+> - **Q3** — whether "OpenEMR" must be removed as a **trademark** matter. The convenient answer is
+>   "it's our choice." GPL grants no trademark licence, so it may be an obligation.
+>
+> **Recommended, and it costs little:** have the completed determination counter-read by someone with
+> the authority to say *no* to the business — outside counsel, or at minimum a reviewer who did not
+> author the branding. A determination that only ever agreed with the commissioner is weak evidence
+> precisely when it is most needed, which is when someone challenges it.
+>
+> **Recorded once, at the top, so whoever performs the review sees it before they start.**
 
 ---
 
@@ -168,6 +203,8 @@ To keep the review bounded, these are **not** in question and need no determinat
 | Field | Value |
 |---|---|
 | Reviewer (named individual) | |
+| Organisation | **SkyEagle** (commissioned 2026-08-14) |
+| Independent counter-read by | *(see §0.0 — recommended, not yet arranged)* |
 | Role / basis of authority | |
 | Date | |
 | Jurisdiction(s) considered | |
@@ -195,8 +232,9 @@ To keep the review bounded, these are **not** in question and need no determinat
 
 ## 7. Status
 
-**RDY-0095 — STILL BLOCKED — DECISION.** Unchanged. This pack removes the *preparation* cost, not
-the decision.
+**RDY-0095 — COMMISSIONED, determination OUTSTANDING.** The Owner commissioned SkyEagle on
+2026-08-14 (PB-077). **Commissioning is an assignment, not a determination** — the same distinction
+PB-032 applied when RDY-0028's reviewer was named and the requirement stayed open. §6 is blank.
 
 **`Blocks`: G1 G4.** No gate count moved (§0.0 Rule 3).
 

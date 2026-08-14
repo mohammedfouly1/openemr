@@ -1868,6 +1868,56 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-079 (2026-08-14) — D-1 and D-2 actioned: claim-review procedure issued, licence determination commissioned. **Neither closes anything — naming is not reviewing**
+
+Evidence: **`EV-003-claim-review-procedure.md`** (new), **`EV-095`** §0.0 (revised). HR-04 gains
+**HR-06** and **HR-07**.
+
+### D-1 — RDY-0003: two of three criteria met
+
+| Criterion | Result |
+|---|---|
+| A named individual is recorded as claim reviewer | **MET** — **Mohammed Elfouly** |
+| A written review step exists | **MET** — `EV-003` §3: six gates (C-1 traceability · C-2 prohibited terms · C-3 audit-integrity · C-4 sensitivity/MFA · C-5 competitive frequencies · C-6 status registers), with the mechanical scans separated from the read-and-judge checks |
+| **One sample artefact has passed through it and the review is recorded** | **NOT MET — `EV-003` §5 is empty** |
+
+**`EV-067` is queued as the recommended sample**: it is customer-facing, exercises all six gates, and
+**already contains one caught-and-corrected C-5 violation**, which makes it a live test of the
+reviewer's eye rather than a formality.
+
+**The procedure carries one warning that matters more than the checklist.** RDY-0088's acceptance
+asks for a *"keyword and numeral scan"*, and **the naive form of that scan must not be used** —
+`[0-9]+ of (16|11|26)` also matches *"0 of 16 forms"* and *"16 of 16 installed cleanly"*, because 16
+is simultaneously the number of scored competitors, dormant clinical forms and encounter forms. A
+reviewer handed it sees three hits, dismisses two correctly, and may dismiss the third. **That exact
+failure has already occurred once here**, so the competitor-scoped pattern is mandated instead.
+
+**⚠ One dependency worth knowing rather than discovering.** Mr Elfouly now holds **both** review roles
+— claim reviewer (HR-06) and Legal/Compliance for RDY-0028 (HR-02, awaiting review since
+2026-08-13). **The constraint on RDY-0028 and on every claim-review-dependent item is the same
+person's time.** Recorded, not queried.
+
+### D-2 — RDY-0095: commissioned to SkyEagle, determination outstanding
+
+**Commissioning is an assignment, not a determination** — the same distinction PB-032 applied when
+RDY-0028's reviewer was named and the requirement stayed open. §6's block is blank; no answer,
+verdict, signature or date is pre-filled.
+
+**⚠ This is a self-review, and the pack now says so at the top so the reviewer sees it first.**
+SkyEagle is the vendor — `skyeagle.uk` is the live branding target across the logo, support and
+manual links. The party determining the obligations is the party that benefits from the answer.
+**Not a reason to refuse the instruction, and it is not being treated as one** — but the two
+questions most likely to be answered conveniently are the two that matter most: **Q1** (whether
+suppressing the acknowledgements page, *our* change, is lawful) and **Q3** (whether removing
+"OpenEMR" is a trademark *obligation* rather than a choice).
+
+**Recommended, and cheap:** have the completed determination counter-read by someone with the
+authority to say *no* to the business. A determination that only ever agreed with its commissioner
+is weak evidence exactly when it is challenged.
+
+**Nothing is closed by this entry.** RDY-0003 needs one review performed; RDY-0095 needs eight
+answers. **`Blocks`:** 0003 → G0 G5 · 0095 → G1 G4. No gate count moved (§0.0 Rule 3).
+
 ## PB-078 (2026-08-14) — D-3 change 1 applied: **13 UUIDs populated.** RDY-0083 now meets every T-18 criterion. **A restore reverts the service table — and will on every demo reset**
 
 Evidence: **`EV-083`** §4A (revised). Authorised at PB-077.
@@ -5255,6 +5305,8 @@ development and does not belong in Phase 2B.
 | **HR-01-BV** | RDY-0021 (supporting) | *(automated agent — not a reviewer)* | Browser UI/data verification | **`de6e513c…`** | 2026-08-14 | **PASS (attempt 4).** 78 artefacts; all 8 retina captures legible incl. exam 6's macula/CMT; CLINHASH identical at all 9 checkpoints and re-verified live afterwards; **dataset not mutated** | IOP targets DOM-confirmed only on 7 of 8 (hidden panel) | `docs/ScreenShoots/HR-01-BrowserVerification-v4.md` + 78 files | **NO — evidence only, never a clinical verdict** |
 | *(superseded)* | RDY-0021 | — | Attempts 1-3 | mutated states | 2026-08-13/14 | Corrupted the dataset (PB-040/042/043). **Not evidence.** Retained for traceability only | — | `…-BrowserVerification.md`, `-v2.md`, `-v3.md` | **NO** |
 | **HR-02** | RDY-0028 | **Mohammed Elfouly** | Legal / Compliance *(basis of authority to be stated by the reviewer)* | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **ASSIGNED — AWAITING REVIEW.** Assignment recorded 2026-08-13; checklist not yet worked, no verdict issued | — | — | **NO** |
+| **HR-06** | RDY-0003 | **Mohammed Elfouly** | **Claim reviewer** *(also holds HR-02 — same person, both roles)* | n/a — procedure, not dataset | — | **APPOINTED 2026-08-14 (PB-077) — AWAITING FIRST REVIEW.** Procedure written at `EV-003`; §5 review record is **empty**. Recommended sample artefact: `EV-067` | — | `docs/evidence/EV-003-claim-review-procedure.md` | **NO — naming is not reviewing** |
+| **HR-07** | RDY-0095 | **SkyEagle** *(organisation; individual reviewer not yet named)* | Licence / attribution determination | n/a — determination, not dataset | — | **COMMISSIONED 2026-08-14 (PB-077) — DETERMINATION OUTSTANDING.** 8 closed-form questions; §6 block blank. **⚠ Self-review — SkyEagle is the vendor; independent counter-read recommended** | — | `docs/evidence/EV-095-licence-attribution-pack.md` | **NO** |
 | **HR-03a** | RPT-0009 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
 | **HR-03b** | RPT-0028 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
 
