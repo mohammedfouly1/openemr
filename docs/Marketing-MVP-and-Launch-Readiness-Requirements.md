@@ -1851,6 +1851,73 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-071 (2026-08-14) — **⚠ CURRENT-STATE CORRECTION: the background-service runner HAS executed.** Trigger built and proven; held disabled on one decision
+
+Evidence: **`docs/evidence/EV-083-background-service-trigger.md`**.
+
+### The document has been wrong about this since 2026-08-13
+
+**At least twelve places assert the runner "has never executed" and that both active services are
+"stuck at `next_run` = 2021-01-18".** Measured before any change was made here:
+
+```
+Email_Service   active=1  next_run=2026-08-13 13:15:21  interval=2 min
+UUID_Service    active=1  next_run=2026-08-13 17:02:38  interval=240 min
+X12_SFTP        active=0  next_run=2021-01-18 11:25:10   <-- the only one still at 2021, and it is INACTIVE
+```
+
+`next_run` is written in exactly one place — `BackgroundServiceRunner.php:402`,
+`next_run = NOW() + INTERVAL ? MINUTE` — inside the claim statement. Nothing else in the tree writes
+it. Both active services were therefore claimed at ≈13:02–13:13 on 2026-08-13, most likely a
+side-effect of the authenticated HTTP sessions used for the PB-012/PB-013 acceptance.
+
+**The corrected finding is narrower and more accurate:** the runner works and has run. **What does
+not exist is a *recurring* trigger**, so it fires only when something happens to invoke it. Both
+active services are consequently overdue — which is the symptom the audit saw and read as "never".
+
+**§40 row 12 has been corrected in place, because it scripted the presenter to say the runner "has
+never been triggered on this build" — aloud, to a prospect.** The remaining stale assertions
+(§3.6, §3.9 OD-03, §4.4, §7.15, §7.21, §22.1, §45.2, §47 G3, §48.B, *20 LINES* #12) are listed in
+EV-083 §7 and are **not** swept here: that is a whole-file edit and another agent is working in it.
+
+### The trigger — built, and proven with a negative control
+
+Registered Windows Scheduled Task `\OpenEMR-Thiqa-BackgroundServices`, 2-minute tick, invoking the
+application's **own** upstream CLI (`bin/console background:services run`). No core edit, no
+bespoke script.
+
+| Step | Result |
+|---|---|
+| Direct run, `--name Email_Service --force` | `next_run` **2026-08-13 13:15:21 → 2026-08-14 03:04:03**; lock released |
+| **Negative control** — task fired at 03:03:28, service **not yet due** | Task result `0`, **`next_run` did not move.** The interval check works |
+| Task fired at 03:04:26, service **due** | **`next_run` 03:04:03 → 03:06:26 — through the Scheduled Task itself** |
+| Collateral | patients 30 · encounters 72 · appointments 37 · charges 36 · globals 495 — **unchanged** |
+
+Two host constraints recorded because they must **not** be copied into the pilot runbook unchanged:
+the task needs an **absolute** path to `bin\console` (`schtasks` sets no working directory — the
+first attempt would have failed silently on every tick), and it must run **as the logged-on user**,
+because Google Drive mounts `G:` per session and a `SYSTEM` task cannot see the application at all.
+
+### ⚠ Why it is registered DISABLED — and the decision needed
+
+**Enabling it writes into the RDY-0044-B baseline that two named humans signed off.**
+`UUID_Service` is overdue and fires on the first tick, and **13 rows are missing UUIDs** —
+**12 in `form_vitals`, 1 in `insurance_companies`**, both traceable to the seeder's documented
+raw-SQL exceptions (`VitalsService::create()` is an empty stub in this release).
+
+This does **not** invalidate RDY-0044-B, whose criterion is *identical **counts*** and counts do not
+change. But the baseline is reproducible in counts, **not in bytes**: after a reset those 13 rows
+are NULL again and the next tick repopulates them with *different* random UUIDs.
+
+**Recommended: populate the 13 UUIDs, then re-baseline RDY-0044-B.** The sign-offs are clinical and
+legal content, which UUIDs do not touch — but saying so is the Owner's call, not the engineer's.
+**Nothing was applied**, on the PB-046 precedent that quietly re-seeding an accepted artefact is
+exactly the churn the closure contract exists to prevent.
+
+**RDY-0083: NOT CLOSED.** Trigger built and proven for `Email_Service`; the `UUID_Service` leg and
+"no overdue active service" both wait on that one decision. **`Blocks`: G2 (disclosure), G3.**
+No gate count moved (§0.0 Rule 3).
+
 ## PB-070 (2026-08-14) — **Agent B, first entry.** RDY-0067 registers extracted; 3 of 4 criteria met, **not closed**
 
 *Agent B's range is PB-070…PB-139 (§0.0 Rule 1). RDY items are claimed in
@@ -1899,6 +1966,65 @@ pre-filled and no verdict assumed.** RDY-0067 closes the moment a name is record
 passes that person's review.
 
 **RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
+
+## PB-052 (2026-08-14) — **RDY-0043 FIXED (PR-15)** — the encounter-forms menu rendered **zero** forms, not "the first in each category"
+
+Patch record: **PR-15**. Verification harness: `scratchpad/menu-verify.php`, which builds the menu
+through the real `updateVisitForms()` code path and reconciles it against `registry`.
+
+### The audit understated this by a factor of sixteen
+
+`src/Menu/MainMenuRole.php` creates each category with `$catEntry->children = []` and then pushes each
+form **only if `children` is already non-empty**:
+
+```php
+$catEntry->children = [];          // new category
+...
+if (!empty($catEntry->children)) { // false on the first form...
+    array_push($catEntry->children, $formEntry);
+}
+```
+
+Because nothing is ever pushed, `children` **stays** empty — so the guard is false on **every**
+iteration, not just the first.
+
+| | Categories | Forms rendered | Missing |
+|---|---:|---:|---:|
+| **Before** | 4 | **0** | **16 of 16** |
+| **After** | 4 | **16** | **0** |
+
+**No encounter form was reachable from the menu at all** — including **Eye Exam**, the form the entire
+ophthalmology beachhead rests on, plus **Vitals**, **SOAP**, **Fee Sheet**, **Procedure Order** and
+**New Questionnaire**.
+
+> **Correction to Audit §14.4 and to RDY-0043's own wording**, both of which say it *"silently drops
+> the first form in every category."* That reads the code correctly for one iteration and does not
+> carry the consequence to the next. **It drops all of them.** Recorded rather than quietly widened —
+> and I made the same error first: my initial DB-level analysis predicted 4 dropped forms, and only
+> the before/after harness showed 16. **The prediction was wrong and the measurement was right.**
+
+### It is upstream's, in both branches, and no workaround existed
+
+`MainMenuRole.php` is **byte-identical to `upstream/rel-820` and `upstream/master`** — unmodified by
+this fork — and **the defect is present in both**. RDY-0043's hope that *"the fix may already exist in
+the 418 commits not yet taken"* is **false**: taking every upstream commit would not fix it.
+
+RDY-0043's fallback, *"work around by category placement"*, **cannot work** — with no form ever
+pushed, no ordering or category arrangement produces a non-empty menu. `updateBlankForms()` in the
+same class does the equivalent push **unguarded**, which is what correct looks like.
+
+Core file, so it carries a numbered patch record per Invariant 4 / Q1. **Upstream contribution is the
+intended disposition**, deferred only because the maintenance target is undecided (EV-045).
+
+### Consequence for D-7 — three steps were affected, not one
+
+`EV-040` flagged this at step 9 only, on my incorrect first analysis. **Steps 9 (Vitals), 10
+(Ophthalmology examination) and 14 (Fee sheet) all depended on menu reachability and would have
+failed.** EV-040 §5 is corrected.
+
+**RDY-0043: FIXED at the code path and verified before/after.** **Not yet closed** — its acceptance
+requires the rendered menu confirmed *per demo account in the application*, which belongs to the D-7
+rehearsal. **Per Rule 3, no gate count moved.**
 
 ## PB-051 (2026-08-14) — GATE SYNC. RDY-0040 and RDY-0046 applied
 
@@ -7213,7 +7339,7 @@ from evidence, not caution.
 | 9 | **Arabic PDF output** | **No Arabic-shaping font in the tree.** It will not render correctly | Open (L-10) | RDY-0098 (P1) | *"Arabic PDF output doesn't render correctly as shipped. That's on the roadmap and I'd rather say it than show it."* |
 | 10 | **Any report in the RDY-0050 set** | *At Phase 2A:* eleven reports had no in-file authorisation, so demonstrating them invited the exact test that disproves Pillar 1 | **Still NO-GO** — Code remediation complete and statically verified; positive/negative authenticated role acceptance pending; the denial has not yet been demonstrated under a real non-privileged session | RDY-0050 **closes** (not merely code-complete) | — (use the §24.3 six instead) |
 | 11 | **The `admin` account** | Prohibited in any material, ever | Permanent | Never | — (use the demo administrator) |
-| 12 | **Background services screen — without pre-empting it** | Two active services show as overdue since 2021 | Open (OD-03) | RDY-0083 | *"You'll see two overdue services — the runner has never been triggered on this build. It's a P0 fix and it's exactly the kind of thing we take responsibility for."* |
+| 12 | **Background services screen — without pre-empting it** | Two active services show as **overdue since 2026-08-13**. ⚠ **CORRECTED 2026-08-14 (PB-071, EV-083): the previous wording said "overdue since 2021" and scripted the presenter to say the runner "has never been triggered". Both are false** — the runner has executed; what is missing is a *recurring* trigger | Open (OD-03) — **restated** | RDY-0083 | *"You'll see two services showing overdue. The runner works — we've run it and watched the timestamps advance — but this build has no scheduled trigger yet, so they only run when something invokes them. The trigger is built and it's one decision away from being switched on. It's a P0 and it's exactly the kind of thing we take responsibility for."* |
 | 13 | **Telehealth, dispensary, group therapy** | Uninstalled or Disabled | Open | RDY-0103/0114 | *"Present in the software, switched off. Activation is a priced service, not a claim."* |
 
 **The principle behind every row:** the honest answer exists in every case and is
