@@ -1868,6 +1868,74 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-075 (2026-08-14) — Data exit **executed**, termination procedure written, claim-discipline scans run — **and one scan caught its own author**
+
+Evidence: **`EV-071-data-export-procedure.md`**, **`EV-073-termination-and-handover.md`**,
+**`EV-056-057-088-claim-discipline.md`**, plus `docs/evidence/templates/export-README.txt`.
+
+### RDY-0071 — the export procedure was run, not just written
+
+Package produced at `C:/openemr-stack/exports/thiqa-export-20260814-032943` — **15 files, 79 MB**:
+283-table SQL dump (82,438,080 B), the appointments report as CSV
+(`Content-Type: application/Csv`, **7 named columns, 40 data rows**, parsed with a real CSV reader),
+**10 document payloads**, a document manifest, a customer-facing README, and
+`CHECKSUMS.sha256` — **`sha256sum -c` → 14 of 14 OK.**
+
+**⚠ Executing it found a defect that writing it would not have.** The first package's document
+payloads are named with internal UUIDs and **carry no file extension**:
+`documents/6/a27f08b3-e2d6-4b72-aaee-0943d95c23a0`. It satisfied the letter of *"contains the
+uploaded documents"* while a customer would have had no way to know that file is
+`SYNTHETIC-DEMO-specimen-06.txt` belonging to `SYN-0006`. **`DOCUMENT-MANIFEST.csv` is now a required
+step**, mapping every payload to patient, original filename and mimetype. A procedure written and
+never run would have shipped the unreadable version.
+
+**NOT CLOSED:** **1 of 8** CSV-capable reports exported (each takes its own form fields — PB-037's
+finding), and no reviewer has opened the package cold. **That reviewer must not be its author** —
+the criterion is about usability to an outsider.
+
+### RDY-0073 — termination and handover, with its dry run
+
+Nine steps, T-1…T-9, with owners, timeframes and the evidence each produces. **The obligation ends
+at T-6 — the customer confirming they can *read* it — not at delivery.** GTM O-3 publishes this
+*before signature*, which is why it is a pre-sale artefact.
+
+**T-9 deletion has no timeframe, deliberately.** RDY-0055 established PHI is in the audit log, so
+*every backup taken during the engagement contains PHI*. Deleting the database does not delete the
+customer's data if backups survive. Retention, rotation and the deletion certificate must be decided
+together, and that is Legal's. **Left open rather than filled with a plausible-sounding "90 days".**
+
+**NOT CLOSED:** two of four criteria require RDY-0066 and RDY-0068 to *reference* it, and neither
+exists yet. Recorded so the ordering is explicit: 0073 is written first, 0068 cites it, 0073 closes
+after.
+
+### RDY-0056 / 0057 / 0088 — scans executed; 1 violation, in my own artefact
+
+| Requirement | Scan result |
+|---|---|
+| **0056** immutable / blockchain | **0 unqualified uses** — the only hit is §32's own prohibition row |
+| **0057** MFA enforced / field-level security | **0 unqualified uses** |
+| **0088** competitive frequency figures | **1 TRUE violation — `EV-067:17`, written by me hours earlier.** Corrected in place to state the mechanism and name the hold |
+
+**⚠ The scan as specified does not work.** RDY-0088 asks for a *"keyword and numeral scan"*. Run
+unscoped, `[0-9]+ of (16|11|26)` returns three hits, and **two are false positives** — *"0 of 16
+forms"* (EV-040, encounter forms) and *"16 of 16 installed cleanly"* (EV-067, dormant forms).
+**"N of 16" is a legitimate engineering phrase here**, because 16 is simultaneously the number of
+scored competitors, dormant forms and encounter forms. A reviewer handed the naive pattern would
+dismiss two hits and, pattern fatigue being what it is, plausibly dismiss the third. **The scan must
+be competitor-scoped**; the working pattern is in EV-056-057-088 §5.
+
+**⚠ And a material weakness in RDY-0057's own claim:** `SELECT sensitivity, COUNT(*) FROM
+form_encounter` → **`normal 72`**. **Sensitivity gating has never been exercised in either direction
+on any dataset.** Until one flagged encounter exists, every statement about sensitivity behaviour is
+an assertion from source reading, not a demonstrated capability — and it must not be demonstrated
+live.
+
+**All three NOT CLOSED**, each on the same single blocker as RDY-0067: their acceptance requires
+*claim-review sign-off (RDY-0003)*, and **no named claim reviewer exists.**
+
+**`Blocks`:** 0071 → G3 G5 G6 · 0073 → G3 G6 · 0056 → G1 G5 · 0057 → G1 G5 · 0088 → G5 G6.
+No gate count moved (§0.0 Rule 3) — nothing closed.
+
 ## PB-074 (2026-08-14) — **RDY-0095 determination pack issued.** RDY-0033/0034 verified complete and blocked on it alone
 
 Evidence: **`docs/evidence/EV-095-licence-attribution-pack.md`** and

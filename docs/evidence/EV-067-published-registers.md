@@ -14,8 +14,10 @@ Its purpose is to publish, in the vendor's own words and ahead of being asked, *
 product does not do today** — split into four registers by *why* it does not do it, because the
 four have completely different costs to change.
 
-Source C found that **2 of 16** competitors publish exclusions at all. GTM §17.7 makes this
-content priority #1 — ahead of pricing, ahead of the recorded demo.
+Source C found that **very few competitors publish exclusions at all** — the exact frequency is
+withheld under **RDY-0088**, because it is computed over 16 scored competitors while 9 of 26
+dossiers remain unverified. **Publish the mechanism, not the number.** GTM §17.7 makes this content
+priority #1 — ahead of pricing, ahead of the recorded demo.
 
 **The rule that makes this credible:** a register that quietly drops an inconvenient row is worse
 than no register. The counts below are mechanically derived and reproducible (§6), and the
