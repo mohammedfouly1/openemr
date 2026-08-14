@@ -18,11 +18,16 @@ the first.
 | Range | Owner |
 |---|---|
 | **PB-001 … PB-069** | **Agent A** (Claude Code, this session — entries through PB-046 are its work) |
-| **PB-070 … PB-139** | **Agent B** (second agent) |
+| **PB-070 … PB-139** | **Agent B** — Claude Code, the session that produced the independent audit of 2026-08-14 and `docs/evidence/AGENT-CLAIMS.md`. **Range claimed 2026-08-14.** |
 | PB-140 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
 claim another here rather than borrowing.
+
+**PB numbers are not the only thing that collides.** Two agents can also spend a day closing the
+same RDY item, or mutate the same rows from opposite directions. **RDY items are claimed in
+`docs/evidence/AGENT-CLAIMS.md`** — add a row and commit it on its own *before* starting an item,
+and never start one another agent holds.
 
 ### Rule 2 — prefer a new file to editing this one
 
