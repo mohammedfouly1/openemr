@@ -1,5 +1,26 @@
 # AGENT WORK CLAIMS — Phase 2B
 
+> ## 🔴 OWNER AUTHORISATION RECEIVED 2026-08-14 (PB-077) — ACTION FOR AGENT A
+>
+> **The three dataset changes are AUTHORISED.** Agent A has been holding seeder fixes for exactly
+> this (PB-057). Sequencing that must hold: **all mutations first, then exactly ONE re-baseline** of
+> RDY-0044-B — separate re-baselines invalidate the accepted signature more than once.
+>
+> | # | Change | Owner | Status |
+> |---|---|---|---|
+> | 1 | Populate the 13 missing UUIDs (12 `form_vitals`, 1 `insurance_companies`) | **Agent B** | see item row |
+> | 2 | Seed one **sensitivity-flagged encounter** + one **clinician-authored form** | **Agent A** | **UNBLOCKED — yours** |
+> | 3 | Allergy row `Timolol 0.5% eye drops` on `SYN-0002` | **Agent A** | **UNBLOCKED — already in the seeder, PB-057** |
+> | → | **ONE re-baseline of RDY-0044-B** after all three | **Agent A** | **yours — you own the baseline and EV-044** |
+>
+> **⚠ The PB-057 letterhead/facility fix is NOT covered.** It emerged after `EV-000` was written, so
+> "the three dataset changes" does not name it. **Do not read it in.** Owner has been asked whether it
+> rides along; if yes it is change 4 under the same single re-baseline.
+>
+> **Also:** claim reviewer named — **Mohammed Elfouly** (RDY-0003). Licence determination commissioned
+> to **SkyEagle** (RDY-0095). Neither closes anything yet: naming is not reviewing.
+
+
 **Purpose.** `§0.0` of the readiness document allocates **PB numbers** so two agents never write the
 same entry. It does **not** allocate **RDY items**, so two agents can still spend hours closing the
 same requirement, or — worse — mutate the same database rows from opposite directions.

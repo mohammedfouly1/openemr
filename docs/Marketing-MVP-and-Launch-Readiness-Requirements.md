@@ -1868,6 +1868,65 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-077 (2026-08-14) — **OWNER DECISIONS RECEIVED.** Claim reviewer named · licence determination commissioned · the three dataset changes AUTHORISED
+
+**Recorded exactly as received, through the Owner.** Three decisions, answering `EV-000` D-1, D-2 and D-3.
+
+| # | Decision | As given | Requirement |
+|---|---|---|---|
+| **D-1** | Claim reviewer | **"el fouly"** → **Mohammed Elfouly** (already recorded in HR-04 as the Legal/Compliance reviewer) | RDY-0003 |
+| **D-2** | Licence determination commissioned to | **SkyEagle** | RDY-0095 |
+| **D-3** | The three dataset changes | **AUTHORISED, together** | RDY-0083, RDY-0016, D-7 step 11 |
+
+### D-3 — what is now authorised, and the sequencing that must hold
+
+**All mutations first, then exactly ONE re-baseline.** If the changes land in separate re-baselines
+the accepted signature is invalidated more than once and RDY-0044-B's *"a second reset produces
+identical counts"* stops meaning anything.
+
+| # | Change | Owner | Unblocks |
+|---|---|---|---|
+| 1 | Populate the **13 missing UUIDs** — 12 `form_vitals`, 1 `insurance_companies` | **Agent B** (it is a `background:services` run, not a seeder change) | RDY-0083 |
+| 2 | Seed **one sensitivity-flagged encounter** and **one clinician-authored form** | **Agent A** (seeder / Track D) | RDY-0016 rows A-2, A-7, A-8 |
+| 3 | Add the allergy row titled exactly `Timolol 0.5% eye drops` on `SYN-0002` | **Agent A** — already implemented in the seeder and proven read-only at **PB-057** | D-7 step 11 |
+| **→** | **ONE re-baseline of RDY-0044-B**, after all three | **Agent A** (owns the baseline and the runbook) | — |
+
+### ⚠ A fourth change exists and is NOT covered by this authorisation
+
+**PB-057's letterhead fix** — setting `users.facility` and populating the demo clinic's **street,
+city, postal code and phone**, which PB-057 found are empty behind the installer placeholder
+`000-000-0000`. It emerged after `EV-000` was written, so *"the three dataset changes"* does not name
+it.
+
+**It is in the same re-baseline window and it would be wasteful to defer it — but I am not going to
+read it into an authorisation that did not mention it.** Owner: confirm whether the letterhead fix
+rides along. If yes, it is change 4 and the same single re-baseline covers it.
+
+### Two things recorded honestly about D-1 and D-2
+
+**Naming is not reviewing.** RDY-0003's acceptance has three parts: a named reviewer, a written
+review step, and *"one sample artefact has passed through it and the review is recorded"*. **D-1
+satisfies the first.** The second is written at `EV-003`. **The third needs Mohammed Elfouly to
+actually review something** — and nothing downstream (RDY-0067, 0056, 0057, 0088) closes until he
+does. This is the PB-041 precedent: a name recorded is not a verdict recorded, and **no verdict has
+been invented here.**
+
+**Mohammed Elfouly now holds two reviewer roles** — Legal/Compliance for RDY-0028 (HR-02, still
+`ASSIGNED — AWAITING REVIEW`) and now claim reviewer for RDY-0003. That is the Owner's call and it is
+recorded, not queried. Worth noting only because HR-02 has been awaiting his review since 2026-08-13,
+so the constraint on both is the same person's time.
+
+**⚠ SkyEagle determining SkyEagle's own licence obligations is a self-review.** SkyEagle is the
+vendor — `skyeagle.uk` is the branding target across `main_menu_logo_link`, `online_support_link` and
+`user_manual_link`. A GPL determination made by the party that benefits from the answer is weaker
+evidence than independent counsel, and **the questions most likely to be answered conveniently are
+exactly the ones that matter**: Q1 (whether suppressing the acknowledgements page is lawful) and Q3
+(whether "OpenEMR" must be removed as a trademark). **Flagged once, and proceeding as instructed.**
+Recorded in `EV-095` §0 so whoever performs the review sees it before they start.
+
+**No gate count moved** (§0.0 Rule 3). **Nothing is closed by this entry** — it records decisions,
+and decisions are inputs, not evidence.
+
 ## PB-076 (2026-08-14) — **⚠ RDY-0048's candidate closure should be WITHDRAWN.** The live DB password is an unchanged upstream default. RDY-0084 requirements complete
 
 Evidence: **`EV-048-secrets-handling.md`**, **`EV-084-monitoring-requirements.md`**.
