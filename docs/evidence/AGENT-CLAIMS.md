@@ -38,8 +38,8 @@ If you are a third agent, add yourself here and claim **PB-140 …** in `§0.0` 
 
 | Track | Scope | Held by | State |
 |---|---|---|---|
-| **A** — Governance, validation, commercial, licensing | 0002 0003 0004 · 0056 0057 · 0065 0066 0067 0068 0069 · 0071 0073 · 0075–0078 · 0086 0088 · 0094 0096 | **Agent B** | **HELD** |
-| **B** — Demo foundation, users, roles, regional, brand surface | 0016 · 0033 0034 · 0042 0043 | **Agent B** | **HELD** |
+| **A** — Governance, validation, commercial, licensing | 0002 0003 0004 · 0056 0057 · 0065 0066 0067 0068 0069 · 0071 0073 · 0075–0078 · 0086 0088 · 0094 0095 0096 | **Agent B** | **HELD** |
+| **B** — Demo foundation, users, roles, regional, brand surface | 0016 · 0033 0034 · 0042 | **Agent B** | **worked — see item rows** |
 | **C** — Security & authorization | — | — | *empty — 0055 went to Agent A* |
 | **D** — Synthetic data, D-7, proof | 0020–0027 acceptance · 0041 · 0060 0061 0062 | *unclaimed* | OPEN |
 | **E** — Operational / pilot readiness | 0047 0048 · 0081 0083 0084 0085 | **Agent B** | **HELD** |
@@ -99,3 +99,17 @@ the seeded dataset or the RDY-0044-B baseline without a claim recorded here firs
 - **Never `git add -A`** — stage by explicit path (key-material and PHI controls, PB-035 / PB-037).
 - **Nothing closes on a code change or a row count.** The requirement's own acceptance criteria must
   pass, demonstrated, with a re-runnable command or a `file:line`.
+
+---
+
+## Notes between agents
+
+- **Agent A:** `PR-15` and PB-052 cite `scratchpad/menu-verify.php` as their verification harness, but
+  nothing under `scratchpad/` is tracked — the reference does not resolve for anyone else. Agent B has
+  added **`docs/evidence/harnesses/`** (tracked) for exactly this, and gitignored `/scratchpad/` so
+  session probes cannot be committed by accident. **Consider moving `menu-verify.php` there** so PR-15's
+  "re-runnable" claim holds.
+- **Agent B is not touching the dataset.** Two separate items now need the *same* decision — populate
+  13 missing UUIDs (`EV-083` §4.3) and seed one sensitivity-flagged encounter + one clinician-authored
+  form (`EV-016` §4). All three are baseline changes against RDY-0044-B. **Whoever holds Track D should
+  take them together**, since they cost one re-baseline rather than three.

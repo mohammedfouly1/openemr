@@ -1868,6 +1868,58 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-074 (2026-08-14) — **RDY-0095 determination pack issued.** RDY-0033/0034 verified complete and blocked on it alone
+
+Evidence: **`docs/evidence/EV-095-licence-attribution-pack.md`** and
+**`docs/evidence/EV-033-034-identity-and-vendor-links.md`**.
+
+**RDY-0095 blocks G4 outright and is named as a dependency by both RDY-0033 and RDY-0034**, whose
+acceptance criteria each end *"the licence determination is attached."* It also has **no technical
+predecessor** — it could have started on day one. It remains **BLOCKED — DECISION**; the pack removes
+the *preparation* cost, not the decision, and determines nothing.
+
+**Built from primary text in this repository:** GPL-3.0-or-later (`composer.json:4`), `LICENSE`
+674 lines, **2,396 PHP files carrying a GPL header**, with the three governing clauses quoted at
+`LICENSE:103-110` (definition of *Appropriate Legal Notices*), `:196-203` (§4 *keep intact all
+notices*) and `:230-233` (§5(d) interactive interfaces). **Twelve attribution-bearing surfaces
+enumerated**, each marked changed-by-us or untouched. **Eight closed-form questions**, each with its
+primary text, affected surfaces, options and consequences, plus a blank determination block. **No
+answer, verdict or signature is pre-filled.**
+
+### ⚠ Flagged against our own interest
+
+**The change most likely to need reversing is ours, not upstream's.** `acknowledge_license_cert.html`
+is currently unreachable **twice over** — `display_acknowledgements` / `_on_login` set to `0`, *and*
+an Apache `<Files>` deny returning **HTTP 403** (verified live). The stated rationale was correct as
+far as it went — the file was preserved rather than deleted precisely because it carries GPL text and
+copyright notices (locked constraint C7). **But preserving a file no user can reach is not obviously
+"keeping a notice intact"**, and §0's *"convenient and prominently visible feature"* is exactly what
+the acknowledgements menu item used to be. §5(d) may cut the other way. **That is a lawyer's call**,
+it is Q1 in the pack, and the reversal is two SQL rows and one Apache block.
+
+Three further open surfaces neither source had enumerated: the **product-registration modal still
+names the OpenEMR Foundation** and solicits consent to share data with it (a privacy question as much
+as a licensing one); **`rwt_2026_report.php` instructs users to email `hello@open-emr.org` for ONC
+certification**, which sits badly against §32's blanket prohibition on certification claims; and
+**trademark is not copyright** — GPL grants no trademark licence, so removing "OpenEMR" from user
+surfaces may be an *obligation* rather than the choice RDY-0033 frames it as.
+
+### RDY-0033 / RDY-0034 — work complete, verified live, still not closed
+
+Verified by live `globals` reads plus an unauthenticated fetch of the login page: `openemr_name`
+**Thiqa**, `<title>Thiqa Login</title>`, tagline replaced, `open-emr.org` occurrences **0**,
+donation/review/acknowledgements links rendered **0**, logo repointed to `skyeagle.uk`, acknowledgements
+page **HTTP 403**.
+
+**One residual `OpenEMR` string survives on the login page, and it is the session cookie name**
+(`document.cookie = "OpenEMR=…"`). Invisible on screen — but **persona P-3 is the prospect's IT
+contractor, and the first thing a competent one does is open developer tools.** Deliberately not
+changed: renaming the session cookie invalidates every live session and touches authentication.
+Routed to RDY-0090 for classification, suggested class **B**.
+
+**Both remain NOT CLOSED for one reason only: the attached determination does not exist.** No further
+engineering closes either. **`Blocks`: G1 G2** (0033, 0034); **G1 G4** (0095). No gate count moved.
+
 ## PB-073 (2026-08-14) — RDY-0016 matrix executed: **32/32 PASS** — and **4 rows still cannot be executed**, on a seeded dataset
 
 Evidence: **`docs/evidence/EV-016-authorization-matrix.md`**. Real authenticated HTTP, each role
