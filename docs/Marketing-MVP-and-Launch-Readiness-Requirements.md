@@ -174,10 +174,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **18** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029) |
-| **Requirements still open** | **96** |
-| **Open P0** | **55** (71 P0, less 0001, 0010, 0011, 0012, 0013, 0014, 0015, 0017, 0032, 0036, 0037, 0038, 0050, 0051, 0052, 0080) — **unchanged by PB-031**, see the sub-requirement note below |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 24 · G2 28 · G3 22 · G4 3 · G5 14 · G6 21** after Phase 2B PB-013 — **unchanged by PB-031** |
+| **Requirements CLOSED** | **23** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045) |
+| **Requirements still open** | **91** |
+| **Open P0** | **50** — 71 P0 less the 21 closed P0 IDs (0001, 0010-0015, 0017, 0021, 0028, 0032, 0036-0038, 0044, 0050-0052, 0058, 0059, 0080). **Recalculated at PB-045** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 23 · G2 23 · G3 21 · G4 3 · G5 13 · G6 21** — recalculated at **PB-045** after closing 0021, 0028, 0044, 0058, 0059. G2 fell 28 → 23, the largest movement of Phase 2B |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -1789,6 +1789,105 @@ Authenticated sessions, real page fetches, string-level confirmation that config
 a real session. They prove the value reaches the rendered page. They do **not** prove visual
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
+
+## PB-045 (2026-08-14) — **RDY-0021, 0028, 0044, 0058, 0059 CLOSED.** Human verdicts received; RDY-0044-B built and reset proven
+
+### Human verdicts — recorded exactly as received
+
+| | HR-01 · RDY-0021 | HR-02 · RDY-0028 |
+|---|---|---|
+| Reviewer | **Dr Mohamed Taha**, ophthalmologist | **Mohammed Elfouly**, Legal / Compliance |
+| Verdict | **PASS — all 8 examinations, no comments** | **APPROVED** for controlled synthetic demo use |
+| Dataset reviewed | **`de6e513c…`** — the corrected dataset, against the complete 78-file v4 pack | **`de6e513c…`** |
+| Date | 2026-08-14 | 2026-08-14 |
+| Conditions | None | None |
+| **Attestation route** | **Relayed by the Owner**, not a countersigned artefact | **Relayed by the Owner** |
+
+> **Recorded honestly as to form.** Both verdicts reached this document **through the Owner**, not as
+> a document signed by the reviewer. I have not invented a signature, a licence number, per-exam
+> comments or a timestamp beyond the date given. **A countersigned artefact from each reviewer should
+> replace the relay when available** — that is a documentation improvement, not a re-review, and it
+> does not reopen either requirement.
+>
+> **What made these verdicts acceptable where the 2026-08-13 assertion was not:** that one was given
+> against a dataset carrying an injected target IOP of 21 and zeroed field flags, on a screenshot
+> pack missing the retina findings. **Both defects are fixed**, the pack is complete and
+> independently verified (PB-044), and the disclosures — the FTCF header limitation and the
+> CANCEL-not-OK hazard — were on the record before the verdict. The substantive objection is gone.
+
+**RDY-0021: VERIFIED READY — CLOSED.** **RDY-0028: VERIFIED READY — CLOSED.**
+
+### RDY-0044-B — protected post-seed baseline, built
+
+**Two components, because one is not a reset:**
+
+| Component | Size | SHA-256 |
+|---|---|---|
+| Database | 75,463,249 bytes, 283 tables | `e45ad2e7c854d24812fbcf50bd0be5f556aad3ef9cf280a2bf8dd3b86d8828dd` |
+| **Document payloads** | 7,006 bytes, **10 files** | `338b122228a7c5d948bd90119cf50d4c36f7dd7b63db6a1f2c02929bf5030d9d` |
+
+**`mysqldump` does not capture document payloads.** It saves the 10 `documents` rows but not the
+files on disk under `sites/<site>/documents/<pid>/`. A database-only baseline would restore a
+document list where **nothing opens** — a defect that would surface for the first time in front of a
+prospect. Both components are hashed, moved outside the retention glob, and read-only (overwrite
+attempt blocked, verified).
+
+### Reset proof — executed against two *different* kinds of damage
+
+A reset test that restores an undamaged database proves nothing. So:
+
+| Step | Result |
+|---|---|
+| Accepted state signature recorded (32 fields: counts, cohort, planted case, attribution, EV-028 scans) | baseline |
+| **Perturbation 1** — added a patient, deleted 3 charges and 2 prescriptions, renamed the facility, corrupted an acuity value, **deleted a document file from disk** | diverged on 7 fields; payloads 10 → 9; the planted-case check went from 1 to **4** encounters missing charges |
+| **Reset 1** | **signature identical to accepted**; payloads restored to 10 |
+| **Perturbation 2**, different damage — deleted 5 patients, 10 appointments **including the recurring series**, 3 allergies, changed the timezone, corrupted an IOP | diverged again, on different fields |
+| **Reset 2** | **signature identical to accepted AND to reset 1** |
+
+**`accepted == reset#1 == reset#2`.** Full EV-028 and cohort validation after reset 2: **all PASS,
+zero FAIL.**
+
+Remaining RDY-0044-B criteria, all verified post-reset:
+
+| Criterion | Result |
+|---|---|
+| All six demo accounts authenticate | **6 of 6** |
+| D-1 returns a clean integrity result | **HTTP 200, 7,316 bytes, "No audit log tampering detected"** |
+| Flow board shows today's seeded list | **16 appointments dated today**; report renders 8,793 bytes |
+| A second reset produces identical counts | **Proven above** |
+
+**Runbook:** `docs/evidence/EV-044-demo-reset-runbook.md` — procedure, verification signature,
+what is and is not reset, credential policy, and **the §16.3 audit-trail decision made explicitly:
+the log is reset with everything else**, because preserving it would leave entries referring to
+patients the reset removed. Consequence recorded: demonstrate D-1 *before* a reset, not after.
+
+**RDY-0044-B: CLOSED. RDY-0044 therefore CLOSES** — both A (PB-031) and B are now closed.
+
+### RDY-0058 and RDY-0059 — closed on evidence already gathered
+
+**RDY-0058** — six named reports return non-empty results. All six pass (PB-037), and its acceptance
+requires *"a reviewer reconciles at least two reports against the manifest"*: **RPT-0028** reconciled
+exactly (SYN-0001, codes 99213+92014, 250.00+350.00 = that patient's 2 charges / 600.00 SAR) and
+**RPT-0012** identified the planted missing-charge case (encounter 36 / SYN-0019). **CLOSED.**
+
+**RDY-0059** — CSV export end-to-end. RPT-0009 exported `application/Csv` with
+`attachment; filename=appts.Csv`, and the final criterion — *"opens in a spreadsheet"* — was verified
+by parsing the file with a real CSV reader rather than eyeballing it: **38 data rows, 7 named columns
+(Provider, Date, Time, Patient, DOB, Type, Status), every row populated.** **CLOSED.**
+
+### Gate recalculation under the §47 locked rule
+
+Five RDY IDs close: **0021, 0028, 0044, 0058, 0059**. Their `Blocks` fields are the only input.
+
+| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Before (PB-013) | 3 | 24 | 28 | 22 | 3 | 14 | 21 |
+| Closing 0021, 0028, 0044, 0058, 0059 | — | **−1** (0058) | **−5** | **−1** (0028) | — | **−1** (0059) | — |
+| **After** | **3** | **23** | **23** | **21** | **3** | **13** | **21** |
+
+**Open P0: 55 → 50.** All five closures are G2 items; 0028 also blocks G3, 0058 also G1, 0059 also G5.
+
+**G2 falls from 28 to 23 — the largest single movement of Phase 2B.**
 
 ## PB-044 (2026-08-14) — **HR-01 EVIDENCE PACK COMPLETE.** v4 PASS, independently verified; idempotence fix held
 
