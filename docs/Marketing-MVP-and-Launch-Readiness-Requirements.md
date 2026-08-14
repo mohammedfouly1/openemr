@@ -1868,6 +1868,70 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-081 (2026-08-14) — ⚠ **The RDY-0044-B v2 baseline ships the UUID defect.** The authorised fix did not reach the artefact it was authorised to fix
+
+**Agent A rebuilt the RDY-0044-B baseline at 03:45. Agent B applied the authorised UUID fix at
+03:49.** The baseline is four minutes older than the change it was supposed to contain — **exactly
+the 240-minute window PB-080 flagged as the one case where the trigger does not self-heal in time.**
+
+### Verified against the baseline file, not inferred from timestamps
+
+`C:/openemr-stack/backups/protected/rdy0044b/thiqa-rdy0044b-v2-baseline-20260814-064532.sql`
+(71,857,993 B, SHA-256 `4048e65c12d6e152…`), parsed directly:
+
+| Table | Rows in baseline | `uuid` NULL |
+|---|---:|---:|
+| `form_vitals` | 12 | **12** |
+| `insurance_companies` | 2 | **1** |
+
+**13 NULL UUIDs — precisely the 13 rows D-3 change 1 was authorised to populate.**
+
+Column position confirmed before asserting: the dump's own
+`CREATE TABLE \`form_vitals\`` declares `uuid binary(16)` as **column 2**, matching
+`information_schema` on the live database. The values are `NULL`, not empty binary.
+
+**Live is currently correct** — `form_vitals` 0 missing, `insurance_companies` 0 missing — because
+the enabled trigger re-ran `UUID_Service` after the last restore. **The live database and the
+baseline now disagree**, and it is the baseline that ships.
+
+### Why this matters more than a cosmetic null
+
+1. **The authorised change did not land where it was authorised to land.** The Owner approved D-3 to
+   remove these NULLs from the demo dataset. The demo dataset *is* the baseline. Applying it only to
+   the live instance leaves the approval unfulfilled.
+2. **Every reset re-introduces them**, and `UUID_Service` then fills them with **different random
+   values** up to 240 minutes later. RDY-0044-B's *"a second reset produces identical **counts**"*
+   still holds — counts do not change — but the dataset is **not** byte-stable across resets, which
+   is the property the baseline exists to provide.
+3. **Between a reset and that tick, the FHIR/API surface is incomplete** for those 13 records.
+
+### The fix is cheap, and it is Agent A's
+
+**Live state is already correct**, so this needs no re-seed and no re-run of the data fixes — only a
+re-dump:
+
+```bash
+# 1. confirm the live state is clean
+mariadb -u root -h 127.0.0.1 openemr -N -B -e \
+  "SELECT SUM(uuid IS NULL OR uuid='') FROM form_vitals;"          # expect 0
+mariadb -u root -h 127.0.0.1 openemr -N -B -e \
+  "SELECT SUM(uuid IS NULL OR uuid='') FROM insurance_companies;"  # expect 0
+
+# 2. re-take the baseline, supersede v2, re-hash, re-verify the reset proof
+```
+
+**Agent B has not touched it.** The baseline, `EV-044` and the reset proof are Agent A's, the file is
+read-only by design, and re-baselining is the single-owner step PB-077 established. **Flagged, not
+fixed.**
+
+### Recorded as a process finding too
+
+**PB-080's handoff instruction was correct and still missed by four minutes**, because it was written
+after the baseline had already been taken. The general lesson is worth keeping: **when two agents
+mutate one database, "apply the change" and "capture the artefact" must be a single ordered step with
+one owner — not two correct actions in the wrong order.** The verification that caught this was
+re-reading the artefact rather than trusting either agent's status line.
+
 ## PB-080 (2026-08-14) — **CORRECTION to PB-078**, and a better result than the one it claimed: the trigger **self-heals** the UUID population
 
 ### What PB-078 got wrong

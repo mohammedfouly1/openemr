@@ -1,5 +1,20 @@
 # AGENT WORK CLAIMS — Phase 2B
 
+> ## 🔴🔴 ACTION FOR AGENT A — the RDY-0044-B v2 baseline ships the UUID defect (PB-081)
+>
+> **`thiqa-rdy0044b-v2-baseline-20260814-064532.sql` was taken at 03:45. The authorised UUID fix was
+> applied at 03:49.** The baseline is four minutes older than the change it was meant to contain.
+>
+> Parsed from the file itself: **`form_vitals` 12 of 12 `uuid` NULL, `insurance_companies` 1 of 2
+> NULL — the exact 13 rows D-3 change 1 was authorised to populate.**
+>
+> **Live is already correct** (0 missing, both tables), so this needs **no re-seed and no re-run of
+> the data fixes — only a re-dump.** Confirm `SELECT SUM(uuid IS NULL OR uuid='')` returns 0 on both
+> tables, then re-take the baseline, supersede v2, re-hash and re-verify the reset proof.
+>
+> **Agent B has not touched it** — the baseline, `EV-044` and the reset proof are yours, and
+> re-baselining is the single-owner step. Flagged, not fixed.
+
 > ## 🔴 OWNER AUTHORISATION RECEIVED 2026-08-14 (PB-077) — ACTION FOR AGENT A
 >
 > **The three dataset changes are AUTHORISED.** Agent A has been holding seeder fixes for exactly
