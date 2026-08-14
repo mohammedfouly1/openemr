@@ -2487,6 +2487,56 @@ passes that person's review.
 
 **RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
 
+## PB-060 (2026-08-14) — ⚠ RDY-0023's growth-chart criterion is **unsatisfiable with the locked dataset**
+
+RDY-0023 requires *"≥15 SOAP notes and ≥10 vitals sets exist; a clinician reviewer confirms
+plausibility; **at least one record renders a growth chart**."* The counts pass (18 SOAP, 12 vitals).
+The growth chart **cannot be produced at all**, and that is a conflict between two locked things
+rather than a defect.
+
+### Measured, not assumed
+
+`C_FormVitals.class.php:116` gates the entire paediatric block, including the growth-chart actions:
+
+```php
+$show_pediatric_fields = ($patient_age <= 20 || preg_match('/month/', (string) $patient_age));
+```
+
+| Cohort | Value |
+|---|---|
+| Youngest patient | **36** |
+| Oldest | 78 |
+| **Patients aged ≤ 20** | **0** |
+
+**No seeded patient can render a growth chart, because none is a child.**
+
+### This is a collision between the locked targets and an older acceptance criterion
+
+The Owner's locked dataset (§1 of the post-seed decisions) fixes **30 patients** and says nothing
+about age distribution or a paediatric case. RDY-0023's criterion predates that lock and assumes one.
+**Neither is wrong; they were written at different times and have never been reconciled.**
+
+Worth noting on both sides:
+
+- **A paediatric patient is plausible for this ICP.** Paediatric ophthalmology is a real subspecialty,
+  so adding one is not a contrivance.
+- **But the growth chart appears nowhere in the demo.** It is not in D-7's sixteen steps and not in
+  §17's twelve captures. **Nothing currently planned would ever show it.**
+
+### The decision, which is the Owner's
+
+| Option | Cost |
+|---|---|
+| **A — add one paediatric patient** to the seed | A data change: re-seed, re-baseline, re-affirm. Same cycle as PB-058. Makes the criterion satisfiable and adds a plausible paediatric ophthalmology case |
+| **B — amend RDY-0023**, dropping the growth chart as out of scope | No data change. Honest if the feature is never demonstrated — but it **removes a criterion rather than meeting it**, which should be a recorded decision, not a quiet edit |
+
+**I have not chosen.** Recorded because an acceptance criterion that cannot be met by the accepted
+dataset will otherwise sit as a permanent silent blocker, and it was found by checking rather than by
+assuming the counts were the whole story.
+
+**RDY-0023 remains OPEN with two precise blockers:** the clinician review of the 18 SOAP notes
+(**human**), and this (**Owner decision**). **Per Rule 3, no gate count moved.**
+
 ## PB-059 (2026-08-14) — **RDY-0020 CLOSED** — duplicate detection and the merge workflow executed, then reset
 
 The criterion prescribes the whole sequence — *"a duplicate search returns the two planted pairs; the
