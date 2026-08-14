@@ -1868,6 +1868,64 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-082 (2026-08-14) — RDY-0047 deployment runbook issued. **Its acceptance is an execution by someone else, and it has never been run**
+
+Evidence: **`docs/evidence/EV-047-deployment-runbook.md`**.
+
+Thirteen sections, eight provisioning steps, a five-part smoke test, and a first-execution log with a
+place to record **every question the runbook fails to answer** — because RDY-0047's criterion is
+literally *"without asking a question that the runbook does not answer"*, so each such question is a
+defect in the document, not in the follower.
+
+### It closes the environment-separation gap the requirement names
+
+RDY-0047's own problem statement is *"environment-specific configuration is **not** separated from
+code."* Two concrete instances, both handled at provisioning rather than by editing source:
+
+| Item | Handled at |
+|---|---|
+| DB credentials in a git-tracked `sqlconf.php` — **still the upstream default `openemr` on the demo instance** (`EV-048`) | **Step 4**: unique CSPRNG password per instance, stored outside the repository, `sqlconf.php` generated rather than taken from git |
+| Unix-only commands in `config.php` (`lpr`, `enscript`, `/usr/bin/file`) on a Windows host (OD-04) | **Step 7** |
+
+**Rule stated in the runbook:** if provisioning requires editing anything under `src/`, `library/` or
+`interface/`, **stop — that is a defect and gets logged.**
+
+### Three traps carried forward so a follower meets them once, not twice
+
+1. **PHP's own directory must be on `PATH` before Apache starts.** `mod_php` runs inside the Apache
+   process, so six extensions silently fail to load and **every page returns HTTP 500**.
+2. **`thiqa-branding:provision-report-acl` is mandatory.** The `patients|bulk_rep` ACO exists only
+   where it has been run; without it the guard resolves against a non-existent ACO and **fails closed
+   for every role including Administrators** — presenting as a permissions mystery, not a missing
+   migration (PB-009).
+3. **The demo host's background-service trigger must NOT be copied.** It runs as the logged-on user
+   because Google Drive mounts `G:` per session and a `SYSTEM` task cannot see the application at
+   all — so it does not survive a logoff. **A customer instance needs a service account and must
+   survive reboot.** Explicitly flagged as a demo-host artefact.
+
+The runbook also carries the facility **address** fields PB-057 found blank behind the installer
+placeholder `000-000-0000`, so a fresh instance does not reproduce the blank-letterhead defect.
+
+### Not closed, and the reason is structural
+
+| Criterion | Result |
+|---|---|
+| A repeatable runbook exists | **MET** |
+| Environment config separated from code | **MET as specification** — unproven until executed |
+| **Provisioned by someone who did not write it, with no unanswered question** | **NOT MET — never executed** |
+| Smoke test defined (S-1…S-5) | **MET** |
+| Smoke test passes; time recorded | **NOT MET** |
+
+**RDY-0047's acceptance cannot be satisfied by writing.** It needs a person who did not write it to
+follow it end to end, and **the elapsed time they record is one of the two highest-value cost figures
+in the plan** (PRC-003, RDY-0069).
+
+**One knock-on, stated precisely:** RDY-0048's third criterion — *"the runbook contains the
+handling"* — **is satisfied by §6 as written.** RDY-0048 nonetheless stays open on its **first**
+criterion, because the demo instance still runs the default password.
+
+**`Blocks`: G3 G6.** No gate count moved (§0.0 Rule 3).
+
 ## PB-081 (2026-08-14) — ⚠ **The RDY-0044-B v2 baseline ships the UUID defect.** The authorised fix did not reach the artefact it was authorised to fix
 
 **Agent A rebuilt the RDY-0044-B baseline at 03:45. Agent B applied the authorised UUID fix at
