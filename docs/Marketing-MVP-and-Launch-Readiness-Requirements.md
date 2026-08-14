@@ -252,10 +252,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **28** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045); **0040** (PB-046); **0046** (PB-048); **0021**, **0022**, **0027** (PB-055) |
-| **Requirements still open** | **86** |
-| **Open P0** | **45** — 71 P0 less the 26 closed P0 IDs (0001, 0010-0015, 0017, 0021, 0022, 0027, 0028, 0032, 0036-0038, 0040, 0044, 0046, 0050-0052, 0058, 0059, 0080). **Recalculated at PB-055** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 23 · G2 19 · G3 20 · G4 3 · G5 13 · G6 21** — **PB-055**. Across Phase 2B **G2 has fallen 28 → 19 and G3 22 → 20** |
+| **Requirements CLOSED** | **30** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045); **0040** (PB-046); **0046** (PB-048); **0021**, **0022**, **0027** (PB-055); **0024**, **0026** (PB-058) |
+| **Requirements still open** | **84** |
+| **Open P0** | **43** — 71 P0 less the 28 closed P0 IDs (0001, 0010-0015, 0017, 0021, 0022, 0024, 0026, 0027, 0028, 0032, 0036-0038, 0040, 0044, 0046, 0050-0052, 0058, 0059, 0080). **Recalculated at the PB-058 gate sync** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 23 · G2 17 · G3 20 · G4 3 · G5 13 · G6 21** — **PB-058 gate sync**. Across Phase 2B **G2 has fallen 28 → 17 and G3 22 → 20** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -2322,6 +2322,77 @@ pre-filled and no verdict assumed.** RDY-0067 closes the moment a name is record
 passes that person's review.
 
 **RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
+
+## PB-058 (2026-08-14) — **Data fixes APPLIED under renewed approval. RDY-0024 and RDY-0026 CLOSED. Baseline v2.**
+
+The Owner renewed **Dr Mohamed Taha's and Mohammed Elfouly's** verdicts and authorised the change
+(corroborated independently in Agent B's PB-077 D-3). The fixes were applied **through the
+deterministic seeder**, never patched into the accepted dataset — the sequence §7 of the post-seed
+decisions requires.
+
+### The approval was honoured *provably*, which was the whole point
+
+The reviewers pre-approved a **specified, bounded** change. So the obligation was to show the change
+stayed inside it:
+
+| Check | Result |
+|---|---|
+| **Eye-exam clinical values across the re-seed** | **CLINHASH `fab7947785d853d04b431932cf5c45ab` — byte-identical.** **Dr Taha's eight examinations are untouched** |
+| Distinct allergy patients | **5** — the locked target did not move |
+| Full cohort + EV-028 validation | **All PASS, zero FAIL** |
+
+**The pre-approval covered exactly the change that was made, and that is now demonstrable rather than
+asserted.**
+
+### Both fixes verified end to end, not by presence
+
+| Fix | Verification |
+|---|---|
+| **Allergy alert** (RDY-0024, D-7 step 11) | The conflict query returns **`SYN-0002 / Timolol 0.5% eye drops`** — a patient holding the matching active prescription. **The alert fires** |
+| **Prescription letterhead** (RDY-0026, D-7 step 12) | Three printed prescriptions now carry **clinic name, `3100 Fictional Boulevard, Riyadh, Riyadh Region 00000`, and `+966 11 000 000`** — decompressed from the PDFs, where before the letterhead was empty |
+
+The new facility phone is **structurally undialable**, the same EV-028 §3.2 rule as the patient
+numbers. Both seeder steps are **idempotent** — they fill only what is empty.
+
+### Baseline v2, and the reset re-proven
+
+| Component | SHA-256 |
+|---|---|
+| `thiqa-rdy0044b-v2-baseline-20260814-064532.sql` (71,857,993 bytes) | `4048e65c12d6e1527618719e16b45977aa5fc1dd4204c75225928002dd4002d4` |
+| `rdy0044b-v2-document-payloads.zip` (10 files) | `c0a8d0dc797e40a89167c01a815044d080e6625e8c9b92e296c3d3133c2abe6e` |
+
+Reset proof re-run with **two different perturbations**, and **perturbation 1 deliberately removed
+both new fixes**. `accepted == reset#1 == reset#2`, 10 payloads, validation clean. **So the proof also
+shows a reset *restores* the fixes — they are baseline state, not a manual step.**
+
+> **A live hazard closed.** `EV-044`'s runbook still cited the superseded hashes, so **anyone
+> following it would have restored the pre-fix dataset.** Updated to v2 with a warning banner; the old
+> set is retained on disk under a `SUPERSEDED-` prefix and marked never-restore.
+
+### Closures
+
+**RDY-0024** — 3–5 allergy patients ✓ 5 · 4–6 chronic problems ✓ 6 · **allergy alert fires on a
+deliberately constructed exact-match case** ✓ · qualification in the demo script ✓ (EV-040).
+**VERIFIED READY — CLOSED.**
+
+**RDY-0026** — 10–15 prescriptions ✓ 12 · **3 print correctly, with a complete letterhead** ✓ · demo
+script states the eRx limitation before the screen ✓. **VERIFIED READY — CLOSED.**
+
+### GATE SYNC (Rule 3, dedicated pass)
+
+Inputs are the `Blocks` fields of closures since PB-055. **RDY-0024 → G2. RDY-0026 → G2.** Agent B has
+recorded no closures in PB-070…077 and, per the claims ledger, does not recalculate.
+
+| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| At PB-055 | 3 | 23 | 19 | 20 | 3 | 13 | 21 |
+| **After** | **3** | **23** | **17** | **20** | **3** | **13** | **21** |
+
+**Open P0: 45 → 43.** Across Phase 2B **G2 has fallen 28 → 17.**
+
+**Track D's seeded-data set now stands at 5 of 8 closed** (0021, 0022, 0024, 0026, 0027). The three
+remaining need a person: the merge workflow (0020), a clinician on the SOAP notes plus a growth chart
+(0023), and the document marking through a browser (0025).
 
 ## PB-057 (2026-08-14) — Both data fixes implemented in the seeder and **proven read-only**; deliberately **NOT applied**
 
