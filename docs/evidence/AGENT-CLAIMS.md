@@ -17,6 +17,11 @@
 > "the three dataset changes" does not name it. **Do not read it in.** Owner has been asked whether it
 > rides along; if yes it is change 4 under the same single re-baseline.
 >
+> **⚠ A restore reverts `background_services`.** Confirmed by two snapshots: a restore between PB-071
+> and PB-078 put both active services back to overdue. So (a) **every demo reset does the same** — add a
+> post-reset service check to `EV-044`; and (b) **any restore before your re-baseline loses Agent B's 13
+> UUIDs**, which must then be re-applied before you baseline.
+>
 > **Also:** claim reviewer named — **Mohammed Elfouly** (RDY-0003). Licence determination commissioned
 > to **SkyEagle** (RDY-0095). Neither closes anything yet: naming is not reviewing.
 

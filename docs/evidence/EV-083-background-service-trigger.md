@@ -165,17 +165,69 @@ exists to prevent."* The same reasoning applies to mutating it to close RDY-0083
 
 ---
 
+## 4A. UPDATE 2026-08-14 — the §4.3 decision was given. Change 1 applied.
+
+**The Owner authorised the three dataset changes together (PB-077).** Change 1 — populate the 13
+missing UUIDs — was applied here. Changes 2 and 3 are Agent A's (seeder / Track D).
+
+| Step | Result |
+|---|---|
+| Pre-change snapshot | `C:/openemr-stack/backups/pre-uuid-20260814-034849.sql`, 71,857,895 B, SHA-256 `2dedec63be8d4c55…` |
+| Pre-state | `form_vitals` **12 of 12 missing**; `insurance_companies` **1 of 2 missing** |
+| `background:services run --name UUID_Service --force` | **`[OK] Service 'UUID_Service' executed successfully.`** |
+| Post-state | `form_vitals` **0 missing**; `insurance_companies` **0 missing** — **13 rows populated** |
+| **Clinical fingerprint, before and after** | `MD5` over every `form_eye_vitals` clinical column: **`9ee6d0f8fc4238e965b4fdfcc78a674d` → `9ee6d0f8fc4238e965b4fdfcc78a674d` — identical.** No clinical value changed |
+| Row counts | patients 30 · encounters 72 · appointments 37 · charges 36 · globals 495 — **all unchanged** |
+
+**The fingerprint is the control that matters.** Populating a UUID must not touch clinical content,
+and comparing row counts alone would not have proven that — a value could change without a count
+changing.
+
+### ⚠ A restore reverted this table, and it will happen again on every demo reset
+
+Between the PB-071 proof and the snapshot taken 45 minutes later, **`background_services` reverted to
+its exact pre-PB-071 values** — `Email_Service` back to `2026-08-13 13:15:21`, `UUID_Service` to
+`2026-08-13 17:02:38`. Both snapshots confirm it. A targeted `UPDATE` could not produce that; **a
+database restore did.**
+
+**Two consequences, and neither is cosmetic:**
+
+1. **`background_services` is inside the RDY-0044-B baseline.** So **every demo reset returns both
+   active services to an overdue state**, and the trigger has to catch up afterwards. This belongs in
+   the `EV-044` reset runbook's post-reset verification, alongside the account and D-1 checks.
+2. **If a restore happens before Agent A's single re-baseline, the 13 UUIDs are lost and must be
+   re-applied.** Flagged in `AGENT-CLAIMS.md` as a handoff condition.
+
+It also strengthens **M-6** in `EV-084`: this is a real, recurring, silent regression that no one
+would notice by reading a table, which is exactly what M-6 exists to catch.
+
+---
+
 ## 5. Acceptance against T-18
 
 | Criterion | Result |
 |---|---|
 | A recurring trigger exists | **MET** — registered Windows Scheduled Task, 2-minute tick, absolute paths verified |
 | The trigger actually invokes the runner | **MET** — proven through the task itself (§3 step 3), with a negative control (step 2) |
-| `next_run` advances for **`Email_Service`** within one interval | **MET** — 03:04:03 → 03:06:26 |
-| `next_run` advances for **`UUID_Service`** within one interval | **NOT MET — deliberately not attempted.** Blocked on the §4.3 decision |
-| Diagnostics shows no overdue active service | **NOT MET** — `UUID_Service` is still overdue, and will remain so until the trigger is enabled |
+| `next_run` advances for **`Email_Service`** within one interval | **MET** — advanced through the enabled task |
+| `next_run` advances for **`UUID_Service`** within one interval | **MET** — advanced on the authorised run; `2026-08-13 17:02:38` → `2026-08-14 07:49:30` |
+| **Diagnostics shows no overdue active service** | **MET** — at `2026-08-14 03:52:58 UTC`: `Email_Service` next_run `03:53:48` **current**, `UUID_Service` `07:49:30` **current**. **Zero overdue active services** |
 
-### Status: **RDY-0083 — NOT CLOSED. Trigger built, proven, and held disabled pending one Owner decision.**
+### Status: **RDY-0083 — ALL T-18 CRITERIA MET. Recommended for closure.**
+
+The trigger is **enabled** and recurring. **Agent B does not mark its own work closed** — this is a
+closure for the next gate sync, which Agent A holds under §0.0 Rule 3. **`Blocks`: G2 (disclosure), G3.**
+
+**One standing caveat that must travel with the closure:** the trigger runs **as the logged-on user**,
+because Google Drive mounts `G:` per session and a `SYSTEM` task cannot see the application at all.
+**It does not survive a logoff.** That is correct for this host and **must not be copied into the
+pilot runbook unchanged** (RDY-0047).
+
+### Superseded
+
+*The original §5 recorded two criteria as NOT MET pending the §4.3 decision. That decision was given
+at PB-077 and both are now met. The original text is replaced rather than annotated, because a
+superseded acceptance table is the kind of thing a later reader mistakes for current state.*
 
 **`Blocks`: G2 (disclosure), G3.** No gate count is moved (§0.0 Rule 3).
 

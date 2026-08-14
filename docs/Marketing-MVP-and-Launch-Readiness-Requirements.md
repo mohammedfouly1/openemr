@@ -1868,6 +1868,54 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-078 (2026-08-14) — D-3 change 1 applied: **13 UUIDs populated.** RDY-0083 now meets every T-18 criterion. **A restore reverts the service table — and will on every demo reset**
+
+Evidence: **`EV-083`** §4A (revised). Authorised at PB-077.
+
+### Change 1 of 3 — applied and verified
+
+| | |
+|---|---|
+| Snapshot first | `pre-uuid-20260814-034849.sql`, 71,857,895 B, SHA-256 `2dedec63be8d4c55…` |
+| Before | `form_vitals` **12 of 12** missing `uuid`; `insurance_companies` **1 of 2** |
+| After | **0 missing in both — 13 rows populated** |
+| **Clinical fingerprint before → after** | `MD5` over every clinical column of `form_eye_vitals`: **`9ee6d0f8fc4238e965b4fdfcc78a674d` → `9ee6d0f8fc4238e965b4fdfcc78a674d` — identical** |
+| Row counts | patients 30 · encounters 72 · appointments 37 · charges 36 · globals 495 — unchanged |
+
+**The fingerprint is the control that matters**, and row counts would not have supplied it: a
+clinical value can change without any count changing. **Nothing clinical moved.**
+
+### RDY-0083 — every T-18 criterion now met
+
+At **2026-08-14 03:52:58 UTC**: `Email_Service` next_run `03:53:48` **current** ·
+`UUID_Service` `07:49:30` **current** · **zero overdue active services.** The scheduled task is
+**enabled** and ticking every 2 minutes.
+
+**Recommended for closure. Agent B does not mark its own work closed** — that is the next gate sync,
+which Agent A holds (§0.0 Rule 3). **`Blocks`: G2 (disclosure), G3.**
+
+**Caveat that must travel with the closure:** the trigger runs **as the logged-on user**, because
+Google Drive mounts `G:` per session and a `SYSTEM` task cannot see the application at all. **It does
+not survive a logoff.** Correct for this host; **must not be copied into the pilot runbook unchanged**
+(RDY-0047).
+
+### ⚠ A database restore reverted `background_services` — and it will on every demo reset
+
+Between the PB-071 proof and a snapshot 45 minutes later, both services reverted to their **exact**
+pre-PB-071 values (`Email_Service` → `2026-08-13 13:15:21`, `UUID_Service` → `17:02:38`). Two
+snapshots confirm it. A targeted `UPDATE` cannot produce that; **a restore did.**
+
+**Two consequences, neither cosmetic:**
+
+1. **`background_services` sits inside the RDY-0044-B baseline**, so **every demo reset returns both
+   active services to overdue** and the trigger must catch up. **This belongs in `EV-044`'s post-reset
+   verification**, beside the account and D-1 checks — Agent A owns that runbook.
+2. **If any restore happens before Agent A's single re-baseline, the 13 UUIDs are lost and must be
+   re-applied.** Recorded as a handoff condition in `AGENT-CLAIMS.md`.
+
+It also gives **M-6** (`EV-084`) a real, recurring, silent regression to catch — which is a better
+argument for that signal than anything I wrote when defining it.
+
 ## PB-077 (2026-08-14) — **OWNER DECISIONS RECEIVED.** Claim reviewer named · licence determination commissioned · the three dataset changes AUTHORISED
 
 **Recorded exactly as received, through the Owner.** Three decisions, answering `EV-000` D-1, D-2 and D-3.
