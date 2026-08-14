@@ -38,12 +38,30 @@ If you are a third agent, add yourself here and claim **PB-140 …** in `§0.0` 
 
 | Track | Scope | Held by | State |
 |---|---|---|---|
-| **A** — Governance, validation, commercial, licensing | 0002 0003 0004 · 0056 0057 · 0065 0066 0067 0068 0069 · 0071 0073 · 0075–0078 · 0086 0088 · 0094 0095 0096 | **Agent B** | **HELD** |
-| **B** — Demo foundation, users, roles, regional, brand surface | 0016 · 0033 0034 · 0042 0043 · 0090 | **Agent B** | **HELD** |
-| **C** — Security & authorization | 0055 | **Agent B** | **HELD** |
+| **A** — Governance, validation, commercial, licensing | 0002 0003 0004 · 0056 0057 · 0065 0066 0067 0068 0069 · 0071 0073 · 0075–0078 · 0086 0088 · 0094 0096 | **Agent B** | **HELD** |
+| **B** — Demo foundation, users, roles, regional, brand surface | 0016 · 0033 0034 · 0042 0043 | **Agent B** | **HELD** |
+| **C** — Security & authorization | — | — | *empty — 0055 went to Agent A* |
 | **D** — Synthetic data, D-7, proof | 0020–0027 acceptance · 0041 · 0060 0061 0062 | *unclaimed* | OPEN |
-| **E** — Operational / pilot readiness | 0047 0048 · 0064 · 0081 0082 0083 0084 0085 | **Agent B** | **HELD** |
+| **E** — Operational / pilot readiness | 0047 0048 · 0081 0083 0084 0085 | **Agent B** | **HELD** |
 | **F** — Git, upstream, patch currency, provenance | 0045 0046 | **Agent A** | **HELD** — 0046 closed; 0045 in progress (EV-045) |
+
+### ⚠ Claim collision of 2026-08-14, and how it was resolved
+
+**Agent B's opening track claim was too wide and was overtaken within minutes.** Between the claim
+commit and Agent B's first read-back, Agent A had already published **PB-048 (RDY-0046)**,
+**PB-049 (RDY-0090)**, **PB-050 (RDY-0055)** and **PB-051 (the gate sync)**.
+
+**Agent B released all four rather than duplicating or contesting them.** Agent A's work is
+complete, evidenced and first. The table above is corrected accordingly.
+
+**The lesson, recorded so the next agent does not repeat it:** claiming a *whole track* is too
+coarse when another agent is already mid-flight in it. **Claim at item level, re-read the PB
+headings immediately before starting each item, and treat any item with a published PB entry as
+gone** — even if the ledger still shows it free. The ledger is a courtesy; **the committed PB entry
+is the fact.**
+
+**Gate counts are Agent A's.** Agent A ran the PB-051 sync and holds Rule 3. **Agent B will not
+recalculate gate counts**, and records only which gates a closed RDY's `Blocks` field names.
 
 **Track D is left unclaimed deliberately.** Agent A built the dataset, the HR-01 evidence pack and
 the D-7 script, and holds the context for the remaining proof-asset work. Agent B will not mutate
@@ -55,8 +73,16 @@ the seeded dataset or the RDY-0044-B baseline without a claim recorded here firs
 
 | RDY | Item | Held by | State | Note |
 |---|---|---|---|---|
-| 0046 | Module provenance | Agent A | **DONE** | Closed at Agent A's PB entry; `EV-046` |
+| 0040 | D-7 demo script | Agent A | **DONE** | Closed, PB-046; `EV-040` |
+| 0046 | Module provenance | Agent A | **DONE** | Closed, PB-048; `EV-046` |
 | 0045 | Upstream patch currency | Agent A | **HELD** | `EV-045` upstream-target analysis written |
+| 0055 | Audit-log PHI determination | Agent A | **DONE** | PB-050; `EV-055`. Released by Agent B |
+| 0090 | Branding surface inventory | Agent A | **HELD** | PB-049; `EV-090`. Not closed — needs the human walk. Released by Agent B |
+| — | Gate-count sync (Rule 3) | Agent A | **HELD** | PB-051. Agent B does not recalculate |
+| 0067 | Published status registers | Agent B | **DONE (not closed)** | PB-070; `EV-067`. 3 of 4 criteria met; criterion 3 blocked on RDY-0003 |
+| 0016 | Authorization matrix §23.4 | Agent B | **HELD** | Unblocked by the seed; 5 rows were data-blocked at PB-014 |
+| 0083 | Background-service trigger | Agent B | **HELD** | Live evidence contradicts the "never executed" finding — correction pending |
+| 0042 0043 | Menu defects | Agent B | **HELD** | Both confirmed present in source |
 
 ---
 

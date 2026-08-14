@@ -1851,6 +1851,55 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-070 (2026-08-14) — **Agent B, first entry.** RDY-0067 registers extracted; 3 of 4 criteria met, **not closed**
+
+*Agent B's range is PB-070…PB-139 (§0.0 Rule 1). RDY items are claimed in
+`docs/evidence/AGENT-CLAIMS.md` — Agent B holds the items listed there and no others.*
+
+Artefact: **`docs/evidence/EV-067-published-registers.md`**. The four exclusion registers extracted
+from Source B into a publishable form: **47 Disabled · 27 Uninstalled · 18 Requires Integration ·
+60 Missing.**
+
+**The counts are derived, not transcribed.** The artefact prints the command that produces them from
+Source B's own status column, so a reader can re-run it. All four reconcile to Source B §35.2.
+
+### Two things the derivation found that were worth publishing
+
+1. **The command returns 268 of 270 capabilities**, and the shortfall is not an error.
+   **CAP-0201** (C-CDA) and **CAP-0240** (backup) carry the status `A / **Op: BLOCKED**` — Active
+   code that could not actually run. Adding them gives Active 177 and the catalogue total of 270.
+   They are published as their own subsection rather than folded into "Active", because
+   demonstrating either would have failed in front of a customer. **CAP-0240 is now resolved**
+   (RDY-0080); **CAP-0201 is still blocked** and stays on the no-go register.
+2. **Source B carries 73 `GAP` IDs, not 59.** `GAP-0060…0073` are the audit's own fourteen
+   unclosable questions — questions about the *audit*, not gaps in the *product*. Publishing all 73
+   would have overstated the exclusions by 14. §26.8 fixes the Missing register at
+   `GAP-0001…GAP-0059`, and that boundary is applied.
+
+### Disclosed against our own interest, inside the customer-facing artefact
+
+**CAP-0266 Prior Authorizations** is listed in the Uninstalled register *with* Source B's findings
+against it — hard-coded `facility WHERE id = 3`, a query against a table that does not exist, **no
+ACL on its patient page**, and a `registration()` call that POSTs clinic name, phone and email to an
+external endpoint. The register recommends **not** installing it. A register that omits the
+embarrassing row is not a register.
+
+### Why this is NOT closed
+
+| # | Criterion | Result |
+|---|---|---|
+| 1 | Reconciles exactly to 47 / 27 / 18 / 60 | **MET** — derived mechanically, command reproducible |
+| 2 | Each entry carries its mandatory phrasing | **MET** — every Disabled entry names its flag; every Requires-Integration entry names the vendor and places the contract with the customer |
+| 3 | **It passes claim review** | **NOT MET — blocked on RDY-0003** |
+| 4 | Republished whenever a new capability audit is produced | **MET as a rule**; first execution due at the next audit |
+
+**RDY-0003 has no named claim reviewer, so there is nobody who can perform criterion 3.** No further
+engineering clears it. A blank claim-review block sits at the end of the artefact; **no signature is
+pre-filled and no verdict assumed.** RDY-0067 closes the moment a name is recorded and this document
+passes that person's review.
+
+**RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
+
 ## PB-051 (2026-08-14) — GATE SYNC. RDY-0040 and RDY-0046 applied
 
 Dedicated recalculation pass under the §47 locked rule, per concurrency Rule 3. Inputs are the
