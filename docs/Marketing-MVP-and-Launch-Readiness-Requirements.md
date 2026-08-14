@@ -1846,6 +1846,77 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-047 (2026-08-14) — RDY-0045 upstream target analysed: **"418 behind" measures the wrong branch**
+
+Full analysis: **`docs/evidence/EV-045-upstream-target-analysis.md`**. Analysis only — **no fetch,
+merge, rebase, pull or reset was performed**, as the brief requires. Every figure comes from refs
+already in the local object store.
+
+### The correction
+
+This document has recorded since Phase 2A that the product is **"418 commits behind and divergent"**,
+and R-03 rates that **severe — security and reputational**. **418 is the distance to
+`upstream/master`, and `master` is the wrong target for this branch.**
+
+| | vs `upstream/master` | vs **`upstream/rel-820`** |
+|---|---:|---:|
+| Merge-base | `b91c12aee` (2026-07-01) | **`6125a2fd8` — `chore(release): prep 8.2.0 (#12742)`** |
+| Ahead | 53 | **37** |
+| **Behind** | **418** | **83** |
+
+**The branch is now proven rel-820-based, not assumed:** its merge-base with `rel-820` *is* the 8.2.0
+release-preparation commit, which matches `version.php`. The product is 8.2.0 plus 37 Thiqa commits.
+
+### What the 83 commits contain — and this is the material part
+
+| Type | Count |
+|---|---:|
+| `ci` | **61** |
+| `chore` / `docs` | 18 |
+| `feat` | 2 — both `feat(release)`, CI and release tooling only |
+| `test` | 1 — release fixtures |
+| **`fix`** | **1** |
+
+**Security-relevant commits matching `security\|vuln\|CVE\|XSS\|SQL inject\|CSRF\|auth\|escape\|sanitiz`: zero.**
+
+The single `fix` is `dd5ebc069 fix(php86): drop return statements from constructors`, touching
+`src/Billing/EdiHistory/X12File.php` and `src/Gacl/Gacl.php`. **The entire runtime-code delta between
+this deployment and upstream rel-820 is three lines in two files** — a PHP 8.6 forward-compatibility
+cleanup. Nothing else in the gap reaches a customer.
+
+### Consequences, stated carefully
+
+**R-03's severity should be re-derived.** Being 1 fix and 79 CI/docs commits behind a release branch
+is an ordinary maintenance posture, not the contradiction the register describes. **This is a
+correction to a risk rating that has stood since Phase 2A, and it is recorded here rather than
+quietly adjusted.**
+
+**What it does not license:**
+
+- **The local refs are stale.** `upstream/rel-820` sits at `87dcd0fbc`, dated **2026-08-04**; today is
+  2026-08-14. **83 is a floor against a ten-day-old snapshot.** The real number needs
+  `git fetch upstream` — read-only, but outside this analysis's authority.
+- **Divergence is real.** HEAD is not an ancestor of `rel-820`, so catch-up is a merge or rebase, and
+  37 Thiqa commits plus **14 patched core files** (PR-01…PR-14) are the conflict surface. V-09's
+  dry-run has only ever examined six of them.
+- **`rel-820` stops receiving fixes when 8.3.0 ships.** Choosing it defers the master question rather
+  than answering it.
+
+### Recommendation
+
+**Adopt `upstream/rel-820` as the maintenance target** — the branch already lives there, the gap is
+83 commits of which 3 lines are runtime, no security patches are outstanding, and `master` is
+8.3.0-dev, i.e. shipping a customer a pre-release.
+
+Next actions, in order: **(1)** Owner authorises `git fetch upstream` to replace the stale floor;
+**(2)** Owner confirms the target; **(3)** re-run V-09 against all 14 patch records; **(4)** apply
+`dd5ebc069`; **(5)** re-derive R-03.
+
+**RDY-0045 is NOT closed.** Its acceptance also requires an update method, a rollback approach, a
+regression check and a named cadence. This settles the first and most blocking question — *which
+upstream* — with measurements rather than assumption. **Per concurrency Rule 3, no gate count is
+moved in this entry.**
+
 ## PB-046 (2026-08-14) — **RDY-0040 CLOSED** — D-7 script written and bound to the real dataset; one step found broken
 
 `docs/evidence/EV-040-d7-demo-script.md`. §15 already carried the nine-field specification for all
