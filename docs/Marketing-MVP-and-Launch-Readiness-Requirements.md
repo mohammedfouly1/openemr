@@ -2016,6 +2016,60 @@ passes that person's review.
 
 **RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
 
+## PB-053 (2026-08-14) — RDY-0061 capture rules written; **not closed** — the per-image check needs RDY-0060's captures
+
+Artefact: **`docs/evidence/EV-061-capture-rules.md`**. Claimed in `AGENT-CLAIMS.md` before starting,
+per the ledger convention.
+
+§17.2 already carried four rules. This turns them into something a capturer can work from and a
+reviewer can sign — which is RDY-0061's actual gap: *"redaction decided per-capture is redaction
+that eventually gets forgotten."*
+
+### What the rules add beyond §17.2
+
+**Nine absolute prohibitions**, with the standing instruction that a violation means the capture is
+**retaken, not redacted** — a blurred box tells a viewer something was there.
+
+**A decision §17.2 could not previously make: which account takes which capture.** Now that
+RDY-0017 rotated `admin` and six named roles exist with proven grants (PB-037), each of SS-01…SS-12
+is assigned a specific account — `n.alqahtani` for the admin surfaces, `r.aldosari` for the
+front-office and negative-half captures, `y.alharbi` for clinical, `k.alotaibi` for financial.
+**Appearance of `admin` in a capture now means the wrong account was used, not merely bad practice.**
+
+### The rule that inverts the obvious instinct
+
+**Synthetic identifiers must be left visible, not redacted.** `SYN-0001`, `Hessa Alharthi`,
+`9990000001`, `+966 5 000 001` are all fabricated and carry a signed synthetic-data determination.
+`SYN-` announces the record's status, the ID class is non-issued and the phone is undialable.
+**Redacting them would be worse than showing them — it implies something real underneath.**
+
+### Per-capture notes that exist only because the work has been done
+
+- **SS-01** — **do not capture a range containing an `api_log` row** (PB-030 false positive), and the
+  qualification **must not say "encrypted"**: EV-055 proved the log is base64 and decodable in one
+  function call.
+- **SS-03/04** — the pairing is already proven: Front Office 403, Physician 200 with rows. **Frame the
+  403 as a boundary, not an error.**
+- **SS-07** — 16 appointments today at mixed statuses; the "more than one status" acceptance is met.
+- **SS-09** — capture **`SYN-0006` encounter 23**, and **include the retina panel** (macula, vessels,
+  CMT 412/268). Its *"an ophthalmologist confirms plausibility"* acceptance **is already satisfied** by
+  Dr Taha's PB-045 verdict.
+- **SS-10/11** — RPT-0012 finds the planted missing charge; the CSV is a verified 38 rows × 7 columns.
+- **SS-12** — **do not crop the untranslated gaps.** 47.5 % chrome-only is the claim; hiding the gaps
+  would make the capture dishonest.
+
+### The review sheet
+
+Twelve rows, one per capture, each recording prohibitions cleared, synthetic IDs left visible, correct
+account, qualification attached and annotation asserting nothing extra — **signed by someone other
+than the capturer**, as §17.2 requires. Videos are reviewed the same way plus: branded surface,
+non-`admin` account, **qualification spoken before the result appears**.
+
+**RDY-0061: NOT CLOSED.** Criterion 1 (the rules exist) is met; criterion 2 requires every RDY-0060
+capture checked and recorded, and **those captures do not exist yet**. §8 of EV-061 is the instrument
+that fills in as RDY-0060 runs. **Nothing further can be done on 0061 until 0060 runs**, and 0060
+needs a person at a browser. It blocks **G1 and G5**. **Per Rule 3, no gate count moved.**
+
 ## PB-052 (2026-08-14) — **RDY-0043 FIXED (PR-15)** — the encounter-forms menu rendered **zero** forms, not "the first in each category"
 
 Patch record: **PR-15**. Verification harness: `scratchpad/menu-verify.php`, which builds the menu
