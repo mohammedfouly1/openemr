@@ -4,6 +4,62 @@
 
 ---
 
+## 0.0 CONCURRENCY PROTOCOL — read this before editing, if you are an agent
+
+**More than one agent now edits this file.** It is ~6,300 lines and every agent's edits match on
+exact strings, so uncoordinated writes silently lose work. This protocol exists to stop that. It
+costs nothing to follow and it is not optional.
+
+### Rule 1 — PB numbers are allocated by range, never by "next free"
+
+Two agents both reading "highest is PB-046" will both write PB-047, and the second commit destroys
+the first.
+
+| Range | Owner |
+|---|---|
+| **PB-001 … PB-069** | **Agent A** (Claude Code, this session — entries through PB-046 are its work) |
+| **PB-070 … PB-139** | **Agent B** (second agent) |
+| PB-140 … | unallocated — claim a range in this table before using it |
+
+**Write your range into this table before your first entry.** If you find your range exhausted,
+claim another here rather than borrowing.
+
+### Rule 2 — prefer a new file to editing this one
+
+The lowest-collision write is a **new evidence file** under `docs/evidence/EV-*.md`, with a **one-line
+pointer** added here. Long analyses, runbooks, review packs and captures belong in their own file.
+Reserve edits to this document for: a PB entry in your range, a status cell on a requirement you
+closed, and the summary counts under Rule 3.
+
+### Rule 3 — only one agent recalculates gate counts, and only at a sync point
+
+The §1 summary table and the §47 gate figures are the highest-collision surface in the file: every
+closure touches them, and two agents recalculating in parallel produce two wrong answers.
+
+- **Do not update the gate counts inside your closure entry.** Record the closure, and state which
+  gates the RDY's `Blocks` field names.
+- Gate counts are recalculated **in a single dedicated pass** under the §47 locked rule, by whichever
+  agent performs the sync, reading every closure since the last one.
+- **Never infer a gate count from prose.** §47 rule 7: only an explicit `Blocks` entry counts.
+
+### Rule 4 — commit small, commit often, re-read before editing
+
+- Commit each logical unit immediately. An uncommitted 300-line edit is the thing most likely to be lost.
+- **Before any edit to a section you did not just write, re-read it.** The file changes under you.
+- If your edit tool reports the file changed on disk, **stop and diff** before retrying — do not
+  force the edit through.
+- Never `git add -A`. Stage by explicit path. (Also required by the key/PHI controls — PB-035, PB-037.)
+
+### Rule 5 — the closure contract binds every agent equally
+
+Nothing here is closed on a code change, a row count, or an assertion. **Every closure needs the
+requirement's own acceptance criteria to pass, demonstrated**, with a re-runnable command or a
+`file:line`. Where a result could be vacuous, a negative control is required — that discipline has
+caught a false pass at PB-027, PB-031, PB-032 and PB-044, and a false *failure* at PB-037 and PB-043.
+**Do not fabricate a human sign-off.** Record what was received, from whom, and by what route.
+
+---
+
 ## 0. Verification Header
 
 | Field | Value |
