@@ -235,10 +235,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **24** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045); **0040** (PB-046) |
-| **Requirements still open** | **90** |
-| **Open P0** | **49** — 71 P0 less the 22 closed P0 IDs (0001, 0010-0015, 0017, 0021, 0028, 0032, 0036-0038, 0040, 0044, 0050-0052, 0058, 0059, 0080). **Recalculated at PB-046** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 23 · G2 22 · G3 21 · G4 3 · G5 13 · G6 21** — recalculated at **PB-046**. Across PB-045/046 **G2 fell 28 → 22**, the largest movement of Phase 2B |
+| **Requirements CLOSED** | **25** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045); **0040** (PB-046); **0046** (PB-048) |
+| **Requirements still open** | **89** |
+| **Open P0** | **48** — 71 P0 less the 23 closed P0 IDs (0001, 0010-0015, 0017, 0021, 0028, 0032, 0036-0038, 0040, 0044, 0046, 0050-0052, 0058, 0059, 0080). **Recalculated at the PB-051 gate sync** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 23 · G2 22 · G3 20 · G4 3 · G5 13 · G6 21** — **PB-051 gate sync**. Across Phase 2B **G2 has fallen 28 → 22 and G3 22 → 20** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -1850,6 +1850,87 @@ Authenticated sessions, real page fetches, string-level confirmation that config
 a real session. They prove the value reaches the rendered page. They do **not** prove visual
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
+
+## PB-051 (2026-08-14) — GATE SYNC. RDY-0040 and RDY-0046 applied
+
+Dedicated recalculation pass under the §47 locked rule, per concurrency Rule 3. Inputs are the
+`Blocks` fields of the closures recorded since the last sync — nothing else.
+
+| Closure | `Blocks` | Effect |
+|---|---|---|
+| **RDY-0040** (PB-046) | **G2** | G2 −1 — *already applied at PB-046* |
+| **RDY-0046** (PB-048) | **G3** | **G3 −1 — applied now** |
+
+| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| At PB-046 | 3 | 23 | 22 | 21 | 3 | 13 | 21 |
+| **After this sync** | **3** | **23** | **22** | **20** | **3** | **13** | **21** |
+
+**Open P0: 49 → 48.** Closed P0 IDs now number 23.
+
+PB-049 (RDY-0090) and PB-050 (RDY-0055) record **no** closure and move nothing.
+
+## PB-050 (2026-08-14) — **RDY-0055: the audit-log PHI exposure is now MEASURED, not predicted**
+
+Determination: **`docs/evidence/EV-055-audit-phi-determination.md`**. Made against the **seeded**
+system, never a real-patient one, exactly as the acceptance requires — and it only became answerable
+because the seed exists.
+
+### The latent finding is active, and quantified
+
+Source B predicted that on a system with data, *"PHI — and any bound secret — lands in the audit
+table in plaintext base64."* With 30 patients present:
+
+| Probe against **decoded** `log.comments` | Rows |
+|---|---:|
+| Patient surname | **6,073** |
+| `SYN-` patient identifier | **30** |
+| National-ID-class value | **30** |
+| Patient telephone number | **30** |
+| Clinical free text | **214** |
+
+74,397 log rows, **74,042 base64**. `log.comments` stores **the raw SQL statement with bind parameters
+interpolated** — decoded sample: `` REPLACE INTO `form_eye_mag_wearing` (`ENCOUNTER`, `FORM_ID`, `PID`, … `` —
+so anything written to a patient record transits the log.
+
+**Base64 is encoding, not encryption.** Every figure was produced with one built-in function,
+`CONVERT(FROM_BASE64(comments) USING utf8mb4)`. No key, no tooling.
+
+> ### ⚠ A false negative anyone repeating this will hit — including me
+>
+> My first pass searched `log.comments` directly with `LIKE '%Alharthi%'` and returned **0 for every
+> probe.** That reads as "no PHI in the audit log", and it is **wrong** — a plaintext search cannot
+> match base64. **Any prior assurance that the log is clean is void if it was produced that way.**
+> I nearly recorded the opposite finding.
+
+### The other three acceptance elements
+
+- **Who can read it.** Application: `admin|super` — exactly two ACL groups, Administrators and
+  Emergency Login; correctly denied to the other four roles (PB-037). **Database: anyone with the
+  `openemr` credential — no table-level restriction.** **Backups: anyone with the file, and backups
+  are unencrypted.** The application layer is narrow; the database and backups are not.
+- **Retention: there is none.** No purge/retention/prune global is set. The log spans **seven days and
+  already holds 74,397 rows**, growing without bound.
+- **A schema correction.** The audit cited an `encrypt` column and *"all 4,280 rows `encrypt='No'`"*.
+  **That column does not exist in 8.2.0.** The substance is unchanged and arguably worse — there is no
+  encryption flag at all, the code path having been removed.
+
+### Recommended handling — RESTRICT AND DISCLOSE
+
+Six measures in EV-055 §4. The load-bearing ones: **never describe the audit log as encrypted**
+(prohibit the phrasing outright); **encrypt backups at rest** — today a backup file is a
+plaintext-recoverable PHI export, and this is the cheapest large risk reduction available; **set a
+retention policy**, resolving deliberately the conflict between pruning and tamper verification
+rather than leaving retention unset; and **disclose in the pilot agreement** (RDY-0068). Upstream
+redaction of bind parameters is a **contribution candidate, not a local patch** — a local fix worsens
+the divergence EV-045 measured.
+
+**RDY-0055 NOT CLOSED.** The technical determination is complete and evidenced; what remains is a
+written disclosure and a named claim reviewer to approve it (**RDY-0003 is open**) — governance, not
+engineering.
+
+**Immediately actionable for RDY-0056:** the audit-integrity qualification must never imply the log
+is encrypted. It is base64, and this determination decodes it in one function call.
 
 ## PB-049 (2026-08-14) — RDY-0090 branding inventory enumerated; **not closed** — the human walk is its acceptance
 
