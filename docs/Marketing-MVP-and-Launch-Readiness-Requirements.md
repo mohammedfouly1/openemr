@@ -1846,6 +1846,70 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-048 (2026-08-14) — **RDY-0046 CLOSED** — module provenance is upstream's, fully determinable, and inert
+
+Determination: **`docs/evidence/EV-046-module-provenance.md`**. Disposition: **RETAIN, accounted for.**
+
+### The audit's framing was wrong, and the evidence is unambiguous
+
+Source B recorded `oe-module-claimrev-connect` as *"of unknown provenance"*; RDY-0046 calls it *"a
+supply-chain provenance gap."* Every field is in fact fully determinable, and the module is not this
+fork's at all:
+
+| Field | Value |
+|---|---|
+| Package / version | `claimrevolution/oe-module-claimrev-connect` **v2.1.6** |
+| Origin | `https://github.com/claimrevolution/oe-module-claimrev-connect.git` — public |
+| Pinned ref | **`978b0dd498e0e166992259926d6fa77bf56266d4`** in tracked `composer.lock` |
+| Licence | **GPL-3.0** |
+| Purpose | ClaimRev Connect — claims / revenue-cycle connectivity |
+
+**`upstream/rel-820:composer.json` line 52 requires it too** — verified with
+`git show upstream/rel-820:composer.json`. It was added by **`248783e99`,
+`feat(claimrev): install ClaimRev Connect module as Composer dep`, authored by `claimrevolution`,
+2026-05-29, in upstream.** `.gitignore:15` is upstream's own rule from that same commit —
+composer-installed modules are not vendored, which is ordinary practice, not concealment.
+
+### It is already inert — verified live, not assumed
+
+| Check | Result |
+|---|---|
+| Registered in the `modules` table | **NO.** Six modules are registered (`Immunization`, `Syndromicsurveillance`, `Documents`, `Ccr`, `Carecoordination`, `Thiqa Branding`); claimrev is **not** among them |
+| Booted at runtime | **No** — OpenEMR loads from that table |
+| Referenced by Thiqa code, `src/`, `library/` | **None** |
+
+It sits on disk unregistered: transmits nothing, appears on no screen.
+
+### Why removal would be the wrong call
+
+Removing it means dropping a dependency **upstream declares**, which diverges `composer.json` from
+upstream and **enlarges the merge conflict surface EV-045 just measured** — a poor trade for deleting
+an inert package that changes no runtime behaviour. It would also recur as a conflict on every future
+catch-up. **Account for it; do not delete it.**
+
+### D-1's "freely verifiable" claim holds
+
+The module is published publicly under GPL-3.0, **pinned to an exact commit in `composer.lock`, which
+is tracked in this repository**, and required by upstream itself. Anyone can fetch that commit and
+read it. The claim and the artefact do not disagree.
+
+> **One wording tension, recorded rather than glossed.** The acceptance says *"if retained, it is
+> under version control."* The module's **files** are not vendored here; its **identity and exact
+> commit are**. I read the intent as *"we can account for and verify it"* — met in full. **Vendoring
+> 134 files would satisfy the words while diverging from upstream and worsening RDY-0045.** If the
+> Owner reads it literally, the disposition changes and this closure should be revisited.
+
+### Two residual items, neither blocking
+
+- **If the ICP ever adds claims**, this module becomes in-scope and needs a real evaluation —
+  functionality, data flows, and whether it transmits outside the Kingdom. **Not done, and must not be
+  skipped at that point.**
+- **Confirm it is still unregistered after any upgrade** — module upgrades can self-register. A
+  one-line check belongs in the RDY-0047 runbook.
+
+**RDY-0046: VERIFIED READY — CLOSED.** It blocks **G3** only. **Per concurrency Rule 3, no gate count
+is moved in this entry** — to be applied at the next sync.
+
 ## PB-047 (2026-08-14) — RDY-0045 upstream target analysed: **"418 behind" measures the wrong branch**
 
 Full analysis: **`docs/evidence/EV-045-upstream-target-analysis.md`**. Analysis only — **no fetch,
