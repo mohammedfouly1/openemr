@@ -270,6 +270,8 @@ final class SeedDemoCommand extends Command
             return $this->runContextVerification($io);
         }
 
+        $this->completeFacilityAndProviderIdentity($io);
+
         // Dependency order. Each stage records its own count for the manifest.
         $patients = $this->seedPatients($io);
         $this->seedAllergiesAndProblems($io, $patients);
@@ -450,6 +452,74 @@ final class SeedDemoCommand extends Command
 
     // ---------------------------------------------------------------- patients
 
+    /**
+     * Completes the two identity gaps that only surface on **printed** output (PB-056).
+     *
+     * 1. `users.facility` — OpenEMR carries both a `facility_id` foreign key and a denormalised
+     *    `facility` **name string**. The demo users had the FK set and the string NULL, and the
+     *    prescription letterhead is built by `C_Prescription::multiprintplain_header()` with
+     *    `JOIN facility AS f ON f.name = users.facility` — a join on the *string*. With it NULL the
+     *    join returned no rows, so every printed prescription carried **no clinic name, address or
+     *    phone**. Nothing is visibly wrong on screen; it only appears on paper.
+     *
+     * 2. The facility record itself held **only a name** — street, city, state, postal code and
+     *    country were empty and the phone was the installer placeholder `000-000-0000`. Fixing the
+     *    join alone would therefore have produced a letterhead with a clinic name and a blank
+     *    address, which is not obviously better.
+     *
+     * Both are idempotent and only fill what is empty, so re-running never overwrites a value an
+     * operator has set deliberately.
+     */
+    private function completeFacilityAndProviderIdentity(SymfonyStyle $io): void
+    {
+        $io->section('Facility and provider identity (printed-output fields)');
+
+        if ($this->dryRun) {
+            $io->writeln('  would complete the facility address/phone and set users.facility');
+
+            return;
+        }
+
+        QueryUtils::sqlStatementThrowException(
+            "UPDATE facility SET
+                street       = IF(street IS NULL OR street = '', ?, street),
+                city         = IF(city IS NULL OR city = '', ?, city),
+                state        = IF(state IS NULL OR state = '', ?, state),
+                postal_code  = IF(postal_code IS NULL OR postal_code = '', ?, postal_code),
+                country_code = IF(country_code IS NULL OR country_code = '', ?, country_code),
+                phone        = IF(phone IS NULL OR phone = '' OR phone = '000-000-0000', ?, phone)
+             WHERE id = ?",
+            [
+                '3100 Fictional Boulevard',
+                'Riyadh',
+                'Riyadh Region',
+                '00000',
+                'SA',
+                // EV-028 3.2 — structurally undialable, same rule as the patient numbers.
+                '+966 11 000 000',
+                $this->facilityId,
+            ]
+        );
+
+        // The name string the print header joins on.
+        $updated = QueryUtils::sqlStatementThrowException(
+            "UPDATE users SET facility = ? WHERE facility_id = ? AND (facility IS NULL OR facility = '')",
+            [$this->facilityName, $this->facilityId]
+        );
+
+        $withString = (int) QueryUtils::fetchSingleValue(
+            'SELECT COUNT(*) c FROM users WHERE facility = ?',
+            'c',
+            [$this->facilityName]
+        );
+
+        $io->writeln(sprintf(
+            '  facility address and phone completed; %d users now carry the facility name string',
+            $withString
+        ));
+        unset($updated);
+    }
+
     /** @return list<int> */
     private function seedPatients(SymfonyStyle $io): array
     {
@@ -565,6 +635,20 @@ final class SeedDemoCommand extends Command
         for ($i = 0; $i < self::TARGET_ALLERGY_PATIENTS; $i++) {
             $this->insertListEntry($pids[$i] ?? 0, 'allergy', $allergies[$i]);
         }
+
+        // THE CONSTRUCTED ALLERGY-ALERT CASE (D-7 step 11, RDY-0024).
+        //
+        // `allergy_conflict()` (library/clinical_rules.php:354) matches with a literal SQL IN:
+        // `prescriptions.drug` must be **byte-identical** to a `lists.title` allergy. None of the
+        // five clinical allergies above matches any seeded drug, so the alert could never fire and
+        // D-7 step 11's own failure condition was guaranteed.
+        //
+        // This adds a SECOND allergy to a patient who already holds the matching prescription, so
+        // `COUNT(DISTINCT pid)` stays at TARGET_ALLERGY_PATIENTS and no locked target moves. The
+        // title is the full product string because that is what an exact match requires — and it is
+        // clinically ordinary to record an allergy against the product that caused the reaction.
+        $alertPid = $pids[1] ?? 0;   // the patient carrying 'Timolol 0.5% eye drops'
+        $this->insertListEntry($alertPid, 'allergy', 'Timolol 0.5% eye drops');
         for ($i = 0; $i < self::TARGET_PROBLEM_PATIENTS; $i++) {
             $this->insertListEntry($pids[$i] ?? 0, 'medical_problem', $problems[$i]);
         }

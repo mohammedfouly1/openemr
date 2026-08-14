@@ -1868,6 +1868,74 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-076 (2026-08-14) — **⚠ RDY-0048's candidate closure should be WITHDRAWN.** The live DB password is an unchanged upstream default. RDY-0084 requirements complete
+
+Evidence: **`EV-048-secrets-handling.md`**, **`EV-084-monitoring-requirements.md`**.
+
+### RDY-0048 — three true statements that together miss the exposure
+
+This row has moved *"tracked and credential-bearing"* → *"`skip-worktree` set"* → *"committed blob
+pristine, **no credential has ever been committed**"*, recorded as **DRIFT — IMPROVED** and a
+**candidate closure** (§7.21, §45.1.2 row 8). **Every one of those statements is true.** The history
+scan confirms them:
+
+| Check | Result |
+|---|---|
+| Tracked files with a non-`H` git flag | **1** — `S sites/default/sqlconf.php` |
+| Commits touching it, all refs | **11** → **9 distinct blobs** |
+| Blob at `HEAD` vs `upstream/master` vs `631f2b38c` | **`e6be8476…` — byte-identical at all three** |
+| `$config` in the committed blob | **`0`** |
+
+**This project committed nothing.** And yet:
+
+```php
+// the committed (upstream) blob, and the live working tree, both contain:
+$login = 'openemr';  $pass = 'openemr';
+```
+
+**The live database password is `openemr` — the upstream placeholder, never changed.** It is not
+confidential and never was: it ships in every OpenEMR clone on earth and is the first credential
+anyone would try. So RDY-0048's criterion *"no live credential is present in any tracked file"* is
+**not met** — not because a secret leaked, but because **the credential was never changed from a
+public default**, and `skip-worktree` is protecting something that is not a secret.
+
+**What limits it today** (so this is not over-read — it is a pilot-blocker, not a live incident):
+MariaDB binds `127.0.0.1` only; least privilege is real and was *proven* at PB-007, where the app
+user's `CREATE DATABASE` was denied; and there is no real patient data here. **None of that survives
+contact with a hosted pilot.**
+
+**Remediation specified, not applied:** a unique DB password generated per instance at provisioning
+(RDY-0047's runbook, mandatory step), `sqlconf.php` generated from a template rather than tracked on
+customer instances, `skip-worktree` recorded as a developer convenience rather than a control, and a
+rotation on this demo instance before any external party sees it.
+
+**RDY-0048: NOT CLOSED — and the Phase 2A candidate closure should be withdrawn.** Phase 2B has now
+looked, and closing on the improvement would have shipped a pilot with a publicly known database
+password. **`Blocks`: G3.**
+
+### RDY-0084 — six signals, thresholds derived rather than guessed
+
+M-1 availability · M-2 error rate · M-3 disk (database **and** documents volume, which grow
+independently because `mysqldump` does not capture payloads) · M-4 database · M-5 backup success ·
+M-6 background-service health. Each has a signal, threshold, destination and role owner, with the
+derivation of every threshold recorded so it does not get tuned away the first time it is
+inconvenient.
+
+**M-6 is not hypothetical — it has a live failure to detect right now.** Both active services have
+been overdue since 2026-08-13 (`EV-083`), and M-6 would have fired then instead of the condition
+sitting unnoticed in a table. Its tolerance is **2 × each service's own `execute_interval`**, derived
+from live values, because a fixed threshold would spam on the 2-minute service and never fire on the
+240-minute one.
+
+**Tooling explicitly NOT selected**, as the criterion permits — it depends on RDY-0064, since a
+managed platform may supply M-1/M-3/M-4 natively. M-5 and M-6 need bespoke checks regardless.
+
+**RDY-0084: requirements COMPLETE.** All five criteria met, with **one reservation left to the
+Owner**: the criterion says *"owner"*, and this supplies a **role** (DevOps / Infrastructure), which
+is what every other owner field in the register and the whole §36 RACI use. **If "owner" is read as
+requiring a named individual, it stays open.** One-word decision, and not mine. **Agent B does not
+mark its own work closed** — if accepted, this is a closure for the next sync pass. **`Blocks`: G3.**
+
 ## PB-075 (2026-08-14) — Data exit **executed**, termination procedure written, claim-discipline scans run — **and one scan caught its own author**
 
 Evidence: **`EV-071-data-export-procedure.md`**, **`EV-073-termination-and-handover.md`**,
@@ -2195,6 +2263,63 @@ pre-filled and no verdict assumed.** RDY-0067 closes the moment a name is record
 passes that person's review.
 
 **RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
+
+## PB-057 (2026-08-14) — Both data fixes implemented in the seeder and **proven read-only**; deliberately **NOT applied**
+
+The two outstanding data gaps — the allergy alert (PB-046) and the blank prescription letterhead
+(PB-056) — are now **implemented in the deterministic seeder and their mechanisms proven against the
+live database without writing to it.** **The accepted dataset is untouched:** CLINHASH re-measured
+after all this work is still **`fab7947785d853d04b431932cf5c45ab`**.
+
+### Proven read-only, before changing anything
+
+Both fixes were validated by replicating the product's own queries with the hypothetical values —
+`SELECT` only, no `UPDATE`:
+
+| Fix | Query replicated | Result |
+|---|---|---|
+| **Allergy alert** | `allergy_conflict()`'s literal `IN` match (`clinical_rules.php:354`) | With an allergy titled exactly `Timolol 0.5% eye drops` on `SYN-0002`, it **matches that patient's active prescription — the alert fires** |
+| **Letterhead** | `multiprintplain_header()`'s `JOIN facility ON f.name = users.facility` | With `users.facility` set, the join **returns the facility row** |
+
+### ⚠ And the letterhead proof exposed a third gap — "one column" was wrong
+
+Proof 2 returned the facility row, but with **empty street, city, state and postal code, and the
+installer placeholder phone `000-000-0000`**. **The demo clinic has a name and nothing else.**
+
+**So fixing the join alone would have produced a letterhead showing a clinic name over a blank
+address — arguably worse than none, because it looks like a rendering fault rather than missing
+setup.** I had described this as a one-column fix in PB-056; **that was wrong, and it took proving the
+fix to find out.**
+
+**RDY-0032's closure still stands** — its criterion was that no output shows `Your Clinic Name Here`
+and that the name is fictional and consistent, which remains true. **Completeness of the address was
+never in its criteria.** This is a new finding, not a reopened one.
+
+### What is now in the seeder, unapplied
+
+| Change | Detail |
+|---|---|
+| `completeFacilityAndProviderIdentity()` | Fills facility street/city/state/postal/country and replaces the placeholder phone with `+966 11 000 000` — **structurally undialable, same EV-028 §3.2 rule as the patient numbers**. Sets `users.facility` for users whose `facility_id` matches. **Idempotent — only fills what is empty**, so it never overwrites an operator's deliberate value |
+| Constructed allergy case | A **second** allergy, `Timolol 0.5% eye drops`, on the patient already holding that prescription. Because it is a second allergy on an existing patient, **`COUNT(DISTINCT pid)` stays at 5 and no locked target moves** |
+
+`php -l` and `phpcs` clean.
+
+### Why it is not applied
+
+Applying it re-seeds, which invalidates **Dr Mohamed Taha's and Mohammed Elfouly's verdicts against
+`de6e513c…`** and the **RDY-0044-B baseline**, and §7 of the Owner's post-seed decisions requires
+*"renewed reviewer approval"* after any data change. **That is a human step, and re-seeding a signed
+dataset is not something to do on inference.**
+
+**What the Owner gets by deciding:** RDY-0024 and RDY-0026 both become closeable, and **D-7 steps 11
+and 12 both stop being broken**. The cost is a re-seed, a re-baseline, and a re-affirmation from two
+reviewers who have already seen the dataset — the exams and the synthetic-data controls are untouched
+by these changes, so the re-affirmation is a confirmation rather than a fresh review.
+
+**Sequence when approved:** reset from RDY-0044-A → re-seed → full validation → new fingerprint →
+re-baseline RDY-0044-B → re-run the reset proof → re-affirm → close RDY-0024 and RDY-0026.
+
+**Per Rule 3, no gate count moved. Nothing was applied.**
 
 ## PB-056 (2026-08-14) — RDY-0026: prescriptions **do** print — but with a **blank letterhead**
 
