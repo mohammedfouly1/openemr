@@ -55,6 +55,23 @@ closure touches them, and two agents recalculating in parallel produce two wrong
   force the edit through.
 - Never `git add -A`. Stage by explicit path. (Also required by the key/PHI controls — PB-035, PB-037.)
 
+**Rule 4a — commit your edit to THIS file in the same action that makes it. This happened for real.**
+
+Staging by explicit path is **not sufficient** for a shared file. On 2026-08-14, Agent B staged this
+document — by explicit path, correctly — while Agent A's PB-052 entry was sitting uncommitted in the
+working tree. **Agent B's commit swept it in.** Nothing was lost, but the entry landed under a commit
+message describing different work, and for a period **HEAD contained a PB entry describing a code fix
+whose code was still uncommitted** — an inconsistent repo state.
+
+So:
+
+- **Write your PB entry and commit it immediately.** Do not leave it in the working tree while you go
+  and do something else.
+- **Before staging this file, run `git diff` on it** and confirm every hunk is yours. If you see a
+  hunk you did not write, **do not stage the file** — let the other agent commit first.
+- **Keep code and its PB entry in one commit** where possible, so HEAD never describes a change it
+  does not contain.
+
 ### Rule 5 — the closure contract binds every agent equally
 
 Nothing here is closed on a code change, a row count, or an assertion. **Every closure needs the
