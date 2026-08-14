@@ -252,10 +252,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **25** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045); **0040** (PB-046); **0046** (PB-048) |
-| **Requirements still open** | **89** |
-| **Open P0** | **48** — 71 P0 less the 23 closed P0 IDs (0001, 0010-0015, 0017, 0021, 0028, 0032, 0036-0038, 0040, 0044, 0046, 0050-0052, 0058, 0059, 0080). **Recalculated at the PB-051 gate sync** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 23 · G2 22 · G3 20 · G4 3 · G5 13 · G6 21** — **PB-051 gate sync**. Across Phase 2B **G2 has fallen 28 → 22 and G3 22 → 20** |
+| **Requirements CLOSED** | **28** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045); **0040** (PB-046); **0046** (PB-048); **0021**, **0022**, **0027** (PB-055) |
+| **Requirements still open** | **86** |
+| **Open P0** | **45** — 71 P0 less the 26 closed P0 IDs (0001, 0010-0015, 0017, 0021, 0022, 0027, 0028, 0032, 0036-0038, 0040, 0044, 0046, 0050-0052, 0058, 0059, 0080). **Recalculated at PB-055** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 23 · G2 19 · G3 20 · G4 3 · G5 13 · G6 21** — **PB-055**. Across Phase 2B **G2 has fallen 28 → 19 and G3 22 → 20** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -2075,6 +2075,55 @@ pre-filled and no verdict assumed.** RDY-0067 closes the moment a name is record
 passes that person's review.
 
 **RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
+
+## PB-055 (2026-08-14) — Seeded-data acceptance run per requirement: **RDY-0021, 0022, 0027 CLOSED**; five blocked with precise reasons
+
+PB-036 warned: *"Do not mark RDY-0020…0027 closed merely from row counts. Run each requirement's
+existing acceptance criteria."* This is that run — **each requirement judged against its own criteria,
+not against the seed manifest.**
+
+### Closed — every criterion met
+
+| RDY | Criteria | Evidence |
+|---|---|---|
+| **0021** — 60–80 encounters, 6–8 ophthalmology exams | 60–80 ✓ **72** · ≥6 exams ✓ **8** · **a clinician confirms each is clinically plausible** ✓ | **Dr Mohamed Taha, PASS on all 8 (PB-045)**. The clinician criterion was the hard one and it is satisfied |
+| **0022** — a realistic current week | Plausible week for **both** physicians ✓ **2 providers** · flow board at varying statuses ✓ **16 today across `- None`/`@ Arrived`/`> Checked out`/`< In exam room`** · **recurring series renders across weeks** ✓ · no appointment outside clinic hours ✓ | Recurrence proven by expansion, not by inspection: a two-week CSV export returned **38 rows for 36 appointments** — the weekly series expanding twice. Appointment times run **08:00–16:30, zero outside 07:00–20:00** |
+| **0027** — payers, fee schedule, price level, charges | 2 payers ✓ · 1 fee schedule ✓ **4 priced services** · 1 price level ✓ · 30–40 charges ✓ **36** · financial reports non-empty ✓ (PB-037) · demo script carries the invoicing-boundary statement ✓ (EV-040 step 14) · **no payer name resembles a real insurer** ✓ *Meridian Gulf Health (SYNTHETIC)*, *Northwind Care Cooperative (SYNTHETIC)* | — |
+
+**All three block G2 only.**
+
+### Blocked — and each for a specific, stated reason
+
+| RDY | What is met | What blocks it |
+|---|---|---|
+| **0020** patients + duplicates | 30 patients ✓ · both planted pairs found ✓ · no real name/ID/phone ✓ | **The merge workflow has not been run.** The criterion requires a merge to *complete on one pair and then be reset*. RDY-0044-B makes the reset safe, so this is doable — but it mutates the accepted dataset and needs a deliberate decision |
+| **0023** SOAP + vitals | ≥15 SOAP ✓ **18** · ≥10 vitals ✓ **12** | **A clinician must confirm plausibility** — Dr Taha reviewed the *eye exams*, not the SOAP notes. Also *"at least one record renders a growth chart"*, unverified |
+| **0024** problems/allergies | 3–5 allergy patients ✓ **5** · 4–6 chronic problems ✓ **6** · qualification in the demo script ✓ | **The allergy alert cannot fire** (PB-046). No seeded allergy matches any seeded drug, and `allergy_conflict()` needs a byte-identical match. **One row fixes it; it changes the signed dataset. Owner decision** |
+| **0025** documents | 10 documents across 10 patients ✓ · filenames marked ✓ | *"Every one displays the marking **when opened**"* — **not verified.** See below |
+| **0026** prescriptions | 10–15 ✓ **12** · demo script states the eRx limitation ✓ | **"3 print correctly" has not been tested** |
+
+### A wrong test of mine, and what it accidentally established
+
+I first checked the document marking by reading the payload files on disk. **0 of 10 matched**, which
+reads as "the marking is missing."
+
+**It is not. `drive_encryption = 1` — OpenEMR encrypts document files at rest**, so a disk read returns
+ciphertext. The marking is in the content; my test could not see it. **Same class of error as the
+base64 audit-log search in PB-050 — the second time this session a plaintext search over encrypted or
+encoded data produced a confident, wrong negative.** Retrieving through the application 403s on CSRF,
+so the criterion genuinely needs a browser.
+
+**A useful by-product for EV-055:** documents *are* encrypted at rest, unlike the audit log, which is
+base64. That distinction matters to the "an unencrypted backup is a plaintext PHI export" finding —
+**document payloads inside a backup are ciphertext; the audit log inside the same backup is not.**
+
+### Gate effect
+
+Three closures, all **G2**: **G2 22 → 19.** **Open P0 48 → 45.**
+
+Across Phase 2B **G2 has now fallen 28 → 19.** Five of the eight seeded-data requirements remain, and
+**four of the five need a person** — a clinician, a browser, a print test, or an Owner decision on the
+allergy row.
 
 ## PB-054 (2026-08-14) — V-09 conflict dry-run re-run against **all 16** patch records: **one conflict, and it is not a patched file**
 
