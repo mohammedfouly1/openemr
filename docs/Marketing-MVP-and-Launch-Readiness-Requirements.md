@@ -1851,6 +1851,73 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-049 (2026-08-14) — RDY-0090 branding inventory enumerated; **not closed** — the human walk is its acceptance
+
+Inventory: **`docs/evidence/EV-090-branding-inventory.md`**. Source-and-configuration enumeration
+with live HTTP probes. **RDY-0090's acceptance requires the inventory to be *"walked by a second
+person against the live product"* — that has not happened, and this does not substitute for it.** It
+turns an unbounded "walk the product" into a bounded checklist with the machine-findable surfaces
+already resolved.
+
+### Favicons — the category neither source had ever enumerated
+
+| Surface | State | Class |
+|---|---|---|
+| `public/images/logos/core/favicon/favicon.ico` — **the one the login page actually declares** | **BRANDED** (differs from `upstream/rel-820`, installed by `d9757fc55`) | — |
+| `public/images/favicon.ico`, `favicon-32x32.png` | **BRANDED** | — |
+| **`interface/modules/zend_modules/public/images/favicon.ico`** | **STOCK OPENEMR** — byte-identical to upstream | **C** |
+| LForms webcomponent favicon | Stock, but a **third-party NLM asset** | **L** → RDY-0095 |
+
+Also: **`/favicon.ico` at the web root returns 404.** The login page declares its icon explicitly, so
+that tab is branded — but any page omitting the declaration falls back to the 404 and shows a default
+icon.
+
+### Other surfaces found
+
+| Finding | Class |
+|---|---|
+| **`main_screen.php` has no `<title>`** | **A** — an untitled tab in a screenshot reads as unfinished. **The only class-A item found** |
+| **`portal_onsite_two_address = https://your_web_site.com/openemr/portal`** — installer default, placeholder domain **and** the string `openemr`. **Portal is disabled (`portal_onsite_two_enable = 0`)**, so this is pilot-stage, not demo-stage | **C** |
+| `patient_reminder_sender_name`, `patient_reminder_sender_email`, `practice_return_email_path` all **empty** — system mail would send with no sender identity | **C** |
+| Login title `Thiqa Login`, multi-site admin `Thiqa Site Administration` | branded |
+
+### The finding that matters most — it dictates the *mechanism*, not just the target
+
+`grep -rln "OpenEMR" templates/` returns **102 files**; roughly **47 carry the string in rendered
+output** rather than a comment or JS identifier. Confirmed example:
+
+```
+templates/oauth2/oauth2-login.html.twig:92   {{"OpenEMR Login"|xlt }}
+```
+
+**A rendered button label wrapped in `xlt()`.** Per `docs/RebrandingBugs.md` **RB-01**, editing the
+literal inside `xlt()` **orphans the existing translations** because the English source string is the
+catalogue key — a mistake this project has already made once and reverted. **These must be delivered
+through `tools/branding/brand-strings.json` as SET-TRANSLATION, not by patching templates.**
+
+### What is left, and why it needs a person
+
+Six categories cannot be answered from source: **printed report headers**, **PDF output** (mPDF
+renders headers at runtime; not greppable), **authenticated interior browser titles**, **statement /
+superbill layouts**, **residual interior logos**, and **which of the 47 templates reach an actual
+screen**. Method for the walk is in EV-090 §6, including the rule that **anything uncertain is marked
+`L` and routed to RDY-0095 rather than guessed.**
+
+### Classification summary
+
+| Class | Count | |
+|---|---:|---|
+| **A** before screenshot capture | **1** | missing `<title>` |
+| **B** before guided demo | **≤47** | rendered strings on reachable screens — exact count needs the walk |
+| **C** before pilot | **6** | Zend favicon · portal address · 3 email globals · `setup.php` title |
+| **D** may remain | 1 | documentation favicons |
+| **L** legal review | 3 | → RDY-0095 |
+
+**Nothing found blocks the flagship demo.** The single class-A item is one missing `<title>`.
+
+**RDY-0090: NOT CLOSED — enumeration complete, human walk outstanding.** It blocks **G1 and G4**.
+**Per concurrency Rule 3, no gate count is moved.**
+
 ## PB-048 (2026-08-14) — **RDY-0046 CLOSED** — module provenance is upstream's, fully determinable, and inert
 
 Determination: **`docs/evidence/EV-046-module-provenance.md`**. Disposition: **RETAIN, accounted for.**
