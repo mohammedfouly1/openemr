@@ -2128,6 +2128,81 @@ passes that person's review.
 
 **RDY-0067 `Blocks`: G5 G6.** No gate count is moved here (§0.0 Rule 3) — nothing closed.
 
+## PB-056 (2026-08-14) — RDY-0026: prescriptions **do** print — but with a **blank letterhead**
+
+PB-055 recorded *"3 print correctly has not been tested."* Now tested.
+
+### They print, and the content is right
+
+Three prescriptions requested through `controller.php?prescription&multiprint`, as physician
+`y.alharbi`. Each returns **HTTP 200, a valid PDF, 4,321 / 4,323 / 4,319 bytes — all different**.
+Decompressing the streams shows real rendered text:
+
+```
+Yousef Alharbi
+DEA: ________________________
+Patient Name & Address
+Hessa Alharthi
+1000 Fictional Street
+Riyadh, Riyadh Region 00000
++966 5 000 001
+Date of Birth
+01/01/1948
+```
+
+Provider, patient, address, phone, date of birth and drug all render correctly.
+
+### ⚠ But the clinic letterhead is empty
+
+**`Thiqa Demo Eye Clinic` does not appear on the prescription.** Traced to source:
+`multiprintplain_header()` builds the letterhead with
+
+```sql
+SELECT f.name, f.street, f.state, f.postal_code, f.phone …
+  FROM users JOIN facility AS f ON f.name = users.facility WHERE users.id = ?
+```
+
+— a join on the **facility name string**, not on `facility_id`. Measured:
+
+| | Value |
+|---|---|
+| `users.facility` for `y.alharbi` / `s.almutairi` | **NULL** |
+| `users.facility_id` | **3** — correct |
+| `facility.name` | `Thiqa Demo Eye Clinic` |
+| **Rows returned by the header join** | **0** |
+
+**So every printed prescription has no clinic name, address or phone.** OpenEMR carries both a
+denormalised `users.facility` name string and a `users.facility_id` FK; the seeder set the FK and the
+print header reads the string.
+
+**This is a seed gap, not an upstream defect** — though a join on a name string is fragile upstream
+design. **The fix is one column** on the demo users. It changes the signed dataset, so it is the same
+category of decision as the PB-046 allergy row: **Owner call.**
+
+**Impact on D-7 step 12** — a prescription printed on a blank letterhead is exactly the detail an
+audience notices. EV-040 step 12 currently says only *"Print fails"* as its failure condition; the
+real risk is that it prints and looks unbranded.
+
+### Three of my own tests were wrong today — the pattern is worth naming
+
+This finding took **three attempts**, and the first two produced confident false results:
+
+| Attempt | Result | Why it was wrong |
+|---|---|---|
+| 1 | *"PDFs are empty — 1,043 bytes, two byte-identical"* | `generatePdfObjectForPrescriptionIds()` does `substr($id, 1, strlen($id)-2)` — **it strips the first and last character** before splitting on `::`. The id format is `:1:`, not `1`. My bare id became an empty string, so the PDF was genuinely empty — **of my own making** |
+| 2 | *"text-ops = 0, so no text"* | Cezpdf **compresses** its content streams; a `Tj` regex over raw bytes finds nothing. Decompressing found 394 KB of text |
+| 3 | Correct | — |
+
+**Together with PB-050's base64 log search and PB-055's encrypted-document read, that is three
+false negatives in one session, all the same shape: a surface-level search over data that was
+encoded, compressed or wrapped.** Each looked like a product defect and none was. **The rule that
+caught all three: when a probe returns "nothing", suspect the probe before the product.**
+
+**RDY-0026: NOT CLOSED.** *10–15 prescriptions* ✓ 12 · *demo script states the eRx limitation* ✓ ·
+***3 print correctly*** — **they print with correct clinical content but no letterhead**, which I do
+not read as "correctly" for a demo asset. **One column fixes it. Owner decision.**
+**Per Rule 3, no gate count moved.**
+
 ## PB-055 (2026-08-14) — Seeded-data acceptance run per requirement: **RDY-0021, 0022, 0027 CLOSED**; five blocked with precise reasons
 
 PB-036 warned: *"Do not mark RDY-0020…0027 closed merely from row counts. Run each requirement's
