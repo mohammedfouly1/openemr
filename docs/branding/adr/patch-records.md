@@ -784,7 +784,7 @@ short one). The fix mirrors that pattern exactly; **no new convention is introdu
 
 ### Measured impact, before and after
 
-`scratchpad/rdy0042-probe.php` applies `MenuRole`'s own `global_req` rule, transcribed from source,
+`docs/evidence/harnesses/rdy0042-probe.php` applies `MenuRole`'s own `global_req` rule, transcribed from source,
 to the real JSON at both global values, and carries a negative control (a label that must never
 match, proving the collector can return 0).
 

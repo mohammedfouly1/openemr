@@ -1868,6 +1868,66 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-073 (2026-08-14) — RDY-0016 matrix executed: **32/32 PASS** — and **4 rows still cannot be executed**, on a seeded dataset
+
+Evidence: **`docs/evidence/EV-016-authorization-matrix.md`**. Real authenticated HTTP, each role
+under its **own** account, direct-URL `GET` with redirects disabled. No credential printed anywhere.
+
+**32 probes, 32 PASS, 0 FAIL** — A-1, A-3, A-4, A-5, A-6, A-8, A-9, A-11, plus four administrator
+positive controls.
+
+### The controls, because a wall of 403s proves nothing on its own
+
+**Positive control:** the Administrator reaches every surface the other roles are denied
+(`patient_list` 200/5,084 B, `amc_full_report` 200/1,783 B, user administration 200/7,933 B).
+Without it, "every probe returned 403" is equally consistent with a broken application.
+
+**The harness demonstrably fails:** an earlier run returned **3 FAIL** where probes hit HTTP 404.
+**None was recorded as an authorization failure** — a 404 is not a denial. The URLs were wrong and
+were corrected. Retained as proof the checker is not stuck on PASS.
+
+**A loose heuristic was removed before publishing:** `denied()` had matched the bare substring
+`acl` anywhere in a response body, which would have manufactured a PASS on ordinary page content.
+It now recognises only HTTP 403 or the application's own denial wording. All results are from the
+tightened version.
+
+### ⚠ §23.4's A-5 URL is malformed. The denial is real; the route is not.
+
+| URL form | Administrator | Accounting | Front Office |
+|---|---|---|---|
+| `?x12_partner&action=list` — **as §23.4 writes it** | **404** | **404** | **403** |
+| `?x12_partner&list` — true positional form | 200 | 200 | **403** |
+| `?controller=x12_partner` — explicit form | 200 | 200 | **403** |
+
+`Controller::act()` (`Controller.class.php:198-220`) takes the first query key as the controller and
+the **second as the action** — so `&action=list` dispatches action `"action"`, which is invalid.
+**Front Office is denied on all three forms**, so the ACL gate fires before dispatch in every
+routing path: A-5 passes more robustly than asked, and the RDY-0052 fail-closed change is confirmed.
+**§23.4's A-5 URL should be corrected to `?x12_partner&list`** — recorded, not silently edited.
+
+### ⚠ Four rows still cannot be executed — and the seed is not the reason it was expected to be
+
+PB-014 said five rows were blocked on Track D. Track D delivered 30 patients and 72 encounters.
+**Four rows are still blocked, for reasons seeding did not address:**
+
+1. **`SELECT sensitivity, COUNT(*) FROM form_encounter` → `normal 72`.** There is **no
+   sensitivity-flagged encounter at all** (RDY-0030 is P1 and was not seeded). **A-2 is entirely
+   unexecutable**, and the sensitivity legs of A-7 and A-8 with it. Sensitivity gating is a named
+   claim-register limitation (L-28, MC-16, RDY-0057) behind a Pillar 1 statement, and **it has never
+   been exercised in either direction on any dataset.** One seeded encounter closes three legs.
+2. **`SELECT user, COUNT(*) FROM forms` → `admin 110`.** Encounters split correctly across two
+   physicians, but **no form is authored by a clinician**, so A-7's *"cannot amend another
+   clinician's note"* has **no positive case to deny**.
+3. **A-10** (empty-spec ACL paths) needs call-site probes, not HTTP. Not attempted, not claimed.
+4. **The "UI navigation **and** direct URL" halves** of A-1/A-6/A-7/A-8 — only direct URL is
+   evidenced. Needs the manual browser session already outstanding for RDY-0013/0014/0015/0042.
+
+**RDY-0016: NOT CLOSED.** Nothing failed; four rows could not be run, and are named rather than
+skipped. Items 1 and 2 are dataset changes against the signed-off RDY-0044-B baseline and carry the
+same decision as EV-083 §4.3 — **deliberately not applied.**
+
+**`Blocks`: G1 G3 G5.** No gate count moved (§0.0 Rule 3).
+
 ## PB-072 (2026-08-14) — **RDY-0042 FIXED (PR-16)** — the front-office menu had no route to register a patient when the short form is configured
 
 Patch record: **`docs/branding/adr/patch-records.md` PR-16**. Complements Agent A's PB-052, which
@@ -1879,7 +1939,7 @@ whose non-negated global is unset or false, so at `full_new_patient_form = 0` a 
 **no menu route to register a patient** — the first action of the D-7 reception segment, by the
 account that exists to perform it. Fixed by mirroring `standard.json`'s pattern; no new convention.
 
-**Proven before and after, with a negative control** (`scratchpad/rdy0042-probe.php` applies
+**Proven before and after, with a negative control** (`docs/evidence/harnesses/rdy0042-probe.php` applies
 `MenuRole`'s own `global_req` rule, transcribed from source, to the real JSON):
 
 | `full_new_patient_form` | Before (HEAD) | After |

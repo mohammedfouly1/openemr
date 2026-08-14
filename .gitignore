@@ -103,4 +103,16 @@ sites/*/documents/logs_and_misc/methods/*
 # portal templates, custom_menus JSON — must stay visible, so the whole
 # `sites/*/documents` tree is NOT ignored.
 sites/*/documents/[0-9]*/
+
+# Agent probe/verification scripts written to a repo-root scratchpad during a
+# session (Phase 2B PB-074, RDY-0048). These are session-local, are regularly
+# regenerated, and may carry an instance's paths -- they must never be committed
+# by accident.
+#
+# Evidence harnesses that a PB entry or an EV file cites as "re-runnable" do NOT
+# belong here. They live in `docs/evidence/harnesses/` and ARE tracked, because a
+# reproduce command pointing at an untracked path is not reproducible by anyone
+# but its author.
+/scratchpad/
+/tmp-phpstan/
 # ===== Thiqa SaaS fork — end fork-owned rules =====
