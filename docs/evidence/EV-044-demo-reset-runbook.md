@@ -1,5 +1,14 @@
 # EV-044 — DEMO RESET RUNBOOK (RDY-0044-B)
 
+> ### ⚠ BASELINE v2 — updated 2026-08-14 (PB-058)
+>
+> **The baseline was rebuilt** after the Owner authorised two data fixes: the constructed
+> allergy-alert case and the facility/provider identity fields behind the prescription letterhead.
+>
+> **The previous set is retained on disk with a `SUPERSEDED-` prefix and MUST NOT be restored** — it
+> predates both fixes. Every hash and filename below is the **v2** set. If you are holding a copy of
+> this runbook citing `e45ad2e7…` or `338b1222…`, it is out of date.
+
 **Baseline:** Marketing MVP Seed v1 · profile `marketing-mvp-seed-v1` · deterministic seed `20260813`
 **Status:** PROVEN — two consecutive resets from deliberately-damaged states produced byte-identical
 accepted state (PB-045).
@@ -10,8 +19,8 @@ accepted state (PB-045).
 
 | Component | File | SHA-256 |
 |---|---|---|
-| **Database** | `thiqa-rdy0044b-demo-baseline-20260814-051449.sql` (75,463,249 bytes, 283 tables) | `e45ad2e7c854d24812fbcf50bd0be5f556aad3ef9cf280a2bf8dd3b86d8828dd` |
-| **Document payloads** | `rdy0044b-document-payloads.zip` (7,006 bytes, 10 files) | `338b122228a7c5d948bd90119cf50d4c36f7dd7b63db6a1f2c02929bf5030d9d` |
+| **Database** | `thiqa-rdy0044b-v2-baseline-20260814-064532.sql` (71,857,993 bytes, 283 tables) | `4048e65c12d6e1527618719e16b45977aa5fc1dd4204c75225928002dd4002d4` |
+| **Document payloads** | `rdy0044b-v2-document-payloads.zip` (7,009 bytes, 10 files) | `c0a8d0dc797e40a89167c01a815044d080e6625e8c9b92e296c3d3133c2abe6e` |
 
 Both live in `C:\openemr-stack\backups\protected\rdy0044b\`, **outside the repository, outside the
 retention glob, read-only** (write blocked, verified).
@@ -26,13 +35,13 @@ retention glob, read-only** (write blocked, verified).
 ```powershell
 $mysql = 'C:\openemr-stack\mariadb\bin\mariadb.exe'
 $prot  = 'C:\openemr-stack\backups\protected\rdy0044b'
-$db    = "$prot\thiqa-rdy0044b-demo-baseline-20260814-051449.sql"
-$zip   = "$prot\rdy0044b-document-payloads.zip"
+$db    = "$prot\thiqa-rdy0044b-v2-baseline-20260814-064532.sql"
+$zip   = "$prot\rdy0044b-v2-document-payloads.zip"
 $docs  = 'G:\My Drive\OpenEMR\sites\default\documents'
 
 # 1. Verify both components BEFORE trusting them. Stop on any mismatch.
-(Get-FileHash $db  -Algorithm SHA256).Hash.ToLower()   # must be e45ad2e7c854d248...
-(Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()   # must be 338b122228a7c5d9...
+(Get-FileHash $db  -Algorithm SHA256).Hash.ToLower()   # must be 4048e65c12d6e152...
+(Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()   # must be c0a8d0dc797e40a8...
 
 # 2. Stop writes.
 Stop-Process -Name httpd -Force
@@ -121,3 +130,37 @@ Not asserted — executed:
 
 **accepted == reset#1 == reset#2.** That is the determinism RDY-0044-B requires, demonstrated
 against two *different* kinds of damage rather than one repeated no-op.
+
+---
+
+## 8. Proof for the v2 baseline (PB-058)
+
+The v1 proof in §7 stands as the record for the superseded baseline. **The v2 baseline was proven the
+same way, independently:**
+
+| Step | Result |
+|---|---|
+| Accepted v2 signature recorded | baseline |
+| **Perturbation 1** — deleted 4 patients, wiped the facility street, **removed both new fixes** (the allergy-alert row and every `users.facility` value) | signature diverged |
+| **Reset 1** | **identical to accepted** — and both fixes restored |
+| **Perturbation 2**, different damage — deleted 6 prescriptions, reverted the facility phone to the installer placeholder, deleted 8 appointments | diverged again |
+| **Reset 2** | **identical to accepted and to reset 1** |
+| Full EV-028 + cohort validation | **all PASS, zero FAIL** |
+| Document payloads | **10** after each reset |
+
+**`accepted == reset#1 == reset#2`.** Perturbation 1 deliberately removed the two new fixes, so the
+proof also demonstrates that **a reset restores them** — they are baseline state, not a manual step.
+
+## 9. Known state after a v2 reset — additions
+
+Beyond §6:
+
+- **The constructed allergy-alert case is present** — `SYN-0002` carries an allergy titled exactly
+  `Timolol 0.5% eye drops` and holds the matching active prescription, so **D-7 step 11's alert
+  fires**. Distinct allergy patients remain **5**.
+- **The prescription letterhead renders** — clinic name, `3100 Fictional Boulevard, Riyadh, Riyadh
+  Region 00000` and `+966 11 000 000`, verified on three printed prescriptions.
+- **The eight ophthalmology examinations are byte-identical to the set Dr Taha reviewed** — CLINHASH
+  `fab7947785d853d04b431932cf5c45ab`, unchanged across the re-seed. **The re-baseline did not touch
+  the clinical content that was signed off.**
+
