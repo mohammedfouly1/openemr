@@ -264,3 +264,101 @@ from different network infrastructure rather than accepted as permanently unreac
 **Register status:** left as **BLOCKED — VALIDATION** / NOT READY, unchanged. Not marked closed by
 this agent, per the closure contract (§0.0 Rule 5) and this task's explicit instruction that closure is
 not this agent's call.
+
+---
+
+## 7. Addendum — second independent verification pass (2026-08-16, same session role)
+
+**⚠ Process note first.** This addendum was produced by a second AGENT-COMP run that was assigned
+this exact task independently, discovered mid-task (via `git log`, after `.git/index.lock` cleared)
+that commit `dc6baee78` had already written §§1–6 above under the same filename. Per §0.0 Rule 4 —
+"if you see a hunk you did not write, do not stage the file" — the second run's own full rewrite was
+discarded rather than committed over §§1–6; this section appends only what its independent pass found
+that §§1–6 did not, plus corroboration. **Flagged for whoever syncs `AGENT-CLAIMS.md`:** the RDY-0088
+row apparently allowed two concurrent AGENT-COMP instances to both start this item — the claim
+protocol prevented a *different* agent from colliding, but not a duplicate instance of the same one.
+
+**Method, for continuity with §2:** same WebFetch-first/WebSearch-fallback approach, not capped at 2
+attempts (a handful of retries with alternate paths/protocols were used, noted per-finding below).
+Competitor-scoped scan from `EV-056-057-088-claim-discipline.md` §5 was run against this whole file
+before every commit in this addendum's history; see §7.5.
+
+### 7.1 C-16 — TEKNOSys: a direct positive finding, not only indirect evidence
+
+§3's C-16 entry reached only indirect (job-listing) evidence after two direct attempts failed with
+HTTP 520. This pass also got 520 from `teknosysweb.com` (both the clinic-management page and the
+bare domain), but WebSearch surfaced a **different live domain, `teknosys.net`**, for a company
+matching on every available identifying detail — Jeddah, Saudi Arabia; clinic management + pharmacy
+management + cloud ERP + ZATCA e-invoicing; "15+ years experience," 100+ clients. **This one was
+fetched directly and succeeded (HTTP 200)**, with substantive on-page content, not merely a search
+snippet. Nothing on `teknosys.net` states outright that it supersedes `teknosysweb.com`, so this is
+strong circumstantial evidence of a live domain migration, not a confirmed same-entity match — but
+it upgrades C-16 from "indirect evidence only" to "a live, substantive, directly-fetched site
+plausibly belonging to the same vendor, pending domain-continuity confirmation."
+
+### 7.2 C-24 — DenTech (KSA): the identity question got more complicated, not less
+
+§3's C-24 entry treats the identity question as resolved (distinct from the US `dentech.com`) and
+the content question as open (403-blocked). This pass surfaces two further wrinkles neither §3 nor
+Source C had on record:
+
+1. A WebSearch-indexed page at `dentech.com.sa/en/about-ar.html` carries the page **title "About us
+   - Tech Meta Solution"** — a company-name mismatch this pass could not resolve, because the page
+   itself 403'd on every direct attempt (root domain, the Arabic-labelled about path, and
+   `/en/our-services/` were all tried; all three 403'd).
+2. WebSearch also surfaced a **third, separate domain, `dentech.sa`** ("Dentech AI — Dental ERP &
+   Electronic Dental Records"), distinct from both `dentech.com.sa` and the already-known-unrelated
+   US `dentech.com`.
+
+Neither wrinkle was independently confirmed live (both are search-index findings only, same
+limitation as §3 notes for its own C-24 finding). **Recorded so the next re-verification pass does
+not treat C-24's identity as settled** — it is at minimum a three-domain situation
+(`dentech.com` US / `dentech.com.sa` Saudi, access-blocked / `dentech.sa` unconfirmed relationship),
+not the two-domain collision Source C and §3 both describe.
+
+### 7.3 Corroboration, no new information
+
+This pass's independent fetches of C-15 (MediSys — live, substantive, matches §3's finding),
+C-19 (Kizen — homepage still content-free, `/downloads` and `/en` both 404, matches §3's "confirmed
+unchanged" verdict), C-20 (e-MCS — root and `/hospital-information-system/` both returned the same
+live "Account Suspended" hosting notice, matches §3's "confirmed down" finding), C-21 (HMISFOX — DNS
+resolution failure on `hmisfox.com`, `www.hmisfox.com`, both protocols, four attempts total; matches
+§3's "unreachable" verdict), C-22 (Solver — live, full navigable site with regional pages and
+testimonials, matches §3's "clearly superseded" finding) and C-26 (Avicenna — live, Islamabad,
+Pakistan-registered operator, no GCC-targeting language found on the page, matches §3's identity
+finding) independently arrived at the same conclusions as §3 for all six. No conflicting evidence
+was found for any of these six.
+
+### 7.4 Net effect on §5's establishment and §6's recommendation
+
+**Unchanged.** This addendum does not move any competitor from "indirectly evidenced" to "Source
+C's Full/Verified depth standard," does not recompute a frequency, and does not alter §6's
+recommendation. It sharpens two of the four "indirectly evidenced" rows in §4's summary table
+(C-16 now has a direct fetch behind it in addition to indirect evidence; C-24's identity question
+is now known to be messier, not simpler) and leaves the other seven rows exactly as §3/§4 found
+them.
+
+### 7.5 Self-check: competitor-scoped scan against this file
+
+Per RDY-0088's warning against a naive `[0-9]+ of (16|11|26)` scan (it false-positives on
+"16 of 16 installed cleanly" / "0 of 16 forms" elsewhere in this document set — see
+`EV-056-057-088-claim-discipline.md` §4.2), the competitor-scoped pattern was run before commit:
+
+```bash
+grep -rniE "[0-9]+ of (16|11|26)[^0-9]{0,60}(competitor|vendor|GCC|market|publish|demonstrat|discuss)" \
+  docs/evidence/EV-088-competitor-frequency-verification.md \
+  | grep -viE "prohibit|must not|never|withheld|until|provisional|hold"
+```
+
+**Run against the whole file: 2 lines** (`:47` and `:232`, both in §§1/5 above this addendum, both
+pre-existing text from commit `dc6baee78`, not introduced here). Read in context, both are the
+document naming the currently-withheld figures by quoted value while describing what is withheld
+and why ("None of the published figures... are computed over any of these 9"; "...every published
+frequency ... is very likely to grow once §24.2 item 6 is fully re-run") — the same category §4.4 of
+`EV-056-057-088-claim-discipline.md` already accepted for this document set: internal evidence-file
+prose about the hold, not a customer-facing assertion of the figure as settled. **Neither is a new
+violation, and this addendum introduces neither** — re-running the same command scoped to only the
+lines added by this addendum (from `## 7.` onward) returns 0. Recorded rather than silently
+adjusted, per the same discipline `EV-056-057-088-claim-discipline.md` §4.3 applied to its own
+author's violation: the honest number is 2-in-context, not a claimed 0 that does not survive
+literal reproduction of the command shown.
