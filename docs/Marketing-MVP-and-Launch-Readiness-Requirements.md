@@ -921,7 +921,7 @@ qualification*. Dependencies, not dates.
 | **0010** | Create the demo role accounts defined in §12 (administrator, physician ×2, front office, accounting, clinical assistant) | GTM DEM-003, B2; audit §12.5, WF-0012 | **1 usable human account**; 5 of 7 roles never populated | **VERIFIED READY — CLOSED BY PHASE 2B (PB-005)** | USER / ROLE | **P0** | G1 G2 | OpenEMR Engineer | 0001, 0011 | **CLOSED 2026-08-13** |
 | **0011** | Credential convention: naming pattern, generation rule, secure storage, rotation and reset process. **No password appears in any document** | Brief §17; GTM §14.5 | Password policy active (≥9 chars, complexity, expiry 180+30, lockout); **no convention** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-020)** | SECURITY | **P0** | G1 G3 | Security Reviewer | — | **CLOSED 2026-08-13** |
 | **0012** | Assign the correct ACL group to every demo account | Audit §13.4, §12.5 | Only Administrators populated | **VERIFIED READY — CLOSED BY PHASE 2B (PB-005)** | AUTHORIZATION | **P0** | G1 G2 | OpenEMR Engineer | 0010 | **CLOSED 2026-08-13** |
-| **0013** | Assign the correct main and patient menu role to every demo account | Audit §14 | All four accounts on `standard` | READY AFTER CONFIGURATION | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0010, 0042 | NOT READY |
+| **0013** | Assign the correct main and patient menu role to every demo account | Audit §14 | All four accounts on `standard` | READY AFTER CONFIGURATION — **PARTIAL BROWSER EVIDENCE (PB-028/PB-141): 3 of 6 accounts' navigation confirmed (Front Office 5 items, Physician 11, Administrator 13); Accounting/Clinical Assistant/2nd Physician untested; registration was reached but never completed** | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0010, 0042 | NOT READY |
 | **0014** | Set provider identity for clinical accounts — taxonomy appropriate to ophthalmology, `authorized` flag, NPI field handling | Audit §12.2 | `taxonomy` = `207Q00000X` **Family Medicine** for all four; `npi` NULL for all | **VERIFIED READY — CLOSED BY PHASE 2B (PB-029)** | CONFIGURATION | **P0** | G1 G2 | Clinical Workflow Reviewer | 0010 | **CLOSED 2026-08-13** |
 | **0015** | Assign facility to every demo account | Audit §12.5 | Only facility id 3 exists | **VERIFIED READY — CLOSED BY PHASE 2B (PB-029)** | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0010, 0032 | **CLOSED 2026-08-13** |
 | **0016** | Execute the positive **and negative** authorization matrix in §23.4 under each role account | GTM Pillar 1, D-2; brief §24 | **Role-based behaviour never exercised** (L-19) | NOT READY — DEFECT *(unproven)* | AUTHORIZATION | **P0** | G1 G3 G5 | Security Reviewer | 0010, 0012, 0050, 0051, 0052 | NOT READY |
@@ -955,8 +955,8 @@ qualification*. Dependencies, not dates.
 | **0034** | Remove or repoint vendor links — `display_donations_link`, `display_review_link`, `main_menu_logo_link` | Audit §19.4; L-17 | All live and pointing at open-emr.org | READY AFTER CONFIGURATION | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0095 | NOT READY |
 | 0035 | Clear `pqri_registry_name='Model Registry'` and `pqri_registry_id='125789123'` placeholders | Audit §19.4 | Live placeholders | READY AFTER CONFIGURATION | CONFIGURATION | P1 | G2 | OpenEMR Engineer | 0001 | NOT READY |
 | **0036** | Set `gbl_time_zone` to `Asia/Riyadh` | Audit §22.4, §23.4 | **Empty** → UTC | **VERIFIED READY — CLOSED BY PHASE 2B (PB-016)** | CONFIGURATION | **P0** | G1 G2 G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
-| **0037** | Configure currency display for SAR — symbol, decimals, separators | Audit §22.4, §23.4; L-12 | `$`, 2 decimals; **display only, no ISO code** | READY WITH MANDATORY QUALIFICATION | CONFIGURATION | **P0** | G2 | OpenEMR Engineer | 0001 | NOT READY |
-| **0038** | Replace US locale seeds visible during registration — `list_options.state` (52 US states), `country` (1 row), `phone_country_code = 1`, `units_of_measurement` | Audit §22.4 | US seeds live | READY AFTER CONFIGURATION | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0001 | NOT READY |
+| **0037** | Configure currency display for SAR — symbol, decimals, separators | Audit §22.4, §23.4; L-12 | `$`, 2 decimals; **display only, no ISO code** | READY WITH MANDATORY QUALIFICATION — **PB-028 re-ran only the Globals-screen check PB-016 already ruled insufficient (PB-141); a financial screen/report/priced-encounter rendering of SAR has never been observed, though Track D data now exists to make this checkable** | CONFIGURATION | **P0** | G2 | OpenEMR Engineer | 0001 | NOT READY |
+| **0038** | Replace US locale seeds visible during registration — `list_options.state` (52 US states), `country` (1 row), `phone_country_code = 1`, `units_of_measurement` | Audit §22.4 | US seeds live | READY AFTER CONFIGURATION — **PARTIAL BROWSER EVIDENCE (PB-028/PB-141): Saudi regions + country set confirmed; phone-number acceptance and metric-units rendering never tested, registration was never submitted** | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0001 | NOT READY |
 | 0039 | Decide the date display format for the demo surface (3 options only; no format string, no locale derivation) | Audit §22.4 | ISO `YYYY-MM-DD` | READY WITH MANDATORY QUALIFICATION | CONFIGURATION | P1 | G2 | Founder / Product Owner | 0001 | NOT READY |
 
 ### 7.6 Domain E — D-7 journey, demo-surface defects and reset (G2)
@@ -986,8 +986,8 @@ qualification*. Dependencies, not dates.
 | **0050** | Add in-file authorisation to the **11 of 55 reports that have none** and rely on menu hiding alone — two of which (`patient_list.php`, `unique_seen_patients_report.php`) return patient identifiers and export CSV | Audit L-24, §16, §20.6 #2, EB-05; GTM §26 P0, R-14 | *Historical:* 11 reports menu-gated only. **Live (2026-08-13): Code remediation complete and statically verified; positive/negative authenticated role acceptance pending** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** — full live acceptance, 66/66 probes across all 6 accounts | AUTHORIZATION | **P0** | G1 G2 G3 G5 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
 | **0051** | Add authorisation to `reports/amc_full_report.php` — **directly reachable, no ACL check of any kind, no menu link** | Audit §20.6 #3, RPT-0054 | No ACL anywhere in the file | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** | AUTHORIZATION | **P0** | G1 G3 G5 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
 | **0052** | Close the controller gate: `CONTROLLER_ACL_MAP` covers **2 of 10** controllers and `checkControllerAcl()` early-returns for the rest; `?x12_partner&action=list` routes to `C_X12Partner` with no ACL check | Audit §20.6 #6, PL-03, GAP-0062, EB-03 | Confirmed access-control defect (authenticated-user-only, not anonymous) | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** — 60/60 probes across all 10 controllers | AUTHORIZATION | **P0** | G3 G5 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
-| 0053 | Add an ACL check to `interface/super/layout_listitems_ajax.php` — admin endpoint with CSRF but no `aclCheckCore` | Audit §20.6 #4 | No `aclCheckCore` | NOT READY — DEFECT | AUTHORIZATION | P1 | G3 | OpenEMR Engineer | 0001 | NOT READY |
-| 0054 | Resolve the RPT-0042 ACL mismatch — menu declares `patients\|lab`, file enforces `acct\|rep` | Audit §16.6, §20.6 #5 | Mismatch present | NOT READY — DEFECT | AUTHORIZATION | P2 | G3 | OpenEMR Engineer | 0001 | NOT READY |
+| 0053 | Add an ACL check to `interface/super/layout_listitems_ajax.php` — admin endpoint with CSRF but no `aclCheckCore` | Audit §20.6 #4 | No `aclCheckCore` | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** — real CSRF token minted, admin ALLOW confirmed, non-admin denied twice over (no token route exists) | AUTHORIZATION | P1 | G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
+| 0054 | Resolve the RPT-0042 ACL mismatch — menu declares `patients\|lab`, file enforces `acct\|rep` | Audit §16.6, §20.6 #5 | Mismatch present | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** | AUTHORIZATION | P2 | G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
 | **0055** | Decide and document the handling of **PHI in the audit trail**: bound SQL parameters are appended verbatim to `log.comments` as base64, log encryption is off and its code path was deliberately removed. On a system with real patient data this places PHI, in plaintext base64, in the audit table | Audit §20.4 limitation 3, L-23 | Latent — no data exists yet, so no PHI is exposed **today** | **NOT READY — DEFECT** *(activates at pilot)* | SECURITY | **P0** | G3 | Security Reviewer | 0001, 0068 | NOT READY |
 | **0056** | Enforce audit-integrity claim discipline — a **hash, not an HMAC**; rows **not chained**; deleting a `log` row and its `log_comment_encrypt` partner is undetectable. "Immutable" and "blockchain" are prohibited | Audit §20.4, L-23; GTM MC-02, Pillar 1 | Qualification defined; discipline unenforced | READY WITH MANDATORY QUALIFICATION | AUTHORIZATION | **P0** | G1 G5 | Product Marketing | 0003 | NOT READY |
 | **0057** | Enforce sensitivity and MFA disclosure discipline — sensitivity gates **encounters only**, not demographics, problem lists, notes, documents or the API (L-28); MFA **cannot be mandated** (L-03, PL-01) and must be stated before it is discussed | Audit §15.1, §20.2, L-03, L-28; GTM MC-16, P-3 persona | Both correct in the sources; **no enforcement mechanism** | READY WITH MANDATORY QUALIFICATION | AUTHORIZATION | **P0** | G1 G5 | Product Marketing | 0003 | NOT READY |
@@ -1949,6 +1949,98 @@ first canonical count since T0-2 adoption (2026-08-13) that is actually derived 
 here beyond what the cited PB entries already demonstrated; this was a mechanical bookkeeping fix
 plus the sync that rule 3 requires. Items left open above remain open pending their own future PB
 entries.
+
+## PB-141 (2026-08-16) — **Correction to PB-140: PB-028/PB-029 browser evidence was missed; clause-by-clause re-verification of RDY-0013/0037/0038/0053/0054**
+
+**Owner flagged this directly.** PB-140's reconciliation searched the PB log for closures of the
+§1.4-claimed-closed list but did not find `PB-028` ("BROWSER VERIFICATION RESULTS AND REMEDIATION")
+or `PB-029` ("ROUND-2 RE-TEST") — both real, dated 2026-08-13, both citing real evidence artefacts
+on disk: `docs/ScreenShoots/BrowserVervication.md` (23 screenshots, confirmed 21,479 bytes, matching
+the PB entry's own claim) and `docs/ScreenShoots/BrowserRetest.md` (30 screenshots). This entry
+re-verifies every item those two PB entries touch against its own §8 acceptance card, clause by
+clause, rather than trusting either PB-028's closure claim or PB-140's prior "still open" claim.
+
+**Method:** for each RDY, the §8 card's `Acceptance criteria` line was located, each clause checked
+individually against `BrowserVervication.md`'s test-by-test detail (not its own summary table), and
+screenshot filenames cross-checked against the file's own inventory table (all present, sizes match).
+
+### RDY-0014, RDY-0015 — CLOSED-VERIFIED (no change from PB-140)
+
+Already correctly closed in PB-140, citing PB-029. Re-confirmed here: PB-029 closed both with a
+genuine negative control (`k.alotaibi` shows a *different* taxonomy than the two intended accounts,
+proving the change was scoped correctly, not a blanket update). No correction needed.
+
+### RDY-0053, RDY-0054 — CLOSED-VERIFIED — register rows fixed in this entry
+
+Both explicitly closed at PB-013 (:1787-1788) with the same 127/127-probe acceptance run already
+verified in PB-140 for 0050/0051/0052. §1.4 already listed both as closed (the "+ P1s 0053, 0054"
+in its Requirements-CLOSED line) — only their §7 rows were never updated. Fixed below, same bug
+class as PB-140, caught by extending this correction's search to the items the user asked about.
+
+### RDY-0013 — DISPUTED-EVIDENCE-INSUFFICIENT — left OPEN, evidence partially credited
+
+**§8 acceptance criteria (verbatim):** *"Each account's rendered top-level navigation matches the
+intended node set; the reception account can complete registration."*
+
+| Clause | Evidence | Verdict |
+|---|---|---|
+| Each account's navigation matches | T1.1-T1.3: Front Office (5 items: File/View/Patient/Popups/Miscellaneous, no Admin/Procedures/Fees), Physician (11 items), Administrator (13 items) — **all three PASS with screenshots** | **Partial** — 3 of 6 demo accounts tested. Accounting (`k.alotaibi`), Clinical Assistant (`m.alzahrani`) and the second physician (`s.almutairi`) were never screen-checked |
+| Reception account can complete registration | T6.1: Add Patient form reachable and loads for Front Office. T6.5 (verbatim): *"'Create New Patient' button was NEVER clicked. The form was only inspected. No patient was created."* | **Not demonstrated** — the form was reached, not completed. The clause says "can complete registration," not "can reach the registration form" |
+
+PB-028's own "VERIFIED READY — CLOSED" verdict for RDY-0013 does not survive checking both clauses.
+**Register left OPEN**, with the proven 3-account navigation result recorded so it is not re-tested.
+
+### RDY-0037 — DISPUTED-EVIDENCE-INSUFFICIENT — left OPEN, evidence partially credited
+
+**§8 acceptance criteria (verbatim):** *"Financial screens and reports render SAR; the display-only
+limitation is written into the demo script and into the Phase 4 evidence package."*
+
+PB-016 (:1862, already in the document before PB-028 ran) had already stated explicitly: *"SAR
+renders on the Globals screen, but not yet observed in a fee/charge context, which is where the
+claim actually matters. That needs a priced encounter and therefore Track D."* PB-028's T5 test
+(:126-140 of `BrowserVervication.md`) checked `/interface/super/edit_globals.php` → Locale tab —
+**the identical Globals-only check PB-016 had already ruled insufficient**, run again and reported
+as a full closure. It does not check a financial screen, an invoice, a report, or any priced
+encounter — Track D data (which would make this checkable) did not exist yet on 2026-08-13 when
+PB-028 ran; it now does, closed at PB-055/PB-059 (see PB-140).
+
+The demo-script clause is likely satisfied — EV-040/RDY-0040 (closed) documents the "invoicing-
+boundary statement" per PB-055's evidence table — but the primary clause (financial-screen
+rendering) has never been checked, in a Globals-only test or otherwise. **Register left OPEN.**
+This is the one genuine false-pass risk found in this correction: closing on the same insufficient
+evidence a prior entry had already named as insufficient.
+
+### RDY-0038 — DISPUTED-EVIDENCE-INSUFFICIENT — left OPEN, evidence partially credited
+
+**§8 acceptance criteria (verbatim):** *"Registering a synthetic patient offers Saudi regions and a
+plausible country set, accepts a plausible non-real Saudi-format phone number without a validation
+error, and renders metric units; no US state list is reachable from the registration layout."*
+
+| Clause | Evidence | Verdict |
+|---|---|---|
+| Saudi regions + plausible country set | T6.2: 13 Saudi regions, Riyadh default, zero US states. T6.3: Saudi Arabia default, `USA` still selectable but not selected | **Met** (USA remaining selectable is a disclosed, non-blocking observation per the test's own note) |
+| Accepts a Saudi-format phone number without a validation error | T6.4 only checked for a visible `+966` hint (result: PARTIAL/FAIL on the hint itself) — **no phone number was ever entered or submitted** | **Not tested** |
+| Renders metric units | No test in `BrowserVervication.md` addresses `units_of_measurement` rendering on the registration screen | **Not tested** |
+| No US state list reachable | T6.2 confirms for the state dropdown specifically | **Met** for the tested field |
+
+Two of four clauses met with real evidence; two never attempted, and — same root cause as RDY-0013 —
+T6.5 confirms the registration was never submitted, so the phone-validation clause specifically
+**cannot** have been checked by this run regardless of what the summary table claims. **Register left
+OPEN**, with the regions/country result recorded as proven.
+
+### Net effect on the PB-140 gate sync
+
+**No change to the published Open P0 = 47 figure or any per-gate count.** RDY-0013/0037/0038 were
+already counted as open in PB-140 (nothing was closed for them in error); RDY-0053/0054 are P1, not
+inputs to the P0 count. This entry only sharpens what specifically remains for 0013/0037/0038 and
+prevents re-running the parts already proven.
+
+### Register-row edits committed in this entry
+
+`§7`: RDY-0053, RDY-0054 → CLOSED (citing PB-013). RDY-0013, RDY-0037, RDY-0038 → `Status` cell
+Status text unchanged (`NOT READY`), each **appended** with a one-line pointer to the partial
+evidence above and the exact remaining gap, so AGENT-BROWSER's task list is precise rather than
+"re-do everything."
 
 ## PB-085 (2026-08-14) — RDY-0004 control instrument issued. **Its blocker moved from "nobody to name" to "nothing yet to bind"**
 
