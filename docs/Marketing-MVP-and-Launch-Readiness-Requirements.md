@@ -1889,6 +1889,22 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-191 (2026-08-16) — **AGENT-GIT decision pack for RDY-0045, built on `EV-045`** — pointer entry, substance in the evidence file
+
+**Not re-derived from zero** — `CONTINUATION` of Agent A's `EV-045` per `AGENT-CLAIMS.md`. Full
+re-measurement, the ~70-commit mystery resolution, merge-vs-rebase assessment, a rehearsed rollback
+(the `composer.json` conflict was actually resolved and verified against extracted blobs, not just
+predicted) and a recommendation-with-counter-argument are all in
+**`docs/evidence/EV-045-upstream-target-analysis.md`, ADDENDUM 2.** Headline figures: fork point from
+`upstream/rel-820` unchanged (`6125a2fd8`); now **91 behind / 101 ahead** (`HEAD`) vs rel-820 (was 83
+behind / 37 ahead at EV-045); conflict surface still exactly one file (`composer.json`), rehearsed
+clean. The "~70 unpushed commits, actor unidentified" question from PB-142 is **resolved as content
+(not new, not foreign, all on-brand Phase 2A backlog)** though the *which session ran `git push`*
+question remains genuinely unanswerable from git alone. Recommendation: adopt `rel-820` via one
+`--no-ff` merge once RDY-0082 + G1 clear — **not executed here**, per this brief's absolute
+constraint. Live evidence of a concurrent session (AGENT-OPS, PB-181) committing to this same shared
+working tree *during* this analysis is recorded and cited as the strongest argument against rebase.
+
 ## PB-220 (2026-08-16) — **RB-22 CLOSED (Agent D)** — theme rebuild executed; the Inter-dedup saving is now real in the compiled CSS
 
 **Not an RDY item** — RB-22 is `docs/RebrandingBugs.md`'s ledger, not the §7 register. Recorded here
@@ -2509,6 +2525,257 @@ reached the identical conclusion, including retracting that session's own earlie
 connected in this session. Immediately following this entry, RDY-0013/0025/0037/0038 were re-tested
 live (see PB-14x below) rather than re-argued a third time from screenshots. RDY-0082 leg 6 remains
 correctly out of scope pending AGENT-OPS producing a restored instance to test against.
+
+## PB-151 (2026-08-16) — **AGENT-CONF: RDY-0035 CLOSED** — `pqri_registry_name` / `pqri_registry_id` placeholders cleared
+
+DB-only change, single targeted `UPDATE` per row, no source file touched.
+
+**Prior state (re-confirmed live before changing anything):**
+
+```
+mariadb -u root -h 127.0.0.1 openemr -e "SELECT gl_name, gl_value FROM globals WHERE gl_name LIKE 'pqri%';"
+pqri_registry_id     125789123
+pqri_registry_name   Model Registry
+```
+
+**Change applied:**
+
+```sql
+UPDATE globals SET gl_value='' WHERE gl_name='pqri_registry_name';
+UPDATE globals SET gl_value='' WHERE gl_name='pqri_registry_id';
+```
+
+**Verified after:** both rows read back empty string (re-run the same `SELECT` above).
+
+**Rollback:**
+
+```sql
+UPDATE globals SET gl_value='Model Registry' WHERE gl_name='pqri_registry_name';
+UPDATE globals SET gl_value='125789123' WHERE gl_name='pqri_registry_id';
+```
+
+**Where the placeholder could have appeared, checked before closing, not asserted:** the only two
+call sites in the tree are `library/classes/PQRIXml.class.php:56-57`
+(`$this->element('registry-name', OEGlobalsBag::getInstance()->getString('pqri_registry_name'));`
+and the `registry-id` line immediately after). Both simply emit the global's value as an XML element
+text node — an empty string renders as an empty element (`<registry-name></registry-name>`), not an
+error, not a fallback to a hard-coded default. No other reference to either global name exists outside
+`library/globals.inc.php` (the admin-settings field definition, not a display surface).
+
+**Acceptance criterion (§7.3 row 0035 / §16 card): "Neither placeholder appears on any screen or
+report."** Met — the only place either value is ever rendered now renders empty, and the values
+audited on 2026-08-09 no longer exist anywhere in the database.
+
+**RDY-0035: VERIFIED READY — CLOSED.** Register row 976 updated accordingly.
+
+**`Blocks`: G2.** No gate count moved (§0.0 Rule 3).
+
+## PB-152 (2026-08-16) — AGENT-CONF: RDY-0033 / RDY-0034 re-verified live, **no drift since PB-074/`EV-033-034`** — still correctly NOT CLOSED, still blocked on RDY-0095 alone
+
+Config-only re-check, no change made (none was needed).
+
+**Every field `EV-033-034` records was re-read live today and matches exactly:**
+
+```
+mariadb -u root -h 127.0.0.1 openemr -e "SELECT gl_name,gl_value FROM globals WHERE gl_name IN \
+ ('openemr_name','login_tagline_text','main_menu_logo_link','main_menu_logo_title', \
+  'online_support_link','user_manual_link','display_donations_link','display_review_link', \
+  'display_acknowledgements','display_acknowledgements_on_login');"
+```
+
+| Field | `EV-033-034` (2026-08-14) | Live (2026-08-16) |
+|---|---|---|
+| `openemr_name` | `Thiqa` | `Thiqa` |
+| `login_tagline_text` | `Clinical confidence, connected care.` | identical |
+| `main_menu_logo_link` | `https://skyeagle.uk/` | identical |
+| `main_menu_logo_title` | `Thiqa Health Information System` | identical |
+| `online_support_link` | `https://skyeagle.uk/support` | identical |
+| `user_manual_link` | `https://skyeagle.uk/docs` | identical |
+| `display_donations_link` / `display_review_link` | `0` / `0` | identical |
+| `display_acknowledgements` / `_on_login` | `0` / `0` | identical |
+
+**Fresh unauthenticated HTTP re-check of the login surface** (`Invoke-WebRequest
+http://localhost:8300/interface/login/login.php?site=default`, 200, 9,165 B): `open-emr.org` count
+**0**; case-insensitive `donate|acknowledg` count **0**; `<title>Thiqa Login</title>`;
+`GET /acknowledge_license_cert.html` → **403** (the Apache `<Files>` deny from `CLAUDE.local.md` §10
+is still in place). All four match `EV-033-034` §5's reproduction exactly.
+
+**No new work closes either item.** `EV-033-034` §4 already states both acceptance criteria end on
+*"the licence determination from RDY-0095 is attached"* — a human decision, not a config task, and
+RDY-0095 is unchanged since PB-074/PB-079 (commissioned to SkyEagle, not yet returned). Nothing in
+this agent's scope moves that.
+
+**RDY-0033 / RDY-0034: confirmed still correctly NOT CLOSED.** No register row edit — the existing
+"NOT READY" / dependency-on-0095 text is still accurate. **`Blocks`: G1 G2** for both (unchanged from
+`EV-033-034`). No gate count moved (§0.0 Rule 3).
+
+## PB-153 (2026-08-16) — AGENT-CONF: RDY-0018 CLOSED — `oe-system` removed from Administrators
+
+**Findings before acting, because a security-relevant ACL change needs its own justification recorded,
+not just its outcome:**
+
+```
+mariadb -u root -h 127.0.0.1 openemr -e "SELECT id, username, authorized, active FROM users WHERE username='oe-system';"
+id  username    authorized  active
+4   oe-system   0           0
+```
+
+`users_secure` has **no row** for `oe-system` (confirmed by direct `SELECT`, zero rows returned) — it
+cannot authenticate by any path; upstream seeds its `password` column with the literal string
+`'NoLogin'` (`sql/official_additional_users.sql:4`, `sql/6_0_0-to-6_1_0_upgrade.sql:242`). Its
+Administrators membership is upstream's own default, applied unconditionally by that same seed file
+(`sql/official_additional_users.sql:6-10`) — not a Thiqa-introduced drift.
+
+**Grepped for any application code that depends on this specific ACL relationship** (not merely on
+`oe-system` existing as a placeholder row) — none found; the only references to the string
+`oe-system` outside the two SQL seed files are in this requirements document itself. Background
+services (`EV-083`) run via the CLI (`bin/console background:services run`) under a Windows Scheduled
+Task, not via an authenticated `oe-system` web session or its ACL group — so removing the membership
+has no execution-path dependency to break.
+
+**Decision recorded (engineering determination, not a claimed Security Reviewer sign-off — the
+`Security Reviewer` owner slot is unassigned per `AGENT-CLAIMS.md` line 9080 / §9 reviewer table,
+same as it was when RDY-0011/0017 closed by direct engineering action under PB-020 without one):**
+**remove**, not retain. The membership carries zero functional risk *today* (the account cannot log
+in), but it is a latent one: if `oe-system` — or any account reusing that row — is ever given a
+password and activated for a real integration on a pilot instance, it would silently inherit full
+Administrator rights from this pre-existing, otherwise-motiveless membership. Removing it now costs
+nothing (no code path depends on it) and closes that latent hole permanently. This satisfies the
+card's actual acceptance text — *"a recorded decision; if retained, the reason is stated"* — the
+decision recorded here is not to retain.
+
+**Change applied**, single-row, targeted:
+
+```sql
+-- prior state
+SELECT * FROM gacl_groups_aro_map WHERE group_id=11 AND aro_id=11;   -- 1 row: (group_id=11, aro_id=11)
+-- change
+DELETE FROM gacl_groups_aro_map WHERE group_id=11 AND aro_id=11;
+```
+
+**Verified after:**
+
+```sql
+SELECT g.name AS group_name, a.value AS username FROM gacl_groups_aro_map m
+  JOIN gacl_aro_groups g ON g.id=m.group_id JOIN gacl_aro a ON a.id=m.aro_id
+  WHERE g.name='Administrators';
+-- admin, n.alqahtani  (oe-system no longer present; was 3 members, now 2)
+```
+
+**Rollback:**
+
+```sql
+INSERT INTO gacl_groups_aro_map (group_id, aro_id) VALUES (11, 11);
+```
+
+**Negative control — confirmed the change did not break authentication for the app as a whole:**
+`Invoke-WebRequest http://localhost:8300/interface/login/login.php?site=default` still returns
+**200** after the change (same health check `CLAUDE.local.md` §3 specifies). `admin` and
+`n.alqahtani` — the two accounts that actually can authenticate as Administrators — are unaffected;
+neither row was touched.
+
+**RDY-0018: VERIFIED READY — CLOSED.** Register row 949 updated accordingly. §23.1 S-10's "Open
+(upstream default)" status is now stale relative to this entry; not edited here (S-10 is a findings
+table row, not the RDY register — leaving it for the next full pass to avoid touching a section this
+agent did not open for its own reason, per Rule 4).
+
+**`Blocks`: G3.** No gate count moved (§0.0 Rule 3).
+
+## PB-154 (2026-08-16) — AGENT-CONF: RDY-0029 — 3 of 80 CDS rules' `active_alert_flag` activated; **DONE, not closed** — strong pre-existing evidence the same rules already fire on real seeded patients, full closure needs a browser re-check
+
+**Prior state, re-confirmed live** (matches the register's audited value exactly):
+
+```sql
+SELECT COUNT(*) total, SUM(active_alert_flag=1) active, SUM(passive_alert_flag=1) passive FROM clinical_rules;
+-- 80, 0, 16
+```
+
+The register's "80 rules ship with alert flags off" is imprecise in the same way §3.3.1 already
+corrected for the audited baseline: **16 already carry `passive_alert_flag=1`** — `active_alert_flag`
+is what is actually 0/80.
+
+**Selected 3 rules to activate, not arbitrarily** — chosen because `clinical_rules_log` already
+contains real, unprompted evidence (rows 1, 2, 5, 6; timestamps 2026-08-16 19:16:30–19:25:52, written
+during this session's own live browser walk, PB-202) that these exact `rule_id`s fired as
+`due_status: past_due` in the `clinical_reminder_widget` for real seeded patients (pid 1 Hessa
+Alharthi, pid 2 Turki Alqarni, pid 3 Amal Albishi, pid 19) while still passive-only:
+
+```sql
+UPDATE clinical_rules SET active_alert_flag=1 WHERE id='rule_tob_use_assess' AND pid=0;
+UPDATE clinical_rules SET active_alert_flag=1 WHERE id='rule_adult_wt_screen_fu' AND pid=0;
+UPDATE clinical_rules SET active_alert_flag=1 WHERE id='rule_cs_mammo' AND pid=0;
+```
+
+**Verified after:** all three rows now read `active_alert_flag=1, passive_alert_flag=1`;
+`SUM(active_alert_flag=1)` over the whole table is now **3**. Every other row of the 80 is untouched
+(`SELECT id FROM clinical_rules WHERE active_alert_flag=1` returns exactly these 3 ids).
+
+**Rollback:**
+
+```sql
+UPDATE clinical_rules SET active_alert_flag=0 WHERE id IN ('rule_tob_use_assess','rule_adult_wt_screen_fu','rule_cs_mammo') AND pid=0;
+```
+
+**⚠ Not the same alert as the Timolol finding the orchestrator flagged for me to check.** The
+Timolol allergy alert (`clinical_rules_log` rows 3-4, `category='allergy_alert'`, pid 2) is a
+drug-allergy interaction check — a separate subsystem from the 80-rule `clinical_rules` /
+`active_alert_flag` engine RDY-0029 and CLM-0008 name. It does **not** satisfy RDY-0029; it is
+evidence for RDY-0024, already closed (PB-058), and its live UI firing was independently reconfirmed
+at PB-202. **Confirmed by checking `category` on every `clinical_rules_log` row** — only rows 1, 2,
+5, 6 (`clinical_reminder_widget`) belong to the CDS-rule engine; rows 3-5 are the distinct
+`allergy_alert` category.
+
+**Why this is not marked CLOSED despite strong evidence:** the log rows proving real firing on real
+patients predate this change and were produced under `passive_alert_flag` only (the widget's
+"past_due" reminder), not `active_alert_flag` (typically the more prominent/blocking alert
+presentation). The DB-level activation is done and reversible; whether the *active* presentation
+renders visibly and distinctly is a UI question this agent's scope (database/globals configuration
+only) cannot verify — it needs the same browser session pattern AGENT-BROWSER/the orchestrator used
+for PB-202. Handing off: **re-open a patient dashboard for pid 1, 2, 3 or 19 under any clinical
+account and confirm the tobacco-use, adult-weight-screening or mammography reminder now renders as an
+active (not merely passive) alert** — that is the one remaining check.
+
+**RDY-0029: DONE (not closed).** Register row 965's status text updated to reflect the activation and
+the pending visual check; verdict left NOT READY pending that check. **`Blocks`: G2.** No gate count
+moved (§0.0 Rule 3).
+
+## PB-155 (2026-08-16) — AGENT-CONF: RDY-0016 continuation — **re-read `EV-016`/PB-073's 4 remaining gaps, confirmed all 4 unchanged today, none is a database/globals task — handed off rather than attempted**
+
+Per this agent's claim (`AGENT-CLAIMS.md` line 226, CONTINUATION of Agent B's `HELD` row): read
+`docs/evidence/EV-016-authorization-matrix.md` and PB-073 (32/32 PASS, 4 rows unexecutable) in full
+before touching anything. **Nothing here re-runs matrix rows already PASSed** — that would waste the
+existing evidence, which this agent has no reason to distrust.
+
+**Re-verified live, today, that all 4 named gaps are unchanged since PB-073 (2026-08-14):**
+
+```sql
+SELECT sensitivity, COUNT(*) FROM form_encounter GROUP BY sensitivity;   -- normal 72 (still no sensitivity-flagged row)
+SELECT user, COUNT(*) FROM forms GROUP BY user;                          -- admin 110 (still no non-admin author)
+```
+
+**Why none of the 4 is this agent's to close, stated precisely rather than deferred by default:**
+
+1. **A-2 (sensitivity-flagged encounter) and A-7's sensitivity leg** — need a seeded `form_encounter`
+   row with a non-`normal` sensitivity value. This is database data, technically inside "database
+   configuration," but it is **not** an isolated single-row config change: it is explicitly the "D-3
+   change 2" dataset mutation named in `AGENT-CLAIMS.md`'s pinned note (PB-077 owner authorisation),
+   which is tied to a **single coordinated re-baseline of RDY-0044-B** after all D-3 changes land
+   together — sequencing another agent (Track D / AGENT-DATA, per the claims table) already owns and
+   is mid-tracking (the v2 baseline's own integrity is itself still an open question per PB-140/141).
+   Seeding this unilaterally, outside that sequencing, risks exactly the kind of baseline collision
+   this document's history already records more than once. **Not attempted — flagged for AGENT-DATA.**
+2. **A-7's authorship leg** (no clinician-authored form) — same D-3 change 2, same reasoning as above.
+3. **A-10** (empty-spec `aclCheckAcoSpec`/`aclCheckIssue` fail-open paths) — needs "targeted probes of
+   the call sites," i.e. reading `library` ACL call sites and constructing test probes against
+   application code paths. This is source-code analysis/testing, not a database or globals value —
+   outside this agent's hard scope. **Flagged for AGENT-SEC.**
+4. **UI-navigation halves of A-1/A-6/A-7/A-8** — need a live browser session under each role account,
+   the same pattern PB-202 already used for RDY-0013/0037/0038. **Flagged for AGENT-BROWSER /
+   the orchestrator**, same as the outstanding UI legs already named elsewhere in this document.
+
+**RDY-0016: still NOT CLOSED, unchanged from PB-073.** No register row edit — nothing here changes the
+recorded status, only confirms it is current and names the correct owner for each remaining piece.
+**`Blocks`: G1 G3 G5.** No gate count moved (§0.0 Rule 3).
 
 ## PB-085 (2026-08-14) — RDY-0004 control instrument issued. **Its blocker moved from "nobody to name" to "nothing yet to bind"**
 
