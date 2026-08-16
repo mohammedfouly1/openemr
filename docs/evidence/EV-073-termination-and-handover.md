@@ -88,10 +88,12 @@ run produced an unreadable package first.
 |---|---|
 | The procedure exists and is publishable | **MET** |
 | A dry run has been performed against the demo system | **PARTIAL** — T-3/T-4 fully; T-5 partially; T-6 and T-9 not performed |
-| Referenced by the scope template (**RDY-0066**) | **NOT MET** — RDY-0066 does not exist yet |
-| Referenced by the pilot agreement (**RDY-0068**) | **NOT MET** — RDY-0068 does not exist yet |
+| Referenced by the scope template (**RDY-0066**) | **MET (2026-08-16, AGENT-DOC)** — `EV-065-066-069-commercial-artefacts.md` §B.1 lists *"a documented exit (`EV-071`, `EV-073`)"* under what is included, and its own §B.4 note already recorded the cross-reference |
+| Referenced by the pilot agreement (**RDY-0068**) | **MET (2026-08-16, AGENT-DOC)** — `EV-068-pilot-requirements.md` §1 element 11 ("Customer-data exit") incorporates this document by reference |
 
-### Status: **RDY-0073 — NOT CLOSED.** Two of four criteria are references to artefacts that do not yet exist.
+### Status: **RDY-0073 — NOT CLOSED.** Both artefact-reference criteria are now met; the outstanding
+gap is T-5 (delivery confirmation) and T-6 (customer readability confirmation), which need an actual
+delivery channel and an external reviewer — neither of which this correction supplies.
 
 **`Blocks`: G3 G6.** No gate count moved (§0.0 Rule 3).
 

@@ -191,6 +191,29 @@ the seeded dataset or the RDY-0044-B baseline without a claim recorded here firs
   committing should show the file still `M` (other agents' unstaged work) or absent — if it goes clean
   and you only staged part of it, your commit just swept in everything else.
 
+- **AGENT-GIT, 2026-08-16 — a third instance of the same Rule-6 hazard, this time via the textbook-correct
+  chained form.** `git add <explicit path> && git commit -m "..."` (no trailing pathspec, exactly as
+  Rule 6/the prior two notes above prescribe) still swept in another session's work, because the race
+  window is between the pre-stage `git diff --stat` check and the `git add` itself, not just within the
+  commit step. Sequence observed: `git diff --stat` on this file and `EV-045-upstream-target-analysis.md`
+  showed 16 + 217 insertions (exactly this session's own edits) → immediately following `git add && git
+  commit` hit `fatal: Unable to create '.../.git/index.lock': File exists` (another session mid-commit,
+  correctly not forced through, per Rule 6.2) → lock cleared within seconds → re-checked `git diff
+  --stat` again, **still showed 16 + 217** → re-ran `git add && git commit` → **the resulting commit
+  (`6f4ddba9b`) contains 267 insertions on the requirements document, not 16** — AGENT-CONF's PB-151
+  through PB-155 (RDY-0035, RDY-0033/0034, RDY-0018, RDY-0029, RDY-0016 — all five, full content) rode
+  along. **Verified nothing is lost:** `git show HEAD -- docs/Marketing-MVP-and-Launch-Readiness-Requirements.md`
+  shows all five entries complete, ending cleanly before the pre-existing `## PB-085` heading — no
+  truncation, no partial hunk. **Root cause, stated precisely since the mechanism differs from the prior
+  two notes:** AGENT-CONF's edit and commit landed in the gap between this session's *second* diff check
+  and the *second* `git add` — i.e. even a diff check taken milliseconds before staging is not a
+  guarantee, because `git add <path>` stages whatever is in the working tree at the moment it runs, and
+  on a single shared working tree with 3+ live sessions that moment is never provably quiet. **The
+  existing mitigations (re-diff before staging, no trailing pathspec, chain `add`+`commit`) reduce the
+  window but cannot close it to zero on this repo's topology.** Not rewritten, same reasoning as both
+  notes above. Recorded here so AGENT-CONF (and any auditor) can find its PB-151–155 work without
+  expecting it under a commit message that names it.
+
 ---
 
 ## Agent C (Orchestrator) — subagent claims, PB-140–219 (2026-08-16)
@@ -209,17 +232,19 @@ done, not redo it from scratch.
 
 | RDY / item | Assigned to | State | Note |
 |---|---|---|---|
-| 0006, 0008, 0031, 0070, 0072, 0073*, 0074, 0091, 0092, 0096 | AGENT-DOC | **HELD** | Fresh authoring, no existing claim |
-| 0047 | AGENT-DOC | **CONTINUATION** | Agent B: DONE (not closed), `EV-047`, needs an independent provisioner — AGENT-DOC arranges that, does not rewrite the runbook |
-| 0048 | AGENT-DOC | **HELD** | Not previously claimed at item level; §7 row already carries "LIVE EVIDENCE SUGGESTS STATUS CHANGE" note |
-| 0065, 0066, 0069 | AGENT-DOC | **CONTINUATION** | Agent B: DONE (not closed), `EV-065-066-069` — needs 3 sales calls / legal review / a pilot, not new authoring |
-| 0068 | AGENT-DOC | **HELD** | Not previously claimed |
-| 0071 | AGENT-DOC | **HELD** | Not previously claimed at item level (Track A lists it under Agent B's original wide claim, released per the 2026-08-14 collision note — treated as open) |
-| 0081 | AGENT-DOC | **CONTINUATION** | Part of Agent B's Track E (`0081`) — executable half proven (PB-021); off-instance/encryption legs blocked on RDY-0064 (hosting), named owner still needed |
-| 0084 | AGENT-DOC | **CONTINUATION** | `EV-084` self-reported "recommended for closure" by Agent B — awaiting Agent C sync confirmation, not fresh work |
-| 0086 | AGENT-DOC | **CONTINUATION** | `EV-086` self-reported "recommended for closure" by Agent B — needs the screen walk + a named Arabic Reviewer (still nobody) |
-| 0090 | AGENT-DOC | **CONTINUATION** | Agent A: HELD, PB-049, `EV-090` — needs the human walk (§6), not re-inventorying |
-| 0094 | AGENT-DOC | **HELD** | Not previously claimed |
+| 0006, 0008, 0031, 0070, 0072, 0074, 0091, 0092 | AGENT-DOC | **DONE (not closed)** | PB-144/145/146/147. `EV-006/008/031/070/072/074/091/092` authored. 0006/0031/0072/0091 read as VERIFIED READY on their literal acceptance text (recommended for gate-sync confirmation, not self-closed); 0008/0070/0074 remain open on named dependencies (RDY-0003; a website/pilot; Legal review); 0092 found a real unescalated conflict (Locked Decisions Q5 vs. RDY-0057/0099 on MFA) and stays open by design — see PB-147 |
+| 0073 | AGENT-DOC | **DONE (not closed)** | Discovered already `HELD` under Track A with a full `EV-073` (Agent B, 2026-08-14) — **treated as CONTINUATION, not fresh, correcting this ledger's own "fresh authoring" label**. `EV-073`'s two artefact-reference gaps (RDY-0066, RDY-0068) closed via this session's `EV-068`/`EV-065-066-069` cross-references (PB-147/148 area); `EV-073` itself edited to reflect it. Remaining gap (T-5/T-6, external delivery + reviewer) is human-blocked |
+| 0096 | *(released)* | — | Table row 235 named 0096 but the orchestrator's direct task briefing to AGENT-DOC did not include it, and the asterisk footnote below (*"0072 note: DICOM..."*) does not match its placement on 0073 in this row either — **both read as ledger drift, not a real claim**. Not worked by AGENT-DOC; the DICOM question was resolved instead under RDY-0094 (see PB-148) since that is its substantive home (§32 MC-24 / §40 no-go register) regardless of which RDY number the footnote intended |
+| 0047 | AGENT-DOC | **DONE (not closed)** | PB-150. `EV-047` (Agent B) read in full; no material ambiguity found worth correcting — it already names its own coverage boundary and scores its own acceptance honestly. Remains blocked on an independent provisioner, which cannot be produced by more documentation |
+| 0048 | AGENT-DOC | **DONE (not closed)** | PB-150 + register-row edit. Re-confirmed live 2026-08-16: `sites/default/sqlconf.php` still carries `openemr`/`openemr`. `EV-048`'s 2026-08-14 withdrawal of the "candidate closure" signal was never propagated to the §7.7 register row — done now |
+| 0065, 0066, 0069 | AGENT-DOC | **DONE (not closed)** | PB-150. `EV-065-066-069` (Agent B) read in full, unchanged; `EV-066`'s cross-reference to RDY-0073 confirmed live via this session's `EV-068`/`EV-073` work |
+| 0068 | AGENT-DOC | **DONE (not closed)** | PB-147/148 area. `EV-068-pilot-requirements.md` authored — all 14 required elements, a binary success gate, an exit clause written before any pilot is offered, and RDY-0055's PHI determination reflected. Unblocks two of `EV-073`'s acceptance rows. Needs Legal/Compliance review before use in an actual agreement |
+| 0071 | AGENT-DOC | **DONE (not closed)** | PB-150. `EV-071` (Agent B) read in full; 1-of-8 CSV gap and reviewer gap confirmed unchanged. Not executed further — running the remaining 7 report exports against the live seeded dataset is Track D/AGENT-DATA territory, avoided here per the concurrency protocol |
+| 0081 | AGENT-DOC | **DONE (not closed)** | PB-150. PB-021/PB-023 (Agent B) read in full; confirmed current and accurate, no change needed — off-instance/CMEK legs genuinely blocked on RDY-0064's external provisioning |
+| 0084 | AGENT-DOC | **DONE (not closed)** | PB-150. `EV-084` read in full — appears to genuinely meet its own acceptance bar; flagged for gate-sync confirmation, not self-closed (per the closure contract, AGENT-DOC does not close another agent's self-reported item) |
+| 0086 | AGENT-DOC | **DONE (not closed)** | PB-150. `EV-086` read in full; screen walk and named Arabic Reviewer remain the two genuinely human-blocked gaps. Not fabricated |
+| 0090 | AGENT-DOC | **DONE (not closed)** | PB-150. `EV-090` read in full; its own §6 already is the human-walk checklist RDY-0090 needs — no further checklist construction required, only the walk itself, by a second person |
+| 0094 | AGENT-DOC | **DONE (not closed)** | PB-148. `EV-094-demo-no-go-register.md` adopts §40 formally as the register; DICOM classification question resolved (Active/Mentionable-qualified, not a no-go item — C-CDA is). Register-exists and unlock-condition criteria met; rehearsal and D-7 cross-check remain human/execution-blocked |
 | 0013 | AGENT-BROWSER | **DONE — CLOSED** | PB-202 (2026-08-16), live browser session. All 6 accounts' navigation confirmed; Front Office completed a real registration (pid 31) |
 | 0038 (phone clause only) | AGENT-BROWSER | **DONE** | PB-202. Units-of-measurement clause flagged as inapplicable to this screen — see PB-202 for AGENT-DOC follow-up |
 | 0025, 0037, 0082 (leg 6 only) | AGENT-BROWSER | **HELD — 0037 gap re-located, 0025 blocked, 0082 not started** | PB-202: 0037's real gap is now the Ledger showing no currency symbol at all (not "$ instead of SAR"). 0025 blocked by a new reproducible defect — Documents tab hangs the browser tab completely, twice reproduced, needs its own investigation before retry. 0082 leg 6 still waits on AGENT-OPS producing a restored instance |
@@ -231,7 +256,16 @@ done, not redo it from scratch.
 | 0060, 0061, 0062, 0063 | AGENT-CAP | **HELD** | 0060/0062: Agent A `HELD — BLOCKED`; 0061: Agent A `DONE (not closed)`, `EV-061` capture rules already written — **CONTINUATION**, AGENT-CAP executes captures under those existing rules, does not rewrite them. 0063 unclaimed, new |
 | EV-021, EV-000 §2, HR-04 register, `CLAUDE.local.md` | AGENT-HYGIENE | **HELD** | Not RDY items — artefact/local-config maintenance only, no system state change, no RDY closed |
 
-*0072 note: DICOM viewing inventory (Q71) — documentation/classification only, no code.
+*0072 note: DICOM viewing inventory (Q71) — documentation/classification only, no code. **Resolved
+2026-08-16 by AGENT-DOC under RDY-0094/PB-148, not RDY-0072** — DICOM's classification already lives
+in §32 MC-24 (Active, Mentionable-qualified, viewing only/no PACS) and is not a no-go item, unlike
+C-CDA. RDY-0072 itself was authored separately as the schema/data-dictionary artefact its register row
+actually describes (`EV-072-schema-data-dictionary.md`).
+
+**AGENT-DOC, 2026-08-16 — one item outside its claimed list, done in passing.** RDY-0038's §8.4 card
+had a wording defect PB-202 flagged (units-of-measurement acceptance tested against the registration
+screen; the field lives only under `interface/forms/vitals/`). Fixed in the readiness document, logged
+as its own entry (PB-149), no RDY-0038 row in this table claimed or touched otherwise.
 
 ---
 

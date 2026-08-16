@@ -946,7 +946,7 @@ qualification*. Dependencies, not dates.
 | **0015** | Assign facility to every demo account | Audit §12.5 | Only facility id 3 exists | **VERIFIED READY — CLOSED BY PHASE 2B (PB-029)** | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0010, 0032 | **CLOSED 2026-08-13** |
 | **0016** | Execute the positive **and negative** authorization matrix in §23.4 under each role account | GTM Pillar 1, D-2; brief §24 | **Role-based behaviour never exercised** (L-19) | NOT READY — DEFECT *(unproven)* | AUTHORIZATION | **P0** | G1 G3 G5 | Security Reviewer | 0010, 0012, 0050, 0051, 0052 | NOT READY |
 | **0017** | `admin` must never appear on screen or in any asset; rotate before any demo and before any pilot | Audit §12.3, §27.1; GTM §14.5 | Installer-default credential, verified valid | **VERIFIED READY — CLOSED BY PHASE 2B (PB-020)** | SECURITY | **P0** | G1 G2 G3 | Security Reviewer | 0011 | **CLOSED 2026-08-13** |
-| 0018 | Review `oe-system` service identity's membership of Administrators | Audit §12.4, §20.6 #8 | Service identity sits in Administrators (upstream default) | READY AFTER CONFIGURATION | SECURITY | P1 | G3 | Security Reviewer | 0001 | NOT READY |
+| **0018** | Review `oe-system` service identity's membership of Administrators | Audit §12.4, §20.6 #8 | Service identity sits in Administrators (upstream default) | **VERIFIED READY — CLOSED BY PHASE 2B (PB-153)** — removed from Administrators (inactive/`NoLogin` account, no code path depended on the membership); rollback recorded | SECURITY | P1 | G3 | Security Reviewer | 0001 | **CLOSED 2026-08-16** |
 | 0019 | Break-glass: assign or deliberately withhold, and set `Emergency_Login_email_id` | Audit §20.5 | Role exists; **no user assigned; alert email blank** | READY AFTER CONFIGURATION | SECURITY | P2 | G3 | Security Reviewer | 0010 | NOT READY |
 
 ### 7.4 Domain C — Synthetic demo data (G2)
@@ -962,7 +962,7 @@ qualification*. Dependencies, not dates.
 | **0026** | 10–15 recorded and printable prescriptions | GTM DEM-003; CLM-0012 | `prescriptions` = **0** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-058)** | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0021 | **CLOSED 2026-08-14** |
 | **0027** | 2 fictional payers, one fee schedule, one price level populated, 30–40 charges (B3) | GTM DEM-003; audit B3 | `insurance_companies` = 0; `prices` empty; single price level | **VERIFIED READY — CLOSED BY PHASE 2B (PB-055)** | DATA | **P0** | G2 | Database / Demo Data | 0020, 0021, 0037 | **CLOSED 2026-08-14** |
 | **0028** | Synthetic-data safety controls — no real PHI, no real Iqama/National ID, no real phone numbers, no real payer contracts, no customer logos, no real staff names | GTM DEM-003; brief §18 | No data exists; **no control document exists either** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-045)** — Legal/Compliance verdict (Mohammed Elfouly, APPROVED) relayed by the Owner | DATA | **P0** | G1 G2 G3 | Legal / Compliance | — | **CLOSED 2026-08-14** |
-| 0029 | Activate 2–3 of the 80 shipped CDS rules so at least one alert fires on a seeded patient | GTM DEM-003; CLM-0008 | 80 rules ship **with alert flags off** | READY AFTER FEATURE ACTIVATION | CONFIGURATION | P1 | G2 | Clinical Workflow Reviewer | 0020, 0024 | NOT READY |
+| 0029 | Activate 2–3 of the 80 shipped CDS rules so at least one alert fires on a seeded patient | GTM DEM-003; CLM-0008 | 80 rules ship **with alert flags off** | **DONE (not closed) — PB-154**: `active_alert_flag` activated for 3 rules (`rule_tob_use_assess`, `rule_adult_wt_screen_fu`, `rule_cs_mammo`); pre-existing `clinical_rules_log` evidence shows these exact rules already firing `past_due` on real seeded patients under `passive_alert_flag`. Needs one browser check that the *active* presentation also renders | CONFIGURATION | P1 | G2 | Clinical Workflow Reviewer | 0020, 0024 | NOT READY |
 | 0030 | Deliberate edge and negative cases: a patient with no encounters, an unsigned note, a cancelled appointment, an encounter with sensitivity set | Brief §18 | None | READY AFTER DATA | DATA | P1 | G2 | Database / Demo Data | 0020, 0021 | NOT READY |
 | 0031 | Dataset provenance and re-generation — how the data was produced, and how to reproduce it | Brief §18, §46 | None | NOT READY — DOCUMENTATION | DATA | P1 | G2 | Database / Demo Data | 0020…0027 | NOT READY |
 
@@ -973,7 +973,7 @@ qualification*. Dependencies, not dates.
 | **0032** | Rename the facility from `Your Clinic Name Here` to a neutral fictional demo clinic (B4) | GTM DEM-003, B4 | Installer default, 1 facility | **VERIFIED READY — CLOSED BY PHASE 2B (PB-016)** | BRANDING READINESS | **P0** | G1 G2 | Brand *(provisional name)* / Founder | 0001 | **CLOSED 2026-08-13** |
 | **0033** | Replace product identity strings — `openemr_name`, `login_tagline_text` | Audit §19.4; L-17 | `'OpenEMR'`, *"The most popular open-source Electronic Health Record…"* | READY AFTER CONFIGURATION | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0090, 0095 | NOT READY |
 | **0034** | Remove or repoint vendor links — `display_donations_link`, `display_review_link`, `main_menu_logo_link` | Audit §19.4; L-17 | All live and pointing at open-emr.org | READY AFTER CONFIGURATION | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0095 | NOT READY |
-| 0035 | Clear `pqri_registry_name='Model Registry'` and `pqri_registry_id='125789123'` placeholders | Audit §19.4 | Live placeholders | READY AFTER CONFIGURATION | CONFIGURATION | P1 | G2 | OpenEMR Engineer | 0001 | NOT READY |
+| **0035** | Clear `pqri_registry_name='Model Registry'` and `pqri_registry_id='125789123'` placeholders | Audit §19.4 | Live placeholders | **VERIFIED READY — CLOSED BY PHASE 2B (PB-151)** — both cleared to empty string; only call site (`PQRIXml.class.php:56-57`) renders an empty element, not an error | CONFIGURATION | P1 | G2 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-16** |
 | **0036** | Set `gbl_time_zone` to `Asia/Riyadh` | Audit §22.4, §23.4 | **Empty** → UTC | **VERIFIED READY — CLOSED BY PHASE 2B (PB-016)** | CONFIGURATION | **P0** | G1 G2 G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
 | **0037** | Configure currency display for SAR — symbol, decimals, separators | Audit §22.4, §23.4; L-12 | `$`, 2 decimals; **display only, no ISO code** | READY WITH MANDATORY QUALIFICATION — **PB-202: checked the actual Patient Ledger (a real financial screen with real charges) directly — it renders every amount as a bare number, no `SAR` and no `$` anywhere. Worse than the previously-suspected "$ instead of SAR" gap; the currency indicator is simply absent from this screen** | CONFIGURATION | **P0** | G2 | OpenEMR Engineer | 0001 | NOT READY |
 | **0038** | Replace US locale seeds visible during registration — `list_options.state` (52 US states), `country` (1 row), `phone_country_code = 1`, `units_of_measurement` | Audit §22.4 | US seeds live | READY AFTER CONFIGURATION — **PARTIAL BROWSER EVIDENCE (PB-028/PB-141): Saudi regions + country set confirmed; phone-number acceptance and metric-units rendering never tested, registration was never submitted** | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0001 | NOT READY |
@@ -996,7 +996,7 @@ qualification*. Dependencies, not dates.
 | **0045** | Close the upstream gap (**373 commits behind** at audit) and establish an ongoing patch cadence with a rollback approach and a regression check | GTM §25 Phase 2, §26 P0, L-27; audit EB-10 | *Historical (2026-08-09):* 0 ahead / 373 behind; HEAD dated 2026-07-04. **Live (2026-08-13): 33 ahead / 418 behind, DIVERGENT, 13 commits unpushed, upstream target undecided** | NOT READY — ENGINEERING | PATCH / DEPENDENCY | **P0** | G3 G6 | OpenEMR Engineer | 0001, 0047 | NOT READY |
 | **0046** | Resolve provenance of `oe-module-claimrev-connect` — gitignored, composer-installed, source not under version control | Audit §20.6 #12, L-27; GTM §24 | Supply-chain provenance gap | **VERIFIED READY — CLOSED BY PHASE 2B (PB-048)** — determination: RETAIN, fully traced, upstream-required, inert | PATCH / DEPENDENCY | **P0** | G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-14** |
 | **0047** | A documented, repeatable deployment runbook for a fresh clinic instance — every manual step, the expected Windows/Apache/MariaDB environment, environment-specific configuration separated from code | GTM §25 Phase 2 gate | No runbook exists; deployment is a one-off manual install | NOT READY — OPERATIONAL | DEPLOYMENT | **P0** | G3 G6 | DevOps / Infrastructure | 0001, 0064 | NOT READY |
-| **0048** | Secrets handling — `sites/default/sqlconf.php` is **git-tracked and carries local credentials** | Audit §19.6, §0.1 | *Historical:* tracked file holding credentials, shown as modified. **Live (2026-08-13): `skip-worktree` set; invisible to `git status`; committed blob pristine — no credential ever committed** | NOT READY — SECURITY · **LIVE EVIDENCE SUGGESTS STATUS CHANGE — FORMAL CLOSURE DEFERRED TO PHASE 2B** | SECURITY | **P0** | G3 | DevOps / Infrastructure | — | NOT READY |
+| **0048** | Secrets handling — `sites/default/sqlconf.php` is **git-tracked and carries local credentials** | Audit §19.6, §0.1 | *Historical:* tracked file holding credentials, shown as modified. **Live (2026-08-13): `skip-worktree` set; invisible to `git status`; committed blob pristine — no credential ever committed.** **CORRECTED (2026-08-14, `EV-048`; re-confirmed live 2026-08-16, AGENT-DOC): the "candidate closure" signal below is WITHDRAWN.** `skip-worktree` only masks `git status`, it is not a security control, and the live working-tree credential is still the upstream default `openemr`/`openemr` — re-read directly from `sites/default/sqlconf.php` on 2026-08-16, unchanged | NOT READY — SECURITY | SECURITY | **P0** | G3 | DevOps / Infrastructure | — | NOT READY |
 | 0049 | Replace the three Unix-only commands configured on a Windows host (`lpr`, `enscript`, `/usr/bin/file`) and the placeholder OFX bank IDs | Audit §19.6, OD-04, L-21 | Live in `config.php` | NOT READY — DEFECT | CONFIGURATION | P1 | G3 | DevOps / Infrastructure | 0001 | NOT READY |
 
 ### 7.8 Domain G — Security, authorization and audit integrity (G1, G3, G5)
@@ -2525,6 +2525,177 @@ reached the identical conclusion, including retracting that session's own earlie
 connected in this session. Immediately following this entry, RDY-0013/0025/0037/0038 were re-tested
 live (see PB-14x below) rather than re-argued a third time from screenshots. RDY-0082 leg 6 remains
 correctly out of scope pending AGENT-OPS producing a restored instance to test against.
+
+## PB-144 (2026-08-16) — **AGENT-DOC: RDY-0006 and RDY-0008 authored** — evidence repository convention written down; claim-trace mechanism demonstrated
+
+**RDY-0006** — `docs/evidence/EV-006-evidence-artefact-repository.md`. §38's own naming scheme was
+never written down as a convention, only implied by practice. The file records the actual convention
+(`docs/evidence/EV-<n>-<slug>.md`, or a dated PB log entry for items resolved inline) and audits every
+`EV-*` ID in §38 against the live `docs/evidence/` directory listing (2026-08-16) — none resolves to
+nothing; a majority resolve to inline PB entries rather than standalone files, which is now stated
+explicitly rather than left to be discovered. **VERIFIED READY**, recommended for closure at gate sync.
+
+**RDY-0008** — `docs/evidence/EV-008-claim-trace-review-step.md`. Defines the trace mechanism (a
+citation to a `CLM-*`/`CAP-*`/`GAP-*`/`L-*` ID behind every customer-facing sentence) and demonstrates
+it on a real artefact: all 8 disqualifier sentences in `EV-065`'s qualification call sheet trace
+cleanly to a source ID. **Dependency check: RDY-0003 (claim reviewer + review step) is still open** —
+a reviewer is named per `docs/evidence/AGENT-CLAIMS.md`'s 2026-08-14 note but the register row itself
+has not been updated and no review has been logged. **RDY-0008 stays open on that dependency**, not on
+its own mechanism, which works.
+
+**`Blocks`:** 0006 → G1 G2 G3 · 0008 → G5. No gate count moved (§0.0 Rule 3).
+
+## PB-145 (2026-08-16) — **AGENT-DOC: RDY-0031 and RDY-0072 authored** — dataset regeneration procedure; schema concept-map + generator
+
+**RDY-0031** — `docs/evidence/EV-031-dataset-provenance.md`. The regeneration procedure is written as
+copy-runnable commands (`thiqa-branding:backup --verify-only`, `thiqa-branding:seed-demo --dry-run`,
+then execute, then independently verify counts against the manifest) traced to `SeedDemoCommand.php`'s
+documented determinism (`RANDOM_SEED = 20260813`, fixed name tables). Three genuine non-reproducible
+gaps are named rather than glossed: the historical defect-fix sequence is not consolidated into one
+changelog; the 8 ophthalmology profiles are authored content, not distributionally regenerated; and
+regenerating does not regenerate RDY-0021/0028's human sign-offs. **VERIFIED READY** on its own
+acceptance text; recommended for closure at gate sync.
+
+**RDY-0072** — `docs/evidence/EV-072-schema-data-dictionary.md`. Live-counted 283 tables
+(`information_schema.tables`, native stack, 2026-08-16) categorised by concept (patient/encounter/
+billing/scheduling/documents/ACL/audit/localisation/EDI/modules = 119 tables; 164 "everything else",
+stated as an honest bound rather than false precision). A reproducible column-level generator query is
+included and was verified runnable against the live schema. **VERIFIED READY**; recommended for
+closure at gate sync.
+
+**`Blocks`:** 0031 → G2 · 0072 → G6. No gate count moved (§0.0 Rule 3).
+
+## PB-146 (2026-08-16) — **AGENT-DOC: RDY-0070 and RDY-0074 authored** — funnel metric definitions; post-contract deletion policy
+
+**RDY-0070** — `docs/evidence/EV-070-funnel-instrumentation.md`. All 14 rows of GTM §29's measurement
+framework (the readiness document's condensed table rounds this to "13") given a definition and a
+named recording location; explicitly no target on any metric, matching GTM §29's own instruction.
+Several recording points are named-but-unbuilt (depend on a website or a pilot existing) and are
+stated as such rather than presented as live instrumentation. **NOT CLOSED** — definitions complete;
+the instrumentation itself waits on the website and RDY-0068.
+
+**RDY-0074** — `docs/evidence/EV-074-post-contract-deletion-policy.md`. Answers `EV-073` §3's open
+question (deletion timing) with a stated rule (30-day live-instance deletion after handover
+confirmation; a 90-day ceiling on engagement-era backups) that reflects RDY-0055's PHI-in-audit-log
+finding. **The two timeframe numbers are proposed defaults, explicitly not yet Legal/Compliance
+reviewed** — named as the specific human-blocked step rather than asserted as policy. **NOT CLOSED.**
+
+**`Blocks`:** 0070 → G6 · 0074 → G3. No gate count moved (§0.0 Rule 3).
+
+## PB-147 (2026-08-16) — **AGENT-DOC: RDY-0091 and RDY-0092 authored** — branding audit document located; Locked Decisions corpus reconciliation finds a real conflict
+
+**RDY-0091** — `docs/evidence/EV-091-branding-audit-document.md`. Locates and confirms four existing
+branding documents (`docs/AuditRebranding.md`, 1,899 lines, dated 2026-08-10; `rebranding.md`;
+`RebrandingPlan.md`; `RebrandingBugs.md`), reconciles their scope against `EV-090`'s fresher
+(2026-08-14) surface inventory — no conflict found between the two, they answer different questions —
+and flags plainly that `AuditRebranding.md`'s FAIL verdict has not been re-checked against current
+`HEAD` on a branch with substantial branding work since. **VERIFIED READY** on the "located" criterion
+as literally written; recommended for closure at gate sync.
+
+**RDY-0092** — `docs/evidence/EV-092-locked-decisions-reconciliation.md`. Sampled reconciliation
+(categories A–D opening, `Q1`–`Q22` of 77+) of the repo-root `Locked Desicions/` corpus against the
+GTM. **⚠ Found a genuine, unescalated conflict**: Locked Decisions **Q5** locks *"enforce MFA centrally
+in Keycloak... do not add a downstream OpenEMR core `force_mfa` global"*, while the readiness
+document's current position (RDY-0057, RDY-0099, O-12) is that MFA **cannot be mandated** and proposes
+the exact `force_mfa` global Q5 forbids. Neither document references the other's MFA position. Also
+flagged: **Q21's "External verification (ZATCA, 2026-07-24)" note may be a primary-source lead for the
+still-open RDY-0078**, unconfirmed as primary here and handed off rather than resolved. **Categories
+`Q23` onward (of 77+) remain unreviewed** — recorded as open scope, not assumed clean. **NOT CLOSED —
+escalated per the acceptance criterion's own wording, not resolved.**
+
+**`Blocks`:** 0091 → G4 · 0092 → G0. No gate count moved (§0.0 Rule 3).
+
+**Required next step for the Owner (not performed here):** state which corpus governs the current MVP
+phase, and whether Q5's MFA position should override RDY-0057/0099's disclosure-based handling before
+any security-review conversation cites it.
+
+## PB-148 (2026-08-16) — **AGENT-DOC: RDY-0094 adopted; the DICOM classification question resolved**
+
+`docs/evidence/EV-094-demo-no-go-register.md`. §40 (13 rows, actively maintained through 2026-08-16
+via PB-142/PB-181) is adopted as RDY-0094's register rather than re-authored — duplicating it would
+create a second copy to drift out of sync. **Two of four acceptance criteria are met** (register
+exists; every row, including honest "Never" rows, has a recorded unlock condition). **The remaining
+two — a witnessed presenter rehearsal, and a cross-check against a completed D-7 run — are named as
+the exact human/execution steps outstanding; neither can be produced by more documentation.**
+
+**The task briefing's "DICOM viewing inventory" question is resolved, not a gap**: §32's MC-24 row
+already classifies DICOM as `Active — Mentionable, qualified — Viewing only, no PACS`, explicitly
+distinct from C-CDA (which *is* the no-go item, §40 row 2, because nothing listens on 6661). No new
+no-go row is added for DICOM — it is demonstrable with a stated qualification, unlike C-CDA. **NOT
+CLOSED** — register adoption and unlock conditions met; rehearsal and D-7 cross-check outstanding.
+
+**`Blocks`:** G1 G2. No gate count moved (§0.0 Rule 3).
+
+## PB-149 (2026-08-16) — **AGENT-DOC: RDY-0038 card corrected** — the units-of-measurement clause was tested against the wrong screen
+
+Flagged by PB-202: the card's single acceptance-criteria sentence tested Saudi regions, country,
+phone **and** "renders metric units" all against the registration screen, but PB-202's live browser
+search found no units field anywhere on registration. **Confirmed by source**: `units_of_measurement`
+has exactly one consumer set in the tree — `interface/forms/vitals/` (`C_FormVitals.class.php`,
+`report.php`, `growthchart/chart.php`) — not the registration layout.
+
+**Fix applied to RDY-0038's card (§8.4)**: split the acceptance criteria into a registration-screen leg
+(regions/country/phone — unchanged) and a vitals-entry-screen leg (units rendering — moved to its
+correct screen), with the reasoning recorded inline so a future tester is not sent looking for a units
+dropdown on a screen that has never had one. **The underlying requirement is unchanged** — only which
+screen each half of the acceptance criterion is tested against. Status updated to reflect PB-202's
+partial verification of the registration leg; the vitals-entry leg is untested.
+
+**`Blocks`:** G1 G2. No gate count moved (§0.0 Rule 3) — this is a documentation correction, not a
+closure.
+
+## PB-150 (2026-08-16) — **AGENT-DOC: continuation items read and confirmed — RDY-0047, 0048, 0065/0066/0068/0069, 0071, 0081, 0084, 0086, 0090**
+
+Per the closure contract's "read the actual EV file before touching it" rule, every item below was
+read in full before any action. **No dataset, database, or code mutation was performed** — this
+session holds a documentation claim, not a Track D/OPS claim.
+
+- **RDY-0047** (`EV-047`, Agent B, 2026-08-14): reviewed for gaps a fresh reader would hit. It is
+  substantially complete and self-critical (§0 explicitly states it has never been executed). No
+  material ambiguity found worth a correction — the runbook already names its own coverage boundary
+  (§0.1) and its acceptance is honestly scored NOT MET pending an independent execution. **Remains
+  human-blocked on exactly one thing: a person who did not write it, provisioning from it.** No
+  substitute exists for that.
+- **RDY-0048**: register row (§7.7, this document) **corrected** — see the row edit accompanying this
+  entry. `EV-048`'s 2026-08-14 finding (the tracked `sqlconf.php` still carries the live credential
+  `openemr`/`openemr`; `skip-worktree` is not a security control) was **re-confirmed live 2026-08-16**
+  by reading `sites/default/sqlconf.php` directly on this native stack — unchanged. The register row's
+  stale "LIVE EVIDENCE SUGGESTS STATUS CHANGE — FORMAL CLOSURE DEFERRED TO PHASE 2B" framing is
+  withdrawn; `EV-048` had already reached this conclusion on 2026-08-14 but it was never propagated to
+  the register row itself.
+- **RDY-0065/0066/0069** (`EV-065-066-069`, Agent B, 2026-08-14): read in full. All three artefacts are
+  complete and honestly scored NOT MET on their remaining human elements (three real qualification
+  calls; legal/compliance review of the scope template; a pilot existing). **`EV-068`'s existence
+  (PB-14x above) means `EV-066`'s cross-reference to RDY-0073 is now live** — see PB-147's sibling
+  entry and the direct edit to `EV-073`'s acceptance table. Nothing else added; redoing this artefact
+  was explicitly out of scope.
+- **RDY-0071** (`EV-071`, Agent B, 2026-08-14): read in full. 1 of 8 CSV-capable reports exported; the
+  remaining 7 and an external reviewer are the named gaps. Not executed further this session — running
+  more report exports against the live seeded dataset is Track D/AGENT-DATA territory, not documentation,
+  and this session avoids uncoordinated dataset interaction per the concurrency protocol.
+- **RDY-0081** (PB-021/PB-023, Agent B, 2026-08-13): read in full. Executable half (local backup,
+  verification, retention, hashing) is proven; off-instance copy and CMEK remain genuinely blocked on
+  RDY-0064's external provisioning leg, not on any decision this session could make. No change needed —
+  confirmed current and accurate as written.
+- **RDY-0084** (`EV-084`, Agent B, 2026-08-14): read in full. All six monitoring signals are defined
+  with signal/threshold/destination/owner; the tooling-not-selected statement is explicit per its own
+  acceptance criterion. **The one open reservation is Agent B's own** — whether "owner" must name an
+  individual rather than a role. **This item appears to genuinely meet its own acceptance bar**;
+  flagged here for the gate-sync owner's confirmation, not closed by this agent.
+- **RDY-0086** (`EV-086`, Agent B, 2026-08-14): read in full. Data-layer Arabic coverage is
+  measured and two corrections to prior characterisations are recorded (picklist gap quantified at
+  16.1%; `layout_options` labels are 79% covered, not untranslated as previously stated). **Two
+  outstanding gaps, both genuinely human-blocked**: the per-screen visual walk, and a named Arabic
+  Reviewer — nobody holds that role anywhere in the register. Not fabricated here.
+- **RDY-0090** (`EV-090`, Agent A, 2026-08-14): read in full. Source-and-probe inventory is thorough
+  (favicons, titles, portal, email, rendered strings) and its own §6 already **is** the human-walk
+  checklist RDY-0090's acceptance asks for — six named surfaces, one classification per surface,
+  method stated. No further checklist construction was needed; §6 already serves that purpose.
+  **Remains blocked on the walk itself being performed by a second person.**
+
+**No item in this entry is closed. No fabricated sign-off, reviewer, or date appears anywhere above.**
+
+**`Blocks`:** 0047 → G3 G6 · 0048 → G3 · 0065/0066/0069 → G3 G6 · 0071 → G3 G5 G6 · 0081 → G3 · 0084 → G3 · 0086 → G1 G5 · 0090 → G1 G4. No gate count moved (§0.0 Rule 3).
 
 ## PB-151 (2026-08-16) — **AGENT-CONF: RDY-0035 CLOSED** — `pqri_registry_name` / `pqri_registry_id` placeholders cleared
 
@@ -7485,9 +7656,30 @@ exist *before* seeding begins, or there is no way back to a known state.
 **Why it blocks launch:** Neither source classifies this as a blocker, because neither was asked what a Saudi demo looks like. It is derived here from audit §22.4 and it is visible within ninety seconds of starting the buyer-expected journey.
 **Required action:** Configure the state, country, phone and units lists through the **list editor** — which is itself the D-3 configuration proof, so this work doubles as demo content.
 **Risk:** editing seeded list options can orphan existing references; there is no existing data yet, which makes now the cheapest possible moment to do it.
-**Acceptance criteria:** Registering a synthetic patient offers Saudi regions and a plausible country set, accepts a plausible non-real Saudi-format phone number without a validation error, and renders metric units; no US state list is reachable from the registration layout.
-**Verification:** complete one registration end-to-end under the reception account and capture each screen.
-**Evidence artefact:** `EV-038 locale-seeds.md` + registration walkthrough capture · **Status:** NOT READY
+**Acceptance criteria — split across the two screens this clause actually spans (corrected 2026-08-16,
+AGENT-DOC, per PB-202's flag):**
+- **Registration screen:** registering a synthetic patient offers Saudi regions and a plausible
+  country set, and accepts a plausible non-real Saudi-format phone number without a validation error;
+  no US state list is reachable from the registration layout.
+- **Vitals-entry screen:** `units_of_measurement` has exactly one consumer in the codebase —
+  `interface/forms/vitals/` (`C_FormVitals.class.php`, `report.php`, `growthchart/chart.php`) — **not**
+  the registration layout. Recording a vitals entry for a synthetic patient renders metric units
+  (cm/kg), not US customary units.
+
+**Why this was split:** the original single-screen wording conflated two different screens under one
+criterion — confirmed live by PB-202 (2026-08-16): the registration form was searched exhaustively
+(every `select`/`input`, every frame) and **no units-of-measurement field exists on it at all**, while
+`grep`-confirming `units_of_measurement`'s only consumers sit under `interface/forms/vitals/`. The
+underlying requirement (RDY-0038, replacing US locale seeds) is unchanged — only which screen each half
+of the acceptance criterion is tested against is corrected, so a future tester is not sent looking for
+a units dropdown on a screen that has never had one.
+
+**Verification:** complete one registration end-to-end under the reception account and capture each
+screen (regions/country/phone leg); separately, record one vitals entry under a clinical account and
+capture the rendered units (units leg).
+**Evidence artefact:** `EV-038 locale-seeds.md` + registration walkthrough capture + vitals-entry
+capture · **Status:** NOT READY — registration leg PARTIALLY VERIFIED (PB-202: regions/country
+confirmed, phone-acceptance confirmed by a completed submission); vitals-entry leg not yet tested
 
 ### 8.5 Cluster 5 — D-7, demo-surface defects and reset (G2)
 
@@ -9527,6 +9719,7 @@ artefact that proves closure.
 | EV-088 | Frequency-hold record | Record | No unverified figure published | 0088 |
 | EV-090, EV-095 | Branding inventory; licence determination | Inventory + determination | Phase 3 can start | 0090, 0095 |
 | EV-094, EV-096 | No-go register; support definition | Registers | Demo and support discipline | 0094, 0096 |
+| EV-006, EV-008, EV-031, EV-070, EV-072, EV-074, EV-091, EV-092 | Evidence repository convention; claim-trace demonstration; dataset regeneration procedure; funnel metric definitions; schema concept-map + generator; post-contract deletion policy; branding audit location; Locked Decisions reconciliation | Documents | P1 governance/documentation items (§9.3), added 2026-08-16, AGENT-DOC | 0006, 0008, 0031, 0070, 0072, 0074, 0091, 0092 |
 
 ---
 
