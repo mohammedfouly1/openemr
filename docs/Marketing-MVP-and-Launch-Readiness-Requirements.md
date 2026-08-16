@@ -81,6 +81,25 @@ requirement's own acceptance criteria to pass, demonstrated**, with a re-runnabl
 caught a false pass at PB-027, PB-031, PB-032 and PB-044, and a false *failure* at PB-037 and PB-043.
 **Do not fabricate a human sign-off.** Record what was received, from whom, and by what route.
 
+### Rule 6 — chained commits, lock awareness, post-commit verification
+
+Adopted 2026-08-16 after two real incidents in one session (not hypothetical): an unchained
+`git add`/`git commit` pair raced another agent's `.git/index.lock`, the `add` failed silently, and
+the following `commit` committed whatever was already staged — another agent's work — under the wrong
+message (see `docs/evidence/EV-AUDIT-agentA-20260816.md` §8, commit `41e4f0162`). Separately, a
+trailing pathspec on `git commit -m "..." -- <path>` re-staged an entire file and swept in a different
+agent's concurrently-uncommitted edits (`docs/evidence/AGENT-CLAIMS.md`, "Notes between agents"). No
+content was lost in either case, but both were real, not theoretical.
+
+1. **Always chain `git add <explicit path> && git commit -m "..."` as one command.** Never split `add`
+   and `commit` across separate invocations — an unchained `commit` after a silently-failed `add`
+   commits whatever is already staged, which may belong to another agent.
+2. **Before staging, check for `.git/index.lock`.** If present, another session is mid-commit — wait;
+   do not retry immediately and do not force through it.
+3. **After every commit, run `git show --stat HEAD`** and confirm the files listed are the ones you
+   intended. A commit message describing work the commit does not contain is a Rule 4a failure in
+   spirit even when nothing is lost.
+
 ---
 
 ## 0. Verification Header
@@ -2258,6 +2277,25 @@ unidentified (`6de7cdcc1`'s author `mohammedfouly1` is consistent with the Owner
 does not distinguish which of at least three concurrent Claude Code sessions, if any, performed the
 push, or whether it was manual). **Not investigated further here** — flagged for the Owner to confirm
 directly, and for AGENT-GIT to fold into its decision pack once confirmed.
+
+## PB-143 (2026-08-16) — **PB-141 and PB-201 do not contradict — clarified, and superseded by live re-testing**
+
+Raised as a possible contradiction: PB-141 re-verified PB-028/PB-029's evidence for RDY-0013/0037/0038
+clause-by-clause; PB-201 (AGENT-BROWSER) declared a harness blocker on RDY-0013/0025/0037/0038/0082.
+Same three RDY IDs appear in both. **They are not in tension.** PB-141's verdict for all three was
+already **OPEN, with itemized remaining gaps** — not closed, not fully evidenced. PB-201 is a
+different session's record that it could not attempt the *further* testing PB-141 already said was
+needed (`claude-in-chrome` unavailable in that session) — it issues no verdict on any RDY, closed or
+open, and does not revisit PB-141's clause-by-clause finding. Two entries agreeing that work remains
+outstanding, reported from two different angles, is not a contradiction. This is also independently
+confirmed: `docs/evidence/EV-AUDIT-agentA-20260816.md` §2 re-derived PB-141's verdict from the same
+primary sources (§8 cards, `BrowserVervication.md`, `BrowserRetest.md`) in a fully separate session and
+reached the identical conclusion, including retracting that session's own earlier, different verdict.
+
+**Rendered moot by direct action rather than further paper analysis**: `claude-in-chrome` is now
+connected in this session. Immediately following this entry, RDY-0013/0025/0037/0038 were re-tested
+live (see PB-14x below) rather than re-argued a third time from screenshots. RDY-0082 leg 6 remains
+correctly out of scope pending AGENT-OPS producing a restored instance to test against.
 
 ## PB-085 (2026-08-14) — RDY-0004 control instrument issued. **Its blocker moved from "nobody to name" to "nothing yet to bind"**
 
