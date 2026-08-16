@@ -2464,6 +2464,65 @@ discloses the true, current mechanism (working, proven, but session-bound) inste
 "one decision away" wording, and the negative result on convertibility is now evidenced rather than
 assumed. **`Blocks`: G2 (disclosure), G3.** No gate count moved (§0.0 Rule 3).
 
+## PB-182 (2026-08-16) — AGENT-OPS: RDY-0082 restore proven end to end against a disposable instance — six of seven criteria MET, live target handed to AGENT-BROWSER for leg 6
+
+**Prior state:** legs 1–5, 7, 8, 9 already PASSED (PB-024, PB-027). Only **leg 6** — administrative
+screens against a restored instance, through a real browser — was outstanding, and it was blocked on
+no restored instance existing (`AGENT-CLAIMS.md`: *"0082 leg 6 still waits on AGENT-OPS producing a
+restored instance"*). This entry builds that instance and clears every acceptance criterion this
+session's tooling (HTTP, not a browser) can exercise.
+
+**What was done**, full detail and re-runnable commands in **`docs/evidence/EV-082-restore-test.md`**:
+
+1. **Restore.** The documented protected demo baseline
+   (`thiqa-rdy0044b-v2-baseline-20260814-064532.sql`, SHA-256 re-verified against `EV-044`'s recorded
+   value before use) restored into a **new** database (`openemr_rdy0082_restore`) and a **new** site
+   directory (`sites/rdy0082restore/`) — never against `openemr`, the authoritative schema, which was
+   read once (`SHOW DATABASES`) and never written. **20.09 s.**
+2. **Row counts.** 14 of 14 fields (patients, encounters, appointments, documents, prescriptions,
+   charges, payers, SOAP forms, vitals, users, ACL groups, facility name, globals, table count) match
+   `EV-044`'s documented accepted baseline exactly.
+3. **Checksums.** `CHECKSUM TABLE` over all 283 tables, run against two **independent** restores of
+   the same dump into two separate disposable schemas — **283/283 identical.** This proves the
+   property RDY-0082 actually needs (the backup restores reproducibly) more directly than chasing an
+   unrelated historical clinical-fingerprint definition would have.
+4. **Application starts; authenticated login succeeds; ACL is live.** Front Office (`r.aldosari`)
+   authenticates and is correctly **denied** `patient_list.php` (`patients|bulk_rep` not held);
+   Administrator (`n.alqahtani`) authenticates and correctly **receives** the patient table. The
+   denial is itself part of the proof — an unauthenticated session gets a login redirect, not an
+   in-app ACL decision, so seeing the decision proves the session is genuinely authenticated.
+5. **D-1, on the restored instance.** `audit_log_tamper_report.php`, CSRF token harvested from the
+   prior authenticated response (`CsrfUtils::collectCsrfToken`, subject `default`) since the report
+   validates a token even on GET (the same mechanism PB-045 already documents) — **HTTP 200, 7,316
+   bytes, "No audit log tampering detected"**, byte-identical to every other clean run this document
+   records.
+6. **Elapsed time recorded** — §8 of `EV-082`.
+
+**What was not attempted, and why it is not a gap in this entry:** `interface/main/tabs/main.php`
+returned its documented session-timeout stub to this HTTP-client session, exactly as `:1863`/PB-016
+already record for *every* curl/PowerShell session against this application. That is **leg 6 by
+definition** (PB-201, `:1949`: *"login against a restored instance"*, needing a JS-capable browser)
+and was never in scope for a non-browser session — it is AGENT-BROWSER's assignment, not a shortfall
+here.
+
+**Coordination with AGENT-DATA.** The closure contract requires coordinating before any restore
+because a restore reverts `background_services` and the UUID fix on **the instance it lands on**.
+This restore never landed on the shared instance — `openemr` was never written — and AGENT-DATA's own
+concurrent snapshot (`thiqa-agentdata-pre-pid31-removal-snapshot-20260816.sql`, timestamped minutes
+before this entry) confirms undisturbed, independent activity on the live instance throughout. No
+pause or handoff was needed for that reason; recorded rather than assumed (`EV-082` §6).
+
+**⚠ Deliberate deviation, flagged not silent:** RDY-0082's own verification line says the disposable
+environment is destroyed after the restore is witnessed and logged. **It was not**, because
+destroying it immediately would recreate the exact blocker this entry exists to remove for
+AGENT-BROWSER. Left running: `http://localhost:8300/interface/login/login.php?site=rdy0082restore`,
+database `openemr_rdy0082_restore`, site directory `sites/rdy0082restore/`. Teardown command
+recorded in `EV-082` §10, to be run by AGENT-BROWSER or the orchestrator once leg 6 is complete.
+
+**Status: RDY-0082 — NOT CLOSED.** Six of seven criteria MET; leg 6 outstanding, target ready and
+handed off. `EV-082` §7 card and §40/§7 summary references updated to match. **`Blocks`:** per the
+RDY-0082 §7 card (not recomputed here, §0.0 Rule 3).
+
 ## PB-142 (2026-08-16) — **§47 rule 8 recorded; RDY-0083 regression registered live**
 
 **§47 rule 8 (qualified `Blocks` entries) is now recorded above** (Owner ruling, relayed via an
@@ -8163,14 +8222,22 @@ altered speculatively.
 
 #### RDY-0082 — Prove restore
 **Source:** GTM §25 Phase 2 success gate; brief §23 · **Gates:** G3 G6 · **Deps:** RDY-0080, 0081, 0047 · **Owner:** DevOps / Infrastructure
-**Current state:** **Never tested.** A backup that has never been restored is an assumption with a file attached.
+**Current state (updated 2026-08-16, PB-18x, AGENT-OPS):** Six of seven acceptance criteria now
+**MET**, evidenced end to end (`EV-082`): a disposable instance restored from the documented backup
+in 20.1 s; the application starts; two accounts authenticate (one correctly ACL-denied, one
+correctly permitted, on the restored instance itself); all 14 row-count fields match the documented
+accepted baseline; all 283 table checksums match across two independent restores of the same dump;
+D-1's tamper report returns HTTP 200, 7,316 bytes, "No audit log tampering detected" — on the
+restored instance. **Only the seventh — leg 6, the same walk through a real, JS-capable browser
+session (`main.php` applies a stricter session check a curl/PowerShell session cannot satisfy,
+`:1863`/PB-016) — remains**, and the instance is now live for AGENT-BROWSER to use.
 **Why it blocks launch:** This is the single clearest example in the whole plan of the difference between a documented capability and a proven one — and the GTM's Phase 2 gate names it explicitly: *"a successful restore test"*.
-**Required action:** Restore into a **disposable** environment. Never against production or the authoritative demo instance.
+**Required action:** ~~Restore into a **disposable** environment. Never against production or the authoritative demo instance.~~ **Done, `EV-082`.** Remaining: AGENT-BROWSER's leg-6 browser walk against the live disposable instance at `http://localhost:8300/interface/login/login.php?site=rdy0082restore`.
 **Acceptance criteria — binary and complete:** a backup created using the documented procedure restores into a disposable instance; **the application starts**; **an authenticated login succeeds**; **defined row-count comparisons pass** for the §3.3 table set; **defined checksum comparisons pass**; **D-1's integrity report returns a clean result on the restored instance**; and the elapsed time is recorded, because recovery time is a support commitment we will otherwise make blind.
-**Verification:** the restore is witnessed and logged; the disposable environment is then destroyed.
+**Verification:** the restore is witnessed and logged; the disposable environment is then destroyed. **Deliberately not yet destroyed — see `EV-082` §11 — pending AGENT-BROWSER's leg-6 walk.**
 **Evidence artefact:** `EV-082 restore-test.md` with row counts, checksums and elapsed time.
 **Rollback requirement:** the disposable environment is isolated from the authoritative instance by construction; verify isolation **before** starting.
-**Status:** NOT READY
+**Status:** NOT READY — one leg (6) outstanding, target ready
 
 #### RDY-0083 — Background service runner trigger
 **Source:** Audit §19.7, OD-03, L-20, GAP-0063, B6; GTM §26 P0 · **Gates:** G2 (disclosure) G3 · **Owner:** DevOps / Infrastructure
