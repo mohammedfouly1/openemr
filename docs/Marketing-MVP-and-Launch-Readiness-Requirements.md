@@ -2379,6 +2379,75 @@ agent did not decide — `EV-003`'s claim-review procedure and the "relayed vs. 
 it describes govern that, and AGENT-HYGIENE's brief is accuracy, not advancement. Recorded here rather
 than resolved.
 
+## PB-181 (2026-08-16) — AGENT-OPS: RDY-0083 logoff-survival investigated and ruled out on this host; the console-session dependency named in §40 row 12 and confirmed already-adequate in `EV-047`
+
+*AGENT-OPS's range is PB-181…PB-190 (§0.0 Rule 1, Agent C sub-allocation). This is AGENT-OPS's first
+entry, opening on the finding PB-142 registered live: the background-service trigger does not survive
+the console session ending, observed 2026-08-16 as ~10 hours overdue after an unobserved session end.*
+
+**Per the Owner's explicit instruction relayed at PB-142, RDY-0083 stays NOT closed.** Closure needs
+either (a) a trigger that survives logoff, or (b) the limitation named explicitly, by name, in both
+RDY-0094 and RDY-0047. This entry records which path was taken and why.
+
+### (a) tested first, empirically, and ruled out on this host
+
+The existing trigger (`\OpenEMR-Thiqa-BackgroundServices`, built at PB-083/EV-083) is registered
+`Logon Mode: Interactive only` — confirmed live via `schtasks /Query ... /V`. Converting it to a
+logon type that survives logoff (`S4U`, `Password`/Batch, or `ServiceAccount`) was attempted two ways:
+
+| Attempt | Result |
+|---|---|
+| `schtasks /Create ... /RU sakthivelsakthivel89` (no `/RP`, implying S4U) | **`ERROR: Access is denied.`** |
+| `Register-ScheduledTask` with `New-ScheduledTaskPrincipal -LogonType S4U` | **`Access is denied.`** |
+
+Both fail because registering a non-interactive logon-type task requires an elevated session, and
+this session's shell is not elevated (`[Security.Principal.WindowsPrincipal]...IsInRole(Administrator)`
+→ `False`) — consistent with `CLAUDE.local.md` §11, which documents that elevation on this host needs
+an interactive UAC prompt on the desktop that an unattended agent session cannot supply.
+
+**Even setting elevation aside, the mechanism would not survive the drive it depends on.** The
+task's target is `bin\console` under `G:\My Drive\OpenEMR` — a Google-Drive-mounted volume that
+`CLAUDE.local.md` §4a documents as mounted **per interactive user session**, which is exactly why
+Apache and MariaDB run as console processes on this host rather than Windows services (`LocalSystem`
+"cannot see the application directory at all"). A non-interactive Scheduled Task (Batch/S4U/
+ServiceAccount logon) runs outside the interactive window station the same way a `LocalSystem`
+service does, so it inherits the identical blindness to `G:`. **This is not a permissions
+misconfiguration to fix — it is the same architectural constraint already governing every other
+process on this host**, and it was not invented for this entry; `EV-083` §2.1 already flagged the
+"does not survive a logoff" consequence of the interactive-only requirement, this entry is the first
+to test whether the *cause* (the drive mount) is itself circumventable, and finds it is not, on this
+host, without relocating the application off the per-session mount — which `CLAUDE.local.md` §7/§8
+records as a settled decision not to be re-proposed.
+
+**Conclusion: path (a) is not achievable on this host.** Adopting path (b).
+
+### (b) — the limitation named explicitly in both places
+
+- **RDY-0094 / §40 row 12** — rewritten in place. Previously read "the trigger is built and it's one
+  decision away from being switched on," which both understates today's true state (the trigger *is*
+  switched on and has been proven working since PB-071) and omits the actual defect (it stops working
+  unattended). New wording names the **console-session dependency** explicitly, cites the live PB-142
+  regression (~10 hours overdue), states this investigation's negative result, and gives the honest
+  unlock condition and presenter line. An addendum was also added directly under the RDY-0094 card
+  (§8.16) pointing to the corrected row — the card itself is left for AGENT-DOC's authoring of
+  `EV-094`, per its claim in `AGENT-CLAIMS.md`.
+- **RDY-0047 / `EV-047` §9 (Step 7)** — read fresh before editing, per the assignment's instruction not
+  to assume the copy in context was current. **It already names the dependency explicitly and
+  correctly** ("this must be the logged-on user, because Google Drive mounts `G:` per session and a
+  `SYSTEM` task cannot see the app at all — so the trigger there does not survive a logoff. That is a
+  demo-host artefact. A customer instance must use a service account and must survive reboot. Do not
+  copy the demo arrangement."). **No edit was needed there** — Agent B's original wording already
+  satisfies the naming requirement and already correctly scopes it as a demo-host artefact rather than
+  a customer-instance requirement, which today's investigation independently confirms is the right
+  boundary (a customer pilot instance is not expected to run on a per-session network mount).
+
+### What this does and does not close
+
+**RDY-0083 remains NOT CLOSED**, exactly as PB-142 instructed. What changed: the register now
+discloses the true, current mechanism (working, proven, but session-bound) instead of the stale
+"one decision away" wording, and the negative result on convertibility is now evidenced rather than
+assumed. **`Blocks`: G2 (disclosure), G3.** No gate count moved (§0.0 Rule 3).
+
 ## PB-142 (2026-08-16) — **§47 rule 8 recorded; RDY-0083 regression registered live**
 
 **§47 rule 8 (qualified `Blocks` entries) is now recorded above** (Owner ruling, relayed via an
@@ -7717,6 +7786,13 @@ altered speculatively.
 **Verification:** rehearsal witnessed; the register checked against the recorded rehearsal.
 **Evidence artefact:** `EV-094 demo-no-go-register.md` · **Status:** NOT READY
 
+**⚠ AGENT-OPS addendum (PB-181, 2026-08-16) — does not close this item, does not touch AGENT-DOC's
+authoring of `EV-094`.** §40 row 12 has been corrected again: the background-service trigger's
+**console-session dependency** is now named explicitly there, by name, per the Owner's instruction
+relayed at PB-142. Whoever rehearses this register must include that row's corrected wording —
+the trigger is real and proven, but on this demo host it does not survive the console session
+ending, and that must be said before a prospect notices two overdue services after an idle period.
+
 #### RDY-0095 — Licence and attribution review
 **Source:** Brief §22 · **Gates:** G1 G4 · **Deps:** RDY-0090 · **Owner:** Legal / Compliance
 **Current state:** **Not assessed by any source.** Neither the GTM nor the capability audit addresses what OpenEMR's licence requires to remain visible after rebranding.
@@ -9246,7 +9322,7 @@ from evidence, not caution.
 | 9 | **Arabic PDF output** | **No Arabic-shaping font in the tree.** It will not render correctly | Open (L-10) | RDY-0098 (P1) | *"Arabic PDF output doesn't render correctly as shipped. That's on the roadmap and I'd rather say it than show it."* |
 | 10 | **Any report in the RDY-0050 set** | *At Phase 2A:* eleven reports had no in-file authorisation, so demonstrating them invited the exact test that disproves Pillar 1 | **Still NO-GO** — Code remediation complete and statically verified; positive/negative authenticated role acceptance pending; the denial has not yet been demonstrated under a real non-privileged session | RDY-0050 **closes** (not merely code-complete) | — (use the §24.3 six instead) |
 | 11 | **The `admin` account** | Prohibited in any material, ever | Permanent | Never | — (use the demo administrator) |
-| 12 | **Background services screen — without pre-empting it** | Two active services show as **overdue since 2026-08-13**. ⚠ **CORRECTED 2026-08-14 (PB-071, EV-083): the previous wording said "overdue since 2021" and scripted the presenter to say the runner "has never been triggered". Both are false** — the runner has executed; what is missing is a *recurring* trigger | Open (OD-03) — **restated** | RDY-0083 | *"You'll see two services showing overdue. The runner works — we've run it and watched the timestamps advance — but this build has no scheduled trigger yet, so they only run when something invokes them. The trigger is built and it's one decision away from being switched on. It's a P0 and it's exactly the kind of thing we take responsibility for."* |
+| 12 | **Background services screen — without pre-empting it** | ⚠ **CORRECTED AGAIN 2026-08-16 (PB-142, PB-181, AGENT-OPS).** A recurring trigger exists and is enabled — Windows Scheduled Task `\OpenEMR-Thiqa-BackgroundServices`, proven working at PB-071/EV-083. **But it runs as the logged-on console-session user and does not survive that session ending** (logoff, reboot, or the console window closing). Live regression observed 2026-08-16: `httpd`/`mariadbd` fully stopped and both active services found **~10 hours overdue** after an unobserved session end (PB-142). AGENT-OPS then tested whether this is a fixable misconfiguration (PB-181): registering the task with a non-interactive logon type (S4U/Batch/ServiceAccount) was refused (`Access is denied`) without host elevation this session could not self-serve, and even granted elevation, a non-interactive logon session cannot see the Google-Drive-mounted `G:` at all — the same per-session-mount constraint `CLAUDE.local.md` §4a documents for why Apache/MariaDB run as console processes, not Windows services, on this host. **This is a demo-host limitation, not a product defect, and it is not fixable without moving the trigger's working directory off a per-session network mount.** | Open (OD-03) — **console-session dependency, named and disclosed; not fixable on this host** | A pilot/production host whose application directory is **not** a per-session mount (i.e., not this demo host), running the trigger as a genuine Windows service account that survives logoff/reboot — see `EV-047` §9 | *"If this session's been unattended a while you may see two services show overdue — the trigger is real, it's proven, and it self-heals the moment someone is signed back in. On this specific demo host it depends on a console session staying open, because of how this host's storage is mounted. A production pilot host runs the same trigger as a proper Windows service account with no such dependency. I'd rather tell you that than have the screen surprise you."* |
 | 13 | **Telehealth, dispensary, group therapy** | Uninstalled or Disabled | Open | RDY-0103/0114 | *"Present in the software, switched off. Activation is a priced service, not a claim."* |
 
 **The principle behind every row:** the honest answer exists in every case and is
