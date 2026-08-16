@@ -2216,6 +2216,49 @@ agent did not decide — `EV-003`'s claim-review procedure and the "relayed vs. 
 it describes govern that, and AGENT-HYGIENE's brief is accuracy, not advancement. Recorded here rather
 than resolved.
 
+## PB-142 (2026-08-16) — **§47 rule 8 recorded; RDY-0083 regression registered live**
+
+**§47 rule 8 (qualified `Blocks` entries) is now recorded above** (Owner ruling, relayed via an
+independent auditor session — see `docs/evidence/EV-AUDIT-agentA-20260816.md` §1). That session
+hand-derived the PB-140 gate count independently, matched 6 of 7 gates exactly, and traced the 7th
+(G2: their 13 vs PB-140's 12) to `RDY-0083`'s qualified `Blocks` entry `G2(disclose) G3` — the only
+qualified entry in the register. Under rule 8, **PB-140's G2 = 12 stands as correct**; no gate count
+changes as a result of this entry.
+
+### RDY-0083 — live regression, registered, NOT closed
+
+The same auditor session observed, live, on 2026-08-16: `httpd.exe`/`mariadbd.exe` **fully stopped**
+(`Get-Process httpd,mariadbd` returned nothing), and once restarted, `SELECT name, next_run, active
+FROM background_services` showed both `Email_Service` and `UUID_Service` **~10 hours overdue**
+(`next_run` ≈ 05:23–05:25 against a database clock of 15:17). The underlying data fix remains sound —
+both `form_vitals` and `insurance_companies` still show 0 NULL UUIDs, confirmed live — **this is not a
+data-integrity regression.**
+
+**It is the exact limitation PB-080/081 already flagged and that RDY-0083's `G2(disclose)` qualifier
+exists to disclose**: the background-service trigger runs as the logged-on console-session user and
+**does not survive that session ending** — logoff, reboot, or the console window closing. PB-080
+proved the self-heal property while its own console session stayed alive throughout the test; it never
+tested what happens after the session ends, because nothing forced it to end during that test.
+Sometime between then and 2026-08-16, the session ended unobserved, and the trigger died with it —
+overdue for roughly 10 hours before anyone happened to check.
+
+**RDY-0083 is NOT closed by this entry** — it was already `NOT READY — DEFECT` in the register and
+stays there. Per the Owner's explicit instruction (relayed via this conversation): closure now requires
+either a trigger that survives logoff, or the limitation stated explicitly in **both** the demo no-go
+register (RDY-0094) and the pilot deployment runbook (RDY-0047), naming the console-session dependency
+by name — not folded into generic operational language, and never copied into a customer-facing runbook
+silently. AGENT-OPS (Phase 2B, PB-181–190) is assigned this as its first item and should treat this
+entry as the starting finding, not rediscover it.
+
+**Also recorded, unresolved, for AGENT-GIT's decision pack**: the same auditor session measured
+`origin/feat/thiqa-branding-foundation` at only **1 commit unpushed** as of 2026-08-16, against **71**
+reported by the untracked `docs/gap-inventory-and-fix-groups-2026-08-15.md` one day earlier — meaning
+roughly **70 commits were pushed to that branch by some actor between 2026-08-15 and 2026-08-16**, actor
+unidentified (`6de7cdcc1`'s author `mohammedfouly1` is consistent with the Owner's own git identity but
+does not distinguish which of at least three concurrent Claude Code sessions, if any, performed the
+push, or whether it was manual). **Not investigated further here** — flagged for the Owner to confirm
+directly, and for AGENT-GIT to fold into its decision pack once confirmed.
+
 ## PB-085 (2026-08-14) — RDY-0004 control instrument issued. **Its blocker moved from "nobody to name" to "nothing yet to bind"**
 
 Evidence: **`docs/evidence/EV-004-prohibited-claims-control.md`**.
@@ -9394,6 +9437,13 @@ document.** Any future count that disagrees with it is wrong by definition, not 
 > 6. `READY WITH MANDATORY QUALIFICATION` is excluded **only after** the qualification has been
 >    formally **ACCEPTED**;
 > 7. **transitive dependencies are NOT counted** — only an explicit `Blocks` entry counts.
+> 8. **(Added 2026-08-16, Owner ruling, see PB-142)** A **qualified** `Blocks` entry — e.g.
+>    `G2(disclose)`, `G2(no-go)` — means the gate's acceptance can be met **with that qualification
+>    stated**, not that closure is withheld pending the qualifier. A qualified entry does **not** count
+>    toward that gate's open-P0 total, but it creates a **mandatory disclosure obligation**: the exact
+>    qualifying text must appear in that gate's acceptance record (see §47's per-gate table) wherever
+>    the RDY in question is cited as a blocker or as closed. Bare (unqualified) `Blocks` entries are
+>    unaffected and still count per rule 3.
 >
 > Counts are derived mechanically from §7.2–§7.18. **Never inferred from prose.**
 
