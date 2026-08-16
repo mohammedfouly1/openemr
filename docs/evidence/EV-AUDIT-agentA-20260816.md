@@ -255,3 +255,45 @@ subagent, or commit anything other than this file.
 and the resulting obligations table; registering the RDY-0083 regression as its own PB entry; deciding
 whether/how to reconcile the RDY-0045 unpushed-commit history; confirming which of the three `claude`
 processes is which.
+
+---
+
+## 8. Correction record — commit `41e4f0162`'s message does not describe its content
+
+**Commit `41e4f0162`** carries the message *"docs(audit): independent audit of Agent C's PB-140/PB-141
+register sync"* but its actual diff is `docs/evidence/EV-021-clinical-review-pack.md` (73 insertions,
+1 deletion) — content authored by Agent C, not by this session.
+
+**Cause:** this session ran `git add docs/evidence/EV-AUDIT-agentA-20260816.md && git status --short
+...` on one line and a separate `git commit -m "..."` on the next, not chained with `&&`. The `git
+add` hit `.git/index.lock` (Agent C was mid-commit at that exact instant) and failed. Because the
+following `git commit` was not chained to that `git add`'s exit code, it ran anyway, on whatever was
+already staged in the index at that moment — Agent C's own already-staged `EV-021` changes — and
+committed them under this session's message.
+
+**Not corrected by rewrite.** `3de71ab5` ("PB-201 harness blocker for RDY-0013/0025/0037/0038/0082")
+was committed by Agent C on top of `41e4f0162` before this was caught, so a `reset`/rebase to fix the
+message would discard real, subsequent work. **History stays as-is.** No content was lost — `EV-021`'s
+changes are correctly present in the tree, just credited to the wrong commit message. **The audit
+content that `41e4f0162`'s message actually describes is committed at `a5dd794bb`** (this file, this
+commit chain), immediately following.
+
+## 9. Proposed §0.0 Rule 7 — never chain-free, never blind
+
+Proposed for adoption by whoever next edits `§0.0` (this session is not editing the requirements
+document, which is Agent C's active surface and is exactly the collision that just happened):
+
+> **Rule 7 — chained commits, lock awareness, post-commit verification.**
+> 1. Always `git add <explicit path> && git commit -m "..."` as a single chained command. Never split
+>    `add` and `commit` across separate shell invocations or unchained lines — if the `add` fails
+>    silently, an unchained `commit` will commit whatever is already staged, which may belong to
+>    another agent.
+> 2. Before staging, check for `.git/index.lock`. If present, another session is mid-commit —
+>    **wait**, do not retry immediately and do not force through it.
+> 3. After every commit, run `git show --stat HEAD` and confirm the files listed are the ones you
+>    intended. A commit message describing work the commit does not contain is a Rule 4a failure
+>    (misrepresenting what closed, in spirit) **even when nothing is lost** — as happened here.
+
+**How this was caught**: by running exactly the `git show --stat HEAD` check rule 7 proposes, as a
+verification step after the commit rather than trusting the shell's reported success. The failure mode
+this rule targets is real and was not hypothetical.
