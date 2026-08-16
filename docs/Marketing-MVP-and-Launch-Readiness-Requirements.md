@@ -2113,6 +2113,98 @@ Open P0: 47 → 46.
 **`Blocks`:** G1, G2 (RDY-0013's own `Blocks` field). Sync performed inline since it is a single-item,
 unambiguous decrement — not a full re-derivation; the next full sync should still re-verify this line.
 
+## PB-203 (2026-08-16) — **AGENT-BROWSER: RDY-0082 leg 6 CLOSED — authenticated browser login proven against the restored v3 instance, with a negative control**
+
+**Assignment:** Phase 2B, Task 1 — the last outstanding RDY-0082 acceptance-criteria leg, handed off
+live by AGENT-OPS at PB-182/183 (`EV-082`). The disposable restore instance
+(`http://localhost:8300/interface/login/login.php?site=rdy0082restore`, v3 baseline per PB-183) was
+left running specifically for this leg.
+
+**What was done, via a real Chrome session (`claude-in-chrome`), not a curl/PowerShell request:**
+Logged in as `n.alqahtani` (Administrator; credentials read directly from
+`C:\openemr-stack\secrets\thiqa-demo-credentials.json` per this machine's own convention, never
+written here). The login redirected to `interface/main/tabs/main.php` with a fresh `token_main`, the
+full authenticated menu bar rendered (Calendar/Finder/Flow/Recalls/Messages/Patient/Fees/Modules/
+Procedures/Admin/Reports/Miscellaneous/Popups), and the Calendar tab loaded a real provider/schedule
+view (`Thiqa Demo Eye Clinic`, 16 August 2026, providers Administrator/Alharbi Yousef/Almutairi Sara).
+The account-menu dropdown was opened and independently confirmed the identity as "Nadia Alqahtani" —
+not merely a session cookie, an actual authenticated in-app identity check.
+
+**Negative control:** before the successful login, the same account was submitted with a deliberately
+wrong password against the same restored instance. Result: `Invalid username or password`, rendered
+on the login page — confirming the restored instance's authentication is live and actually rejects
+bad credentials, not merely echoing a redirect.
+
+This clears leg 6 — *"an authenticated login succeeds"* via *"the same walk through a real,
+JS-capable browser session"* — the only one of RDY-0082's seven acceptance criteria not already MET
+per PB-182/183. **All seven are now MET.**
+
+**Status: RDY-0082 → CLOSED.** §7 card updated below. The disposable instance/database
+(`openemr_rdy0082_restore`, `sites/rdy0082restore/`) is **deliberately left running** — teardown is
+`EV-082` §10's command, to be run by AGENT-OPS or the orchestrator now that leg 6 is confirmed; not
+executed here per this task's own instruction not to tear it down.
+
+**`Blocks`:** G3, G6 (RDY-0082's own `Blocks` field; not recomputed here, §0.0 Rule 3).
+
+## PB-204 (2026-08-16) — **AGENT-BROWSER: RDY-0025 — Documents-tab hang reproduced a 3rd+ time, root-cause candidates identified; 2 synthetic documents opened and marking confirmed despite the defect**
+
+**Assignment:** Phase 2B, Task 2 — investigate PB-202's Documents-tab hang defect and, if a path
+exists, complete RDY-0025 (synthetic document markings).
+
+**Reproduction, on the `default` site, live browser session:** clicking **Documents** in the patient
+nav, clicking a document inside the Documents tree, and clicking a `Document:` link from **Visit
+History** each independently triggered the same symptom PB-202 named — `read_console_messages`,
+`read_network_requests` and screenshot capture (`CDP Page.captureScreenshot`) all timing out, the tab
+appearing completely unresponsive. Reproduced **at least five separate times** across two fresh
+logins/tabs and two different patients (`SYN-0002` Turki Alqarni, `SYN-0003` Amal Albishi) — beyond
+PB-202's two reproductions. Console and network capture were read proactively (before, not only
+after, each click) per this task's own instruction.
+
+**Refinement of the finding — the hang is not Documents-specific.** It also occurred while typing into
+Patient Finder's live-filter "Search by External ID" field, with no Documents interaction at all, and
+in that one instance the tab never recovered even after 45+ cumulative seconds of waiting and retrying
+— worse than PB-202's "60+ seconds, gave up" pattern, not better. That tab was abandoned in favour of a
+fresh one rather than fought further, per the browser-automation skill's own guidance.
+
+**Root-cause candidates identified, with direct evidence — offered for follow-up, not proven:**
+1. An auto-opening, content-blank `active_reminder_popup.php` modal appears on patient dashboards
+   carrying overdue clinical reminders (both test patients had several "Past Due" items). It showed up
+   in an accessibility-tree read (`role=dialog`) at the exact moment screenshot capture was failing;
+   manually closing it via a ref-based click immediately un-froze that tab.
+2. A `POST apis/default/api/background_service/$run` call fires on **every** page navigation (visible
+   in every captured network log). One instance was observed `pending` for 10+ seconds while sibling
+   calls on other navigations completed in under 1 second with HTTP 200. This lines up with RDY-0083's
+   already-recorded finding that `Email_Service`/`UUID_Service` are roughly 10 hours overdue: if this
+   endpoint attempts to process a large backlog synchronously when triggered, and PHP's default
+   session-file locking serializes concurrent requests sharing one session, that would produce exactly
+   this symptom — the whole tab looking hung until the backlog call finishes or times out.
+3. This machine's documented Google-Drive-mount I/O cost (`CLAUDE.local.md` §8) plausibly compounds
+   but does not fully explain it — most hangs resolved in 15–20s (consistent with "slow"), but at
+   least one did not resolve at all inside the observation window (consistent with something actually
+   stuck, not just slow).
+
+**Worked around it and completed a partial RDY-0025 check.** By waiting out the hang and, in one case,
+reaching a document via the Visit History `Document:` link instead of the Documents tab, 2 seeded
+synthetic documents were opened through the live app UI (not a raw file read — `drive_encryption=1`
+per PB-055 means only the app-decrypted view is meaningful):
+- `SYN-0002` (Turki Alqarni) → `SYNTHETIC-DEMO-specimen-02.txt`, "Document 2 of 10", profile
+  `marketing-mvp-seed-v1`, header **and** footer read `SYNTHETIC DEMO / NOT A REAL PATIENT`.
+- `SYN-0003` (Amal Albishi) → `SYNTHETIC-DEMO-specimen-03.txt`, "Document 3 of 10", identical marking.
+
+**Not attempted:** the v3-restored `rdy0082restore` instance as an alternate Documents path — a brief
+comparison attempt (patient search there) also stalled and was not pursued further given time
+constraints and the same anti-hammering guidance. Genuinely untested, not assumed clear.
+
+**Status: RDY-0025 stays NOT READY.** This entry does not close it — only 2 of the required ≥5
+patients' documents were checked and no reviewer sign-off was obtained — but it does establish that
+the marking mechanism itself works correctly wherever a document can be reached, and that the
+Documents-view hang is real, reproducible (5+ times now), and **not** solely a Documents-tab defect —
+it is broader page-navigation/AJAX instability, most plausibly tied to session-locking behind the
+background-service trigger call named above. Root-cause candidates are now on record for AGENT-OPS/a
+dev follow-up rather than "reproducible, cause unknown."
+
+**`Blocks`:** G2 (RDY-0025's own `Blocks` field; not recomputed here, §0.0 Rule 3).
+
 ## PB-140 (2026-08-16) — **Register reconciliation and fresh §47 gate sync (Agent C, Orchestrator)**
 
 **No RDY item closed by this entry.** This is a bookkeeping-integrity pass plus the dedicated §47
@@ -7905,12 +7997,22 @@ exist *before* seeding begins, or there is no way back to a known state.
 
 #### RDY-0025 — Synthetic documents, visibly marked
 **Source:** GTM DEM-003; brief §18 · **Gates:** G2 · **Deps:** RDY-0020, 0028
-**Current state:** `documents` = 0. **Gap:** the documents tab is empty, and document upload is one of the few integration expectations this ICP actually has (GTM §5).
-**Required action:** Upload 8–10 synthetic documents — a scanned referral, a consent, an ID placeholder — each **visibly marked `SYNTHETIC DEMO / NOT A REAL PATIENT`** on the face of the document.
-**Risk:** an unmarked "ID placeholder" is the single most likely artefact to be mistaken for real identity data. **No real Iqama or National ID number, in any form, including a plausible-looking fabrication.**
+**Current state (updated 2026-08-16, PB-204, AGENT-BROWSER):** Documents now exist and are seeded
+(profile `marketing-mvp-seed-v1`, ≥10 per the "Document N of 10" numbering seen) — the `documents = 0`
+gap this card originally described is stale. 2 of the required ≥5 patients' documents were opened
+live through the app UI and confirmed correctly marked `SYNTHETIC DEMO / NOT A REAL PATIENT`,
+top and bottom (`SYN-0002`/Turki Alqarni doc 2 of 10, `SYN-0003`/Amal Albishi doc 3 of 10). **Gap now:**
+a newly found, reproducible client-side hang on the Documents view (first found PB-202, reproduced
+5+ times total as of PB-204, root-cause candidates identified but not fixed) makes reaching the
+remaining patients' documents slow/unreliable, and no reviewer sign-off has been obtained.
+**Required action:** ~~Upload 8–10 synthetic documents...~~ **Done** (seeded, marking confirmed on 2
+patients). Remaining: confirm the marking across all seeded patients (≥5) and obtain reviewer
+sign-off that no document contains a real identifier, logo, phone number or name — both blocked in
+practice, not in principle, by the Documents-view hang (PB-204/`EV-025`... hang details in PB-204).
+**Risk:** an unmarked "ID placeholder" is the single most likely artefact to be mistaken for real identity data. **No real Iqama or National ID number, in any form, including a plausible-looking fabrication.** Not yet checked on the `Patient ID card`/`Patient Photograph` categories specifically (empty for the 2 patients checked).
 **Acceptance criteria:** 8–10 documents attached across ≥5 patients; every one displays the marking when opened; a reviewer confirms no document contains a real identifier, logo, phone number or name.
 **Verification:** open every document and inspect; reviewer sign-off.
-**Evidence artefact:** `EV-025 document-manifest.md` · **Status:** NOT READY
+**Evidence artefact:** `EV-025 document-manifest.md` · **Status:** NOT READY — marking mechanism verified working (2/≥5 patients); Documents-view hang defect (PB-202, PB-204) and reviewer sign-off remain the blockers
 
 #### RDY-0026 — Prescriptions
 **Source:** GTM DEM-003; CLM-0012 · **Gates:** G2 · **Deps:** RDY-0021
@@ -8509,22 +8611,24 @@ altered speculatively.
 
 #### RDY-0082 — Prove restore
 **Source:** GTM §25 Phase 2 success gate; brief §23 · **Gates:** G3 G6 · **Deps:** RDY-0080, 0081, 0047 · **Owner:** DevOps / Infrastructure
-**Current state (updated 2026-08-16, PB-18x, AGENT-OPS):** Six of seven acceptance criteria now
+**Current state (updated 2026-08-16, PB-203, AGENT-BROWSER):** All seven acceptance criteria now
 **MET**, evidenced end to end (`EV-082`): a disposable instance restored from the documented backup
-in 20.1 s; the application starts; two accounts authenticate (one correctly ACL-denied, one
-correctly permitted, on the restored instance itself); all 14 row-count fields match the documented
-accepted baseline; all 283 table checksums match across two independent restores of the same dump;
-D-1's tamper report returns HTTP 200, 7,316 bytes, "No audit log tampering detected" — on the
-restored instance. **Only the seventh — leg 6, the same walk through a real, JS-capable browser
-session (`main.php` applies a stricter session check a curl/PowerShell session cannot satisfy,
-`:1863`/PB-016) — remains**, and the instance is now live for AGENT-BROWSER to use.
+in 20.1 s (17.73 s on the v3 rebuild); the application starts; two accounts authenticate (one
+correctly ACL-denied, one correctly permitted, on the restored instance itself); all 14 row-count
+fields match the documented accepted baseline; all 283 table checksums match across two independent
+restores of the same dump; D-1's tamper report returns HTTP 200, 7,316 bytes, "No audit log
+tampering detected" — on the restored instance. **Leg 6 — the same walk through a real, JS-capable
+browser session — is now also MET**: `n.alqahtani` authenticated live via `claude-in-chrome` against
+`?site=rdy0082restore`, reached the authenticated Calendar dashboard, and identity was confirmed via
+the account-menu dropdown; a wrong-password attempt against the same account was correctly rejected
+("Invalid username or password") as a negative control. Full detail: PB-203.
 **Why it blocks launch:** This is the single clearest example in the whole plan of the difference between a documented capability and a proven one — and the GTM's Phase 2 gate names it explicitly: *"a successful restore test"*.
-**Required action:** ~~Restore into a **disposable** environment. Never against production or the authoritative demo instance.~~ **Done, `EV-082`.** Remaining: AGENT-BROWSER's leg-6 browser walk against the live disposable instance at `http://localhost:8300/interface/login/login.php?site=rdy0082restore`.
+**Required action:** ~~Restore into a **disposable** environment. Never against production or the authoritative demo instance.~~ **Done, `EV-082`.** ~~Remaining: AGENT-BROWSER's leg-6 browser walk.~~ **Done, PB-203.**
 **Acceptance criteria — binary and complete:** a backup created using the documented procedure restores into a disposable instance; **the application starts**; **an authenticated login succeeds**; **defined row-count comparisons pass** for the §3.3 table set; **defined checksum comparisons pass**; **D-1's integrity report returns a clean result on the restored instance**; and the elapsed time is recorded, because recovery time is a support commitment we will otherwise make blind.
-**Verification:** the restore is witnessed and logged; the disposable environment is then destroyed. **Deliberately not yet destroyed — see `EV-082` §11 — pending AGENT-BROWSER's leg-6 walk.**
+**Verification:** the restore is witnessed and logged; the disposable environment is then destroyed. **Not yet destroyed** — `EV-082` §10's teardown command is now owed to AGENT-OPS/the orchestrator since PB-203 confirms leg 6, not to AGENT-BROWSER (instructed not to tear it down).
 **Evidence artefact:** `EV-082 restore-test.md` with row counts, checksums and elapsed time.
 **Rollback requirement:** the disposable environment is isolated from the authoritative instance by construction; verify isolation **before** starting.
-**Status:** NOT READY — one leg (6) outstanding, target ready
+**Status:** CLOSED (PB-203, 2026-08-16) — all seven legs MET; disposable instance teardown outstanding as a housekeeping step, not a criterion
 
 #### RDY-0083 — Background service runner trigger
 **Source:** Audit §19.7, OD-03, L-20, GAP-0063, B6; GTM §26 P0 · **Gates:** G2 (disclosure) G3 · **Owner:** DevOps / Infrastructure
