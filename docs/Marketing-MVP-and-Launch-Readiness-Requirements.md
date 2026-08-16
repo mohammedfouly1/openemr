@@ -253,10 +253,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **31** — RDY-0001 (2A); **0080**; **0010**, **0012**; **0050**, **0051**, **0052** + P1s **0053**, **0054**; **0032**, **0036**; **0011**, **0017**; **0013**, **0037**, **0038**; **0014**, **0015** (PB-029); **0021**, **0028**, **0044**, **0058**, **0059** (PB-045); **0040** (PB-046); **0046** (PB-048); **0021**, **0022**, **0027** (PB-055); **0024**, **0026** (PB-058); **0020** (PB-059) |
-| **Requirements still open** | **83** |
-| **Open P0** | **42** — 71 P0 less the 29 closed P0 IDs (0001, 0010-0015, 0017, 0020, 0021, 0022, 0024, 0026, 0027, 0028, 0032, 0036-0038, 0040, 0044, 0046, 0050-0052, 0058, 0059, 0080). **Recalculated at the PB-059 gate sync** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 22 · G2 16 · G3 20 · G4 3 · G5 13 · G6 21** — **PB-059 gate sync**. Across Phase 2B **G2 has fallen 28 → 16 and G3 22 → 20** |
+| **Requirements CLOSED** | **24 P0** (+ P1s **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0014**, **0015**, **0017** (PB-005/020/029); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045). **Corrected at the PB-140 register-reconciliation sync (2026-08-16) — the prior "31" figure wrongly counted RDY-0013, 0037, 0038 and full RDY-0044 as closed; see PB-140** |
+| **Requirements still open** | **90** |
+| **Open P0** | **47** — 71 P0 less the 24 genuinely closed P0 IDs above. **Recalculated at the PB-140 gate sync, the first count actually derived from §7 register cells rather than PB-log narrative — see PB-140 for why it is not comparable by simple arithmetic to the earlier "42"** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 16 · G2 12 · G3 17 · G4 3 · G5 13 · G6 21** — **PB-140 gate sync (2026-08-16), mechanical from §7.2–§7.18** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -918,14 +918,14 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state (2026-08-09) | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0010** | Create the demo role accounts defined in §12 (administrator, physician ×2, front office, accounting, clinical assistant) | GTM DEM-003, B2; audit §12.5, WF-0012 | **1 usable human account**; 5 of 7 roles never populated | READY AFTER CONFIGURATION | USER / ROLE | **P0** | G1 G2 | OpenEMR Engineer | 0001, 0011 | NOT READY |
-| **0011** | Credential convention: naming pattern, generation rule, secure storage, rotation and reset process. **No password appears in any document** | Brief §17; GTM §14.5 | Password policy active (≥9 chars, complexity, expiry 180+30, lockout); **no convention** | NOT READY — DOCUMENTATION | SECURITY | **P0** | G1 G3 | Security Reviewer | — | NOT READY |
-| **0012** | Assign the correct ACL group to every demo account | Audit §13.4, §12.5 | Only Administrators populated | READY AFTER CONFIGURATION | AUTHORIZATION | **P0** | G1 G2 | OpenEMR Engineer | 0010 | NOT READY |
+| **0010** | Create the demo role accounts defined in §12 (administrator, physician ×2, front office, accounting, clinical assistant) | GTM DEM-003, B2; audit §12.5, WF-0012 | **1 usable human account**; 5 of 7 roles never populated | **VERIFIED READY — CLOSED BY PHASE 2B (PB-005)** | USER / ROLE | **P0** | G1 G2 | OpenEMR Engineer | 0001, 0011 | **CLOSED 2026-08-13** |
+| **0011** | Credential convention: naming pattern, generation rule, secure storage, rotation and reset process. **No password appears in any document** | Brief §17; GTM §14.5 | Password policy active (≥9 chars, complexity, expiry 180+30, lockout); **no convention** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-020)** | SECURITY | **P0** | G1 G3 | Security Reviewer | — | **CLOSED 2026-08-13** |
+| **0012** | Assign the correct ACL group to every demo account | Audit §13.4, §12.5 | Only Administrators populated | **VERIFIED READY — CLOSED BY PHASE 2B (PB-005)** | AUTHORIZATION | **P0** | G1 G2 | OpenEMR Engineer | 0010 | **CLOSED 2026-08-13** |
 | **0013** | Assign the correct main and patient menu role to every demo account | Audit §14 | All four accounts on `standard` | READY AFTER CONFIGURATION | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0010, 0042 | NOT READY |
-| **0014** | Set provider identity for clinical accounts — taxonomy appropriate to ophthalmology, `authorized` flag, NPI field handling | Audit §12.2 | `taxonomy` = `207Q00000X` **Family Medicine** for all four; `npi` NULL for all | READY AFTER CONFIGURATION | CONFIGURATION | **P0** | G1 G2 | Clinical Workflow Reviewer | 0010 | NOT READY |
-| **0015** | Assign facility to every demo account | Audit §12.5 | Only facility id 3 exists | READY AFTER CONFIGURATION | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0010, 0032 | NOT READY |
+| **0014** | Set provider identity for clinical accounts — taxonomy appropriate to ophthalmology, `authorized` flag, NPI field handling | Audit §12.2 | `taxonomy` = `207Q00000X` **Family Medicine** for all four; `npi` NULL for all | **VERIFIED READY — CLOSED BY PHASE 2B (PB-029)** | CONFIGURATION | **P0** | G1 G2 | Clinical Workflow Reviewer | 0010 | **CLOSED 2026-08-13** |
+| **0015** | Assign facility to every demo account | Audit §12.5 | Only facility id 3 exists | **VERIFIED READY — CLOSED BY PHASE 2B (PB-029)** | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0010, 0032 | **CLOSED 2026-08-13** |
 | **0016** | Execute the positive **and negative** authorization matrix in §23.4 under each role account | GTM Pillar 1, D-2; brief §24 | **Role-based behaviour never exercised** (L-19) | NOT READY — DEFECT *(unproven)* | AUTHORIZATION | **P0** | G1 G3 G5 | Security Reviewer | 0010, 0012, 0050, 0051, 0052 | NOT READY |
-| **0017** | `admin` must never appear on screen or in any asset; rotate before any demo and before any pilot | Audit §12.3, §27.1; GTM §14.5 | Installer-default credential, verified valid | NOT READY — SECURITY | SECURITY | **P0** | G1 G2 G3 | Security Reviewer | 0011 | NOT READY |
+| **0017** | `admin` must never appear on screen or in any asset; rotate before any demo and before any pilot | Audit §12.3, §27.1; GTM §14.5 | Installer-default credential, verified valid | **VERIFIED READY — CLOSED BY PHASE 2B (PB-020)** | SECURITY | **P0** | G1 G2 G3 | Security Reviewer | 0011 | **CLOSED 2026-08-13** |
 | 0018 | Review `oe-system` service identity's membership of Administrators | Audit §12.4, §20.6 #8 | Service identity sits in Administrators (upstream default) | READY AFTER CONFIGURATION | SECURITY | P1 | G3 | Security Reviewer | 0001 | NOT READY |
 | 0019 | Break-glass: assign or deliberately withhold, and set `Emergency_Login_email_id` | Audit §20.5 | Role exists; **no user assigned; alert email blank** | READY AFTER CONFIGURATION | SECURITY | P2 | G3 | Security Reviewer | 0010 | NOT READY |
 
@@ -933,15 +933,15 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0020** | 25–30 synthetic patients including 2 deliberate duplicates for the merge demonstration | GTM DEM-003; B1 | `patient_data` = **0** | READY AFTER DATA | DATA | **P0** | G1(D-2 realism) G2 | Database / Demo Data | 0010, 0032, 0038, 0028 | NOT READY |
-| **0021** | 60–80 encounters over ~6 months, including **6–8 completed ophthalmology examinations** | GTM DEM-003; CLM-0004 | `form_encounter` = **0** | READY AFTER DATA | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0020, 0014 | NOT READY |
-| **0022** | A realistic current week of appointments — 30–40 including 2 no-shows, 3 cancellations, 1 recurring series — plus today's list populated for the flow board | GTM DEM-003 | `openemr_postcalendar_events` = **0** | READY AFTER DATA | DATA | **P0** | G2 | Database / Demo Data | 0020, 0036 | NOT READY |
+| **0020** | 25–30 synthetic patients including 2 deliberate duplicates for the merge demonstration | GTM DEM-003; B1 | `patient_data` = **0** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-059)** | DATA | **P0** | G1(D-2 realism) G2 | Database / Demo Data | 0010, 0032, 0038, 0028 | **CLOSED 2026-08-14** |
+| **0021** | 60–80 encounters over ~6 months, including **6–8 completed ophthalmology examinations** | GTM DEM-003; CLM-0004 | `form_encounter` = **0** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-045)** — clinician verdict (Dr Mohamed Taha, PASS all 8) relayed by the Owner, not a countersigned artefact | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0020, 0014 | **CLOSED 2026-08-14** |
+| **0022** | A realistic current week of appointments — 30–40 including 2 no-shows, 3 cancellations, 1 recurring series — plus today's list populated for the flow board | GTM DEM-003 | `openemr_postcalendar_events` = **0** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-055)** | DATA | **P0** | G2 | Database / Demo Data | 0020, 0036 | **CLOSED 2026-08-14** |
 | **0023** | Clinical depth: ≥15 completed SOAP notes, ≥10 encounters with vitals | GTM DEM-003 | 0 | READY AFTER DATA | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0021 | NOT READY |
-| **0024** | Structured lists populated: 3–5 patients with allergies, 4–6 with chronic problems, plus medications and immunisations | GTM DEM-003; CLM-0006 | 0 | READY AFTER DATA | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0020 | NOT READY |
+| **0024** | Structured lists populated: 3–5 patients with allergies, 4–6 with chronic problems, plus medications and immunisations | GTM DEM-003; CLM-0006 | 0 | **VERIFIED READY — CLOSED BY PHASE 2B (PB-058)** | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0020 | **CLOSED 2026-08-14** |
 | **0025** | 8–10 uploaded synthetic documents, each visibly marked `SYNTHETIC DEMO / NOT A REAL PATIENT` | GTM DEM-003; brief §18 | `documents` = **0** | READY AFTER DATA | DATA | **P0** | G2 | Database / Demo Data | 0020, 0028 | NOT READY |
-| **0026** | 10–15 recorded and printable prescriptions | GTM DEM-003; CLM-0012 | `prescriptions` = **0** | READY AFTER DATA | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0021 | NOT READY |
-| **0027** | 2 fictional payers, one fee schedule, one price level populated, 30–40 charges (B3) | GTM DEM-003; audit B3 | `insurance_companies` = 0; `prices` empty; single price level | READY AFTER DATA | DATA | **P0** | G2 | Database / Demo Data | 0020, 0021, 0037 | NOT READY |
-| **0028** | Synthetic-data safety controls — no real PHI, no real Iqama/National ID, no real phone numbers, no real payer contracts, no customer logos, no real staff names | GTM DEM-003; brief §18 | No data exists; **no control document exists either** | NOT READY — DOCUMENTATION | DATA | **P0** | G1 G2 G3 | Legal / Compliance | — | NOT READY |
+| **0026** | 10–15 recorded and printable prescriptions | GTM DEM-003; CLM-0012 | `prescriptions` = **0** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-058)** | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0021 | **CLOSED 2026-08-14** |
+| **0027** | 2 fictional payers, one fee schedule, one price level populated, 30–40 charges (B3) | GTM DEM-003; audit B3 | `insurance_companies` = 0; `prices` empty; single price level | **VERIFIED READY — CLOSED BY PHASE 2B (PB-055)** | DATA | **P0** | G2 | Database / Demo Data | 0020, 0021, 0037 | **CLOSED 2026-08-14** |
+| **0028** | Synthetic-data safety controls — no real PHI, no real Iqama/National ID, no real phone numbers, no real payer contracts, no customer logos, no real staff names | GTM DEM-003; brief §18 | No data exists; **no control document exists either** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-045)** — Legal/Compliance verdict (Mohammed Elfouly, APPROVED) relayed by the Owner | DATA | **P0** | G1 G2 G3 | Legal / Compliance | — | **CLOSED 2026-08-14** |
 | 0029 | Activate 2–3 of the 80 shipped CDS rules so at least one alert fires on a seeded patient | GTM DEM-003; CLM-0008 | 80 rules ship **with alert flags off** | READY AFTER FEATURE ACTIVATION | CONFIGURATION | P1 | G2 | Clinical Workflow Reviewer | 0020, 0024 | NOT READY |
 | 0030 | Deliberate edge and negative cases: a patient with no encounters, an unsigned note, a cancelled appointment, an encounter with sensitivity set | Brief §18 | None | READY AFTER DATA | DATA | P1 | G2 | Database / Demo Data | 0020, 0021 | NOT READY |
 | 0031 | Dataset provenance and re-generation — how the data was produced, and how to reproduce it | Brief §18, §46 | None | NOT READY — DOCUMENTATION | DATA | P1 | G2 | Database / Demo Data | 0020…0027 | NOT READY |
@@ -950,11 +950,11 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0032** | Rename the facility from `Your Clinic Name Here` to a neutral fictional demo clinic (B4) | GTM DEM-003, B4 | Installer default, 1 facility | READY AFTER CONFIGURATION | BRANDING READINESS | **P0** | G1 G2 | Brand *(provisional name)* / Founder | 0001 | NOT READY |
+| **0032** | Rename the facility from `Your Clinic Name Here` to a neutral fictional demo clinic (B4) | GTM DEM-003, B4 | Installer default, 1 facility | **VERIFIED READY — CLOSED BY PHASE 2B (PB-016)** | BRANDING READINESS | **P0** | G1 G2 | Brand *(provisional name)* / Founder | 0001 | **CLOSED 2026-08-13** |
 | **0033** | Replace product identity strings — `openemr_name`, `login_tagline_text` | Audit §19.4; L-17 | `'OpenEMR'`, *"The most popular open-source Electronic Health Record…"* | READY AFTER CONFIGURATION | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0090, 0095 | NOT READY |
 | **0034** | Remove or repoint vendor links — `display_donations_link`, `display_review_link`, `main_menu_logo_link` | Audit §19.4; L-17 | All live and pointing at open-emr.org | READY AFTER CONFIGURATION | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0095 | NOT READY |
 | 0035 | Clear `pqri_registry_name='Model Registry'` and `pqri_registry_id='125789123'` placeholders | Audit §19.4 | Live placeholders | READY AFTER CONFIGURATION | CONFIGURATION | P1 | G2 | OpenEMR Engineer | 0001 | NOT READY |
-| **0036** | Set `gbl_time_zone` to `Asia/Riyadh` | Audit §22.4, §23.4 | **Empty** → UTC | READY AFTER CONFIGURATION | CONFIGURATION | **P0** | G1 G2 G3 | OpenEMR Engineer | 0001 | NOT READY |
+| **0036** | Set `gbl_time_zone` to `Asia/Riyadh` | Audit §22.4, §23.4 | **Empty** → UTC | **VERIFIED READY — CLOSED BY PHASE 2B (PB-016)** | CONFIGURATION | **P0** | G1 G2 G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
 | **0037** | Configure currency display for SAR — symbol, decimals, separators | Audit §22.4, §23.4; L-12 | `$`, 2 decimals; **display only, no ISO code** | READY WITH MANDATORY QUALIFICATION | CONFIGURATION | **P0** | G2 | OpenEMR Engineer | 0001 | NOT READY |
 | **0038** | Replace US locale seeds visible during registration — `list_options.state` (52 US states), `country` (1 row), `phone_country_code = 1`, `units_of_measurement` | Audit §22.4 | US seeds live | READY AFTER CONFIGURATION | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0001 | NOT READY |
 | 0039 | Decide the date display format for the demo surface (3 options only; no format string, no locale derivation) | Audit §22.4 | ISO `YYYY-MM-DD` | READY WITH MANDATORY QUALIFICATION | CONFIGURATION | P1 | G2 | Founder / Product Owner | 0001 | NOT READY |
@@ -963,7 +963,7 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0040** | Write the D-7 journey as a step-by-step script — actor, screen, prerequisite, data, expected state change, proof point, claim demonstrated, qualification, failure condition | GTM DEM-002 D-7; brief §19 | Storyline named; **no script** | NOT READY — DOCUMENTATION | DEMO | **P0** | G2 | Founder / Product Owner | 0020…0027 | NOT READY |
+| **0040** | Write the D-7 journey as a step-by-step script — actor, screen, prerequisite, data, expected state change, proof point, claim demonstrated, qualification, failure condition | GTM DEM-002 D-7; brief §19 | Storyline named; **no script** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-046)** | DEMO | **P0** | G2 | Founder / Product Owner | 0020…0027 | **CLOSED 2026-08-14** |
 | **0041** | D-7 executes end-to-end **twice** from a known reset state under the intended role accounts, with no empty required screen, no unexpected authorization failure, no unhandled error and no unsupported claim | GTM §25 Phase 1 gate; brief §19 | Not attempted | NOT READY — OPERATIONAL | DEMO | **P0** | G2 G6 | Founder / Product Owner | 0040, 0044, 0010…0027 | NOT READY |
 | **0042** | Resolve the `front_office.json` defect: `Add Patient` is gated on `full_new_patient_form` with **no `!full_new_patient_form` counterpart** — a Front Office user may have no way to add a patient | Audit §14.3 | *Historical:* defect present upstream; global not re-observed. **Live (2026-08-13): defect CONFIRMED still present in `front_office.json`; the global sits at its upstream code default** | NOT READY — DEFECT | DEFECT | **P0** | G1 G2 | OpenEMR Engineer | 0001, 0013 | NOT READY |
 | **0043** | Resolve `MainMenuRole.php:169-171` silently dropping the first form in every category, and `updateBlankForms()` also augmenting `Miscellaneous → Blank Forms` | Audit §14.4 | Upstream defects observed | NOT READY — DEFECT | DEFECT | **P0** | G1 G2 | OpenEMR Engineer | 0001, 0045 | NOT READY |
@@ -974,7 +974,7 @@ qualification*. Dependencies, not dates.
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
 | **0045** | Close the upstream gap (**373 commits behind** at audit) and establish an ongoing patch cadence with a rollback approach and a regression check | GTM §25 Phase 2, §26 P0, L-27; audit EB-10 | *Historical (2026-08-09):* 0 ahead / 373 behind; HEAD dated 2026-07-04. **Live (2026-08-13): 33 ahead / 418 behind, DIVERGENT, 13 commits unpushed, upstream target undecided** | NOT READY — ENGINEERING | PATCH / DEPENDENCY | **P0** | G3 G6 | OpenEMR Engineer | 0001, 0047 | NOT READY |
-| **0046** | Resolve provenance of `oe-module-claimrev-connect` — gitignored, composer-installed, source not under version control | Audit §20.6 #12, L-27; GTM §24 | Supply-chain provenance gap | NOT READY — ENGINEERING | PATCH / DEPENDENCY | **P0** | G3 | OpenEMR Engineer | 0001 | NOT READY |
+| **0046** | Resolve provenance of `oe-module-claimrev-connect` — gitignored, composer-installed, source not under version control | Audit §20.6 #12, L-27; GTM §24 | Supply-chain provenance gap | **VERIFIED READY — CLOSED BY PHASE 2B (PB-048)** — determination: RETAIN, fully traced, upstream-required, inert | PATCH / DEPENDENCY | **P0** | G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-14** |
 | **0047** | A documented, repeatable deployment runbook for a fresh clinic instance — every manual step, the expected Windows/Apache/MariaDB environment, environment-specific configuration separated from code | GTM §25 Phase 2 gate | No runbook exists; deployment is a one-off manual install | NOT READY — OPERATIONAL | DEPLOYMENT | **P0** | G3 G6 | DevOps / Infrastructure | 0001, 0064 | NOT READY |
 | **0048** | Secrets handling — `sites/default/sqlconf.php` is **git-tracked and carries local credentials** | Audit §19.6, §0.1 | *Historical:* tracked file holding credentials, shown as modified. **Live (2026-08-13): `skip-worktree` set; invisible to `git status`; committed blob pristine — no credential ever committed** | NOT READY — SECURITY · **LIVE EVIDENCE SUGGESTS STATUS CHANGE — FORMAL CLOSURE DEFERRED TO PHASE 2B** | SECURITY | **P0** | G3 | DevOps / Infrastructure | — | NOT READY |
 | 0049 | Replace the three Unix-only commands configured on a Windows host (`lpr`, `enscript`, `/usr/bin/file`) and the placeholder OFX bank IDs | Audit §19.6, OD-04, L-21 | Live in `config.php` | NOT READY — DEFECT | CONFIGURATION | P1 | G3 | DevOps / Infrastructure | 0001 | NOT READY |
@@ -983,9 +983,9 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0050** | Add in-file authorisation to the **11 of 55 reports that have none** and rely on menu hiding alone — two of which (`patient_list.php`, `unique_seen_patients_report.php`) return patient identifiers and export CSV | Audit L-24, §16, §20.6 #2, EB-05; GTM §26 P0, R-14 | *Historical:* 11 reports menu-gated only. **Live (2026-08-13): Code remediation complete and statically verified; positive/negative authenticated role acceptance pending** | **NOT READY — ACCEPTANCE PENDING** | AUTHORIZATION | **P0** | G1 G2 G3 G5 | OpenEMR Engineer | 0001 | NOT READY |
-| **0051** | Add authorisation to `reports/amc_full_report.php` — **directly reachable, no ACL check of any kind, no menu link** | Audit §20.6 #3, RPT-0054 | No ACL anywhere in the file | **NOT READY — DEFECT** | AUTHORIZATION | **P0** | G1 G3 G5 | OpenEMR Engineer | 0001 | NOT READY |
-| **0052** | Close the controller gate: `CONTROLLER_ACL_MAP` covers **2 of 10** controllers and `checkControllerAcl()` early-returns for the rest; `?x12_partner&action=list` routes to `C_X12Partner` with no ACL check | Audit §20.6 #6, PL-03, GAP-0062, EB-03 | Confirmed access-control defect (authenticated-user-only, not anonymous) | **NOT READY — DEFECT** | AUTHORIZATION | **P0** | G3 G5 | OpenEMR Engineer | 0001 | NOT READY |
+| **0050** | Add in-file authorisation to the **11 of 55 reports that have none** and rely on menu hiding alone — two of which (`patient_list.php`, `unique_seen_patients_report.php`) return patient identifiers and export CSV | Audit L-24, §16, §20.6 #2, EB-05; GTM §26 P0, R-14 | *Historical:* 11 reports menu-gated only. **Live (2026-08-13): Code remediation complete and statically verified; positive/negative authenticated role acceptance pending** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** — full live acceptance, 66/66 probes across all 6 accounts | AUTHORIZATION | **P0** | G1 G2 G3 G5 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
+| **0051** | Add authorisation to `reports/amc_full_report.php` — **directly reachable, no ACL check of any kind, no menu link** | Audit §20.6 #3, RPT-0054 | No ACL anywhere in the file | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** | AUTHORIZATION | **P0** | G1 G3 G5 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
+| **0052** | Close the controller gate: `CONTROLLER_ACL_MAP` covers **2 of 10** controllers and `checkControllerAcl()` early-returns for the rest; `?x12_partner&action=list` routes to `C_X12Partner` with no ACL check | Audit §20.6 #6, PL-03, GAP-0062, EB-03 | Confirmed access-control defect (authenticated-user-only, not anonymous) | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** — 60/60 probes across all 10 controllers | AUTHORIZATION | **P0** | G3 G5 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
 | 0053 | Add an ACL check to `interface/super/layout_listitems_ajax.php` — admin endpoint with CSRF but no `aclCheckCore` | Audit §20.6 #4 | No `aclCheckCore` | NOT READY — DEFECT | AUTHORIZATION | P1 | G3 | OpenEMR Engineer | 0001 | NOT READY |
 | 0054 | Resolve the RPT-0042 ACL mismatch — menu declares `patients\|lab`, file enforces `acct\|rep` | Audit §16.6, §20.6 #5 | Mismatch present | NOT READY — DEFECT | AUTHORIZATION | P2 | G3 | OpenEMR Engineer | 0001 | NOT READY |
 | **0055** | Decide and document the handling of **PHI in the audit trail**: bound SQL parameters are appended verbatim to `log.comments` as base64, log encryption is off and its code path was deliberately removed. On a system with real patient data this places PHI, in plaintext base64, in the audit table | Audit §20.4 limitation 3, L-23 | Latent — no data exists yet, so no PHI is exposed **today** | **NOT READY — DEFECT** *(activates at pilot)* | SECURITY | **P0** | G3 | Security Reviewer | 0001, 0068 | NOT READY |
@@ -996,8 +996,8 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0058** | Seed enough activity that **6 named reports** return non-empty results (§24.3 names the six) | GTM DEM-003 *Reports*; D-8 | `report_results` = 0; every report returns an empty table | READY AFTER DATA | REPORTING | **P0** | G2 | Database / Demo Data | 0020…0027 | NOT READY |
-| **0059** | Verify CSV export end-to-end — the file downloads, opens in a spreadsheet, and contains plausible synthetic content only | GTM MC-08, D-8, Pillar 2 | 8 of 55 reports export CSV; **never exercised with data** | READY AFTER DATA | REPORTING | **P0** | G2 G5 | Database / Demo Data | 0058 | NOT READY |
+| **0058** | Seed enough activity that **6 named reports** return non-empty results (§24.3 names the six) | GTM DEM-003 *Reports*; D-8 | `report_results` = 0; every report returns an empty table | **VERIFIED READY — CLOSED BY PHASE 2B (PB-045)** | REPORTING | **P0** | G2 | Database / Demo Data | 0020…0027 | **CLOSED 2026-08-14** |
+| **0059** | Verify CSV export end-to-end — the file downloads, opens in a spreadsheet, and contains plausible synthetic content only | GTM MC-08, D-8, Pillar 2 | 8 of 55 reports export CSV; **never exercised with data** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-045)** | REPORTING | **P0** | G2 G5 | Database / Demo Data | 0058 | **CLOSED 2026-08-14** |
 
 ### 7.10 Domain I — Proof assets (G1, G5)
 
@@ -1868,6 +1868,87 @@ Authenticated sessions, real page fetches, string-level confirmation that config
 a real session. They prove the value reaches the rendered page. They do **not** prove visual
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
+
+## PB-140 (2026-08-16) — **Register reconciliation and fresh §47 gate sync (Agent C, Orchestrator)**
+
+**No RDY item closed by this entry.** This is a bookkeeping-integrity pass plus the dedicated §47
+sync it made possible — the first sync since PB-059 (2026-08-14).
+
+### What was found
+
+The §7 master register's `Status`/`Verdict` cells are the sole mechanical input to the §47 canonical
+gate count (rule point 7: "never inferred from prose"). A fresh mechanical read of §7.2–§7.18 found
+that **only RDY-0001 and RDY-0080 had ever had their register row actually updated to CLOSED.**
+Every other Phase 2B P0 closure narrated in the PB execution log and rolled into the §1.4 summary
+table — 22 items across PB-005, PB-013, PB-016, PB-020, PB-029, PB-045, PB-048, PB-055, PB-058,
+PB-059 — left its §7 row reading its original pre-Phase-2B `NOT READY` / `READY AFTER DATA` /
+`READY AFTER CONFIGURATION` state. The §1.4 "Requirements CLOSED" line (:256) and the §47 dashboard
+(:9052–9059, itself an untouched 2026-08-13 T0-2 snapshot) were therefore never defensible mechanical
+counts — they were narrative tallies that happened to agree with each other but not with the register.
+
+**Separately, §1.4's own closed-count line over-claimed on top of that**: it listed RDY-0013, 0037,
+0038 and full RDY-0044 as closed. All four are **explicitly and repeatedly** recorded as NOT closed
+elsewhere in this same document — PB-016 (:1862–1863) states 0037 and 0013 "NOT CLOSED" in so many
+words, 0038 is "NOT CLOSED" at :6241, and :260 itself explains why full RDY-0044 cannot count (only
+the -A sub-part closed; the parent RDY closes only when both A and B close). This was not a register
+gap — it was a direct misstatement inside §1.4 that a mechanical read exposes immediately.
+
+### What was fixed
+
+22 §7 register rows were corrected to `CLOSED`, each citing the specific PB entry and evidence that
+substantiates it, after independently re-reading the cited PB entry against the item's own acceptance
+bar (not rubber-stamped): **0010, 0011, 0012, 0014, 0015, 0017, 0020, 0021, 0022, 0024, 0026, 0027,
+0028, 0032, 0036, 0040, 0046, 0050, 0051, 0052, 0058, 0059.** Spot-verified directly by the
+orchestrator (not just the doing fork) against source: PB-005 (0010/0012 — six accounts created,
+authenticated 6/6, ACL groups confirmed, rollback snapshot hashed), PB-013 (0050/0051/0052 —
+127/127 live probes across all accounts/controllers), PB-020 (0011/0017 — credential rotation with
+before/after proof, a self-caught false-PASS detector bug corrected before being reported), PB-055
+(0021/0022/0027 — Dr Mohamed Taha's clinician PASS on all 8 ophthalmology exams, recurrence proven by
+CSV-expansion math, payer/pricing checks), PB-059 (0020 — duplicate detection, merge, hash-verified
+reset). Full diff: `git show <this commit> -- docs/Marketing-MVP-and-Launch-Readiness-Requirements.md`.
+
+**Left open, correctly, on direct evidence of their own non-closure** (no edit made):
+**0013, 0037, 0038** (all need one manual authenticated browser session — a curl-harness limitation
+per PB-016, not a defect; "the Owner has already ruled acceptable" per :1863, but the session itself
+was never performed), **0043** (PB-052 itself: "Not yet closed... belongs to the D-7 rehearsal"),
+**0044** (0044-A closed at PB-045, but the parent stays open by the document's own rule at :260 —
+and the currently-active v2 baseline has an unresolved integrity flag, see below), **0055**
+(technical determination complete, written disclosure and a reviewer still missing — was never
+claimed closed, checked anyway).
+
+### ⚠ Unresolved item surfaced, not fixed here — flagged for priority attention
+
+**AGENT-CLAIMS.md's top-of-file flag (:3–16) is still unresolved as of this sync**: the RDY-0044-B
+v2 dataset baseline (`thiqa-rdy0044b-v2-baseline-20260814-064532.sql`, PB-058) may have been dumped
+~4 minutes *before* the UUID fix landed and could ship 13 NULL UUIDs. No entry in the file confirms a
+clean re-dump happened. This directly bears on RDY-0044's open status and on any AGENT-DATA/AGENT-OPS
+work that restores from that baseline. **Recommend this is the first item any Track-D-adjacent
+subagent verifies**, before relying on the v2 baseline for anything.
+
+**Also unresolved, out of this entry's scope but recorded for the Owner**: PB-020 (:6172–6176) flags
+that `CLAUDE.local.md`'s documented native-stack login (`admin` / installer default) is now stale —
+the installer default credential was rotated under Owner authorisation and no longer authenticates.
+The current value lives outside the repository in `C:\openemr-stack\secrets\thiqa-demo-credentials.json`.
+This is a local-machine operational note, not a document edit this entry makes.
+
+### GATE SYNC (Rule 3, dedicated pass) — mechanical, derived from corrected §7.2–§7.18 only
+
+| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| At PB-059 (narrative, never register-verified) | 3 | 22 | 16 | 20 | 3 | 13 | 21 |
+| **After PB-140 (mechanical, register-verified)** | **3** | **16** | **12** | **17** | **3** | **13** | **21** |
+
+**Open P0: 47 unique RDY IDs** (71 P0 registered − 24 genuinely CLOSED: 0001, 0080, plus the 22
+above). This number is **not** comparable to PB-059's "42" by simple arithmetic — PB-059's figure was
+never mechanically derived (see above), so there is no valid delta to reconcile against it. 47 is the
+first canonical count since T0-2 adoption (2026-08-13) that is actually derived from §7 cells, per
+§47 point 7. §1.4 and §47's dashboard are updated in this same commit to carry these figures.
+
+**Per §47 rule 2, this correction itself is not this agent's closure to make final** in the sense of
+§2 of the orchestrator's closure contract — no RDY item's closure judgment was overridden or granted
+here beyond what the cited PB entries already demonstrated; this was a mechanical bookkeeping fix
+plus the sync that rule 3 requires. Items left open above remain open pending their own future PB
+entries.
 
 ## PB-085 (2026-08-14) — RDY-0004 control instrument issued. **Its blocker moved from "nobody to name" to "nothing yet to bind"**
 
@@ -9049,34 +9130,46 @@ document.** Any future count that disagrees with it is wrong by definition, not 
 >
 > Counts are derived mechanically from §7.2–§7.18. **Never inferred from prose.**
 
-**Result of applying the rule (2026-08-13):** 71 P0 registered, **1 closed (RDY-0001)**,
-**70 open P0**. Per gate:
+**Result of applying the rule (2026-08-13, superseded — see PB-140 below):** 71 P0 registered,
+**1 closed (RDY-0001)**, **70 open P0**. This snapshot was never refreshed at any subsequent sync
+(PB-051, PB-058, PB-059) despite Rule 3 designating the sync as the update mechanism — it sat stale
+for three sync passes. Retained below **struck through** for the historical record only; do not cite
+it as current.
+
+~~| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |~~
+~~|---|---:|---:|---:|---:|---:|---:|---:|~~
+~~| **Open P0 (canonical)** | **3** | **28** | **32** | **26** | **3** | **17** | **21** |~~
+~~| Including closed RDY-0001 | 4 | 29 | 33 | 27 | 3 | 17 | 21 |~~
+~~| *Retired pre-Phase-2B figure* | *4* | *21* | *17* | *22* | *3* | *11* | *"G2+G3, plus 8"* |~~
+
+### CURRENT — PB-140 (2026-08-16), the first sync mechanically re-derived from §7.2–§7.18 cells
+
+A register-reconciliation pass (PB-140) found that 22 Phase 2B P0 closures narrated in the PB log
+between PB-005 and PB-059 had never had their §7 row's `Status`/`Verdict` cell updated — only
+RDY-0001 and RDY-0080 had been. Those 22 rows are now corrected (each independently re-verified
+against its cited PB entry's evidence, not rubber-stamped), and the count below is read directly
+from the corrected register, per rule 7 ("never inferred from prose"). **71 P0 registered, 24 closed,
+47 open P0.**
 
 | | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Open P0 (canonical)** | **3** | **28** | **32** | **26** | **3** | **17** | **21** |
-| Including closed RDY-0001 | 4 | 29 | 33 | 27 | 3 | 17 | 21 |
-| *Retired pre-Phase-2B figure* | *4* | *21* | *17* | *22* | *3* | *11* | *"G2+G3, plus 8"* |
+| **Open P0 (canonical, PB-140)** | **3** | **16** | **12** | **17** | **3** | **13** | **21** |
 
-Two consequences worth stating plainly, because the numbers moved **up**, not down:
-
-- **G1, G2, G5 and G6 were previously under-counted.** G1 is 28 open P0, not 20; G2 is 32, not
-  16. Phase 2B is therefore a **larger** body of work than the retired dashboard implied.
-- **G6's "All of G2 + G3, plus 8" is replaced by a real number (21).** The old phrasing double-
-  counted: many G2/G3 rows already name G6 in `Blocks`, so the canonical rule counts each once.
-
-The sum of per-gate counts (130) exceeds 70 because **one RDY commonly blocks several gates** —
-that is expected under rule 4 and is not a reconciliation error.
+The sum of per-gate counts (85) exceeds 47 because **one RDY commonly blocks several gates** — that
+is expected under rule 4 and is not a reconciliation error. See the PB-140 execution-log entry for
+the full worked derivation, the list of RDY IDs behind each gate figure, and the items deliberately
+left open (RDY-0013, 0037, 0038, 0043, 0044) with the specific evidence for why each is not yet
+closed.
 
 | Gate | Status | Open P0 | Main blockers | Next action |
 |---|---|---|---|---|
 | **G0 Strategy governance** | **PARTIAL** | **3** | The registers are complete; the **governance mechanism** is not — no named claim reviewer, no adoption step, no acceptance record | Name a claim reviewer and issue §32 to Phases 3–5 (RDY-0003, RDY-0004) |
-| **G1 Flagship demo** | **PARTIAL** | **24** | One usable login · **branding applied, but facility still `Your Clinic Name Here`, US locale seeds, empty timezone, `$` currency** · **report authorisation: code remediation complete and statically verified (PB-002); positive/negative authenticated role acceptance pending** | **Create the six demo role accounts — begin at RDY-0011 (credential convention), then 0010, 0012–0015 — which is now the only thing blocking the RDY-0050/0051/0053/0054 acceptance tests** |
-| **G2 Seeded commercial demo** | **NOT READY** | **28** | Zero data of every category · no reset baseline · no D-7 script · `front_office` Add-Patient defect unresolved | Set timezone and locale seeds **first**, then seed patients and encounters (RDY-0036, 0038 → 0020) |
-| **G3 Pilot operational readiness** | **NOT READY** | **22** | **Backup EXECUTION proven and CLOSED (RDY-0080, PB-001) · backup POLICY still open (RDY-0081) · restore still UNPROVEN (RDY-0082) · 418 commits behind AND divergent (13 commits unpushed; upstream maintenance target undecided) · service runner never executed · HTTP only · hosting undecided · secrets still in a tracked file, now `skip-worktree`-masked (candidate closure)** | **RDY-0080 is done.** Next: define the backup policy (RDY-0081) and **prove a restore into a disposable target (RDY-0082)**; **decide the upstream maintenance target (`master` vs `rel-820`) by analysis before scoping RDY-0045 — no merge until that decision and RDY-0082 both land**; start the hosting decision in parallel because it blocks the runbook |
+| **G1 Flagship demo** | **PARTIAL** | **16** | Demo accounts, ACL, provider identity, facility, timezone, report/controller authorization and installer-credential rotation are now genuinely CLOSED · remaining: menu roles (0013) and locale/currency (0037, 0038) each need one manual browser session · `front_office` Add-Patient defect (0042) and menu form-rendering defect (0043) still unresolved · RDY-0016's full matrix, branding identity (0033/0034) and proof assets (0060–0062, 0086, 0090, 0094, 0095) remain | Perform the three outstanding manual browser sessions (0013, 0037, 0038) — the Owner has already ruled the method acceptable; nothing technical blocks it |
+| **G2 Seeded commercial demo** | **NOT READY** | **12** | Track D data is now mostly seeded and closed (0020–0022, 0024, 0026–0028, 0058, 0059) · remaining: 0023/0025 need a clinician+Owner decision and a browser session respectively · D-7 rehearsal (0041) and its two defects (0042, 0043) still open · branding identity and locale/currency still open | Execute the D-7 rehearsal (0041) once 0013/0042/0043 clear; resolve 0023/0025's person-dependencies |
+| **G3 Pilot operational readiness** | **NOT READY** | **17** | Backup EXECUTION closed (RDY-0080) · authorization/controller defects now closed (0050–0052) · credential rotation closed (0011, 0017) · still open: backup POLICY (0081), restore UNPROVEN (0082), upstream currency (0045), deployment runbook (0047), secrets handling (0048), background-service trigger (0083), monitoring (0084), audit-log PHI (0055), authorization matrix (0016) | Prove a restore into a disposable target (RDY-0082); define the backup policy (RDY-0081) |
 | **G4 Ready for Phase 3 Brand** | **BLOCKED** | **3** | **Licence/attribution determination absent** · branding surface never enumerated at surface level · no captures exist | Commission the licence review (RDY-0095) — it has no technical predecessor and it blocks branding |
-| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **14** | 10 of 15 Safe-Now claims have no proof asset · registers not extracted · **the lead claim is contradicted by an open defect** · frequencies and regulatory framing provisional | Extract the four status registers (RDY-0067) — it is content priority #1 and needs no engineering |
-| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **21** | G2 and G3 both open · **V-1/V-2/V-3 unrun** · hosting BLOCKED · pricing figures BLOCKED · Arabic message design PROVISIONAL | **Run V-1.** It requires no engineering, it sits at the root of the validation branch, and there is no technical reason it has not started |
+| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **13** | Authorization/controller items closed removed some load · registers not extracted · claim-reviewer/claim-discipline items (0003, 0056, 0057, 0088) still open · proof assets (0060–0062) still open | Extract the four status registers (RDY-0067) — it is content priority #1 and needs no engineering |
+| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **21** | G2 and G3 both open · hosting BLOCKED · pricing figures BLOCKED · Arabic message design PROVISIONAL — unaffected by this sync, no RDY in this gate's list was among the 22 closures | **Run V-1.** It requires no engineering, it sits at the root of the validation branch, and there is no technical reason it has not started |
 
 ### 47.1 The readiness questions, answered separately
 
