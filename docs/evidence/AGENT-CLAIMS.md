@@ -314,14 +314,19 @@ none of Table C is claimed below; it stays with whoever already holds it.
 
 | RDY/item | Held by | State | Note |
 |---|---|---|---|
-| 0078 | Agent D (AGENT-REG) | HELD | Primary ZATCA/NPHIES source verification. Unclaimed by anyone — pure web research |
-| 0088 | Agent D (AGENT-COMP) | HELD | Competitor dossier re-verification. Unclaimed |
-| 0079 (candidate-list half) | Agent D (AGENT-PROSPECT) | HELD | Research output only, not the "5 reached" acceptance half |
-| 0075, 0076, 0077 | Agent D (AGENT-VALIDATION) | HELD | Field instrument only — no existing pack covers the combined-call design this specifically asks for |
-| 0064 (provisioning runbook), 0081, 0084, 0085 | Agent D (AGENT-HOSTING) | HELD — CONTINUATION | `EV-081`/`EV-084`/`EV-047`§10.5 (TLS) already exist (AGENT-DOC/AGENT-OPS) — this reshapes/extends them into the specific "Owner creates account" runbook + comparable-quotes spec the Owner asked for, does not redo the underlying research |
-| 0065, 0066, 0068, 0073, 0096 | Agent D (AGENT-COMMERCIAL) | HELD — CONTINUATION | `EV-065-066-069`/`EV-068`/`EV-073` already exist (AGENT-DOC) — this builds the specific REVIEWER PACK shape (blank verdict block, FAIL consequence) the Owner asked for, on top of that existing research, not a rewrite |
-| 0090, 0094, 0095 (input) | Agent D (AGENT-BRANDING) | HELD — CONTINUATION | `EV-090-branding-inventory.md`/`EV-094-demo-no-go-register.md` already exist (AGENT-DOC) — this adds the programmatic grep-checklist and rehearsal-script SHAPE specifically asked for; 0095 background brief is new |
-| 0086, 0087, 0063 | Agent D (AGENT-ARABIC) | HELD — CONTINUATION | `EV-086` (Agent B) already exists — this consolidates it plus RDY-0087 (backed by `EV-RB14`) and RDY-0063 into one pack with the basis-of-authority field the Owner specified |
+| 0078 | Agent D (AGENT-REG) | **DONE — PREPARED, PARTIAL** | `EV-078-zatca-nphies-primary-sources.md`, `03b2da101`. EXT-01 CONFIRMED on primary `zatca.gov.sa` sources (Wave 24/25 thresholds and dates). EXT-02 PRIMARY-SOURCE VERIFICATION OUTSTANDING — `chi.gov.sa` unreachable across 7 attempts, disclosed not guessed. Audited by Agent D against source, confirmed sound |
+| 0088 | Agent D (AGENT-COMP) | **DONE — PREPARED, NOT CLOSEABLE** | `EV-088-competitor-frequency-verification.md`, `dc6baee78` + `8bbdc23a4` addendum. ⚠ Two concurrent instances of this same agent ran on the same claim simultaneously — the claim mechanism stops different agents colliding, not duplicate instances of the same one; flagged as a real protocol gap, not just a footnote. Second instance self-detected the collision and appended rather than overwrote. 6 of 9 dossiers show new marketing-surface evidence; no frequency figure published, per RDY-0088's own preference for mechanism over number |
+| 0079 (candidate-list half) | Agent D (AGENT-PROSPECT) | **DONE — PREPARED** | `EV-079-candidates.md`, `efc52c8a1`. 30 candidates, Riyadh/Jeddah/Eastern Province, 14 flagged GOOD ICP fit. Two dead leads explicitly excluded rather than padded in. "5 reached" half is the Owner/Sales-Pilot-Owner's |
+| 0075, 0076, 0077 | Agent D (AGENT-VALIDATION) | **DONE — PREPARED** | `EV-075-077-instrument.md`, `94aef33a7`. Combined 3-in-1 call instrument, thresholds verified against live §8 cards (matched exactly), unprompted/prompted tracking for V-3, Arabic draft marked unreviewed |
+| 0064 (provisioning runbook), 0081, 0084, 0085 | Agent D (AGENT-HOSTING) | **DONE — PREPARED** | `EV-064-081-084-085-hosting-pack.md`, `ce9c2a124`. Audited: EV-084's M-6 threshold (2×execute_interval) confirmed real, not invented by this pass; no standalone EV-081 existed before. Next action named: Owner creates GCP billing account/project |
+| 0065, 0066, 0068, 0073, 0096 | Agent D (AGENT-COMMERCIAL) | **DONE — PREPARED** | `EV-065-pack.md`, `EV-066-pack.md`, `EV-068-073-reviewer-packs.md`, `EV-096-options.md`, `0662b898f`. Verdict blocks audited directly — confirmed genuinely blank, not pre-filled |
+| 0090, 0094, 0095 (input) | Agent D (AGENT-BRANDING) | **DONE — PREPARED** | `EV-090-walk-checklist.md`, `EV-094-rehearsal-script.md`, `EV-095-background-brief.md`, `de161597b`. Committed by the orchestrator on the subagent's behalf after its turn ended waiting on `.git/index.lock` — files were already staged, content audited before finishing the commit |
+| 0086, 0087, 0063 | Agent D (AGENT-ARABIC) | **DONE — PREPARED** | `EV-086-arabic-reviewer-pack.md`, `0d1c02328`. Used all three measured coverage layers (47.5/16.1/79.0%), not just the flattering headline; correctly found no numeric Arabic-parity target exists in source and did not invent one |
+
+**None of the above closes its RDY.** Every item stays exactly where its own file says it stays — a
+human action (a real call, a legal review, a funded cloud account, HR-09's actual review, or the
+Owner's own decision) is still required in every case. This wave was fully audited by Agent D against
+each committed file's actual content, not accepted on the doing agent's self-report.
 
 **Wave 3 (RDY-0002, 0045, 0086-naming, 0096) is decision capture — run by the orchestrator directly,
 not a subagent, per the Owner's own instruction.**
