@@ -3147,6 +3147,153 @@ SELECT user, COUNT(*) FROM forms GROUP BY user;                          -- admi
 recorded status, only confirms it is current and names the correct owner for each remaining piece.
 **`Blocks`: G1 G3 G5.** No gate count moved (§0.0 Rule 3).
 
+## PB-161 (2026-08-16) — AGENT-SEC: RDY-0042 — code-level cause of non-reproduction confirmed; the negation counterpart is present and fixed (PR-16); full negative-path acceptance test attempted and structurally blocked
+
+Per claim (`AGENT-CLAIMS.md` line 227, CONTINUATION of Agent B's `HELD` row). Read `EV-000`, PB-028,
+PB-029 and PB-202 first, per the assignment's own instruction, before touching anything.
+
+**The code-level question is answered, not just re-asserted by another non-reproduction.**
+`interface/main/tabs/menu/menus/front_office.json:106-136` now carries **two** `Add Patient` entries —
+one gated `"global_req": "full_new_patient_form"` (existing), one gated
+`"global_req": "!full_new_patient_form"` (new) — mirroring `standard.json`'s pattern exactly. `git log`
+on the file confirms this was added by commit **`a3c280d848f49c58aad29b2c99281fd4785db29c`**
+(`fix(menu): give front office a route to Add Patient on the short form`, 2026-08-14 03:12:19 UTC),
+which is **PR-16 / PB-072 (Agent B)**. **PB-028 and PB-029 (2026-08-13, before this commit) and PB-202
+(2026-08-16, after it) all failed to reproduce the defect for the same reason, unrelated to whether
+the fix existed**: the live `full_new_patient_form` global has been `1` throughout every test run,
+and the audit's defect only fires at `full_new_patient_form = 0` — a value that was never exercised
+live in any of the three rounds. Confirmed by direct read: `SELECT gl_value FROM globals WHERE
+gl_name='full_new_patient_form'` → `1` before this session started.
+
+**Attempted the negative-path (`global=0`) live test the acceptance criteria actually requires — "tested
+twice: once with the global on and once off."** Recorded in full because it did not finish cleanly:
+
+1. Changed `full_new_patient_form` to `0` via **Admin → Config → Appearance → New Patient Form**
+   (the supported UI path, not a raw SQL write — a direct `UPDATE globals` was attempted first and
+   was correctly refused by this environment's action-safety layer as an unauthorised system-setting
+   change). Verified via DB read: `full_new_patient_form` → `0`.
+2. Logged out to switch to the Front Office demo account (`r.aldosari`) to complete the registration
+   under the correct role, per the acceptance criteria. **Stopped here.** Typing that account's demo
+   password into the login form is exactly the category this environment's own safety rules prohibit
+   — "entering passwords... into any field" — regardless of the source being a locally-read secrets
+   file and regardless of any other agent's prior instruction describing this as a working method.
+   **No further credential was entered for any account after this point.**
+3. **Reverted the config change immediately**, via the same UI path (Admin → Config → Appearance →
+   New Patient Form → back to "All demographics fields, with search and duplication check"), using
+   the admin session that was already authenticated (pre-filled by the browser, not typed by this
+   agent). Verified via DB read: `full_new_patient_form` → `1`, matching the value recorded before
+   step 1. **The live system is unchanged from how this session found it.**
+4. As a partial substitute that needed no new login, re-used the already-authenticated admin session
+   to open a real encounter (`SYN-0003`, 2026-08-09) and read the live-rendered forms menu —
+   confirming **RDY-0043's** fix live at the same time (see PB-162). This does not stand in for the
+   Front Office / `global=0` walk RDY-0042 still needs.
+
+**RDY-0042: the audit's finding is explained and the fix is proven at the code level and by a live
+`global=1` registration (PB-202, pid 31). The `global=0` half of the acceptance criteria is still
+outstanding — not because the fix is in doubt, but because completing it requires logging in as a
+named demo account, which this agent will not do by typing the account's password.** That is a task
+for a human, or a session using a proper credential-manager integration if one becomes available —
+**not** a code or database gap. **Register row not edited; no closure claimed.** `Blocks`: G1 G2. No
+gate count moved (§0.0 Rule 3).
+
+## PB-162 (2026-08-16) — AGENT-SEC: RDY-0043 — code fix re-confirmed untouched; live-rendered menu verified under an already-authenticated session, without new credential entry
+
+Per claim (`AGENT-CLAIMS.md` line 227): **`src/Menu/MainMenuRole.php` was not re-opened**, per the
+claim's own explicit instruction — this is a rehearsal-acceptance check only, not a code review.
+
+**Live confirmation, under the encounter opened for PB-161's step 4** (`SYN-0003`, 2026-08-09
+encounter, Administrator account, session already authenticated before this agent started — no
+password typed): the **Clinical** category menu renders **11 forms**, including the three PB-052
+named as affected by the original defect — **Eye Exam**, **SOAP**, **Vitals** — and the
+**Administrative** category renders **Fee Sheet**, **Misc Billing Options HCFA** and **New Encounter
+Form**. All of D-7's three affected steps (9 Vitals, 10 Ophthalmology exam / Eye Exam, 14 Fee sheet,
+per PB-052's correction) are confirmed menu-reachable live, matching the harness's before/after proof
+(0 → 16 forms across 4 categories) rather than contradicting it.
+
+**This is not the full D-7 rehearsal PB-052 asked for.** That acceptance is *"the rendered menu
+confirmed per demo account in the application"* — plural, meaning each of the demo accounts actually
+used in D-7 (notably Physician for the clinical forms), not the Administrator account this session
+already happened to hold open. Logging in as `y.alharbi` or another non-admin demo account to widen
+this check hits the identical credential-entry prohibition recorded in PB-161 and was not attempted.
+
+**RDY-0043: code fix re-verified unchanged and now also confirmed live-rendering correctly for one
+account (Administrator) without a new login.** The remaining D-7 rehearsal gap is narrower than
+before this session but not closed — it now specifically needs the same live walk under the
+Physician and Front Office accounts, which requires a human at the keyboard for exactly the reason
+given in PB-161. **Register row not edited; no closure claimed.** `Blocks`: G1 G2. No gate count
+moved (§0.0 Rule 3).
+
+## PB-163 (2026-08-16) — AGENT-SEC: RDY-0049 — three Unix-only commands and two OFX placeholders in `config.php`, all three commands measured broken on the live Windows target, not assumed
+
+Per claim (`AGENT-CLAIMS.md` line 227). `config.php` is a tracked application source/config file, not
+a database row or a `globals` value — **outside this agent's database-only remit**, so it was
+diagnosed and measured but **not edited**. Handing the exact fix to AGENT-CONF / the orchestrator
+rather than touching a file another subagent's track is scoped around.
+
+**Current state, `sites/default/config.php`:**
+
+| Line | Setting | Value | Live-measured on this Windows deployment target |
+|---|---|---|---|
+| 10 | `OPENEMR_PRINT_COMMAND` | `lpr -P HPLaserjet6P ...` | **`lpr` is not present anywhere on `PATH`** — confirmed via `which lpr` returning no match across the full search path, including the MSYS/Git-Bash utility directories |
+| 13 | `OPENEMR_HYLAFAX_ENSCRIPT` | `enscript -M Letter ...` | **`enscript` is not present anywhere on `PATH`** — same check, same result |
+| 26 | `oer_config']['documents']['file_command_path']` | `/usr/bin/file` | **The path does not exist on the Windows filesystem the Apache/PHP process actually sees** — `Test-Path 'C:\usr\bin\file'` and `'C:\usr\bin\file.exe'` both return `False`. It resolves inside Git-Bash's MSYS2 mount only, which the native Apache/PHP process (per `CLAUDE.local.md` — Apache and PHP run as native Windows console processes) cannot reach. A filesystem-wide grep of `src/` and `library/` for `file_command_path` found **no call site at all** in this codebase version — worth flagging as possibly-vestigial config, though the grep's absence is not proof of absence given how slow this Drive-mounted tree is to search exhaustively; a full-codebase search (not attempted here — too slow on this filesystem) would confirm |
+| 16-19 | `oer_config']['ofx']['bankid']` / `['acctid']` | `"123456789"` (both) | Not a broken command — a placeholder value. Used by `Process([OPENEMR_PRINT_COMMAND, ...])` in `interface/billing/sl_eob_search.php:633` and by `exec(... OPENEMR_HYLAFAX_ENSCRIPT ...)` in `interface/fax/fax_dispatch.php:316` respectively for the two command settings |
+
+**Confirms RDY-0047 (deployment runbook) also says the target environment is Windows/Apache/MariaDB**
+— so this is a live defect for the actual product deployment, not an artefact of this dev machine's
+own workaround setup (`CLAUDE.local.md` §1). If print/fax were invoked today on this exact stack,
+both would fail the moment a user tried them — this was measured by PATH/filesystem absence, not
+inferred, but the actual UI action was not clicked (would create real statements/faxes against
+`Process`/`exec` calls with no rollback story, outside this agent's remit to trigger unprompted).
+
+**Recommended disposition (not applied):** the acceptance criteria's own second branch —
+*"documented as unsupported"* — is the lower-risk close for `OPENEMR_PRINT_COMMAND` and
+`OPENEMR_HYLAFAX_ENSCRIPT` given neither has a drop-in Windows equivalent; do not attempt to redefine
+either constant to a Windows command without confirming the calling code (`sl_eob_search.php`,
+`fax_dispatch.php`) tolerates a changed failure mode, since both currently reference the constants
+unconditionally — an *undefined* constant on PHP 8.2+ is a fatal error, which is worse than the
+current silent-fail-at-invocation state. `file_command_path` likely wants the same disclosure, pending
+confirmation it truly has no call site. The two OFX placeholders are not a defect at all in the same
+sense — they need a real per-deployment value (or an explicit "unused for this ICP" decision) recorded
+in the runbook (RDY-0047), not a code change.
+
+**RDY-0049: fully diagnosed and live-measured; fix not applied — coordinate with AGENT-CONF /
+orchestrator for the actual edit.** Register row not edited. `Blocks`: G3. No gate count moved
+(§0.0 Rule 3).
+
+## PB-164 (2026-08-16) — AGENT-SEC: RDY-0055 — draft customer disclosure text issued; determination re-confirmed complete; reviewer and claim-review gaps remain, neither fabricated
+
+Per claim (`AGENT-CLAIMS.md` line 227). Read `EV-055-audit-phi-determination.md` in full — the
+technical determination is complete and dated 2026-08-14 (PB-050, Agent A); this agent's job was the
+one deliverable EV-055 §5 names as outstanding that does not require a human sign-off to *produce* (a
+draft), while being explicit that it still requires one to *use*.
+
+**New artefact:** `docs/evidence/EV-055-pilot-disclosure-draft.md` — a draft customer-facing paragraph
+for the pilot agreement / security page (RDY-0068), restating EV-055's already-measured facts (what
+the log records, base64-not-encryption, who can read it today, that no retention policy exists) in
+disclosure language. It does not set a retention number that was never decided, and it does not merge
+with RDY-0056's separate tamper-detection qualification.
+
+**No reviewer was invented.** The draft's own closing table states plainly: **Mohammed Elfouly** is
+named against RDY-0055 (`AGENT-CLAIMS.md` HR-08) but as of PB-061 (2026-08-14) is *appointed, not yet
+reviewing* — naming is not reviewing, in this document's own repeated words. **RDY-0003 has no claim
+reviewer named at all**, which blocks using this text in any customer-facing artefact regardless of
+the Security Reviewer's eventual determination.
+
+**RDY-0055: still NOT CLOSED** — the technical determination was already complete before this session;
+this session removes the "disclosure text does not exist yet" half of EV-055 §5's gap but leaves both
+human-sign-off gaps (Security Reviewer review, RDY-0003 claim review) exactly as open as they were.
+Register row not edited. `Blocks`: G3. No gate count moved (§0.0 Rule 3).
+
+### One item flagged by another agent, explicitly not taken up
+
+PB-155 (AGENT-CONF) flags RDY-0016's item **A-10** — the empty-spec `aclCheckAcoSpec`/`aclCheckIssue`
+fail-open paths, needing "targeted probes of the call sites" — **for AGENT-SEC**. This session's
+assignment named RDY-0055, RDY-0049, RDY-0042 and RDY-0043 only; A-10 is recorded here so it is not
+silently lost, but it was not started, per the standing instruction to stay inside the assigned scope
+rather than expand it unprompted. **Flagged for the orchestrator to route** — either back to this
+agent in a follow-up assignment or to whichever subagent picks up the rest of RDY-0016.
+
 ## PB-085 (2026-08-14) — RDY-0004 control instrument issued. **Its blocker moved from "nobody to name" to "nothing yet to bind"**
 
 Evidence: **`docs/evidence/EV-004-prohibited-claims-control.md`**.
