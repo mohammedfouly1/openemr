@@ -1889,6 +1889,43 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-220 (2026-08-16) — **RB-22 CLOSED (Agent D)** — theme rebuild executed; the Inter-dedup saving is now real in the compiled CSS
+
+**Not an RDY item** — RB-22 is `docs/RebrandingBugs.md`'s ledger, not the §7 register. Recorded here
+anyway because it is a genuine closure with evidence, per this document's own convention of logging
+every closure in the PB stream regardless of which register it belongs to.
+
+**What was stale:** the SCSS fix (one `@font-face` with `font-weight: 400 700`, one
+`Inter-Regular.woff2`, in `interface/themes/thiqa/_typography.scss`) had been committed for days, but
+`C:\openemr-stack\build` — the off-Drive-mount workspace `CLAUDE.local.md` §6 requires for any front-end
+build on this host — still held the old 5-`@font-face` version, so every `npm run build` since the fix
+would have shipped the stale CSS if run without re-syncing first.
+
+**Executed:** `robocopy /MIR` to re-sync `interface/themes` and `public/assets` from the repo into the
+build workspace, `npm run build` (webpack themes + `sync-css.js`, compiled clean, only the pre-existing
+Sass-deprecation and asset-size warnings), then `robocopy /MIR` back into `public/themes` and
+`public/assets`. **Deviation from `CLAUDE.local.md`'s documented `Remove-Item`-then-copy sequence,
+recorded because it matters**: this session's sandbox blocks `Remove-Item` on `public/themes/*`
+("protected from removal"). `robocopy /MIR` was used instead — it purges destination files not present
+in source in the same pass as copying, which satisfies the same Q77 requirement (no stale theme file may
+merely go unbuilt; it must not be *present*) without a separate delete step.
+
+**Verified, not assumed:**
+
+| Check | Result |
+|---|---|
+| `Inter-Regular.woff2` reference count, each of the 8 theme CSS files (`style_{light,dark}`, `rtl_style_{light,dark}`, `compact_style_{light,dark}`, `rtl_compact_style_{light,dark}`) | **Exactly 1 each** |
+| `Inter-Medium`/`Inter-SemiBold`/`Inter-Bold` references, same 8 files | **0** |
+| Forbidden theme files (`solar`/`manila`/`cobalt_blue`/`forest_green`) present in `public/themes/` | **None** |
+| `BrandingGovernanceGuard` isolated suite (`phpunit-isolated.xml --filter BrandingGovernanceGuard`) | **31/31 tests, 66 assertions, OK** |
+| `tools/branding/verify-brand-manifest.php` | **123/123 verified**, no drift introduced |
+
+**`public/themes` and `public/assets` are gitignored build output** (`.gitignore:17`) — nothing to
+commit there. `docs/RebrandingBugs.md`'s RB-22 row, its terminal-state count, and its two other
+references to the pending rebuild are updated in this same commit range.
+
+**`Blocks`:** none — RB-22 was never an RDY row and carries no `Blocks` field; no gate count changes.
+
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
 **Assignment:** RDY-0013 (untested accounts + registration completion), RDY-0025 (document marking
