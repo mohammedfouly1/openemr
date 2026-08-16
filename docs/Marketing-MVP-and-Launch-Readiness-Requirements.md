@@ -273,10 +273,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **24 P0** (+ P1s **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0014**, **0015**, **0017** (PB-005/020/029); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045). **Corrected at the PB-140 register-reconciliation sync (2026-08-16) — the prior "31" figure wrongly counted RDY-0013, 0037, 0038 and full RDY-0044 as closed; see PB-140** |
-| **Requirements still open** | **90** |
-| **Open P0** | **47** — 71 P0 less the 24 genuinely closed P0 IDs above. **Recalculated at the PB-140 gate sync, the first count actually derived from §7 register cells rather than PB-log narrative — see PB-140 for why it is not comparable by simple arithmetic to the earlier "42"** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 16 · G2 12 · G3 17 · G4 3 · G5 13 · G6 21** — **PB-140 gate sync (2026-08-16), mechanical from §7.2–§7.18** |
+| **Requirements CLOSED** | **25 P0** (+ P1s **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045). **RDY-0013 closed at PB-202 (2026-08-16, live browser re-test); see PB-140 for the register-reconciliation history behind the rest of this list** |
+| **Requirements still open** | **89** |
+| **Open P0** | **46** — 71 P0 less the 25 genuinely closed P0 IDs above. **PB-202 decremented this from PB-140's 47 by one (RDY-0013); not yet re-confirmed by a full dedicated sync** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 15 · G2 11 · G3 17 · G4 3 · G5 13 · G6 21** — **PB-202 single-item decrement (2026-08-16) on top of the PB-140 mechanical sync; a full re-derivation is still owed at the next dedicated sync** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -941,7 +941,7 @@ qualification*. Dependencies, not dates.
 | **0010** | Create the demo role accounts defined in §12 (administrator, physician ×2, front office, accounting, clinical assistant) | GTM DEM-003, B2; audit §12.5, WF-0012 | **1 usable human account**; 5 of 7 roles never populated | **VERIFIED READY — CLOSED BY PHASE 2B (PB-005)** | USER / ROLE | **P0** | G1 G2 | OpenEMR Engineer | 0001, 0011 | **CLOSED 2026-08-13** |
 | **0011** | Credential convention: naming pattern, generation rule, secure storage, rotation and reset process. **No password appears in any document** | Brief §17; GTM §14.5 | Password policy active (≥9 chars, complexity, expiry 180+30, lockout); **no convention** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-020)** | SECURITY | **P0** | G1 G3 | Security Reviewer | — | **CLOSED 2026-08-13** |
 | **0012** | Assign the correct ACL group to every demo account | Audit §13.4, §12.5 | Only Administrators populated | **VERIFIED READY — CLOSED BY PHASE 2B (PB-005)** | AUTHORIZATION | **P0** | G1 G2 | OpenEMR Engineer | 0010 | **CLOSED 2026-08-13** |
-| **0013** | Assign the correct main and patient menu role to every demo account | Audit §14 | All four accounts on `standard` | READY AFTER CONFIGURATION — **PARTIAL BROWSER EVIDENCE (PB-028/PB-141): 3 of 6 accounts' navigation confirmed (Front Office 5 items, Physician 11, Administrator 13); Accounting/Clinical Assistant/2nd Physician untested; registration was reached but never completed** | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0010, 0042 | NOT READY |
+| **0013** | Assign the correct main and patient menu role to every demo account | Audit §14 | All four accounts on `standard` | **VERIFIED READY — CLOSED BY PHASE 2B (PB-202)** — all 6 of 6 accounts' navigation confirmed, registration completed end-to-end by Front Office (pid 31 created) | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0010, 0042 | **CLOSED 2026-08-16** |
 | **0014** | Set provider identity for clinical accounts — taxonomy appropriate to ophthalmology, `authorized` flag, NPI field handling | Audit §12.2 | `taxonomy` = `207Q00000X` **Family Medicine** for all four; `npi` NULL for all | **VERIFIED READY — CLOSED BY PHASE 2B (PB-029)** | CONFIGURATION | **P0** | G1 G2 | Clinical Workflow Reviewer | 0010 | **CLOSED 2026-08-13** |
 | **0015** | Assign facility to every demo account | Audit §12.5 | Only facility id 3 exists | **VERIFIED READY — CLOSED BY PHASE 2B (PB-029)** | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0010, 0032 | **CLOSED 2026-08-13** |
 | **0016** | Execute the positive **and negative** authorization matrix in §23.4 under each role account | GTM Pillar 1, D-2; brief §24 | **Role-based behaviour never exercised** (L-19) | NOT READY — DEFECT *(unproven)* | AUTHORIZATION | **P0** | G1 G3 G5 | Security Reviewer | 0010, 0012, 0050, 0051, 0052 | NOT READY |
@@ -975,7 +975,7 @@ qualification*. Dependencies, not dates.
 | **0034** | Remove or repoint vendor links — `display_donations_link`, `display_review_link`, `main_menu_logo_link` | Audit §19.4; L-17 | All live and pointing at open-emr.org | READY AFTER CONFIGURATION | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0095 | NOT READY |
 | 0035 | Clear `pqri_registry_name='Model Registry'` and `pqri_registry_id='125789123'` placeholders | Audit §19.4 | Live placeholders | READY AFTER CONFIGURATION | CONFIGURATION | P1 | G2 | OpenEMR Engineer | 0001 | NOT READY |
 | **0036** | Set `gbl_time_zone` to `Asia/Riyadh` | Audit §22.4, §23.4 | **Empty** → UTC | **VERIFIED READY — CLOSED BY PHASE 2B (PB-016)** | CONFIGURATION | **P0** | G1 G2 G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
-| **0037** | Configure currency display for SAR — symbol, decimals, separators | Audit §22.4, §23.4; L-12 | `$`, 2 decimals; **display only, no ISO code** | READY WITH MANDATORY QUALIFICATION — **PB-028 re-ran only the Globals-screen check PB-016 already ruled insufficient (PB-141); a financial screen/report/priced-encounter rendering of SAR has never been observed, though Track D data now exists to make this checkable** | CONFIGURATION | **P0** | G2 | OpenEMR Engineer | 0001 | NOT READY |
+| **0037** | Configure currency display for SAR — symbol, decimals, separators | Audit §22.4, §23.4; L-12 | `$`, 2 decimals; **display only, no ISO code** | READY WITH MANDATORY QUALIFICATION — **PB-202: checked the actual Patient Ledger (a real financial screen with real charges) directly — it renders every amount as a bare number, no `SAR` and no `$` anywhere. Worse than the previously-suspected "$ instead of SAR" gap; the currency indicator is simply absent from this screen** | CONFIGURATION | **P0** | G2 | OpenEMR Engineer | 0001 | NOT READY |
 | **0038** | Replace US locale seeds visible during registration — `list_options.state` (52 US states), `country` (1 row), `phone_country_code = 1`, `units_of_measurement` | Audit §22.4 | US seeds live | READY AFTER CONFIGURATION — **PARTIAL BROWSER EVIDENCE (PB-028/PB-141): Saudi regions + country set confirmed; phone-number acceptance and metric-units rendering never tested, registration was never submitted** | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0001 | NOT READY |
 | 0039 | Decide the date display format for the demo surface (3 options only; no format string, no locale derivation) | Audit §22.4 | ISO `YYYY-MM-DD` | READY WITH MANDATORY QUALIFICATION | CONFIGURATION | P1 | G2 | Founder / Product Owner | 0001 | NOT READY |
 
@@ -1990,6 +1990,112 @@ own piece of work rather than assumed to work).
 
 **`Blocks`:** none — no gate count changes; nothing was closed, corrected, or newly opened by this
 entry (§0.0 Rule 3 N/A, no recalculation performed).
+
+## PB-202 (2026-08-16) — **AGENT-BROWSER's mission completed live (Agent C, Orchestrator) — RDY-0013 CLOSED, RDY-0038 phone clause CLOSED, RDY-0037's real gap confirmed, two new defects found**
+
+PB-201's blocker (`claude-in-chrome` unavailable) resolved after the Owner connected the extension.
+Rather than resume AGENT-BROWSER cold, the orchestrator drove the session directly, live, against
+`http://localhost:8300/`. Screenshots referenced below are saved to the orchestrator's session output
+and described in full below; filenames follow the existing `T*`/`R*` convention is not reused to avoid
+collision — this session's captures are referenced inline by test ID `L*` (Live re-test).
+
+### RDY-0013 — menu role — **VERIFIED READY — CLOSED**
+
+**Clause 1 (navigation matches per account), all 6 of 6 accounts now confirmed** (3 from PB-028,
+3 new this session): Accounting (`k.alotaibi`) — 10 top-level items incl. a **restricted** Admin
+submenu (Practice / Coding / Documents / Address Book only — no Config/Clinic/System/Users/ACL,
+confirmed by opening it), a legitimate least-privilege scope, not a defect. Clinical Assistant
+(`m.alzahrani`) — 11 items, no Admin. Second Physician (`s.almutairi`) — 11 items, matching
+`y.alharbi`'s count exactly. Identity confirmed for each via the account-menu dropdown.
+
+**Clause 2 (reception account can complete registration) — executed end-to-end, not just reached.**
+Logged in as Front Office (`r.aldosari`), opened Add Patient, filled a clearly-marked synthetic
+patient (`QATest BrowserVerification-SYNTHETIC`, DOB 1990-01-01, Riyadh/Saudi Arabia defaults
+confirmed, phone `+966500000000`), and clicked **Create New Patient** through to a real duplicate-check
+modal and **Confirm Create New Patient** — patient created (`pid 31`), landed on its Medical Record
+Dashboard, demographics verified as persisted exactly as entered.
+
+**⚠ New defect found and worked around, not previously recorded**: the **Birth Sex** field (required,
+labelled in red) silently blocks submission when left at "Unassigned" — no error message, no console
+log, no network request fires. Reproduced 3 times independently: twice via direct coordinate clicks
+on the "Create New Patient" button, once via a genuine `element.click()` dispatched in-page. Root
+cause confirmed by setting `form_sex` to a valid value via the DOM and retrying — submission then
+proceeded normally through the duplicate-check modal. **This is a real UX defect**: a required field
+with no visible validation message when unmet, on the same screen already flagged for RDY-0038's own
+missing-hint problem. Recorded as a new gap; not previously named anywhere in this document.
+
+**Dataset note, disclosed in full**: this genuinely added one patient (`pid 31`,
+`QATest BrowserVerification-SYNTHETIC`) to the live seeded dataset. Given RDY-0044-B's v2 baseline
+integrity is itself still unconfirmed (PB-140/141's carried-forward flag), no restore was attempted
+against it during this session — restoring from a baseline of unconfirmed integrity would compound
+the open question, not resolve it. **AGENT-DATA should account for this patient** (delete it, or fold
+it into a fresh baseline) once the v2 baseline question is resolved, whichever comes first.
+
+### RDY-0038 — phone clause — **CLOSED**; units-of-measurement clause — **not applicable to this screen**
+
+Phone `+966500000000` was submitted (not just typed) as part of the RDY-0013 registration above and
+persisted without any validation error — the acceptance criterion's actual text ("accepts... without
+a validation error") is now satisfied by a completed submission, not an inspected field. No visible
+`+966` hint exists on the field (confirmed, matches T6.4). State/country defaults (Riyadh / Saudi
+Arabia) reconfirmed via direct DOM inspection of the `form_state`/`form_country_code` select
+elements: exactly 13 Saudi regions + Unassigned (zero US states), exactly 3 country options
+(Unassigned / Saudi Arabia / USA, Saudi Arabia selected).
+
+**"Renders metric units" — searched exhaustively (all `select`/`input` elements, all frames, by
+name/id) and no units-of-measurement field exists anywhere on the registration form.** This is very
+likely a vitals-entry-screen concept (how weight/height render during a clinical encounter), not a
+registration-layout field — the card's own wording ("...offers Saudi regions... and renders metric
+units... no US state list is reachable **from the registration layout**") appears to conflate two
+different screens under one criterion. **Flagged as a card-wording ambiguity for AGENT-DOC**, not
+resolved here by guessing which screen was actually meant.
+
+### RDY-0037 — SAR in a financial screen — **still NOT CLOSED, and the real gap is now precisely located**
+
+Opened the Patient Ledger (a genuine financial screen, not the Globals/Locale tab PB-028 checked) for
+a seeded patient with real charges (`SYN-0001`, Hessa Alharthi: two encounters, charges 350.00 and
+250.00, a payment of 150.00, balance 450.00). **Confirmed directly and by zoomed screenshot: every
+amount renders as a bare number — no `SAR`, no `$`, no currency indicator of any kind, anywhere on
+the Ledger screen.** This is not the "$ instead of SAR" gap the register row's audited state
+originally described — it is a stricter finding: **the financial screen that actually carries charges
+displays no currency symbol at all.** The payment description does correctly carry the
+`SYNTHETIC DEMO` marking per EV-028's convention. **Register left NOT READY** with this precise
+finding recorded in place of the vaguer "not yet observed" note.
+
+### RDY-0025 — document markings — **NOT TESTED, blocked by a newly found, reproducible defect**
+
+⚠ **New defect, reproduced twice with fresh sessions, not previously recorded**: clicking
+**Documents** in the patient navigation bar causes the entire browser tab to become **completely
+unresponsive** — no screenshot, no page-text extraction, no network-request read succeeds, for over
+60 seconds combined wait, on both attempts. Reproduced on two different patients (`SYN-0002`,
+`SYN-0003`) with a freshly-logged-in session each time, ruling out session staleness as the cause.
+**The application server itself remained healthy throughout** — confirmed via a direct
+`Invoke-WebRequest` to the login page from outside the browser session, HTTP 200 — so this is a
+client-side hang specific to the Documents view, not a stack outage. Per the browser-automation
+skill's own guidance against repeated retries on a failing action, this was not forced through a
+third time. **RDY-0025 remains untested. This hang itself is the more urgent finding** — it sits on
+the same reception/documents workflow D-7 walks through, and would stop a live demo cold.
+
+### Incidental confirmations, not part of this session's assigned scope
+
+- The Timolol allergy alert (RDY-0024's fix) fired correctly and visibly on real UI interaction for
+  `SYN-0002` (Turki Alqarni) — first live confirmation beyond the data-layer checks in PB-058.
+- The "OpenEMR Product Registration" telemetry modal (FIX-1, PB-028) did not reappear across several
+  fresh logins this session, consistent with PB-029's confirmation that it stays suppressed.
+
+### Register-row edits committed in this entry
+
+RDY-0013 → `Status`/`Verdict` CLOSED, citing this entry. RDY-0037 → `Status` cell note replaced with
+the precise Ledger-screen finding, still NOT READY. RDY-0038 → unchanged (P0 status was already
+correctly open; the phone clause closing does not close the whole RDY, since the units-of-measurement
+clause remains genuinely unresolved, not merely untested).
+
+### Gate effect
+
+RDY-0013 was already counted open toward G1 and G2 in PB-140's 47. **G1: 16 → 15. G2: 12 → 11.**
+Open P0: 47 → 46.
+
+**`Blocks`:** G1, G2 (RDY-0013's own `Blocks` field). Sync performed inline since it is a single-item,
+unambiguous decrement — not a full re-derivation; the next full sync should still re-verify this line.
 
 ## PB-140 (2026-08-16) — **Register reconciliation and fresh §47 gate sync (Agent C, Orchestrator)**
 
