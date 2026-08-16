@@ -134,6 +134,36 @@ Set at provisioning, per instance:
 **Then, in `config.php`:** replace or clear the Unix-only commands (`lpr`, `enscript`,
 `/usr/bin/file`) and the placeholder OFX bank IDs (OD-04).
 
+### 7.1 OD-04 in full — AGENT-OPS addendum, 2026-08-16 (PB-18x)
+
+**Live-reconfirmed on this host, unchanged since the 2026-08-13/14 audit passes** (`sites/default/config.php`):
+
+| Line | Current value | Problem on Windows |
+|---|---|---|
+| `OPENEMR_PRINT_COMMAND` | `lpr -P HPLaserjet6P -o cpi=10 ...` | `lpr` is a Unix line-printer client; no such binary ships or is reachable on this stack |
+| `OPENEMR_HYLAFAX_ENSCRIPT` | `enscript -M Letter -B -e^ --margins=...` | `enscript` is a Unix PostScript converter for HylaFAX; not present |
+| `$GLOBALS['oer_config']['documents']['file_command_path']` | `/usr/bin/file` | Absolute Unix path; does not exist on Windows |
+| `$GLOBALS['oer_config']['ofx']['bankid']` / `['acctid']` | `123456789` (placeholder, ×2) | Not OS-specific, but the installer default and never replaced |
+
+**Per RDY-0049's own acceptance criterion** — *"printing, faxing and MIME detection either work or
+are documented as unsupported"* — the disjunction is satisfied by disclosure, and that is what this
+runbook specifies rather than attempting non-native Windows print/fax tooling as part of a generic
+provisioning step:
+
+| Capability | Disposition on a Windows-hosted instance |
+|---|---|
+| Direct Unix-socket printing via `lpr` | **Unsupported.** Windows printing goes through the OS print spooler; if print support is contracted, implement via a Windows-native path (e.g., a configured default printer + a print-to-file/PDF flow) as a **separate, scoped** piece of work — not a `config.php` value |
+| HylaFAX faxing via `enscript` | **Unsupported.** HylaFAX itself is a Unix daemon; faxing on a Windows deployment needs a different transport entirely (e.g., a fax API/gateway), which is its own scoping exercise, not a config edit |
+| MIME detection via `/usr/bin/file` | **Replace, not disclose — this one has a native fix.** PHP's bundled `fileinfo` extension (`finfo_open`/`mime_content_type`) does the same job without shelling out to any external binary, Unix or Windows, and `fileinfo` is already required and loaded on this stack (`CLAUDE.local.md` §5, the 33-extension list). **Recommended runbook value:** leave `file_command_path` unset/empty on Windows deployments and confirm the document-upload code path falls back to `finfo` rather than shelling out — this is a code-level check for whoever executes this runbook's first provisioning, logged in §12's question table if the fallback does not already exist |
+| OFX bank IDs | **Set per instance**, or leave the OFX/quickbooks-export feature undocumented-as-unused if no customer has requested it yet — never ship the placeholder `123456789` on an instance that claims financial export works |
+
+**Not applied to the live demo host in this entry.** `sites/default/config.php` is shared,
+concurrently read by other active sessions this run, and outside the RDY-0044-B reset scope (a
+reset does not revert it) — an edit here is a persistent, cross-session change with no rollback via
+the demo-reset mechanism. Per the same disclosure-over-silent-mutation standard RDY-0083 applied:
+**this is now specified for the runbook (the customer-instance path), not applied to the shared demo
+config**, and is recorded as a decision, not an oversight.
+
 ---
 
 ## 8. Step 6 — ACL provisioning ⚠ easy to miss, fails closed and looks like a mystery
@@ -170,9 +200,57 @@ php <abs-path>/bin/console background:services run
 
 ## 10. Step 8 — Backup
 
-Configure per RDY-0081 once an off-instance target exists. **Until a restore has been proven into a
-disposable instance (RDY-0082), treat the backup as unverified** — a backup nobody has restored is an
-assumption with a file attached.
+Configure per RDY-0081 once an off-instance target exists. ~~Until a restore has been proven into a
+disposable instance (RDY-0082), treat the backup as unverified~~ **Updated 2026-08-16 (PB-182,
+`EV-082`): a restore has now been proven — disposable instance, 20.09 s, row counts and 283/283
+table checksums matched, application starts, authenticated login succeeds, D-1 returns clean.**
+6 of RDY-0082's 7 criteria are MET; only the browser-driven leg 6 remains, unrelated to whether the
+backup/restore mechanism itself works. Off-instance copy and encryption at rest (RDY-0081) remain
+open regardless — this update is about restore proof, not the full backup policy.
+
+---
+
+## 10.5 Step 8.5 — TLS, domain and DNS (RDY-0085) ⚠ specification only — not executed, no hosting yet
+
+**AGENT-OPS addendum, 2026-08-16 (PB-18x).** RDY-0085 is blocked on RDY-0064 (hosting), which is
+**DECIDED (Dammam, `me-central2`) but provisioning-BLOCKED — EXTERNAL** as of this document's own
+tracking. Nothing here can be executed against a real customer instance until that unblocks. What
+follows satisfies RDY-0085's *"specify certificate issuance and renewal in the runbook"* clause —
+the specification, not the execution.
+
+| Item | Specification |
+|---|---|
+| Domain | One subdomain per customer instance under a controlled parent domain (e.g. `<clinic>.<brand-domain>`), registered and DNS-delegated before provisioning starts — this is a prerequisite of this runbook's Step 1, not a Step 8.5 action |
+| Certificate issuance | ACME (Let's Encrypt) via a Windows-native ACME client — **`win-acme` (`wacs.exe`)** is the standard choice for IIS/Apache-on-Windows hosts; it can target Apache's `conf/` directly via a manual/script install plugin. Avoid `certbot`'s Windows support, which upstream itself now recommends against in favour of WSL or `win-acme` |
+| Renewal | `win-acme` self-registers a **Windows Scheduled Task** for renewal on install — ⚠ **on a customer host this is exactly the trigger pattern RDY-0083 already had to solve.** Unlike this demo host, a **customer instance's application directory is not expected to be a per-session Google-Drive mount** (`EV-083` §2.1, `EV-047` §9 above), so a certificate-renewal Scheduled Task run as a proper service account **should** work where the background-service trigger's demo-host limitation does not apply. **Verify this explicitly during the first real provisioning** — do not assume by analogy; log the result in §12 |
+| HTTP → HTTPS | `httpd.conf`: a `<VirtualHost *:80>` block containing only `Redirect permanent / https://<domain>/`, with the application served exclusively from the `:443` vhost. **Acceptance criterion is explicit that HTTP requests redirect or are refused** — a bare redirect is the simpler of the two and is what is specified here |
+| Verification (once executed) | `curl -I http://<domain>/` → redirect; `curl -I https://<domain>/` → `200`; certificate validity and issuer checked (`openssl s_client` or equivalent); renewal exercised once or its date placed under RDY-0084 monitoring, per RDY-0085's own acceptance text |
+
+**Status: still NOT READY.** This section closes none of RDY-0085's acceptance criteria — *"the
+pilot instance is reachable only over HTTPS"* requires a real pilot instance, which requires RDY-0064
+to unblock first. What changed: the runbook no longer has a blank cell where the certificate
+mechanism should be specified.
+
+---
+
+## 10.6 Step 8.6 — Outbound email (OD-05) ⚠ specification only — no live instance to configure yet
+
+**AGENT-OPS addendum, 2026-08-16.** Live-reconfirmed unchanged on this host: `practice_return_email_path`,
+`patient_reminder_sender_email`, `SMTP_USER` and `SMTP_PASS` are all empty; `EMAIL_METHOD = SMTP`,
+`SMTP_HOST = localhost` — nothing is actually configured to send, so `Email_Service` (RDY-0083) runs
+on schedule and silently no-ops every time.
+
+| Setting | Per-instance value |
+|---|---|
+| `EMAIL_METHOD` | `SMTP` (unchanged) |
+| `SMTP_HOST` / `SMTP_PORT` | The real outbound relay for the clinic's environment — never `localhost` unless a local MTA is actually configured and tested |
+| `SMTP_USER` / `SMTP_PASS` | Generated/assigned per instance, stored per **Step 4**'s secret-handling rule — never a shared credential across instances |
+| `practice_return_email_path`, `patient_reminder_sender_email` | The clinic's real sender address, not blank — a blank sender is indistinguishable from "email is disabled" until someone opens the queue and finds it empty |
+
+**Verification:** after setting these, confirm at least one queued item in `email_queue` (or a
+deliberately triggered reminder) is actually delivered — S-4 of the smoke test (§11) checks that the
+service *runs*, not that mail *sends*; this is a distinct, additional check worth adding to a future
+smoke-test revision, flagged here rather than silently assumed covered.
 
 ---
 

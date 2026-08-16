@@ -20,6 +20,26 @@ read-only (`SHOW DATABASES` before/after, unchanged) — and every write in this
 newly created, separate schema. No coordination-blocking action against AGENT-DATA's concurrent work
 was needed for that reason (see §6).
 
+> ### ⚠ UPDATE 2026-08-16, same session — rebuilt against the v3 baseline
+>
+> **§§1–8 below were originally run against `thiqa-rdy0044b-v2-baseline-20260814-064532.sql`.**
+> While this entry was in progress, **AGENT-DATA closed the v2 UUID-defect flag and issued a v3
+> baseline** (`thiqa-rdy0044b-v3-baseline-20260816-165016.sql`, PB-171, `EV-044` §10) and renamed v2
+> to `SUPERSEDED-...`. v2 was the current, non-superseded, documented baseline at the moment this
+> restore ran — nothing here was invalid when it was written — but leaving the handoff to
+> AGENT-BROWSER pointed at a since-superseded dataset would be a foreseeable source of confusion, so
+> **the disposable instance was rebuilt from v3 before handoff**, in the same session, at negligible
+> extra cost (another ~18 s restore).
+>
+> **Every check in §§3–7 was re-run against v3 and re-confirmed, with one expected difference:**
+> `globals` is **504** under v3, not 495 (`EV-044` §10's own v3 baseline states 504; this is a
+> pre-existing, disclosed change from AGENT-DATA's re-baseline, not a discrepancy introduced by this
+> restore). Every other field, the 283/283 checksum determinism, both authenticated logins, ACL
+> enforcement, and D-1's clean verdict reproduced identically on v3. **Tables and values below are
+> left as originally written (v2) for the traceable record of what actually ran first**; the v3
+> re-confirmation is recorded in the addendum at the end of each of §§3, 4, 5, 7. **The live
+> disposable instance handed to AGENT-BROWSER in §10 is the v3-restored one.**
+
 ---
 
 ## 1. The backup used
@@ -70,6 +90,10 @@ not a one-off.
 
 Table count post-restore: **283** (`information_schema.tables`, `table_schema='openemr_rdy0082_restore'`) — matches the dump's documented `283 tables`.
 
+**v3 addendum:** re-run against `thiqa-rdy0044b-v3-baseline-20260816-165016.sql` (SHA-256
+`b70e969572657a5269def836874a220d52afae818b238a0723f528415984fe9b`, re-measured before use and
+matched). Elapsed **17.73 s**. Table count **283**, unchanged.
+
 ---
 
 ## 4. Row-count comparisons — against the documented accepted baseline (`EV-044` §3)
@@ -92,6 +116,11 @@ Table count post-restore: **283** (`information_schema.tables`, `table_schema='o
 | tables | 283 | **283** | MATCH |
 
 **14 of 14 fields match exactly.** Query re-run separately in §7 for reproducibility.
+
+**v3 addendum:** re-run against the v3-restored instance. **13 of 14 unchanged; `globals` is now
+**504**, matching `EV-044` §10's own v3 accepted value exactly** (AGENT-DATA's re-baseline changed
+this figure; not a defect here). `SELECT SUM(uuid IS NULL OR uuid='')` also re-checked directly:
+**0** on both `form_vitals` and `insurance_companies`, matching v3's whole reason for existing.
 
 ---
 
@@ -116,6 +145,13 @@ CHECKSUM TABLE <283 backtick-quoted names>;
 name label in column 1 differs, by construction). **283/283 table checksums match.**
 `openemr_rdy0082_restore2` was dropped immediately after this comparison — it existed only to prove
 determinism, not as a second disposable instance.
+
+**v3 addendum:** repeated against v3 — two independent restores, `openemr_rdy0082_restore` (the
+instance kept live for AGENT-BROWSER) and a throwaway `openemr_rdy0082_restore2` (dropped
+immediately after comparison, as before). Aggregate SHA-256 over the 283 checksum values:
+**`86e9cc2d2546c33951e65dfe549da5a8ccd6a529aa3af91e00ec0a00e5b4220f`** on both — **283/283 match**,
+same determinism property, different value from v2's aggregate because the underlying data changed
+(the UUID fix and the `globals` count), not because determinism failed.
 
 ---
 
@@ -159,13 +195,22 @@ correctly-ACL'd report fetches are the standard this document uses elsewhere (PB
 session is accepted by every report and controller endpoint") to establish a session is genuinely
 authenticated.
 
+**v3 addendum:** every row of the table above was re-run against the v3-restored instance and
+reproduced identically — Front Office 200/title `Thiqa`/45,048 bytes (one byte more than v2's
+45,047; content, not a defect — different `globals` count renders one extra character somewhere in
+the frameset, not investigated further as it is immaterial to the acceptance criterion), Front
+Office denied `patient_list.php`, Administrator 200/title `Thiqa`, Administrator's `patient_list.php`
+200/5,084 bytes, and D-1 200/7,316 bytes/"No audit log tampering detected". **This is the version now
+live for AGENT-BROWSER.**
+
 ---
 
 ## 8. Elapsed time
 
 | Phase | Time |
 |---|---|
-| Database restore (20,145,700+ lines of SQL, 283 tables) | **20.09 s** |
+| Database restore, v2 (superseded mid-session — see the update note in §0) | **20.09 s** |
+| Database restore, **v3 (the version now live)** | **17.73 s** |
 | Site directory provisioning (`robocopy /E`, `sqlconf.php` edit, DB grant) | **< 5 s** |
 | End-to-end, dump-verified to first successful authenticated request | **≈ 1 minute** |
 
@@ -203,7 +248,7 @@ waits on AGENT-OPS producing a restored instance"). **The instance now exists.**
 |---|---|
 | URL | `http://localhost:8300/interface/login/login.php?site=rdy0082restore` |
 | Credentials | Same six demo accounts, same file: `C:\openemr-stack\secrets\thiqa-demo-credentials.json` |
-| Database | `openemr_rdy0082_restore` on the same MariaDB instance (127.0.0.1:3306) — isolated from `openemr` |
+| Database | `openemr_rdy0082_restore` on the same MariaDB instance (127.0.0.1:3306) — isolated from `openemr`. **Contains the v3 baseline** (`thiqa-rdy0044b-v3-baseline-20260816-165016.sql`) as of the update note in §0 |
 | Site directory | `G:\My Drive\OpenEMR\sites\rdy0082restore\` |
 | What leg 6 needs | A real browser session (per §7's method note): log in, walk the administrative screens the existing leg-6 definition names, confirm rendering matches an authenticated session — the thing curl/PowerShell cannot verify on `main.php` |
 | **Rollback / teardown** | **Deliberately left standing for AGENT-BROWSER**, not torn down immediately — see §11. Teardown command: `DROP DATABASE openemr_rdy0082_restore;` + `Remove-Item 'G:\My Drive\OpenEMR\sites\rdy0082restore' -Recurse -Force` + `REVOKE ALL ON openemr_rdy0082_restore.* FROM 'openemr'@'localhost';` |
