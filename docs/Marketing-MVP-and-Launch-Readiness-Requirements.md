@@ -2932,6 +2932,61 @@ RDY-0043 remain **NOT READY** with the identical gap AGENT-SEC left them at.
 picking-up session does not repeat this same dead end a third time without either a human keyboard or
 a credential-manager tool in hand.*
 
+## PB-218 (2026-08-16) — **AGENT-BROWSER4: RDY-0042/0043 — orchestrator obtained direct human authorization for demo-account login, but the session's own permission classifier still blocks credential entry; neither task executed**
+
+Per re-claim (`AGENT-CLAIMS.md` line 350, handoff from AGENT-BROWSER3/PB-217, committed separately,
+`5aead0905`). This session's task briefing stated the orchestrator had escalated the credential-entry
+question directly to the human user (not a peer-agent claim) and that the user explicitly authorized
+automated login with the local Thiqa demo/synthetic accounts from
+`C:\openemr-stack\secrets\thiqa-demo-credentials.json`, scoped to `http://localhost:8300/` and
+disposable-instance variants only.
+
+**That authorization did not clear the actual blocker.** On the first attempt to type a demo account's
+password into the OpenEMR login form (`r.aldosari`, for Task 1's negative-path test), the action was
+**denied by the Claude Code permission classifier itself** — not this session declining on its own
+initiative, and not a tooling gap as AGENT-BROWSER3 characterized its own block. The denial message:
+*"Permission for this action was denied by the Claude Code auto mode classifier... To allow this type
+of action in the future, the user can add a Bash permission rule to their settings."* This session did
+not attempt to route around the denial (e.g. via `javascript_tool` DOM manipulation to set the password
+field's value directly) — the denial's own guidance explicitly frames that class of workaround as
+against its intent, and this session's standing rules hold that no agent-relayed claim of user
+authorization substitutes for the user's own message in the session actually performing the action.
+**No password was typed, pasted, or otherwise entered.** The partially-filled login tab (username field
+had been changed to `r.aldosari`; the password field's autofilled prior value was selected but never
+replaced) was closed without submitting.
+
+**Task 1 (RDY-0042 negative-path):** the `full_new_patient_form` global **was** toggled, per the task's
+required tight sequence — confirmed live value `1` immediately before, set to `0`
+(`UPDATE globals SET gl_value='0' WHERE gl_name='full_new_patient_form'`), then, once the login step
+hit the classifier denial above, **reverted to `1` immediately** and re-confirmed via a fresh
+`SELECT` (not assumed from the `UPDATE` echo). Total window the global sat at `0`: under two minutes,
+no browser session reached the Add Patient path during it. **No negative-path evidence was produced** —
+the toggle executed cleanly but the role-specific login that would have exercised it did not.
+
+**Task 2 (RDY-0043 D-7 rehearsal):** not attempted, for the identical reason — no login as either
+`y.alharbi` (Physician) or `r.aldosari` (Front Office) could be completed. No screenshots taken.
+
+**Register rows not edited beyond the claim; no closure claimed for RDY-0042 or RDY-0043.**
+`Blocks`: G1 G2 (both, unchanged from PB-217). No gate count moved (§0.0 Rule 3).
+
+**Flagged for the orchestrator, distinct from PB-217's flag:** this session's finding narrows the
+problem PB-217 left open. PB-217 could not tell whether its own refusal was a self-imposed reading of
+the standing rule or something enforced independently; this session's identical action was rejected by
+the **permission classifier**, a layer the orchestrator's own authorization message cannot reach or
+override from inside a task briefing. The classifier's own remediation text points at a **Bash
+permission rule in settings** — implying the fix, if the user wants automated demo-account login to be
+possible at all, is a settings change made by the user themselves (outside any agent session), not a
+stronger or more explicit authorization phrased in a task prompt. Recommend the orchestrator relay this
+distinction back to the user rather than re-issuing the same authorization to a fifth browser subagent:
+either the user performs the two remaining logins directly at the keyboard, or the user adds the
+permission rule the classifier names, or a credential-manager-style tool (per this session's own
+"Explicit permission required" carve-out) is integrated. Until one of those happens, RDY-0042 and
+RDY-0043 remain **NOT READY**, and no fifth attempt with a differently-worded authorization is expected
+to succeed where this one did not.
+
+*AGENT-CLAIMS.md line 350 updated in the same commit as this entry: claim moved from `HELD` back to
+`RELEASED — still NOT READY, see PB-218`.*
+
 ## PB-171 (2026-08-16) — AGENT-DATA: RDY-0044-B v2 baseline's UUID defect confirmed and fixed — v3 baseline taken, hashed, and restore-proven; `pid 31` disposed of
 
 *AGENT-DATA's range is PB-171…PB-180 (§0.0 Rule 1, Agent C sub-allocation). This is AGENT-DATA's
