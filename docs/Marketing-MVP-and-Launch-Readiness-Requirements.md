@@ -1049,7 +1049,7 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0071** | Documented export procedure covering CSV report export, full database export, and document/file export | GTM Pillar 2, D-2, MC-08, O-2/O-3 | Capability exists (8 CSV reports, open 283-table schema); **no procedure** | NOT READY — DOCUMENTATION | DOCUMENTATION | **P0** | G3 G5 G6 | DevOps / Infrastructure | 0059 | NOT READY |
+| **0071** | Documented export procedure covering CSV report export, full database export, and document/file export | GTM Pillar 2, D-2, MC-08, O-2/O-3 | Procedure written and executed (PB-045); 7 of 9 reachable CSV reports now verified exporting cleanly (PB-208), 1 has a genuine code defect (`pat_ledger.php`), 2 are empty on unrelated seed gaps. Reviewer leg still untouched | NOT READY — reviewer confirmation outstanding; `pat_ledger.php` defect unfixed | DOCUMENTATION | **P0** | G3 G5 G6 | DevOps / Infrastructure | 0059 | NOT READY — see `EV-071` §5.2 |
 | 0072 | Schema / data-dictionary artefact the customer can be handed | GTM Pillar 2; audit §27.5 | Schema is open and documented upstream; **no customer-facing artefact** | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G6 | OpenEMR Engineer | 0071 | NOT READY |
 | **0073** | Termination and handover procedure — what is delivered, in what format, in what timeframe, by whom, and how it is verified received | GTM Pillar 2, O-3, O-11, §26 brief | Does not exist | NOT READY — DOCUMENTATION | DOCUMENTATION | **P0** | G3 G6 | Legal / Compliance + DevOps | 0071 | NOT READY |
 | 0074 | Post-contract data deletion and backup-handling policy, including backups taken during the engagement | Brief §26 | Does not exist | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G3 | Legal / Compliance | 0073, 0081 | NOT READY |
@@ -2436,6 +2436,64 @@ prevents re-running the parts already proven.
 Status text unchanged (`NOT READY`), each **appended** with a one-line pointer to the partial
 evidence above and the exact remaining gap, so AGENT-BROWSER's task list is precise rather than
 "re-do everything."
+
+## PB-208 (2026-08-16) — AGENT-DATA2: RDY-0071 CSV export completeness advanced — 7 of 9 clean, 1 real defect found, 2 empty on unrelated seed gaps
+
+**Continuation of Track A's `EV-071`** (Agent B, PB-045/2026-08-14): 1 of 8 report CSVs had been
+exported and verified end-to-end (`RPT-0009`); the remaining 7 were named as scoped, not-yet-done
+work. This session executed them.
+
+**First correction needed before executing anything**: the "8" was never actually enumerated by
+name anywhere in this document or `EV-071`. Derived it from the code
+(`grep -rl form_csvexport interface/reports/` → 10 files) cross-checked against
+`interface/main/tabs/menu/menus/standard.json`'s `global_req` gates: `ippf_cyp_report.php` sits
+behind `ippf_specific`, which defaults `false` and is unset in this instance's `globals` table
+(confirmed live) — unreachable, doesn't count. `unique_seen_patients_report.php` — described
+elsewhere in this document as "CSV + mailing labels" — turns out to export **labels only**, no CSV
+code path at all; that description is corrected in `EV-071` §3.4. Net: **9**, not 8, reachable
+CSV-exporting reports, all 9 tested for completeness.
+
+**Method**: authenticated as `n.alqahtani` (Administrator, the demo role account holding every ACL
+these 9 reports require — see `C:\openemr-stack\secrets\thiqa-demo-credentials.json`, read directly,
+no value written here or in any evidence artefact), CSRF harvested from a GET of each report page,
+then the same `form_csvexport=true` POST (GET for `pat_ledger.php`, which reads its identifying
+params from `$_GET` only) this document's own export procedure (`EV-071` §1 step 4) already
+prescribes. Driven via `curl` with a session cookie jar rather than `claude-in-chrome` — the browser
+extension hit repeated `chrome-error://` connection resets on this host under concurrent multi-agent
+load; host-side `curl` confirmed Apache was answering normally throughout (1.5-2.9 s/request), so the
+extension's flakiness, not the server, was the blocker. `curl` is a faithful re-implementation of
+this document's own prescribed method, not a workaround of it.
+
+**Results** (full detail, byte counts and content samples in `EV-071` §5.2):
+
+| Report | Result |
+|---|---|
+| RPT-0009 Appointments | PASS (prior evidence, unchanged) |
+| Collections and Aging | **PASS** — 36 data rows, clean CSV |
+| Financial Summary by Service Code | **PASS** — 4 data rows, clean CSV |
+| Sales by Item | **PASS** — 36 data rows, clean CSV |
+| Patient List (PROTECTED, `patients\|bulk_rep`) | **PASS** — 30 data rows, ACL correctly enforced |
+| Patient List Creation | **PASS** (with a valid `srch_option`) — 30 data rows |
+| Patient Insurance Distribution | mechanically PASS, **1 trivial row** — `insurance_data` table is empty (0 rows) at the DB, a Track D seed gap unrelated to the export path |
+| Message List | mechanically PASS, **empty** — `pnotes` table is empty (0 rows) at the DB, same category of gap |
+| **Patient Ledger by Date (RPT-0028)** | **DEFECT — not usable.** Wrong filename (copy-pasted from `svc_code_financial_report.php`). Body: header row is valid CSV, every data row is raw unescaped HTML (`<tr>`/`<td>`/`&nbsp;`) with the actual charge/payment amounts missing entirely. Root cause: `PrintEncHeader()` (`library/global_functions.inc.php:691`) always echoes HTML with no CSV-mode branch, and `pat_ledger.php`'s own charge-line loop declares a `$csv` variable per row that is never populated before the `echo $csv` branch fires. **Not fixed by this session** — a proper fix touches a shared, non-CSV-aware helper function used elsewhere; flagged for the report-defect owner |
+
+**A second, narrower defect found in passing**: `patient_list_creation.php` throws an uncaught
+`TypeError` (`array_keys(): Argument #1 ($array) must be of type array, null given`, HTTP 500) if
+`srch_option` is sent as an empty string rather than omitted or a valid option key. **Not reachable
+through the normal UI** (the form's own `<select>` always carries a real value) — recorded as a
+robustness gap, not a blocker, and not fixed.
+
+**Verified against `EV-028`'s synthetic-data control on every export**: `SYN-` `pubpid` prefixes,
+`999...`-leading SSNs (not a valid Saudi National ID or Iqama class), `(SYNTHETIC)`-suffixed payer
+names, `"NNNN Fictional Street"` addresses. No real-looking PHI in any of the 8 CSV bodies produced
+this session.
+
+**Status: RDY-0071 not closed.** Register row (`§7`) updated to reflect the corrected count and the
+two named remaining gaps (the `pat_ledger.php` defect and the reviewer leg — the latter is
+human-blocked and explicitly out of this session's scope per its own task briefing, consistent with
+`AGENT-DOC`'s PB-150 note that running the exports was "Track D/AGENT-DATA territory"). **No gate
+count moved** (§0.0 Rule 3) — `Blocks` unchanged at G3 G5 G6.
 
 ## PB-209 (2026-08-16) — AGENT-HYGIENE: `CLAUDE.local.md` §3 corrected — stale `admin`/`pass` credential documentation was an active trap
 

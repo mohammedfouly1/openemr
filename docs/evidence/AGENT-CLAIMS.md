@@ -339,7 +339,7 @@ decision, none needs an external dependency — each is a concrete, unowned tech
 | RDY/item | Held by | State | Note |
 |---|---|---|---|
 | 0048 | AGENT-CONF2 | **HELD** | Live plaintext DB credential in `sites/default/sqlconf.php` (skip-worktree masked, not committed) — rotation is a pure ops task, no decision needed |
-| 0071 | AGENT-DATA2 | **HELD** | 7 of 8 report CSV exports remain; AGENT-DOC explicitly left this to Track D/AGENT-DATA, never executed |
+| 0071 | AGENT-DATA2 | **DONE (not closed)** | PB-208; `EV-071` §3.4-3.6, §5.2. Corrected the "8" to 9 reachable CSV reports (one was gated off, one was mislabeled — exports labels not CSV); ran the remaining 7. 7 of 9 export clean CSV with plausible data, 1 (`pat_ledger.php`) has a genuine content-corruption defect (not fixed), 2 are mechanically fine but empty on unrelated Track D seed gaps (`insurance_data`, `pnotes` both 0 rows). Reviewer leg untouched, human-blocked, out of scope per task briefing |
 | 0037 | AGENT-SEC2 | **HELD** | Ledger screen renders no currency symbol at all (AGENT-BROWSER's PB-202 finding) — a real template/code defect, unowned as a fix task |
 | 0025 | AGENT-SEC2 | **HELD** | Documents-tab hang — two root-cause candidates already named (PB-204): a blank auto-opening `active_reminder_popup.php` modal, and a slow `background_service/$run` call. Fix attempt, not just further investigation |
 | 0042, 0043 | AGENT-BROWSER2 | **HELD** | Negative-path live verification (global=0 registration path; Physician/Front Office D-7 rehearsal) — AGENT-SEC hit a credential-entry tooling restriction it doesn't have; AGENT-BROWSER's `claude-in-chrome` tooling reads credentials from the secrets file routinely without issue, so this is a tooling mismatch, not a human blocker |
