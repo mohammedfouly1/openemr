@@ -302,3 +302,26 @@ instead, plus continuing spot-audits of the fleet's closures as they land.
 |---|---|---|---|
 | **RB-22** (Inter font dedup — theme rebuild) | **Agent D** | **DONE — CLOSED** | PB-220; `acec953cf`. Build workspace resynced, rebuilt, verified: all 8 theme CSS files reference `Inter-Regular.woff2` once each, zero Medium/SemiBold/Bold references. `BrandingGovernanceGuard` 31/31, brand manifest 123/123 |
 | **RB-14** (Arabic PDF font — D-9) | **Agent D** | **DECIDED — Option C adopted; stays OPEN through pilot** | Owner decision recorded `docs/evidence/EV-RB14-mpdf-gpos.md` §4 (2026-08-16): accept open, disclosed, revisit trigger = a customer contract requiring Arabic PDF. Option B (Scheherazade New, Lateef) tested time-boxed, both failed — 4/4 fonts now fail identically. Draft `RDY-0094` no-go text and `RDY-0087` Arabic disclosure (unreviewed, needs HR-09) at §6. `Config_Mpdf.php` untouched. Not edited into the requirements document by this session |
+
+### Agent D — Wave execution, 2026-08-16 (Owner-directed)
+
+**Table C checked first, before claiming anything.** Every Table C item (0016, 0025, 0038, 0041, 0042,
+0043, 0060, 0061, 0062, 0082-leg-6) is already held by an Agent C subagent right now — AGENT-CAP holds
+0060/0061/0062/0063 outright; AGENT-BROWSER just closed 0082 and is mid-investigation on 0025;
+AGENT-SEC holds the remaining 0042/0043 negative-path gap; AGENT-CONF/AGENT-DATA hold 0016/0041's
+other legs. **The Owner's credential authorisation removes the policy blocker, not the claim** —
+none of Table C is claimed below; it stays with whoever already holds it.
+
+| RDY/item | Held by | State | Note |
+|---|---|---|---|
+| 0078 | Agent D (AGENT-REG) | HELD | Primary ZATCA/NPHIES source verification. Unclaimed by anyone — pure web research |
+| 0088 | Agent D (AGENT-COMP) | HELD | Competitor dossier re-verification. Unclaimed |
+| 0079 (candidate-list half) | Agent D (AGENT-PROSPECT) | HELD | Research output only, not the "5 reached" acceptance half |
+| 0075, 0076, 0077 | Agent D (AGENT-VALIDATION) | HELD | Field instrument only — no existing pack covers the combined-call design this specifically asks for |
+| 0064 (provisioning runbook), 0081, 0084, 0085 | Agent D (AGENT-HOSTING) | HELD — CONTINUATION | `EV-081`/`EV-084`/`EV-047`§10.5 (TLS) already exist (AGENT-DOC/AGENT-OPS) — this reshapes/extends them into the specific "Owner creates account" runbook + comparable-quotes spec the Owner asked for, does not redo the underlying research |
+| 0065, 0066, 0068, 0073, 0096 | Agent D (AGENT-COMMERCIAL) | HELD — CONTINUATION | `EV-065-066-069`/`EV-068`/`EV-073` already exist (AGENT-DOC) — this builds the specific REVIEWER PACK shape (blank verdict block, FAIL consequence) the Owner asked for, on top of that existing research, not a rewrite |
+| 0090, 0094, 0095 (input) | Agent D (AGENT-BRANDING) | HELD — CONTINUATION | `EV-090-branding-inventory.md`/`EV-094-demo-no-go-register.md` already exist (AGENT-DOC) — this adds the programmatic grep-checklist and rehearsal-script SHAPE specifically asked for; 0095 background brief is new |
+| 0086, 0087, 0063 | Agent D (AGENT-ARABIC) | HELD — CONTINUATION | `EV-086` (Agent B) already exists — this consolidates it plus RDY-0087 (backed by `EV-RB14`) and RDY-0063 into one pack with the basis-of-authority field the Owner specified |
+
+**Wave 3 (RDY-0002, 0045, 0086-naming, 0096) is decision capture — run by the orchestrator directly,
+not a subagent, per the Owner's own instruction.**
