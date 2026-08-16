@@ -2606,6 +2606,63 @@ recorded in `EV-082` §10, to be run by AGENT-BROWSER or the orchestrator once l
 handed off. `EV-082` §7 card and §40/§7 summary references updated to match. **`Blocks`:** per the
 RDY-0082 §7 card (not recomputed here, §0.0 Rule 3).
 
+## PB-183 (2026-08-16) — AGENT-OPS: rebuilt RDY-0082 disposable instance on the v3 baseline; TLS/OD-04/OD-05 specifications issued; RDY-0093 out of scope, recorded not silently dropped
+
+**Part 1 — v3 rebuild.** Mid-session, AGENT-DATA closed the v2 UUID-defect flag and issued a **v3**
+protected demo baseline (PB-171, `thiqa-rdy0044b-v3-baseline-20260816-165016.sql`), superseding the
+v2 dump PB-182's restore had used. v2 was current and correctly documented at the moment PB-182 ran
+— nothing there was wrong when written — but handing AGENT-BROWSER a since-superseded dataset would
+be a foreseeable source of confusion, so the disposable instance was rebuilt from v3 in the same
+session (**17.73 s**) and every check re-run: 283/283 checksum determinism reproduced with a new
+aggregate hash (data changed, determinism did not fail), all 14 row-count fields match except
+`globals` (495 → 504, the documented v3 change itself), both authenticated logins and the D-1 tamper
+report reproduced identically. **The instance now live for AGENT-BROWSER (`?site=rdy0082restore`)
+is the v3 one.** Full detail: `EV-082` §0 update note and the v3 addenda under §§3, 4, 5, 7.
+
+**Part 2 — RDY-0085 (TLS) and OD-04/OD-05, per this session's assignment.** All three read fresh
+(`§8.13`/`§8.14` cards, `§3.3`/`§3.9` OD rows) before acting:
+
+- **RDY-0085.** Still genuinely blocked on RDY-0064 (hosting DECIDED, provisioning BLOCKED —
+  EXTERNAL) — no acceptance criterion here can be met without a real reachable pilot instance. What
+  *is* now done: the Required-action clause *"specify certificate issuance and renewal in the
+  runbook"* — `EV-047` §10.5 names `win-acme` for ACME issuance against Apache-on-Windows, its
+  self-registered renewal Scheduled Task (flagged for explicit verification against the same
+  console-session-dependency class of risk PB-181 found for RDY-0083 — untested by this entry, a
+  customer host is not assumed identical to this one), and the HTTP→HTTPS redirect vhost. **Status
+  unchanged: NOT READY** — this is a specification landing in the runbook, not an execution.
+- **OD-04** (Unix-only `lpr`/`enscript`/`/usr/bin/file`, placeholder OFX IDs). Live-reconfirmed
+  unchanged in `sites/default/config.php`. `EV-047` §7.1 now specifies the disposition per
+  capability: printing and faxing **documented as unsupported** on a Windows-hosted instance (the
+  disjunction RDY-0049's own acceptance criterion allows, rather than half-implementing Unix tooling
+  that was never going to work), and MIME detection **replaced, not disclosed** — PHP's already-loaded
+  `fileinfo` extension does the job natively, no external binary needed on either OS. **Not applied to
+  the live shared demo `config.php`** — that file is outside the RDY-0044-B reset scope, is read
+  concurrently by other active sessions this run, and editing it is a persistent cross-session change
+  with no reset-driven rollback. Specified for the customer-instance runbook path; disclosed as a
+  deliberate non-edit here, not an oversight (same standard RDY-0083's investigation applied).
+- **OD-05** (blank email sender addresses, `SMTP_HOST=localhost`). Live-reconfirmed unchanged.
+  `EV-047` §10.6 specifies the per-instance values (`SMTP_HOST`, `SMTP_USER`/`SMTP_PASS` generated
+  per Step 4's secret-handling rule, real sender addresses) and flags that the existing smoke test
+  (S-4) checks the service *runs*, not that mail *sends* — a gap in the smoke test itself, recorded
+  rather than silently left implicit. Not applied to the live demo instance for the same reason as
+  OD-04.
+
+**Part 3 — RDY-0093, assigned but genuinely out of scope for this agent.** Read in full: it has **no
+dedicated `§8` card** — its only appearance is the GTM-002 summary row (`:729`), *"A WhatsApp business
+channel; publishable disqualification content... Neither exists... The WhatsApp channel is live and
+monitored with a published response target before the CTA referencing it is published."* This is a
+Founder/Marketing operational action — registering and staffing a real WhatsApp Business number,
+defining and publishing a response-time SLA, writing disqualification content — not a configuration,
+code, or infrastructure task an OPS agent can execute or simulate. **No work performed; recorded as
+correctly out of scope rather than silently skipped**, per the same disclosure standard the rest of
+this entry holds every other item to. Whoever owns Founder/Marketing execution should pick this up
+directly; it does not need a technical agent.
+
+**Status:** RDY-0082 target refreshed (still NOT CLOSED, leg 6 only); RDY-0085 NOT READY (spec
+issued, execution blocked on RDY-0064); OD-04/OD-05 specified in the runbook, live demo config
+deliberately untouched; RDY-0093 out of scope, unclaimed for a technical agent. **`Blocks`:** none
+recomputed here (§0.0 Rule 3).
+
 ## PB-142 (2026-08-16) — **§47 rule 8 recorded; RDY-0083 regression registered live**
 
 **§47 rule 8 (qualified `Blocks` entries) is now recorded above** (Owner ruling, relayed via an
@@ -8350,6 +8407,15 @@ session (`main.php` applies a stricter session check a curl/PowerShell session c
 **Acceptance criteria:** The pilot instance is reachable only over HTTPS; HTTP requests redirect or are refused; the certificate is valid and its renewal mechanism is documented and has been exercised once, or its renewal date is monitored under RDY-0084.
 **Verification:** request the instance over both schemes and record the responses.
 **Evidence artefact:** `EV-085 tls-configuration.md` · **Status:** NOT READY
+
+**AGENT-OPS addendum (2026-08-16, PB-18x):** the *"specify certificate issuance and renewal in the
+runbook"* clause of Required action is now done — `EV-047` §10.5 specifies domain/DNS prerequisites,
+`win-acme` for ACME issuance against the Apache-on-Windows target, its self-registered renewal
+Scheduled Task (flagged there to be verified explicitly against the same console-session-dependency
+risk RDY-0083 hit, since a customer host's task-scheduling behaviour has not itself been tested
+here), and the HTTP→HTTPS redirect vhost. **This is a specification, not an execution** — no
+acceptance criterion here is met, because all of them require a real reachable pilot instance, which
+remains blocked on RDY-0064. Status unchanged: **NOT READY.**
 
 ### 8.15 Cluster 15 — Arabic and research-provisional items (G1, G5)
 
