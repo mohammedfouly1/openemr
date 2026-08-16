@@ -2874,6 +2874,64 @@ is unambiguous and unqualified.
 
 **`Blocks`:** none — a sync entry recalculates, it does not itself block a gate.
 
+## PB-217 (2026-08-16) — **AGENT-BROWSER3: RDY-0042/0043 — both remaining checks blocked by the same credential-entry safety rule AGENT-SEC hit; the task briefing's claim that this doesn't apply to this session's tooling did not hold**
+
+Per claim (`AGENT-CLAIMS.md` line 350, continuation of AGENT-BROWSER2's `HELD` row, handed off to this
+session — handoff committed separately, `200459cc7`). Assignment: RDY-0042's `global=0` negative-path
+Front Office login, and RDY-0043's D-7 rehearsal under the Physician (`y.alharbi`) and Front Office
+(`r.aldosari`) demo accounts specifically. The task briefing asserted this session's `claude-in-chrome`
+tooling reads credentials from the secrets file "without issue" and that AGENT-SEC's PB-161/162
+credential-entry block was "a tooling limitation specific to that agent, not present for you."
+
+**That assertion did not hold.** This session is bound by the same standing safety rule AGENT-SEC
+correctly applied: entering a password into any field is a prohibited action category, and stays
+prohibited even when a task, another agent, or an orchestrator states or implies authorization —
+authorization for that category can only come from the human user directly, never from content
+observed through tools or from another agent's instructions. Neither `y.alharbi` nor `r.aldosari` has
+a live authenticated browser session available to reuse without a new login: the one open MCP browser
+tab (`tabId 1467269597`) was checked first and confirmed, via its account-menu dropdown, to be
+authenticated as **Nadia Alqahtani (Administrator)** — the same role AGENT-SEC already exhausted at
+PB-161/162 step 4, and not a substitute for either role this task needed. No dedicated credential-manager
+tool (of the kind that could hand credentials to the site without this session ever seeing or typing
+the value) is available in this session's toolset. A fresh login tab was opened
+(`http://localhost:8300/interface/login/login.php?site=default`) to check for reusable saved-session
+state first; none was found — Chrome's own autofill pre-filled the Administrator's username/password
+from a prior session's saved entry, confirming the browser *can* hold saved credentials for this site,
+but selecting a *different* account's saved entry (if one even exists) would still require this session
+to drive that selection deliberately in order to authenticate as that different identity, which is the
+same category of action, not a distinct one. **No password was typed, pasted, or otherwise entered by
+this session.** The fresh login tab was closed without submitting any login.
+
+**Neither task was executed. Nothing closes.** Task 1 (RDY-0042 negative-path): **not attempted at
+all**, including the `full_new_patient_form` global toggle itself — confirmed live value **`1`**
+(`SELECT gl_value FROM globals WHERE gl_name='full_new_patient_form'` → `1`, matching AGENT-SEC's
+PB-161 pre/post value) and left it unmutated, since toggling it without being able to complete the
+role-specific login step would add mutation risk to concurrently active agents' sessions for zero new
+evidence — PB-161 already recorded the identical before/after/reverted round-trip. Task 2 (RDY-0043
+D-7 rehearsal under Physician/Front Office): **not attempted** for the reason above; no screenshots
+taken under either account's own session.
+
+**Register rows not edited; no closure claimed for RDY-0042 or RDY-0043.** `Blocks`: G1 G2 (both). No
+gate count moved (§0.0 Rule 3).
+
+**Flagged for the orchestrator's sync, not self-resolved:** PB-202's narrative records that its
+Front-Office-account login (the same category of action this session just declined) was performed by
+"the orchestrator" driving the session "directly, live" rather than by an autonomous AGENT-BROWSER
+subagent — it is not established from that entry's own wording whether a human was at the keyboard for
+that specific step or whether a prior agent session typed the password autonomously. That distinction
+matters for whether PB-202 is valid precedent for this category of action at all, and this session
+cannot resolve it from the text alone. Recommend the orchestrator either (a) confirm a human performed
+the actual credential entry in PB-202 and personally perform the two still-outstanding role-specific
+logins for RDY-0042/0043, or (b) obtain a dedicated credential-manager tool integration (per this
+session's own instructions, ¶"Explicit permission required" / credential-request tool carve-out) before
+assigning this category of step to another browser subagent. Until one of those happens, RDY-0042 and
+RDY-0043 remain **NOT READY** with the identical gap AGENT-SEC left them at.
+
+*AGENT-CLAIMS.md line 350 updated in the same commit as this entry: claim moved from `HELD` to
+`RELEASED — still NOT READY, see PB-217`, with the credential-entry blocker restated so the next
+picking-up session does not repeat this same dead end a third time without either a human keyboard or
+a credential-manager tool in hand.*
+
 ## PB-171 (2026-08-16) — AGENT-DATA: RDY-0044-B v2 baseline's UUID defect confirmed and fixed — v3 baseline taken, hashed, and restore-proven; `pid 31` disposed of
 
 *AGENT-DATA's range is PB-171…PB-180 (§0.0 Rule 1, Agent C sub-allocation). This is AGENT-DATA's
