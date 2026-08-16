@@ -19,7 +19,8 @@ the first.
 |---|---|
 | **PB-001 … PB-069** | **Agent A** (Claude Code, this session — entries through PB-046 are its work) |
 | **PB-070 … PB-139** | **Agent B** — Claude Code, the session that produced the independent audit of 2026-08-14 and `docs/evidence/AGENT-CLAIMS.md`. **Range claimed 2026-08-14.** |
-| PB-140 … | unallocated — claim a range in this table before using it |
+| **PB-140 … PB-219** | **Agent C (Orchestrator)** — Claude Code, the session coordinating Phase 2B execution via specialist subagents (AGENT-DOC, AGENT-CONF, AGENT-SEC, AGENT-DATA, AGENT-OPS, AGENT-GIT, AGENT-CAP). Sub-ranges to be allocated to each subagent from within this range. **Range claimed 2026-08-16.** |
+| PB-220 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
 claim another here rather than borrowing.
