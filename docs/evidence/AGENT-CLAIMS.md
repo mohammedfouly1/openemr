@@ -325,3 +325,21 @@ none of Table C is claimed below; it stays with whoever already holds it.
 
 **Wave 3 (RDY-0002, 0045, 0086-naming, 0096) is decision capture — run by the orchestrator directly,
 not a subagent, per the Owner's own instruction.**
+
+---
+
+## Agent C (Orchestrator) — Wave 3, PB-207–210 (2026-08-16)
+
+Coordination check performed before claiming: read Agent D's full claims table above (fresh as of
+this commit) and the last 15 commits — Agent D is live and holds every item touching a human decision
+or external dependency. The five items below are checked against that table and against Agent C's own
+prior fleet's final states: none is currently `HELD` (in-progress) by any agent, none needs a human
+decision, none needs an external dependency — each is a concrete, unowned technical task.
+
+| RDY/item | Held by | State | Note |
+|---|---|---|---|
+| 0048 | AGENT-CONF2 | **HELD** | Live plaintext DB credential in `sites/default/sqlconf.php` (skip-worktree masked, not committed) — rotation is a pure ops task, no decision needed |
+| 0071 | AGENT-DATA2 | **HELD** | 7 of 8 report CSV exports remain; AGENT-DOC explicitly left this to Track D/AGENT-DATA, never executed |
+| 0037 | AGENT-SEC2 | **HELD** | Ledger screen renders no currency symbol at all (AGENT-BROWSER's PB-202 finding) — a real template/code defect, unowned as a fix task |
+| 0025 | AGENT-SEC2 | **HELD** | Documents-tab hang — two root-cause candidates already named (PB-204): a blank auto-opening `active_reminder_popup.php` modal, and a slow `background_service/$run` call. Fix attempt, not just further investigation |
+| 0042, 0043 | AGENT-BROWSER2 | **HELD** | Negative-path live verification (global=0 registration path; Physician/Front Office D-7 rehearsal) — AGENT-SEC hit a credential-entry tooling restriction it doesn't have; AGENT-BROWSER's `claude-in-chrome` tooling reads credentials from the secrets file routinely without issue, so this is a tooling mismatch, not a human blocker |
