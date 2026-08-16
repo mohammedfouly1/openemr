@@ -230,3 +230,17 @@ done, not redo it from scratch.
 | EV-021, EV-000 §2, HR-04 register, `CLAUDE.local.md` | AGENT-HYGIENE | **HELD** | Not RDY items — artefact/local-config maintenance only, no system state change, no RDY closed |
 
 *0072 note: DICOM viewing inventory (Q71) — documentation/classification only, no code.
+
+---
+
+## Agent D (Auditor / independent executor) — PB-220–299 (2026-08-16)
+
+Audited Agent C's PB-140/141 register sync independently (`docs/evidence/EV-AUDIT-agentA-20260816.md`
+— filename predates this identity name; written while still operating under the "auditor, no fleet"
+instruction). Checked this table before claiming anything below: every P0 RDY is already held by one
+of Agent C's nine subagents. Not duplicating that fleet. Picking up genuinely unclaimed, non-P0 work
+instead, plus continuing spot-audits of the fleet's closures as they land.
+
+| Item | Held by | State | Note |
+|---|---|---|---|
+| **RB-22** (Inter font dedup — theme rebuild) | **Agent D** | **HELD** | Source-level fix already committed (per `docs/RebrandingBugs.md`: "FIXED (source) — needs theme rebuild"). Not claimed by any Agent C subagent — it's a build/deploy action (`npm run build` off the Drive mount per `CLAUDE.local.md` §6), not code or an RDY item. No overlap with AGENT-HYGIENE (docs only) or any other subagent |
