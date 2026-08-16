@@ -235,6 +235,8 @@ final class SeedDemoCommand extends Command
 
     protected function configure(): void
     {
+        $this->getDefinition()->addOption(BaselineOption::define(self::BASELINE_PATH));
+
         $this
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Validate preconditions and report the plan without writing')
             ->addOption('verify-context', null, InputOption::VALUE_NONE, 'Seed exactly one patient to prove author attribution, then stop')
@@ -253,7 +255,7 @@ final class SeedDemoCommand extends Command
             $this->dryRun ? ' (DRY RUN — nothing will be written)' : ''
         ));
 
-        if (!$this->checkPreconditions($io, (bool) $input->getOption('force'))) {
+        if (!$this->checkPreconditions($io, (bool) $input->getOption('force'), BaselineOption::resolve($input))) {
             return self::FAILURE;
         }
 
@@ -298,7 +300,7 @@ final class SeedDemoCommand extends Command
     /**
      * Fail-closed preconditions. Each refuses the run rather than producing a partial dataset.
      */
-    private function checkPreconditions(SymfonyStyle $io, bool $force): bool
+    private function checkPreconditions(SymfonyStyle $io, bool $force, BaselineOption $baseline): bool
     {
         $problems = [];
 
@@ -331,11 +333,13 @@ final class SeedDemoCommand extends Command
         }
 
         // The rollback baseline must exist AND still hash correctly. Seeding without a proven
-        // way back is the hard stop T0-3 exists to enforce.
-        if (!is_file(self::BASELINE_PATH)) {
-            $problems[] = 'RDY-0044-A baseline not found at its recorded path.';
-        } elseif (hash_file('sha256', self::BASELINE_PATH) !== self::BASELINE_SHA256) {
-            $problems[] = 'RDY-0044-A baseline hash MISMATCH — the rollback artefact is not the accepted one.';
+        // way back is the hard stop T0-3 exists to enforce. Its *location* is configurable
+        // (--baseline-path, defaulting to BASELINE_PATH) because the recorded default names a
+        // developer workstation and would refuse on every other host, the Ubuntu demo target
+        // included; the integrity check itself is unchanged and cannot be skipped (PR-17).
+        $baselineProblem = $baseline->verify(self::BASELINE_SHA256);
+        if ($baselineProblem !== null) {
+            $problems[] = $baselineProblem;
         }
 
         // The synthetic-data control must be present at the moment of seeding (RDY-0028).

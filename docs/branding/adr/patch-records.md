@@ -813,6 +813,173 @@ counterparts confirmed present; before/after probe quoted above.
 
 ---
 
+## PR-17 — `oe-module-thiqa-branding/src/Console/SeedDemoCommand.php` (+ new `Console/BaselineOption.php`)
+
+**BRAND ID:** none — **a portability/defect fix, not branding.** Fourth non-branding entry.
+**Readiness ref:** demo-deployment discovery `DG-005` / blocker `B-03`
+(`docs/demo-deployment-readiness.md` §7.3, §18 W-1). **Gates:** G3. **Date:** 2026-08-15.
+
+### ⚠ A scope note this record should not paper over
+
+**Invariant 4 / Q1 do not strictly compel this record.** Every other entry in this document is a
+*core* file — one outside the branding module — which is exactly the trigger Invariant 4 names. The
+file changed here lives **inside** `oe-module-thiqa-branding`, so the module's own code is being
+changed, which is what a module is for.
+
+It is recorded anyway, deliberately, for two reasons: the change alters a **fail-closed safety
+control** (the gate that stops the seeder running without a proven rollback artefact), and it
+**establishes the provisioning interface the Ubuntu deployment runbook will depend on**. A change
+with either property should be reviewable from the register regardless of which side of the module
+boundary it sits on. **No core file is touched by this patch.**
+
+### The problem
+
+`SeedDemoCommand` refused to run anywhere except one developer workstation.
+
+```php
+private const BASELINE_PATH = 'C:/openemr-stack/backups/protected/rdy0044a/'
+                            . 'thiqa-rdy0044a-preseed-20260813-185745.sql';
+...
+if (!is_file(self::BASELINE_PATH)) {                                              // precondition
+    $problems[] = 'RDY-0044-A baseline not found at its recorded path.';
+} elseif (hash_file('sha256', self::BASELINE_PATH) !== self::BASELINE_SHA256) {
+    $problems[] = 'RDY-0044-A baseline hash MISMATCH — ...';
+}
+```
+
+The path was a **hard-coded Windows absolute path compiled into a committed application file**, and
+it was consumed by a fail-closed precondition. On any host that is not that workstation — the Ubuntu
+demo target above all — `is_file()` answers false, `checkPreconditions()` returns false, and the
+command exits `FAILURE` without writing a row.
+
+### Evidence
+
+- The constant and its two consumers: `SeedDemoCommand.php:101-103`, `:335`, `:337` (pre-patch line
+  numbers).
+- It is the **only** drive-letter path in application code anywhere in the repository. A repo-wide
+  scan for `[A-Za-z]:[\\/](openemr-stack|Users|Program Files|xampp|wamp|inetpub|windows)` returns
+  hits only in `docs/`, in two evidence harnesses, in `tools/branding_production.py`, and in stock
+  PHP `php.ini` *comments* under `docker/` and `ci/` — none of them runtime code.
+  (`docs/demo-deployment-readiness.md` §18.)
+- Consequence recorded as **P0 blocker `B-03`**: without it the deterministic demo dataset — the
+  substrate of the whole Option 3 database strategy — is unreachable on the target.
+
+### Affected files
+
+| File | Change |
+|---|---|
+| `oe-module-thiqa-branding/src/Console/SeedDemoCommand.php` | 4 edits: register the option; resolve it; pass it to `checkPreconditions()`; replace the inline check with a delegated one |
+| `oe-module-thiqa-branding/src/Console/BaselineOption.php` | **New.** Value object holding the resolve-and-verify logic |
+| `tests/.../ThiqaBranding/Console/BaselineOptionTest.php` | **New.** 18 tests |
+
+### Original behaviour → new behaviour
+
+| | Original | New |
+|---|---|---|
+| Where the baseline is looked for | The compiled-in constant, always | `--baseline-path=<path>` if supplied, **otherwise the same compiled-in constant** |
+| Baseline must exist | Yes | **Yes — unchanged** |
+| SHA-256 must match `BASELINE_SHA256` | Yes | **Yes — unchanged, same constant, same digest** |
+| Behaviour when either check fails | Appended to `$problems` → `checkPreconditions()` false → `execute()` returns `FAILURE` | **Identical** |
+| Way to skip the check | None | **Still none** |
+| Invocation with no new flag | — | **Byte-for-byte the previous behaviour** |
+
+### Why this is necessary for Ubuntu portability
+
+The demo database strategy is locked to **Option 3 — fresh database + controlled configuration +
+synthetic demo seeding**. That strategy's step 7 *is* `thiqa-branding:seed-demo`. A seeder that
+cannot execute outside one Windows workstation makes the locked strategy unexecutable on the target,
+which is why this is a P0 rather than a tidy-up. The alternatives were worse: placing a file at a
+literal `C:/...` path on an Ubuntu server is absurd, and abandoning the seeder would mean hand-moving
+30 synthetic patients and their 72 encounters — losing the reproducibility that made Option 3
+defensible in the first place.
+
+### Security implications
+
+**The integrity guarantee is unchanged; only the search location became an input.** Assessed
+explicitly:
+
+- **The digest is still hard-coded.** `BASELINE_SHA256` remains a class constant and is *not*
+  configurable. An operator can say *where* to look; they cannot say *what counts as acceptable*.
+  Pointing the option at an attacker-supplied file therefore fails the hash check and refuses.
+- **No new bypass exists.** `BaselineOption::verify()` returns a refusal for every input shape that
+  is not "a real file whose digest matches" — proven by a data-provider test that enumerates the
+  omitted, empty, whitespace-only, directory, nonexistent, literal-`skip` and null-byte-injection
+  cases and asserts **all seven refuse**.
+- **Null-byte injection is safe.** `is_file()` returns `false` for a path containing a null byte and
+  does not throw (verified directly on PHP 8.3.33), so the refusal path is taken rather than an
+  exception escaping the precondition block.
+- **Unreadable files fail closed.** `hash_file()` returns `false` on an unreadable file; the
+  comparison is guarded with `is_string()` and `hash_equals()`, so a `false` becomes a MISMATCH
+  refusal. The original `!==` comparison reached the same outcome; this is a clearer expression of
+  it, not a change of behaviour.
+- **The rejected path is never echoed**, matching `SiteOption`'s established handling and `EV-071`
+  §4's finding that filesystem paths disclose host layout.
+- **Attack surface is CLI-only.** `bin/.htaccess` denies web access to `bin/`, and `bin/console`
+  refuses to run as root (`bin/console:25`). The option is reachable only by a non-root shell user
+  who can already read the application tree.
+
+### Rollback
+
+Self-contained and low-risk. Revert the commit: `BaselineOption.php` and its test are new files
+(deleting them removes the whole feature), and the four edits in `SeedDemoCommand.php` restore the
+inline `is_file()`/`hash_file()` pair verbatim. **No database state, no migration, no generated
+artefact and no configuration is involved**, so there is nothing to unwind beyond the source. An
+operator who reverts is returned to the pre-patch situation: the seeder works on the recorded
+workstation and refuses everywhere else.
+
+### Tests
+
+`tests/Tests/Isolated/Modules/ThiqaBranding/Console/BaselineOptionTest.php` — **18 tests, 32
+assertions, all passing**:
+
+```
+vendor/bin/phpunit -c phpunit-isolated.xml --filter 'BaselineOption' --no-coverage
+→ OK (18 tests, 32 assertions)
+```
+
+Covering, per the remediation brief: option absent (falls back to the recorded default) · the
+default still failing closed when absent · nonexistent path · **hash mismatch on a real file** ·
+empty value · whitespace-only value · valid path with the accepted digest · **path containing
+spaces**, end to end · **Linux-style forward-slash path accepted verbatim**, plus a real
+forward-slash file verifying normally · the seven-case no-bypass provider · option declared
+`VALUE_REQUIRED` with the caller-supplied default · `define()` embedding no host path.
+
+**Why the logic moved into a value object to be testable at all:** `SeedDemoCommand` cannot be
+instantiated without a database (`QueryUtils` calls throughout `checkPreconditions()`), and the
+remediation brief forbids running the seeder against the live development database. Logic left
+inline in that method is logic that cannot be unit-tested. `BaselineOption` mirrors `SiteOption`,
+the pattern this module already uses for a console option needing validation.
+
+**No regression:** the full isolated ThiqaBranding suite (Twig render group excluded per
+`CLAUDE.local.md` §9, which hangs on this host for reasons unrelated to this change) —
+**1298 tests, 3660 assertions, OK**. `BrandingGovernanceGuard` — **31 tests, 66 assertions, OK**.
+`phpcs` clean on all three files; `php -l` clean on all three.
+
+### Relationship to DG-005 / B-03
+
+This patch is the entirety of the remediation for both. `DG-005` asked *"How is
+`SeedDemoCommand`'s `BASELINE_PATH` precondition satisfied on Ubuntu?"* and offered three options:
+(a) place a baseline at the literal Windows path, (b) make the constant configurable **with a patch
+record**, (c) abandon the seeder. **Option (b) was taken, and this is that record.** `B-03` moves
+from P0-open to closed-in-source; it stays operationally dependent on the operator having a
+baseline artefact whose digest matches `BASELINE_SHA256` present on the target — which is a
+provisioning input, not a source defect.
+
+### Confirmation: SHA-256 verification remains fail-closed
+
+Stated explicitly because it is the one property a reviewer must not have to infer.
+**`BASELINE_SHA256` is unchanged, still compiled in, still compared on every run.** There is no
+flag, no value, and no code path — including omitting the option entirely — that reaches the
+seeding logic without `BaselineOption::verify()` first returning `null`. A refusal is still appended
+to `$problems`, still short-circuits `checkPreconditions()`, and still produces a non-zero exit
+before the first row is written. `testNoInputShapeSkipsVerification` exists specifically to make a
+future regression of this property fail the suite.
+
+**Upstream-first path (Q1):** not applicable — the file is fork-owned module code with no upstream
+counterpart.
+
+---
+
 ### Required before release
 
 **V-09 must be re-run against all 17 files.** The existing dry-run examined only the six the plan listed
