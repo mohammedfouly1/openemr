@@ -1,7 +1,10 @@
 # EV-021 — OPHTHALMOLOGY EXAMINATION CLINICAL REVIEW PACK
 
 **Requirement:** RDY-0021 · **Gate:** G2 · **Reviewer required:** a qualified clinician
-**Dataset:** Marketing MVP Seed v1 · **Prepared:** 2026-08-13 · **Status:** AWAITING CLINICAL REVIEW
+**Dataset:** Marketing MVP Seed v1 · **Prepared:** 2026-08-13
+**Status:** **VERDICT RECEIVED, RELAYED — NOT A COUNTERSIGNED ARTEFACT.** See §5. RDY-0021 itself was
+closed at `### PB-045` (2026-08-14) on this evidence; this pack's own §4 table below is left blank
+deliberately (see §5) rather than filled in on the reviewer's behalf.
 
 ---
 
@@ -124,3 +127,72 @@ Reviewing in the application, not from this table, is preferable — it is what 
 FAIL costs a re-seed, not a rebuild — **please mark FAIL where you mean it rather than passing
 something marginal.** A demo that a clinician in the audience quietly disbelieves is worse than one
 that was corrected before it shipped.
+
+---
+
+## 5. What actually closed RDY-0021 — recorded precisely, not left to contradict PB-045
+
+**Added 2026-08-16 (AGENT-HYGIENE), artefact hygiene only — this section closes nothing and asserts no
+new fact.** It exists so this pack stops silently disagreeing with the PB log: the table in §4 above is
+still blank, and it stays blank, because filling it in on the reviewer's behalf would be exactly the
+kind of fabricated sign-off the closure contract (`§0.0` Rule 5 of the requirements document) forbids.
+
+### What is recorded
+
+`### PB-045` (2026-08-14) in `docs/Marketing-MVP-and-Launch-Readiness-Requirements.md` states, under
+"Human verdicts — recorded exactly as received":
+
+| Field | PB-045's record |
+|---|---|
+| Reviewer | **Dr Mohamed Taha**, ophthalmologist |
+| Verdict | **PASS — all 8 examinations, no comments** |
+| Dataset reviewed | `de6e513c…` — the corrected v4 dataset, against the complete 78-file pack |
+| Date | 2026-08-14 |
+| Conditions | None |
+| **Attestation route** | **"Relayed by the Owner, not a countersigned artefact"** — PB-045's own words |
+
+`### PB-055` (2026-08-14) cites the same verdict as the satisfying evidence for RDY-0021's clinician
+criterion: *"Dr Mohamed Taha, PASS on all 8 (PB-045). The clinician criterion was the hard one and it
+is satisfied."* PB-055 does not add a second, independent source — it is citing PB-045.
+
+**This is a narrative account relayed through the Owner, not a document signed or countersigned by
+Dr Taha.** PB-045 discloses that distinction itself and says so in as many words (see the block quoted
+above and its surrounding note: *"I have not invented a signature, a licence number, per-exam comments
+or a timestamp beyond the date given. A countersigned artefact from each reviewer should replace the
+relay when available — that is a documentation improvement, not a re-review, and it does not reopen
+either requirement."*).
+
+### What was checked and not found
+
+`docs/ScreenShoots/HR-01-BrowserVerification-v4.md` (cross-referenced via `### PB-044`) is real and
+substantial — 78 artefacts, 8 exams × 9 sections, retina images individually verified, CLINHASH checked
+at 9 checkpoints. But it is explicitly **not** a clinical verdict: HR-04's own register
+(`## HR-04 — Human Sign-Off Evidence Register`) lists it as a separate row, **`HR-01-BV`**, described
+as *"(automated agent — not a reviewer) ... Browser UI/data verification"* with Closure Eligible
+**"NO — evidence only, never a clinical verdict."** It corroborates that the dataset Dr Taha reviewed
+was intact and legible; it is not itself the clinician's determination.
+
+No file under `docs/evidence/`, `docs/ScreenShoots/`, or elsewhere in the repository was found
+containing a per-exam PASS/FAIL breakdown, a reviewer signature, a licence/registration number, or a
+timestamp finer than the date, from Dr Taha. (Searched: `docs/evidence/*.md` for "Taha", `docs/
+ScreenShoots/*.md` for "Taha"/"ophthalmolog". Only PB-045/PB-055's own narrative and the HR-01 pack's
+own blank §4 table were found.)
+
+### What a countersigned record would still require
+
+Per HR-01's own §2 ("Reviewer identity — to be completed by the reviewer") and §8 ("RDY-0021 closure
+rule"), a fully countersigned pack would need, at minimum: the reviewer's name, professional role,
+specialty, organization and (optionally) licence reference entered directly by Dr Taha; a per-exam
+verdict recorded in §4 of this document (or the equivalent §6 checklist in HR-01) rather than an
+aggregate "all 8, no comments"; and a signature/approval method. None of that exists in this repository
+today.
+
+### Why this does not reopen RDY-0021
+
+That is not this agent's call to make, and it is not what this section does. RDY-0021 is recorded as
+**CLOSED BY PHASE 2B (PB-045)** in the requirements document's §7 table, with the qualifying phrase
+*"clinician verdict (Dr Mohamed Taha, PASS all 8) relayed by the Owner, not a countersigned artefact"*
+already attached to that closure. This section brings EV-021 into agreement with that same, already-
+qualified closure — it does not advance, contest, or re-litigate it. **AGENT-HYGIENE closes no RDY
+item** (per its own operating brief); recording a countersigned artefact from Dr Taha, if and when one
+is produced, remains future work for whoever holds Track D / HR-01.
