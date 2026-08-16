@@ -79,6 +79,7 @@ claiming work is a low-collision write.
 |---|---|---|
 | **Agent A** | Claude Code — the session that produced PB-001 … PB-046 and wrote `§0.0` | **PB-001 … PB-069** |
 | **Agent B** | Claude Code — the session that produced the independent audit of 2026-08-14 and this file | **PB-070 … PB-139** |
+| **Agent C (Orchestrator)** | Claude Code — session coordinating Phase 2B via 9 specialist subagents (DOC/CONF/SEC/DATA/OPS/GIT/CAP/BROWSER/HYGIENE). Claimed 2026-08-16, PB-140/141 already used for register reconciliation | **PB-140 … PB-219** |
 
 If you are a third agent, add yourself here and claim **PB-140 …** in `§0.0` before your first entry.
 
@@ -172,3 +173,43 @@ the seeded dataset or the RDY-0044-B baseline without a claim recorded here firs
   13 missing UUIDs (`EV-083` §4.3) and seed one sensitivity-flagged encounter + one clinician-authored
   form (`EV-016` §4). All three are baseline changes against RDY-0044-B. **Whoever holds Track D should
   take them together**, since they cost one re-baseline rather than three.
+
+---
+
+## Agent C (Orchestrator) — subagent claims, PB-140–219 (2026-08-16)
+
+Registered in one commit before any subagent starts, per this file's own rule. Agent C's PB-140/141
+(register reconciliation, browser-evidence correction) already landed before this claim block.
+
+**Overlap check performed against the tables above before claiming.** Several items already carry an
+Agent A/B row at `HELD` or `DONE (not closed)`. Per this file's own standing guidance ("claim at item
+level... if a row has been HELD for a long time and the holder is demonstrably gone, release it here
+with a note rather than silently taking it"): Agent A's and Agent B's sessions have shown no activity
+since 2026-08-14/15 (last entries PB-061 and PB-085 respectively); no new claim below **replaces**
+either agent's row — each overlapping row is noted as **CONTINUATION**, and the assigned subagent is
+directed to read the existing EV artefact first and pursue closure of what's already substantively
+done, not redo it from scratch.
+
+| RDY / item | Assigned to | State | Note |
+|---|---|---|---|
+| 0006, 0008, 0031, 0070, 0072, 0073*, 0074, 0091, 0092, 0096 | AGENT-DOC | **HELD** | Fresh authoring, no existing claim |
+| 0047 | AGENT-DOC | **CONTINUATION** | Agent B: DONE (not closed), `EV-047`, needs an independent provisioner — AGENT-DOC arranges that, does not rewrite the runbook |
+| 0048 | AGENT-DOC | **HELD** | Not previously claimed at item level; §7 row already carries "LIVE EVIDENCE SUGGESTS STATUS CHANGE" note |
+| 0065, 0066, 0069 | AGENT-DOC | **CONTINUATION** | Agent B: DONE (not closed), `EV-065-066-069` — needs 3 sales calls / legal review / a pilot, not new authoring |
+| 0068 | AGENT-DOC | **HELD** | Not previously claimed |
+| 0071 | AGENT-DOC | **HELD** | Not previously claimed at item level (Track A lists it under Agent B's original wide claim, released per the 2026-08-14 collision note — treated as open) |
+| 0081 | AGENT-DOC | **CONTINUATION** | Part of Agent B's Track E (`0081`) — executable half proven (PB-021); off-instance/encryption legs blocked on RDY-0064 (hosting), named owner still needed |
+| 0084 | AGENT-DOC | **CONTINUATION** | `EV-084` self-reported "recommended for closure" by Agent B — awaiting Agent C sync confirmation, not fresh work |
+| 0086 | AGENT-DOC | **CONTINUATION** | `EV-086` self-reported "recommended for closure" by Agent B — needs the screen walk + a named Arabic Reviewer (still nobody) |
+| 0090 | AGENT-DOC | **CONTINUATION** | Agent A: HELD, PB-049, `EV-090` — needs the human walk (§6), not re-inventorying |
+| 0094 | AGENT-DOC | **HELD** | Not previously claimed |
+| 0013, 0025, 0037, 0038, 0082 (leg 6 only) | AGENT-BROWSER | **HELD** | New claim, none previously held at item level. **0082 is split**: AGENT-BROWSER holds only the application-layer/login leg; AGENT-OPS (below) holds the backup/restore infrastructure legs of the same RDY — coordinate before either closes it |
+| 0013, 0016, 0018, 0029, 0033, 0034, 0035 | AGENT-CONF | **HELD** | 0016 is Agent B's `HELD` row (Track B) — **CONTINUATION**, partial evidence at PB-037/PB-034 already exists, read before re-running. 0013 also claimed by AGENT-BROWSER above for its browser leg — AGENT-CONF holds any remaining config-only piece, AGENT-BROWSER does the screen verification; same item, two legs, coordinate |
+| 0055, 0049, 0042, 0043 | AGENT-SEC | **HELD** | 0042 is Agent B's `HELD` row (Track B) — **CONTINUATION**, Agent B has done no work on it yet, clean handoff. 0043 already closed in code (Agent A, PB-052, commit `5ab88c700`) — AGENT-SEC's job is the D-7-rehearsal acceptance check only, **not** touching `MainMenuRole.php` again |
+| 0023, 0041, 0044-B (verify-only) | AGENT-DATA | **HELD** | 0023/0025 were Agent A's `HELD — BLOCKED` row — 0025 reassigned to AGENT-BROWSER above (needs a browser, not a seeder), 0023 stays here (needs a clinician + Owner decision on the growth-chart criterion) |
+| 0082 (backup/restore infrastructure legs), 0083, 0085, 0093, OD-04, OD-05 | AGENT-OPS | **HELD** | 0083 is Agent B's `HELD` row — **CONTINUATION**, live evidence contradicts "never executed," correction in progress; AGENT-OPS adds the console-session-dependency finding (see PB-14x) |
+| 0045 | AGENT-GIT | **CONTINUATION** | Agent A: `HELD`, `EV-045` already contains the master-vs-rel-820 divergence analysis (83 behind at 2026-08-13). AGENT-GIT re-measures current divergence and builds the decision pack on top of `EV-045`, does not redo it from zero |
+| 0060, 0061, 0062, 0063 | AGENT-CAP | **HELD** | 0060/0062: Agent A `HELD — BLOCKED`; 0061: Agent A `DONE (not closed)`, `EV-061` capture rules already written — **CONTINUATION**, AGENT-CAP executes captures under those existing rules, does not rewrite them. 0063 unclaimed, new |
+| EV-021, EV-000 §2, HR-04 register, `CLAUDE.local.md` | AGENT-HYGIENE | **HELD** | Not RDY items — artefact/local-config maintenance only, no system state change, no RDY closed |
+
+*0072 note: DICOM viewing inventory (Q71) — documentation/classification only, no code.
