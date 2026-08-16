@@ -1869,6 +1869,71 @@ a real session. They prove the value reaches the rendered page. They do **not** 
 placement or that a human would notice it, which is a demo-rehearsal concern (RDY-0041), not a
 configuration one.
 
+## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
+
+**Assignment:** RDY-0013 (untested accounts + registration completion), RDY-0025 (document marking
+on open), RDY-0037 (SAR in a financial screen), RDY-0038 (phone-validation + metric-units
+sub-clauses), RDY-0082 leg 6 (login against a restored instance). All five require an authenticated,
+JS-capable browser session against `http://localhost:8300/` — string-presence checks over a raw HTTP
+session are the exact method PB-016 and this document's own `:1863` row already record as
+insufficient for `main.php` (it returns a session-timeout stub to a curl-established session even
+though the login itself is valid).
+
+**Preparation completed before the blocker was hit:** read `§0.0`, `docs/evidence/AGENT-CLAIMS.md`
+(claim already registered, confirmed no collision), `docs/ScreenShoots/BrowserVervication.md` and
+`BrowserRetest.md` in full for method/format, `PB-141` (:1953) for the exact remaining gaps per item,
+the `RDY-0013`/`RDY-0025`/`RDY-0037`/`RDY-0038` §8 cards (:6495, :6653/§7 :941, :6735, :6745),
+`docs/evidence/EV-028-synthetic-data-control.md` §3 (synthetic phone/ID conventions) and
+`EV-044-demo-reset-runbook.md` (reset is proven safe if a test registration needs undoing). Confirmed
+the app is up: `Invoke-WebRequest http://localhost:8300/interface/login/login.php?site=default` →
+`200`. Read `C:\openemr-stack\secrets\thiqa-demo-credentials.json` directly for the six demo
+accounts' credentials (not reproduced here or anywhere in the repo, per that file's own policy).
+Checked `AGENT-CLAIMS.md` for AGENT-OPS activity on RDY-0082: only `PB-140`/`PB-141` exist in Agent
+C's range so far, both Agent C's own register-reconciliation entries — **no AGENT-OPS PB entry and no
+restored-instance evidence exists yet**, so RDY-0082 leg 6 was going to be skipped this session
+regardless (per my own instructions: do not simulate a restored instance).
+
+**The blocker.** Invoked the `claude-in-chrome` skill, as directed, before attempting any
+`mcp__claude-in-chrome__*` call. Its response: *"Browser tools are not available in this session: the
+Claude in Chrome extension is not set up... Do not attempt `mcp__claude-in-chrome__*` tool calls."*
+`ToolSearch` for chrome/browser/screenshot tooling returned only `WebFetch` — no
+`mcp__claude-in-chrome__*` tools were loaded into this session at all, regardless of query.
+
+**Alternatives considered and rejected, not silently skipped:**
+- **`WebFetch` against `localhost:8300`** — rejected. It has no session/cookie continuity across
+  requests and cannot execute the client-side JS the menu/registration-form checks depend on. Using
+  it would reproduce exactly the PB-016 class of error this document already names: a harness that
+  cannot actually observe the thing being tested, producing a confident false result. It was not
+  attempted, because a result from it could not be trusted enough to report either PASS or FAIL.
+- **Native Panther + WebDriver, bypassing Docker** — investigated, not executed. `symfony/panther` is
+  present in `vendor/` (`composer.json:159`), but this machine has no Chrome install
+  (`C:\Program Files\Google\Chrome\Application\chrome.exe` and the `(x86)` path both absent) and no
+  `chromedriver`/`msedgedriver` binary anywhere under `C:\openemr-stack` (checked). Edge is present
+  (`C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`), but standing up a new WebDriver
+  pipeline — downloading `msedgedriver`, wiring Panther to it, proving it actually renders JS-driven
+  state correctly on this host — is unproven infrastructure this task was not scoped to build, and my
+  own instructions are explicit that `claude-in-chrome` is *"the proven working method here"* and
+  that I should not substitute an unsanctioned mechanism. Not attempted.
+
+**Result: no test was run against any of the five items.** No PASS, FAIL, CLOSED-VERIFIED, or
+HARNESS-FAILURE-on-a-specific-test is recorded for RDY-0013, RDY-0025, RDY-0037, RDY-0038 or RDY-0082
+leg 6 — recording one would require having actually observed something, which did not happen. This
+entry is the harness-level blocker itself, reported per the closure contract rather than papered over
+as either a pass or a denial.
+
+**Nothing was changed.** No page was requested against an authenticated session, no form was
+submitted, no document was opened, no configuration/global/user/ACL/facility/list value was touched,
+no reset was run. State is identical to before this entry.
+
+**What unblocks this:** either (a) the user connects the `claude-in-chrome` extension for a session
+(`/chrome` per the tool's own message) and AGENT-BROWSER is re-invoked or resumed against the same
+five items using the prep already done above, or (b) the orchestrator authorises and scopes a
+specific alternative method (e.g. the native-Panther path outlined above, built out and proven as its
+own piece of work rather than assumed to work).
+
+**`Blocks`:** none — no gate count changes; nothing was closed, corrected, or newly opened by this
+entry (§0.0 Rule 3 N/A, no recalculation performed).
+
 ## PB-140 (2026-08-16) — **Register reconciliation and fresh §47 gate sync (Agent C, Orchestrator)**
 
 **No RDY item closed by this entry.** This is a bookkeeping-integrity pass plus the dedicated §47
@@ -2041,6 +2106,115 @@ prevents re-running the parts already proven.
 Status text unchanged (`NOT READY`), each **appended** with a one-line pointer to the partial
 evidence above and the exact remaining gap, so AGENT-BROWSER's task list is precise rather than
 "re-do everything."
+
+## PB-209 (2026-08-16) — AGENT-HYGIENE: `CLAUDE.local.md` §3 corrected — stale `admin`/`pass` credential documentation was an active trap
+
+**Not an RDY closure — artefact/local-config hygiene only**, per AGENT-HYGIENE's operating brief and
+its `AGENT-CLAIMS.md` claim (`EV-021, EV-000 §2, HR-04 register, CLAUDE.local.md`).
+
+`CLAUDE.local.md` §3 (local-only, excluded via `.git/info/exclude` — confirmed with
+`git check-ignore -v CLAUDE.local.md`, not part of this document's concurrency protocol) documented
+the native-stack login as `admin` / `pass`. **`### PB-020`** (2026-08-13) recorded that this credential
+was rotated under Owner authorisation and that the installer default **no longer authenticates**
+(476-byte session-timeout stub vs. a 68,634-byte authenticated shell on the new value), and flagged in
+its own "OPERATIONAL NOTE FOR THE OWNER" that `CLAUDE.local.md` was now stale but that PB-020 itself
+could not edit a file outside its remit.
+
+**Fixed:** the §3 table no longer states a password. It now states that `admin` was rotated 2026-08-13
+(citing PB-020), that the installer default no longer works, and points to
+`C:\openemr-stack\secrets\thiqa-demo-credentials.json` (`admin_account` key) as the current value's
+location — confirmed present on this machine by enumerating the file's top-level JSON keys
+(`schema, purpose, policy, generated_at, rotation, accounts, admin_account`) without reading the
+password field itself. No password is written into this document, matching RDY-0011's convention.
+
+**Also added:** the six demo role accounts (`r.aldosari`, `y.alharbi`, `s.almutairi`, `n.alqahtani`,
+`k.alotaibi`, `m.alzahrani` — PB-005) were not documented in `CLAUDE.local.md` at all. Checked
+`docs/ScreenShoots/BrowserVervication.md` and `BrowserRetest.md` (`grep -n
+"credential|password|r\.aldosari" docs/ScreenShoots/BrowserVervication.md`) — both reference these
+accounts by username only, never by password, consistent with RDY-0011. Confirmed the same protected
+file's `accounts` array holds all six (`$j.accounts | ForEach-Object { $_.username }` → the six names
+above, password values not read), and recorded that location in `CLAUDE.local.md` so AGENT-BROWSER (or
+any later session) does not need to rediscover it.
+
+## PB-210 (2026-08-16) — AGENT-HYGIENE: `EV-021` brought into agreement with PB-045's relayed clinical verdict — no sign-off fabricated
+
+**Not an RDY closure.** `EV-021` (`docs/evidence/EV-021-clinical-review-pack.md`) still showed header
+status "AWAITING CLINICAL REVIEW" and a blank §4 sign-off table, while `### PB-045` (2026-08-14) and
+`### PB-055` both cite "Dr Mohamed Taha, PASS on all 8" as the evidence that closed RDY-0021 — a
+silent disagreement between the evidence artefact and the PB log.
+
+**Checked before writing anything:** PB-045's own text (`grep -n "Attestation route" docs/Marketing-
+MVP-and-Launch-Readiness-Requirements.md`) states the verdict was **"Relayed by the Owner, not a
+countersigned artefact"** — its own words, not an inference. Cross-checked `HR-04`'s register: the
+`HR-01-BV` row independently confirms this is *"(automated agent — not a reviewer) ... evidence only,
+never a clinical verdict."* Searched every file under `docs/evidence/` and `docs/ScreenShoots/` for
+`Taha` (`grep -rn Taha docs/evidence docs/ScreenShoots`) — found only PB-045/PB-055's own narrative,
+HR-01's own (blank) §4/§6 tables, and other artefacts (`EV-061`, `EV-083`, `EV-044`) citing PB-045 as
+the source. **No countersigned artefact exists anywhere in the repository.**
+
+**Fixed:** `EV-021`'s header status now states plainly that a verdict was received and relayed, not
+countersigned, and points to the new §5 added at the end of the file. §4's per-exam PASS/FAIL table is
+**left blank, deliberately** — PB-045's record is an aggregate ("all 8, no comments"), not a per-exam
+breakdown, so filling in eight rows would fabricate detail nobody supplied. §5 records exactly what
+PB-045/PB-055 state, what was searched and not found, and what a countersigned record would still
+need (per HR-01 §2/§8) — without asserting RDY-0021 should reopen. **That determination is not
+AGENT-HYGIENE's to make** and none is made here; RDY-0021's own §7 status cell already carries the
+same "relayed, not countersigned" qualifier and is left as is.
+
+## PB-211 (2026-08-16) — AGENT-HYGIENE: `EV-000` §2 updated to match PB-141's clause-by-clause findings on RDY-0013/0014/0015/0042
+
+**Not an RDY closure.** `EV-000` §2 (`docs/evidence/EV-000-blocked-items-register.md`) carried one row,
+`"0013 0014 0015 0042 — One manual browser session discharges all four (curl cannot reach main.php —
+PB-016)"`, written 2026-08-14 (per its own header) before `### PB-141`'s 2026-08-16 clause-by-clause
+re-verification existed. (`### PB-029`, which actually closed 0014/0015, is dated 2026-08-13 — earlier
+than EV-000's own production date — so this was a case of EV-000 never having incorporated evidence
+that already existed when it was written, not a later regression.)
+
+**Checked:** `### PB-029` closes RDY-0014 and RDY-0015 with a genuine negative control
+(`k.alotaibi` shows a different taxonomy than the two intended accounts). `### PB-141` re-verified
+`### PB-028`'s "VERIFIED READY — CLOSED" claim for RDY-0013 clause by clause against
+`BrowserVervication.md`'s own test-by-test detail and found it does not survive: navigation proven for
+3 of 6 accounts only, and the registration-completion clause unmet (`"'Create New Patient' button was
+NEVER clicked"` — T6.5, quoted verbatim in PB-141). `### PB-072` (PB-045's neighbour, 2026-08-14) fixed
+RDY-0042 at the menu layer (patch record PR-16) but explicitly left it **not closed**, needing the same
+outstanding browser session as RDY-0013's remaining gap.
+
+**Fixed:** the single row is split into three, matching each item's actual current state — 0014/0015
+marked closed (citing PB-029, re-confirmed by PB-141), 0013 and 0042 each carry PB-141/PB-072's precise
+remaining gap rather than a blanket "still blocked" or the prior overclaim. A dated note was added at
+the top of `EV-000` recording why the correction was made. No RDY item closed or reopened.
+
+## PB-212 (2026-08-16) — AGENT-HYGIENE: HR-04 register and its §"Human review packs issued" summary corrected — HR-01/HR-02 no longer read pre-review language after PB-045's relayed verdicts
+
+**Not an RDY closure.** Two places in this document still read as if HR-01 and HR-02 had received no
+verdict, after `### PB-045` (2026-08-14) recorded that both had:
+
+1. The `"Human review packs issued"` summary table's HR-04 row (§ near `### PHASE 2B — HUMAN REVIEW &
+   SIGN-OFF PACKS`) read *"All four rows read AWAITING; none is closure-eligible"* — stale, since
+   HR-01/HR-02 have carried a relayed verdict since PB-045.
+2. `## HR-04 — Human Sign-Off Evidence Register` itself: the HR-01 row still said *"reviewed the
+   MUTATED state... Re-affirmation required against the restored dataset"* with Closure Eligible **"NO
+   — pending re-affirmation"** — but PB-045 **is** that re-affirmation, delivered against the restored
+   dataset `de6e513c…`. The HR-02 row still said *"ASSIGNED — AWAITING REVIEW... no verdict issued"* —
+   but PB-045 also relays Mohammed Elfouly's **APPROVED** verdict against the same dataset.
+
+**Fixed, not advanced.** Both rows now cite PB-045, the correct dataset version (`de6e513c…`) and
+review date (2026-08-14), and record the verdict as **relayed**. The prior "pending re-affirmation" /
+"awaiting review" framing is replaced with PB-045's own qualifier — **"relayed by the Owner, not a
+countersigned artefact"** — kept in `Closure Eligible: NO`, because that is what PB-045 itself states
+and what `HR-04`'s own governing line ("No row may record a verdict before real human input exists")
+requires: real input (relayed) exists, a countersigned artefact does not. The superseded 2026-08-13
+HR-01 row (reviewed-the-mutated-state) is kept, marked `*(superseded)*`, for the same traceability
+reason the existing `HR-01-BV` superseded rows already use. The summary-table HR-04 line is corrected
+to the same effect. **This does not make HR-01 or HR-02 closure-eligible** — it only stops the register
+from contradicting PB-045, which is the entirety of AGENT-HYGIENE's remit here.
+
+**Judgement call flagged for the orchestrator:** whether "relayed by the Owner" verdicts should ever be
+treated as sufficient for `Closure Eligible: YES` on HR-04 (as opposed to RDY-0021/0028's own §7 status
+cells, which already treat PB-045 as sufficient to close the *requirement*) is a policy question this
+agent did not decide — `EV-003`'s claim-review procedure and the "relayed vs. countersigned" distinction
+it describes govern that, and AGENT-HYGIENE's brief is accuracy, not advancement. Recorded here rather
+than resolved.
 
 ## PB-085 (2026-08-14) — RDY-0004 control instrument issued. **Its blocker moved from "nobody to name" to "nothing yet to bind"**
 
@@ -4388,7 +4562,7 @@ now disclosed to the reviewer (HR-01 §4 #1) instead of being papered over with 
 | **HR-01** | RDY-0021, qualified ophthalmologist | Header with dataset fingerprint · blank reviewer identity · 18 global criteria · **10 disclosed known issues** · full 8-exam findings table · a 13-item A-M checklist per exam with three-way verdict · diagnosis-specific prompts · closure rule |
 | **HR-02** | RDY-0028, named Legal/Compliance | Header with explicit scope limit · blank reviewer identity · 18-item evidence package · 14-section checklist A-N · **three disclosed limitations inline** · one-of-three verdict with mandatory disclaimer · closure rule |
 | **HR-03** | Product Owner | Two decision cards (RPT-0009, RPT-0028), each with data sensitivity, live-vs-documented grants, why they disagree, three options with benefits/risks/blast radius, **one recommendation with evidence**, and a blank decision block |
-| **HR-04** | — | Sign-off evidence register. **All four rows read AWAITING; none is closure-eligible** |
+| **HR-04** | — | Sign-off evidence register. **Corrected 2026-08-16 (AGENT-HYGIENE) — this row was stale.** HR-01 and HR-02 no longer read AWAITING: both carry a verdict relayed by the Owner at `### PB-045` (2026-08-14). **None is closure-eligible in the countersigned sense** — HR-01/HR-02 are "relayed, not countersigned" (PB-045's own words); the rest are still genuinely AWAITING |
 | **HR-05** | — | Outcome processing rules, the RDY-0044-B gate and the D-7 gate |
 
 **The locked billing-cohort decision is recorded** at the head of the section and is not re-opened.
@@ -5990,10 +6164,11 @@ development and does not belong in Phase 2B.
 
 | HR ID | RDY | Reviewer | Role | Dataset Version | Review Date | Verdict | Conditions | Evidence Ref | Closure Eligible |
 |---|---|---|---|---|---|---|---|---|---|
-| **HR-01** | RDY-0021 | **Dr Mohamed Taha** | Ophthalmologist | **reviewed the MUTATED state, not `ad6ea86d…`** | 2026-08-13 | **ASSERTED: PASS, all 8, no comments** — recorded as asserted. **NOT closure-eligible:** the reviewed state was the one PB-040 found corrupted (target IOP 21, zeroed VF quadrants on all 8), and the screenshot pack omits the retina findings. **Re-affirmation required against the restored dataset** | Re-review vs `ad6ea86d…` after re-capture | verbal, via Owner | **NO — pending re-affirmation** |
+| **HR-01** | RDY-0021 | **Dr Mohamed Taha** | Ophthalmologist | **`de6e513c…`** — the corrected v4 dataset (corrected 2026-08-16: superseded row below was stale) | 2026-08-14 | **RELAYED: PASS, all 8, no comments** (`### PB-045`) — the re-affirmation this row previously required *was* delivered, against the restored/corrected dataset, corroborated by independent browser evidence (row `HR-01-BV` below, `### PB-044`). **Still NOT closure-eligible in the countersigned sense** — PB-045's own words: *"relayed by the Owner, not a countersigned artefact."* See `EV-021` §5 (added 2026-08-16) for the full account and what a countersigned record would still require | None (per PB-045) | verbal, via Owner (`### PB-045`) | **NO — relayed by the Owner, not a countersigned artefact** |
+| *(superseded)* | RDY-0021 | Dr Mohamed Taha | Ophthalmologist | reviewed the MUTATED state, not `ad6ea86d…` | 2026-08-13 | **ASSERTED: PASS, all 8, no comments** — the reviewed state was the one PB-040 found corrupted (target IOP 21, zeroed VF quadrants on all 8), and the screenshot pack omitted the retina findings. **Superseded by the row above** once the required re-affirmation was delivered at PB-045. Retained for traceability only | — | verbal, via Owner | **NO — superseded, see row above** |
 | **HR-01-BV** | RDY-0021 (supporting) | *(automated agent — not a reviewer)* | Browser UI/data verification | **`de6e513c…`** | 2026-08-14 | **PASS (attempt 4).** 78 artefacts; all 8 retina captures legible incl. exam 6's macula/CMT; CLINHASH identical at all 9 checkpoints and re-verified live afterwards; **dataset not mutated** | IOP targets DOM-confirmed only on 7 of 8 (hidden panel) | `docs/ScreenShoots/HR-01-BrowserVerification-v4.md` + 78 files | **NO — evidence only, never a clinical verdict** |
 | *(superseded)* | RDY-0021 | — | Attempts 1-3 | mutated states | 2026-08-13/14 | Corrupted the dataset (PB-040/042/043). **Not evidence.** Retained for traceability only | — | `…-BrowserVerification.md`, `-v2.md`, `-v3.md` | **NO** |
-| **HR-02** | RDY-0028 | **Mohammed Elfouly** | Legal / Compliance *(basis of authority to be stated by the reviewer)* | `marketing-mvp-seed-v1` / `ad6ea86d…` | — | **ASSIGNED — AWAITING REVIEW.** Assignment recorded 2026-08-13; checklist not yet worked, no verdict issued | — | — | **NO** |
+| **HR-02** | RDY-0028 | **Mohammed Elfouly** | Legal / Compliance *(basis of authority to be stated by the reviewer)* | **`de6e513c…`** (corrected 2026-08-16 — previously listed `ad6ea86d…`, the pre-correction dataset; see `### PB-045`) | **2026-08-14** | **RELAYED: APPROVED for controlled synthetic demo use** (`### PB-045`). **Corrected 2026-08-16 — this row previously read "AWAITING REVIEW, no verdict issued," which PB-045 (2026-08-14) superseded.** Still NOT closure-eligible in the countersigned sense — same basis as HR-01: relayed by the Owner, not a countersigned artefact | None (per PB-045) | verbal, via Owner (`### PB-045`) | **NO — relayed by the Owner, not a countersigned artefact** |
 | **HR-06** | RDY-0003 | **Mohammed Elfouly** | **Claim reviewer** *(also holds HR-02 — same person, both roles)* | n/a — procedure, not dataset | — | **APPOINTED 2026-08-14 (PB-077) — AWAITING FIRST REVIEW.** Procedure written at `EV-003`; §5 review record is **empty**. Recommended sample artefact: `EV-067` | — | `docs/evidence/EV-003-claim-review-procedure.md` | **NO — naming is not reviewing** |
 | **HR-07** | RDY-0095 | **Mohammed Elfouly** *(named 2026-08-14, PB-061; supersedes the organisation-level "SkyEagle" assignment)* | Licence / attribution determination | n/a — determination, not dataset | — | **COMMISSIONED 2026-08-14 (PB-077) — DETERMINATION OUTSTANDING.** 8 closed-form questions; §6 block blank. **⚠ Self-review — the named reviewer is on the vendor side; independent counter-read recommended** | — | `docs/evidence/EV-095-licence-attribution-pack.md` | **NO** |
 | **HR-08** | RDY-0055 | **Mohammed Elfouly** | **Security Reviewer** — audit-trail PHI determination | n/a — determination, not dataset | — | **APPOINTED 2026-08-14 (PB-061) — AWAITING DETERMINATION.** Finding to accept or reject is measured, not asserted: **6,073 audit rows contain patient surnames**, `log.comments` is **base64, not encrypted**, and **no retention policy exists**. Evidence: `EV-055` | — | `docs/evidence/EV-055-audit-phi-determination.md` | **NO — naming is not determining** |
