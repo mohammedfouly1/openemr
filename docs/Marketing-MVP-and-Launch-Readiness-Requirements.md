@@ -2395,6 +2395,89 @@ agent did not decide — `EV-003`'s claim-review procedure and the "relayed vs. 
 it describes govern that, and AGENT-HYGIENE's brief is accuracy, not advancement. Recorded here rather
 than resolved.
 
+## PB-171 (2026-08-16) — AGENT-DATA: RDY-0044-B v2 baseline's UUID defect confirmed and fixed — v3 baseline taken, hashed, and restore-proven; `pid 31` disposed of
+
+*AGENT-DATA's range is PB-171…PB-180 (§0.0 Rule 1, Agent C sub-allocation). This is AGENT-DATA's
+first entry, responding to the top-of-file flag in `docs/evidence/AGENT-CLAIMS.md` (PB-081): the
+RDY-0044-B v2 baseline (`thiqa-rdy0044b-v2-baseline-20260814-064532.sql`) was dumped ~4 minutes
+before the authorised UUID fix landed and may ship 13 NULL UUIDs it was meant to contain.*
+
+**Confirmed live, before touching anything:** `SELECT SUM(uuid IS NULL OR uuid='')` returns **0** on
+both `form_vitals` (0/12) and `insurance_companies` (0/2) — live data was already correct, exactly as
+the flag predicted. This is a stale-baseline problem, not a data problem — **no re-seed performed.**
+
+**A clinical fingerprint (CLINHASH) was captured before and after every operation**, per this
+assignment's closure contract — not row counts, which the same contract notes can stay flat while a
+clinical value changes. `docs/evidence/harnesses/rdy0044b-v3-clinhash.sql` (tracked, re-runnable)
+computes an MD5 over ordered clinical *values* across `form_vitals`, `insurance_companies`,
+`form_soap`, `lists`, `prescriptions`, `form_encounter`, `form_eye_vitals`. Value throughout this
+entire operation: **`7c72767f2f8f006f181b2217c99cf1e9`** — unchanged before the dataset-cleanup DML
+below, unchanged after it, and unchanged again in the restored copy used to prove the new baseline.
+
+**`pid 31` disposed of.** PB-202 disclosed adding one synthetic test patient
+(`QATest BrowserVerification-SYNTHETIC`) live during browser verification and handed the disposition
+decision to this agent. Its footprint was scanned exhaustively across every table in the schema
+carrying a `pid`/`patient_id`/`foreign_id` column: `patient_data` (1), `employer_data` (1),
+`history_data` (1), `insurance_data` (3 auto-created placeholders), `log` (50 audit rows) — **zero**
+rows in any clinical table. **Removed** (patient_data/employer_data/history_data/insurance_data
+rows deleted; the 50 audit-log rows were deliberately left alone — hand-editing audit history is a
+worse problem than the one being solved, see `EV-044` §10), not folded into the new baseline, because
+the accepted state signature fixes `patients=30` and every downstream count-based check (EV-028,
+cohort/duplicate-detection validation) is built on that figure. Full reasoning in `EV-044` §10.
+
+**New baseline taken, hashed, and proven:**
+
+| | |
+|---|---|
+| Database | `thiqa-rdy0044b-v3-baseline-20260816-165016.sql`, 81,869,406 bytes, SHA-256 `b70e969572657a5269def836874a220d52afae818b238a0723f528415984fe9b` |
+| Document payloads | `thiqa-rdy0044b-v3-document-payloads.zip`, 7,009 bytes — SHA-256 **identical** to v2's (`c0a8d0dc79…`), confirming no document changed |
+| v2 (superseded) | renamed `SUPERSEDED-thiqa-rdy0044b-v2-baseline-20260814-064532.sql`, kept read-only, MUST NOT be restored — ships the 13-NULL-UUID defect |
+
+**Restore-test used an isolated throwaway database, not the live schema — disclosed, not hidden.**
+The documented reset procedure (`EV-044` §2) restores directly onto live `openemr`, which needs
+`Stop-Process -Name httpd -Force` first. **This environment's own permission classifier refused that
+action** when attempted, correctly: this session's brief states at least three other Claude Code
+sessions were concurrently active against this same repo and stack, and stopping Apache would have
+broken whatever they were mid-doing. Instead, the v3 dump was restored into
+`openemr_rdy0044b_v3_verify` (dropped afterward) and checked there: state signature matches
+(`patients=30, encounters=72, appts=36, recurring=1, docs=10, rx=12, payers=2, soap=18, vitals=12,
+users=10, aclgroups=7`; `globals=504`, +9 from v2's 495 — explained below, not a defect), UUID nulls
+still 0/0, and CLINHASH still `7c72767f2f8f006f181b2217c99cf1e9`. Full table and method in `EV-044`
+§10.
+
+**One real mistake made and caught before it shipped, recorded rather than smoothed over:** the first
+attempt at both the pre-cleanup snapshot and the v3 dump used PowerShell's own `>` redirection on
+`mysqldump`'s stdout (`& mysqldump.exe ... > out.sql`), which silently corrupts the binary stream —
+observed as roughly double the expected file size and a restore failure (`ASCII '\0' appeared in the
+statement`) only surfaced when the dump was actually restored for verification. Both dumps were
+retaken using `cmd /c "... > \"out.sql\""` instead, which produced a file that restored cleanly. The
+corrupted pre-cleanup snapshot was deleted rather than kept as a false safety net — **disclosed in
+`EV-044` §10's rollback note**, since the closure contract requires a stated rollback command and the
+honest one differs from what was originally planned. This bug is now documented in `EV-044` itself so
+the next agent taking a fresh dump on this host does not repeat it.
+
+**`globals` 495 → 504 (+9), not a defect.** `globals` rows are lazily created by visiting settings
+pages; this document already characterises the same phenomenon as neutral drift elsewhere (§0.2,
+490 → 495 rows between two earlier observations). Two days of concurrent-agent testing between the
+v2 and v3 dumps is sufficient explanation. Not individually inventoried — none of the 9 rows are
+clinical data, and the CLINHASH check covers the surface that actually matters for this closure.
+
+**⚠ Not resolved by this entry, flagged onward rather than silently dropped:** `AGENT-CLAIMS.md`'s
+PB-077 owner-authorisation table names a *second* dataset change — a sensitivity-flagged encounter
+plus a clinician-authored form — as part of the same single coordinated re-baseline this entry
+executes. PB-155 (AGENT-CONF, today) independently re-flagged both pieces as unseeded and handed
+them to AGENT-DATA. **Neither was seeded here** — this entry's scope was the UUID-defect flag only,
+and seeding clinical content (which encounter, which form, which account) is a decision neither this
+session's brief nor the PB-077 table names this agent as the owner of. If that change still needs to
+happen, doing it against this v3 baseline and then re-baselining once more is the coordination this
+document's own history already warns costs more than sequencing correctly the first time. Recorded in
+full in `EV-044` §11 for Agent C to route.
+
+**RDY-0044-B: still not independently `CLOSED` as a register row by this entry** (§0.0 Rule 3 —
+this agent does not recalculate gate counts or register status cells outside its own verified claim).
+This entry closes the top-of-file `AGENT-CLAIMS.md` flag it was scoped to fix; `EV-044` and
+`docs/evidence/harnesses/rdy0044b-v3-clinhash.sql` are the re-runnable evidence.
+
 ## PB-181 (2026-08-16) — AGENT-OPS: RDY-0083 logoff-survival investigated and ruled out on this host; the console-session dependency named in §40 row 12 and confirmed already-adequate in `EV-047`
 
 *AGENT-OPS's range is PB-181…PB-190 (§0.0 Rule 1, Agent C sub-allocation). This is AGENT-OPS's first

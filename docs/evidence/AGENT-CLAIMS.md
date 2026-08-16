@@ -1,6 +1,25 @@
 # AGENT WORK CLAIMS — Phase 2B
 
-> ## 🔴🔴 ACTION FOR AGENT A — the RDY-0044-B v2 baseline ships the UUID defect (PB-081)
+> ## ✅ RESOLVED 2026-08-16 (AGENT-DATA, PB-171) — the RDY-0044-B baseline is now v3, UUID defect fixed
+>
+> **This flag is closed.** `thiqa-rdy0044b-v2-baseline-20260814-064532.sql`'s 13-NULL-UUID defect
+> (described below, unchanged for the record) is fixed in a new **v3** baseline:
+> `thiqa-rdy0044b-v3-baseline-20260816-165016.sql`, SHA-256
+> `b70e969572657a5269def836874a220d52afae818b238a0723f528415984fe9b`. Live UUIDs re-confirmed 0/0
+> immediately before the dump. v2 is renamed `SUPERSEDED-...` and MUST NOT be restored. Full method,
+> CLINHASH before/after, and the restore-test proof (into an isolated throwaway database, not the
+> live schema — this session could not take Apache down with other agents concurrently active) are in
+> `docs/evidence/EV-044-demo-reset-runbook.md` §10. This also disposes of the `pid 31` synthetic test
+> patient PB-202 added (§10 explains: removed, not folded in).
+>
+> **⚠ Not resolved by this update — flagged onward in `EV-044` §11 rather than silently dropped:**
+> the PB-077 authorisation below also names a **second** dataset change (sensitivity-flagged
+> encounter + clinician-authored form) as part of the *same* single coordinated re-baseline. That
+> change was **not seeded** — it needs an explicit owner and its own decision about what to seed, and
+> if it happens after this v3 baseline it will require a further re-baseline, which is exactly the
+> repeated-re-baselining cost this document's own history warns against. Recorded for Agent C.
+>
+> *(Original flag text, preserved for the record below.)*
 >
 > **`thiqa-rdy0044b-v2-baseline-20260814-064532.sql` was taken at 03:45. The authorised UUID fix was
 > applied at 03:49.** The baseline is four minutes older than the change it was meant to contain.
@@ -250,7 +269,7 @@ done, not redo it from scratch.
 | 0025, 0037, 0082 (leg 6 only) | AGENT-BROWSER | **HELD — 0037 gap re-located, 0025 blocked, 0082 UNBLOCKED** | PB-202: 0037's real gap is now the Ledger showing no currency symbol at all (not "$ instead of SAR"). 0025 blocked by a new reproducible defect — Documents tab hangs the browser tab completely, twice reproduced, needs its own investigation before retry. **0082 leg 6 no longer waits on AGENT-OPS** — a restored disposable instance is live now (PB-182, `EV-082`): `http://localhost:8300/interface/login/login.php?site=rdy0082restore`, same demo credential store. Six of seven RDY-0082 criteria already MET against it (row counts, checksums, D-1, non-browser login); leg 6 is the JS-capable browser walk `main.php`'s stricter session check needs. **Deliberately left running, not torn down** — teardown command in `EV-082` §10, run it once leg 6 is done |
 | 0013, 0016, 0018, 0029, 0033, 0034, 0035 | AGENT-CONF | **DONE** | PB-151–155 (2026-08-16). **0018 CLOSED** — `oe-system` removed from Administrators. **0035 CLOSED** — `pqri_registry_name`/`pqri_registry_id` cleared. **0029 DONE (not closed)** — 3 rules' `active_alert_flag` activated, strong pre-existing `clinical_rules_log` evidence they already fire on real seeded patients; final visual check handed to AGENT-BROWSER. **0033/0034** re-verified live, zero drift, still correctly blocked on RDY-0095 alone (not config). **0016**: read `EV-016`/PB-073 in full per this row's own CONTINUATION note before touching anything; confirmed its 4 remaining gaps are unchanged and none is a database/globals task — handed off precisely (dataset legs → AGENT-DATA, A-10 call-site probes → AGENT-SEC, UI-navigation legs → AGENT-BROWSER), not attempted. 0013 was AGENT-BROWSER's to begin with (already closed there, PB-202) — no config-only piece remained once that closed. **Note for any auditor**: this session's PB-151–155 text twice rode along inside another agent's commit on this same shared-file race (`6f4ddba9b`, then `f5facec44`) — content verified intact both times, see the notes above this table and inside PB-153/PB-155 themselves |
 | 0055, 0049, 0042, 0043 | AGENT-SEC | **HELD** | 0042 is Agent B's `HELD` row (Track B) — **CONTINUATION**, Agent B has done no work on it yet, clean handoff. 0043 already closed in code (Agent A, PB-052, commit `5ab88c700`) — AGENT-SEC's job is the D-7-rehearsal acceptance check only, **not** touching `MainMenuRole.php` again |
-| 0023, 0041, 0044-B (verify-only) | AGENT-DATA | **HELD** | 0023/0025 were Agent A's `HELD — BLOCKED` row — 0025 reassigned to AGENT-BROWSER above (needs a browser, not a seeder), 0023 stays here (needs a clinician + Owner decision on the growth-chart criterion) |
+| 0023, 0041, 0044-B (verify-only) | AGENT-DATA | **0044-B DONE (verify-only, PB-171) — 0023/0041 still HELD** | 0023/0025 were Agent A's `HELD — BLOCKED` row — 0025 reassigned to AGENT-BROWSER above (needs a browser, not a seeder), 0023 stays here (needs a clinician + Owner decision on the growth-chart criterion). **0044-B: v3 baseline taken, UUID defect fixed, see `EV-044` §10/§11 and PB-171** — closes the top-of-file flag but leaves the PB-077 change-2 seeding question open, flagged onward |
 | 0082 (backup/restore infrastructure legs) | AGENT-OPS | **DONE (not closed)** | PB-182, `EV-082`. Restore proven end to end into a disposable instance — 6 of 7 criteria MET (row counts, checksums, D-1, application-layer login/ACL via HTTP). Leg 6 handed to AGENT-BROWSER above; RDY-0082 stays open on that leg alone |
 | 0083 | AGENT-OPS | **HELD — investigated, not closed (per Owner instruction)** | PB-181, `EV-083`. 0083 is Agent B's `HELD` row — **CONTINUATION**. Live PB-142 regression confirmed; converting the trigger to survive logoff tested and ruled out on this host (Google Drive per-session mount, `CLAUDE.local.md` §4a); console-session dependency now named explicitly in §40 row 12 and RDY-0094's card. `EV-047` already named it correctly, no edit needed there |
 | 0085, 0093, OD-04, OD-05 | AGENT-OPS | **HELD** | Not yet started this session |

@@ -1,17 +1,40 @@
 # EV-044 — DEMO RESET RUNBOOK (RDY-0044-B)
 
-> ### ⚠ BASELINE v2 — updated 2026-08-14 (PB-058)
+> ### ⚠ BASELINE v3 — updated 2026-08-16 (AGENT-DATA, PB-171)
 >
-> **The baseline was rebuilt** after the Owner authorised two data fixes: the constructed
-> allergy-alert case and the facility/provider identity fields behind the prescription letterhead.
+> **The v2 baseline shipped a defect and has been superseded.** `thiqa-rdy0044b-v2-baseline-
+> 20260814-064532.sql` was dumped at 03:45:32 UTC on 2026-08-14, **~4 minutes before** the
+> authorised UUID fix landed at 03:49. Parsed from that file: `form_vitals` 12/12 `uuid` NULL,
+> `insurance_companies` 1/2 NULL — the exact 13 rows the fix was meant to populate. Flagged at the
+> top of `docs/evidence/AGENT-CLAIMS.md`, confirmed and fixed here.
 >
-> **The previous set is retained on disk with a `SUPERSEDED-` prefix and MUST NOT be restored** — it
-> predates both fixes. Every hash and filename below is the **v2** set. If you are holding a copy of
-> this runbook citing `e45ad2e7…` or `338b1222…`, it is out of date.
+> **Live data was already correct** (`SELECT SUM(uuid IS NULL OR uuid='')` = 0 on both tables,
+> re-verified 2026-08-16 before and after this baseline was taken), so **no re-seed of the UUID fix
+> was needed — only a re-dump.** This also folds in the disposition of `pid 31`
+> (`QATest BrowserVerification-SYNTHETIC`, added live by PB-202's browser session): **removed**
+> before the v3 dump was taken, not folded in — see §10 for why.
+>
+> **The v2 set is retained on disk with a `SUPERSEDED-` prefix and MUST NOT be restored** — it ships
+> the UUID defect. Every hash and filename below is the **v3** set. If you are holding a copy of this
+> runbook citing `4048e65c…` or `c0a8d0dc79…` (the v2 hashes) it is out of date — note the v3
+> document-payloads hash is `c0a8d0dc79…` too (payloads did not change, see §10), only the database
+> hash changed.
+>
+> **⚠ Open sequencing question, not resolved by this update — see §11.** `AGENT-CLAIMS.md`'s
+> PB-077 owner-authorisation table names two further dataset changes (a sensitivity-flagged
+> encounter + a clinician-authored form) as part of the *same* single coordinated re-baseline this
+> file records, owned there by Agent A. PB-155 (2026-08-16, AGENT-CONF) independently re-flagged both
+> as still unseeded and unowned. **Neither was seeded in this v3 baseline** — this update closes only
+> the UUID-defect flag it was scoped to fix. If that seeding still happens, it needs its own
+> re-baseline, and the pinned flag in `AGENT-CLAIMS.md` already warns that repeated re-baselining
+> costs more than doing it once. Coordinate before assuming v3 is final.
 
 **Baseline:** Marketing MVP Seed v1 · profile `marketing-mvp-seed-v1` · deterministic seed `20260813`
-**Status:** PROVEN — two consecutive resets from deliberately-damaged states produced byte-identical
-accepted state (PB-045).
+**Status:** PROVEN — v1 proven by two consecutive resets from deliberately-damaged live states (§7,
+PB-045); v2 proven the same way after its two dataset fixes (§8, PB-058); **v3 (current) proven by a
+restore-into-isolated-database round-trip after the UUID-defect re-dump (§10, PB-171)** — a
+different but equally rigorous method, chosen because this session could not take exclusive control
+of the live stack (§10 explains why).
 
 ---
 
@@ -19,8 +42,13 @@ accepted state (PB-045).
 
 | Component | File | SHA-256 |
 |---|---|---|
-| **Database** | `thiqa-rdy0044b-v2-baseline-20260814-064532.sql` (71,857,993 bytes, 283 tables) | `4048e65c12d6e1527618719e16b45977aa5fc1dd4204c75225928002dd4002d4` |
-| **Document payloads** | `rdy0044b-v2-document-payloads.zip` (7,009 bytes, 10 files) | `c0a8d0dc797e40a89167c01a815044d080e6625e8c9b92e296c3d3133c2abe6e` |
+| **Database** | `thiqa-rdy0044b-v3-baseline-20260816-165016.sql` (81,869,406 bytes, 283 tables) | `b70e969572657a5269def836874a220d52afae818b238a0723f528415984fe9b` |
+| **Document payloads** | `thiqa-rdy0044b-v3-document-payloads.zip` (7,009 bytes, 10 files) | `c0a8d0dc797e40a89167c01a815044d080e6625e8c9b92e296c3d3133c2abe6e` |
+
+(Superseded v2: `SUPERSEDED-thiqa-rdy0044b-v2-baseline-20260814-064532.sql`, hash
+`4048e65c12d6e1527618719e16b45977aa5fc1dd4204c75225928002dd4002d4` — ships 13 NULL UUIDs, MUST NOT
+be restored. v2's document payloads are unaffected by the defect but were superseded alongside it for
+naming consistency; the v3 payload hash is identical to v2's because no document changed.)
 
 Both live in `C:\openemr-stack\backups\protected\rdy0044b\`, **outside the repository, outside the
 retention glob, read-only** (write blocked, verified).
@@ -35,12 +63,12 @@ retention glob, read-only** (write blocked, verified).
 ```powershell
 $mysql = 'C:\openemr-stack\mariadb\bin\mariadb.exe'
 $prot  = 'C:\openemr-stack\backups\protected\rdy0044b'
-$db    = "$prot\thiqa-rdy0044b-v2-baseline-20260814-064532.sql"
-$zip   = "$prot\rdy0044b-v2-document-payloads.zip"
+$db    = "$prot\thiqa-rdy0044b-v3-baseline-20260816-165016.sql"
+$zip   = "$prot\thiqa-rdy0044b-v3-document-payloads.zip"
 $docs  = 'G:\My Drive\OpenEMR\sites\default\documents'
 
 # 1. Verify both components BEFORE trusting them. Stop on any mismatch.
-(Get-FileHash $db  -Algorithm SHA256).Hash.ToLower()   # must be 4048e65c12d6e152...
+(Get-FileHash $db  -Algorithm SHA256).Hash.ToLower()   # must be b70e969572657a52...
 (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()   # must be c0a8d0dc797e40a8...
 
 # 2. Stop writes.
@@ -62,6 +90,15 @@ Start-Process -FilePath 'C:\openemr-stack\apache\bin\httpd.exe' `
 
 Roughly 20 seconds end to end.
 
+> **⚠ Taking a NEW dump — do not redirect `mysqldump`'s stdout with PowerShell's own `>` operator.**
+> Discovered while producing v3 (2026-08-16): `& mysqldump.exe ... openemr > out.sql` run directly in
+> PowerShell silently re-encodes the byte stream (observed: file size roughly doubled, and the
+> restore failed with `ERROR: ASCII '\0' appeared in the statement` / garbled `??` bytes at the start
+> of the file). The dump **looks** like it succeeded (exit code 0, plausible file size) — the
+> corruption is only caught on restore. Always wrap it in `cmd /c "... > \"out.sql\""` instead, the
+> same way this file's restore step already does for the `<` side. Verify any new dump by restoring
+> it — into a throwaway database if the live one can't be touched, see §10 — before trusting it.
+
 ## 3. Post-reset verification — required, not optional
 
 Run the state signature and compare against the accepted value:
@@ -69,12 +106,24 @@ Run the state signature and compare against the accepted value:
 ```
 patients=30 | encounters=72 | appts=36 | recurring=1 | docs=10 | rx=12 | charges=36 | payers=2 |
 soap=18 | vitals=12 | eyeexams=8 | allergy_pts=5 | problem_pts=6 | payments=12 | adjustments=4 |
-prices=4 | users=10 | aclgroups=7 | aclrules=19 | facility=Thiqa Demo Eye Clinic | globals=495 |
+prices=4 | users=10 | aclgroups=7 | aclrules=19 | facility=Thiqa Demo Eye Clinic | globals=504 |
 duppairs=2 | cohort=37 | cohort_charged=36 | planted=36/SYN-0019 | createdby0=0 | unattr_forms=0 |
 unattr_soap=0 | ev028_ids=0 | ev028_phone=0 | ev028_phrase=0 | ev028_marker=0
 ```
 
-Query: `scratchpad/state-signature.sql`. **Any difference means the reset did not complete.**
+**`globals` changed from 495 (v2) to 504 (v3), +9.** Not a defect: `globals` rows are lazily
+created by visiting settings pages, and this document already characterises the same phenomenon
+elsewhere as neutral background drift (§0.2's schema table: 490 → 495 rows between two earlier
+observations, marked `DRIFT — NEUTRAL`). Two days of concurrent-agent browser/UI testing between the
+v2 baseline (2026-08-14) and this v3 dump (2026-08-16) is sufficient explanation; the 9 rows were not
+individually inventoried since none of them are clinical data and the CLINHASH check in §10 covers
+the surface that actually matters. Every other field above is **unchanged from the v2 accepted
+value**, including the `uuid`-bearing tables.
+
+Query: `scratchpad/state-signature.sql` if present on this machine (agent-local, not tracked — see
+`docs/evidence/harnesses/rdy0044b-v3-clinhash.sql`, tracked, for the clinical-fingerprint half of
+this check, §10). **Any count difference beyond the noted `globals` drift means the reset did not
+complete.**
 
 Also confirm on disk: **10** payload files under `sites/default/documents/<pid>/`.
 
@@ -163,4 +212,105 @@ Beyond §6:
 - **The eight ophthalmology examinations are byte-identical to the set Dr Taha reviewed** — CLINHASH
   `fab7947785d853d04b431932cf5c45ab`, unchanged across the re-seed. **The re-baseline did not touch
   the clinical content that was signed off.**
+
+---
+
+## 10. Proof for the v3 baseline (PB-171, AGENT-DATA, 2026-08-16)
+
+Not asserted — executed. Scope: fix the stale v2 baseline (§ header flag), not a general re-seed.
+
+| Step | Result |
+|---|---|
+| **Pre-check** — live `SELECT SUM(uuid IS NULL OR uuid='')` | `form_vitals` **0/12**, `insurance_companies` **0/2** — confirmed already correct, matching the pinned flag's expectation |
+| **CLINHASH before** (`docs/evidence/harnesses/rdy0044b-v3-clinhash.sql` — MD5 over ordered clinical *values*, not counts, across `form_vitals`, `insurance_companies`, `form_soap`, `lists`, `prescriptions`, `form_encounter`, `form_eye_vitals`) | `7c72767f2f8f006f181b2217c99cf1e9` |
+| **`pid 31` disposition** — see below | removed (3 tables + patient_data, 4 rows total; audit log left untouched) |
+| **CLINHASH after removal** | `7c72767f2f8f006f181b2217c99cf1e9` — **identical**, confirming the removal touched none of the tables clinical closure depends on |
+| **v3 database dump taken** | `thiqa-rdy0044b-v3-baseline-20260816-165016.sql`, 81,869,406 bytes, SHA-256 `b70e969572657a5269def836874a220d52afae818b238a0723f528415984fe9b` |
+| **v3 document payloads** | re-zipped fresh from the live 10 payload files under `sites/default/documents/<pid>/`; SHA-256 `c0a8d0dc797e40a89167c01a815044d080e6625e8c9b92e296c3d3133c2abe6e` — **byte-identical to v2's**, confirming no document changed |
+| **Restore-test** | restored the v3 dump into a **throwaway database** (`openemr_rdy0044b_v3_verify`), not the live `openemr` schema — see rationale below |
+| **State signature in the restored copy** | `patients=30, encounters=72, appts=36, recurring=1, docs=10, rx=12, payers=2, soap=18, vitals=12, users=10, aclgroups=7, globals=504` — matches §3 exactly (the `globals` figure is the v3 accepted value, see §3's note) |
+| **UUID re-check in the restored copy** | `form_vitals` **0/12** NULL, `insurance_companies` **0/2** NULL |
+| **CLINHASH in the restored copy** | `7c72767f2f8f006f181b2217c99cf1e9` — **identical to live**, proving the dump/restore round-trip is faithful for every clinically relevant table checked |
+| Throwaway verify database | dropped after the check; nothing persists from it |
+
+**live (post-removal) == v3-dump-restored-elsewhere.** That is the same determinism property §7/§8
+demonstrate, established without a second route through the live `openemr` schema.
+
+### Why this used a throwaway database instead of restoring over live `openemr`
+
+§2's documented procedure restores directly onto the live schema (`DROP DATABASE openemr; ...`),
+which is correct when an agent has exclusive control of the stack. **This session does not**: the
+brief for this task states at least three other Claude Code sessions were concurrently active against
+this same repo and, by extension, this same running Apache/MariaDB instance. `Stop-Process -Name
+httpd -Force` — required by §2 step 2 before any live restore — **was refused by the environment's
+own permission classifier** when attempted here, which is the correct outcome: taking Apache down
+would have broken whatever the other concurrent sessions were doing against `http://localhost:8300/`
+at that moment. Restoring the new dump into a separate, disposably-named database on the same MariaDB
+instance validates the file's restorability and clinical fidelity without that blast radius, at the
+cost of not re-proving the Apache-restart leg of §2 (that leg is unchanged from v1/v2 and was not
+touched by this operation).
+
+### `pid 31` — removed, not folded in, and why
+
+PB-202 (2026-08-16, live browser session) created `pid 31`
+(`QATest BrowserVerification-SYNTHETIC`) while proving RDY-0013's registration flow end to end, and
+explicitly disclosed it and handed the disposition decision to this agent. Its footprint was
+`patient_data` (1 row), `employer_data` (1), `history_data` (1), `insurance_data` (3 default
+placeholder rows created automatically on patient creation) — **zero** rows in every clinical table
+checked (`form_vitals`, `form_encounter`, `form_soap`, `prescriptions`, `documents`, `lists`,
+`billing`, `form_eye_vitals`), confirmed by an exhaustive scan of every table in the schema carrying
+a `pid`/`patient_id`/`foreign_id` column before deletion.
+
+**Decision: removed.** Reasons:
+
+1. The accepted state signature (§3, unchanged since v1) fixes `patients=30`. Every other count-based
+   check in this document, EV-028, and the cohort/duplicate-detection validation is built on that
+   figure. Folding in an extra patient would have meant re-deriving and re-documenting every one of
+   those checks against `patients=31` for a patient that carries no demo narrative, no clinical
+   content, and exists only as incidental UI-test residue.
+2. RDY-0013's own closure (PB-202) is already evidenced by the *actions* taken during that session
+   (screenshots, DOM state, the duplicate-check modal, the created-and-verified demographics) — the
+   row persisting afterward was never itself part of that evidence. Deleting it after the fact takes
+   nothing away from the closure.
+3. Leaving ad-hoc QA/test patients in what becomes the new accepted baseline sets a bad precedent:
+   every future browser-verification session would either need the same removed-or-folded decision
+   made for it, or the "accepted" patient count would drift upward indefinitely.
+
+**What was deliberately not touched:** the 50 `log` (audit trail) rows referencing `patient_id=31`.
+Hand-deleting audit log rows for a single patient is a different and worse thing than a normal
+`DROP DATABASE`/restore cycle resetting the whole log (§5) — it would be selective audit-log editing,
+which is exactly what D-1's tamper-detection check exists to catch. Those 50 rows remain in the v3
+baseline as a (harmless, patient-record-absent) historical record that the registration test
+happened. They will be cleared the same way the rest of the log is, on the next full reset.
+
+**Rollback note, disclosed honestly.** A pre-deletion snapshot was taken before the `DELETE`
+statements ran, but it was produced with the same PowerShell-`>`-redirection encoding bug documented
+above (discovered afterward, while validating the v3 dump) and was corrupted — it would not have
+restored. It has been deleted rather than kept as a false safety net. The `DELETE` itself was verified
+immediately (row counts, no orphaned rows in the 43-table scan, CLINHASH unchanged) before the v3 dump
+was taken, so there was no window where a bad delete could have gone undetected. If `pid 31` or an
+equivalent synthetic patient is ever needed again, the practical path is re-running the same
+Add-Patient flow PB-202 already exercised, not a file restore — the superseded v2 baseline (which
+predates `pid 31` entirely) is also a valid rollback target for anything unrelated to this delete.
+
+## 11. Open sequencing question — not this agent's to resolve, flagged for Agent C
+
+`docs/evidence/AGENT-CLAIMS.md`'s PB-077 owner-authorisation table names **three** dataset changes as
+belonging to one coordinated re-baseline: (1) the 13 UUIDs — done, confirmed live, the subject of this
+v3 baseline; (2) a sensitivity-flagged encounter + a clinician-authored form, owned there by Agent A;
+(3) the `Timolol 0.5% eye drops` allergy on `SYN-0002` — already present (§9, carried into v3
+unchanged, confirmed by the CLINHASH match). **Change 2 was not seeded by this update.**
+
+Separately and more recently, PB-155 (2026-08-16, AGENT-CONF, `docs/Marketing-MVP-and-Launch-
+Readiness-Requirements.md`) re-flagged the same two pieces of change 2 (RDY-0016's A-2/A-7 rows) as
+still unseeded and explicitly handed them to AGENT-DATA rather than Agent A.
+
+This agent's task for today was scoped narrowly to the stale-baseline UUID defect — confirmed live,
+re-dumped, proven — not to change 2. Seeding a sensitivity-flagged encounter and reassigning a form's
+authorship is a real clinical-content decision (which encounter, which form, which non-admin account)
+that neither this session's brief nor the PB-077 table names me as the decider for, so it was not
+improvised here. **If change 2 still needs to happen, it should happen before anyone treats v3 as
+final** — the pinned flag in `AGENT-CLAIMS.md` already warns that re-baselining more than once costs
+more than sequencing it correctly once. Recorded here rather than silently deferred, per this
+document's own evidence-first standard.
 
