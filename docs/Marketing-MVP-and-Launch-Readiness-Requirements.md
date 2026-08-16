@@ -273,10 +273,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **25 P0** (+ P1s **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045). **RDY-0013 closed at PB-202 (2026-08-16, live browser re-test); see PB-140 for the register-reconciliation history behind the rest of this list** |
-| **Requirements still open** | **89** |
-| **Open P0** | **46** — 71 P0 less the 25 genuinely closed P0 IDs above. **PB-202 decremented this from PB-140's 47 by one (RDY-0013); not yet re-confirmed by a full dedicated sync** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 15 · G2 11 · G3 17 · G4 3 · G5 13 · G6 21** — **PB-202 single-item decrement (2026-08-16) on top of the PB-140 mechanical sync; a full re-derivation is still owed at the next dedicated sync** |
+| **Requirements CLOSED** | **26 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205). See PB-140 for the register-reconciliation history and PB-206 for this figure's mechanical re-derivation |
+| **Requirements still open** | **88** |
+| **Open P0** | **45** — 71 P0 less the 26 genuinely closed P0 IDs above. **PB-206 (2026-08-16): full mechanical re-derivation, three-way verified (per-gate deltas, direct union count, and 71−26 arithmetic all agree)** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 15 · G2 11 · G3 16 · G4 3 · G5 13 · G6 20** — **PB-206 gate sync (2026-08-16), the first full mechanical re-derivation since PB-140** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -2204,6 +2204,65 @@ background-service trigger call named above. Root-cause candidates are now on re
 dev follow-up rather than "reproducible, cause unknown."
 
 **`Blocks`:** G2 (RDY-0025's own `Blocks` field; not recomputed here, §0.0 Rule 3).
+
+## PB-205 (2026-08-16) — **Register-row bookkeeping fix for RDY-0082/0025 (Agent C, Orchestrator) — and a self-correction**
+
+PB-203 stated *"RDY-0082 → CLOSED. §7 card updated below"*, but the §7 register row still read
+`NOT READY — OPERATIONAL` / `Never tested` — the same bug class PB-140 found originally: a PB entry
+narrating a closure the register row was never actually touched to reflect. Verified the underlying
+evidence first, independently, before trusting the claim: `front_office.json:135` confirmed to carry
+the `!full_new_patient_form` negation counterpart AGENT-SEC's report (commit `2851fd9ef`) cited; the
+disposable restore instance confirmed reachable via a direct `Invoke-WebRequest` (HTTP 200); the v3
+baseline file confirmed present on disk at the exact byte size and SHA-256 hash reported. Register
+row then fixed to `VERIFIED READY — CLOSED BY PHASE 2B (PB-182/183/203)`.
+
+RDY-0025's row was also brought current to reflect PB-204's actual findings (marking mechanism
+confirmed working through the app; 2 of ≥5 required patients checked; blocked by a reproducible
+Documents-tab hang) rather than left at its stale pre-cycle text.
+
+**Self-correction, disclosed rather than hidden:** the commit that made this fix was itself titled
+"PB-205" in its message, but this log entry — the actual PB-205 record — was not written until this
+correction. The exact failure mode this document's own closure contract exists to catch, caught in
+its own orchestrator. Recorded here rather than silently backfilled.
+
+**`Blocks`:** none — no gate count changes in this entry itself; the RDY-0082/0025 register-row edits
+were already reflected in PB-203/PB-204's own `Blocks` accounting. See PB-206 for the dedicated sync.
+
+## PB-206 (2026-08-16) — **Fresh §47 gate sync (Agent C, Orchestrator) — direct manual re-derivation, supersedes an unreliable automated pass**
+
+A fork spawned to run a mechanical §47 sync after this cycle's wave of closures returned an
+internally inconsistent result (its own report: *"I cannot reconcile [a G1 drop of 4] from what
+closed since PB-140... this likely means PB-140's original G1 enumeration was itself off by 3... but
+I did not chase this further"*) and explicitly flagged its own numbers as unverified. Rather than
+publish an admittedly-unreconciled count, this entry re-derives every gate directly, by hand, via
+`grep` against the live register — showing full workings so the arithmetic is checkable by inspection.
+
+**Method:** for each gate G0–G6, every `Pri = P0` row whose `Blocks` field names that gate (bare
+token only — per §47 rule 8, a qualified entry like RDY-0083's `G2(disclose)` does **not** count) was
+listed with its current `Verdict` cell, then partitioned into closed/open by that cell's literal text
+(`**CLOSED ...**` vs `NOT READY`/`BLOCKED`).
+
+**Only two P0 items have closed since the PB-140 baseline: RDY-0013 (`G1 G2`, PB-202) and RDY-0082
+(`G3 G6`, PB-182/183/203/205).** Every gate's delta below traces to exactly one of these two closures
+— G0/G4/G5 (neither closure names them) show **zero** change, and each of G1/G2/G3/G6 drops by
+**exactly 1**, matching one closure each. This three-way consistency (per-gate deltas, a full manual
+union-count of open IDs, and `71 total P0 − 26 closed = 45`) is the confirmation the fork's pass
+lacked.
+
+| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| At PB-140 | 3 | 16 | 12 | 17 | 3 | 13 | 21 |
+| **After PB-206** | **3** | **15** | **11** | **16** | **3** | **13** | **20** |
+
+**Open P0: 47 → 45** (RDY-0013, RDY-0082 both now excluded). 71 P0 registered, **26 closed**:
+0001, 0010, 0011, 0012, 0013, 0014, 0015, 0017, 0020, 0021, 0022, 0024, 0026, 0027, 0028, 0032,
+0036, 0040, 0046, 0050, 0051, 0052, 0058, 0059, 0080, 0082.
+
+`§1.4` updated in this same commit to carry these figures. The fork's inconsistent report is not
+cited as evidence anywhere and should not be treated as a prior sync — this entry is the first
+mechanically-derived count since PB-140.
+
+**`Blocks`:** none — a sync entry recalculates, it does not itself block a gate.
 
 ## PB-140 (2026-08-16) — **Register reconciliation and fresh §47 gate sync (Agent C, Orchestrator)**
 
