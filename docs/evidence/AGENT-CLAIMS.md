@@ -243,4 +243,4 @@ instead, plus continuing spot-audits of the fleet's closures as they land.
 
 | Item | Held by | State | Note |
 |---|---|---|---|
-| **RB-22** (Inter font dedup — theme rebuild) | **Agent D** | **HELD** | Source-level fix already committed (per `docs/RebrandingBugs.md`: "FIXED (source) — needs theme rebuild"). Not claimed by any Agent C subagent — it's a build/deploy action (`npm run build` off the Drive mount per `CLAUDE.local.md` §6), not code or an RDY item. No overlap with AGENT-HYGIENE (docs only) or any other subagent |
+| **RB-22** (Inter font dedup — theme rebuild) | **Agent D** | **DONE — CLOSED** | PB-220; `acec953cf`. Build workspace resynced, rebuilt, verified: all 8 theme CSS files reference `Inter-Regular.woff2` once each, zero Medium/SemiBold/Bold references. `BrandingGovernanceGuard` 31/31, brand manifest 123/123 |
