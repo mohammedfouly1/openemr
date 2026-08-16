@@ -302,6 +302,18 @@ instead, plus continuing spot-audits of the fleet's closures as they land.
 |---|---|---|---|
 | **RB-22** (Inter font dedup — theme rebuild) | **Agent D** | **DONE — CLOSED** | PB-220; `acec953cf`. Build workspace resynced, rebuilt, verified: all 8 theme CSS files reference `Inter-Regular.woff2` once each, zero Medium/SemiBold/Bold references. `BrandingGovernanceGuard` 31/31, brand manifest 123/123 |
 | **RB-14** (Arabic PDF font — D-9) | **Agent D** | **DECIDED — Option C adopted; stays OPEN through pilot** | Owner decision recorded `docs/evidence/EV-RB14-mpdf-gpos.md` §4 (2026-08-16): accept open, disclosed, revisit trigger = a customer contract requiring Arabic PDF. Option B (Scheherazade New, Lateef) tested time-boxed, both failed — 4/4 fonts now fail identically. Draft `RDY-0094` no-go text and `RDY-0087` Arabic disclosure (unreviewed, needs HR-09) at §6. `Config_Mpdf.php` untouched. Not edited into the requirements document by this session |
+| **RDY-0002** | Agent D | **DONE — CLOSED** | Mechanical register sync, `aa39f8b7d`. Owner's Wave 3 decision (`EV-WAVE3-decisions-20260816.md`) was never applied to the §7 row — applied here, no new judgment |
+| **RDY-0071** (`pat_ledger.php` CSV defect only) | Agent D (AGENT-FIX071) | **HELD** | The reporting-procedure half of 0071 is done (AGENT-DOC/AGENT-DATA2, `EV-071`) and explicitly out of scope here. This claim is narrowly the one named unfixed code defect: `pat_ledger.php`'s CSV export emits unescaped HTML instead of CSV rows (`EV-071` §3.5). Not the reviewer-confirmation leg — that stays human-blocked and untouched |
+
+**Checked and deliberately NOT re-attempted, per the standing pattern already on record**: `RDY-0025`,
+`RDY-0042`/`0043`, `RDY-0048` — each has failed multiple times (2–4 attempts) at the Claude Code
+permission classifier itself (password entry, `ALTER USER`, or a `php.ini`/Apache-restart system
+change), independent of any relayed Owner authorization. Spawning another subagent repeats a
+documented dead end; these need the Owner's own direct settings-level action, not another task
+prompt. `RDY-0057` was checked and found already substantively complete (`EV-056-057-088`, 0
+violations) — the sole remaining gap is `RDY-0003`'s reviewer sign-off, a human blocker, not
+engineering. `RDY-0016/0038/0041/0044/0045/0060/0061/0062` remain with Agent C's fleet, per the
+existing rule above — not reclaimed.
 
 ### Agent D — Wave execution, 2026-08-16 (Owner-directed)
 
