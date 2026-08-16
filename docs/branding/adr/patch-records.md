@@ -993,3 +993,85 @@ patched core files") understates the exposure.
 references above are filled in. Every one of the 17 core files now has a numbered record naming a real
 commit, which is what `Q1` asks for — a patch record citing no commit satisfies its letter but not its
 purpose.
+
+---
+
+## PR-18 — `interface/reports/pat_ledger.php`
+
+**BRAND ID:** none — **a correctness/defect fix, not branding.** Fifth non-branding entry, recorded
+because Invariant 4 / Q1 governs every core edit regardless of motive. **Readiness ref:** Phase 2B
+PB-214, RDY-0037. **Gates:** G2. **Agent:** AGENT-SEC2.
+
+**Locked decision satisfied:** Q26 (tenant/site-aware currency resolver — "replace runtime hard-coded
+currency assumptions... do not global-search-and-replace"). This patch does not introduce a resolver;
+it **wires an existing one** (`OpenEMR\Common\Utils\FormatMoney::getFormattedMoney()`, called via the
+legacy `oeFormatMoney()` wrapper in `library/formatting.inc.php`) through to a screen that was calling
+it with the symbol parameter omitted. `FormatMoney` already reads `gbl_currency_symbol` from
+`OEGlobalsBag` — confirmed live in the `globals` table as `SAR` (set per PB-016/PB-028) — so no new
+resolver, no hardcoded string, and no other tenant's non-Saudi configuration is affected: any site
+with `gbl_currency_symbol` unset renders identically to before (the symbol branch is a no-op on an
+empty string, per `FormatMoney::getFormattedMoney()` line 43).
+
+**Locked-decision exception used:** Invariant 4 residual-edit exception. **No extension point can
+reach it** — this is a legacy, un-templated report script (`interface/reports/pat_ledger.php`) that
+builds its own HTML inline via string concatenation; there is no Twig render, filter, or event on this
+page a module could hook to alter the money-formatting call sites.
+
+### What was wrong
+
+`interface/reports/pat_ledger.php` is the server-rendered "Patient Ledger" screen (reached from the
+patient menu's `Ledger` item, `interface/main/tabs/menu/menus/patient_menus/standard.json:86-89`, and
+from `Reports > Financial > Pat Ledger`). Every one of its 13 `oeFormatMoney(...)` call sites omitted
+the optional `$symbol` argument, which defaults to `false`:
+
+```diff
+-    echo "<td class='detail text-center'>" . text(oeFormatMoney($enc_chg)) . "</td>";
++    echo "<td class='detail text-center'>" . text(oeFormatMoney($enc_chg, true)) . "</td>";
+```
+
+(and identically for `$enc_pmt`, `$enc_adj`, `$enc_bal` in `PrintEncFooter()`; `$pmt_amt`, `$adj_amt`,
+`$uac_appl`, `$uac_bal` in `PrintCreditDetail()`; the per-line-item `$erow['fee']`; and the grand-total
+row's `$total_chg`, `$total_pmt`, `$total_adj`, `$total_bal`). Every monetary amount on the screen
+rendered as a bare number — no `SAR`, no `$`, no currency indicator of any kind.
+
+**Not touched:** the CSV-export code path in the same file (`$_REQUEST['form_csvexport']`). That path
+has an unrelated, pre-existing content-corruption defect (`$csv` is initialized but never populated in
+the render loop) found independently by AGENT-DATA2 (PB-208, `EV-071` §3.4-3.6) — out of this patch's
+scope; fixing it would touch different lines for a different reason and is left to whoever owns that
+finding.
+
+### Measured impact, before and after
+
+Live browser verification (`claude-in-chrome`, logged in as `k.alotaibi` / Accounting, credentials
+read from `C:\openemr-stack\secrets\thiqa-demo-credentials.json`), same patient and figures PB-202
+originally flagged — `SYN-0001` (Hessa Alharthi, pid 1): two encounters, charges 350.00 and 250.00, a
+payment of 150.00, balance 450.00.
+
+| | Before (PB-202, 2026-08-16) | After (PB-214, this patch) |
+|---|---|---|
+| Line-item charge | `350.00` | `SAR 350.00` |
+| Encounter Balance row | `350.00 · 0.00 · 0.00 · 350.00` | `SAR 350.00 · SAR 0.00 · SAR 0.00 · SAR 350.00` |
+| Payment row | `150.00` | `SAR 150.00` |
+| Grand Total row | `600.00 · 150.00 · 0.00 · 450.00` | `SAR 600.00 · SAR 150.00 · SAR 0.00 · SAR 450.00` |
+
+`text()` extraction of the live page (`GET /interface/reports/pat_ledger.php?form=1&patient_id=1&form_refresh=1`,
+HTTP 200) shows `SAR` prepended to all 7 distinct amount instances on the page (line-item charges,
+both `Encounter Balance` rows, the payment row shown twice — once as a credit, once under `{Pay
+History}` — and the `Grand Total` row), with figures identical to PB-202's pre-patch numbers,
+confirming this is additive formatting, not a data change.
+
+**Negative control:** the `gbl_currency_symbol` global was independently confirmed set to `SAR` by
+direct MariaDB query (`SELECT gl_value FROM globals WHERE gl_name = 'gbl_currency_symbol'` → `SAR`)
+*before* editing any code, so the live rendering change is attributable to the code path now reading
+that value, not to a coincidental global change made at the same time.
+
+**Upstream-first path (Q1):** not filed. Omitting the `$symbol` argument is not itself an upstream
+defect — `oeFormatMoney()`'s symbol-off default is deliberate elsewhere in the codebase (e.g. figures
+embedded in prose where a symbol would read oddly). This screen's specific omission is a plain
+oversight on a screen whose entire purpose is to display money, not a defect present across the
+function's other 190+ call sites, so there is no single upstream fix that would apply generally.
+
+**Verification:** `php -l` clean. Live HTTP 200 render inspected via `fetch()` in the authenticated
+browser session and via DOM text extraction (`get_page_text`), both showing `SAR` on every amount;
+figures cross-checked against `ar_activity`/`billing` table contents for `pid=1` and against PB-202's
+own pre-patch numbers as the negative-control baseline.

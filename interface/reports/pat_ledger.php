@@ -139,10 +139,10 @@ function PrintEncFooter(): void
     echo "<td colspan='3'>&nbsp;</td>";
     echo "<td class='detail'>" . xlt('Encounter Balance') . ":</td>";
     echo "<td class='detail text-center'>" . text($enc_units) . "</td>";
-    echo "<td class='detail text-center'>" . text(oeFormatMoney($enc_chg)) . "</td>";
-    echo "<td class='detail text-right'>" . text(oeFormatMoney($enc_pmt)) . "</td>";
-    echo "<td class='detail text-right'>" . text(oeFormatMoney($enc_adj)) . "</td>";
-    echo "<td class='detail text-right'>" . text(oeFormatMoney($enc_bal)) . "</td>";
+    echo "<td class='detail text-center'>" . text(oeFormatMoney($enc_chg, true)) . "</td>";
+    echo "<td class='detail text-right'>" . text(oeFormatMoney($enc_pmt, true)) . "</td>";
+    echo "<td class='detail text-right'>" . text(oeFormatMoney($enc_adj, true)) . "</td>";
+    echo "<td class='detail text-right'>" . text(oeFormatMoney($enc_bal, true)) . "</td>";
     echo "</tr>\n";
 }
 function PrintCreditDetail($detail, $pat, $unassigned = false, $effectiveInsurances = []): void
@@ -233,16 +233,16 @@ function PrintCreditDetail($detail, $pat, $unassigned = false, $effectiveInsuran
 
         $print_pmt = '';
         if ($pmt_amt != 0) {
-            $print_pmt = oeFormatMoney($pmt_amt);
+            $print_pmt = oeFormatMoney($pmt_amt, true);
         }
 
         $print_adj = '';
         if (!empty($adj_amt)) {
-            $print_adj = oeFormatMoney($adj_amt);
+            $print_adj = oeFormatMoney($adj_amt, true);
         }
 
-        $print_appl = $uac_appl ? oeFormatMoney($uac_appl) : "";
-        $print_bal = $uac_bal ? oeFormatMoney($uac_bal) : "";
+        $print_appl = $uac_appl ? oeFormatMoney($uac_appl, true) : "";
+        $print_bal = $uac_bal ? oeFormatMoney($uac_bal, true) : "";
 
         $print .= "<td class='detail text-center'>" . text($print_appl) . "&nbsp;</td>";
         $print .= "<td class='detail text-right'>" . text($print_pmt) . "&nbsp;</td>";
@@ -809,7 +809,7 @@ if ($_REQUEST['form_refresh'] || $_REQUEST['form_csvexport']) {
 
             $print .= "<td class='detail'>" . text($bill) . "&nbsp;/&nbsp;" . text($who) . "</td>";
             $print .= "<td class='detail text-center'>" . text($erow['units']) . "</td>";
-            $print .= "<td class='detail text-center'>" . text(oeFormatMoney($erow['fee'])) . "</td>";
+            $print .= "<td class='detail text-center'>" . text(oeFormatMoney($erow['fee'], true)) . "</td>";
             $print .= "<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>";
             $print .= "</tr>\n";
 
@@ -867,10 +867,10 @@ if ($_REQUEST['form_refresh'] || $_REQUEST['form_csvexport']) {
         echo " <td colspan='2'>&nbsp;</td>";
         echo " <td class='font-weight-bold' colspan='2'>" . xlt("Grand Total") . "</td>\n";
         echo " <td class='font-weight-bold text-center'>" . text($total_units) . "</td>\n";
-        echo " <td class='font-weight-bold text-center'>" . text(oeFormatMoney($total_chg)) . "</td>\n";
-        echo " <td class='font-weight-bold text-right'>" . text(oeFormatMoney($total_pmt)) . "</td>\n";
-        echo " <td class='font-weight-bold text-right'>" . text(oeFormatMoney($total_adj)) . "</td>\n";
-        echo " <td class='font-weight-bold text-right'>" . text(oeFormatMoney($total_bal)) . "</td>\n";
+        echo " <td class='font-weight-bold text-center'>" . text(oeFormatMoney($total_chg, true)) . "</td>\n";
+        echo " <td class='font-weight-bold text-right'>" . text(oeFormatMoney($total_pmt, true)) . "</td>\n";
+        echo " <td class='font-weight-bold text-right'>" . text(oeFormatMoney($total_adj, true)) . "</td>\n";
+        echo " <td class='font-weight-bold text-right'>" . text(oeFormatMoney($total_bal, true)) . "</td>\n";
         echo " </tr>\n";
         ?>
     </table>

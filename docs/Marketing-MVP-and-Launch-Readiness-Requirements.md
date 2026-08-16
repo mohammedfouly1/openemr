@@ -958,7 +958,7 @@ qualification*. Dependencies, not dates.
 | **0022** | A realistic current week of appointments — 30–40 including 2 no-shows, 3 cancellations, 1 recurring series — plus today's list populated for the flow board | GTM DEM-003 | `openemr_postcalendar_events` = **0** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-055)** | DATA | **P0** | G2 | Database / Demo Data | 0020, 0036 | **CLOSED 2026-08-14** |
 | **0023** | Clinical depth: ≥15 completed SOAP notes, ≥10 encounters with vitals | GTM DEM-003 | 0 | READY AFTER DATA | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0021 | NOT READY |
 | **0024** | Structured lists populated: 3–5 patients with allergies, 4–6 with chronic problems, plus medications and immunisations | GTM DEM-003; CLM-0006 | 0 | **VERIFIED READY — CLOSED BY PHASE 2B (PB-058)** | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0020 | **CLOSED 2026-08-14** |
-| **0025** | 8–10 uploaded synthetic documents, each visibly marked `SYNTHETIC DEMO / NOT A REAL PATIENT` | GTM DEM-003; brief §18 | `documents` = **0** | READY AFTER DATA — **PB-204: marking mechanism confirmed working through the app (2 of ≥5 required patients checked, SYN-0002/SYN-0003) — blocked from completion by a reproducible Documents-tab hang defect (3+ reproductions, root-cause candidates identified, not yet fixed)** | DATA | **P0** | G2 | Database / Demo Data | 0020, 0028 | NOT READY |
+| **0025** | 8–10 uploaded synthetic documents, each visibly marked `SYNTHETIC DEMO / NOT A REAL PATIENT` | GTM DEM-003; brief §18 | `documents` = **0** | READY AFTER DATA — **PB-215: investigated PB-204's two named hang candidates (neither independently confirmed as the trigger — see PB-214) and found a third, better-evidenced, chronic candidate instead: PHP session persistence is broken on this host (`session.save_path` resolving to non-writable `C:\Windows`, 472 `Permission denied` events since 2026-08-13). This is a host/environment defect outside the git repo, not an OpenEMR source defect — no code fix applies; the fix (an explicit writable `session.save_path` in `C:\openemr-stack\php\php.ini`) requires a shared Apache restart not taken here given concurrently active agent sessions. Marking mechanism itself remains confirmed working per PB-204 (unchanged)** | DATA | **P0** | G2 | Database / Demo Data | 0020, 0028 | NOT READY |
 | **0026** | 10–15 recorded and printable prescriptions | GTM DEM-003; CLM-0012 | `prescriptions` = **0** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-058)** | DATA | **P0** | G2 | Clinical Workflow Reviewer | 0021 | **CLOSED 2026-08-14** |
 | **0027** | 2 fictional payers, one fee schedule, one price level populated, 30–40 charges (B3) | GTM DEM-003; audit B3 | `insurance_companies` = 0; `prices` empty; single price level | **VERIFIED READY — CLOSED BY PHASE 2B (PB-055)** | DATA | **P0** | G2 | Database / Demo Data | 0020, 0021, 0037 | **CLOSED 2026-08-14** |
 | **0028** | Synthetic-data safety controls — no real PHI, no real Iqama/National ID, no real phone numbers, no real payer contracts, no customer logos, no real staff names | GTM DEM-003; brief §18 | No data exists; **no control document exists either** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-045)** — Legal/Compliance verdict (Mohammed Elfouly, APPROVED) relayed by the Owner | DATA | **P0** | G1 G2 G3 | Legal / Compliance | — | **CLOSED 2026-08-14** |
@@ -975,7 +975,7 @@ qualification*. Dependencies, not dates.
 | **0034** | Remove or repoint vendor links — `display_donations_link`, `display_review_link`, `main_menu_logo_link` | Audit §19.4; L-17 | All live and pointing at open-emr.org | READY AFTER CONFIGURATION | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0095 | NOT READY |
 | **0035** | Clear `pqri_registry_name='Model Registry'` and `pqri_registry_id='125789123'` placeholders | Audit §19.4 | Live placeholders | **VERIFIED READY — CLOSED BY PHASE 2B (PB-151)** — both cleared to empty string; only call site (`PQRIXml.class.php:56-57`) renders an empty element, not an error | CONFIGURATION | P1 | G2 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-16** |
 | **0036** | Set `gbl_time_zone` to `Asia/Riyadh` | Audit §22.4, §23.4 | **Empty** → UTC | **VERIFIED READY — CLOSED BY PHASE 2B (PB-016)** | CONFIGURATION | **P0** | G1 G2 G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
-| **0037** | Configure currency display for SAR — symbol, decimals, separators | Audit §22.4, §23.4; L-12 | `$`, 2 decimals; **display only, no ISO code** | READY WITH MANDATORY QUALIFICATION — **PB-202: checked the actual Patient Ledger (a real financial screen with real charges) directly — it renders every amount as a bare number, no `SAR` and no `$` anywhere. Worse than the previously-suspected "$ instead of SAR" gap; the currency indicator is simply absent from this screen** | CONFIGURATION | **P0** | G2 | OpenEMR Engineer | 0001 | NOT READY |
+| **0037** | Configure currency display for SAR — symbol, decimals, separators | Audit §22.4, §23.4; L-12 | `$`, 2 decimals; **display only, no ISO code** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-214)** — `interface/reports/pat_ledger.php`'s 13 `oeFormatMoney()` call sites wired to pass `$symbol=true` (PR-18); live re-check of the exact PB-202 scenario (`SYN-0001`/pid 1) shows `SAR` on every amount (line items, both Encounter Balance rows, the payment row, Grand Total) | CONFIGURATION | **P0** | G2 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-16** |
 | **0038** | Replace US locale seeds visible during registration — `list_options.state` (52 US states), `country` (1 row), `phone_country_code = 1`, `units_of_measurement` | Audit §22.4 | US seeds live | READY AFTER CONFIGURATION — **PARTIAL BROWSER EVIDENCE (PB-028/PB-141): Saudi regions + country set confirmed; phone-number acceptance and metric-units rendering never tested, registration was never submitted** | CONFIGURATION | **P0** | G1 G2 | OpenEMR Engineer | 0001 | NOT READY |
 | 0039 | Decide the date display format for the demo surface (3 options only; no format string, no locale derivation) | Audit §22.4 | ISO `YYYY-MM-DD` | READY WITH MANDATORY QUALIFICATION | CONFIGURATION | P1 | G2 | Founder / Product Owner | 0001 | NOT READY |
 
@@ -2690,6 +2690,173 @@ value the same way `CLAUDE.local.md` §3 documents for other rotated credentials
 repository. This session's item-level claim in `AGENT-CLAIMS.md` is set to `RELEASED` in the
 accompanying commit, with this finding attached, rather than left `HELD` against a session that cannot
 finish it.
+
+## PB-214 (2026-08-16) — **AGENT-SEC2: RDY-0037 FIXED (PR-18)** — the Patient Ledger now renders `SAR` on every amount
+
+*PB-213 was already taken live by AGENT-CONF2 by the time this session wrote to the register (see
+directly above). Next free number in Agent C's PB-140–219 range is **PB-214**, used here.*
+
+**Assignment:** Phase 2B, Task 1 — fix PB-202's finding that the Patient Ledger (`interface/reports/pat_ledger.php`,
+reached via the patient menu's `Ledger` item and via `Reports > Financial > Pat Ledger`) renders every
+monetary amount as a bare number, with no `SAR` and no `$` anywhere.
+
+**Root cause:** the screen already calls a tenant/site-aware currency resolver —
+`oeFormatMoney($amount, $symbol)` (`library/formatting.inc.php:21`) delegates to
+`OpenEMR\Common\Utils\FormatMoney::getFormattedMoney()` (`src/Common/Utils/FormatMoney.php:29`), which
+prepends `OEGlobalsBag::getInstance()->getString('gbl_currency_symbol', '')` when `$symbol` is `true`.
+This is exactly the Q26-class resolver ("replace runtime hard-coded currency assumptions... do not
+global-search-and-replace") already present and already reading a live `SAR` value (confirmed by
+direct query: `SELECT gl_value FROM globals WHERE gl_name='gbl_currency_symbol'` → `SAR`, set per
+PB-016/PB-028). The Ledger screen's 13 call sites simply never passed `$symbol=true` — the parameter
+defaults to `false`, so every amount silently omitted the symbol regardless of the resolver working
+correctly everywhere else it's actually invoked with the flag on.
+
+**Fix:** `interface/reports/pat_ledger.php` — all 13 `oeFormatMoney(...)` call sites (in
+`PrintEncFooter()`, `PrintCreditDetail()`, the per-line-item charge, and the Grand Total row) now pass
+`true` as the second argument. No other file changed; the CSV-export path in the same file is
+untouched (unrelated pre-existing defect, AGENT-DATA2/PB-208, out of scope here).
+
+**Core-file status:** `interface/reports/pat_ledger.php` is a genuine OpenEMR core file (no branding
+module involvement), so this went through the numbered patch-record process rather than a bare
+uncatalogued edit — **`PR-18`** in `docs/branding/adr/patch-records.md`, following the PR-15/PR-16
+precedent for non-branding correctness fixes to core files ("Invariant 4 / Q1 governs every core edit
+regardless of motive"). Full before/after evidence, the Locked-decision (Q26) satisfaction argument,
+and the negative control are in PR-18; not duplicated here.
+
+**Verification, live (`claude-in-chrome`, fresh login as `k.alotaibi` / Accounting — credentials read
+directly from `C:\openemr-stack\secrets\thiqa-demo-credentials.json`, never written anywhere in the
+repo):** re-opened the exact PB-202 scenario — `SYN-0001` (Hessa Alharthi, pid 1). DOM text extraction
+of the live, authenticated page (`GET /interface/reports/pat_ledger.php?form=1&patient_id=1&form_refresh=1`,
+HTTP 200) shows:
+
+```
+92014 Eye exam, established patient          unbilled / Self  1  SAR 350.00
+Encounter Balance:                                             1  SAR 350.00  SAR 0.00  SAR 0.00  SAR 350.00
+99213 Office visit, established patient      unbilled / Self  1  SAR 250.00
+SYN-PAY-0001: SYNTHETIC DEMO payment ...                          SAR 150.00  SAR 0.00
+Encounter Balance:                                             1  SAR 250.00  SAR 150.00 SAR 0.00  SAR 100.00
+Grand Total                                                    2  SAR 600.00  SAR 150.00 SAR 0.00  SAR 450.00
+```
+
+Every figure matches PB-202's pre-patch numbers exactly (350.00 / 250.00 / 150.00 / 450.00 balance) —
+confirming this is additive formatting, not a data change. `php -l` clean on the edited file.
+
+**Register-row edit committed in this entry:** RDY-0037 → `Status`/`Verdict` **CLOSED**, citing this
+entry and PR-18.
+
+**Gate effect:** RDY-0037 was already counted open toward G2 in the current baseline (its own `Blocks`
+field names only G2, unlike RDY-0013's G1+G2). **G2: current count − 1.** Full re-derivation left to
+whichever agent next runs the dedicated §47 sync (§0.0 Rule 3) — not performed inline here since more
+than this one item may have closed since the last sync.
+
+**`Blocks`:** G2 (RDY-0037's own `Blocks` field).
+
+## PB-215 (2026-08-16) — **AGENT-SEC2: RDY-0025 — investigated PB-204's two hang candidates, neither confirmed; found and evidenced a third, chronic, host-level candidate instead — not independently fixable within this task's authorization**
+
+**Assignment:** Phase 2B, Task 2 — investigate PB-204's two root-cause candidates for the Documents-tab
+hang (an auto-opening blank `active_reminder_popup.php` modal; a slow `background_service/$run` call
+tied to RDY-0083's overdue-service backlog + PHP session-file locking) and, if a genuine
+independently-fixable root cause exists, fix and verify it live.
+
+### Candidate 1 — `active_reminder_popup.php` — mechanism confirmed, not confirmed as the hang trigger
+
+Traced the auto-open path: `interface/patient_file/summary/demographics.php:832-869` calls
+`openReminderPopup()` automatically on page load whenever `$active_reminders || $all_allergy_alerts` is
+truthy, opening `active_reminder_popup.php` inside a client-side jQuery-UI **iframe dialog** (not a
+native browser popup/modal — `dlgopen(..., {type: 'iframe', ...})`). `active_reminder_popup.php` itself
+(`interface/patient_file/reminder/active_reminder_popup.php:33-40`) runs two DB-driven summaries
+(`allergy_conflict()`, `active_alert_summary()`) and renders a small HTML fragment — nothing in it
+spawns a subprocess or makes a synchronous blocking call. Live reproduction (fresh login, `n.alqahtani`)
+found only the pre-existing, correctly-suppressed `product-registration-modal` (`display:none`,
+matches PB-029) in the DOM — the reminder popup did not visibly hang in this session. **Not ruled out
+entirely** (it plausibly fires only for patients with specific overdue-reminder combinations this
+session's brief check didn't hit), but no direct evidence it is the trigger was found here, beyond what
+PB-204 already recorded.
+
+### Candidate 2 — `background_service/$run` — confirmed synchronous-per-service design, but not the observed failure mode here
+
+Read `src/RestControllers/BackgroundServiceRestController.php:181-185` and
+`src/Services/Background/BackgroundServiceRunner.php:156-199`: `runAllDueIsolatedUnlocked()` does loop
+**sequentially** (not in parallel) through every active, due service, spawning each in its own
+subprocess via `SymfonyBackgroundServiceSpawner::spawn()` (`$process->run($callback)` — a blocking
+call, confirmed at `SymfonyBackgroundServiceSpawner.php:195`). This *is* a real, confirmed,
+synchronous-per-request design, and a large backlog would genuinely block the calling HTTP request for
+the sum of every due service's subprocess-boot time. **However, live DB inspection at the time of this
+investigation found only one truly overdue active service** (`UUID_Service`, ~109 minutes overdue,
+`execute_interval=240`; `Email_Service` was not yet due) — not the "10 hours overdue" scale PB-204's
+own RDY-0083 cross-reference implied, so this specific mechanism was not observed causing a
+multi-service pile-up during this session. Plausible under a worse backlog; not confirmed as the
+active cause right now.
+
+### Candidate 3 (found here, not named in the task briefing) — chronic, host-level PHP session persistence failure
+
+While reproducing cleanly (fresh tab, fresh login, before touching Documents at all), `main.php` itself
+began returning intermittent HTTP 400s within the same browser session, and `library/ajax/dated_reminders_counter.php`
+alternated 200/400 on its 60-second repeater (`interface/main/tabs/main.php:193-218`,
+`goRepeaterServices()`). Correlated against `C:\openemr-stack\logs\php_error.log`:
+
+```
+[...] PHP Warning:  SessionHandler::read(): open(C:\Windows\sess_<id>, O_RDWR) failed: Permission denied (13)
+      in G:\My Drive\OpenEMR\vendor\symfony\http-foundation\Session\Storage\Handler\StrictSessionHandler.php on line 50
+[...] PHP Warning:  SessionHandler::write(): open(C:\Windows\sess_<id>, O_RDWR) failed: Permission denied (13)
+      in ...StrictSessionHandler.php on line 60
+[...] PHP Warning:  session_write_close(): Failed to write session data using user defined save handler.
+      (session.save_path: , handler: ...SessionHandlerProxy::write)
+```
+
+**Scale, not a one-off:** `grep -c "Permission denied (13)"` against the log returns **472** occurrences
+across **236 distinct session IDs**, spanning **2026-08-13 13:02 UTC through the live moment of this
+investigation** (2026-08-16, ~21:43 UTC) — i.e. this has been happening continuously for the entire
+Phase 2 browser-testing history recorded in this document, not something introduced by this session.
+
+**Mechanism:** `session.save_path` is unset in `C:\openemr-stack\php\php.ini` (confirmed: no
+`session.save_path` line; `CLAUDE.local.md` §5's own php.ini-deviations table never names it either —
+it was never explicitly configured on this host). With no explicit path, PHP's Windows fallback
+resolves to `C:\Windows` — visible directly in every one of the 472 log lines above — and the Apache
+worker process cannot write there. Every `session_start()`/`session_write_close()` on this host is
+therefore a coin flip: succeeds only when the OS happens to let a stale handle through, fails
+otherwise, and a failed write means the *next* request on that same cookie can't find the CSRF/`token_main`
+state the previous request wrote, so it 400s. This reproduces as exactly the class of symptom PB-201/
+PB-202/PB-204 recorded — intermittent failures, "Reminders start failed" console errors, a tab that
+stops making forward progress — **without needing either of the two named candidates to be true**, and
+independent of RDY-0083's backlog size.
+
+**Also found, not chased further:** a pre-existing browser tab left open from an earlier session (logged
+in as `n.alqahtani` against the disposable `rdy0082restore` instance, i.e. PB-203's target) was
+genuinely frozen at the start of this investigation — `Page.captureScreenshot` timed out after 30s, and
+`tabs_close_mcp` timed out repeatedly — while its own network log showed the same `dated_reminders_counter.php`
+alternating 200/503 pattern against that instance. Left running (not this session's tab to tear down);
+flagged for AGENT-OPS alongside the `EV-082` §10 teardown already owed.
+
+### Why this was not fixed here
+
+The defect is in **this host's PHP configuration** (`C:\openemr-stack\php\php.ini` — outside the git
+repository entirely, not tracked, not an OpenEMR source file) and correcting it requires setting an
+explicit, writable `session.save_path` and then **restarting the shared Apache process** for the
+`php.ini` change to take effect (`php.ini` is read once at worker-process start, unlike `.php` source
+files under `opcache.revalidate_freq=30`). Per this document's own repeated framing ("multiple other
+Claude Code sessions are concurrently active on this repo right now") and `CLAUDE.local.md` §4a
+(Apache/MariaDB are session processes with no supervisor — a restart drops every in-flight browser
+session on this shared instance for every concurrently active agent), this is a disruptive,
+shared-infrastructure action outside this task's explicit authorization scope ("source-code edits" —
+this task did not authorize host-service restarts). Recommending rather than executing:
+
+**Recommended fix for AGENT-OPS / the orchestrator:** add `session.save_path = "C:\openemr-stack\logs\sessions"`
+(directory pre-created, writable by the Apache worker user) to `php.ini`, then restart Apache per
+`CLAUDE.local.md` §10's documented restart procedure (stop, re-prepend PHP to `PATH`, start, `-t`
+syntax check first). Re-run this session's same repro (fresh login, watch `php_error.log` for
+`Permission denied` over a multi-minute window) to confirm the count stops climbing before treating
+RDY-0025/RDY-0083-adjacent flakiness as resolved.
+
+### Status
+
+**RDY-0025 stays NOT READY.** Nothing closes here — no code fix was applied (none of the three
+candidates is an OpenEMR source defect; candidate 3, the best-evidenced one, is a host configuration
+gap). The synthetic-document marking mechanism itself remains confirmed working per PB-204, unchanged.
+This entry supersedes PB-204's "root-cause candidates identified, not yet fixed" only in scope (a third,
+better-evidenced candidate is now on record) — not in outcome.
+
+**`Blocks`:** G2 (RDY-0025's own `Blocks` field; not recomputed here, §0.0 Rule 3).
 
 ## PB-171 (2026-08-16) — AGENT-DATA: RDY-0044-B v2 baseline's UUID defect confirmed and fixed — v3 baseline taken, hashed, and restore-proven; `pid 31` disposed of
 
