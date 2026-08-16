@@ -244,3 +244,4 @@ instead, plus continuing spot-audits of the fleet's closures as they land.
 | Item | Held by | State | Note |
 |---|---|---|---|
 | **RB-22** (Inter font dedup — theme rebuild) | **Agent D** | **DONE — CLOSED** | PB-220; `acec953cf`. Build workspace resynced, rebuilt, verified: all 8 theme CSS files reference `Inter-Regular.woff2` once each, zero Medium/SemiBold/Bold references. `BrandingGovernanceGuard` 31/31, brand manifest 123/123 |
+| **RB-14** (Arabic PDF font — D-9) | **Agent D** | **HELD** | Amiri proven incompatible with bundled mPDF (`GPOS Lookup Type 5, Format 3 not supported`) — recorded resolution recommends switching to Noto Naskh Arabic (`Q25` already permits it, no ADR needed). `Config_Mpdf.php` registration was deliberately reverted last time; not touching it until the same incompatibility probe passes on the new font |
