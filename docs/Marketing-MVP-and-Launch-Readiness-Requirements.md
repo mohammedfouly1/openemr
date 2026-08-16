@@ -273,10 +273,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **26 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205). See PB-140 for the register-reconciliation history and PB-206 for this figure's mechanical re-derivation |
-| **Requirements still open** | **88** |
-| **Open P0** | **45** — 71 P0 less the 26 genuinely closed P0 IDs above. **PB-206 (2026-08-16): full mechanical re-derivation, three-way verified (per-gate deltas, direct union count, and 71−26 arithmetic all agree)** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 15 · G2 11 · G3 16 · G4 3 · G5 13 · G6 20** — **PB-206 gate sync (2026-08-16), the first full mechanical re-derivation since PB-140** |
+| **Requirements CLOSED** | **27 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
+| **Requirements still open** | **87** |
+| **Open P0** | **44** — 71 P0 less the 27 genuinely closed P0 IDs above. **PB-216 (2026-08-16): single-item decrement on PB-206's baseline (RDY-0037, `Blocks` = G2 only)** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 15 · G2 10 · G3 16 · G4 3 · G5 13 · G6 20** — **PB-216 (2026-08-16), single-item decrement on the PB-206 mechanical baseline** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -2857,6 +2857,22 @@ This entry supersedes PB-204's "root-cause candidates identified, not yet fixed"
 better-evidenced candidate is now on record) — not in outcome.
 
 **`Blocks`:** G2 (RDY-0025's own `Blocks` field; not recomputed here, §0.0 Rule 3).
+
+## PB-216 (2026-08-16) — **Single-item gate decrement (Agent C, Orchestrator) — RDY-0037 closed at PB-214**
+
+RDY-0037's `Blocks` field names **G2 only**. Per §47's own rule 4 (each RDY counted once per gate it
+blocks), this is a clean single-item decrement on the PB-206 mechanical baseline — no re-derivation of
+the other six gates was needed, since only one closure occurred since that sync and its `Blocks` field
+is unambiguous and unqualified.
+
+| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| At PB-206 | 3 | 15 | 11 | 16 | 3 | 13 | 20 |
+| **After PB-216** | **3** | **15** | **10** | **16** | **3** | **13** | **20** |
+
+**Open P0: 45 → 44.** §1.4 updated in this same commit.
+
+**`Blocks`:** none — a sync entry recalculates, it does not itself block a gate.
 
 ## PB-171 (2026-08-16) — AGENT-DATA: RDY-0044-B v2 baseline's UUID defect confirmed and fixed — v3 baseline taken, hashed, and restore-proven; `pid 31` disposed of
 
