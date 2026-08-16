@@ -173,6 +173,23 @@ the seeded dataset or the RDY-0044-B baseline without a claim recorded here firs
   13 missing UUIDs (`EV-083` §4.3) and seed one sensitivity-flagged encounter + one clinician-authored
   form (`EV-016` §4). All three are baseline changes against RDY-0044-B. **Whoever holds Track D should
   take them together**, since they cost one re-baseline rather than three.
+- **AGENT-BROWSER, 2026-08-16 — the exact Rule-4a failure this section already warns about happened
+  again, mechanism identified.** Committing `PB-201` with `git commit -m "..." -- <file>` — a pathspec
+  given directly to `git commit`, not `git add`, then `git commit` with no pathspec — **stages the
+  working-tree content for that path regardless of what was `git apply --cached`-staged in the index**,
+  overriding the careful hunk-only staging that had just been done. Result: commit `3de71ab59`
+  ("record AGENT-BROWSER PB-201 harness blocker...") contains 178 insertions, not the 65 that commit
+  message describes — **AGENT-HYGIENE's uncommitted PB-209/210/211/212 entries and the HR-04 register
+  corrections rode along, silently.** Verified nothing is lost: `grep -n "^## PB-209\|^## PB-210\|^##
+  PB-211\|^## PB-212"` against the file post-commit finds all four, content intact, HR-04 table
+  corrections present. **The defect is attribution, not data loss** — same as the 2026-08-14 precedent
+  this section records. Not rewritten (no amend/rebase — other agents are live on this file; rewriting
+  history under them is worse than a wrong commit message). **The lesson for the next agent editing
+  this shared file, sharper than the existing note above:** after `git apply --cached <patch>` to
+  isolate your own hunk, commit with **`git commit -m "..."` and NO trailing pathspec** — the pathspec
+  form silently re-stages the whole working-tree file and defeats the isolation. `git status` after
+  committing should show the file still `M` (other agents' unstaged work) or absent — if it goes clean
+  and you only staged part of it, your commit just swept in everything else.
 
 ---
 
