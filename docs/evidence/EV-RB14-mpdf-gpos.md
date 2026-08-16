@@ -121,7 +121,56 @@ instanced from a variable font by this session's ad hoc tooling) before drawing 
 
 ---
 
-## 4. The four options — costs and blast radii, no recommendation made
+## 4. DECISION — 2026-08-16 (Owner)
+
+**ADOPTED: Option C — accept open through pilot.**
+
+> Rationale: the GTM already excludes Arabic PDF from every demo and RDY-0087 already requires the
+> limitation be stated in Arabic. This decision does not add a constraint; it replaces an inherited
+> claim (Source B L-10) with a reproduced mechanism. Option A is a fork-owned parser patch — not a
+> version bump — against a dependency touching all 55 reports, prescriptions and letterheads, for a
+> feature we do not demonstrate. That regression risk is not purchasable by any current commercial
+> need.
+>
+> **Revisit trigger: a customer contract requiring Arabic PDF output. None exists.**
+
+**Option B — time-boxed parallel test, executed same session, now CLOSED (tested-and-negative).**
+
+Two OFL faces chosen for being more traditional/established Naskh designs than Amiri or Noto Naskh
+Arabic, on the hypothesis that an older or simpler-construction face might predate the unsupported GPOS
+table: **Scheherazade New** and **Lateef**, both sourced the same way as §2.2 (Google Fonts' canonical
+`google/fonts` repository, OFL-licensed, static Regular/Bold faces — no `fonttools` instancing involved
+this time, so the §2.4 uncertainty does not apply to these results).
+
+Same instrument, same `useOTL` sweep, same test string (containing initial/medial/final joining forms
+and a mandatory lam-alef ligature, `لا`):
+
+| Font | `0xFF` | `0x03` | `0x01` | `0x00` |
+|---|---|---|---|---|
+| **Scheherazade New** | FAIL — `GPOS Lookup Type 5, Format 3 not supported` | FAIL — same | FAIL — same | OK, 40,178 bytes, unshaped |
+| **Lateef** | FAIL — `GPOS Lookup Type 5, Format 3 not supported` | FAIL — same | FAIL — same | OK, 36,998 bytes, unshaped |
+
+**Both candidates fail on shaping quality — identically to Amiri and Noto Naskh Arabic.** Per the
+instruction, this is reported as a failure regardless of the clean `0x00` output, because `0x00`
+produces unshaped Arabic (§2.3), not a passing result. **Four of four independently-sourced Arabic
+OpenType fonts now fail this mPDF build the same way** — stronger evidence than the two-font minimum
+requested, and it raises confidence that this is close to a universal limitation of mPDF 8.3.1's GPOS
+parser against modern Arabic fonts generally, not a property of any specific four fonts sampled.
+
+One methodology note, recorded honestly: a visual rendered sample of the unshaped output (requested as
+part of this test) could not be produced — `magick.exe` is present on this host but has no Ghostscript
+PDF delegate installed, so PDF-to-image rasterization failed (`gswin64c.exe` not found). The unshaped
+finding rests on the documented mechanics of Arabic joining behaviour (disabling OTL skips
+positional-form substitution entirely, per §2.3) and on the qualitative description already recorded in
+RB-14's original 2026-08-10 finding, not on a screenshot from this pass. Flagged rather than silently
+omitted.
+
+**Per the instruction: `Config_Mpdf.php` was not touched under this outcome.** Neither candidate passed,
+so there is no amendment to propose to Option C's disclosure; C stands as adopted above.
+
+---
+
+## 5. The four options — costs and blast radii (retained for the record; A and D remain deferred, not chosen)
 
 ### Option A — Upgrade `mpdf/mpdf`
 
@@ -213,12 +262,68 @@ and starts being the de facto answer without anyone having actually decided it.
 
 ---
 
-## 5. Downstream reach — this is bigger than one ticket
+## 6. Draft text for `RDY-0094` and `RDY-0087` — prepared for Agent C to adopt, NOT signed
+
+**Neither text below is authoritative.** Both are drafted here so Agent C (or whoever next syncs the
+register) has ready language rather than a blank requirement. The Arabic text specifically **has not
+been reviewed by HR-09** (Mohammed Elfouly, appointed 2026-08-14 per PB-061, Arabic/RTL reviewer,
+"awaiting review" — competence basis not yet stated, per HR-04's own flag). **Preparing this text is not
+reviewing it.** It must carry HR-09's review before any customer or demo-facing use, exactly as HR-04's
+governing rule already requires for every other item in that register.
+
+### 6.1 `RDY-0094` no-go register entry (operator-facing, English only — internal instrument)
+
+> **Arabic PDF output (statements, prescriptions, letterheads, any Arabic-language export) — DO NOT
+> ATTEMPT.** The bundled PDF engine (mPDF 8.3.1) cannot shape Arabic text: reproduced across four
+> independently-sourced Arabic OpenType fonts (Amiri, Noto Naskh Arabic, Scheherazade New, Lateef), all
+> four fail identically with `GPOS Lookup Type 5, Format 3 not supported`. **Forcing shaping off is not a
+> fallback** — it produces a PDF that opens normally but renders Arabic as disconnected, unjoined
+> letters, which reads as a broken product to any Arabic-literate viewer and is worse than declining the
+> feature outright. If a prospect or pilot user asks for an Arabic PDF, state plainly that Arabic PDF
+> export is not yet supported and is a known, tracked limitation (`RB-14`/`D-9`), not an oversight.
+> **See `EV-RB14-mpdf-gpos.md` for the full evidence.**
+
+### 6.2 `RDY-0087` Arabic disclosure text — spoken before any Arabic-surface switch is shown
+
+**English (drafting basis for HR-09's review):**
+
+> Thiqa's interface supports Arabic and right-to-left layout on the screens used in this demo. PDF
+> documents — statements, prescriptions and printed letterheads — are not yet available in Arabic; this
+> is a known limitation in the underlying PDF engine, not an incomplete translation, and we are tracking
+> it openly rather than working around it in a way that would produce broken-looking output.
+
+**Arabic — ⚠ DRAFT, MACHINE-ASSISTED, UNREVIEWED. Do not use in any demo, pilot, or customer-facing
+context until HR-09 reviews and either approves or replaces it. Recorded here only so HR-09 has a
+starting point rather than a blank page, per the instruction to prepare and not sign:**
+
+> تدعم واجهة ثقة اللغة العربية والتخطيط من اليمين إلى اليسار في الشاشات المستخدمة في هذا العرض. مستندات
+> PDF — مثل الفواتير والوصفات الطبية والترويسات المطبوعة — غير متاحة بعد باللغة العربية؛ هذا قيد معروف في
+> محرك PDF المستخدم، وليس ترجمة غير مكتملة، ونحن نسجل هذا القيد بشكل صريح بدلاً من التحايل عليه بطريقة قد
+> تُنتج مخرجات تبدو معطوبة.
+
+**Why this text specifically needs native review, stated plainly rather than left implicit**: this
+session's Arabic is machine-assisted, not a native or professionally translated rendering. Technical
+terms (*"PDF engine limitation," "known limitation" vs. "incomplete translation"*) carry a distinction
+this draft is trying to preserve — that the gap is engineering, not effort — and getting that framing
+wrong in Arabic would undercut the exact disclosure it's meant to make. **Per G6's Arabic-parity
+precondition, this text must appear at equal prominence to the English version, not as a smaller or
+later addition** — the draft above is written as a direct equivalent for that reason, not a summary.
+
+---
+
+## 7. Downstream reach — this is bigger than one ticket
 
 - **`RDY-0087`** — the Arabic PDF limitation now has **a proven mechanism** (a specific mPDF parser gap,
-  reproduced twice), not an inherited claim from RB-14's audit trail. Its disclosure text can now name
-  the actual cause rather than a general "no Arabic-shaping font exists in the tree" — which is itself
-  now known to be imprecise: fonts exist and were tested; the engine is what's missing the capability.
+  reproduced across four independently-sourced fonts, not once but four times), not an inherited claim
+  from RB-14's audit trail. **Stated plainly so this doesn't read as bad news only: this is a
+  strengthening of RDY-0087's evidence basis, not a new problem.** Before this session, RDY-0087 rested
+  on Source B's finding that "no Arabic-shaping font exists in the tree" — true at the time, but
+  imprecise about *why* the gap exists, and vulnerable to someone later "fixing" it by adding a font and
+  believing the requirement closed. That imprecise claim is now replaced with a specific, reproduced,
+  falsifiable mechanism (§2, §4): fonts exist, were tested, and the engine — not the font tree — is
+  what's missing the capability. A requirement resting on a reproduced mechanism is stronger evidence
+  than one resting on an absence, and is harder to accidentally mark closed by a future session that
+  adds a font without re-running this probe.
 - **`RDY-0086`** — the Arabic/RTL coverage and parity plan. Whatever coverage percentage is eventually
   published, Arabic PDF output specifically needs to be scoped out of any implied "Arabic works" claim
   until one of Options A–D actually closes it.
