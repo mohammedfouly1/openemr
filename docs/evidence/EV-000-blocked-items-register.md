@@ -4,6 +4,12 @@
 **Purpose:** after working every P0 that engineering can move, record what remains and **exactly what
 would clear it**. Not a status summary — a list of decisions, each with its owner and its cost.
 
+> **Corrected 2026-08-16 (AGENT-HYGIENE), artefact hygiene only.** §2's `0013 0014 0015 0042` row
+> predated `### PB-029`'s closures of 0014/0015 (2026-08-13) and `### PB-141`'s clause-by-clause
+> re-verification of 0013 (2026-08-16), which found `### PB-028`'s "CLOSED" claim for 0013 did not
+> survive checking both acceptance clauses. Split into three rows below reflecting each item's actual
+> current state. No RDY item closed or reopened by this correction.
+
 ---
 
 ## 1. The headline
@@ -48,7 +54,9 @@ together costs one re-baseline instead of three:
 | **0078** | Founder | Read **primary** ZATCA and NPHIES sources and record the date accessed |
 | **0096** | Sales / Pilot Owner | Decide published hours and response targets — a staffing decision |
 | **0016 0083** | Owner + Track D | See D-3 |
-| **0013 0014 0015 0042** | — | **One manual browser session** discharges all four (curl cannot reach `main.php` — PB-016) |
+| **0014 0015** | *(closed)* | Closed by `### PB-029` (2026-08-13), re-confirmed unchanged by `### PB-141`'s clause-by-clause re-verification (2026-08-16). No action remains |
+| **0013** | — | **Corrected 2026-08-16 (AGENT-HYGIENE) — this row was stale.** `### PB-141` re-verified `### PB-028`'s "CLOSED" claim clause by clause and found it does not survive: navigation is proven for only **3 of 6** demo accounts (Front Office 5 items, Physician 11, Administrator 13 — `k.alotaibi`/Accounting, `m.alzahrani`/Clinical Assistant and the second physician `s.almutairi` were never screen-checked), and the registration-completion clause was **never met** — the Add-Patient form was reached but "'Create New Patient' button was NEVER clicked" (PB-141 citing `BrowserVervication.md` T6.5). **Register left OPEN by PB-141.** One browser session, walked under the 3 untested accounts plus an actual registration completion under `r.aldosari`, discharges both remaining gaps |
+| **0042** | — | **Corrected 2026-08-16 (AGENT-HYGIENE) — this row was stale.** Fixed at the menu layer (`### PB-072`, patch record PR-16) but **not closed**: acceptance requires a live walk under `r.aldosari` where `Add Patient` **completes a registration**, tested twice (`full_new_patient_form` on and off). `### PB-028`/`### PB-029` twice observed the menu item present and reachable (contradicting the original audit finding) but never completed a registration through it. Same outstanding browser session as RDY-0013 above — PB-072 itself says "one session can discharge all four" (of the original 0013/0014/0015/0042 set; 0014/0015 are now closed, leaving 0013 and 0042) |
 | **0041** | Founder / presenter | Two D-7 rehearsals **driven by a person**, with real elapsed time. V-8 and PRC-003 both consume that number |
 | **0071** | An outside reviewer | Open the export package cold and confirm it is readable. **Must not be its author** |
 | **0084** | Owner | One word: does *"owner"* mean a role or a named individual? |
