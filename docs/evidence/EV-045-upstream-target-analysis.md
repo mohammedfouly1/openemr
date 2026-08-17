@@ -398,3 +398,104 @@ race observed in §4) changes the merge result. **The strongest mitigation is pr
 merge from a HEAD confirmed idle for some minimum quiet window, immediately after the gate clears,
 with the tag-then-merge-then-regression-then-push sequence in §5 run as one uninterrupted block** —
 but that is a scheduling discipline this document cannot itself enforce, only recommend.
+
+---
+
+# ADDENDUM 3 — AGENT-GIT2: §5's local procedure executed against the live repo (2026-08-17)
+
+**Owner: AGENT-GIT2 (Agent D takeover of the `EV-045`/PB-191 remaining work, `AGENT-CLAIMS.md`
+"Agent D takeover of Agent C's remaining open items" table, RDY-0045 row).** Preconditions re-verified
+first: `RDY-0082` confirmed **CLOSED** live in the register (§7 row: *"VERIFIED READY — CLOSED BY
+PHASE 2B (PB-182/183/203)"*, closed 2026-08-16). G1 stability re-checked against the canonical
+`Open P0 per gate` figure at its last sync (PB-216, 2026-08-16: `G1 15`) — no gate-recalculation and no
+P0 closure touching G1 has landed since; nothing found regressed. `git status --short` showed three
+**untracked** entries only (no modified/staged tracked files) — two pre-existing docs artifacts and
+`sites/rdy0082restore/` (AGENT-OPS's documented disposable restore instance, `AGENT-CLAIMS.md`
+PB-183/PB-203). Judged as satisfying the "clean" precondition (nothing tracked was in flight) and
+proceeded, flagged rather than silently accepted.
+
+**Executed, in order:**
+
+1. Tag `pre-rel820-merge-20260817` created at local `HEAD` (`01119d47123f96b91f37bd9061708b1cab8810e7`).
+   `git push origin pre-rel820-merge-20260817` **failed**: `remote: Permission to
+   mohammedfouly1/openemr.git denied to midodevelopper` (HTTP 403). `git remote -v` confirms the
+   origin URL itself is correct (`https://github.com/mohammedfouly1/openemr`); the credential helper
+   on this host resolves to a different, unauthorized GitHub identity. **This means no push — tag or
+   branch — can succeed from this session/host as currently configured.** The tag exists locally only.
+   Not worked around (no git-config changes made, per standing instruction).
+2. `git fetch upstream rel-820` succeeded (read-only, public repo) — advanced `upstream/rel-820` from
+   `47d966dbc` (EV-045 Addendum 2's figure) to `fdd10a7af`. Re-ran `git merge-tree --write-tree
+   --name-only HEAD upstream/rel-820` before merging, given the ref had moved since the rehearsal:
+   **still exactly one conflicted file, `composer.json`** — confirms the rehearsal held.
+3. `git merge upstream/rel-820 --no-ff` stopped on `composer.json` as predicted. `git diff --name-only
+   --diff-filter=U` and `git ls-files -u` both confirmed **`composer.json` was the only genuinely
+   unmerged path** — the raw `git status --short` also showed ~14 `.phpstan/baseline/*.php` files as
+   `M`/`MM`, but `git diff --stat` and a byte-level `cmp` against the committed blob proved these were
+   stat-cache/timestamp staleness on the Drive mount (`git update-index --refresh` said "needs update",
+   `git diff` showed zero content difference) — the same known category as `CLAUDE.local.md`'s "G:
+   directory listings go stale" note, not a second conflict.
+4. Resolved `composer.json`'s `autoload-dev.psr-4` conflict exactly as rehearsed: kept all three lines
+   (`OpenEMR\Branding\`, `OpenEMR\Release\`, `OpenEMR\Tests\Acceptance\`), deduped the shared
+   `OpenEMR\Release\` line. Validated with `php -r
+   'json_decode(file_get_contents("composer.json"), true, 512, JSON_THROW_ON_ERROR); echo "valid";'` →
+   `valid`. `symfony/mime`, the `acceptance` script, and the `@branding-tokens-check`/
+   `branding-tokens-check` hook were all already present pre-conflict-resolution (upstream's and this
+   branch's non-conflicting adds merged cleanly) — visually confirmed in the final file.
+5. `git add composer.json`, confirmed zero remaining unmerged paths, `git commit` (no message override
+   — the merge's staged message was used). **Merge commit: `8e0eaba90732fc4ec505516dbbb9cd08b102c821`**,
+   parents `01119d47123f96b91f37bd9061708b1cab8810e7` (this branch) and
+   `fdd10a7af70c0cad0a484d131f76e1aca00fa25f` (`upstream/rel-820`).
+
+**Concurrent-write observation, direct (not hypothetical, matching EV-045 §4's predicted pattern):**
+partway through the regression check, `HEAD` advanced from `8e0eaba90` to `f37ead1fab2adf7afd727d34f230097967eb8f08` — a different session's own commit (`docs(readiness): execute RDY-0016 A-10 empty-spec ACL
+call-site probes`, one new docs file, no application code) landed directly on top, unprompted by this
+session. `git merge-base --is-ancestor 8e0eaba90 HEAD` confirms the merge commit is intact and is an
+ancestor of current `HEAD` — nothing lost, nothing rewritten, no destructive action taken or needed.
+Reported, not treated as a stop condition: it is purely additive and touches no file this merge or its
+regression check depended on.
+
+## Regression check
+
+Full PHP-syntax pass on every `*.php` file the merge actually changed (`git diff --name-only
+pre-rel820-merge-20260817 HEAD -- '*.php'`, 139 files after filtering deletions): **0 syntax errors**
+(`php -l` via `C:\openemr-stack\php\php.exe`, per `CLAUDE.local.md`'s native-stack path).
+
+Isolated PHPUnit suite (`phpunit-isolated.xml`, `--no-coverage`, excluding the documented Twig-render/
+session-hang classes per `CLAUDE.local.md` §9): **Tests: 5163, Assertions: ~13486, Errors: 35,
+Failures: 52, Warnings: 491, Skipped: 5, Incomplete: 13** (exit code 2; ran twice for a stable read,
+counts varied by ±1 between runs — expected minor flake in a 5,163-test suite, not investigated
+further).
+
+**Every one of the 35+52=87 failing/erroring tests was individually traced to either a file the merge
+never touched, or to CI-only release-engineering tooling that never ships to or runs on the deployed
+product:**
+
+| Group | Count | `git diff --name-status pre-rel820-merge-20260817 HEAD` on the test file + its source |
+|---|---:|---|
+| `HolidayServiceTest` (all 25 sub-tests) | 25 errors | **Empty on both** — byte-identical before and after the merge. Pre-existing, unrelated. |
+| `DocumentImportCommandTest`, `SymfonyBackgroundServiceSpawnerTest`, `CacheDirectoryTest` (Services/Storage, permission/symlink assertions — a known Windows-vs-POSIX-permission-bits mismatch), `FrontControllerRoutingTest` | 35 failures | **Empty on both**, all five. Pre-existing, unrelated. |
+| `DockerUpgradeScaffoldMutatorTest`, `DockerfileOpenemrVersionMutatorTest`, `TranslationFileCopyFromPriorRelMutatorTest` | 10 errors | **Empty on both** (test files *and* their `Mutator` source classes). Pre-existing, unrelated — these already lived on this branch's own prior release-tooling work, untouched by this merge. |
+| `BranchCutReleaseTargetsMutatorTest` (+ its `Mutator` source) | 2 failures | **Modified by the merge** — but the failure text is literally `#Warning: Strings contain different line endings!` with otherwise byte-identical content; a CRLF/LF checkout artifact of this Windows host, not a logic defect. |
+| `ChangelogGeneratorFixtureTest`, `DeriveBuildInputsCliTest`, `GitHubApiTest` | 15 failures | **Newly added by the merge** (`git diff --name-status` shows `A`) — upstream's own release-engineering test suite (branch-cut/changelog/GitHub-API tooling), CI-internal, never executed by or shipped in the product. Sampled failure text (`GitHubApiTest::testSuccessfulFirstAttemptReturnsStdoutAndSkipsBackoff`: *"Failed asserting that actual size 0 matches expected size 1"*) is consistent with subprocess-mocking assumptions written against a Linux CI runner, not a functional defect — not root-caused further, out of this task's scope. |
+
+**Zero failures trace to `library/`, `interface/`, or any patient/clinical-facing `src/Services`
+class.** The merge's only touch inside `src/` outside release tooling is the two files EV-045 §2
+already named — `src/Billing/EdiHistory/X12File.php`, `src/Gacl/Gacl.php` (the 3-line PHP 8.6
+constructor-return-statement removal) — and neither appears anywhere in the 87-item failure/error
+list. **No evidence of a functional regression in application code from this merge.** The residual
+17 merge-attributable failures are entirely confined to CI-only release-engineering tooling and, on
+the one sampled in full, demonstrably a Windows line-ending artifact rather than a logic error.
+
+## What was NOT done
+
+**`git push origin feat/thiqa-branding-foundation` was never run — HEAD was never pushed.**
+`origin/feat/thiqa-branding-foundation` is still at `6de7cdcc1`, unchanged; local `HEAD`
+(`f37ead1fa`, including the merge and the concurrent RDY-0016 commit) is 162 commits ahead, entirely
+unpushed. This was a hard scope boundary in this session's task brief, independent of the credential
+failure in step 1 above (which would have blocked the push regardless).
+
+**Handoff for the next session / human:** (a) the credential problem — this host's git credential
+helper authenticates to GitHub as `midodevelopper`, who lacks write access to
+`mohammedfouly1/openemr`; the tag and, after review, the branch both need pushing from a session/host
+with correct write credentials; (b) review the merge commit `8e0eaba90732fc4ec505516dbbb9cd08b102c821`
+and this regression analysis, then push the tag and (separately, on approval) the branch.
