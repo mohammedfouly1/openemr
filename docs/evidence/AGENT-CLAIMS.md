@@ -388,3 +388,28 @@ decision, none needs an external dependency — each is a concrete, unowned tech
 | 0037 | AGENT-SEC2 | **RELEASED — CLOSED, see PB-214** | Root cause: 13 `oeFormatMoney()` call sites in `interface/reports/pat_ledger.php` never passed the existing resolver's `$symbol` flag. Fixed (`PR-18`), verified live against the exact PB-202 scenario (`SYN-0001`) — `SAR` now renders on every amount. Register row CLOSED |
 | 0025 | AGENT-SEC2 | **RELEASED — still NOT READY, see PB-215** | Investigated both PB-204 candidates (active_reminder_popup, background_service/$run) — neither independently confirmed as the trigger in this session's repro. Found and evidenced a third, chronic candidate instead: PHP session persistence is broken on this host (`session.save_path` resolving to non-writable `C:\Windows`, 472 `Permission denied` events since 2026-08-13, ongoing). Host/environment defect outside the git repo — no source fix applies; the actual fix needs a `php.ini` edit plus a shared Apache restart, out of this task's source-code-only authorization and disruptive to concurrently active agents, so not executed. Handed to AGENT-OPS/orchestrator with the exact fix recommended in PB-215 |
 | 0042, 0043 | AGENT-BROWSER4 | **RELEASED — still NOT READY, see PB-218** | Handoff from AGENT-BROWSER3 (PB-217) accepted on the strength of a genuine, directly-relayed human authorization for demo-account login — but that authorization did not clear the actual blocker: the first password-entry attempt (`r.aldosari`) was denied by the Claude Code **permission classifier itself**, independent of this session's own judgment, with its own remediation text pointing at a user-made settings change, not a stronger task-prompt authorization. No password was typed. Task 1's global toggle (`full_new_patient_form`: `1`→`0`→`1`) was executed and reverted cleanly as its own tight sequence, but produced no negative-path evidence since no login reached Add Patient. Task 2 not attempted. Recommend the orchestrator relay the classifier's own remediation path to the user directly rather than re-issuing this authorization to a fifth browser subagent |
+
+---
+
+## AGENT-GIT2 — RDY-0045 merge executed, push withheld (2026-08-17)
+
+**Took over the row in the "Agent D takeover" table above.** Ran `EV-045` §5's local procedure against
+the live repo — preconditions re-verified (RDY-0082 confirmed CLOSED live; G1 stability re-checked
+against the PB-216 canonical sync, unchanged at 15, nothing regressed since) — tagged
+`pre-rel820-merge-20260817`, fetched and merged `upstream/rel-820` `--no-ff`, resolved the rehearsed
+`composer.json` conflict exactly as `EV-045` specified, and completed the merge commit:
+**`8e0eaba90732fc4ec505516dbbb9cd08b102c821`**. Regression check (PHP syntax, full isolated PHPUnit
+suite) found no failure traceable to application code — every one of 87 failing/erroring tests is
+either byte-identical-unchanged by the merge or confined to CI-only release-engineering tooling. Full
+detail and the failure-by-failure trace: `EV-045` ADDENDUM 3.
+
+**Not done, and why: `git push origin pre-rel820-merge-20260817` failed with HTTP 403 — this host's
+git credential helper authenticates as `midodevelopper`, who has no write access to
+`mohammedfouly1/openemr`.** The tag exists locally only. This blocks *any* push from this
+session/host, not just this task's explicit push-the-branch prohibition — flagging it as a distinct,
+independent blocker for whichever session/human does the actual push. `git push origin
+feat/thiqa-branding-foundation` was never attempted (out of this task's authorized scope regardless).
+`origin/feat/thiqa-branding-foundation` remains at `6de7cdcc1`, unchanged.
+
+**RDY-0045 stays NOT READY / open** — a human push (of the tag, then, on review, the branch) is the
+only remaining step in `EV-045`'s own procedure.
