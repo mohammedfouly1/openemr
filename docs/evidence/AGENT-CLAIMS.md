@@ -290,6 +290,34 @@ as its own entry (PB-149), no RDY-0038 row in this table claimed or touched othe
 
 ---
 
+## Agent D takeover of Agent C's remaining open items — 2026-08-17
+
+**Idleness verified before taking anything, per the Owner's own explicit condition** ("would need
+Agent C's session to actually be gone/idle, not just currently mid-task"): Agent C's last commit
+(`PB-218`) landed 2026-08-16 22:31:34 UTC; this check ran 2026-08-17 11:43 UTC — **13 hours of git
+silence** in a project that had been producing a new entry every few minutes throughout the prior
+day. Six `claude.exe` processes were still resident on the host, but all had start times from the
+prior afternoon/evening (none newer), and a 15-second CPU-delta measurement across all six showed
+essentially zero active work (highest: 1.19s of CPU over 15s wall-clock — consistent with an idle
+open window, not a running agent). **Both signals agree: idle, not mid-task.**
+
+**Taking over, not duplicating**: every row below that still read `HELD` under Agent C's table above
+is re-claimed here. Rows already `DONE`/`CLOSED` are untouched — this is a takeover of unfinished
+work, not a re-litigation of finished work.
+
+| RDY/item | Was held by | Now held by | Note |
+|---|---|---|---|
+| 0016 (remaining legs: A-10 fail-open call-site probes) | AGENT-SEC (handed off, not attempted) | Agent D (AGENT-SEC3) | Code-level probe (`aclCheckAcoSpec`/`aclCheckIssue`), no browser/credential needed — genuinely spawnable |
+| 0016 (UI-navigation legs), 0038 (units-of-measurement clause), 0041, 0044 (D-7 gate), 0060, 0061, 0062, 0063 | AGENT-BROWSER/AGENT-DATA/AGENT-CAP | **NOT re-spawned — see below** | Every one of these needs an authenticated demo-account browser login. That exact action has failed **4 separate times** on `RDY-0042`/`0043` at the Claude Code permission classifier itself, independent of relayed Owner authorization (`PB-217`, `PB-218`). Re-spawning here would add a 5th+ instance of the identical documented dead end, not new information. **Held pending the Owner's own settings-level fix to the classifier** — see the standing note on `RDY-0025`/`0042`/`0043`/`0048` earlier in this file |
+| 0045 | AGENT-GIT (CONTINUATION, decision pack only, merge not executed) | Agent D (AGENT-GIT2) | Real remaining work: `EV-045`'s own §5 procedure (tag → merge → regression → push) has not actually been run. Owner already decided the target (`upstream/rel-820`, `--no-ff`, Wave 3) — this is execution, not a new decision |
+
+**Not taken over, and deliberately not re-attempted**: `0083`, `0093`, `OD-04`, `OD-05` — AGENT-OPS
+already investigated each and concluded, correctly, that no further technical action is possible
+without a real hosted target (`PB-181`, `PB-183`). Re-running the same investigation would not move
+any of them; they stay exactly where AGENT-OPS left them.
+
+---
+
 ## Agent D (Auditor / independent executor) — PB-220–299 (2026-08-16)
 
 Audited Agent C's PB-140/141 register sync independently (`docs/evidence/EV-AUDIT-agentA-20260816.md`
