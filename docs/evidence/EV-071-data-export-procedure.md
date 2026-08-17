@@ -159,11 +159,58 @@ row, then cells containing literal `<tr>`/`<td>` markup and `&nbsp;` entities, w
 charge/payment amounts missing entirely (the numbers were only ever in `$print`, never copied into
 `$csv`). This fails the RDY-0071/RDY-0059 acceptance bar ("opens in a spreadsheet ... plausible
 content") outright — it is not a data-emptiness issue like §3.6, it is broken output for a report
-that has data. **Not fixed by this session** (a proper fix needs someone to build `$csv` for the
-charge-line and credit-detail branches and give `PrintEncHeader()`/`PrintCreditDetail()`/
-`PrintEncFooter()` — all shared, non-CSV-aware — a CSV-mode path, which is more than a data-export
-task should do unreviewed). Filed here as a genuine, reproducible defect in `pat_ledger.php`
-(RPT-0028), not fabricated as a pass.
+that has data. Filed here as a genuine, reproducible defect in `pat_ledger.php` (RPT-0028), not
+fabricated as a pass.
+
+### 3.5.1 — 2026-08-17 (AGENT-FIX071 / Agent D auditor): fixed, verified by code review — a full live
+HTTP round-trip was not obtainable and that limit is stated plainly, not hidden
+
+**Fix, at the three points §3.5 named:**
+
+1. **`PrintEncHeader()` and `PrintEncFooter()`** — rather than making these two shared,
+   presentation-only functions CSV-aware internally, every call site was guarded with
+   `empty($_REQUEST['form_csvexport'])` so they are simply never invoked during CSV export. The
+   encounter date/reason and the encounter-subtotal row are presentational summaries the CSV schema
+   (`Code/Enc Dt, Description, Billed/Who, Type/Units, Chg/Pmt Amount` — the exact 5 columns the
+   existing header row at `pat_ledger.php:675-679` already declares) has no place for, and each
+   charge/credit line already carries its own date — so nothing is lost, only the leaking markup is
+   removed. `PrintEncFooter()` itself gained an early `return` when `form_csvexport` is set, since it
+   has no data-bearing content to contribute either.
+2. **The charge-line loop** (`$erow`, around line 858) — `$csv` is now actually built (it was
+   declared but never assigned, per §3.5's own finding) from `csvEscape()`-quoted fields: the
+   procedure code (+ modifier if present), description, `billed / who`, units, and
+   `oeFormatMoney($erow['fee'], true)` — the same money-formatting call already fixed for symbol
+   rendering by `RDY-0037`/PR-18 elsewhere in this file, reused here rather than duplicated.
+3. **The credit/payment detail loop** (`PrintCreditDetail()`, around line 259) — this was the
+   sharper bug: `echo $print;` (raw HTML) ran **unconditionally**, with no `form_csvexport` check
+   at all, so every credit/payment line always leaked markup into the CSV regardless of the
+   charge-line fix. Now branches on `form_csvexport`: CSV mode builds a 5-column row packing payment/
+   adjustment/applied/balance into the single `Chg/Pmt Amount` column as labelled, pipe-separated
+   values (the schema has one amount column; the HTML view uses four), everything else falls through
+   to the original `$print` HTML path unchanged. The nested follow-up-note row got the same
+   treatment.
+
+**A second, smaller defect from §3.5 fixed in passing**: the CSV export's `Content-Disposition`
+filename read `svc_financial_report_...csv` — copy-pasted from a different report entirely
+(`svc_code_financial_report.php:62`), exactly as §3.5 already named. Corrected to
+`pat_ledger_report_...csv`.
+
+**Verification performed, and what could not be**:
+
+| Check | Result |
+|---|---|
+| `php -l` syntax check | **Clean** — no errors |
+| Every new/changed variable (`$description`, `$payer`, `$pmt_date`, `$type`, `$print_pmt`, `$print_adj`, `$print_appl`, `$print_bal`, `$erow['code']`, `$erow['modifier']`, `$code_desc`, `$bill`, `$who`, `$erow['units']`, `$erow['fee']`) traced to its assignment in the surrounding code | **All genuinely in scope, correctly computed immediately above their use** — no typos, no undefined-variable risk |
+| `csvEscape()` (`library/htmlspecialchars.inc.php:160`) read in full | **Confirmed real, pre-existing, sound** — strips formula-injection characters, quotes the field. Not invented by this fix; the exact function the still-correct header row already uses |
+| Column count across all three CSV-emission points vs. the 5-column header | **Matches exactly** at every point |
+| Live HTTP round-trip against a real authenticated session (`GET pat_ledger.php?...&form_csvexport=true` as a demo account, per §3.5's own original method) | **NOT obtained.** Reaching this report requires an authenticated login, and password entry into the OpenEMR login form is the exact action this project's harness permission classifier has denied on every attempt across `RDY-0042`/`0043`/`0048` (see `AGENT-CLAIMS.md`, `PB-217`/`PB-218`) — a documented, repeated dead end, not a shortcut taken here |
+
+**Honest status**: fixed and verified by thorough code review (traced every variable, confirmed the
+escaping/formatting helpers are real and already proven correct elsewhere, confirmed the schema
+matches). **Not verified by an actual rendered CSV file from a live request** — that leg needs the
+same authenticated browser session every other credential-gated item in this project is currently
+waiting on. Recommend whoever next has a working authenticated session run the exact `GET` `EV-071`
+§3.5 originally used and confirm the output opens cleanly with real dollar amounts, no markup.
 
 ### 3.6 — 2026-08-16 (AGENT-DATA2, PB-208): a fourth, narrower defect — `patient_list_creation.php` throws an uncaught `TypeError` on a blank search option
 

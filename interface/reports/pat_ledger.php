@@ -135,6 +135,12 @@ function GetAllCredits($enc = '', $pat = '')
 function PrintEncFooter(): void
 {
     global $enc_units, $enc_chg, $enc_pmt, $enc_adj, $enc_bal;
+    if (!empty($_REQUEST['form_csvexport'])) {
+        // This is a presentational encounter subtotal only; the same figures are
+        // already carried by the individual charge/credit CSV rows, so nothing to emit.
+        return;
+    }
+
     echo "<tr style='background-color: var(--gray300)'>";
     echo "<td colspan='3'>&nbsp;</td>";
     echo "<td class='detail'>" . xlt('Encounter Balance') . ":</td>";
@@ -249,15 +255,47 @@ function PrintCreditDetail($detail, $pat, $unassigned = false, $effectiveInsuran
         $print .= "<td class='detail text-right'>" . text($print_adj) . "&nbsp;</td>";
         $print .= "<td class='detail text-right'>" . text($print_bal) . "&nbsp;</td>";
         $print .= "</tr>\n";
-        echo $print;
-        if (!empty($pmt['follow_up_note'])) {
-            $bgcolor = (($bgcolor == "#FFFFDD") ? "#FFDDDD" : "#FFFFDD");
-            $print = "<tr style='background-color:" . attr($bgcolor) . ";'>";
-            $print .= "<td class='detail' colspan='2'>&nbsp;</td>";
-            $print .= "<td colspan='7'>" . xlt('Follow Up Note') . ": ";
-            $print .= text($pmt['follow_up_note']);
-            $print .= "</td></tr>\n";
+
+        // CSV export shares this loop with the HTML render, but the report's CSV
+        // schema only has one amount column (Chg/Pmt Amount), so the payment,
+        // adjustment, applied and balance figures are labeled and packed into it.
+        $csv_amounts = [];
+        if ($print_pmt !== '') {
+            $csv_amounts[] = xl('Payment') . ': ' . $print_pmt;
+        }
+        if ($print_adj !== '') {
+            $csv_amounts[] = xl('Adjustment') . ': ' . $print_adj;
+        }
+        if ($print_appl !== '') {
+            $csv_amounts[] = xl('UAC Appl') . ': ' . $print_appl;
+        }
+        if ($print_bal !== '') {
+            $csv_amounts[] = xl('UAC Tot') . ': ' . $print_bal;
+        }
+        $csv = csvEscape('') . ',';
+        $csv .= csvEscape($description) . ',';
+        $csv .= csvEscape($pmt_date . ' / ' . $payer) . ',';
+        $csv .= csvEscape($type) . ',';
+        $csv .= csvEscape(implode(' | ', $csv_amounts)) . "\n";
+
+        if (!empty($_REQUEST['form_csvexport'])) {
+            echo $csv;
+        } else {
             echo $print;
+        }
+
+        if (!empty($pmt['follow_up_note'])) {
+            if (!empty($_REQUEST['form_csvexport'])) {
+                echo csvEscape('') . ',' . csvEscape(xl('Follow Up Note') . ': ' . $pmt['follow_up_note']) . ',' . csvEscape('') . ',' . csvEscape('') . ',' . csvEscape('') . "\n";
+            } else {
+                $bgcolor = (($bgcolor == "#FFFFDD") ? "#FFDDDD" : "#FFFFDD");
+                $print = "<tr style='background-color:" . attr($bgcolor) . ";'>";
+                $print .= "<td class='detail' colspan='2'>&nbsp;</td>";
+                $print .= "<td colspan='7'>" . xlt('Follow Up Note') . ": ";
+                $print .= text($pmt['follow_up_note']);
+                $print .= "</td></tr>\n";
+                echo $print;
+            }
         }
 
         if ($unassigned) {
@@ -340,7 +378,7 @@ if ($_REQUEST['form_csvexport']) {
     header("Expires: 0");
     header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
     header("Content-Type: application/force-download");
-    header("Content-Disposition: attachment; filename=svc_financial_report_" . attr($form_from_date) . "--" . attr($form_to_date) . ".csv");
+    header("Content-Disposition: attachment; filename=pat_ledger_report_" . attr($form_from_date) . "--" . attr($form_to_date) . ".csv");
     header("Content-Description: File Transfer");
 } else {
     ?>
@@ -756,7 +794,7 @@ if ($_REQUEST['form_refresh'] || $_REQUEST['form_csvexport']) {
             if ($prev_encounter_id != -1) {
                 $credits = GetAllCredits($prev_encounter_id, $form_pid);
                 if (count($credits) > 0) {
-                    if (!$hdr_printed) {
+                    if (!$hdr_printed && empty($_REQUEST['form_csvexport'])) {
                         PrintEncHeader(
                             $prev_row['date'],
                             $prev_row['reason'],
@@ -778,13 +816,17 @@ if ($_REQUEST['form_refresh'] || $_REQUEST['form_csvexport']) {
         }
 
         if ($erow['id']) {
-            // Now print an encounter heading line -
+            // Now print an encounter heading line - CSV export omits this
+            // presentational summary row; the encounter date/reason are not part
+            // of the CSV schema and each charge line already carries its own date.
             if (!$hdr_printed) {
-                PrintEncHeader(
-                    $erow['date'],
-                    $erow['reason'],
-                    $erow['provider_id']
-                );
+                if (empty($_REQUEST['form_csvexport'])) {
+                    PrintEncHeader(
+                        $erow['date'],
+                        $erow['reason'],
+                        $erow['provider_id']
+                    );
+                }
                 $hdr_printed = true;
             }
 
@@ -813,6 +855,16 @@ if ($_REQUEST['form_refresh'] || $_REQUEST['form_csvexport']) {
             $print .= "<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>";
             $print .= "</tr>\n";
 
+            $csv_code = (string) $erow['code'];
+            if ($erow['modifier']) {
+                $csv_code .= ':' . $erow['modifier'];
+            }
+            $csv = csvEscape($csv_code) . ',';
+            $csv .= csvEscape((string) $code_desc) . ',';
+            $csv .= csvEscape($bill . ' / ' . $who) . ',';
+            $csv .= csvEscape((string) ($erow['units'] ?? '')) . ',';
+            $csv .= csvEscape(oeFormatMoney($erow['fee'], true)) . "\n";
+
             $total_units  += $erow['units'] ?? 1;
             $total_chg += $erow['fee'];
             $total_bal += $erow['fee'];
@@ -835,7 +887,7 @@ if ($_REQUEST['form_refresh'] || $_REQUEST['form_csvexport']) {
     if ($prev_encounter_id != -1) {
         $credits = GetAllCredits($prev_encounter_id, $form_pid);
         if (count($credits) > 0) {
-            if (!$hdr_printed) {
+            if (!$hdr_printed && empty($_REQUEST['form_csvexport'])) {
                 PrintEncHeader(
                     $prev_row['date'],
                     $prev_row['reason'],
@@ -854,7 +906,7 @@ if ($_REQUEST['form_refresh'] || $_REQUEST['form_csvexport']) {
 // This is the end of the encounter/charge loop -
     $uac = GetAllUnapplied($form_pid, $from_date, $to_date);
     if (count($uac) > 0) {
-        if ($orow) {
+        if ($orow && empty($_REQUEST['form_csvexport'])) {
             $bgcolor = (($bgcolor == "#FFFFDD") ? "#FFDDDD" : "#FFFFDD");
             echo "<tr style='background-color: var(--white);'><td colspan='9'>&nbsp;</td></tr>\n";
         }
