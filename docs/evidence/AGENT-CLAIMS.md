@@ -563,3 +563,46 @@ untouched — different setting, no code guard applies to a placeholder value), 
 or fax pipeline (none exists; not fabricated), or any live-hardware print/fax test (would require
 physical or virtual printer/fax hardware not present on this host, same constraint PB-163 already
 recorded for the unclicked UI action).
+
+## Agent F (Owner-decision scribe) — five direct Owner decisions recorded, PB-350..359 (2026-08-19)
+
+**Claim: RDY-0084, RDY-0086/HR-09, RDY-0096, RDY-0092/RDY-0099, RDY-0083 — decision-recording only,
+not their engineering/review closure.** Claimed PB-350..359 in §0.0's range table (unclaimed at the
+time — the table showed only PB-300..349/Agent E and PB-350+ as unallocated).
+
+The Owner (Mohammed Elfouly) gave five decisions **directly in conversation with the orchestrating
+session, 2026-08-19** — not relayed through any agent, not through a subagent task prompt. Transcribed
+each as given, per §0.0 Rule 5 ("record what was received, from whom, and by what route" — no
+fabricated sign-off). Full PB-log summary: `### PB-350` in the readiness document.
+
+Evidence-file addenda (`6f27d57a7`): `EV-084-monitoring-requirements.md` (owner = role, not
+individual), `EV-WAVE3-decisions-20260816.md` (RDY-0086/HR-09 competence basis = "native Arabic
+speaker"), `EV-096-options.md` (Level 1/Business Hours selected, response target confirmed),
+`EV-092-locked-decisions-reconciliation.md` §3.1 (Q5/RDY-0099 ruling: RDY-0057's disclosure-based
+position governs, RDY-0099 retired as superseded), `EV-047-deployment-runbook.md` §9 (pilot-host
+trigger = a proper Windows Service).
+
+Register updates (`bba1cc108`): RDY-0083/0084/0092/0096 register rows and detail sections; RDY-0099's
+Domain Q row (Status/Verdict changed from `DEFERRED` to `RETIRED — SUPERSEDED`, so it no longer reads
+as an active future task); RDY-0057's row (pointer to the Q5 ruling); HR-04's HR-09 row (basis of
+authority now stated). `git diff` run on the readiness document before staging both commits; every
+hunk in each was confirmed as this session's own edit before staging.
+
+**On the RDY-0083 decision specifically — verified, not just recorded.** The task flagged a possible
+inconsistency: a Windows Service, like a `SYSTEM`-context scheduled task, typically runs outside the
+interactive session, and this demo host's Google Drive mount of `G:` is per-session. Checked
+`EV-083` and PB-181 (`AGENT-CLAIMS.md` above, and the readiness document's own PB-181 entry) directly:
+**confirmed accurate.** PB-181's investigation already found that non-interactive logon types
+(S4U/Batch/ServiceAccount) — the execution context a Windows Service typically runs under — hit the
+identical `G:`-mount blindness that ruled out converting the existing Scheduled Task to survive
+logoff. So a Windows Service would face the same blocker **on this specific demo host**. This does not
+make the Owner's decision wrong: it is a decision for a real pilot host (RDY-0064), which is not
+expected to run from a per-session Drive mount the way this dev machine does — the same reasoning
+`EV-047` §10.5 already applied to the TLS-renewal Scheduled Task. Recorded as NOT validated on this
+host, with implementation/testing deferred to real pilot-host provisioning, rather than silently
+treated as equivalent to the working demo-host mechanism.
+
+**Not claiming:** closure of any of the five RDY items — each addendum states precisely what narrow
+gap it closes (a wording question, a missing basis statement, a level selection, one conflict
+sub-finding, a future mechanism decision) and what stays open. No code, no database changes, no
+gate-count recalculation (§0.0 Rule 3 — that stays with whoever runs the next dedicated sync).
