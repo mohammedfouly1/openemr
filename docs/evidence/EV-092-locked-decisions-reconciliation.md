@@ -309,3 +309,33 @@ governing-relationship question; audit the 848-line implementation backlog's own
 scope for both reconciliation passes so far); and only then can RDY-0092's acceptance criterion — "any
 decision not reflected [in the GTM] is escalated, not silently adopted" — be called fully met rather
 than met-so-far.
+
+---
+
+## 7. RESOLVED 2026-08-19 — §4's governing-relationship question answered; RDY-0092 closed
+
+> **✅ Owner ruling, given directly in conversation with the orchestrating session.** The `Locked
+> Desicions/` corpus (`Q1`–`Q77`) is a **future-phase roadmap** — not binding on the current MVP,
+> consistent with both rulings already made under this same reading (§3.1's Q5/MFA ruling, §6.1's
+> `Q27`–`Q31`/`Q65` NPHIES ruling). It does not override the current locked GTM/readiness positions.
+> Future conflicts default to "GTM/readiness governs now, corpus governs later" unless the Owner rules
+> otherwise on a specific item — the same case-by-case escalation discipline this document has used
+> throughout, not a blanket dismissal of the corpus.
+
+**Both conditions §6.4 named as blocking RDY-0092 are now met:**
+
+1. §6.1's `Q27`–`Q31`/`Q65` NPHIES finding — resolved earlier today (option (a), see the addendum in
+   §6.1 above).
+2. §4's governing-relationship question — resolved by this ruling.
+
+**§4's provisional note is retired.** Every "consistent, not a conflict" reading in §6.2/§6.3 was
+provisional on the corpus reading as future-roadmap rather than live-binding; that premise is now the
+Owner's own ruling, not an assumption this document made unilaterally.
+
+**RDY-0092's acceptance criterion — "any decision not reflected in the GTM is escalated, not silently
+adopted" — is now fully met, not merely met-so-far**: the full corpus (`Q1`–`Q77`) has been read across
+two passes, the two real findings it produced were escalated rather than resolved unilaterally, and
+both have now received an Owner ruling. The 848-line implementation backlog's own conformance remains
+explicitly out of scope for this item (§4 row 3) and is not a closure condition.
+
+### Status: **RDY-0092 — CLOSED 2026-08-19.**
