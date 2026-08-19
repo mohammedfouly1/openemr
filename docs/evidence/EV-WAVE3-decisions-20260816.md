@@ -97,3 +97,29 @@ these was applied to `docs/Marketing-MVP-and-Launch-Readiness-Requirements.md` b
 this session's standing practice of preferring a new evidence file over editing the actively-edited
 shared document, and per §0.0 Rule 3 (gate counts move only at a dedicated sync, not inside a
 decision-capture entry). **`Blocks` per each RDY's own field, not recomputed here.**
+
+---
+
+## ADDENDUM 2026-08-19 — DECISION RECORD — RDY-0086, the basis-of-authority statement
+
+**Given directly by the Owner (Mohammed Elfouly) in conversation with the orchestrating session,
+2026-08-19** (not relayed through any agent). This closes the specific gap the DECISION RECORD above
+(2026-08-16) left open: the Owner had re-affirmed themselves as HR-09 but had not, in that exchange,
+stated the basis of authority the option presented had asked for.
+
+**Decision:** The Owner's stated basis of authority for HR-09 (Arabic/RTL reviewer) is: **"Native
+Arabic speaker."**
+**Rationale:** NONE STATED BEYOND THE ANSWER ITSELF.
+**Decided by:** Owner (Mohammed Elfouly)
+**Date:** 2026-08-19
+**Conditions:** NONE STATED.
+**Reversibility:** N/A — a statement of fact about the reviewer's own background, not a reversible
+policy choice.
+**What this closes:** HR-09's competence-basis gap, flagged in HR-04's register since PB-061 and
+recorded as still-open in the DECISION RECORD above — the missing *statement* now exists.
+**What this does NOT close:** RDY-0086 and RDY-0063 (the actual Arabic/RTL screen-walk and
+qualification-script work) are untouched by this entry — this is a basis-of-authority statement, not
+a review record. HR-09's `Verdict`/`Closure Eligible` fields in HR-04's register stay whatever they
+currently read until the first actual review is written.
+**Evidence path:** this file. HR-04's register (existing) updated separately to carry this statement
+against the HR-09 row.

@@ -196,6 +196,32 @@ php <abs-path>/bin/console background:services run
 | Use an **absolute** path to `bin/console` | Schedulers frequently set no working directory |
 | Run as an account that can see the application directory | ⚠ **On the demo host this must be the logged-on user**, because Google Drive mounts `G:` per session and a `SYSTEM` task cannot see the app at all — so the trigger there **does not survive a logoff**. **That is a demo-host artefact. A customer instance must use a service account and must survive reboot.** Do not copy the demo arrangement |
 
+**Owner decision, 2026-08-19 — pilot-host trigger mechanism.** Given directly by the Owner (Mohammed
+Elfouly) in conversation with the orchestrating session, 2026-08-19 (not relayed through any agent).
+Of the three live options this section (and RDY-0083's register row) had left undecided — a proper
+Windows Service, a `SYSTEM`-context scheduled task against a non-Drive-mounted deployment, or enabling
+`rest_api` — **the Owner selected a proper Windows Service.**
+
+**This is specified for the pilot runbook; it is explicitly NOT validated on this demo host.**
+`EV-083`'s own PB-181 investigation (AGENT-OPS, 2026-08-16) already established, by testing the closely
+related case, why: a non-interactive logon type (S4U/Batch/ServiceAccount) — the same execution context
+a Windows Service typically runs under (`SYSTEM`/`LocalService`/`NetworkService`/a configured service
+account) — runs outside the interactive window station, and **this host's Google Drive mount of `G:` is
+per interactive user session**, so a task or service running outside that session cannot see the
+application directory at all. That finding is preserved and confirmed here, extended by analogy from
+"non-interactive scheduled task" to "Windows Service": **on this specific demo host, a proper Windows
+Service would hit the identical `G:`-mount blindness** that ruled out the SYSTEM-scheduled-task path.
+
+**This does not make the Owner's decision wrong for its actual target.** The decision is for a **real
+pilot host**, provisioned under RDY-0064, which is not expected to run the application from a
+per-session Google-Drive mount the way this dev machine does (the same reasoning already applied to the
+TLS-renewal Scheduled Task at §10.5 above). A proper Windows Service is a normal, well-supported pattern
+on an ordinary Windows Server filesystem. **Implementation and testing of this mechanism is deferred to
+real pilot-host provisioning** — it cannot be built or verified on this host, and pilot-host provisioning
+itself waits on RDY-0064 (hosting). Nothing here is implemented; this section records the specification
+only, consistent with how the rest of this step and §10.5 already treat unexecuted, hosting-blocked
+work.
+
 ---
 
 ## 10. Step 8 — Backup

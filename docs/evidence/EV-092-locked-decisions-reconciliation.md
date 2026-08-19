@@ -49,6 +49,29 @@ document's locked GTM has no IdP layer in scope anywhere and treats MFA non-enfo
 references the other's MFA position.** Escalated here, not resolved — this is the Founder/Product
 Owner's decision on which locked corpus governs the current MVP phase.
 
+#### ADDENDUM 2026-08-19 — RULING GIVEN
+
+**Given directly by the Owner (Mohammed Elfouly) in conversation with the orchestrating session,
+2026-08-19** (not relayed through any agent).
+
+**Ruling:** The readiness plan's disclosure-based position **governs for this MVP phase**.
+RDY-0099's `force_mfa` proposal is **retired as superseded by Q5's centralized-Keycloak direction**,
+not merely left deferred.
+**Rationale:** NONE STATED BEYOND THE RULING ITSELF.
+**Decided by:** Owner (Mohammed Elfouly)
+**Date:** 2026-08-19
+**Conditions:** NONE STATED.
+**What this resolves:** the specific §3.1 conflict above — RDY-0057's disclosure-based MFA handling
+stands for the current MVP; RDY-0099 (the `force_mfa` core-global proposal) does not proceed as an
+active deferred item, because it is the exact mechanism Q5 forbids, not because it is merely
+lower-priority. If Q5's centralized-Keycloak direction is ever built, MFA enforcement would be
+addressed there, not via a core OpenEMR global.
+**What this does NOT resolve:** the broader question of §4's table — whether `Locked Desicions/` is a
+future-phase roadmap, a superseded exploration, or a live parallel programme — remains open, as do
+categories `Q23`+ (unreviewed, §2). This ruling is scoped to the Q5/RDY-0099 conflict only.
+**Evidence path:** this file. Register rows for RDY-0092, RDY-0099 and RDY-0057 updated separately to
+carry this ruling.
+
 ### 3.2 Q21 — ZATCA: a possible primary-source lead for the still-open RDY-0078
 
 Locked Decisions Q21 records: *"External verification (ZATCA, 2026-07-24): Wave 25 covers
@@ -106,3 +129,12 @@ clean.
 corpus governs for the current MVP phase, and — if `Locked Desicions/` is a live parallel programme —
 whether Q5's MFA position should override RDY-0057/0099's current disclosure-based handling before
 any security-review conversation cites it.
+
+**UPDATE 2026-08-19 — the §3.1 sub-finding is now resolved, RDY-0092 as a whole is not.** The Owner's
+ruling (§3.1 addendum above) answers the Q5/RDY-0099 conflict specifically: the readiness plan's
+disclosure-based position governs for this MVP phase, and RDY-0099 is retired as superseded rather than
+left deferred. **This is one resolved sub-finding, not a resolution of the whole reconciliation.** The
+broader "which corpus governs, roadmap vs. live programme" question (§4's first row) and categories
+`Q23`+ (§2, never read) remain exactly as open as before this ruling. **RDY-0092 stays NOT CLOSED** —
+its own acceptance criterion needs the full corpus reconciled, and this ruling reconciles one category-B
+finding, not the remaining ~55 decisions.

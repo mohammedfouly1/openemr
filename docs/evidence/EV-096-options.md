@@ -25,13 +25,13 @@ none has ever been measured (RDY-0084 territory, not this item).
 
 ## The three options
 
-### Level 1 — Business Hours
+### Level 1 — Business Hours — **SELECTED by the Owner, 2026-08-19 (see addendum below)**
 
 | Element | Definition |
 |---|---|
 | **Channels** | Email / ticket portal only |
 | **Published hours** | Sun–Thu, standard clinic business hours (e.g. 09:00–17:00 AST) |
-| **Response target** | *Candidate:* first response within 1 business day. **Not yet agreed — needs Owner confirmation against real staffing.** |
+| **Response target** | First response within 1 business day. **CONFIRMED 2026-08-19 by the Owner directly, against real staffing — no longer a candidate.** See addendum below. |
 | **Escalation path** | Single tier: implementer handles the ticket; unresolved after [X] days escalates directly to the founder. No after-hours path. |
 | **Training plan** | One session per role at implementation. No scheduled refresher; further training available at a published day rate. |
 | **Staffing commitment implied** | **One person, part-time**, covering the published window only. No on-call rotation, no weekend coverage. The lightest commitment of the three. |
@@ -118,3 +118,38 @@ actually made — exactly what the closure discipline for this project forbids.
 differently-committed options) but explicitly withholds the one thing only the Owner can supply: which
 one the real team can staff. **`Blocks`:** G3, G6 (per RDY-0096's own card). No gate count recalculated
 here (§0.0 Rule 3).
+
+---
+
+## ADDENDUM 2026-08-19 — Owner decision: Level 1 selected, response target confirmed
+
+**Given directly by the Owner (Mohammed Elfouly) in conversation with the orchestrating session,
+2026-08-19** (not relayed through any agent).
+
+**Decision:** **Level 1 — Business Hours** is the selected service level.
+**Response target:** first response **within 1 business day** — previously listed above as
+*"Candidate, not yet agreed"*; **now confirmed, not candidate.**
+**Rationale:** NONE STATED BEYOND THE SELECTION ITSELF.
+**Decided by:** Owner (Mohammed Elfouly)
+**Date:** 2026-08-19
+**Conditions:** NONE STATED.
+
+**Updated table cell (Level 1, "Response target" row, §"The three options"):** reads as **"First
+response within 1 business day. CONFIRMED 2026-08-19 by the Owner directly, against real staffing —
+no longer a candidate."**
+
+**What this closes against RDY-0096's own acceptance criteria (§"Acceptance" table above):**
+
+| Criterion | Result as of this addendum |
+|---|---|
+| A level is chosen | **NOW MET** — Level 1, Business Hours |
+| The response target is one the team has agreed it can meet with current staffing | **NOW MET** — Owner confirmed 1-business-day first response, not candidate |
+| Channels, hours, response target, escalation path, training plan all defined per level | Still MET (unchanged, already true of Level 1's full definition above) |
+| No uptime or performance figure appears anywhere | Still MET (unchanged) |
+| All six elements **reflected in the scope template and pilot agreement** | **STILL NOT MET** — `EV-066-pack.md` and `EV-068-pilot-requirements.md` are the named downstream documents (§"Downstream wiring, once chosen" above); this decision has not yet been wired into either |
+
+**What this does NOT close:** RDY-0096 stays open pending the scope-template/pilot-agreement wiring
+named above and in the register's own acceptance text — the decision itself is now recorded, but
+"reflected in the scope template and pilot agreement" is a separate, unfinished step. **Staffing
+commitment implied by Level 1** (one person, part-time, published-window only, per the side-by-side
+table above) is recorded as part of this same decision, not invented separately.

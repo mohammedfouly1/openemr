@@ -116,3 +116,22 @@ and implementation is gated on RDY-0064.
 **`Blocks`: G3.** No gate count moved (§0.0 Rule 3) — **Agent B does not recalculate gate counts, and
 does not mark its own work closed.** If the Owner accepts the role-level owner, this is a closure for
 the next sync pass.
+
+---
+
+## ADDENDUM 2026-08-19 — the reservation above is resolved
+
+**Given directly by the Owner (Mohammed Elfouly) in conversation with the orchestrating session,
+2026-08-19** (not relayed through any agent). Question put to the Owner: does "owner" in the six
+monitoring signals mean a role or a named individual? **Answer: a role** — e.g. "DevOps /
+Infrastructure," exactly as this document's §1 table already carries it, not a named person.
+
+**What this closes:** the one-word wording ambiguity flagged in the reservation above. §1's
+"Owner (role)" column and §6's "MET at role level" line are confirmed correct as written; no
+individual name is to be substituted.
+
+**What this does NOT close:** RDY-0084 as a whole stays whatever status the register currently
+carries. The reservation was the only open question this document itself raised; it does not
+supply the tooling decision (§5, still deliberately not made) or unblock the RDY-0064 hosting
+dependency implementation waits on. Recording per §0.0 Rule 5 — this is what was received, from
+whom, and by what route; nothing beyond the Owner's one-word answer is inferred.
