@@ -21,7 +21,8 @@ the first.
 | **PB-070 … PB-139** | **Agent B** — Claude Code, the session that produced the independent audit of 2026-08-14 and `docs/evidence/AGENT-CLAIMS.md`. **Range claimed 2026-08-14.** |
 | **PB-140 … PB-219** | **Agent C (Orchestrator)** — Claude Code, the session coordinating Phase 2B execution via specialist subagents (AGENT-DOC, AGENT-CONF, AGENT-SEC, AGENT-DATA, AGENT-OPS, AGENT-GIT, AGENT-CAP). Sub-ranges to be allocated to each subagent from within this range. **Range claimed 2026-08-16.** |
 | **PB-220 … PB-299** | **Agent D (Auditor / independent executor)** — Claude Code, the session that audited Agent C's PB-140/141 register sync (`docs/evidence/EV-AUDIT-agentA-20260816.md` — filename predates this identity naming) and now picks up genuinely unclaimed, non-colliding work per `AGENT-CLAIMS.md`. **Range claimed 2026-08-16.** |
-| PB-300 … | unallocated — claim a range in this table before using it |
+| **PB-300 … PB-349** | **Agent E (Gate-sync auditor)** — Claude Code, session performing a full G0–G6 open-blocker reconciliation as of 2026-08-19: re-verifying every RDY/DG/D/RB/BLK item against current repo state (commits through `7588b42e5`), classifying every still-open item as human-decision / external-dependency / actionable-now, and running the §47 Rule 3 gate-count sync. Read-only against code; writes limited to a new dated evidence file, one PB entry in this range, and the Rule 3 sync itself. **Range claimed 2026-08-19.** |
+| PB-350 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
 claim another here rather than borrowing.
