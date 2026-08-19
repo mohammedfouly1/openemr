@@ -951,3 +951,17 @@ wording question — left exactly as flagged, not decided) also needed no browse
 remaining captures and RDY-0086's Arabic walk are genuinely browser-dependent (real screenshots) and
 are deferred pending reconnection — will be attempted if/when the browser becomes reachable this
 session, otherwise honestly recorded as not-attempted rather than faked.
+
+## Orchestrator (main session) — PB-444, 2026-08-19 — RDY-0016/A-7 sensitivity-ACL bypass fix
+
+Used PB-444 (next free in the eighth agent's PB-434-460 reservation, after the ninth
+browser-check agent's PB-443). Non-browser, code-only work: fixed the sensitivity-ACL bypass
+half of A-7's negative-row failure (`view_form.php`/`load_form.php` never checked encounter
+sensitivity), verified live via HTTP harness, no regression on the 32-probe matrix. Left the
+separate cross-physician non-sensitive-note policy question open for the Owner — did not touch
+it. Files changed: `interface/patient_file/encounter/view_form.php`,
+`interface/patient_file/encounter/load_form.php`, `docs/evidence/EV-016-A7-sensitivity-fix.md`,
+`docs/evidence/harnesses/rdy0016-a7-sensitivity-fix-verify.php`. Commits `e02d7b5f3` (code fix),
+`73f906200` (register/PB-log update). Did not touch RDY-0060/0061/0086/0090/0094 or the demo
+database — a separate agent (Codex, briefed via a standalone prompt) is expected to work the
+remaining browser-dependent items; avoided any DB reseed to prevent colliding with it.
