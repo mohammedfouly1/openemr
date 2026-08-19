@@ -438,3 +438,39 @@ than left standing.
 positive/negative authorization matrix (§23.4) is still unexecuted under real role sessions (same
 classifier block as RDY-0042/0043), and §3's Owner decision on the 16 directories is untouched. **Not
 attempting either of those here** — out of this claim's scope.
+
+## Agent F (AGENT-COMP2) — RDY-0088 remainder, dossier-scoped (2026-08-19)
+
+**Claim: exactly 4 dossier codes, not "RDY-0088" generically** — `C-16` (TEKNOSys PolyCare),
+`C-18` (MAEN.MEDS / M3n Technology), `C-21` (HMISFOX), `C-24` (DenTech KSA). Per this task's own
+history (see the ⚠ note on the existing 0088 row above), the prior collision on this exact item was
+between two *identically-scoped* claims — naming the specific remaining codes is meant to make a
+second collision visible immediately rather than silent.
+
+**How this scope was derived (re-read of `EV-088-competitor-frequency-verification.md` §3/§4/§7 in
+full, not inferred from any summary count):** of the 9 dossiers, 5 are terminally resolved and are
+**not** being touched — `C-15` (MediSys, live multi-product vendor confirmed), `C-19` (Kizen,
+confirmed unchanged — content-free shell, collision risk validated), `C-20` (e-MCS, confirmed dead —
+hosting suspended, reproduced across 2 independent passes/4 attempts), `C-22` (Solver, clearly
+superseded — full live site, brochure assumption was wrong), `C-26` (Avicenna, live site confirmed,
+scored-claim impact against RDY-0062 explicitly assessed as null). The remaining 4 above each still
+have a genuinely researchable next step recorded in `EV-088` §6's own recommendation (a direct
+re-fetch attempt against a specific URL each returned a transient-looking error on: 520, timeout, DNS
+failure, 403) — none is blocked on anything external to more research.
+
+**⚠ Flagging a discrepancy rather than silently picking a number:** `docs/Marketing-MVP-and-Launch-
+Readiness-Requirements.md` §47 (PB-300 sync) and `EV-GATE-SYNC-20260819.md:117` both say **"3
+remaining"**, apparently computed as `9 − 6` from `EV-088`'s own "6 of 9 advanced" framing (§5 there,
+and this file's row 358). That arithmetic doesn't hold up against the dossier-level detail: of the "6
+advanced" (`C-15 C-16 C-18 C-22 C-24 C-26`), only 3 (`C-15 C-22 C-26`) are actually resolved to a live,
+directly-confirmed marketing surface — `C-16`, `C-18` and `C-24` were each still only *indirectly*
+evidenced (WebSearch, not a successful direct fetch) when `EV-088` §7 was written, and `C-21` — not in
+the "6 advanced" list at all — was never folded into that count on either side. **4 open, not 3**, by
+direct re-derivation from the dossier text. Recorded here per this repo's evidence-first convention
+(state the method beside the number) rather than adopting either prior figure on trust.
+
+**Not claiming:** the other 5 dossiers (terminal, no further action), Source C §24.2 items 2/3/4/5
+(identity-cluster resolution, evidence-class re-ranking, Arabic review — separate scope, already noted
+as untouched in `EV-088` §5), and any frequency recomputation (`EV-088` §5/§6 already establish that
+even full resolution of these 4 would not by itself meet Source C's Full/Verified depth standard
+required before recomputation).
