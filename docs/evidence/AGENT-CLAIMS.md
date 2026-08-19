@@ -743,6 +743,15 @@ needs the Chrome browser extension, which the PB-380-383 agent may still be usin
 follow-up pass once that agent is confirmed finished, to avoid two agents contending for one browser
 session.
 
+## Orchestrator (main session) — fifth subagent dispatched, 2026-08-19 (Chrome extension reconnected)
+
+**Claiming:** RDY-0016 (A-2/A-7 sensitivity live test + more matrix probes), RDY-0023 (vitals seed +
+growth-chart render), RDY-0041 (second D-7 run), RDY-0060/0062 (screenshot/recording capture),
+RDY-0071 (CSV-button click-test) — every item this session's register rows recorded as
+browser-tooling-blocked. Range `PB-407…PB-412` claimed in §0.0. The Chrome extension reconnected as
+device `1a030f48-96bf-43e4-86e4-6abe92e9f2f4` ("Browser 1") after multiple failed attempts earlier
+this session; the Owner selected it directly when asked.
+
 **Update, same day — this agent has completed (PB-390…PB-393 used, PB-394…PB-399 not needed):**
 RDY-0004, RDY-0061 and RDY-0086 all turned out to already have their core artefacts written by
 earlier agents (`EV-004-prohibited-claims-control.md`, `EV-061-capture-rules.md`,
