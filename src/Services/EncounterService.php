@@ -731,7 +731,8 @@ class EncounterService extends BaseService
     {
         $encounterResult = $this->search(['pid' => $pid, 'eid' => $encounter_id], $options = ['limit' => '1']);
         if ($encounterResult->hasData()) {
-            return (string) ($encounterResult->getData()[0]['sensitivity'] ?? '');
+            $sensitivity = $encounterResult->getData()[0]['sensitivity'] ?? '';
+            return is_string($sensitivity) ? $sensitivity : '';
         }
         return '';
     }
