@@ -149,7 +149,89 @@ Owner decision on the 16 now-blocked form directories (`EV-016-A10-fix-scope.md`
 A-1, A-6, A-7 and A-8 each specify *"UI navigation **and** direct URL"*. **The direct-URL half is
 evidenced above. The UI half for A-7/A-8's sensitivity legs is now also evidenced (§4.1, PB-410) —
 real UI navigation to Visit History under Front Office, Accounting and Physician accounts.** A-1's
-and A-6's UI halves remain unexercised.
+UI half is now evidenced (§4.6, PB-435). **A-6's UI half is evidenced at menu level only** (PB-435:
+no `Admin` top-level menu, `Fees` menu has no payment-posting item) — not yet probed via an actual
+click into a denied screen.
+
+### 4.5 ⚠ NEW 2026-08-19 (PB-443) — A-2/§23.4's original 32-probe run never re-checked A-3/A-4/A-5/
+A-6/A-8/A-9/A-11's direct-URL legs against **today's** live system, and doing so surfaced a genuine
+negative-row FAILURE at A-7
+
+**Bookkeeping correction first.** Several agents' dispatch notes between 2026-08-14 and 2026-08-19
+described A-3, A-4, A-5, A-6 (direct-URL), A-8, A-9 and A-11 as "still unrun." **They were not
+unrun — they were run here, 2026-08-14, all 32 PASS (§1 table above), and this document's own §5
+"What would close it" list never named them as outstanding.** The confusion traces to later PB
+entries (e.g. the RDY-0016 register row after PB-435) listing "Remaining unrun: A-3, A-4, A-5, A-8,
+A-9, A-11" without cross-referencing this file. **Re-run live today, 2026-08-19, as a fresh
+same-day confirmation** (`docs/evidence/harnesses/rdy0016-matrix.php`, unchanged):
+
+```
+EXECUTED: 32   PASS: 32   FAIL: 0
+```
+
+Byte-for-byte the same 32 probes, same result. A-3, A-4, A-5, A-6 (direct-URL negative), A-8
+(positive + negative), A-9 and A-11 are **CLOSED as of today's re-run**, not merely historically
+passed.
+
+**New probe, not in the original 32 — and it FAILS.** RDY-0041's D-7 runs (PB-425, PB-442) finally
+gave A-7 something the original run explicitly could not test (§4.2 above): **two different
+clinician-authored forms exist now, but both are authored by the same physician (`y.alharbi`)** —
+still no second clinician's own note existed as of the last check. What changed: a real, specific
+form record now exists (`forms.id = 115`, a SOAP note authored by `y.alharbi` on encounter 117,
+pid 32, 2026-08-19), which is enough to test the **other** physician's access to it directly, even
+without a second clinician-authored note of her own. Probe
+(`docs/evidence/harnesses/rdy0016-a7-matrix.php`, real authenticated HTTP, GET only — no data
+mutated):
+
+| Actor | Request | Result |
+|---|---|---|
+| `y.alharbi` (the note's author) | `GET view_form.php?formname=soap&id=115&pid=32&encounter=117` | HTTP 200, 5,522 B — positive control, can view own note |
+| `s.almutairi` (a **different** physician, not this note's author, not this patient's provider) | same URL | **HTTP 200, 5,522 B — NOT DENIED.** Body contains the same SOAP field labels (Subjective/Objective/Assessment/Plan) as the author's own view, no denial text anywhere |
+
+**This is a negative-row FAILURE.** §23.4's A-7 row states the negative expectation *"cannot amend
+another clinician's note"* in the same breath as *"cannot sign lab results; cannot see
+`high`-sensitivity encounters."* The sensitivity leg of that same row was already found not to hold
+for physicians (§4.1) — **this is now the second of A-7's three negative clauses shown not to
+hold**, for the same underlying reason: `interface/patient_file/encounter/view_form.php:41` and
+`interface/patient_file/encounter/load_form.php:38` (the two entry points a browser session and a
+direct URL both go through) gate exclusively on `AclMain::aclCheckForm($_GET['formname'])` — a
+**form-TYPE** ACL check ("is this account's role allowed to open a SOAP note at all") — with **no
+per-record author or provider check anywhere in that code path**. Any account holding the
+`physicians` group's form ACL can open any patient's SOAP note by direct URL once it knows (or
+guesses/increments) the form `id`, regardless of who authored it or which provider the encounter
+belongs to.
+
+**Third clause, clarified rather than failed.** *"cannot sign lab results"* — probed via
+`interface/orders/orders_results.php`, gated in source on `AclMain::aclCheckCore('patients',
+'sign')` (`interface/orders/orders_results.php:33/39`):
+
+| Actor | Result |
+|---|---|
+| `y.alharbi` (Physician) | HTTP 200, 27 B — **not denied** |
+| `s.almutairi` (Physician) | HTTP 200, 27 B — **not denied** |
+| `m.alzahrani` (Clinical Assistant) | **HTTP 403, 1,816 B — denied** |
+| `r.aldosari` (Front Office) | **HTTP 403, 1,816 B — denied** |
+| `k.alotaibi` (Accounting) | **HTTP 403, 1,816 B — denied** |
+
+This clause does **not** fail — it exposes a role-naming ambiguity already visible elsewhere in
+§23.4: A-6 ("Physician... sign labs" — a **positive** expectation) and A-7 ("Clinician... cannot
+sign lab results" — a **negative** expectation) read as contradictory if "Physician" and "Clinician"
+name the same two accounts. The live grant matches **A-6's** positive claim exactly (both physician
+accounts can sign) and denies exactly the roles A-7's negative clause would apply to if "Clinician"
+means the Clinical Assistant tier (`m.alzahrani`, correctly 403) rather than a second physician.
+Recorded as a matrix-wording ambiguity for whoever next revises §23.4's role column — not a defect,
+unlike the note-amend finding above.
+
+**Net effect on RDY-0016's status.** Before this pass, RDY-0016 was NOT READY for incompleteness
+(cells unrun). **It is now NOT READY for a demonstrated defect**: A-7's *"cannot amend another
+clinician's note"* is a real, live, direct-URL-confirmed negative-row failure, exactly the class of
+finding §23.4's own pass condition calls dispositive — *"A single negative-row failure fails the
+matrix, and therefore G1 and G3."* This is a genuine new authorization gap, not a test artifact:
+the same account that cannot see another clinician's *sensitivity-flagged* encounter redaction
+correctly (§4.1) can nonetheless open — and, following the same code path, very likely edit/save,
+though a SAVE was deliberately not probed to avoid mutating another clinician's real note content —
+any other physician's clinical documentation on any patient, by direct URL, with no ACL gate at the
+record level.
 
 ---
 
