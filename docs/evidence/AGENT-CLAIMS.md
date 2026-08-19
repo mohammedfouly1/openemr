@@ -836,3 +836,20 @@ Read/Grep/Bash-for-read-only-queries; it should not open any browser MCP tool at
 evidence files (`EV-056-057-088-claim-discipline.md`, `EV-016-authorization-matrix.md`) updated in the
 same pass.** Range PB-407…PB-412 fully used. Nothing in this update was written without a
 corresponding live action (real HTTP request, real DOM state, or real server log line) behind it.
+
+## Orchestrator (main session) — seventh subagent dispatched, 2026-08-19 (browser, root cause now fixed)
+
+**Claiming:** RDY-0041 (D-7 second run, Accounting leg retry), RDY-0062 (live recording retry), RDY-0086
+(per-screen Arabic/RTL walk, D-1…D-5/D-7), RDY-0094 (§40 rows 6, 8, 10). Range `PB-425…PB-430` claimed
+in §0.0.
+
+**Context this dispatch inherits:** RDY-0025's session-persistence defect (the traced root cause of
+RDY-0041's Accounting-leg "Authentication Error" and RDY-0062's blocked recording) is now fixed and
+live-verified (PB-423) — both worth a clean retry. The demo DB was freshly reset to the v4 baseline
+immediately before this dispatch (PB-424, two independent resets, CLINHASH byte-identical) — starts
+from a known-clean state, not carrying over the earlier D-7 test patients (pid 31/32, now gone).
+
+**Do NOT restart Apache or reset the database mid-dispatch** — if RDY-0041's D-7 run needs a "known
+reset state" precondition it does not already have from the pre-dispatch reset above, that still needs
+explicit Owner authorization per the standing convention this session has used throughout, not a
+unilateral reset by this agent.
