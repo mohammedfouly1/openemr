@@ -8,8 +8,9 @@ All three requirements share the same two-part acceptance: **(a)** a mandatory q
 with the claim, and **(b)** a **keyword scan** of every artefact finds no prohibited term, signed off
 by the claim reviewer (RDY-0003).
 
-**Part (b) is executable and was executed. Part (a)'s sign-off is not — RDY-0003 has no named
-reviewer.** That is the only reason none of the three closes.
+**Part (b) is executable and was executed. Part (a)'s sign-off was, for a while, the only thing
+missing — see the ✅ CLOSED addendum in §6: reviewed 2026-08-19 by the now-named reviewer, verdict
+APPROVED FOR PUBLICATION, all three closed.**
 
 ---
 
@@ -181,12 +182,25 @@ grep -rniE "[0-9]+ of (16|11|26)[^0-9]{0,60}(competitor|vendor|GCC|market|publis
 
 | Requirement | Qualification defined | Scan executed | Reviewer sign-off (RDY-0003) | Status |
 |---|---|---|---|---|
-| **RDY-0056** | **Yes** | **Yes — 0 violations** | **MISSING** | **NOT CLOSED** |
-| **RDY-0057** | **Yes** | **Yes — 0 violations** | **MISSING** | **NOT CLOSED** |
-| **RDY-0088** | **Yes** | **Yes — 1 violation found and fixed** | **MISSING** | **NOT CLOSED** |
+| **RDY-0056** | **Yes** | **Yes — 0 violations (re-run 2026-08-19, same result)** | **✅ Mohammed Elfouly, 2026-08-19** | **CLOSED** |
+| **RDY-0057** | **Yes** | **Yes — 0 violations (re-run 2026-08-19, same result)** | **✅ Mohammed Elfouly, 2026-08-19** | **CLOSED** |
+| **RDY-0088** | **Yes** | **Yes — 1 violation found and fixed (re-run 2026-08-19, confirmed fixed)** | **✅ Mohammed Elfouly, 2026-08-19** | **CLOSED** |
 
-All three name *"claim-review sign-off (RDY-0003)"* in their acceptance. **RDY-0003 requires one
-named individual to be recorded as claim reviewer, and no name exists.** No further engineering
-clears it — the same single blocker as RDY-0067.
+> **✅ CLOSED 2026-08-19 — see `EV-003` §5 row 2.** This artefact went through the RDY-0003 review step
+> as its own named reviewer, Mohammed Elfouly. The orchestrating session re-ran the §5 mechanical
+> scans against the current state of `docs/` (not just cited the 2026-08-14 run) and read the artefact
+> for traceability (C-1: qualifications trace to CLM-0024/CLM-0025/L-23) and prohibited-term use
+> (C-2: the prohibited terms appear only inside this document's own "prohibited, absolutely" framing,
+> never as a claim). Findings were put to the reviewer directly; verdict **APPROVED FOR PUBLICATION**,
+> his judgment, not inferred. One observation surfaced during the re-run and put to him alongside the
+> verdict rather than decided silently: `docs/Product-Positioning-and-GTM-Locked-Strategy.md` carries
+> extensive unguarded "N of 16"-pattern text, judged out of scope on the same reasoning §4.4 already
+> gives for the readiness document's own internal uses (internal strategy material, not a
+> customer-facing artefact — `EV-003` §3's exemption). Approved without additional correction.
 
-**`Blocks`:** 0056 → G1 G5 · 0057 → G1 G5 · 0088 → G5 G6. No gate count moved (§0.0 Rule 3).
+All three named *"claim-review sign-off (RDY-0003)"* in their acceptance. That sign-off is now
+recorded, closing the same single blocker that RDY-0067 had.
+
+**`Blocks`:** 0056 → G1 G5 (closed) · 0057 → G1 G5 (closed) · 0088 → G5 G6 (closed). Gate-count
+decrement recorded in the main readiness document's PB-372 sync, per §0.0 Rule 3 — not recalculated
+here.

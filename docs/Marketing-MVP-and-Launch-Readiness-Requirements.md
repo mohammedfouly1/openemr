@@ -24,7 +24,7 @@ the first.
 | **PB-300 … PB-349** | **Agent E (Gate-sync auditor)** — Claude Code, session performing a full G0–G6 open-blocker reconciliation as of 2026-08-19: re-verifying every RDY/DG/D/RB/BLK item against current repo state (commits through `7588b42e5`), classifying every still-open item as human-decision / external-dependency / actionable-now, and running the §47 Rule 3 gate-count sync. Read-only against code; writes limited to a new dated evidence file, one PB entry in this range, and the Rule 3 sync itself. **Range claimed 2026-08-19.** |
 | **PB-350 … PB-359** | **Agent F (Owner-decision scribe)** — Claude Code, session transcribing five decisions the Owner gave directly, in conversation, 2026-08-19: RDY-0084 (owner = role), RDY-0086/HR-09 (Arabic competence basis), RDY-0096 (support level selected), RDY-0092/RDY-0099 (Q5/MFA conflict ruling), RDY-0083 (pilot trigger = Windows Service). Documentation-only; no code, no database, no gate-count recalculation. **Range claimed 2026-08-19.** |
 | **PB-360 … PB-369** | **Agent G** — Claude Code, session closing out three "decided, not yet implemented" items per direct task briefing, 2026-08-19: RDY-0055 (live re-verification of the PHI disclosure text against the seeded demo DB, closure), RDY-0096 (Level 1 support definition wired into `EV-066-pack.md`/`EV-068-pilot-requirements.md`, closure), RDY-0083 (confirmed correctly stays open — no host exists to implement/test the Windows Service decision against). **Range claimed 2026-08-19.** |
-| **PB-370 … PB-379** | **Orchestrator (main session)** — recording two real reviews the Owner performed directly, 2026-08-19: EV-055's technical PHI determination (Security Reviewer acceptance) and `EV-067`'s claim review (RDY-0003's sample artefact, per `EV-003` §4/§9) — both prepared (mechanical scans, C-1/C-2/C-6 read) before being put to the Owner, neither fabricated. **Range claimed 2026-08-19.** |
+| **PB-370 … PB-379** | **Orchestrator (main session)** — recording three real reviews the Owner performed directly, 2026-08-19: EV-055's technical PHI determination (Security Reviewer acceptance), `EV-067`'s claim review (RDY-0003's sample artefact, per `EV-003` §4/§9), and `EV-056-057-088-claim-discipline.md`'s claim review (RDY-0056/0057/0088's own artefact, per `EV-003` §4 queue row 2) — all three prepared (mechanical scans, C-1/C-2/C-6 or C-1/C-2 read as applicable) before being put to the Owner, none fabricated. **Range claimed 2026-08-19.** |
 | PB-380 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
@@ -283,10 +283,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **36 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370, 2026-08-19 — RDY-0055/0096's Owner decisions wired and live-verified; RDY-0003/0067 closed on a real claim review by the named reviewer, `EV-067` APPROVED FOR PUBLICATION). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
-| **Requirements still open** | **78** |
-| **Open P0** | **35** — 71 P0 less the 36 genuinely closed P0 IDs above. **PB-371 (2026-08-19): four-item decrement on the PB-301 baseline** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 1 · G1 12 · G2 8 · G3 13 · G4 2 · G5 11 · G6 17** — **PB-371 (2026-08-19): RDY-0003 (G0 G5), RDY-0055 (G3), RDY-0067 (G5 G6), RDY-0096 (G3 G6) decremented from the PB-301 baseline; G1, G2, G4 independently re-confirmed unchanged — none of the four block those gates** |
+| **Requirements CLOSED** | **39 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370); **0056**, **0057**, **0088** (PB-372, 2026-08-19 — second claim review, `EV-056-057-088-claim-discipline.md` APPROVED FOR PUBLICATION, same reviewer). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
+| **Requirements still open** | **75** |
+| **Open P0** | **32** — 71 P0 less the 39 genuinely closed P0 IDs above. **PB-372 (2026-08-19): three-item decrement on the PB-371 baseline** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 1 · G1 10 · G2 8 · G3 13 · G4 2 · G5 8 · G6 16** — **PB-372 (2026-08-19): RDY-0056 (G1 G5), RDY-0057 (G1 G5), RDY-0088 (G5 G6) decremented from the PB-371 baseline; G0, G2, G3, G4 independently re-confirmed unchanged — none of the three block those gates** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -1026,8 +1026,8 @@ qualification*. Dependencies, not dates.
 | 0053 | Add an ACL check to `interface/super/layout_listitems_ajax.php` — admin endpoint with CSRF but no `aclCheckCore` | Audit §20.6 #4 | No `aclCheckCore` | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** — real CSRF token minted, admin ALLOW confirmed, non-admin denied twice over (no token route exists) | AUTHORIZATION | P1 | G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
 | 0054 | Resolve the RPT-0042 ACL mismatch — menu declares `patients\|lab`, file enforces `acct\|rep` | Audit §16.6, §20.6 #5 | Mismatch present | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** | AUTHORIZATION | P2 | G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
 | **0055** | Decide and document the handling of **PHI in the audit trail**: bound SQL parameters are appended verbatim to `log.comments` as base64, log encryption is off and its code path was deliberately removed. On a system with real patient data this places PHI, in plaintext base64, in the audit table | Audit §20.4 limitation 3, L-23 | Latent — no data exists yet, so no PHI is exposed **today**. **Owner APPROVED the disclosure text as-is, 2026-08-19, given directly in conversation** — `EV-055-pilot-disclosure-draft.md`'s draft customer-disclosure text (audit log is base64-encoded not encrypted, DB/backup-credential holders can read it, retained indefinitely by default, viewer restricted to Admin/break-glass roles) is now cleared to go into the pilot agreement / security page. **Live-reverified 2026-08-19 (PB-360):** `DESCRIBE log` confirms no `encrypt` column on this schema; 101,963/101,963 non-empty `comments` rows decode as base64; `LIKE '%Alharthi%'` = 0 raw / 3 decoded — disclosure text's claims match live reality exactly | **CLOSED 2026-08-19** — determination made against a seeded system, disclosure text exists with the Security Reviewer's direct approval, live re-verification confirms it; underlying latent PHI-in-audit-log architecture is unchanged, only the determination-and-disclosure requirement closes | SECURITY | **P0** | G3 | Security Reviewer | 0001, 0068 | **CLOSED 2026-08-19 — see `EV-055` and `EV-055-pilot-disclosure-draft.md` addenda, PB-360. Does NOT close RDY-0003 (separate item, untouched)** |
-| **0056** | Enforce audit-integrity claim discipline — a **hash, not an HMAC**; rows **not chained**; deleting a `log` row and its `log_comment_encrypt` partner is undetectable. "Immutable" and "blockchain" are prohibited | Audit §20.4, L-23; GTM MC-02, Pillar 1 | Qualification defined; discipline unenforced | READY WITH MANDATORY QUALIFICATION | AUTHORIZATION | **P0** | G1 G5 | Product Marketing | 0003 | NOT READY |
-| **0057** | Enforce sensitivity and MFA disclosure discipline — sensitivity gates **encounters only**, not demographics, problem lists, notes, documents or the API (L-28); MFA **cannot be mandated** (L-03, PL-01) and must be stated before it is discussed | Audit §15.1, §20.2, L-03, L-28; GTM MC-16, P-3 persona | Both correct in the sources; **no enforcement mechanism**. **Owner ruling 2026-08-19 (given directly in conversation) confirms this disclosure-based position governs over Locked Decisions Q5 for the current MVP phase** — see `EV-092` §3.1 addendum; RDY-0099's centralized `force_mfa` proposal retired accordingly, not this item's position | READY WITH MANDATORY QUALIFICATION | AUTHORIZATION | **P0** | G1 G5 | Product Marketing | 0003 | NOT READY |
+| **0056** | Enforce audit-integrity claim discipline — a **hash, not an HMAC**; rows **not chained**; deleting a `log` row and its `log_comment_encrypt` partner is undetectable. "Immutable" and "blockchain" are prohibited | Audit §20.4, L-23; GTM MC-02, Pillar 1 | Qualification defined; discipline enforced — mechanical scan (`\bimmutable\b|\bblockchain\b|tamper-proof`) re-run 2026-08-19 against current `docs/`, 0 genuine violations (all hits are the control's own prohibition text or an unrelated theme-bundle-caching usage of "immutable") | **VERIFIED READY — CLOSED 2026-08-19** — claim review passed, `EV-056-057-088` §5 review record | AUTHORIZATION | **P0** | G1 G5 | Product Marketing | 0003 | **CLOSED 2026-08-19 — see `EV-056-057-088-claim-discipline.md` §6 and `EV-003` §5 row 2** |
+| **0057** | Enforce sensitivity and MFA disclosure discipline — sensitivity gates **encounters only**, not demographics, problem lists, notes, documents or the API (L-28); MFA **cannot be mandated** (L-03, PL-01) and must be stated before it is discussed | Audit §15.1, §20.2, L-03, L-28; GTM MC-16, P-3 persona | Both correct in the sources; **no enforcement mechanism**. **Owner ruling 2026-08-19 (given directly in conversation) confirms this disclosure-based position governs over Locked Decisions Q5 for the current MVP phase** — see `EV-092` §3.1 addendum; RDY-0099's centralized `force_mfa` proposal retired accordingly, not this item's position. Mechanical scan (`MFA enforced\|MFA required\|mandatory two-factor\|field-level security`) re-run 2026-08-19, 0 genuine violations | **VERIFIED READY — CLOSED 2026-08-19** — claim review passed, `EV-056-057-088` §5 review record | AUTHORIZATION | **P0** | G1 G5 | Product Marketing | 0003 | **CLOSED 2026-08-19 — see `EV-056-057-088-claim-discipline.md` §6 and `EV-003` §5 row 2** |
 
 ### 7.9 Domain H — Reporting and export (G2)
 
@@ -1098,7 +1098,7 @@ qualification*. Dependencies, not dates.
 |---|---|---|---|---|---|---|---|---|---|---|
 | **0086** | Assess Arabic and RTL coverage **on the specific screens used in the demo**, and write the qualification script that is spoken *before* the switch is shown | GTM D-5, MC-06, O-7; audit §22.2, §22.3, L-08/L-09 | 47.5 % of strings, chrome only; `list_options`, `layout_options` and code descriptions untranslated; ~20 RTL consumers; legacy screens hard-coded left | READY WITH MANDATORY QUALIFICATION | DOCUMENTATION | **P0** | G1 G5 | Arabic Reviewer | 0001, 0060 | NOT READY |
 | 0087 | Disclose the Arabic PDF limitation and place Arabic PDF output on the demo no-go list — **no Arabic-shaping font exists in the tree** | Audit §22.4, L-10 | No `amiri*`/`noto*naskh*`/`dejavu*` font in `git ls-files` | READY WITH MANDATORY QUALIFICATION | DOCUMENTATION | P1 | G1 G5 | Arabic Reviewer | 0086, 0094 | NOT READY |
-| **0088** | Do not publish any competitive frequency figure ("0 of 16", "1 of 16", "0 of 11 GCC") until Source C §24.2 item 6 is re-run against the 9 unverified dossiers. **Publish the mechanism, not the number** | GTM §2.3, §35, R-12; Source C §24.1 | 17 of 26 dossiers verified | **BLOCKED — VALIDATION** | VALIDATION | **P0** | G5 G6 | Product Marketing | 0003 | NOT READY |
+| **0088** | Do not publish any competitive frequency figure ("0 of 16", "1 of 16", "0 of 11 GCC") until Source C §24.2 item 6 is re-run against the 9 unverified dossiers. **Publish the mechanism, not the number** | GTM §2.3, §35, R-12; Source C §24.1 | 17 of 26 dossiers still unverified — **but the discipline requirement is "do not publish," not "finish verifying"; no premature publication has occurred.** Competitor-scoped scan re-run 2026-08-19: the one prior violation (`EV-067:17`) is fixed; the only unguarded "N of 16"-pattern text left lives in internal strategy/planning documents (`Product-Positioning-and-GTM-Locked-Strategy.md`, `Marketing-MVP-and-Launch-Readiness-Requirements.md` itself), not customer-facing artefacts — same exemption class as `EV-*` internal evidence under `EV-003` §3 | **VERIFIED READY — CLOSED 2026-08-19** — claim review passed, `EV-056-057-088` §5 review record. Dossier re-verification remains separately tracked, unrelated to this closure | VALIDATION | **P0** | G5 G6 | Product Marketing | 0003 | **CLOSED 2026-08-19 — see `EV-056-057-088-claim-discipline.md` §6 and `EV-003` §5 row 2** |
 | 0089 | Conduct the Arabic-language competitor review before any Arabic-specific message design; ship a faithful translation of the locked English hierarchy until then | GTM WEB-003 **PROVISIONAL**; Source C §24.2 item 5 | All competitor review conducted in English | **BLOCKED — VALIDATION** | VALIDATION | P1 | G6 | Product Marketing + Arabic Reviewer | 0088 | NOT READY |
 
 ### 7.17 Domain P — Branding inventory, support, and remaining handoff items
@@ -2150,6 +2150,40 @@ is the single dedicated sync covering all eight together, re-derived mechanicall
 **Not done here:** RDY-0004, RDY-0056, RDY-0057, RDY-0088 remain open — each flagged above with
 exactly what it still needs, not silently left ambiguous now that RDY-0003's review mechanism has
 been demonstrated to work.
+
+## PB-372 (2026-08-19) — **Orchestrator: RDY-0056, RDY-0057 and RDY-0088 closed on the second claim review; gate-count sync for three more same-day closures**
+
+**Scope:** the second artefact through the RDY-0003 review mechanism, exactly as PB-371 said it would
+be — `EV-056-057-088-claim-discipline.md` reviewed against the applicable gates (C-1/C-2 by reading;
+C-3/C-4/C-5 by re-running the three mechanical scans in its own §5 against the current state of
+`docs/`, not just citing the 2026-08-14 run), verdict **APPROVED FOR PUBLICATION** from the same named
+reviewer (Mohammed Elfouly), recorded in `EV-003` §5 row 2 and `EV-056-057-088` §6. This closes
+**RDY-0056**, **RDY-0057** and **RDY-0088** together — all three named this one artefact and no other
+blocker in their acceptance.
+
+**Re-verification, not a bare citation.** The scans were re-run rather than trusted from five days
+earlier, since `docs/` has changed substantially since. RDY-0056/0057 reconfirmed 0 genuine
+violations. RDY-0088's competitor-scoped scan reconfirmed the one already-known `EV-067` violation
+(already fixed) and surfaced a new observation: extensive unguarded "N of 16"-pattern text throughout
+`docs/Product-Positioning-and-GTM-Locked-Strategy.md`. Judged out of scope for the same reason
+`EV-056-057-088` §4.4 already gave for the readiness document's own internal uses — it is internal
+strategy/planning material (Source A/B/C citations, LOCKED-decision tables, its own line 1259 already
+marking such figures "BLOCKED" for publication), not a customer-facing artefact, so it falls under
+`EV-003` §3's exemption for internal working records. Put to the Owner alongside the verdict question
+rather than silently decided; the recorded answer was to approve without additionally flagging it.
+
+**RDY-0088's register row corrected in the same pass.** Its prior status (`BLOCKED — VALIDATION`,
+citing "17 of 26 dossiers verified") measured against the wrong bar — the requirement's actual text is
+"do not publish... until re-run," a discipline requirement, not a "finish verifying" requirement. No
+premature publication has occurred, which is what the scan confirms. Dossier re-verification remains
+separately tracked and unrelated to this closure.
+
+**Gate-count sync.** Three more P0 items closed today, immediately following PB-371's eight. **71 P0
+registered, 39 closed, 32 open.** RDY-0056/0057 decrement G1 and G5; RDY-0088 decrements G5 and G6.
+Full per-gate table and narrative in §47, PB-372 block, immediately above.
+
+**Not done here:** RDY-0004 remains open — now unblocked by both claim reviews (its own packaging
+task, not itself reviewed), flagged above with what it still needs.
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
@@ -11448,27 +11482,38 @@ See PB-300 immediately below for the corrected table and narrative.**
 ~~|---|---:|---:|---:|---:|---:|---:|---:|~~
 ~~| **Open P0 (canonical, PB-301)** | **2** | **12** | **8** | **15** | **2** | **13** | **19** |~~
 
-### CURRENT — PB-371 (2026-08-19), same-day resync after four more closures
+### PB-371 (2026-08-19) — superseded 40 minutes later by PB-372, retained for the record
 
-**71 P0 registered, 36 closed, 35 open P0.** Four more items closed since PB-301, all same day:
+~~**71 P0 registered, 36 closed, 35 open P0.** Four more items closed since PB-301, all same day:
 RDY-0055 (PHI disclosure — Security Reviewer accepted the technical determination, live-reverified
 against the seeded DB), RDY-0096 (support tier wired into the scope template and pilot pack),
 RDY-0003 and RDY-0067 (a real claim review — `EV-067` reviewed against all six named gates by the
-named reviewer, verdict APPROVED FOR PUBLICATION, recorded in `EV-003` §5 and `EV-067` §9).
+named reviewer, verdict APPROVED FOR PUBLICATION, recorded in `EV-003` §5 and `EV-067` §9).~~
+
+~~| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |~~
+~~|---|---:|---:|---:|---:|---:|---:|---:|~~
+~~| **Open P0 (canonical, PB-371)** | **1** | **12** | **8** | **13** | **2** | **11** | **17** |~~
+
+### CURRENT — PB-372 (2026-08-19), same-day resync after the second claim review
+
+**71 P0 registered, 39 closed, 32 open P0.** Three more items closed since PB-371, same day: RDY-0056,
+RDY-0057 and RDY-0088 — the second artefact through the RDY-0003 claim-review step,
+`EV-056-057-088-claim-discipline.md`, reviewed against the same six gates by the same named reviewer,
+verdict APPROVED FOR PUBLICATION, recorded in `EV-003` §5 row 2 and `EV-056-057-088` §6.
 
 | | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Open P0 (canonical, PB-371)** | **1** | **12** | **8** | **13** | **2** | **11** | **17** |
+| **Open P0 (canonical, PB-372)** | **1** | **10** | **8** | **13** | **2** | **8** | **16** |
 
 | Gate | Status | Open P0 | Main blockers | Next action |
 |---|---|---|---|---|
-| **G0 Strategy governance** | **PARTIAL** | **1** | **RDY-0003 CLOSED today** — a real review, by the named reviewer, on a real artefact · remaining: RDY-0004, packaging the prohibited-claim list downstream, now unblocked by 0003 but not yet done | RDY-0004 is now purely a packaging task, nothing left blocking it |
-| **G1 Flagship demo** | **PARTIAL** | **12** | Unchanged by today's four closures (none block G1) — RDY-0016's ACL fix scoped/unwritten; RDY-0042/0043/0038 in flight via the browser-check agent; proof assets (0060–0062, 0086, 0090, 0094) cascade from those | Browser-check agent's results still the next real movement here |
-| **G2 Seeded commercial demo** | **NOT READY** | **8** | Unchanged by today's four closures | Browser-check agent's results (0023/0042/0043) still the next movement |
-| **G3 Pilot operational readiness** | **NOT READY** | **13** | **RDY-0055 and RDY-0096 both CLOSED today** · remaining: RDY-0045 (push blocked on credentials), RDY-0048 (rotation blocked at tool-permission layer), RDY-0047/0073/0081/0084/0085 (need real configuration against the now-provisioned host), RDY-0083 (decided, deferred to real pilot-host provisioning), RDY-0065/0066/0068 (commercial documents still in draft) | Real configuration work against the provisioned host is now the largest remaining bucket in this gate |
-| **G4 Ready for Phase 3 Brand** | **PARTIAL** | **2** | Unchanged by today's four closures — RDY-0004 (shared with G0, now unblocked), RDY-0090 (walk in flight) | Same as G0/G1 |
-| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **11** | **RDY-0003 and RDY-0067 both CLOSED today** · remaining: RDY-0004, RDY-0016, RDY-0056/0057 (need their *own* artefact reviewed — `EV-056-057-088-claim-discipline.md`, not inherited from RDY-0067's review), RDY-0060–0062, 0071, 0078, 0086, 0088 | RDY-0056/0057/0088's own artefact is one more review, same reviewer, same mechanism — the fastest remaining item in this gate |
-| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **17** | **RDY-0067 and RDY-0096 both CLOSED today** · still requires G2 and G3 · RDY-0069 can't start without a pilot · RDY-0075/0076/0077 still zero calls made | RDY-0075's first call remains the single most under-leveraged action in the whole register |
+| **G0 Strategy governance** | **PARTIAL** | **1** | RDY-0004, packaging the prohibited-claim list downstream, now unblocked by both claim reviews but not yet done | RDY-0004 is now purely a packaging task, nothing left blocking it |
+| **G1 Flagship demo** | **PARTIAL** | **10** | **RDY-0056 and RDY-0057 both CLOSED today** · RDY-0016's ACL fix scoped/unwritten; RDY-0042/0043/0038 in flight via the browser-check agent; proof assets (0060–0062, 0086, 0090, 0094) cascade from those | Browser-check agent's results still the next real movement here |
+| **G2 Seeded commercial demo** | **NOT READY** | **8** | Unchanged by today's three closures (none block G2) | Browser-check agent's results (0023/0042/0043) still the next movement |
+| **G3 Pilot operational readiness** | **NOT READY** | **13** | Unchanged by today's three closures (none block G3) · remaining: RDY-0045 (push blocked on credentials), RDY-0048 (rotation blocked at tool-permission layer), RDY-0047/0073/0081/0084/0085 (need real configuration against the now-provisioned host), RDY-0083 (decided, deferred to real pilot-host provisioning), RDY-0065/0066/0068 (commercial documents still in draft) | Real configuration work against the provisioned host is still the largest remaining bucket in this gate |
+| **G4 Ready for Phase 3 Brand** | **PARTIAL** | **2** | Unchanged by today's three closures — RDY-0004 (shared with G0, now unblocked), RDY-0090 (walk in flight) | Same as G0/G1 |
+| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **8** | **RDY-0056, RDY-0057 and RDY-0088 all CLOSED today** · remaining: RDY-0004, RDY-0016, RDY-0060–0062, 0071, 0078, 0086 | RDY-0004's packaging is now the fastest remaining item in this gate |
+| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **16** | **RDY-0088 CLOSED today** · still requires G2 and G3 · RDY-0069 can't start without a pilot · RDY-0075/0076/0077 still zero calls made | RDY-0075's first call remains the single most under-leveraged action in the whole register |
 
 ### 47.1 The readiness questions, answered separately
 

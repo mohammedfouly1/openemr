@@ -82,12 +82,12 @@ out here rather than left to be rediscovered.
 
 ## 4. Queue — artefacts awaiting first review
 
-**Nothing below has been reviewed. No verdict is pre-filled.**
+**Two rows below have been reviewed — see §5. The remaining two have no verdict pre-filled.**
 
 | Artefact | Requirement it unblocks | Why it needs review |
 |---|---|---|
-| **`EV-067-published-registers.md`** | **RDY-0067** | Criterion 3 is *"it passes claim review"*. **This is the recommended sample artefact** — it is customer-facing, it exercises **all six** gates, and it already contains one caught-and-corrected C-5 violation to check the reviewer's eye against |
-| `EV-056-057-088-claim-discipline.md` | **RDY-0056, 0057, 0088** | Each names *"claim-review sign-off"* in its acceptance |
+| ~~`EV-067-published-registers.md`~~ | ~~RDY-0067~~ | **Reviewed 2026-08-19 — §5 row 1, APPROVED FOR PUBLICATION** |
+| ~~`EV-056-057-088-claim-discipline.md`~~ | ~~RDY-0056, 0057, 0088~~ | **Reviewed 2026-08-19 — §5 row 2, APPROVED FOR PUBLICATION** |
 | `docs/evidence/templates/export-README.txt` | RDY-0071 | Customer-facing text delivered at termination |
 | `EV-073-termination-and-handover.md` | RDY-0073 | GTM O-3 publishes it **before signature** |
 
@@ -100,8 +100,9 @@ out here rather than left to be rediscovered.
 | # | Artefact | Version / hash | Reviewer | Date | C-1 | C-2 | C-3 | C-4 | C-5 | C-6 | Verdict | Corrections |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | `EV-067-published-registers.md` | commit `df335a2c3` (current at review time) | Mohammed Elfouly | 2026-08-19 | PASS | PASS | PASS | PASS | PASS | PASS | **APPROVED FOR PUBLICATION** | none |
+| 2 | `EV-056-057-088-claim-discipline.md` | current at review time (PB-372) | Mohammed Elfouly | 2026-08-19 | PASS | PASS | PASS | PASS | PASS | N/A | **APPROVED FOR PUBLICATION** | none |
 
-**Review conducted:** the orchestrating session ran the §3.2/§3.3 mechanical scans (the
+**Review conducted (row 1):** the orchestrating session ran the §3.2/§3.3 mechanical scans (the
 competitor-scoped C-5 pattern, not the naive one) against `EV-067` and found zero hits on all
 three (C-3/C-4/C-5); read the document for C-1 (every entry traces to a CAP/GAP ID), C-2 (no §32
 prohibited term used as a claim), and C-6 (every register carries its mandatory phrasing — flag
@@ -113,6 +114,22 @@ received, from whom, by what route.
 
 **This is RDY-0003's required sample.** Per §4, `EV-067` was the recommended artefact and is now
 reviewed. Per §6 below, this closes the third and final acceptance criterion.
+
+**Review conducted (row 2):** the same session re-ran the three §5 mechanical scans from
+`EV-056-057-088` itself against the current state of `docs/` (not just cited the 2026-08-14 run) —
+C-3 and C-4 reconfirmed zero genuine violations; C-5 (competitor-scoped, not the naive numeral scan)
+reconfirmed the one already-known, already-fixed `EV-067` violation and surfaced one new observation:
+extensive unguarded "N of 16"-pattern text in `docs/Product-Positioning-and-GTM-Locked-Strategy.md`,
+judged out of scope under this document's own §3 exemption for internal working records (that file is
+internal strategy/planning material, not itself shown to a customer — it even marks such figures
+"BLOCKED" for publication at its own line 1259). Read the artefact for C-1 (its qualifications trace
+to CLM-0024, CLM-0025 and L-23) and C-2 (the prohibited terms in it appear only inside its own
+"prohibited, absolutely" framing, never used as a claim). **C-6 does not apply** — this artefact
+defines claim qualifications and prohibitions, not capability status registers, so there is no
+Disabled/Uninstalled/Missing phrasing to check. The Product-Positioning-and-GTM-Locked-Strategy.md
+observation was put to Mohammed Elfouly alongside the verdict question rather than decided silently;
+his recorded answer approved without an additional correction. Closes RDY-0056, RDY-0057 and
+RDY-0088 together — the shared artefact named in all three acceptance criteria.
 
 ---
 
