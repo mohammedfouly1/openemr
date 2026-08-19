@@ -947,7 +947,7 @@ qualification*. Dependencies, not dates.
 | **0001** | Re-verify current repository, database, configuration and runtime state read-only, and republish §3 from observed evidence | Brief §16, §44 | *Historical (2026-08-09):* baseline captured, not re-observed. **Live (2026-08-13): performed in full** | **VERIFIED READY — CLOSED BY PHASE 2A** | DOCUMENTATION | **P0** | G0 G1 G2 G3 | OpenEMR Engineer | — | **CLOSED 2026-08-13** |
 | **0002** | Confirm `Product-Positioning-and-GTM-Locked-Strategy.md` 2026-08-11 is still the newest authoritative GTM, and record acceptance of VERDICT B | GTM §0, §35 | Version identified; **no acceptance record** | **VERIFIED READY — CLOSED (2026-08-16)** — Owner accepted VERDICT B directly; decision recorded in `docs/evidence/EV-WAVE3-decisions-20260816.md` | DOCUMENTATION | **P0** | G0 | Founder / Product Owner | — | **CLOSED 2026-08-16** |
 | **0003** | Adopt the §14 Marketing Claim Register as binding, with a single named claim reviewer and a claim-trace review step | GTM MSG-002, §25 Phase 0; audit §27.4 | **All three acceptance criteria now met.** Named reviewer: Mohammed Elfouly (PB-077). Written review step: `EV-003` §3, six gates (C-1…C-6) plus a mechanical scan set. **Sample review completed 2026-08-19**: `EV-067-published-registers.md` reviewed against all six gates, verdict APPROVED FOR PUBLICATION, recorded in `EV-003` §5 and `EV-067` §9 | **VERIFIED READY — CLOSED 2026-08-19** — a real review, by the named reviewer, on a real artefact, per `EV-003`'s own procedure — not inferred from the appointment alone | DOCUMENTATION | **P0** | G0 G5 | Product Marketing | 0002 | **CLOSED 2026-08-19 — see `EV-003` §5-§6. RDY-0056/0057/0088 do NOT close from this alone — each needs its own artefact (`EV-056-057-088-claim-discipline.md`) reviewed separately** |
-| **0004** | Publish the prohibited-claim and prohibited-term control list (§31) to Phases 3, 4 and 5 as a binding input | GTM §14.5, §13.1; audit §27.1, §27.3 | Enumerated in both sources; **not packaged for downstream** | NOT READY — DOCUMENTATION | DOWNSTREAM HANDOFF | **P0** | G0 G4 G5 G6 | Product Marketing | 0003 | NOT READY |
+| **0004** | Publish the prohibited-claim and prohibited-term control list (§32) to Phases 3, 4 and 5 as a binding input | GTM §14.5, §13.1; audit §27.1, §27.3 | **Packaging instrument now exists** — `EV-004-prohibited-claims-control.md` (2026-08-14, augmented 2026-08-19 with a cross-reference to the GTM per-pillar "Claims to avoid" phrases at §454/469/484/499, none of which conflict with §32). §32 itself names the reviewer (Mohammed Elfouly, RDY-0003) and is the single canonical list — not duplicated elsewhere. **Genuinely still not packaged to the phases themselves: Phase 3, 4 and 5 have not started** (Phase 4/5 blocked on proof assets; see EV-004 §5) | NOT READY — DOCUMENTATION | DOWNSTREAM HANDOFF | **P0** | G0 G4 G5 G6 | Product Marketing | 0003 | NOT READY |
 | 0005 | Preserve `PROVISIONAL` / `BLOCKED` / `UNEVALUATED` markers in every downstream artefact | GTM §35 | Markers intact in GTM | READY WITH MANDATORY QUALIFICATION | DOCUMENTATION | P1 | G4 G5 G6 | Product Marketing | 0004 | NOT READY |
 | 0006 | Establish an evidence artefact repository with the naming scheme in §38 | Brief §38 | Does not exist | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G1 G2 G3 | Founder / Product Owner | — | NOT READY |
 | 0007 | Change control for this readiness document — versioned, dated, single path | Brief §2 | This is v1 | NOT READY — DOCUMENTATION | DOCUMENTATION | P2 | — | Founder / Product Owner | — | NOT READY |
@@ -1043,9 +1043,9 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0060** | Capture the screenshot inventory in §17 (SS-01…SS-12) against a branded, seeded, role-correct system | GTM §16.1, §21; Source C §11 (product visibility mean 1.9/5) | *Historical:* six screens capturable, on a stock-branded empty system. **Live (2026-08-13): surface now branded; system still empty, single-user, `Your Clinic Name Here`, US locale** | READY AFTER CONFIGURATION | PROOF ASSET | **P0** | G1 G5 G6 | Product Marketing | 0032…0038, 0010…0017, 0020…0027 | NOT READY |
-| **0061** | Capture rules: what must be visible, what must be hidden or redacted, prohibited content (`admin`, real names, real IDs, customer logos, volume-implying figures) | Brief §20, §21; GTM §14.5 | No rules exist | NOT READY — DOCUMENTATION | PROOF ASSET | **P0** | G1 G5 | Product Marketing | 0028 | NOT READY |
-| **0062** | Produce the recorded audit-integrity verification run — the flagship asset, 0 of 16 competitors have an equivalent | GTM §16.1, §21, Pillar 1; Source C §1.2 | The run itself is **runtime-verified** (200/200 over 4,280 rows at audit; `log` is now 13,370 rows); **no recording exists**. **Live (2026-08-13): surface now branded, but still `admin`-only with US locale, so capture rules would still fail** | READY AFTER CONFIGURATION | PROOF ASSET | **P0** | G1 G5 G6 | Product Marketing | 0032…0034, 0017, 0056 | NOT READY |
+| **0060** | Capture the screenshot inventory in §17 (SS-01…SS-12) against a branded, seeded, role-correct system | GTM §16.1, §21; Source C §11 (product visibility mean 1.9/5) | *Historical:* six screens capturable, on a stock-branded empty system. **Re-verified live 2026-08-19 (PB-39x, independent of the 2026-08-13 pass): the "`Your Clinic Name Here` / US locale" claim above is stale and wrong.** Live DB: `facility` has exactly one row — `name = 'Thiqa Demo Eye Clinic'`, `city = 'Riyadh'`, `state = 'Riyadh Region'`, `country_code = 'SA'`, `phone = '+966 11 000 000'`; `globals.gbl_currency_symbol = 'SAR'`, `gbl_time_zone = 'Asia/Riyadh'`. Repo-wide grep for `Your Clinic Name Here` under `interface/`, `library/`, `src/` finds it only inside OpenAPI/Swagger example annotations (e.g. `src/RestControllers/PractitionerRestController.php:384`, FHIR example payloads), test fixtures, and `SeedDemoCommand.php`'s own defensive guard-check (`if (str_contains($this->facilityName, 'Your Clinic Name Here'))`) — none runtime-reachable in a demo. **One real gap found and fixed**: `facility.primary_business_entity` was `0` on the single facility row; `interface/eRxStore.php::getFacilityPrimary()` and `interface/usergroup/facilities.php` both key off `primary_business_entity = 1` to resolve "the" facility, so a single-facility system with no row marked primary would return empty/unselected from those paths. Fixed via `UPDATE facility SET primary_business_entity = 1 WHERE id = 3;`, confirmed applied. **Config is now confirmed correct. Capture (SS-01…SS-12) itself has not been performed — out of scope for this pass (no browser access) — and remains the next step** | READY AFTER CONFIGURATION | PROOF ASSET | **P0** | G1 G5 G6 | Product Marketing | 0032…0038, 0010…0017, 0020…0027 | NOT READY |
+| **0061** | Capture rules: what must be visible, what must be hidden or redacted, prohibited content (`admin`, real names, real IDs, customer logos, volume-implying figures) | Brief §20, §21; GTM §14.5 | **Rules exist and are complete**: `EV-061-capture-rules.md` (PB-053, 2026-08-14) — 9 absolute prohibitions, per-capture account assignments, per-capture notes, annotation rules and a 12-row review sheet. Re-verified unchanged 2026-08-19 (PB-39x). Acceptance has two parts (line ~9460): "the rules exist" (**MET**) and "every capture in RDY-0060 has been checked against them, recorded per image" (**NOT MET — RDY-0060's captures do not exist yet**) | NOT READY — DOCUMENTATION | PROOF ASSET | **P0** | G1 G5 | Product Marketing | 0028 | NOT READY |
+| **0062** | Produce the recorded audit-integrity verification run — the flagship asset, 0 of 16 competitors have an equivalent | GTM §16.1, §21, Pillar 1; Source C §1.2 | The run itself is **runtime-verified** (200/200 over 4,280 rows at audit; `log` is now 13,370 rows); **no recording exists**. **Re-verified live 2026-08-19 (PB-39x): the "still `admin`-only with US locale" claim above is stale.** Facility/locale config independently confirmed correct (see RDY-0060's row for the DB values and the `primary_business_entity` fix) — the system is Saudi-configured and branded. **The one remaining true blocker is the recording itself: capture is out of scope for this pass (no browser access) and is the clearly-named next step** for whoever has browser/capture access next | READY AFTER CONFIGURATION | PROOF ASSET | **P0** | G1 G5 G6 | Product Marketing | 0032…0034, 0017, 0056 | NOT READY |
 | 0063 | Arabic/RTL equivalents of the capture set, with the untranslated elements visible rather than cropped out | GTM WEB-003, D-5; audit §22.2 | Not attempted | READY AFTER CONFIGURATION | PROOF ASSET | P1 | G6 | Arabic Reviewer | 0060, 0086 | NOT READY |
 
 ### 7.11 Domain J — Hosting (G3, G6)
@@ -1099,7 +1099,7 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0086** | Assess Arabic and RTL coverage **on the specific screens used in the demo**, and write the qualification script that is spoken *before* the switch is shown | GTM D-5, MC-06, O-7; audit §22.2, §22.3, L-08/L-09 | 47.5 % of strings, chrome only; `list_options`, `layout_options` and code descriptions untranslated; ~20 RTL consumers; legacy screens hard-coded left | READY WITH MANDATORY QUALIFICATION | DOCUMENTATION | **P0** | G1 G5 | Arabic Reviewer | 0001, 0060 | NOT READY |
+| **0086** | Assess Arabic and RTL coverage **on the specific screens used in the demo**, and write the qualification script that is spoken *before* the switch is shown | GTM D-5, MC-06, O-7; audit §22.2, §22.3, L-08/L-09 | 47.5 % of strings, chrome only (picklists measured separately at **16.1 %**, layout labels at **79.0 %**); ~20 RTL consumers; legacy screens hard-coded left. **The qualification script itself is already written** — `EV-086-arabic-rtl-coverage.md` §3 (PB, 2026-08-14), spoken *before* the switch, stating the 47.5 %/chrome-only figure and the picklist gap by number, in the exact "spoken proactively" style of the §40 no-go register. Re-verified unchanged 2026-08-19. Of the three acceptance criteria (line ~9743): script written (**MET**), per-screen walk of D-1…D-5/D-7 in Arabic (**NOT MET** — needs a live browser session), native Arabic reviewer sign-off (**NOT MET** — HR-09/Mohammed Elfouly appointed but has not yet reviewed; see `EV-086-arabic-reviewer-pack.md`) | READY WITH MANDATORY QUALIFICATION | DOCUMENTATION | **P0** | G1 G5 | Arabic Reviewer | 0001, 0060 | NOT READY |
 | 0087 | Disclose the Arabic PDF limitation and place Arabic PDF output on the demo no-go list — **no Arabic-shaping font exists in the tree** | Audit §22.4, L-10 | No `amiri*`/`noto*naskh*`/`dejavu*` font in `git ls-files` | READY WITH MANDATORY QUALIFICATION | DOCUMENTATION | P1 | G1 G5 | Arabic Reviewer | 0086, 0094 | NOT READY |
 | **0088** | Do not publish any competitive frequency figure ("0 of 16", "1 of 16", "0 of 11 GCC") until Source C §24.2 item 6 is re-run against the 9 unverified dossiers. **Publish the mechanism, not the number** | GTM §2.3, §35, R-12; Source C §24.1 | 17 of 26 dossiers still unverified — **but the discipline requirement is "do not publish," not "finish verifying"; no premature publication has occurred.** Competitor-scoped scan re-run 2026-08-19: the one prior violation (`EV-067:17`) is fixed; the only unguarded "N of 16"-pattern text left lives in internal strategy/planning documents (`Product-Positioning-and-GTM-Locked-Strategy.md`, `Marketing-MVP-and-Launch-Readiness-Requirements.md` itself), not customer-facing artefacts — same exemption class as `EV-*` internal evidence under `EV-003` §3 | **VERIFIED READY — CLOSED 2026-08-19** — claim review passed, `EV-056-057-088` §5 review record. Dossier re-verification remains separately tracked, unrelated to this closure | VALIDATION | **P0** | G5 G6 | Product Marketing | 0003 | **CLOSED 2026-08-19 — see `EV-056-057-088-claim-discipline.md` §6 and `EV-003` §5 row 2** |
 | 0089 | Conduct the Arabic-language competitor review before any Arabic-specific message design; ship a faithful translation of the locked English hierarchy until then | GTM WEB-003 **PROVISIONAL**; Source C §24.2 item 5 | All competitor review conducted in English | **BLOCKED — VALIDATION** | VALIDATION | P1 | G6 | Product Marketing + Arabic Reviewer | 0088 | NOT READY |
@@ -2471,6 +2471,131 @@ escalation. **Status stays NOT READY / open** — full corpus text is now read, 
 criterion ("any decision not reflected [in the GTM] is escalated, not silently adopted") needs §6.1's
 escalation actually answered and §4's governing-relationship question actually ruled on; neither
 happened in this pass, by design. No gate count moved (§0.0 Rule 3 — this item carries no gate).
+
+## PB-390 (2026-08-19) — **RDY-0004 fourth-subagent pass: packaging instrument re-checked, GTM per-pillar claims cross-referenced against §32 — genuinely still open, phases 3-5 have not started**
+
+**Assignment (fourth subagent, `docs/evidence/AGENT-CLAIMS.md` "fourth subagent dispatched" entry):**
+RDY-0004, range `PB-390`–`PB-399` claimed.
+
+**Found before writing anything:** `EV-004-prohibited-claims-control.md` already exists (Agent B,
+2026-08-14) and is a correct, complete adoption instrument — it deliberately does not duplicate §32
+(the 26-row canonical list, confirmed at `:10753`), names the RDY-0003 reviewer (Mohammed Elfouly),
+and honestly records RDY-0004 as NOT CLOSED because Phase 3/4/5 briefs do not exist yet. **This
+register row (`:949`) had not been updated to reflect that EV-004 exists** — it still read
+"not packaged for downstream", which was stale.
+
+**Work done:** (1) corrected the register row to point at EV-004 and its real status. (2) Read the
+GTM's four per-pillar "Claims to avoid" rows (Pillars 1-4, `Product-Positioning-and-GTM-Locked-
+Strategy.md:454/469/484/499`) against §32's 26 rows to check for scattered, un-cross-referenced
+prohibited-term content — this was the actual "consolidate scattered mentions" gap in the original
+task brief. Added EV-004 §1.3: no conflicts found, but a handful of phrases (`secure`,
+`field-level security`, `full interoperability suite`, `automatic coding`, `hundreds of specialty
+templates`, `affordable`, `cheapest`, `unlimited`, `all-inclusive`) appear in the GTM pillar tables
+without a literal §32 entry. Flagged, not silently merged into the locked §32 list, which is outside
+this task's authority to edit.
+
+**Did not do:** create a second, duplicate "prohibited claims list" document — §32 already is that
+document and duplicating it is exactly the failure mode EV-004 itself warns against (two versions
+that drift). Did not edit §32 itself. Did not fabricate a Phase 3/4/5 brief to force closure.
+
+**RDY-0004 stays NOT READY / NOT CLOSED.** Genuinely blocked on Phase 3/4/5 not having started —
+this is a real sequencing constraint, not a documentation gap. No gate count moved (§0.0 Rule 3) —
+verdict is unchanged.
+
+## PB-391 (2026-08-19) — **RDY-0061 fourth-subagent pass: capture rules already fully written (PB-053, 2026-08-14) — confirmed unchanged, register row corrected, item correctly stays open**
+
+**Assignment:** RDY-0061, same dispatch as PB-390.
+
+**Found before writing anything:** `EV-061-capture-rules.md` already exists (PB-053, 2026-08-14) and
+is a complete, usable capture-rules document — 9 absolute prohibitions, per-capture account
+assignments (from proven role grants, PB-037), per-capture notes, an explicit "synthetic IDs stay
+visible" rule, annotation rules, and a 12-row per-capture review sheet. **This fully satisfies the
+first half of RDY-0061's own two-part acceptance criterion** (line ~9460: "the rules exist"). The
+second half ("every capture in RDY-0060 has been checked against them, recorded per image") is
+genuinely not met, because RDY-0060 has not been captured — PB-053 already reached this exact
+conclusion and left the item open with clear reasoning (`:5841`).
+
+**Considered and rejected: closing RDY-0061 anyway.** The register row's summary text still said "No
+rules exist", which is stale and was corrected. But re-reading RDY-0061's own two-criterion
+acceptance text (not just the one-line requirement summary) confirms PB-053's original call was
+right — closing would mean treating "the rules exist" as the whole acceptance criterion when the
+document's own source text says otherwise. Left open, per the honesty requirement for this pass.
+
+**Work done:** corrected the register row and detail card's stale "No rules exist" / "Write the
+rules" language to reflect that the rules exist and are unchanged; added a short re-verification
+addendum to `EV-061-capture-rules.md` noting the facility/locale prerequisites its own P-3/P-4 rules
+govern are now independently confirmed correct (see PB-393).
+
+**RDY-0061 stays NOT READY / NOT CLOSED — correctly.** No gate count moved (§0.0 Rule 3).
+
+## PB-392 (2026-08-19) — **RDY-0086 fourth-subagent pass: the spoken qualification script already exists (PB, 2026-08-14) — confirmed unchanged; per-screen walk and native review remain the real gaps**
+
+**Assignment:** RDY-0086, same dispatch as PB-390.
+
+**Found before writing anything:** `EV-086-arabic-rtl-coverage.md` already contains, at §3, a
+qualification script written in exactly the "spoken before the switch, proactively, not just if
+asked" register the task brief described (comparable in register to the §40 no-go tables' "what the
+presenter says" columns) — it states the 47.5 % chrome-only figure, the 16.1 % picklist gap by
+number, the 79.0 % layout-label figure, and explicitly declines to demonstrate Arabic PDF output.
+This directly satisfies the second of RDY-0086's three acceptance criteria (line ~9743). The first
+(a per-screen walk of every demo screen in Arabic) and third (native-reviewer sign-off) remain
+genuinely unmet — the walk needs a live browser session (out of scope here, no browser tools used
+per this dispatch's own instruction), and HR-09 (Mohammed Elfouly, appointed 2026-08-14 per PB-061)
+has not yet recorded a review verdict in `EV-086-arabic-reviewer-pack.md` §0 (still blank).
+
+**Work done:** corrected the register row and detail card, which both still described the script as
+not yet written and cited a stale "13 RTL themes" figure (actual: 7 stylesheets / 4 sources, per
+EV-086 §2.3 — a deliberate Q77 pruning, not a regression) and an unquantified picklist gap (now
+16.1 %, EV-086 §2.1). Added a short re-verification addendum to EV-086 noting HR-09's appointment
+supersedes the file's own "no Arabic Reviewer named" staffing note, without claiming a review that
+has not happened.
+
+**Did not do:** perform the per-screen Arabic/RTL walk (needs a browser session this dispatch does
+not use); fabricate or stand in for HR-09's native-speaker review; write a second qualification
+script — the existing one was read in full and found to already meet the stated bar.
+
+**RDY-0086 stays NOT READY (READY WITH MANDATORY QUALIFICATION, unchanged) — correctly**, 1 of 3
+acceptance criteria still open beyond the script. No gate count moved (§0.0 Rule 3).
+
+## PB-393 (2026-08-19) — **RDY-0060/0062 config-verification-only pass: facility/locale independently re-confirmed correct; one real gap found and fixed (`primary_business_entity`); capture explicitly not attempted**
+
+**Assignment:** config-verification-only pass on RDY-0060/0062, same dispatch as PB-390. Explicitly
+**not** claiming the screenshot/recording capture itself — no browser tools were used, per this
+dispatch's own instruction to avoid contending with a concurrent browser-session agent.
+
+**Independently re-ran, not taken on the dispatcher's word:**
+- `SELECT id,name,city,state,country_code,phone,primary_business_entity FROM facility;` → one row:
+  `id=3, name='Thiqa Demo Eye Clinic', city='Riyadh', state='Riyadh Region', country_code='SA',
+  phone='+966 11 000 000', primary_business_entity=0`.
+- `SELECT gl_value FROM globals WHERE gl_name IN ('gbl_currency_symbol','gbl_time_zone')` →
+  `SAR` / `Asia/Riyadh`.
+- Grepped `interface/`, `library/`, `src/` for `Your Clinic Name Here`: the only runtime-adjacent
+  hits are OpenAPI/Swagger example annotations in REST controllers (e.g.
+  `src/RestControllers/PractitionerRestController.php:384`, FHIR example payloads — API
+  documentation examples, never rendered to a user), PHPUnit test fixtures under `tests/`, and
+  `interface/modules/custom_modules/oe-module-thiqa-branding/src/Console/SeedDemoCommand.php:345`'s
+  own defensive guard-check (`if (str_contains($this->facilityName, 'Your Clinic Name Here'))`,
+  which *fails* against the real seeded name — i.e. it is a check that the default is gone, not the
+  default itself). None of this is reachable in a demo. **The register's "still `Your Clinic Name
+  Here` / US locale" claim (dated 2026-08-13) is confirmed stale and has been corrected** at the
+  RDY-0060/0062 rows, their detail cards (`:9447`, `:9466`), and the Phase 3 missing-inputs table
+  (`:11371`).
+
+**One real gap found, not on the dispatcher's list, and fixed:** `facility.primary_business_entity`
+was `0` on the single facility row. Read its call sites: `interface/eRxStore.php::getFacilityPrimary()`
+does `WHERE primary_business_entity = '1'` to resolve "the" facility for e-prescribing identity, and
+`interface/usergroup/facilities.php:2704-2709` uses it to pre-select the primary facility in a
+dropdown. With no row marked primary, `getFacilityPrimary()` returns nothing and the dropdown
+pre-selects nothing — a real, if minor, defect on a single-facility system where exactly one row
+should obviously be primary. Fixed directly: `UPDATE facility SET primary_business_entity = 1 WHERE
+id = 3;`, confirmed applied (`primary_business_entity` now `1`).
+
+**Did not do:** any screenshot capture (RDY-0060) or recording (RDY-0062) — both explicitly require
+a browser session, out of scope for this pass. Did not mark either item CLOSED.
+
+**RDY-0060 and RDY-0062 both stay NOT READY.** Config is now confirmed correct (and one gap fixed);
+both are unblocked for capture, which is the clearly-named next step for whoever has browser access
+next. No gate count moved (§0.0 Rule 3) — verdicts unchanged.
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
@@ -9444,7 +9569,7 @@ All acceptance-criteria components are met and the decision is acceptance-with-d
 
 #### RDY-0060 — Screenshot inventory captured
 **Source:** GTM §16.1, §21; Source C §11 · **Gates:** G1 G5 G6 · **Deps:** Clusters 2, 3, 4 · **Owner:** Product Marketing
-**Current state — LIVE 2026-08-13:** Six screens are demonstrable today. The surface is **no longer stock-branded** — the product reads Thiqa, the login page returns `<title>Thiqa Login</title>`, and vendor links are repointed — but the system is still **empty and single-user**, the facility is still `Your Clinic Name Here`, and the locale seeds are still US. Source C measures competitor product visibility at a mean of **1.9/5**, with nine competitors scoring 0 or 1, and identifies real annotated screenshots as directly actionable white space.
+**Current state — LIVE 2026-08-13, config re-verified 2026-08-19 (PB-39x):** Six screens are demonstrable today. The surface is **no longer stock-branded** — the product reads Thiqa, the login page returns `<title>Thiqa Login</title>`, and vendor links are repointed. **The "still `Your Clinic Name Here`, US locale seeds" claim is stale and corrected here**: live DB shows `facility.name = 'Thiqa Demo Eye Clinic'` (Riyadh, Riyadh Region, SA), `gbl_currency_symbol = 'SAR'`, `gbl_time_zone = 'Asia/Riyadh'`; `Your Clinic Name Here` no longer appears anywhere runtime-reachable (only in OpenAPI examples, test fixtures, and `SeedDemoCommand.php`'s own guard-check against it). `facility.primary_business_entity` was found `0` (should be `1` on a single-facility system — `eRxStore.php::getFacilityPrimary()` and the facility-selection dropdown both key off it) and has been fixed. **Config is now confirmed correct; the system remains single-user/empty, which is a separate, real gap** (see Clusters 2-4). Source C measures competitor product visibility at a mean of **1.9/5**, with nine competitors scoring 0 or 1, and identifies real annotated screenshots as directly actionable white space.
 **Gap:** The opportunity is available now; the surface is not presentable now.
 **Why it blocks launch:** Every flagship page in WEB-002 leads with a real screenshot, and DEM-001 commits to them "immediately".
 **Required action:** Capture the SS-01…SS-12 inventory in §17 after branding, seeding and role accounts are in place.
@@ -9454,16 +9579,16 @@ All acceptance-criteria components are met and the decision is acceptance-with-d
 
 #### RDY-0061 — Capture rules
 **Source:** Brief §20, §21; GTM §14.5 · **Gates:** G1 G5 · **Deps:** RDY-0028 · **Owner:** Product Marketing
-**Current state:** No rules exist.
-**Gap:** Redaction decided per-capture is redaction that eventually gets forgotten.
-**Required action:** Write the rules: what must be visible (the claim being supported), what must be hidden or redacted, what is absolutely prohibited (`admin` username, any credential, real names or identifiers, customer logos, any figure implying real volume, the phrase "our customer"), the annotation concept, and the requirement that the mandatory qualification travels with the image wherever it is used.
-**Acceptance criteria:** The rules exist; every capture in RDY-0060 has been checked against them and the check is recorded per image.
+**Current state:** **Rules exist** — `EV-061-capture-rules.md` (PB-053, 2026-08-14): 9 absolute prohibitions, per-capture account assignments, per-capture notes, annotation rules, and a 12-row review sheet. Re-verified unchanged 2026-08-19 (PB-39x).
+**Gap:** Redaction decided per-capture is redaction that eventually gets forgotten — closed by the rules document. The remaining gap is application, not authorship: no RDY-0060 capture exists yet to check against them.
+**Required action:** ~~Write the rules...~~ **Done.** Remaining: run each RDY-0060/0062 capture through EV-061 §8's review sheet as RDY-0060 executes.
+**Acceptance criteria:** The rules exist (**MET**); every capture in RDY-0060 has been checked against them and the check is recorded per image (**NOT MET — RDY-0060 has not been captured**).
 **Verification:** review sheet completeness.
-**Evidence artefact:** `EV-061 capture-rules.md` · **Status:** NOT READY
+**Evidence artefact:** `EV-061-capture-rules.md` · **Status:** NOT READY
 
 #### RDY-0062 — Recorded audit-integrity verification run
 **Source:** GTM §16.1, §21, Pillar 1; Source C §1.2 · **Gates:** G1 G5 G6 · **Deps:** RDY-0017, 0032…0034, 0056 · **Owner:** Product Marketing
-**Current state:** The run itself is the strongest asset the product owns and is **runtime-verified** — 200/200 checksums over 4,280 rows. **No recording exists.** The surface it would be recorded on is **now branded**, but is still logged in as `admin` and still shows `Your Clinic Name Here`, a US state list and a `$` currency symbol — so RDY-0061 capture rules would still fail today.
+**Current state:** The run itself is the strongest asset the product owns and is **runtime-verified** — 200/200 checksums over 4,280 rows. **No recording exists.** The surface it would be recorded on is **now branded**. **Re-verified 2026-08-19 (PB-39x): the "still shows `Your Clinic Name Here`, a US state list and a `$` currency symbol" claim is stale** — facility and locale config are confirmed correct (see RDY-0060). The remaining true gap is narrower than previously stated: use a named demo administrator (e.g. `n.alqahtani`), not `admin`, per EV-061 §3 — that account-selection rule is what actually still needs to be honoured at capture time, not a locale/branding defect.
 **Gap:** The flagship proof asset is one configuration pass away from existing, and does not exist.
 **Why it blocks launch:** Source C: **zero of sixteen** competitors demonstrate audit or tamper-evidence visually; they assert security in prose. This is the homepage's section 3 and the *Security & Audit* flagship page's centrepiece.
 **Required action:** Record the run under the demo administrator account on a branded surface, with the hash/not-HMAC and unchained qualification stated **before** the result appears.
@@ -9735,14 +9860,14 @@ remains blocked on RDY-0064. Status unchanged: **NOT READY.**
 
 #### RDY-0086 — Arabic and RTL coverage on the demo screens
 **Source:** GTM D-5, MC-06, O-7; audit §22.2, §22.3, L-08, L-09 · **Gates:** G1 G5 · **Owner:** Arabic Reviewer
-**Current state:** Arabic is loaded and genuine — **6,290 of 13,234 constants, 47.5 %**, human-quality and spot-verified live, with 13 RTL themes and a runtime direction flag. And the coverage is **chrome only**: `list_options` (185 language rows, 848 provider specialties, 213 remit codes), `layout_options` field labels and ICD/CPT/SNOMED descriptions are untranslated, so **the visible gap to an Arabic-speaking user is considerably larger than 47.5 % suggests**. RTL has roughly **20 code consumers**; most of `patient_file/`, `reports/` and `billing/` uses hard-coded left alignment and float/table layouts the RTL stylesheet does not fully invert.
-**Gap:** Nobody has assessed Arabic and RTL **on the specific screens the demo uses** — which is a different and much smaller question than completing the localisation.
+**Current state:** Arabic is loaded and genuine — **6,291 of 13,235 constants, 47.5 %**, human-quality and spot-verified live, with a runtime direction flag. **RTL ships as 7 prebuilt stylesheets / 4 RTL theme sources, not 13** (corrected by `EV-086-arabic-rtl-coverage.md` §2.3, 2026-08-14 — the count changed because of the deliberate Q77 theme pruning, not a regression). And the coverage is **chrome only**: picklists (`list_options`) are separately measured at **16.1 %** (700 of 4,346 distinct titles), layout field labels at **79.0 %** (124 of 157) — so **the visible gap to an Arabic-speaking user is considerably larger than 47.5 % suggests, and is now quantified rather than asserted**. RTL has roughly **20 code consumers**; most of `patient_file/`, `reports/` and `billing/` uses hard-coded left alignment and float/table layouts the RTL stylesheet does not fully invert. **The qualification script required by this item is already written** — `EV-086-arabic-rtl-coverage.md` §3 — spoken before the switch, stating the 47.5 % figure, the chrome-only caveat, and the 16.1 % picklist gap by number. Re-verified unchanged 2026-08-19 (PB-39x).
+**Gap:** Nobody has assessed Arabic and RTL **on the specific screens the demo uses** — which is a different and much smaller question than completing the localisation. The per-screen walk and the native-reviewer sign-off are the two parts of this that remain undone; the script itself is not the gap any more.
 **Why it blocks launch:** D-5 is a live demo today, and its proof moment is *the switch, with the untranslated picklists pointed out by us first*. That only works if we know in advance which picklists on which screens.
-**Required action:** Walk the D-1…D-5 and D-7 screen set in Arabic; record per screen what is translated, what is not, and where RTL breaks; write the qualification script that is spoken **before** the switch. Do **not** attempt remediation — Arabic completion is **P1 (RDY-0098)** and is not promoted.
+**Required action:** ~~Walk the D-1…D-5 and D-7 screen set in Arabic; record per screen what is translated, what is not, and where RTL breaks; write the qualification script that is spoken before the switch.~~ **Script done.** Remaining: (1) the per-screen walk, blocked on a live browser session (same session already outstanding for RDY-0013/0014/0015/0042/0016); (2) HR-09 (Mohammed Elfouly, appointed) review and sign-off on the script's accuracy and tone — see `EV-086-arabic-reviewer-pack.md` §0. Do **not** attempt remediation — Arabic completion is **P1 (RDY-0098)** and is not promoted.
 **Risk:** R-08 — implying a fully Arabic product. The GTM rates the impact High and notes it would be a contradiction *in the market's own language*.
-**Acceptance criteria:** A per-screen record exists for every demo screen; the qualification script states the 47.5 %/chrome-only limit and the picklist gap before the switch; a native Arabic reviewer confirms the script is accurate and reads as disclosure rather than apology.
+**Acceptance criteria:** A per-screen record exists for every demo screen (**NOT MET**); the qualification script states the 47.5 %/chrome-only limit and the picklist gap before the switch (**MET**); a native Arabic reviewer confirms the script is accurate and reads as disclosure rather than apology (**NOT MET**).
 **Verification:** screen-by-screen record plus native-reviewer sign-off.
-**Evidence artefact:** `EV-086 arabic-demo-coverage.md` · **Status:** NOT READY
+**Evidence artefact:** `EV-086-arabic-rtl-coverage.md` (coverage + script) + `EV-086-arabic-reviewer-pack.md` (HR-09 review pack) · **Status:** NOT READY
 
 #### RDY-0088 — Competitive frequency figures withheld until re-verified
 **Source:** GTM §2.3, §35, R-12; Source C §24.1, §24.2 item 6 · **Gates:** G5 G6 · **Owner:** Product Marketing
@@ -9950,7 +10075,7 @@ which is six accounts, and six is what is specified below.
 | 1 | **Demo Administrator** | `admin` (Administrators) | `standard` | `write` on all 65 ACOs; user/ACL/module administration; global settings; layout and list editors; audit log and tamper report | — (superuser by design; **this is why it must not be the account used for D-2's "what reception sees" half**) | Runs D-1, D-3, D-4; administrative segment of D-7 | Replaces `admin` on screen entirely |
 | 2 | **Physician A** (ophthalmology) | `doc` (Physicians) | `standard` | Full clinical authority: demographics, history/problems, clinical notes on any encounter, encounter authorise, coding, prescriptions, lab results and sign-off, documents, price discounting, own financial reports, **high-sensitivity encounters** | **Cannot** delete documents · **cannot** access billing, EOB/payment posting, all-provider financial reports, practice settings, superbill administration · **cannot** administer users, ACL or modules | Owns 6–8 ophthalmology examinations and a share of the SOAP notes | The physician segment of D-7; the ophthalmology beachhead proof |
 | 3 | **Physician B** (general) | `doc` (Physicians) | `standard` | As above | As above | Second provider column on the calendar; recurring series | Makes the calendar and provider-scoped reporting real, and enables the ownership-scope demonstration |
-| 4 | **Front Office / Reception** | `front` (Front Office) | `front_office` (32 nodes) | Calendar and appointments (full), patient demographics (full), clinical alerts (view), front receipts and checkout | **Cannot** see medical history, clinical notes, prescriptions, lab results, documents or patient reports · **cannot** authorise or code encounters · **cannot** access billing or practice settings · **has no sensitivity permission at all**, so any encounter with a non-empty sensitivity value is **invisible, not redacted** | Registers the walk-in, books, checks in, works the flow board | The reception segment of D-7 and the "show me what my receptionist cannot see" half of D-2 |
+| 4 | **Front Office / Reception** | `front` (Front Office) | `front_office` (32 nodes) | Calendar and appointments (full), patient demographics (full), clinical alerts (view), front receipts and checkout | **Cannot** see medical history, clinical notes, prescriptions, lab results, documents or patient reports · **cannot** authorise or code encounters · **cannot** access billing or practice settings · **has no sensitivity permission at all**, so any encounter with a non-empty sensitivity value has its reason/notes **redacted, not the whole row hidden** *(corrected 2026-08-19 from "invisible, not redacted" — two independent static-code reads of `encounters.php` found the row itself still renders; not yet live-confirmed, see `EV-056-057-088` §2.2)* | Registers the walk-in, books, checks in, works the flow board | The reception segment of D-7 and the "show me what my receptionist cannot see" half of D-2 |
 | 5 | **Accounting** | `back` (Accounting) | `standard` | Billing (full), EOB and payment posting, price discounting, financial reports (own and all), practice settings, superbill administration, appointments and demographics, **and — this surprises people — authorise, code and re-date *any* encounter** | **Cannot** open clinical notes, medical history, prescriptions, lab results or documents · **has no sensitivity permission at all** | The charges, the day-sheet, the collections report | The financial/reporting segment of D-7 and D-8 — used carefully, per §15.5 |
 | 6 | **Clinical Assistant** | `clin` (Clinicians) | `standard` | Medical history and problems (full), demographics (**add only**), clinical notes on **own** encounters (add only), prescriptions/labs/documents (add only), patient report (view), inventory administration | **Cannot** amend another clinician's notes · **cannot** sign lab results · **cannot** delete documents · **cannot** access billing · **cannot see `high`-sensitivity encounters** (physicians can) | Vitals, intake, document upload | Demonstrates that "role" is finer-grained than admin/not-admin — the detail that makes CLM-0024 credible |
 
@@ -9964,8 +10089,12 @@ Taken directly from the audit's cross-role matrix, because each one surprises pe
 each is genuinely defensible once explained:
 
 1. **Front Office and Accounting have no sensitivity permission at all.** A sensitivity-flagged
-   encounter is invisible to them — not redacted, not greyed out, absent. Presented well,
-   this is a strong demonstration. Discovered accidentally, it looks like data loss.
+   encounter's reason/notes text is redacted to them — the encounter row (date, encounter
+   number) still appears in the list *(corrected 2026-08-19 — this previously said "invisible…
+   absent," which two independent static-code reads of `encounters.php` contradict; not yet
+   live-confirmed, see `EV-056-057-088` §2.2)*. Presented well, this is still a defensible
+   demonstration of gated access. Discovered accidentally, it looks like a lesser protection
+   than promised, not data loss.
 2. **Clinicians cannot see `high`-sensitivity encounters; physicians can.**
 3. **Accounting can authorise, code and re-date *any* encounter but cannot open clinical
    notes.** The audit calls this "a deliberate biller design, and it surprises people".
@@ -10519,7 +10648,7 @@ accepted for any row.
 | # | Actor | Positive expectation | Negative expectation | Method |
 |---|---|---|---|---|
 | A-1 | Front Office | Can register a patient, book, check in, work the flow board | **Cannot** open a clinical note, prescription, lab result, document or patient report | UI navigation **and** direct URL |
-| A-2 | Front Office | Can view clinical alerts | **Cannot** see any encounter carrying a non-empty sensitivity value — it is **invisible, not redacted** | Seeded sensitivity-flagged encounter (RDY-0030) |
+| A-2 | Front Office | Can view clinical alerts | **Cannot** see the reason/notes text of any encounter carrying a non-empty sensitivity value — **redacted, not invisible** *(corrected 2026-08-19, not yet live-confirmed — see `EV-056-057-088` §2.2)* | Seeded sensitivity-flagged encounter (RDY-0030, now real — `SYN-0014` encounter 31) |
 | A-3 | Front Office | — | **Cannot** reach any of the 11 reports in RDY-0050 by direct URL — **denial, no content, no CSV** | Direct URL, all 11 |
 | A-4 | Front Office | — | **Cannot** reach `amc_full_report.php` | Direct URL |
 | A-5 | Front Office | — | **Cannot** reach `?x12_partner&action=list` | Direct URL |
@@ -11368,7 +11497,7 @@ to say first. That is D-1 working as designed.
 
 | Missing | Why it matters to Phase 3 | RDY |
 |---|---|---|
-| **Screenshot inventory that actually exists** | Phase 3 designs around real product visuals. Six screens are *capturable*; **none is captured.** The surface is **no longer stock-branded** (live 2026-08-13), but it still shows `Your Clinic Name Here`, a US state list and `$`, so captures would still fail the RDY-0061 rules | 0060 |
+| **Screenshot inventory that actually exists** | Phase 3 designs around real product visuals. Six screens are *capturable*; **none is captured.** The surface is **no longer stock-branded** (live 2026-08-13). **Re-verified 2026-08-19: facility/locale config confirmed correct (Thiqa Demo Eye Clinic, SAR, Asia/Riyadh — see RDY-0060), so this is no longer a config blocker to capture** — capture itself (a live browser session) is what's still missing | 0060 |
 | **Complete branding surface inventory** | §18 lists what the audit implies. Logos, favicons, printed headers, PDF output, browser titles and email templates were **never enumerated at surface level** | 0090 |
 | **Licence / attribution determination** | Phase 3 cannot specify a login page without knowing what attribution must remain | **0095 — CLOSED 2026-08-19** |
 | Screen dimensions / capture specifications | Not established | 0060, 0061 |

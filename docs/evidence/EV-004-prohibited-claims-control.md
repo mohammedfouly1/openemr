@@ -41,6 +41,33 @@ awk '/^## 32\. Prohibited Claims/,/^---$/' docs/Marketing-MVP-and-Launch-Readine
 
 ---
 
+## 1.3 Cross-reference: other prohibited-term mentions in the corpus, checked for drift
+
+RDY-0004's acceptance is about *packaging §32 downstream*, not about finding new prohibitions — but
+"one canonical artefact" is only true if the other places prohibited terms are mentioned actually
+agree with §32. Checked 2026-08-19 (PB-39x):
+
+| Other source | What it says | Consistent with §32? |
+|---|---|---|
+| `Product-Positioning-and-GTM-Locked-Strategy.md` Pillar 1 "Claims to avoid" (line ~454) | immutable · blockchain · HIPAA · compliant · secure · MFA enforced · field-level security | Mostly subsumed (§32 #14, #16, #17). **`secure` and `field-level security` are not literal entries in §32** — closest coverage is #24's banned-adjective list (which does not include "secure") and #14/#17's specific claims. Not a conflict, but not a verbatim match either |
+| GTM Pillar 2 "Claims to avoid" (line ~469) | analytics · dashboards · real-time reporting · full interoperability suite · PACS | Subsumed by §32 #3 (PACS), #5 (analytics/dashboards). "Full interoperability suite" has no direct §32 line but is covered in spirit by #13 | 
+| GTM Pillar 3 "Claims to avoid" (line ~484) | AI · automatic coding · hundreds of specialty templates · queue management with token display · no-code customisation (unqualified) | Subsumed by §32 #20 (queue/token), #22 (no-code, unqualified), #21/#24 (AI). "Automatic coding" and "hundreds of specialty templates" have no direct §32 line |
+| GTM Pillar 4 "Claims to avoid" (line ~499) | best value · affordable · cheapest · unlimited · all-inclusive | §32 #24's banned-adjective list has "best" but not "affordable", "cheapest", "unlimited", or "all-inclusive" verbatim |
+| EV-003 §3.1 gate C-2 | "No prohibited term or claim" — explicitly cites §32 as its source | Fully consistent — C-2 already points here, no drift |
+| `EV-056-057-088-claim-discipline.md` | Reviews specific claims (MFA, 2FA, competitive-frequency figures) against §32/GTM directly | Fully consistent, no separate list of its own |
+
+**Finding, not a fix:** the GTM's four pillar-level "Claims to avoid" rows contain a handful of
+phrases (`secure`, `field-level security`, `full interoperability suite`, `automatic coding`,
+`hundreds of specialty templates`, `affordable`, `cheapest`, `unlimited`, `all-inclusive`) that are
+not literal entries in §32, though none contradicts it — they read as the same discipline applied
+at finer grain per-pillar. **This is flagged here rather than silently folded into §32**, because
+editing the locked §32 list is outside this task's authority; a phase author embedding §32 verbatim
+should also read the relevant GTM pillar table's "Claims to avoid" row for their own pillar, since
+it is not a strict subset of §32 term-for-term. No new document was created to hold a second copy of
+either list — this table is the cross-reference, not a duplicate.
+
+---
+
 ## 2. The enforcing reviewer
 
 | Field | Value |
@@ -102,5 +129,10 @@ carrying §32 and Mr Elfouly's name**, and §4 is the form that records it.
 **One dependency now satisfied:** RDY-0004's card lists **RDY-0003** as its dependency, and the
 reviewer it needed is named as of PB-077. **The blocker has moved from "nobody to name" to "nothing
 yet to bind".**
+
+**Re-verified 2026-08-19 (PB-39x):** §1.3 above added — cross-referenced the GTM's four per-pillar
+"Claims to avoid" rows against §32 (no conflicts, a handful of phrases not literally duplicated).
+§4's adoption record is unchanged — still all-empty, because Phases 3/4/5 still have not started.
+**Status unchanged: NOT CLOSED**, for the same reason as before.
 
 **`Blocks`: G0 G4 G5 G6.** No gate count moved (§0.0 Rule 3).

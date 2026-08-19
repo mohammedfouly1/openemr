@@ -128,3 +128,10 @@ account, **qualification spoken before the result appears**, and claim-reviewed 
 
 **RDY-0061 is NOT closed.** The rules are complete and usable; closure needs RDY-0060's captures to
 exist and be reviewed through §8. **Nothing further can be done on 0061 until 0060 runs.**
+
+**Re-verified 2026-08-19 (PB-39x):** independently confirmed §1-§8 unchanged and still accurate.
+Also independently confirmed, against the live DB, that the facility/locale prerequisites this
+document's rules govern (P-3 stock identity, P-4 currency/locale) are now correct — see the
+RDY-0060 register row for the DB values and the `facility.primary_business_entity` fix. This
+removes one class of risk from a future capture session (an escaped-US-locale screen) but does not
+change this document's own status: §8 is still empty because RDY-0060 has not run.

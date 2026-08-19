@@ -160,3 +160,10 @@ ls interface/themes/ | grep -c rtl       # 4
 anywhere in the register**. Unlike RDY-0003 and RDY-0095, this role has not been filled. It also
 gates RDY-0063 (Arabic captures) and RDY-0089. **It is a fourth naming decision, and it has not been
 asked for yet.**
+
+**Update 2026-08-19 (PB-39x):** re-checked against the requirements document — HR-09 (Mohammed
+Elfouly) was appointed 2026-08-14 (PB-061) covering RDY-0086/0087/0063/0089, per
+`EV-086-arabic-reviewer-pack.md` §0, superseding the staffing gap noted above. The appointment has
+not yet produced a completed review (pack §0's fields are still blank), so §6's acceptance table is
+otherwise unchanged: the script (§3) still stands as written, the per-screen walk and native-review
+sign-off are still both outstanding.

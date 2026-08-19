@@ -742,3 +742,26 @@ of `Your Clinic Name Here` / US locale; this agent confirms and corrects the rec
 needs the Chrome browser extension, which the PB-380-383 agent may still be using. Left for a
 follow-up pass once that agent is confirmed finished, to avoid two agents contending for one browser
 session.
+
+**Update, same day — this agent has completed (PB-390…PB-393 used, PB-394…PB-399 not needed):**
+RDY-0004, RDY-0061 and RDY-0086 all turned out to already have their core artefacts written by
+earlier agents (`EV-004-prohibited-claims-control.md`, `EV-061-capture-rules.md`,
+`EV-086-arabic-rtl-coverage.md` §3) — re-verified each in full rather than re-writing from scratch,
+found them accurate and unchanged, corrected the several places in the register that still described
+them as not-yet-written (stale by up to five days), and added one genuine new finding to
+`EV-004` §1.3 (a cross-reference gap between §32 and the GTM's four per-pillar "Claims to avoid"
+rows — flagged, not resolved, since editing the locked §32 list is outside this task's authority).
+**None of the three closed** — each has a real, unmet, non-documentation blocker (Phase 3/4/5 not
+started; RDY-0060 not captured; a live-browser screen walk and HR-09's native review, respectively).
+RDY-0060/0062: independently re-ran the DB queries and the grep rather than trusting the pre-dispatch
+note, confirmed the facility/locale claim is correct and the stale "Your Clinic Name Here / US
+locale" register text is wrong, and found one small real gap outside the dispatch's own claim —
+`facility.primary_business_entity = 0` on the single facility row, which two live code paths
+(`eRxStore.php::getFacilityPrimary()`, the facility-select dropdown in `usergroup/facilities.php`)
+key off to resolve "the" facility — fixed directly (`UPDATE facility SET primary_business_entity = 1
+WHERE id = 3`). Neither RDY-0060 nor RDY-0062 marked CLOSED; capture remains the explicit next step
+for whoever has browser access. **No gate-count/summary-table sync performed** — none of this pass's
+findings changed any item's final Verdict, so §1.4/§47 do not need resyncing; also the PB-380-383
+browser/live-system agent's status was not re-confirmed as finished before this agent completed, so
+even if a verdict had changed here, a sync would have been deferred pending that confirmation, per
+the same collision-avoidance convention the PB-386-387 entry above used.
