@@ -287,6 +287,7 @@ class SMARTAuthorizationController
                     , 'mname' => $searchParams['mname'] ?? ''
                     , 'redirect' => $redirect
                     , 'csrfToken' => CsrfUtils::collectCsrfToken($this->session, 'oauth2')
+                    , 'applicationTitle' => $this->globalsBag->getString('openemr_name')
                 ]
             );
         } catch (AccessDeniedException $error) {
@@ -315,6 +316,7 @@ class SMARTAuthorizationController
                     , 'lname' => $searchParams['lname'] ?? ''
                     , 'mname' => $searchParams['mname'] ?? ''
                     , 'redirect' => $redirect
+                    , 'applicationTitle' => $this->globalsBag->getString('openemr_name')
                 ]
             );
         }

@@ -11,7 +11,7 @@
  # @license   https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
 #}
 {% extends "oauth2/oauth2-base.html.twig" %}
-{% block title %}{{ "OpenEMR Authorization"|xlt }}{% endblock %}
+{% block title %}{{ applicationTitle }} {{ "Authorization"|xlt }}{% endblock %}
 {% block content %}
 <div class="row h-100 w-100 justify-content-center align-items-center">
     <div class="col-sm-6 bg-light text-dark">
@@ -89,7 +89,7 @@
                 <div class="col-md-12">
                     <div class="btn-group">
                         {% if mfaRequired is empty %}
-                            <button type="submit" name="user_role" class="btn btn-outline-primary" value="api">{{"OpenEMR Login"|xlt }} <i class="fa fa-sign-in-alt"></i></button>
+                            <button type="submit" name="user_role" class="btn btn-outline-primary" value="api">{{ applicationTitle }} {{ "Login"|xlt }} <i class="fa fa-sign-in-alt"></i></button>
                             {% if patientRoleSupport is not empty %}
                                 <button type="submit" name="user_role" class="btn btn-outline-info" value="portal-api">{{ "Patient Login"|xlt  }} <i class="fa fa-sign-in-alt"></i></button>
                             {% endif %}

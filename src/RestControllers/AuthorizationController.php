@@ -833,6 +833,7 @@ class AuthorizationController
             ,'invalid' => ''
             ,'client' => $client
             ,'csrfToken' => CsrfUtils::collectCsrfToken($session, 'oauth2')
+            ,'applicationTitle' => $this->globalsBag->getString('openemr_name')
         ];
         if (empty($request->request->get('username')) && empty($request->request->get('password'))) {
             $this->getSystemLogger()->debug("AuthorizationController->userLogin() presenting blank login form");
@@ -1107,6 +1108,7 @@ class AuthorizationController
             ,'offlineRequested' => true == $offline_requested
             ,'offline_access_date' => $offline_access_date
             ,'csrfToken' => CsrfUtils::collectCsrfToken($session, 'oauth2')
+            ,'applicationTitle' => $this->globalsBag->getString('openemr_name')
         ];
 
         return $this->renderTwigPage('oauth2/authorize/scopes-authorize', "oauth2/scope-authorize.html.twig", $twigVars);
