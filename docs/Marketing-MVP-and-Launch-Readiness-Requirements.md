@@ -8995,14 +8995,27 @@ rule counts it as still blocking **G2**, and **no gate count moves on this closu
 
 #### RDY-0055 — PHI in the audit trail
 **Source:** Audit §20.4 limitation 3, L-23 · **Gates:** G3 · **Owner:** Security Reviewer
-**Current state:** SQL **bind parameters are appended verbatim to `log.comments`** (`EventAuditLogger.php:457-461`). Log encryption is **off and its code path was deliberately removed**; comments are **base64-encoded, not encrypted**; all 4,280 current rows are `encrypt='No'`.
+**Current state:** SQL **bind parameters are appended verbatim to `log.comments`** (`EventAuditLogger.php:457-461`). Log encryption is **off and its code path was deliberately removed**; comments are **base64-encoded, not encrypted**. *(The `encrypt='No'`/4,280-row figure above describes a schema version this instance does not have — `EV-055-audit-phi-determination.md` §1 found no `encrypt` column exists at all on 8.2.0's `log` table, live-reconfirmed 2026-08-19 below; the substance is unchanged, arguably worse, since there is now no encryption flag at all.)*
 **Why this is latent rather than active today, and why it must not be deferred:** the installation holds **zero patient records**, so no PHI is in the log now. The audit states the consequence precisely: *"On a system with real data that means PHI — and any bound secret — lands in the audit table in plaintext base64."* The defect activates on the first day of the first pilot, which is exactly when it stops being cheap to think about.
 **Why it blocks launch:** It sits at the intersection of the two things this product sells — the audit trail and data ownership — and it is the kind of finding a customer's IT contractor or a later regulator asks about. Disclosure-led positioning cannot afford to be surprised by it.
 **Required action:** Determine the exposure precisely on a system with data; decide the handling — retention limits, access restriction to the log tables, a redaction approach, or acceptance with disclosure; record the decision and reflect it in the pilot agreement (RDY-0068) and the security page evidence.
 **Risk:** discovering this after real records exist, at which point the log already contains them.
 **Acceptance criteria:** A recorded determination, made against a seeded system, stating what appears in `log.comments`, who can read the log tables, what the retention is, and what the customer is told. If the decision is acceptance, the disclosure text exists and has passed the RDY-0003 claim review.
 **Verification:** inspect a sample of `log.comments` rows on the **seeded demo** system (never a real-patient system) and compare with the determination.
-**Evidence artefact:** `EV-055 audit-phi-determination.md` · **Status:** NOT READY
+**Evidence artefact:** `EV-055 audit-phi-determination.md` · **Status:** CLOSED
+
+**CLOSED 2026-08-19 (PB-360, this session).** The technical determination (`EV-055-audit-phi-determination.md`, 2026-08-14, 30 synthetic patients) already stated what appears in `log.comments` (§1), who can read the log tables (§2) and the retention (§3, none). The remaining gap — a disclosure text and its review — is now closed:
+
+- **Disclosure text:** `EV-055-pilot-disclosure-draft.md` states the log is base64-encoded not encrypted, that DB/backup-credential holders can read it directly with no key or tooling, that application-layer viewer access is restricted to Admin/break-glass roles, and that retention is indefinite by default.
+- **Reviewed and approved 2026-08-19 by the Security Reviewer named against this item** (Mohammed Elfouly, `docs/evidence/AGENT-CLAIMS.md` HR-08), given directly in conversation with the orchestrating session — see the ✅ APPROVED addendum in `EV-055-pilot-disclosure-draft.md`. **This satisfies RDY-0055's own review requirement; it does not close or advance RDY-0003**, which is a separate register item needing its own formally-recorded review (`EV-003-claim-review-procedure.md` §5) of the artefact `EV-003` actually queues (`EV-067`) — RDY-0003 stays exactly as `EV-003` records it, untouched by this closure (see the correction addendum in `EV-055-pilot-disclosure-draft.md`).
+- **Live re-verification against the running seeded demo database** (native stack, `"/c/openemr-stack/mariadb/bin/mariadb.exe" -u root --host=127.0.0.1 --port=3306 openemr`), 2026-08-19:
+  - `DESCRIBE log;` → confirms **no `encrypt` column exists** on this schema.
+  - `SELECT COUNT(*), SUM(FROM_BASE64(comments) IS NOT NULL) FROM log WHERE comments IS NOT NULL AND comments != '';` → **101,963 / 101,963** — every non-empty `comments` row decodes cleanly as base64.
+  - Negative control, `SELECT COUNT(*) FROM log WHERE comments LIKE '%Alharthi%';` → **0** (raw column, plaintext search).
+  - Positive control, `SELECT COUNT(*) FROM log WHERE CONVERT(FROM_BASE64(comments) USING utf8mb4) LIKE '%Alharthi%';` → **3** (decoded, same rows).
+  - **Result: the disclosure text's factual claims match live reality exactly** — encoded not encrypted, decodable by anyone with table access, no encryption mechanism present on this schema. Nothing contradicts the disclosure.
+
+All acceptance-criteria components are met and the decision is acceptance-with-disclosure. **RDY-0055 CLOSED.** The underlying PHI-in-audit-log architecture is unchanged by this closure — it closes the determination-and-disclosure requirement, not a claim that the defect was fixed in code.
 
 #### RDY-0056 — Audit-integrity claim discipline
 **Source:** Audit §20.4, L-23; GTM MC-02, Pillar 1 · **Gates:** G1 G5 · **Owner:** Product Marketing
@@ -9398,20 +9411,35 @@ ending, and that must be said before a prospect notices two overdue services aft
 
 #### RDY-0096 — Support, escalation and training definition
 **Source:** GTM §15.3, §21, §24 · **Gates:** G3 G6 · **Deps:** RDY-0064, 0084 · **Owner:** Sales / Pilot Owner
-**Current state:** The model is decided — support included with **published hours, published channels including WhatsApp, and a published response target**; training included at implementation with further training at a published day rate. Nothing operational exists.
+**Current state:** The model is decided — support included with **published hours, published channels, and a published response target**; training included at implementation with further training at a published day rate. *(The GTM's own §15.3 model names WhatsApp as an expected channel generically; the Owner-selected Level 1 tier below is narrower — email/ticket only — see the closure note.)* Nothing operational exists.
 **Gap:** We would be committing to a response target we have never measured our ability to meet.
 **Why it blocks launch:** P-3's core requirement is that *"patching, backup and access are contracted to us"* — in writing. And GTM §15.3 is explicit: **no uptime figure may be published — none has been measured.**
 **Required action:** Define channels, hours, response target, escalation path, the boundary of what support covers versus what is a priced project (integrations, custom development, migration), and the training plan by role. Instrument support hours from day one (RDY-0069 consumes them).
 **Acceptance criteria:** All six elements are defined and are reflected in the scope template and pilot agreement; **no uptime or performance figure appears anywhere**; the response target is one the team has agreed it can meet with current staffing.
 **Verification:** inspect against the scope template; keyword-scan artefacts for uptime and availability figures.
-**Evidence artefact:** `EV-096 support-definition.md` · **Status:** NOT READY
+**Evidence artefact:** `EV-096 support-definition.md` · **Status:** CLOSED
 
 **Owner decision 2026-08-19 (given directly in conversation with the orchestrating session, not
 relayed through any agent):** **Level 1 — Business Hours** selected from `EV-096-options.md`'s
 three-tier card; response target of **first response within 1 business day confirmed**, no longer a
-candidate (`EV-096` addendum). **This does not close RDY-0096** — the acceptance criterion also
-requires the decision to be "reflected in the scope template and pilot agreement," which is not yet
-done (`EV-066-pack.md`, `EV-068-pilot-requirements.md` untouched by this decision).
+candidate (`EV-096` addendum).
+
+**CLOSED 2026-08-19 (PB-360, this session).** The decision is now reflected in both named downstream
+documents, closing the one remaining gap the Owner-decision addendum above identified:
+- `EV-066-pack.md` §9 — full Level 1 definition (channels, hours, response target, escalation,
+  training, staffing) added to the customer-facing scope template, cross-referenced from §1's "what
+  is included" line.
+- `EV-068-pilot-requirements.md` elements 5–7 (support channel/hours, training, escalation) and §4
+  (hypercare period) updated from "per RDY-0096 once it exists" to the actual Level 1 definition — §4
+  states plainly that Level 1 defines no separate elevated hypercare-specific target, rather than
+  leaving a placeholder.
+
+All six elements (channels, hours, response target, escalation path, the support-vs-priced-project
+boundary, training plan) are defined in `EV-096-options.md` and now reflected in both the scope
+template and the pilot-agreement requirements pack. **Keyword-scanned both edited files for
+"uptime"/"availability" post-edit — no figure present**, only an explicit disclosure sentence stating
+none is published (mirrors `EV-096-options.md`'s own convention). The response target (first response
+within 1 business day) is Owner-confirmed against real staffing, not a candidate. **RDY-0096 CLOSED.**
 
 ---
 
