@@ -1943,6 +1943,60 @@ references to the pending rebuild are updated in this same commit range.
 
 **`Blocks`:** none — RB-22 was never an RDY row and carries no `Blocks` field; no gate count changes.
 
+## PB-300 (2026-08-19) — **Agent E: full G0-G6 open-blocker reconciliation and dashboard sync**
+
+**Scope:** re-verify the true current status of every item touched since PB-201 (2026-08-16), live-verify
+the register against the running instance, and audit Groups 6-9 (human decisions, legal/regulatory,
+hosting, market validation) plus the orphaned SaaS locked-decisions backlog (RDY-0092/R5) — via three
+parallel read-only subagents, each spot-checked against primary sources before being relied on. Full
+citation trail: `docs/evidence/EV-GATE-SYNC-20260819.md`. Full gate-by-gate blocker inventory with
+human-decision / external-dependency / actionable-now classification for every open item:
+`docs/gap-inventory-and-fix-groups-2026-08-19.md`.
+
+**One genuine new closure found and synced:** RDY-0002 closed at PB-16 (`aa39f8b7d`, Owner accepted GTM
+VERDICT B directly, `EV-WAVE3-decisions-20260816.md`) but never reached §1.4's counts, §47's dashboard, or
+even RDY-0002's own detail-section `Status` field (which still read `NOT READY`, contradicting its already-
+corrected §7.2 table row). All three corrected in this session's commits `10a489e89` and `c7cbb7b80`.
+**71 P0 registered, 28 closed, 43 open. G0 3→2; every other gate independently re-derived from
+§7.2–§7.17's `Blocks` fields and confirmed unchanged against the PB-216 baseline** (see
+`EV-GATE-SYNC-20260819.md` §5 for the worked ID-by-ID derivation — this is a mechanical recount, not a new
+judgment call, per rule 7).
+
+**§47's main dashboard table was found stale independent of RDY-0002** — it had been sitting at its
+PB-140 (2026-08-13) figures through three subsequent sync passes (PB-206, PB-216, and this one), each of
+which posted its corrected numbers only into a PB-log-entry table rather than back into §47 itself. Fixed
+in commit `c7cbb7b80`, which also refreshes every per-gate narrative row (several were describing
+already-closed items — e.g. G1's row still named RDY-0013 as an open manual-browser-session item after
+PB-202 closed it four days earlier).
+
+**Findings worth carrying forward, not just bookkeeping:**
+
+1. **RDY-0045's upstream merge already happened** (`8e0eaba90`, confirmed on-branch via
+   `git merge-base --is-ancestor`). The only remaining step is a `git push` of the safety tag
+   `pre-rel820-merge-20260817`, which failed HTTP 403 — this host's git credential helper authenticates as
+   `midodevelopper`, who lacks write access to `mohammedfouly1/openemr`. This is now a pure human-with-
+   credentials task, not an undecided direction as prior prose still implied in places.
+2. **RDY-0042, RDY-0043, RDY-0048, and RDY-0071's live-verification leg are blocked by one shared root
+   cause**, not four separate problems: the coding-agent session's own permission classifier refuses
+   password entry and credential mutation, independent of task-relayed human authorization — demonstrated
+   twice at PB-217/218, including once with the Owner's authorization directly relayed and the classifier
+   still refusing. One person spending roughly an hour at the keyboard clears all four.
+3. **RDY-0016** (ACL authorization matrix) has a real, live-exploitable fail-open path now traced
+   (`EV-016-A10-acl-probes.md`) and a fix scoped but unimplemented (`EV-016-A10-fix-scope.md`) — this is
+   ready for ordinary engineering work today, no blocker.
+4. **RDY-0083** (background-service runner) reads in the register as "has never executed," but live
+   re-verification today (`Email_Service` next_run 2026-08-19 02:37, `UUID_Service` 06:35, both active)
+   found no evidence supporting that claim — flagged as likely-stale rather than closed here, since no PB
+   entry was found running it through the formal closure contract.
+5. **RDY-0095 (licence/attribution determination) remains the single highest-leverage open item in the
+   whole register**, unchanged in substance since being commissioned to SkyEagle on 2026-08-14. It alone
+   gates G4 and three other rows.
+
+**Not done here, and why:** no item is closed on this pass beyond the one RDY-0002 sync — this was a
+reconciliation and classification exercise, not a code-fix session. RDY-0016's scoped fix,
+RDY-0083's formal closure check, and RDY-0071's live-verification remain open for whoever picks them up
+next, with pointers above to exactly what's needed.
+
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
 **Assignment:** RDY-0013 (untested accounts + registration completion), RDY-0025 (document marking
