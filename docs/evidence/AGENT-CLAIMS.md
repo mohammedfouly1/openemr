@@ -783,3 +783,15 @@ findings changed any item's final Verdict, so §1.4/§47 do not need resyncing; 
 browser/live-system agent's status was not re-confirmed as finished before this agent completed, so
 even if a verdict had changed here, a sync would have been deferred pending that confirmation, per
 the same collision-avoidance convention the PB-386-387 entry above used.
+
+## Orchestrator (main session) — sixth subagent dispatched, 2026-08-19 (source/DB-read-only, deliberately non-colliding)
+
+**Claiming:** continuation of RDY-0090 (branding surface walk) and RDY-0094 (demo no-go rehearsal),
+via source reads and read-only DB queries only. Range `PB-417…PB-420` claimed in §0.0.
+
+**Deliberately excluded, and why:** any Apache restart (RDY-0025's fix), any database
+reset/reseed/mutation (RDY-0044), and anything requiring the Chrome browser extension (RDY-0086's
+per-screen walk, or re-touching any of the PB-407-412 dispatch's six items) — all of these share
+state with the still-running browser dispatch (`a1122332bd54186f0`) and restarting Apache or
+resetting the DB out from under it mid-test would corrupt its work. This agent's tools are limited to
+Read/Grep/Bash-for-read-only-queries; it should not open any browser MCP tool at all.
