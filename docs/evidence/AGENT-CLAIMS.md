@@ -1040,3 +1040,18 @@ agent had OS print-dialog access or a safe mail-capture channel). Register row a
 updated to reflect closure while explicitly recording this as a risk-acceptance decision, not a
 claim that the unverified legs were inspected and found clean -- distinct from this document's
 usual evidence-first closures. Open P0: 13 -> 12. G1 2->1, G4 2->1; all other gates unchanged.
+
+## Orchestrator — PB-473, 2026-08-19 — RDY-0048 substantive exposure fixed on demo-openemr, register not yet closed
+
+Prepared `docs/evidence/ubuntu-infra-scripts/04-rdy0048-rotate-db-password.sh`; Owner ran it on
+`demo-openemr`. Live-verified: DB password rotated off the public upstream default
+`openemr`/`openemr` for every host-grant that user had, old value confirmed dead, new value
+confirmed working, app confirmed still serving HTTP 200 after the `apache2` restart. This closes
+R-1/R-4 (the substantive risk EV-048 itself called "the one that matters") on the one instance
+reachable from outside this session. Not done in this pass: R-2/R-3 (externalizing `sqlconf.php`
+from git tracking, template + `.gitignore`), the sibling open finding on patient-document storage
+not being `.gitignore`'d, and rotation on this local dev box (lower priority, not externally
+reachable). Register row and `EV-048-secrets-handling.md` §2.5/§3 updated to record this as
+partial, not a closure — full closure needs either the remaining hygiene work or an explicit Owner
+risk-acceptance call, not made unilaterally here. No gate count moved (§0.0 Rule 3) — row stays
+open.

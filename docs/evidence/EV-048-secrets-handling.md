@@ -92,24 +92,60 @@ runbook as a provisioning step rather than as a one-off edit here.
 
 ---
 
+## 2.5 R-1/R-4 executed on demo-openemr, 2026-08-19 (Owner-run, orchestrator-prepared script)
+
+`docs/evidence/ubuntu-infra-scripts/04-rdy0048-rotate-db-password.sh` — reads the live
+`$login`/`$dbase` straight out of `sites/default/sqlconf.php`, generates a random 32-character
+password, backs up `sqlconf.php` first, runs `ALTER USER` in MariaDB for every host-grant that
+user actually has (not a guessed single host), rewrites `sqlconf.php`, restarts `apache2`, then
+verifies three things live. **Real run output, `demo-openemr`, 2026-08-19 23:00 UTC** (password
+value never appeared in the terminal or in this document):
+
+```
+Rotating password for DB user 'openemr' on database 'openemr' (127.0.0.1).
+Backed up current sqlconf.php to /root/rdy0048-backups/sqlconf.php.pre-rotate-20260819-230010
+Rotated 'openemr'@'127.0.0.1' in MariaDB.
+Rewrote /var/www/openemr/sites/default/sqlconf.php with the new password.
+
+--- Verification ---
+OK: new password authenticates against MariaDB as 'openemr'.
+OK: the old password no longer authenticates.
+OK: login page returns HTTP 200 after restart.
+```
+
+All three legs verified live: the new credential works, the old public default (`openemr`/`openemr`)
+was tested directly and **no longer authenticates**, and the app came back up clean after the
+`apache2` restart. **R-1 and R-4 (§2) are now done** on the one instance anyone external can reach
+(`demo.skyeagle.uk`). **Not yet done anywhere:** this local Windows dev box still has the unrotated
+`openemr`/`openemr` default per `CLAUDE.local.md` §3 — lower priority since it is not externally
+reachable (`localhost` only), but the same script (PowerShell-adapted) would close that gap too if
+wanted. **Still open regardless of rotation:** R-2 (keep `sqlconf.php` out of the repo entirely,
+template-generated) and R-3 (formally recording `skip-worktree` as a convenience, not a control) are
+process/hygiene fixes, not yet applied on `demo-openemr` — the file there is still a tracked path
+that could re-acquire a live value in its working copy on a future clone that lacks `skip-worktree`.
+
+---
+
 ## 3. Acceptance
 
 | Criterion | Result |
 |---|---|
-| No live credential is present in any tracked file | **NOT MET** — the tracked `sqlconf.php` carries `openemr`/`openemr`, which is the live credential |
+| No live credential is present in any tracked file | **PARTIALLY MET** — the public-default value is gone from the one externally-reachable instance (`demo-openemr`, rotated and verified 2026-08-19, §2.5); `sqlconf.php` remains a tracked path with a live (now unique, non-public) value on disk there, since R-2/R-3's externalization was not part of this pass |
 | A history scan finds no committed credential, **or a remediation is recorded** | **MET (second limb)** — 9 distinct blobs scanned; every one is upstream's; **this project committed nothing**, and the remediation is recorded in §2 |
-| The runbook (RDY-0047) contains the handling | **NOT MET** — RDY-0047 does not exist yet |
+| The runbook (RDY-0047) contains the handling | **MET** — `EV-047` §6 (Step 4) now specifies unique-password-per-instance and template generation; this criterion predates `EV-047`'s existence and was never revisited after it was written (`PB-082`) |
 
-### Status: **RDY-0048 — NOT CLOSED, and the "candidate closure" recorded at Phase 2A should be withdrawn.**
+### Status: **RDY-0048 — NOT CLOSED, but the substantive security exposure is now fixed on the one instance that matters most.**
 
 **This is a correction to a status this document was moving toward, not a new gap.** §7.21 and
 §45.1.2 row 8 both mark this row `DRIFT — IMPROVED` and *"LIVE EVIDENCE SUGGESTS STATUS CHANGE —
-FORMAL CLOSURE DEFERRED TO PHASE 2B"*. **Phase 2B has now looked, and the answer is no.** The
-improvement was real but partial, and closing on it would have shipped a pilot with a publicly known
-database password.
+FORMAL CLOSURE DEFERRED TO PHASE 2B"*. **Phase 2B looked and found the answer was no — closing on
+`skip-worktree` alone would have shipped a pilot with a publicly known database password.** §2.5 now
+closes that specific gap for real, live, on `demo-openemr`. **R-1 is the one that matters** (§2) and
+is done; **R-2/R-3 remain open as hygiene, not as a live exposure** — whether that residual gap is
+enough to keep this row open, or is an acceptable risk to close on, is an Owner call, not one this
+document makes unilaterally.
 
-**`Blocks`: G3.** No gate count moved (§0.0 Rule 3) — nothing closed, and nothing newly opened
-either; the row was already open.
+**`Blocks`: G3.** No gate count moved (§0.0 Rule 3) pending that call.
 
 ---
 
