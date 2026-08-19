@@ -21,9 +21,9 @@ the piece those two were waiting on to close their own cross-references.
 | **2** | **Success gate** | See §2 — binary, measurable |
 | **3** | **Exit criteria** | See §3 |
 | **4** | **Data-migration boundary** | Quoted **after inspection**, never fixed-price sight-unseen (PRC-002, `EV-066` §B.3) — the pilot agreement states this as a contract term, not a sales note |
-| **5** | **Support channel and hours** | Per `RDY-0096`'s definition once it exists; until then, the agreement states explicitly that hours and channel are **not yet published** rather than inventing a figure |
-| **6** | **Training** | At implementation, included; further training at a published day rate (per GTM §15.3 model) |
-| **7** | **Escalation** | Per `RDY-0096`; same "not yet published" discipline applies if that item is still open when the first pilot is offered |
+| **5** | **Support channel and hours** | Per `RDY-0096`'s Owner-selected definition (Level 1 — Business Hours, `EV-096-options.md` ADDENDUM 2026-08-19): **channel is email/ticket portal only; hours are Sunday–Thursday, standard clinic business hours (e.g. 09:00–17:00 AST); first response within 1 business day** |
+| **6** | **Training** | At implementation, included, one session per role, no scheduled refresher; further training at a published day rate (per GTM §15.3 model and `RDY-0096` Level 1) |
+| **7** | **Escalation** | Per `RDY-0096`'s Level 1 definition: single tier — the implementer handles the ticket; unresolved after [X] days escalates directly to the founder. No after-hours path |
 | **8** | **Hosting boundary** | Depends on `RDY-0064` (hosting decision — Dammam, `me-central2`, per the register). The agreement states the hosting model and explicitly the **on-premise variant's** term: the customer takes backup responsibility, **stated in writing** (PRC-002) |
 | **9** | **Integration boundary** | Third-party integration contracts are the **customer's** to hold, never ours (`EV-066` §B.2, O-10) |
 | **10** | **Claims/invoicing exclusion** | Verbatim from `EV-066` §B.2 — no tax field anywhere in the billing chain; no NPHIES connection |
@@ -64,8 +64,10 @@ any reason, at any point):
 ## 4. Hypercare period
 
 **30 days immediately following go-live** (the point where Success Gate condition 1's 30-day live-use
-clock also starts — they are the same window, not two separate periods). During hypercare: elevated
-support responsiveness (specific target deferred to `RDY-0096`), a named point of contact, and daily
+clock also starts — they are the same window, not two separate periods). During hypercare: support
+responsiveness at the standard `RDY-0096` Level 1 target (first response within 1 business day,
+email/ticket only, Sun–Thu business hours) — **Level 1 does not define a separate, elevated
+hypercare-specific response target**, and none is invented here; a named point of contact, and daily
 review of any error-rate or backup-failure signal defined under `RDY-0084`'s monitoring requirements
 once a hosted instance exists to monitor.
 

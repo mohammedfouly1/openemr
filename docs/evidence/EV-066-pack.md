@@ -29,8 +29,8 @@ section — every exclusion below exists because a specific risk (R-06) names it
 
 Implementation and configuration · facility and branding setup · role and ACL design · form
 building from the 18 active clinical forms · list and layout configuration · fee-schedule setup ·
-hosting, patching, backup and support for the term · training at implementation · a documented exit
-(§5 below).
+hosting, patching, backup and support for the term (§9 below) · training at implementation (§9
+below) · a documented exit (§5 below).
 
 #### 2. What is excluded — read this section before signing
 
@@ -116,6 +116,24 @@ own meeting — **not from their accountant afterward**.
 | Confirmed: heard the invoicing/VAT/ZATCA exclusion (§2) directly | ☐ |
 | Confirmed: heard the claims/NPHIES exclusion (§2) directly | ☐ |
 | Notes / questions raised | |
+
+#### 9. Support, escalation and training
+
+**Level 1 — Business Hours**, selected by the Owner 2026-08-19 (`EV-096-options.md` ADDENDUM
+2026-08-19; the lightest of three tiers that document specifies — see it for the full comparison
+against Levels 2 and 3, not restated here beyond what this template needs to stand alone):
+
+| Element | Definition |
+|---|---|
+| **Support channels** | Email / ticket portal only |
+| **Support hours** | Sunday–Thursday, standard clinic business hours (e.g. 09:00–17:00 AST) |
+| **Response target** | First response within 1 business day |
+| **Escalation path** | Single tier — the implementer handles the ticket; unresolved after [X] days escalates directly to the founder. No after-hours path |
+| **Training plan** | One session per role at implementation. No scheduled refresher; further training available at a published day rate |
+| **Staffing this implies** | One person, part-time, covering the published window only — recorded so the commitment above is one the team can actually deliver, not a promise made on paper |
+
+**No uptime or availability figure is stated anywhere in this template** — none has been measured
+(GTM §15.3; `RDY-0084`'s monitoring-requirements territory, not this one).
 
 ### TEMPLATE — ends above this line
 
