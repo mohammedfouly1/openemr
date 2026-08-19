@@ -748,9 +748,18 @@ session.
 **Claiming:** RDY-0016 (A-2/A-7 sensitivity live test + more matrix probes), RDY-0023 (vitals seed +
 growth-chart render), RDY-0041 (second D-7 run), RDY-0060/0062 (screenshot/recording capture),
 RDY-0071 (CSV-button click-test) — every item this session's register rows recorded as
-browser-tooling-blocked. Range `PB-407…PB-412` claimed in §0.0. The Chrome extension reconnected as
-device `1a030f48-96bf-43e4-86e4-6abe92e9f2f4` ("Browser 1") after multiple failed attempts earlier
-this session; the Owner selected it directly when asked.
+browser-tooling-blocked. Range `PB-407…PB-412` claimed in §0.0.
+
+**Update — first dispatch under this claim (device `1a030f48-96bf-43e4-86e4-6abe92e9f2f4`) hit a
+genuine, thoroughly-diagnosed connectivity dead end**: that device could reach the open internet but
+got a hard connection refusal against `localhost:8300`/`127.0.0.1:8300`/`10.128.0.3:8300` — confirmed
+across a full Edge restart, an extension reinstall (new pairing, new `connectedAt`), and multiple
+fresh tabs. Nothing was written to any evidence/register file by that attempt; no rollback needed.
+
+**Second device connected during troubleshooting, `93bb8839-1b42-4f7b-a294-10bf4203dc64` ("Browser
+1"), confirmed working** — `read_page` against `http://localhost:8300/interface/login/login.php`
+returned the real Thiqa login form (username/password fields, language dropdown, Login button).
+**Use this device, not the first one, for the redispatch below.**
 
 **Update, same day — this agent has completed (PB-390…PB-393 used, PB-394…PB-399 not needed):**
 RDY-0004, RDY-0061 and RDY-0086 all turned out to already have their core artefacts written by
