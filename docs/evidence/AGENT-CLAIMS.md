@@ -652,3 +652,49 @@ not accepted at face value — one of the five (`acknowledge_license_cert.html`'
 turned out to be in real tension with the ruling. The Owner was asked directly and chose to leave the
 tension unresolved. This is recorded as a live, acknowledged gap in `RDY-0095`'s own register row, not
 smoothed over to make the closure look cleaner than it is.
+
+## Agent G — RDY-0055/RDY-0096 closed, RDY-0083 confirmed correctly open, PB-360..369 (2026-08-19)
+
+**Claim: RDY-0055 (verification + closure), RDY-0096 (file wiring + closure), RDY-0083 (confirmation
+only, no edit).** Claimed PB-360..369 in §0.0's range table (unclaimed at the time).
+
+**RDY-0055 CLOSED.** `EV-055-audit-phi-determination.md`'s technical determination and
+`EV-055-pilot-disclosure-draft.md`'s Owner-approved disclosure text already existed. Live-reverified
+this session against the running seeded demo DB (native stack): `DESCRIBE log` — no `encrypt` column
+on this schema; `SELECT COUNT(*), SUM(FROM_BASE64(comments) IS NOT NULL) FROM log WHERE comments IS
+NOT NULL AND comments != ''` → 101,963 / 101,963 (every non-empty row decodes as base64); negative
+control `comments LIKE '%Alharthi%'` → 0; positive control on the decoded value → 3. Disclosure text's
+factual claims match live reality exactly — closed on that basis.
+
+**Correction made along the way, not part of the original brief:** the disclosure file's own
+2026-08-19 approval addendum claimed the Owner's approval also served as RDY-0003's sample claim
+review. Read `EV-003-claim-review-procedure.md` §3-§6 directly — that criterion is met only by a
+review recorded in `EV-003` §5 against the artefact `EV-003` §4 actually queues (`EV-067`), which this
+disclosure text was never part of. Appended a correction rather than rewriting (`EV-055-pilot-
+disclosure-draft.md`). **RDY-0003 was left untouched by this session** — a separate, concurrent
+session's uncommitted working-tree edit was observed closing RDY-0003/RDY-0067 via a real `EV-067`
+claim review while this session was mid-task; not verified or touched here, left for its own author to
+commit.
+
+**RDY-0096 CLOSED.** `EV-096-options.md`'s Level 1 (Business Hours) Owner decision existed but wasn't
+"reflected in the scope template and pilot agreement" per the item's own acceptance criterion. Added
+Level 1's full definition to `EV-066-pack.md` §9 (new section, cross-referenced from the existing §1
+line) and to `EV-068-pilot-requirements.md` elements 5-7 and §4 (replacing the "per RDY-0096 once it
+exists" placeholders). Keyword-scanned both files post-edit for "uptime"/"availability" — clean, no
+figure present.
+
+**RDY-0083 — confirmed correctly stays open, nothing closed or forced.** Its own register text and
+`EV-047` §9 already state precisely and honestly that the Owner's Windows Service decision is a
+specification for a real pilot host, explicitly not validated on this demo host (`G:` per-session
+Drive-mount blindness applies to non-interactive execution contexts too, per PB-181's own finding).
+**Did not draft an installer script.** `EV-047` §9 already fully specifies the decision and its
+scope-of-non-validation; a PowerShell/WinSW installer written here, untested against any real host and
+without the real pilot host's service-account/path specifics (none of which exist yet), would add
+speculative content without reducing genuine future implementation work — assessed as not worth the
+risk of looking more authoritative than it is. Register row and `EV-047` §9 both left untouched.
+
+**Gate-count sync (§0.0 Rule 3) explicitly NOT run**, despite closing two P0 items whose `Blocks`
+fields (G3 for 0055; G3, G6 for 0096) would move counts — a concurrent session was found mid-edit on
+this exact file, with its own uncommitted RDY-0003/RDY-0067 closures (G0, G5, G6) sitting in the
+working tree at the same time. Recalculating now risks exactly the collision Rule 3 exists to prevent.
+Left for a genuine dedicated sync pass once all concurrent closures for this window have landed.
