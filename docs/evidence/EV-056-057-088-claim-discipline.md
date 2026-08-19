@@ -67,7 +67,18 @@ register for exactly this reason (`EV-067` §5.1).
 > **"Encounter sensitivity is enforced at the encounter level. It is not applied to demographics,
 > problem lists, notes, documents, or the API. Where an encounter is gated, the reason/notes text is
 > redacted to '(No access)' — the encounter row itself (date, encounter number) still appears in the
-> list."**
+> list. This gating applies to non-clinical roles such as Front Office and Accounting. Clinical roles
+> (Physicians) are not sensitivity-gated against each other in this configuration — a physician can
+> see the full detail of a sensitivity-flagged encounter belonging to a different clinician's
+> patient."**
+
+> **⚠ ADDED 2026-08-19 (Owner decision, given directly in conversation with the orchestrating
+> session).** The physician-vs-physician sentence above is new. Live test (PB-410, §2.3 below) found
+> a physician role, viewing a different clinician's `sensitivity='high'` encounter, saw it fully
+> unredacted — no prior version of this qualification stated this. **Owner chose to disclose it as an
+> added qualification** rather than treat it as a defect to fix, consistent with this project's
+> disclose-don't-hide pattern (RDY-0055's PHI determination, RDY-0057's MFA disclosure). This does not
+> change product behaviour — it makes the claim accurate to what the live test found.
 
 > **⚠ CORRECTED 2026-08-19 (PB-380 browser/live-system agent + independent orchestrator re-read,
 > Owner-directed).** This qualification previously read *"it is invisible, not redacted."* Two
@@ -106,11 +117,10 @@ Live test against the real data (`SYN-0014` pid 14, encounter 31, `sensitivity='
 
 **Consequence for claim discipline:** the qualification at the top of §2.2 is now a demonstrated
 capability, not merely an assertion from source reading, for the Accounting/Front-Office-style
-non-clinical roles it was written to describe. The Physician finding above is a separate, narrower
-nuance (clinical roles are not sensitivity-gated at all in this configuration) that does not appear in
-the current qualification text and should be considered if this claim is ever extended to describe
-clinician-vs-clinician sensitivity behaviour specifically — not addressed by this correction, flagged
-for whoever next revises the qualification. Full detail: `docs/Marketing-MVP-and-Launch-Readiness-
+non-clinical roles it was written to describe. **The Physician finding is now folded into §2.2's own
+qualification text** (Owner decision, same day) rather than left as a separate flagged nuance — the
+qualification a presenter uses now states both halves: non-clinical roles are gated, clinical roles
+are not gated against each other. Full detail: `docs/Marketing-MVP-and-Launch-Readiness-
 Requirements.md` PB-410; `EV-016-authorization-matrix.md` §4.1 (updated in the same pass).
 
 ---
