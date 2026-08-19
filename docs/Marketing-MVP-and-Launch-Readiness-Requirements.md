@@ -40,6 +40,7 @@ the first.
 | **PB-422** | **Orchestrator (main session)** — Owner approves RDY-0045's monthly patch cadence, 2026-08-19: `git fetch upstream rel-820` monthly, security-relevant commits applied immediately, owner = OpenEMR Engineer. Records the cadence leg; only the rollback drill (already authorized, scheduled post-dispatch) remains. **Range claimed 2026-08-19.** |
 | **PB-423** | **Orchestrator (main session)** — RDY-0025's session-persistence fix applied and verified, 2026-08-19, once both dispatches (PB-407-412, PB-417-420) confirmed finished: `session.save_path` set explicitly, Apache restarted, live-verified. **Range claimed 2026-08-19.** |
 | **PB-424** | **Orchestrator (main session)** — RDY-0044 closed 2026-08-19: two independent repeat resets from the v4 baseline, CLINHASH byte-identical both times and matching the documented value. **Range claimed 2026-08-19.** |
+| **PB-425 … PB-430** | **Orchestrator (main session)** — seventh subagent, 2026-08-19: RDY-0041 (D-7 Accounting-leg retry, now that RDY-0025's session-persistence fix is live), RDY-0062 (live recording retry, same root cause), RDY-0086 (per-screen Arabic/RTL walk, D-1…D-5/D-7), RDY-0094 (§40 rows 6, 8, 10 — the three genuinely requiring live browser action). Demo DB freshly reset to the v4 baseline immediately before this dispatch. **Range claimed 2026-08-19.** |
 | PB-380 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
