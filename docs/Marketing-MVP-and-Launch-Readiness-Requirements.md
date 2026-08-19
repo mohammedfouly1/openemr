@@ -33,6 +33,7 @@ the first.
 | **PB-407 … PB-412** | **Orchestrator (main session)** — fifth subagent, 2026-08-19: the Chrome browser extension reconnected (device `1a030f48-96bf-43e4-86e4-6abe92e9f2f4`, "Browser 1") after several failed attempts; dispatched to finish every item still blocked on it — RDY-0016 (A-2/A-7 sensitivity live test, more probes), RDY-0023 (vitals seed + growth-chart render), RDY-0041 (second D-7 run, no DB reset), RDY-0060/0062 (screenshot/recording capture), RDY-0071 (CSV-button click-test). **First dispatch under this claim hit a genuine device-connectivity dead end (that device couldn't reach the app at all); a second device (`93bb8839-1b42-4f7b-a294-10bf4203dc64`) confirmed working and a redispatch is in flight — see `AGENT-CLAIMS.md`.** |
 | **PB-413** | **Orchestrator (main session)** — Owner ruling on `EV-092` §4's governing-relationship question, 2026-08-19: the Locked Decisions corpus is a future-phase roadmap, not binding on the current MVP — closes RDY-0092. **Range claimed 2026-08-19.** |
 | **PB-414** | **Orchestrator (main session)** — Owner confirms `upstream/rel-820` as RDY-0045's maintenance target, 2026-08-19; read-only `git fetch upstream` run on authorization found the branch already merged with `rel-820` (2026-08-17, `8e0eaba90`), gap now 1 trivial CI commit; R-03 re-derived Severe→Minor. **Range claimed 2026-08-19.** |
+| **PB-415** | **Orchestrator (main session)** — RDY-0078 closed 2026-08-19: primary regulator sources (`zatca.gov.sa`, `chi.gov.sa`/`portal.nphies.sa`) read and cited for EXT-01/EXT-02, no product-compliance claim made. **Range claimed 2026-08-19.** |
 | PB-380 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
@@ -291,10 +292,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **44 P0** (+ P1s **0018**, **0035**, **0053**, **0054**, **0074**, **0092**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370); **0056**, **0057**, **0088** (PB-372); **0074** (PB-373); **0042** (PB-374); **0038**, **0043** (PB-375); **0066**, **0068** (PB-376); **0092** (PB-413, 2026-08-19 — Owner ruled the Locked Decisions corpus is a future-phase roadmap, not binding on the current MVP). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
-| **Requirements still open** | **68** |
-| **Open P0** | **27** — 71 P0 less the 44 genuinely closed P0 IDs above. **PB-376 (2026-08-19): two-item decrement on the PB-375 baseline** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 1 · G1 7 · G2 5 · G3 11 · G4 2 · G5 8 · G6 15** — **PB-376 (2026-08-19): RDY-0066 (G3 G6), RDY-0068 (G3) decremented from the PB-375 baseline; G0, G1, G2, G4, G5 independently re-confirmed unchanged** |
+| **Requirements CLOSED** | **45 P0** (+ P1s **0018**, **0035**, **0053**, **0054**, **0074**, **0092**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370); **0056**, **0057**, **0088** (PB-372); **0074** (PB-373); **0042** (PB-374); **0038**, **0043** (PB-375); **0066**, **0068** (PB-376); **0092** (PB-413); **0078** (PB-415, 2026-08-19 — primary regulator sources read and cited for EXT-01/EXT-02). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
+| **Requirements still open** | **67** |
+| **Open P0** | **26** — 71 P0 less the 45 genuinely closed P0 IDs above. **PB-415 (2026-08-19): one-item decrement on the PB-376 baseline** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 1 · G1 7 · G2 5 · G3 11 · G4 2 · G5 7 · G6 14** — **PB-415 (2026-08-19): RDY-0078 (G5 G6) decremented from the PB-376 baseline; G0, G1, G2, G3, G4 independently re-confirmed unchanged** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -1086,7 +1087,7 @@ qualification*. Dependencies, not dates.
 | **0075** | **V-1** — a reachable population of self-pay Saudi outpatient clinics exists (A-02) | GTM §28 V-1, A-02, R-01 | **Unrun.** No project source measures it | **BLOCKED — VALIDATION** | VALIDATION | **P0** | G6 | Founder / Product Owner | 0065 | NOT READY |
 | **0076** | **V-2** — they will accept a clinical system separate from invoicing (A-03) | GTM §28 V-2, A-03 | Unrun | **BLOCKED — VALIDATION** | VALIDATION | **P0** | G6 | Founder / Product Owner | 0075 | NOT READY |
 | **0077** | **V-3** — record control and portability are felt pains, not merely true statements (A-05) | GTM §28 V-3, A-05 | Unrun | **BLOCKED — VALIDATION** | VALIDATION | **P0** | G6 | Founder / Product Owner | 0075 | NOT READY |
-| **0078** | **V-10** — verify EXT-01 (ZATCA wave status) and EXT-02 (NPHIES obligation) against **primary** regulator sources, recording the date accessed | GTM §28 V-10, A-09, EXT-01/02 | **Secondary sources only. No primary regulator document has been read** | **BLOCKED — VALIDATION** | REGULATORY VERIFICATION | **P0** | G5 G6 | Founder / Product Owner | — | NOT READY |
+| **0078** | **V-10** — verify EXT-01 (ZATCA wave status) and EXT-02 (NPHIES obligation) against **primary** regulator sources, recording the date accessed | GTM §28 V-10, A-09, EXT-01/02 | **Primary sources read 2026-08-19**: `zatca.gov.sa` (EXT-01 — Wave 24, SAR 375,000 VAT-revenue threshold, 30 June 2026 deadline) and `chi.gov.sa`/`portal.nphies.sa` (EXT-02 — NPHIES connectivity obligation is framed around insurance transactions specifically). **EXT-01 confirmed as generally applying** (revenue-dependent, not insurance-dependent); **EXT-02 refined**, not flatly confirmed — the obligation's weight depends on a clinic's own payer mix, and the locked self-pay ICP may have little or no NPHIES transaction to make. No compliance claim made; §32 item 12's prohibition unaffected | **VERIFIED READY — CLOSED 2026-08-19** — see `EV-078` §3 | REGULATORY VERIFICATION | **P0** | G5 G6 | Founder / Product Owner | — | **CLOSED 2026-08-19 — see `EV-078-regulatory-primary-sources.md`** |
 | 0079 | Confirm A-01 (founder network) with a counted list of warm introductions, and A-07/V-9 with 30 named ophthalmology clinics of which 5 are reached | GTM A-01, A-07, §28 V-9 | **A-01 not evidenced in either source** | BLOCKED — VALIDATION | VALIDATION | P1 | G6 | Founder / Product Owner | — | NOT READY |
 
 ### 7.15 Domain N — Backup, restore, background services, monitoring, transport (G3)
@@ -2666,6 +2667,29 @@ measured against the wrong branch (`master`). RDY-0045's register row updated to
 open** — cadence, rollback approach and regression check are still undefined, and the push-credential
 blocker (191, was 162, commits unpushed — this host's git credential helper authenticates as a user
 without write access to the target repo) is unchanged, both explicitly outside this decision's scope.
+
+## PB-415 (2026-08-19) — **Orchestrator: RDY-0078 closed via primary-source desk research**
+
+Asked which currently-open blockers could close without external dependencies; RDY-0078 (primary
+regulator verification for EXT-01/EXT-02) was identified as genuinely closeable by web research,
+distinct from RDY-0075/0076/0077 (which need real prospect contact) and RDY-0065/0069 (which need
+real customers). Read and cited two official Saudi government domains: `zatca.gov.sa` for EXT-01
+(Wave 24 e-invoicing criteria — SAR 375,000 VAT-revenue threshold, 30 June 2026 deadline) and
+`chi.gov.sa`/`portal.nphies.sa` for EXT-02 (NPHIES connectivity, framed around insurance
+transactions specifically).
+
+**Findings, applied to the locked self-pay ICP, neither overstated nor dismissed:** EXT-01
+**confirmed as generally applying** — a VAT/revenue obligation independent of insurance participation,
+so a self-pay clinic isn't exempted by being self-pay. EXT-02 **refined, not flatly confirmed** — the
+obligation is framed around insurance-payer transactions; a clinic with little or no insurance billing
+has correspondingly little or no NPHIES transaction to make, a distinction common vendor-blog
+commentary (the secondary sources previously relied on) tends to flatten in either direction. **No
+product-compliance claim made anywhere** — §32 item 12's NPHIES/ZATCA prohibition is unaffected;
+this closes what the regulatory *environment* requires of a prospect, not what the product does.
+
+**Gate-count sync.** One P0 item closed (RDY-0078, G5 G6). **71 P0 registered, 45 closed, 26 open.**
+Full per-gate table deferred to a dedicated sync — see the summary table near the top of this
+document, updated directly.
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
@@ -9804,7 +9828,7 @@ session) and the still-open downstream execution chain (0081/0084/0085/0047).
 **Required action:** Read primary ZATCA material for the current wave criteria and primary CHI/NPHIES material for the provider obligation; record the **date accessed** for each; ideally confirm with two clinic finance managers. **Distinguish regulation from product capability throughout, and do not convert regulatory research into any claim that the product is compliant** — it is not, and that is prohibited.
 **Acceptance criteria:** A dated record citing primary sources for both EXT-01 and EXT-02, stating whether each is confirmed, refined or contradicted as applied to small private clinics. Where primary verification cannot be obtained, the item is marked **`PRIMARY-SOURCE VERIFICATION OUTSTANDING`** and no downstream artefact asserts the fact.
 **Verification:** the record is inspected for primary-source citations and access dates.
-**Evidence artefact:** `EV-078 regulatory-primary-sources.md` · **Status:** **BLOCKED — VALIDATION.** NOT READY
+**Evidence artefact:** `EV-078 regulatory-primary-sources.md` · **Status:** **CLOSED 2026-08-19** — primary sources cited and dated for both EXT-01 (`zatca.gov.sa`) and EXT-02 (`chi.gov.sa`/`portal.nphies.sa`); EXT-01 confirmed as generally applying, EXT-02 refined per payer mix. See `EV-078` §1-§3.
 
 ### 8.14 Cluster 14 — Backup, restore, background services, monitoring, transport (G3)
 
