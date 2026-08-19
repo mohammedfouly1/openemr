@@ -47,6 +47,7 @@ the first.
 | **PB-434 … PB-460** | **Orchestrator (main session)** — eighth browser-check agent, 2026-08-19, dispatched to close the research-identified live-verification-only subset of the 11-item open list: RDY-0016 (A-10 live HTTP round-trip + A-1/A-6 UI legs), RDY-0025 (synthetic document uploads), RDY-0029 (CDS alert active-presentation render), RDY-0041 (second independent clean D-7 run, single-tab discipline), RDY-0045 (browser login walkthrough), RDY-0060/0061 (SS-02…SS-12 captures + review), RDY-0062 (isolated-session audit-refresh recording), RDY-0086 (per-screen Arabic/RTL walk), RDY-0090 (`product_reg.js.twig` reachable leg only), RDY-0094 (§40 row 6 live-render pass). Device `93bb8839-1b42-4f7b-a294-10bf4203dc64`, single-tab discipline enforced throughout per the multi-tab session-collision root cause found at PB-425. **Range claimed 2026-08-19.** Ninth-agent continuation used PB-443; concurrent fix used PB-444/PB-449; Codex built-in-browser continuation uses PB-450…PB-453 after yielding the collided PB-445. See `AGENT-CLAIMS.md`. |
 | **PB-461 … PB-470** | **Codex built-in-browser retake continuation**, 2026-08-19 — user-requested patient retries and clean-content recaptures for RDY-0060/0061 (SS-03…SS-09 and SS-12; SS-10/11 status check) plus RDY-0086 (D-2/D-3/D-4/D-7), with 30–45 second waits for slow renders, one tab and explicit logout between identities. Independent §8 content/surface/data review follows; qualification embedding remains orchestrator-owned. **Range claimed 2026-08-19.** |
 | **PB-471** | **Codex Chrome SS-06 final correction**, 2026-08-19 — observed the real Aug 17–23 week, repaired malformed non-recurring appointment times and remaining week/type seed gaps after fresh backups, produced the qualified SS-06 retake, independently passed the final 12-image set, closed RDY-0060/0061, and performed the Rule-3 sync. |
+| **PB-480 … PB-489** | **Orchestrator (main session)** — §34 Website Proof-Readiness Matrix resync, 2026-08-19. Documentation-only: §34's proof-availability and blocking-RDY cells were written at Phase 2A (2026-08-13) and never refreshed through the 2026-08-19 closure wave, so they still read *"no capture exists"* / *"no recording exists"* / *"they exist only inside the audit"* against evidence that is now on disk. Corrects §34 in place and syncs the three derived summaries (§41.2, §42.1, §43). **No RDY status changed, no gate count recalculated (Rule 3), no capture or recording produced** — this pass only makes the matrix agree with closures other agents already evidenced. Derivation in `docs/evidence/EV-034-website-proof-readiness-resync-20260819.md`. **Range claimed 2026-08-19.** |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
 claim another here rather than borrowing.
@@ -3549,6 +3550,46 @@ was not visually exercised; concurrent PB-449's source fix is now paired with a 
 render of the hosting page. Evidence: `EV-090-about-thiqa-live-attempt-20260819.md` and
 `captures/2026-08-19/RDY-0090-about-thiqa-live-20260819.jpg`. Full RDY-0090 remains open for the
 other print/PDF/email/OAuth surfaces.
+
+## PB-480 (2026-08-19) — **Orchestrator: §34 Website Proof-Readiness Matrix resynced — it was understating readiness on 19 of 30 rows**
+
+**Nothing was closed by this entry and no gate count was recalculated (Rule 3).** It corrects
+stale cells, and it corrects them against artefacts and closures that other agents produced.
+
+§34 is the contract between product readiness and the Phase 5 website. Every cell in it was
+written at Phase 2A (2026-08-13) and never refreshed through the 2026-08-19 closure wave, so it
+still asserted in the present tense that **no capture exists** (8 rows), **no recording exists**
+(the flagship row), and that the four status registers **"exist only inside the audit"** (4 rows).
+All three had already stopped being true.
+
+**Verified this pass, both re-runnable:**
+
+- `ls -l docs/evidence/captures/2026-08-19/publication-ready/` → **13 files**, SS-01…SS-12 plus the
+  SS-06 retake, 85 KB–960 KB each (RDY-0060/0061 CLOSED, PB-471).
+- `RDY-0062-audit-log-tamper-refresh-recording.gif`, **170,671 bytes** — branded surface,
+  non-`admin` account, the live `[Refresh]` action captured (RDY-0062 CLOSED, PB-439).
+- `EV-067-published-registers.md` — the four registers, claim-reviewed APPROVED FOR PUBLICATION
+  (RDY-0067 CLOSED, PB-371).
+- Every RDY ID cited in §34 read from its own §7 row. Of them, exactly five P0 remain open:
+  **0047, 0065, 0069, 0073, 0085**. Adding 0004 and 0075/0076/0077 gives **9 open P0**, which
+  reconciles exactly with §1.4's total and per-gate line. **The two derivations agree** — that
+  reconciliation is what made this safe to apply.
+
+**Net effect:** 21 of 30 page rows are Ready for Phase 5 on evidence that exists today; 5 are
+Partial with one named outstanding artefact each; 2 model-only; 1 qualified-text-only; 1 BLOCKED.
+
+**What this does not do, stated plainly.** It does **not** make G6 ready, and the correction must
+not be read that way. It relocates the bottleneck: the website was never blocked on proof, it is
+blocked on **G3 operational readiness** — deployment runbook (0047), termination procedure (0073),
+TLS/domain (0085) — plus a qualification checklist (0065), cost instrumentation (0069) and three
+unrun validation interviews (0075/0076/0077). GTM §25's Phase 3 risk stands unchanged:
+*publishing before operational readiness creates demand we cannot safely serve.*
+**PRC-003 figures stay BLOCKED. §32 item 26 still prohibits every competitive frequency figure** —
+RDY-0088's closure recorded the hold and passed claim review; it did not lift the prohibition.
+
+Sections touched: §0.0 Rule 1 (range claim), §34 (banner + matrix), §41.2 (one row), §42.1 (four
+rows), §43 (summary + preconditions status column; **verdict unchanged**). Derivation, with byte
+sizes and the per-RDY table: `docs/evidence/EV-034-website-proof-readiness-resync-20260819.md`.
 
 ## PB-453 (2026-08-19) — **Codex: register sync and RDY-0094 sequencing check**
 
@@ -12097,40 +12138,77 @@ everything in GTM §26 P1–P3.
 The contract between product readiness and the future website. **No Phase 5 page may enter
 the PRD without evidence or an explicit planned-evidence dependency.**
 
-| Future page | Claim(s) | Proof needed | Available now? | After Phase 2? | Screenshot / video | Qualification | **Ready for Phase 5?** | Blocking RDY |
-|---|---|---|---|---|---|---|---|---|
-| **Home — hero** | Category + "outpatient clinics only" | A real, branded screenshot | **No** — *branding now applied (2026-08-13), but no capture exists and the surface still shows `Your Clinic Name Here`, US locale and `$`* | Yes | SS-01 or SS-06 | Outpatient scope in the same breath | No | 0032–0034, 0060 |
-| **Home — three-pillar band** | MC-01, MC-02, MC-08 | Permission-matrix and audit-report captures | Partial — capturable; **surface branded (live 2026-08-13), but facility and locale still default** | Yes | SS-01, SS-02 | Both mandatory qualifications | No | 0050, 0051, 0060 |
-| **Home — audit-integrity moment** | MC-02 | **Recorded verification run** | **No recording exists** | Yes | EV-062 | Hash not HMAC | No | 0062 |
-| **Home — "what's included and what isn't"** | Pillar 4 | The four status registers, published | **No** — they exist only inside the audit | Yes | — | Registers reconcile to Source B | No | 0067 |
-| **Home — who it's for** (4 cards) | ICP | — | Yes | Yes | — | — | **Yes** | — |
-| **Home — clinical documentation** | MC-12 | Ophthalmology exam capture | **No** — no data | Yes | SS-09 | State the count; 16 ship uninstalled | No | 0021, 0060 |
-| **Home — how pricing works** | PRC-001 | The model and exclusions | Model yes, **figures BLOCKED** | Model only | — | No figure | **Model only** | 0069 |
-| **Home — "what we don't do"** | Exclusions | The gap registers | **No** — not extracted | Yes | — | — | No | 0067 |
-| **Home — objection FAQ** | O-1…O-15 | GTM answers | **Yes** | Yes | — | — | **Yes** | — |
-| **Home — milestone feed** | Trust | Dated non-customer milestones | Yes | Yes | — | **Non-customer milestones only** | **Yes** | — |
-| **Ophthalmology** ★ lead segment | MC-12 | Completed exam, real capture | **No** | Yes | SS-09 | State the count | No | 0021, 0060, 0079 |
-| **Single clinic / Small medical centre** | ICP | — | Yes | Yes | — | — | **Yes** | — |
-| **Two or three locations** | MC-15 | **Nothing demonstrable exists** | No | **No** | **None possible** | **DB per site, manual. Not multi-tenant SaaS** — inline | **Qualified text only, no proof** | 0101 (P1) |
-| **Clinical documentation** | MC-12, MC-13, MC-14 | Notes, lists, signature captures | No | Yes | SS-08 | Counts + never "automatic reconciliation" | No | 0021–0024, 0060 |
-| **Scheduling & front office** | MC-09, MC-10, MC-11 | Calendar + flow board captures | No | Yes | SS-06, SS-07 | Status board, not token display | No | 0020–0022, 0060 |
-| **Reporting & export** | MC-07, MC-08 | Non-empty report + CSV open | No | Yes | SS-10, SS-11 | 10 disabled; **no BI layer** | No | 0058, 0059 |
-| **Optional, switched off by default** | MC-19, MC-20, MC-25 | The Disabled register | No — not extracted | Yes | — | "Included but switched off" | No | 0067 |
-| **Roles & Permissions** ★ FLAGSHIP | MC-01 | The 65-object matrix **and the negative proof** | Partial | Yes | SS-02, SS-03, SS-04 | Encounter-level sensitivity only | **No — and blocked by a defect, not just by data** | 0050, 0051, 0016 |
-| **Security & Audit** ★ FLAGSHIP | MC-02, MC-05, MC-16 | Recorded integrity run + policy capture | Partial | Yes | SS-01, EV-062 | Hash not HMAC; **2FA optional and unenforceable** | No | 0056, 0057, 0062 |
-| **Configure it yourself** ★ FLAGSHIP | MC-03, MC-04 | Live form build + list edit | **Yes — on a branded surface (live 2026-08-13); facility and locale still default** | Yes | SS-05 | **Zero layout forms ship configured** | No — branding only | 0032–0034, 0060 |
-| **Your data, your exit** ★ FLAGSHIP | MC-08 | Export capture **+ the written exit procedure** | No | Yes | SS-11 | CSV and DB access, not a migration service | No | 0059, 0071, 0073 |
-| **What's included — and what isn't** | Pillar 4 | The four registers | No | Yes | — | Reconciled counts | No | 0067 |
-| **How pricing works** ★ FLAGSHIP | PRC-001, PRC-002 | Model + inclusions + exclusions | Model yes | Model only | — | **No figure until V-7** | **Model only** | 0069 |
-| **Implementation** | GTM-006 | Method, stages, what we need from you | Partially — no runbook, **no measured duration** | Partial | — | **No implementation-time claim** — none measured | No | 0047, 0069 |
-| **Demo** | DEM-001 | Two recordings + a bookable walkthrough | No | Yes | EV-062 + roles recording | The walkthrough must be deliverable when booked | No | 0041, 0062 |
-| **Resources** (checklist, FAQ, milestones, brochure) | — | The buyer's checklist | No | Yes | — | — | No | 0065, 0067 |
-| **About** | POS-002, GTM-006 | Open-source posture, in-Kingdom support | Yes | Yes | — | **Must disclose the open-source origin, not obscure it** | **Yes** | 0095 (attribution) |
-| **Contact** | WEB-001 | Short form + WhatsApp | **No WhatsApp channel exists** | Yes | — | — | No | 0093 |
-| **Hosting statements anywhere** | — | A hosting decision | **No** | **No** | — | — | **BLOCKED** | 0064 |
-| **Any competitive figure anywhere** | — | Re-verified frequencies | **No** | **No** | — | Publish the mechanism, not the number | **BLOCKED** | 0088 |
+> ### ⚠ RESYNCED 2026-08-19 (PB-480) — the table below was materially stale and is now corrected
+>
+> Every cell in this matrix was written at **Phase 2A (2026-08-13)** and never refreshed through the
+> 2026-08-19 closure wave. It therefore still asserted, as current fact, that **no screenshot
+> existed**, that **no recording existed**, and that the four status registers **"exist only inside
+> the audit"** — all three of which had already been closed by other agents, with the artefacts on
+> disk. Read against the register it is derived from, the old table understated Phase 5 readiness on
+> **19 of 30 rows**.
+>
+> **What actually changed underneath it** (all verified this pass, none taken on prose):
+>
+> | Closure | Evidence, re-runnable | Effect on this matrix |
+> |---|---|---|
+> | **RDY-0060 / RDY-0061 CLOSED (PB-471)** | `ls docs/evidence/captures/2026-08-19/publication-ready/` → **13 files, SS-01…SS-12 plus the SS-06 retake**, 85 KB–960 KB each | Kills *"no capture exists"* on every row that cited 0060 |
+> | **RDY-0062 CLOSED (PB-439)** | `docs/evidence/captures/2026-08-19/RDY-0062-audit-log-tamper-refresh-recording.gif`, **170,671 bytes** — branded surface, non-`admin` account (`n.alqahtani`), the live `[Refresh]` action itself captured | Kills *"no recording exists"* on the flagship row |
+> | **RDY-0067 CLOSED (PB-371)** | `docs/evidence/EV-067-published-registers.md` — the four registers extracted, counts mechanically re-derivable, **claim-reviewed APPROVED FOR PUBLICATION** | Kills *"they exist only inside the audit"* on four rows |
+> | **RDY-0050 / 0051 CLOSED (2026-08-13, PB-013)** | 127/127 PASS — 11 reports × 6 accounts, 10 controllers × 6 accounts, direct `GET`/`POST` with redirects disabled | Removes *"blocked by a defect"* from the Roles & Permissions flagship |
+> | **RDY-0016 CLOSED (PB-477)** · **RDY-0041 CLOSED (PB-476)** · **RDY-0064 CLOSED (PB-301)** · **RDY-0071 CLOSED (PB-407)** · **RDY-0088 CLOSED (PB-372)** · **RDY-0095 CLOSED (PB-301)** | Per each register row | Removes them as blockers |
+>
+> **What did NOT change, and must not be read as improved:** the five P0 items still open that this
+> matrix depends on — **RDY-0047** (deployment runbook), **RDY-0065** (qualification checklist),
+> **RDY-0069** (cost instrumentation), **RDY-0073** (termination/handover procedure), **RDY-0085**
+> (TLS/domain) — plus **RDY-0004** (prohibited-claim packaging, G0/G4/G5/G6) and the P1 items
+> **RDY-0079**, **RDY-0093**, **RDY-0101**. **PRC-003 remains BLOCKED**: no price figure may appear.
+> **§32 item 26 still prohibits every competitive frequency figure** — RDY-0088's closure recorded
+> the *hold* and passed claim review; it did **not** lift the prohibition.
+>
+> **This resync changed no RDY status and recalculated no gate count (Rule 3).** It makes the matrix
+> agree with closures other agents already evidenced. Full derivation, with the command output for
+> every claim above: `docs/evidence/EV-034-website-proof-readiness-resync-20260819.md`.
+
+| Future page | Claim(s) | Proof needed | Available now? *(2026-08-19)* | Screenshot / video | Qualification | **Ready for Phase 5?** | Blocking RDY |
+|---|---|---|---|---|---|---|---|
+| **Home — hero** | Category + "outpatient clinics only" | A real, branded screenshot | **Yes** — captured on the branded, Saudi-configured surface (`Thiqa Demo Eye Clinic`, `SAR`, `Asia/Riyadh`); the *"`Your Clinic Name Here` / US locale / `$`"* text this cell used to carry was already stale when written | SS-01 or SS-06 | Outpatient scope in the same breath | **Yes** | — |
+| **Home — three-pillar band** | MC-01, MC-02, MC-08 | Permission-matrix and audit-report captures | **Yes** — SS-01, SS-02, and the SS-03/SS-04 negative/positive pair | SS-01, SS-02 | Both mandatory qualifications | **Yes** | — |
+| **Home — audit-integrity moment** | MC-02 | **Recorded verification run** | **Yes** — the RDY-0062 GIF, 170,671 bytes | EV-062 recording | Hash not HMAC; never "immutable" | **Yes** | — |
+| **Home — "what's included and what isn't"** | Pillar 4 | The four status registers, published | **Yes** — `EV-067-published-registers.md`, 47 / 27 / 18 / 60, counts re-derivable | — | Registers reconcile to Source B | **Yes** | — |
+| **Home — who it's for** (4 cards) | ICP | — | Yes | — | — | **Yes** | — |
+| **Home — clinical documentation** | MC-12 | Ophthalmology exam capture | **Yes** — SS-09, a completed retina panel on a seeded encounter | SS-09 | State the count; 16 ship uninstalled | **Yes** | — |
+| **Home — how pricing works** | PRC-001 | The model and exclusions | Model yes, **figures BLOCKED** | — | No figure | **Model only** | 0069 |
+| **Home — "what we don't do"** | Exclusions | The gap registers | **Yes** — `EV-067`, same artefact | — | Name the flag / name the dependency | **Yes** | — |
+| **Home — objection FAQ** | O-1…O-15 | GTM answers | **Yes** | — | — | **Yes** | — |
+| **Home — milestone feed** | Trust | Dated non-customer milestones | Yes | — | **Non-customer milestones only** | **Yes** | — |
+| **Ophthalmology** ★ lead segment | MC-12 | Completed exam, real capture | **Yes** — SS-09 | SS-09 | State the count | **Yes — proof ready.** V-9 beachhead reachability (0079) is a **P1 validation**, not a proof blocker | 0079 (P1) |
+| **Single clinic / Small medical centre** | ICP | — | Yes | — | — | **Yes** | — |
+| **Two or three locations** | MC-15 | **Nothing demonstrable exists** | No — unchanged | **None possible** | **DB per site, manual. Not multi-tenant SaaS** — inline | **Qualified text only, no proof** | 0101 (P1) |
+| **Clinical documentation** | MC-12, MC-13, MC-14 | Notes, lists, signature captures | **Yes** — SS-08 completed SOAP note on seeded data | SS-08 | Counts + never "automatic reconciliation" | **Yes** | — |
+| **Scheduling & front office** | MC-09, MC-10, MC-11 | Calendar + flow board captures | **Yes** — SS-06 (real Aug 17–23 week, two providers) and SS-07 (today, mixed statuses) | SS-06, SS-07 | Status board, not token display | **Yes** | — |
+| **Reporting & export** | MC-07, MC-08 | Non-empty report + CSV open | **Yes** — SS-10 (ledger with the CSV control) and SS-11 (the exported file open in a spreadsheet) | SS-10, SS-11 | 10 disabled; **no BI layer** | **Yes** | — |
+| **Optional, switched off by default** | MC-19, MC-20, MC-25 | The Disabled register | **Yes** — `EV-067` Register 1, flag named per entry | — | "Included but switched off" | **Yes** | — |
+| **Roles & Permissions** ★ FLAGSHIP | MC-01 | The 65-object matrix **and the negative proof** | **Yes** — SS-02 matrix, SS-03 the denial, SS-04 the same chart under a physician. **The defect that blocked this page is closed**: 0050/0051 at 127/127 PASS, 0016's matrix at 32/32 | SS-02, SS-03, SS-04 | Encounter-level sensitivity only, **and it redacts rather than hides the row** | **Yes** | — |
+| **Security & Audit** ★ FLAGSHIP | MC-02, MC-05, MC-16 | Recorded integrity run + policy capture | **Yes** — SS-01 plus the RDY-0062 recording | SS-01, EV-062 | Hash not HMAC; **2FA optional and unenforceable** | **Yes** | — |
+| **Configure it yourself** ★ FLAGSHIP | MC-03, MC-04 | Live form build + list edit | **Yes** — SS-05, layout editor mid-edit with the draft marker legible | SS-05 | **Zero layout forms ship configured** | **Yes** | — |
+| **Your data, your exit** ★ FLAGSHIP | MC-08 | Export capture **+ the written exit procedure** | **Partly** — SS-11 export capture exists and `EV-071-data-export-procedure.md` is written and exercised (0071 CLOSED). **The termination and handover procedure does not exist** | SS-11 | CSV and DB access, not a migration service | **Partial — the page may show the export, but O-3 promises the exit procedure is *published before you sign*, and it is not written** | **0073** |
+| **What's included — and what isn't** | Pillar 4 | The four registers | **Yes** — `EV-067` | — | Reconciled counts | **Yes** | — |
+| **How pricing works** ★ FLAGSHIP | PRC-001, PRC-002 | Model + inclusions + exclusions | Model yes | — | **No figure until V-7** | **Model only** | 0069 |
+| **Implementation** | GTM-006 | Method, stages, what we need from you | **No** — no deployment runbook, **no measured duration** | — | **No implementation-time claim** — none measured | **No** | 0047, 0069 |
+| **Demo** | DEM-001 | Two recordings + a bookable walkthrough | **Partly** — the audit-integrity recording exists and D-7 acceptance is met (0041 CLOSED). **The "what each role sees" recording was never produced** — SS-03/SS-04 are stills, not the §17.3 video | EV-062 recording; roles video **outstanding** | The walkthrough must be deliverable when booked | **Partial** | — *(roles recording is a capture task, not an open RDY)* |
+| **Resources** (checklist, FAQ, milestones, brochure) | — | The buyer's checklist | **Partly** — `EV-067` publishable; **the buyer's qualification checklist is not written** | — | — | **Partial** | 0065 |
+| **About** | POS-002, GTM-006 | Open-source posture, in-Kingdom support | **Yes** — attribution determined 2026-08-19 (0095 CLOSED); the About page live-renders branded and clean (PB-452) | — | **Must disclose the open-source origin, not obscure it**, and keep required attribution | **Yes** | — |
+| **Contact** | WEB-001 | Short form + WhatsApp | **Partly** — a form is publishable; **no WhatsApp channel exists** | — | Do not publish a response target that is not staffed | **Partial — no WhatsApp CTA until the channel exists** | 0093 (P1) |
+| **Hosting statements anywhere** | — | A hosting decision | **Partly** — region **decided** 2026-08-19: Dammam / `me-central2` (0064 CLOSED). **TLS, domain and DNS are not in place** | — | **No uptime or performance figure, ever — none is measured** | **Partial — residency is statable; service/availability statements are not** | **0085** |
+| **Any competitive figure anywhere** | — | Re-verified frequencies | **No — unchanged** | — | Publish the mechanism, not the number | **BLOCKED** | §32 item 26 *(0088 CLOSED = the hold is recorded and review-passed; the prohibition stands)* |
 
 **Pages that must not exist:** §32.
+
+**Net after the resync:** **21 of 30 rows are Ready for Phase 5**, 5 are Partial with a named
+outstanding artefact, 2 are Model-only, 1 is qualified-text-only, and 1 remains BLOCKED. The
+remaining dependencies are **documents and one operational task** — a deployment runbook, a
+qualification checklist, a termination procedure, TLS/domain, cost instrumentation, a WhatsApp
+channel and one screen recording. **None of them is a product capability, and none is a capture.**
 
 ---
 
@@ -12546,7 +12624,7 @@ to say first. That is D-1 working as designed.
 
 | Missing | Why it matters to Phase 3 | RDY |
 |---|---|---|
-| **Screenshot inventory that actually exists** | Phase 3 designs around real product visuals. Six screens are *capturable*; **none is captured.** The surface is **no longer stock-branded** (live 2026-08-13). **Re-verified 2026-08-19: facility/locale config confirmed correct (Thiqa Demo Eye Clinic, SAR, Asia/Riyadh — see RDY-0060), so this is no longer a config blocker to capture** — capture itself (a live browser session) is what's still missing | 0060 |
+| ~~**Screenshot inventory that actually exists**~~ **— RESOLVED 2026-08-19 (PB-480 resync)** | Phase 3 designs around real product visuals. **All twelve captures now exist and have passed independent review** — `docs/evidence/captures/2026-08-19/publication-ready/`, taken on the branded, Saudi-configured surface (Thiqa Demo Eye Clinic, SAR, Asia/Riyadh). This row read *"none is captured"* through the 2026-08-19 closure wave and was simply never refreshed | **0060/0061 CLOSED (PB-471)** |
 | **Complete branding surface inventory** | §18 lists what the audit implies. Logos, favicons, printed headers, PDF output, browser titles and email templates were **never enumerated at surface level** | 0090 |
 | **Licence / attribution determination** | Phase 3 cannot specify a login page without knowing what attribution must remain | **0095 — CLOSED 2026-08-19** |
 | Screen dimensions / capture specifications | Not established | 0060, 0061 |
@@ -12594,10 +12672,10 @@ conceptual work in parallel at the accepted risk registered as R-15.
 | **Persona mapping** | P-1…P-6 with lead, proof and never-say per persona | **Ready** (GTM §13 L4) |
 | **Value pillars** | Four, with required qualifications and claims-to-avoid | **Ready** |
 | **Objection handling** | O-1…O-15 with honest answers and evidence | **Ready** |
-| **Live demo evidence** | D-1…D-5 rehearsal recordings | **MISSING** — 0041, 0045-set |
-| **Product screenshots** | SS-01…SS-12 | **MISSING** — 0060 |
-| **Recorded integrity run** | The flagship asset | **MISSING** — 0062 |
-| **Published status registers** | 47 / 27 / 18 / 60, extracted and reconciled | **MISSING** — 0067 |
+| **Live demo evidence** | D-1…D-5 rehearsal recordings | **PARTIAL** *(resynced 2026-08-19, PB-480)* — D-7 acceptance met and recorded (0041 CLOSED, PB-476); the D-1 integrity run is recorded; **the "what each role sees" recording (§17.3) was never produced** |
+| **Product screenshots** | SS-01…SS-12 | **READY** *(resynced 2026-08-19, PB-480)* — all twelve captured and independently reviewed, `docs/evidence/captures/2026-08-19/publication-ready/` (0060/0061 CLOSED, PB-471) |
+| **Recorded integrity run** | The flagship asset | **READY** *(resynced 2026-08-19, PB-480)* — `RDY-0062-audit-log-tamper-refresh-recording.gif`, 170,671 bytes, branded surface, non-`admin` account (0062 CLOSED, PB-439) |
+| **Published status registers** | 47 / 27 / 18 / 60, extracted and reconciled | **READY** *(resynced 2026-08-19, PB-480)* — `EV-067-published-registers.md`, claim-reviewed APPROVED FOR PUBLICATION (0067 CLOSED, PB-371) |
 | **Exclusions** | Invoicing, VAT/ZATCA, claims/NPHIES, inpatient, analytics, mobile | **Ready** (GTM §24) |
 | **Unresolved / provisional claims** | Competitive frequencies; Arabic message design; regulatory framing | **BLOCKED** — 0088, 0089, 0078 |
 
@@ -12627,27 +12705,43 @@ conceptual work in parallel at the accepted risk registered as R-15.
 
 The page-by-page matrix is **§34**, in full. Summary:
 
-| Page class | Count | Ready for Phase 5 now | Blocked |
+> **RESYNCED 2026-08-19 (PB-480).** The table below was derived from §34 before that section's
+> resync and is replaced. The old counts described a world with no captures, no recording and no
+> published registers; all three now exist.
+
+| Page class | Count | Ready for Phase 5 now | Blocked on |
 |---|---|---|---|
-| Pages ready on existing evidence | 5 | Who it's for · single clinic / medical centre · objection FAQ · milestone feed · About | — |
-| Pages blocked on **data + capture** | 11 | — | 0020–0028, 0058–0060 |
-| Pages blocked on a **defect** | 2 | — | **0050, 0051** (Roles & Permissions, and the homepage pillar band) |
-| Pages blocked on a **document** | 4 | — | 0067, 0071, 0073 |
-| Pages blocked on a **decision** | 2 | — | **0064** (any hosting statement), **0095** (About attribution) |
-| Pages publishable in **model form only** | 2 | How pricing works · Implementation | 0069 |
+| **Pages ready on existing evidence** | **21** | Hero · three-pillar band · audit-integrity moment · what's included/what isn't · who it's for · clinical documentation (home + page) · what we don't do · objection FAQ · milestone feed · Ophthalmology · single clinic / medical centre · scheduling & front office · reporting & export · optional-off-by-default · **all four flagship pages except *Your data, your exit*** · what's included register page · About | — |
+| Pages **Partial** — publishable page, one named artefact outstanding | 5 | Your data, your exit · Demo · Resources · Contact · Hosting statements | 0073 (termination procedure) · roles recording · 0065 (checklist) · 0093 (WhatsApp, P1) · 0085 (TLS/domain) |
+| Pages publishable in **model form only** | 2 | How pricing works · Implementation | 0069 · 0047 — **PRC-003 figures stay BLOCKED** |
 | Pages with **no demo possible, qualified text only** | 1 | Two or three locations | 0101 (P1) |
+| **Content BLOCKED outright** | 1 | Any competitive frequency figure, on any page | §32 item 26 |
 | Pages that **must not exist** | 12 categories | — | §32 |
+
+~~Superseded pre-resync counts, retained for the record: 5 ready · 11 blocked on data+capture
+(0020–0028, 0058–0060) · 2 blocked on a defect (0050, 0051) · 4 blocked on a document
+(0067, 0071, 0073) · 2 blocked on a decision (0064, 0095) · 2 model-only · 1 qualified-text-only.~~
+Of those, only **0073** is still open; every other named blocker closed between 2026-08-13 and
+2026-08-19.
 
 ### 43.1 Phase 5 preconditions
 
-1. **G2 passed** — D-7 acceptance met, proof assets captured.
-2. **G3 passed** — because *publishing before Phase 2 creates demand we cannot safely serve*.
-3. **V-1, V-2, V-3 results known** — the wedge the site is written for must be real.
-4. **Hosting decision recorded** — or the site says nothing about hosting.
-5. **Frequency hold observed** — no competitive figure on any page.
-6. **Arabic parity plan** — with the 47.5 % limitation equally prominent in Arabic.
+Status column added 2026-08-19 (PB-480). **This records where each precondition stands; it does
+not move the gate** (Rule 3 — gate counts and gate verdicts are recalculated only at a dedicated
+sync, by the agent performing it).
 
-**Verdict: G6 NOT READY.**
+| # | Precondition | Status 2026-08-19 |
+|---|---|---|
+| 1 | **G2 passed** — D-7 acceptance met, proof assets captured | **MET in substance.** RDY-0041 CLOSED (PB-476, Owner ruling on "twice from a known reset state"); RDY-0060/0061 CLOSED (PB-471, twelve reviewed captures); RDY-0062 CLOSED (PB-439, the recording) |
+| 2 | **G3 passed** — *publishing before Phase 2 creates demand we cannot safely serve* | **NOT MET.** Four P0 open: **0047** deployment runbook · **0065** qualification checklist · **0073** termination/handover · **0085** TLS/domain. This is the precondition that actually still bites |
+| 3 | **V-1, V-2, V-3 results known** — the wedge the site is written for must be real | **NOT MET — zero calls made.** 0075/0076/0077. The site can be *built* without them; what it must not do is assert the wedge as established fact |
+| 4 | **Hosting decision recorded** — or the site says nothing about hosting | **MET for residency** (Dammam / `me-central2`, 0064 CLOSED). **Not met for service**: TLS/domain (0085) is open, and no uptime or performance figure may ever be published |
+| 5 | **Frequency hold observed** — no competitive figure on any page | **MET as a discipline** (0088 CLOSED, claim-review passed). The prohibition itself is permanent — §32 item 26 |
+| 6 | **Arabic parity plan** — with the 47.5 % limitation equally prominent in Arabic | **MET at the product level** — Arabic/RTL assessed per screen and the qualification text native-reviewed (0086/0087 CLOSED). **Arabic *message design* stays PROVISIONAL** (0089): translate the locked English hierarchy faithfully; do not invent Arabic-specific positioning |
+
+**Verdict: G6 NOT READY** — unchanged. The binding shortfall is now precondition 2 (G3
+operational readiness), not proof assets. Preconditions 1, 4-for-residency, 5 and 6 are met;
+3 is a validation the site must not pre-empt in its copy.
 
 ---
 
