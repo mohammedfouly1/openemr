@@ -35,6 +35,7 @@ the first.
 | **PB-414** | **Orchestrator (main session)** — Owner confirms `upstream/rel-820` as RDY-0045's maintenance target, 2026-08-19; read-only `git fetch upstream` run on authorization found the branch already merged with `rel-820` (2026-08-17, `8e0eaba90`), gap now 1 trivial CI commit; R-03 re-derived Severe→Minor. **Range claimed 2026-08-19.** |
 | **PB-415** | **Orchestrator (main session)** — RDY-0078 closed 2026-08-19: primary regulator sources (`zatca.gov.sa`, `chi.gov.sa`/`portal.nphies.sa`) read and cited for EXT-01/EXT-02, no product-compliance claim made. **Range claimed 2026-08-19.** |
 | **PB-416** | **Orchestrator (main session)** — RDY-0087 closed 2026-08-19: Owner relayed HR-09 (Mohammed Elfouly)'s native-speaker PASS review of both Arabic disclosure texts; §40 row 9's stale "no font in tree" reason corrected to the actual GPOS-shaping finding. RDY-0086's review leg met by the same relay; its per-screen walk stays open. **Range claimed 2026-08-19.** |
+| **PB-417 … PB-420** | **Orchestrator (main session)** — sixth subagent, 2026-08-19: source/DB-read-only continuation of RDY-0090 (branding surface walk) and RDY-0094 (no-go rehearsal), deliberately excluding anything touching Apache/the DB/the browser to avoid contending with the still-running PB-407-412 browser dispatch. **Range claimed 2026-08-19.** |
 | PB-380 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
