@@ -966,10 +966,13 @@ it. Files changed: `interface/patient_file/encounter/view_form.php`,
 database — a separate agent (Codex, briefed via a standalone prompt) is expected to work the
 remaining browser-dependent items; avoided any DB reseed to prevent colliding with it.
 
-## Codex built-in-browser continuation — PB-445…PB-448, 2026-08-19
+## Codex built-in-browser continuation — PB-450…PB-453, 2026-08-19
 
 **Continuing the ninth browser-check claim in the still-reserved PB-434…PB-460 range.**
-PB-445…PB-448 are reserved for the user-requested direct built-in-browser work on
+**Collision correction:** the initial claim named PB-445…PB-448, but the mandatory pre-edit re-read
+found concurrent RDY-0090 work consuming PB-445 and then reserving PB-449. This agent yielded those
+numbers before recording any PB entry. PB-450…PB-453 are reserved instead for the user-requested
+direct built-in-browser work on
 RDY-0060/0061 (SS-03…SS-06 and SS-08…SS-12), RDY-0086 (Arabic/RTL D-1…D-5/D-7
 visual walk), RDY-0090 (one bounded About Thiqa attempt), and RDY-0094 sequencing only.
 The browser is one visible Codex in-app tab with one authenticated identity at a time.
