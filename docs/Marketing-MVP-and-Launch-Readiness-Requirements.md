@@ -281,10 +281,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **28 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync, Owner acceptance recorded `EV-WAVE3-decisions-20260816.md`, register row synced 2026-08-16 at `aa39f8b7d`, dashboard count synced 2026-08-19). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
-| **Requirements still open** | **86** |
-| **Open P0** | **43** — 71 P0 less the 28 genuinely closed P0 IDs above. **PB-300 (2026-08-19): single-item decrement on PB-216's baseline (RDY-0002, `Blocks` = G0 only)** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 2 · G1 15 · G2 10 · G3 16 · G4 3 · G5 13 · G6 20** — **PB-300 (2026-08-19), single-item decrement on the PB-216 baseline; every other gate independently re-derived from §7.2–§7.17's `Blocks` fields and confirmed unchanged — see `docs/evidence/EV-GATE-SYNC-20260819.md` §5** |
+| **Requirements CLOSED** | **32 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301, 2026-08-19 — RDY-0095's SkyEagle determination and RDY-0064's hosting provisioning both relayed by the Owner directly in conversation, unblocking RDY-0033/0034 which were already config-complete live). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
+| **Requirements still open** | **82** |
+| **Open P0** | **39** — 71 P0 less the 32 genuinely closed P0 IDs above. **PB-301 (2026-08-19): four-item decrement on the PB-300 baseline** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 2 · G1 12 · G2 8 · G3 15 · G4 2 · G5 13 · G6 19** — **PB-301 (2026-08-19): RDY-0033/0034 (G1 G2), RDY-0064 (G3 G6), RDY-0095 (G1 G4) decremented from the PB-300 baseline; G0 and G5 independently re-confirmed unchanged** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -986,8 +986,8 @@ qualification*. Dependencies, not dates.
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
 | **0032** | Rename the facility from `Your Clinic Name Here` to a neutral fictional demo clinic (B4) | GTM DEM-003, B4 | Installer default, 1 facility | **VERIFIED READY — CLOSED BY PHASE 2B (PB-016)** | BRANDING READINESS | **P0** | G1 G2 | Brand *(provisional name)* / Founder | 0001 | **CLOSED 2026-08-13** |
-| **0033** | Replace product identity strings — `openemr_name`, `login_tagline_text` | Audit §19.4; L-17 | `'OpenEMR'`, *"The most popular open-source Electronic Health Record…"* | READY AFTER CONFIGURATION | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0090, 0095 | NOT READY |
-| **0034** | Remove or repoint vendor links — `display_donations_link`, `display_review_link`, `main_menu_logo_link` | Audit §19.4; L-17 | All live and pointing at open-emr.org | READY AFTER CONFIGURATION | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0095 | NOT READY |
+| **0033** | Replace product identity strings — `openemr_name`, `login_tagline_text` | Audit §19.4; L-17 | *Historical:* `'OpenEMR'`, *"The most popular open-source Electronic Health Record…"*. **Live 2026-08-19: `openemr_name = 'Thiqa'`, `login_tagline_text = 'Clinical confidence, connected care.'`** — this cell's "Audited state" was stale, config had already been changed; only the RDY-0095 block was outstanding. **RDY-0095 now DETERMINED** (minimal branding changes permitted, consistent with this change) | **VERIFIED READY — CLOSED 2026-08-19** | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0090, 0095 | **CLOSED 2026-08-19** |
+| **0034** | Remove or repoint vendor links — `display_donations_link`, `display_review_link`, `main_menu_logo_link` | Audit §19.4; L-17 | *Historical:* all live and pointing at open-emr.org. **Live 2026-08-19: `display_donations_link`/`display_review_link` both empty (off), `main_menu_logo_link = 'https://skyeagle.uk/'`** — confirmed live, RDY-0095 now DETERMINED | **VERIFIED READY — CLOSED 2026-08-19** | BRANDING READINESS | **P0** | G1 G2 | Brand / Founder | 0095 | **CLOSED 2026-08-19** |
 | **0035** | Clear `pqri_registry_name='Model Registry'` and `pqri_registry_id='125789123'` placeholders | Audit §19.4 | Live placeholders | **VERIFIED READY — CLOSED BY PHASE 2B (PB-151)** — both cleared to empty string; only call site (`PQRIXml.class.php:56-57`) renders an empty element, not an error | CONFIGURATION | P1 | G2 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-16** |
 | **0036** | Set `gbl_time_zone` to `Asia/Riyadh` | Audit §22.4, §23.4 | **Empty** → UTC | **VERIFIED READY — CLOSED BY PHASE 2B (PB-016)** | CONFIGURATION | **P0** | G1 G2 G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
 | **0037** | Configure currency display for SAR — symbol, decimals, separators | Audit §22.4, §23.4; L-12 | `$`, 2 decimals; **display only, no ISO code** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-214)** — `interface/reports/pat_ledger.php`'s 13 `oeFormatMoney()` call sites wired to pass `$symbol=true` (PR-18); live re-check of the exact PB-202 scenario (`SYN-0001`/pid 1) shows `SAR` on every amount (line items, both Encounter Balance rows, the payment row, Grand Total) | CONFIGURATION | **P0** | G2 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-16** |
@@ -1047,7 +1047,7 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0064** | Decide the hosting model, region and data-residency position, and obtain two hosting quotes before anything about hosting is published | GTM A-10 **UNEVALUATED**, §25 Phase 2, §27 | **Not evaluated in any source.** The audited install is `http://localhost:8300` | **BLOCKED — DECISION** | OPERATIONAL | **P0** | G3 G6 | Founder / Product Owner + DevOps | 0047 | NOT READY |
+| **0064** | Decide the hosting model, region and data-residency position, and obtain two hosting quotes before anything about hosting is published | GTM A-10 **UNEVALUATED**, §25 Phase 2, §27 | Region decided at PB-022 (Dammam, `me-central2`). **Provisioning reported complete 2026-08-19, relayed by the Owner directly in conversation (not independently verified by this session — no access to the actual instance/account exists here)**: Dammam / `me-central2`, as originally planned. Exceeds this item's own stated requirement (decide + two quotes), since an instance now reportedly exists | **VERIFIED READY — CLOSED 2026-08-19, Owner-relayed** | OPERATIONAL | **P0** | G3 G6 | Founder / Product Owner + DevOps | 0047 | **CLOSED 2026-08-19 — see caveat; downstream chain (0081/0084/0085/0047's own execution) still needs real configuration work against the host, not closed by this alone** |
 
 ### 7.12 Domain K — Commercial and pilot readiness (G3, G6)
 
@@ -1108,7 +1108,7 @@ qualification*. Dependencies, not dates.
 | 0092 | Recover and reconcile the in-repository `Locked Desicions/` corpus, which audit §23.2 records as existing and which may contain decisions not reflected in the GTM | Audit §23.2 | **Not present in this environment.** Corpus recovered and sample-reconciled (`EV-092`, PB-147) — one real conflict found (Q5 vs. RDY-0057/0099 MFA position) and escalated. **Owner ruling 2026-08-19 (given directly in conversation) resolves that one sub-finding:** the readiness plan's disclosure-based MFA position governs this MVP phase; RDY-0099 retired as superseded, not merely deferred — see `EV-092` §3.1 addendum. **Item as a whole stays open**: categories `Q23`+ (~55 decisions) remain unreviewed, and the broader "which corpus governs" question is unresolved | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G0 | Founder / Product Owner | 0001 | NOT READY |
 | 0093 | Stand up the WhatsApp business channel with a published response target before any CTA referencing it is published | GTM GTM-002, §17.1, §19 | Does not exist | NOT READY — OPERATIONAL | OPERATIONAL | P1 | G6 | Founder / Product Owner | — | NOT READY |
 | **0094** | Adopt the demo no-go register (§40) and rehearse against it — never open Admin → Backup; never attempt C-CDA; expect two overdue background services and mention them first; know that opening Module Manager auto-registers three modules | GTM §16.2 operational rules; audit §28.2, OD-01, OD-02 | Rules known; **no register, no rehearsal** | NOT READY — DOCUMENTATION | DEMO | **P0** | G1 G2 | Founder / Product Owner | 0080, 0083 | NOT READY |
-| **0095** | **Legal / licensing review** of what OpenEMR attribution must remain visible after branding. Do not remove attribution because it is inconvenient | Brief §22 | **Not assessed by any source** | **BLOCKED — DECISION** | REGULATORY VERIFICATION | **P0** | G1 G4 | Legal / Compliance | 0090 | NOT READY |
+| **0095** | **Legal / licensing review** of what OpenEMR attribution must remain visible after branding. Do not remove attribution because it is inconvenient | Brief §22 | **DETERMINED 2026-08-19** — SkyEagle's determination, relayed by the Owner directly in conversation (not a countersigned artefact — same convention as PB-045's clinical verdicts): **full GPL/OpenEMR attribution must remain visible** (licence text, copyright notices, About-page credits); **only minimal/surface branding changes are permitted** (product name, tagline, logo, vendor links). Resolves `EV-090` §8's five routed items (30-34): items 30/31/33 read as consistent with the ruling (third-party favicon and copyright notices untouched, the product-registration modal's "OpenEMR Foundation" consent-copy mention is exactly the kind of attribution the ruling requires to stay); item 34 (`rwt_2026_report.php`'s ONC-certification email instruction) is a separate prohibited-claim question, not resolved by this ruling alone — see `RDY-0004`. **Item 32 (`acknowledge_license_cert.html`) surfaces a real, acknowledged tension**: this local machine's dev-only workaround (`CLAUDE.local.md` §10 — Apache 403 + suppressed links, adopted pending exactly this determination) suppresses access to the page the ruling says must stay visible. Asked the Owner directly whether to reverse it now that the ruling is in — **Owner chose to leave it suppressed for now, no reason given beyond the choice itself.** Not resolved by inference; flagged honestly rather than silently left contradictory. **Whoever provisions a real (non-dev-machine) deployment must not carry this suppression forward without revisiting it against this ruling** | **VERIFIED READY — CLOSED 2026-08-19** — the item's own acceptance criterion (produce the determination) is met; the acknowledged suppression tension is a follow-up flag, not an unmet criterion of this item | REGULATORY VERIFICATION | **P0** | G1 G4 | Legal / Compliance | 0090 | **CLOSED 2026-08-19 — see local suppression caveat in this row** |
 | **0096** | Define support channels, published hours, response target, escalation path and training plan. **No uptime figure may be published — none has been measured** | GTM §15.3 *Support/Training*, §21, §24 | Model defined; **nothing operational**. **Owner decision 2026-08-19 (given directly in conversation): Level 1 — Business Hours selected; response target of first response within 1 business day confirmed**, no longer a candidate — see `EV-096` addendum. Still not met: reflected in the scope template and pilot agreement | NOT READY — DOCUMENTATION | COMMERCIAL | **P0** | G3 G6 | Sales / Pilot Owner | 0064, 0084 | NOT READY |
 
 ### 7.18 Domain Q — Market-expansion and enhancement roadmap (P1–P3, carried from GTM §26 unchanged)
@@ -2010,6 +2010,44 @@ PB-202 closed it four days earlier).
 reconciliation and classification exercise, not a code-fix session. RDY-0016's scoped fix,
 RDY-0083's formal closure check, and RDY-0071's live-verification remain open for whoever picks them up
 next, with pointers above to exactly what's needed.
+
+## PB-301 (2026-08-19) — **Orchestrator: RDY-0095 and RDY-0064 closed on Owner-relayed outcomes; RDY-0033/0034 unblocked and closed as a consequence**
+
+**What happened:** the Owner, directly in conversation, reported two outcomes: (1) SkyEagle's
+licence/attribution determination (RDY-0095, commissioned 2026-08-14, item 5 of PB-300's own "highest
+leverage" list above) — **full GPL/OpenEMR attribution must remain visible; only minimal/surface
+branding changes are permitted**; (2) hosting (RDY-0064) — Dammam / `me-central2` as decided at PB-022,
+**now provisioned**.
+
+**Neither is independently verified by this session** — no access to SkyEagle's actual written opinion
+or the hosting account/instance exists here. Recorded as Owner-relayed, the same honest convention used
+throughout this session for exactly this kind of second-hand professional/factual input (PB-045's
+clinical verdicts, RDY-0002's GTM acceptance). This is a materially different thing from an agent
+inferring or fabricating an outcome — see the register rows themselves for exactly what's attributed to
+whom.
+
+**RDY-0095's closure surfaced a real tension, not swept under it:** `EV-090` §8 had five items routed
+to this determination. Checked all five against the ruling. Four are consistent with it or are a
+separate question (see the RDY-0095 register row for the item-by-item read). The fifth —
+`acknowledge_license_cert.html`, currently 403-blocked with its links suppressed on this local machine
+specifically pending this determination (`CLAUDE.local.md` §10) — is in real tension with "full
+attribution must stay." Asked the Owner directly whether to reverse the suppression now that the ruling
+is in. **Owner chose to leave it suppressed, no reason given.** Recorded exactly that, not a guessed
+justification.
+
+**RDY-0033/0034 closed as a direct consequence:** both were already fully configured live
+(`openemr_name = 'Thiqa'`, `login_tagline_text` changed, vendor-donation/review links off,
+`main_menu_logo_link` repointed — all reconfirmed by direct query before closing, not assumed from the
+register's own stale "Audited state" text) and were blocked on RDY-0095 alone. With RDY-0095 determined
+and the live config already consistent with its "minimal branding changes" allowance, both close on the
+live evidence.
+
+**Gate effect:** RDY-0033/0034 (G1 G2), RDY-0064 (G3 G6), RDY-0095 (G1 G4) all decrement per §0.0 Rule
+3. Full worked table above, this section. **71 P0 registered, 32 closed, 39 open.**
+
+**Not done here:** the downstream chain RDY-0064 was the root of (backup policy, TLS, monitoring,
+RDY-0047's full runbook execution) still needs real configuration work against the newly-provisioned
+host — closing RDY-0064 itself does not close those, and none of them was touched in this pass.
 
 ## PB-350 (2026-08-19) — **Agent F: five direct Owner decisions recorded (RDY-0084, RDY-0086/HR-09, RDY-0096, RDY-0092/RDY-0099, RDY-0083)**
 
@@ -11304,26 +11342,35 @@ each posted its corrected figures only as a log-entry table (lines ~2256, ~2872)
 this dashboard section, reproducing exactly the drift pattern PB-140 itself was created to fix.
 See PB-300 immediately below for the corrected table and narrative.**
 
-### CURRENT — PB-300 (2026-08-19), full re-sync against §7.2–§7.17 plus a live-evidence pass
+### PB-300 (2026-08-19) — superseded four hours later by PB-301, retained for the record
 
-Re-derived directly from the register's own `Blocks` fields under rule 7 (never inferred from
-prose) — see `docs/evidence/EV-GATE-SYNC-20260819.md` §5 for the full worked ID-by-ID derivation.
-**71 P0 registered, 28 closed, 43 open P0.** Every count matches the PB-216 (2026-08-16) baseline
-exactly except G0, which drops by one (RDY-0002 closed 2026-08-16, synced here 2026-08-19).
+~~**71 P0 registered, 28 closed, 43 open P0.**~~
+
+~~| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |~~
+~~|---|---:|---:|---:|---:|---:|---:|---:|~~
+~~| **Open P0 (canonical, PB-300)** | **2** | **15** | **10** | **16** | **3** | **13** | **20** |~~
+
+### CURRENT — PB-301 (2026-08-19), same-day resync after four Owner decisions/relayed outcomes
+
+Re-derived the same way as PB-300 (register `Blocks` fields, rule 7). **71 P0 registered, 32 closed,
+39 open P0.** Four items closed since PB-300, all same day: RDY-0033, RDY-0034 (branding config
+already live, unblocked once RDY-0095 landed), RDY-0064 (hosting provisioning, Owner-relayed), RDY-0095
+(SkyEagle's determination, Owner-relayed — see that row for the acknowledged local-suppression tension
+it also surfaced).
 
 | | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Open P0 (canonical, PB-300)** | **2** | **15** | **10** | **16** | **3** | **13** | **20** |
+| **Open P0 (canonical, PB-301)** | **2** | **12** | **8** | **15** | **2** | **13** | **19** |
 
 | Gate | Status | Open P0 | Main blockers | Next action |
 |---|---|---|---|---|
-| **G0 Strategy governance** | **PARTIAL** | **2** | RDY-0002 CLOSED (Owner accepted VERDICT B, 2026-08-16) · remaining: no claim reviewer actually running a review (0003); prohibited-claim list not packaged downstream, waits on 0003 (0004) | Have the named reviewer (Mohammed Elfouly) run one sample review and record it |
-| **G1 Flagship demo** | **PARTIAL** | **15** | RDY-0013 CLOSED (PB-202, full navigation + registration proof) since this table was last current · RDY-0016's ACL fail-open path found and scoped, fix unwritten · RDY-0042/0043 attempted twice more (PB-217/218) and blocked both times by the coding-agent's own permission classifier refusing credential entry, even with directly-relayed Owner authorization — **not a product defect** · branding identity (0033/0034) waits on the licence determination (0095) · proof assets (0060–0062, 0086, 0090, 0094) cascade from the above | A human must perform the RDY-0042/0043/0038 logins directly, or adjust the session's permission settings — no further agent delegation clears these three |
-| **G2 Seeded commercial demo** | **NOT READY** | **10** | RDY-0037 CLOSED (PB-214, SAR now renders) and RDY-0035 CLOSED (PB-151, pqri placeholders cleared) since this table was last current · remaining: clinical depth (0023) is plain seeding work; documents (0025) blocked on a chronic host-level PHP session bug, not a code defect; 0033/0034/0038/0042/0043/0094 as under G1; D-7 rehearsal (0041) needs 0042/0043 verified first; demo reset (0044) is a bookkeeping close-out against an already-fixed v3 baseline | Seed RDY-0023's clinical depth now — no blocker; close out RDY-0044's bookkeeping against the existing v3-baseline evidence |
-| **G3 Pilot operational readiness** | **NOT READY** | **16** | RDY-0082 fully CLOSED (leg 6, PB-203, authenticated login on the restored instance with a negative control) since this table was last current · RDY-0045's upstream merge **has actually happened** (`8e0eaba90` on-branch) — only a `git push` (blocked on this host's GitHub credentials) remains, this is no longer an undecided item · RDY-0048's DB-password rotation is not merely unstarted, it was attempted three ways and blocked at the same permission-classifier layer as the G1 login items · RDY-0064 (hosting) is the root of a 5-item cascade (0081, 0084, 0085, 0096, plus 0047's full closure) · RDY-0083 (background-service runner) reads as a stale row — both services are live-confirmed active and ticking today, but no formal closure has been run against it | Push `pre-rel820-merge-20260817` and get RDY-0045 off the table; have the Owner rotate the DB credential directly; run RDY-0083 through the formal closure contract rather than treating it as still-open by default |
-| **G4 Ready for Phase 3 Brand** | **BLOCKED** | **3** | **Licence/attribution determination still absent** — commissioned to SkyEagle 2026-08-14, a 2026-08-16 background brief explicitly disclaims being a determination and leaves the actual decision block blank · branding surface walk checklist is issued but unexecuted (0090) | **This is the single highest-leverage open item in the entire register.** Nothing has moved on the actual determination since it was commissioned |
-| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **13** | Same underlying items as G0/G1/G3 above (0003, 0004, 0016, 0056, 0057, 0060–0062, 0086) plus: 0067's status-register extraction is mechanically simple but formally waits on 0003; 0071's code defect is now fixed but not live-verified (same permission-classifier block); 0078 needs primary ZATCA/NPHIES sources read, purely a research task; 0088 has 3 of 9 competitor dossiers left to re-verify | RDY-0078 and RDY-0088's remainder are both closable by research alone, today, with no blocker of any kind |
-| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **20** | Requires G2 and G3, both still open · RDY-0069 explicitly cannot start before a pilot exists · **RDY-0075/0076/0077 (V-1/V-2/V-3 market validation) have had zero calls made since commissioning** — this is the item that has moved least of anything in the register and has no technical predecessor of any kind | **Make the first RDY-0075 call.** Same conclusion as every prior sync: no engineering blocks it, and nothing else in this gate can be validated ahead of it |
+| **G0 Strategy governance** | **PARTIAL** | **2** | RDY-0002 CLOSED · remaining: no claim reviewer actually running a review (0003) — though `EV-055`'s disclosure-text review now stands as a first real sample; prohibited-claim list not packaged downstream, waits on 0003 (0004) | Package RDY-0004 now that 0003 has a sample review on record |
+| **G1 Flagship demo** | **PARTIAL** | **12** | **RDY-0033/0034/0095 all CLOSED today** — the licence/attribution determination landed (full attribution stays, minimal branding changes permitted) and the already-live branding config is now formally unblocked · remaining: RDY-0016's ACL fix scoped, unwritten; RDY-0042/0043/0038 still need a human at the keyboard (browser-check agent in flight); proof assets (0060–0062, 0086, 0090, 0094) still cascade from those | Browser-check agent's results, once back, likely close or advance several of the remaining items directly |
+| **G2 Seeded commercial demo** | **NOT READY** | **8** | **RDY-0033/0034 CLOSED today**, dropping off this gate too · RDY-0023's growth-chart criterion resolved (paediatric conversion seeded, `EV-044` §12), live-render confirmation in flight via the browser-check agent · RDY-0044's dataset content is now complete (v4 baseline), item stays open on its own both-legs-closed rule · 0025 still blocked on the host PHP-session bug | Once the browser-check agent confirms 0023/0042/0043 live, this gate has very little left |
+| **G3 Pilot operational readiness** | **NOT READY** | **15** | **RDY-0064 CLOSED today** (hosting provisioned, Owner-relayed) — drops the root of what was a 5-item cascade, though the downstream items (0081/0084/0085/0047's execution) still need real configuration work against the new host, not closed by this alone · RDY-0045 unchanged (merge done, push still blocked on credentials) · RDY-0048 unchanged (rotation blocked at the tool-permission layer three times) · RDY-0083 decided (pilot host: a proper Windows Service) but not implemented — correctly deferred to real pilot-host provisioning | Configure backup policy/TLS/monitoring against the now-provisioned host; push RDY-0045; Owner rotates RDY-0048 directly |
+| **G4 Ready for Phase 3 Brand** | **PARTIAL, was BLOCKED** | **2** | **RDY-0095 CLOSED today** — this gate's sole hard blocker is gone · remaining: RDY-0004 (downstream packaging, waits on 0003) and RDY-0090 (branding-surface walk, checklist ready, execution in flight via the browser-check agent) | Once RDY-0090's walk lands, this gate is very close |
+| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **13** | Unchanged by today's four closures (none of them block G5) — same items as before: 0003/0004/0016/0056/0057/0060–0062/0086, plus 0067 (waits on 0003), 0071 (code fixed, live-check in flight), 0078 (NPHIES source unreachable), 0088 (3 dossiers unreachable) | RDY-0078/0088's remainder are genuinely stuck on unreachable external sites, not on any decision |
+| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **19** | **RDY-0064 CLOSED today**, one fewer item · still requires G2 and G3 · RDY-0069 can't start without a pilot · **RDY-0075/0076/0077 still zero calls made** — unchanged, the item that has moved least in the whole register | **RDY-0075's first call is still the single most under-leveraged action available** — nothing today changed that ranking |
 
 ### 47.1 The readiness questions, answered separately
 

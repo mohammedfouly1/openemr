@@ -639,3 +639,16 @@ themselves; `EV-044` §12's "Authorisation on record" paragraph is the actual te
 same wall as RDY-0042/0043). **RDY-0044 stays NOT READY** (baseline is current and content-complete,
 but the item's own closure rule needs both legs formally closed, not performed here). **PB-057
 confirmed applied** (was already live before this patch, undocumented until now).
+
+## Orchestrator (main session) — RDY-0095 / RDY-0064 closed on Owner-relayed outcomes, 2026-08-19
+
+**Claim:** RDY-0095, RDY-0064, and their consequence closures RDY-0033/0034. Full detail: `PB-301` in
+the main readiness document. Not re-narrated here — this entry exists so the claim is visible in this
+file's own index without a reader having to search the PB log.
+
+**One thing worth surfacing here specifically, for any future auditor of this file:** RDY-0095's
+determination was checked against `EV-090` §8's five routed items before being accepted as a closure,
+not accepted at face value — one of the five (`acknowledge_license_cert.html`'s local suppression)
+turned out to be in real tension with the ruling. The Owner was asked directly and chose to leave the
+tension unresolved. This is recorded as a live, acknowledged gap in `RDY-0095`'s own register row, not
+smoothed over to make the closure look cleaner than it is.
