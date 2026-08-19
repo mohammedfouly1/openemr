@@ -65,23 +65,36 @@ register for exactly this reason (`EV-067` §5.1).
 ### 2.2 Sensitivity — the qualification
 
 > **"Encounter sensitivity is enforced at the encounter level. It is not applied to demographics,
-> problem lists, notes, documents, or the API. Where an encounter is gated it is invisible, not
-> redacted."**
+> problem lists, notes, documents, or the API. Where an encounter is gated, the reason/notes text is
+> redacted to '(No access)' — the encounter row itself (date, encounter number) still appears in the
+> list."**
+
+> **⚠ CORRECTED 2026-08-19 (PB-380 browser/live-system agent + independent orchestrator re-read,
+> Owner-directed).** This qualification previously read *"it is invisible, not redacted."* Two
+> independent static-code reads of `interface/patient_file/history/encounters.php:506-511/533-536`
+> found the opposite of that claim: the encounter row is echoed unconditionally (line 533/536); only
+> `$reason_string` is replaced with `"(No access)"` when `AclMain::aclCheckCore('sensitivities', ...)`
+> denies. A second layer, `src/Services/EncounterService.php:450-452` (FHIR/REST), similarly returns an
+> explicit denial string rather than omitting the record. **Corrected to the direction the code
+> actually supports — redaction, not invisibility — because the prior wording overstated the privacy
+> protection in customer-facing material.** Still not confirmed against live rendered output (§2.3
+> below); if a live test contradicts this, correct again.
 
 **Prohibited:** *"field-level security"*, *"granular data-level permissions"*, *"record-level
-encryption"*.
+encryption"*, and (as of this correction) **"invisible"** in connection with sensitivity gating.
 
 ### 2.3 ⚠ A material weakness in the sensitivity claim, found while writing this
 
-**Sensitivity gating has never been exercised, in either direction, on any dataset.**
-`SELECT sensitivity, COUNT(*) FROM form_encounter` → **`normal 72`**. There is no
-sensitivity-flagged encounter in the system, so the mechanism behind this qualification is **entirely
-unverified at runtime** (`EV-016` §4.1, which is why three matrix rows are unexecutable).
+**Sensitivity gating has never been exercised, in either direction, on any dataset — and as of
+2026-08-19 still has not been exercised live**, though a sensitivity-flagged encounter now exists
+(`SYN-0014` encounter 31, `sensitivity='high'`, added 2026-08-19) and the browser tooling needed to
+observe it live has been unavailable every time it's been attempted since. The mechanism behind this
+qualification remains **unverified at runtime** (`EV-016` §4.1/§4.4).
 
-**Consequence for claim discipline:** until one sensitivity-flagged encounter exists and A-2 passes,
-**any statement about sensitivity behaviour is an assertion from source reading, not a demonstrated
-capability.** It must be phrased accordingly, and it must not be demonstrated live. Recorded here
-rather than left to be discovered when a prospect asks to see it.
+**Consequence for claim discipline:** until a live test actually renders the gated encounter under a
+non-privileged role, **any statement about sensitivity behaviour is an assertion from source reading,
+not a demonstrated capability.** It must be phrased accordingly, and it must not be demonstrated live.
+Recorded here rather than left to be discovered when a prospect asks to see it.
 
 ---
 
@@ -200,6 +213,16 @@ grep -rniE "[0-9]+ of (16|11|26)[^0-9]{0,60}(competitor|vendor|GCC|market|publis
 
 All three named *"claim-review sign-off (RDY-0003)"* in their acceptance. That sign-off is now
 recorded, closing the same single blocker that RDY-0067 had.
+
+> **⚠ Post-closure correction, same day (2026-08-19).** §2.2's sensitivity qualification text was
+> amended after this table's closures were recorded (see the addendum in §2.2 above) — "invisible, not
+> redacted" corrected to "redacted, not invisible," on two independent static-code reads. **Not
+> reopening RDY-0057**: the closure criteria (qualification defined, scan executed, reviewer sign-off)
+> are about the *discipline process* existing and working, and they still hold — the correction makes
+> the qualification's *content* more accurate, it doesn't undo the process that produced it. Recorded
+> here so a future reader of this status table isn't misled by a stale "0 violations" scan result that
+> ran against the old wording — the scans (C-3/C-4/C-5) never checked this particular sentence's
+> factual accuracy, only whether prohibited terms appeared as unqualified claims elsewhere.
 
 **`Blocks`:** 0056 → G1 G5 (closed) · 0057 → G1 G5 (closed) · 0088 → G5 G6 (closed). Gate-count
 decrement recorded in the main readiness document's PB-372 sync, per §0.0 Rule 3 — not recalculated

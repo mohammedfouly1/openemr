@@ -105,7 +105,7 @@ set"*) is **P1** and was not seeded.
 
 | Row | Leg blocked |
 |---|---|
-| **A-2** | Front Office *"cannot see any encounter carrying a non-empty sensitivity value — invisible, not redacted"*. **No such encounter exists to be invisible.** The entire row is unexecutable |
+| **A-2** | Front Office *"cannot see any encounter carrying a non-empty sensitivity value — invisible, not redacted"* **(⚠ this expected-behavior wording corrected 2026-08-19 — see `EV-056-057-088` §2.2 addendum: two independent static-code reads found the row is redacted, not invisible; re-read this row's own expected behavior as "redacted" accordingly)**. **No such encounter existed at the time this row was written.** A sensitivity-flagged encounter now exists (`SYN-0014` encounter 31, added 2026-08-19) but a live browser session to actually exercise this row has not yet been available |
 | **A-7** | Clinician *"cannot see `high`-sensitivity encounters"* |
 | **A-8** | Accounting *"cannot see sensitivity-flagged encounters"* |
 

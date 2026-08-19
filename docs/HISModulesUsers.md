@@ -1569,8 +1569,11 @@ Derived from the 19 live grants. `Full` = write · `Part` = wsome/mixed ·
 Three consequences worth stating plainly to a customer:
 
 1. **Front Office and Accounting have no sensitivity permission at all.** Any
-   encounter carrying a non-empty sensitivity value is invisible to them
-   entirely — not redacted, invisible.
+   encounter carrying a non-empty sensitivity value has its reason/notes
+   redacted to them — the encounter row itself still appears in the list
+   *(corrected 2026-08-19 from "invisible… entirely," which two independent
+   static-code reads of `encounters.php` contradict; not yet live-confirmed,
+   see `docs/evidence/EV-056-057-088-claim-discipline.md` §2.2)*.
 2. **Clinicians cannot see `high`-sensitivity encounters.** Physicians can.
 3. **Accounting can authorise, code and re-date *any* encounter** (`auth_a`,
    `coding_a`, `date_a`) but cannot open clinical notes. That is a deliberate
