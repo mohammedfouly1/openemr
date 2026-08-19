@@ -356,6 +356,11 @@ class AclMain
     {
         require_once(__DIR__ . '/../../../library/registry.inc.php');
         $tmp = getRegistryEntryByDirectory($formdir, 'aco_spec');
+        if ($tmp === false || $tmp === null) {
+            // No registry row for this form directory at all -- deny, rather than deferring an
+            // absent aco_spec into aclCheckAcoSpec()'s empty-spec-means-unrestricted fail-open path.
+            return false;
+        }
         return self::aclCheckAcoSpec($tmp['aco_spec'], $user, $return_value);
     }
 

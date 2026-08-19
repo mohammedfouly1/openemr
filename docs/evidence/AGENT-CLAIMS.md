@@ -413,3 +413,28 @@ feat/thiqa-branding-foundation` was never attempted (out of this task's authoriz
 
 **RDY-0045 stays NOT READY / open** — a human push (of the tag, then, on review, the branch) is the
 only remaining step in `EV-045`'s own procedure.
+
+## Agent E (Gate-sync auditor) — PB-300..349 (2026-08-19)
+
+**Claim:** RDY-0016, §1a/§1b only (the two confirmed live-exploitable A-10 paths `EV-016-A10-fix-scope.md`
+had already scoped). Not claiming: §2's admin-misconfig call sites (deferred by the scope doc itself),
+§3's 16-orphaned-directory decision (Owner-only), or any of RDY-0016's remaining UI-navigation/browser
+legs (held per the standing classifier-block note elsewhere in this file).
+
+**Done:** implemented both fixes exactly as scoped, resolving §1b's one open implementation question
+(`$ISSUE_TYPES` scope) and tracing the downstream-use concern to a dead end (`AccessDeniedHelper::deny()`
+is `: never`). Added two regression tests to `tests/Tests/Unit/Common/Acl/AclMainTest.php`, both passing
+(3/3, 5 assertions) against the live DB-backed unit suite. Full patch record: PR-19,
+`docs/branding/adr/patch-records.md`.
+
+**Found and corrected, not part of the claimed fix:** `EV-016-A10-fix-scope.md`'s claim that
+`fee_sheet/new.php:1731`'s two literal `aclCheckForm('admin','super')`/`('acct','disc')` calls were
+"unaffected, since they have real registry rows" does not hold — direct query shows zero registry rows
+for either. Traced to stock upstream code (`be636987b7`) that is dead regardless, since it's additionally
+gated on `ippf_specific`, unset on this instance. Corrected in place in `EV-016-A10-fix-scope.md` rather
+than left standing.
+
+**RDY-0016 stays NOT READY** — the two confirmed live-exploitable paths are closed, but the full
+positive/negative authorization matrix (§23.4) is still unexecuted under real role sessions (same
+classifier block as RDY-0042/0043), and §3's Owner decision on the 16 directories is untouched. **Not
+attempting either of those here** — out of this claim's scope.

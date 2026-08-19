@@ -42,6 +42,23 @@ allowing. Per §5.4 of the probe report, the 3 confirmed-registered core forms (
 `newpatient`, and the two literal `aclCheckForm('admin','super')`/`('acct','disc')` calls) are
 unaffected, since they have real registry rows.
 
+> **CORRECTION (2026-08-19, PR-19 implementation pass):** the claim above about the two literal calls
+> is wrong. `SELECT directory, aco_spec FROM registry WHERE directory IN ('admin','acct')` returns
+> **zero rows** on this instance — `fee_sheet/new.php:1731`'s
+> `AclMain::aclCheckForm('admin', 'super') || AclMain::aclCheckForm('acct', 'bill') ||
+> AclMain::aclCheckForm('acct', 'disc')` is not a registered-form lookup at all; it appears to be
+> upstream code that meant to call `aclCheckAcoSpec()` with an ACO-spec string but calls
+> `aclCheckForm()` (a directory lookup) instead — `stock upstream (be636987b7, 2026-03-09), not
+> introduced by this project`. Before the fix, this made the block **fail open unconditionally**
+> (any true value from any of the three always-missing-registry-row calls); after the fix, it
+> **denies unconditionally**. **Verified currently inert either way**: it is additionally gated by
+> `OEGlobalsBag::get('ippf_specific')`, which has **zero rows in `globals`** on this instance (off by
+> default, `library/globals.inc.php:4450`'s own `!empty(...)` guard), so the block does not render
+> before or after this fix. Flagged because the fix-scope's own "unaffected, since they have real
+> registry rows" claim did not hold up under direct verification — the block is unaffected in practice
+> today, but for a different reason (dead code) than originally stated. See PR-19 in
+> `docs/branding/adr/patch-records.md` for the implementation.
+
 **One thing this fix does NOT resolve on its own**: the 16 directories that exist on disk with no
 registry row (`physical_exam`, `treatment_plan`, `sdoh`, `prior_auth`, `transfer_summary`, `note`,
 `clinic_note`, `track_anything`, `requisition`, `gad7`, `phq9`, `painmap`, `ankleinjury`,

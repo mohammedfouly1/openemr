@@ -76,7 +76,12 @@ $info_msg = "";
 // A nonempty thistype is an issue type to be forced for a new issue.
 $thistype = empty($_REQUEST['thistype']) ? '' : $_REQUEST['thistype'];
 
-if ($thistype && !$issue && !AclMain::aclCheckIssue($thistype, '', ['write', 'addonly'])) {
+if (
+    $thistype && !$issue
+    && (!array_key_exists($thistype, $ISSUE_TYPES) || !AclMain::aclCheckIssue($thistype, '', ['write', 'addonly']))
+) {
+    // array_key_exists() guards against a $thistype that isn't a real issue type: $ISSUE_TYPES[$thistype][5]
+    // would then be an undefined index, empty() on it is true, and aclCheckIssue() fails open (returns true).
     AccessDeniedHelper::deny('Not authorized to add issue of this type');
 }
 

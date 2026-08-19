@@ -1075,3 +1075,114 @@ function's other 190+ call sites, so there is no single upstream fix that would 
 browser session and via DOM text extraction (`get_page_text`), both showing `SAR` on every amount;
 figures cross-checked against `ar_activity`/`billing` table contents for `pid=1` and against PB-202's
 own pre-patch numbers as the negative-control baseline.
+
+## PR-19 — `src/Common/Acl/AclMain.php` (+ `interface/patient_file/summary/add_edit_issue.php`)
+
+**BRAND ID:** none — **a security/authorization defect fix, not branding.** Sixth non-branding entry,
+recorded because Invariant 4 / Q1 governs every core edit regardless of motive. **Readiness ref:**
+RDY-0016 (A-10 finding, `EV-016-A10-acl-probes.md` / `EV-016-A10-fix-scope.md` §1a/§1b). **Gates:**
+G1 G3 G5. **Agent:** Agent E (gate-sync auditor, PB-300 range), implementing a fix `EV-016-A10-fix-scope.md`
+had already scoped but left unimplemented.
+
+**Locked-decision exception used:** Invariant 4 residual-edit exception, same framing as PR-18. This
+is a direct fix inside a core authorization function and a core interface script; there is no module
+extension point, event, or filter that reaches either the ACL registry lookup in `AclMain::aclCheckForm()`
+or the inline ACL check in `add_edit_issue.php`.
+
+### What was wrong
+
+**§1a — `AclMain::aclCheckForm()` (`src/Common/Acl/AclMain.php:355`):** when a form directory has no
+row in the `registry` table, `getRegistryEntryByDirectory()` returns `false`. The prior code indexed
+straight into it (`$tmp['aco_spec']`) and passed the resulting `null` into `aclCheckAcoSpec()`, whose
+`empty($aco_spec)` contract treats a missing/empty spec as "no restriction" and returns `true` — so an
+**unregistered** form directory was **more** permissive than a registered one, not less. Three call
+sites reach this with attacker-controlled input: `view_form.php:41` and `load_form.php:40`
+(`AclMain::aclCheckForm($_GET["formname"])`) and `questionnaire_assessments.php:64` (same pattern).
+Combined with `FormLocator::locateFile()` resolving the actual file purely from the filesystem with no
+registry dependency, any authenticated user's request for one of the 16 on-disk form directories with
+no registry row (`physical_exam`, `treatment_plan`, `sdoh`, `prior_auth`, `transfer_summary`, `note`,
+`clinic_note`, `track_anything`, `requisition`, `gad7`, `phq9`, `painmap`, `ankleinjury`, `bronchitis`,
+`CAMOS`, `aftercare_plan`, `LBF`) reached the form's own code with no ACL check ever effectively
+applied.
+
+**§1b — `interface/patient_file/summary/add_edit_issue.php:79`:** `$thistype = $_REQUEST['thistype']`
+was passed to `AclMain::aclCheckIssue($thistype, ...)` without confirming `$thistype` is a real key of
+`$ISSUE_TYPES`. A bogus value makes `$ISSUE_TYPES[$thistype][5]` an undefined array index —
+`empty()` on it is `true` — and `aclCheckIssue()`'s own `empty($ISSUE_TYPES[$type][5])` guard then
+returns `true` (fail open), identical mechanism to §1a but in the issue-type list instead of the form
+registry.
+
+### The fix
+
+```diff
+ public static function aclCheckForm($formdir, $user = '', $return_value = '')
+ {
+     require_once(__DIR__ . '/../../../library/registry.inc.php');
+     $tmp = getRegistryEntryByDirectory($formdir, 'aco_spec');
++    if ($tmp === false || $tmp === null) {
++        return false;   // no registry row at all -- deny, don't defer to the fail-open helper
++    }
+     return self::aclCheckAcoSpec($tmp['aco_spec'], $user, $return_value);
+ }
+```
+
+```diff
+-if ($thistype && !$issue && !AclMain::aclCheckIssue($thistype, '', ['write', 'addonly'])) {
++if (
++    $thistype && !$issue
++    && (!array_key_exists($thistype, $ISSUE_TYPES) || !AclMain::aclCheckIssue($thistype, '', ['write', 'addonly']))
++) {
+     AccessDeniedHelper::deny('Not authorized to add issue of this type');
+ }
+```
+
+`$ISSUE_TYPES` is already a local array in scope at that line (populated at line 40 from
+`OEGlobalsBag::get('ISSUE_TYPES', [])`), so no additional fetch was needed — resolving the one open
+question `EV-016-A10-fix-scope.md` §1b left for the implementer. The downstream use this
+document flagged for tracing (`$irow['type'] = $thistype` at line 322) is unreachable for a bogus
+`$thistype`, because `AccessDeniedHelper::deny()` is declared `: never` and exits before that line can
+run — confirmed by reading its signature, not assumed.
+
+**Deliberately not fixed here (§2 of the fix-scope doc, and §3's Owner decision):** the 8
+admin-misconfiguration-path call sites into `aclCheckAcoSpec()`/`aclCheckIssue()` directly are
+unchanged — they are confirmed latent (zero live `categories`/`issue_types` rows with an empty
+`aco_spec`), and a global fail-closed flip of the shared helpers would silently break any deployment
+deliberately relying on an admin-selected blank ACO spec, which is out of this patch's authorization to
+decide. Also unresolved: **what happens to the 16 now-blocked-instead-of-open form directories** —
+`EV-016-A10-fix-scope.md` §3 names this as an Owner decision (leave blocked / register the
+clinically-relevant subset / explicitly confirm all 16 dead) and none has been made. This fix applies
+§3's "Option A" (leave them blocked) as the safe default, not as a decision on their fate.
+
+**A related finding, corrected but not part of the fix:** `EV-016-A10-fix-scope.md`'s own §1a claimed
+the two literal `aclCheckForm('admin','super')`/`('acct','disc')` calls in
+`interface/forms/fee_sheet/new.php:1731` were "unaffected, since they have real registry rows." Direct
+verification (`SELECT directory, aco_spec FROM registry WHERE directory IN ('admin','acct')`) found
+**zero rows** — the claim was wrong. Traced further: that call site is stock upstream code
+(`be636987b7`, 2026-03-09) that appears to call the wrong function (`aclCheckForm()`, a registry
+lookup, where `aclCheckAcoSpec()` was likely intended), and it is additionally gated by
+`OEGlobalsBag::get('ippf_specific')`, which has zero rows in `globals` on this instance (off by
+default). **Net effect: this block is dead code on this instance both before and after this patch**,
+for a different reason than `EV-016-A10-fix-scope.md` stated. Correction recorded there directly.
+
+### Verification
+
+`php -l` clean on both files. Two tests added to `tests/Tests/Unit/Common/Acl/AclMainTest.php`
+(DB-backed, run via `vendor/bin/phpunit -c phpunit.xml`, **3/3 passed, 5 assertions**):
+
+- `testAclCheckFormDeniesWhenNoRegistryRow` — negative control proving the exact defect: a directory
+  guaranteed to have no registry row now returns `false` (was `true` before the fix).
+- `testAclCheckFormStillResolvesRegisteredForm` — positive control confirming `newpatient` (registered,
+  `aco_spec = 'patients|appt'`) still resolves normally for an admin user, unaffected by the fix.
+
+Live-registry state confirmed by direct query before writing the fix: `fee_sheet` → `encounters|coding`,
+`newpatient` → `patients|appt`; all 16 named orphaned directories and `admin`/`acct` → zero rows.
+
+**Not verified:** an authenticated live HTTP round-trip against `add_edit_issue.php` (would need a
+demo-account login, currently blocked by the same tool-permission classifier documented at PB-217/218
+for RDY-0042/0043/0048) — code-traced and reasoned above instead, consistent with how RDY-0071's
+`pat_ledger.php` CSV fix was left at code-review verification for the same reason.
+
+**RDY-0016 status:** stays **NOT READY** — this closes the two confirmed live-exploitable A-10 paths
+from `EV-016-A10-acl-probes.md` §1, but the full positive/negative authorization matrix (§23.4) this
+requirement calls for has never been executed under real role sessions, and §3's Owner decision on the
+16 directories remains open.
