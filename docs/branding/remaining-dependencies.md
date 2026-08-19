@@ -137,17 +137,23 @@ otherwise the plan's own recorded status is carried forward unchanged.
 | D-9 | Q25-compliant Arabic PDF fonts, engine-configured | **OPEN — directly confirmed, and confirmed further behind than "font sourcing done"** | `brand/typography/fonts/pdf/Amiri-Regular.ttf` and `Amiri-Bold.ttf` **do exist** (fonts sourced), but `grep -rl "Amiri|NotoNaskh" --include=*.php src/ interface/` → **zero matches**. Neither `mpdf` nor `dompdf` has been configured to use them. This is a real, verified gap: font files present, engine wiring absent |
 | D-10 | Repoint/disable product registration endpoint | **OPEN** | Not independently re-checked; `ProductRegistrationService.php`'s cURL removal (per `coverage-matrix.md` row 34) is a related but distinct fact — D-10 itself (a decision, not code) is still recorded open |
 | D-11 | Counsel review of `acknowledge_license_cert.html` | **OPEN — genuinely unresolved** | The page is blocked at the Apache layer (403, confirmed live) and the globals-level links are suppressed, but the file itself still exists unmodified (by design, per `CLAUDE.local.md` §10) and counsel has not reviewed it. Access-suppression is not legal clearance |
-| D-12 | Ratification of `border.strong`/dark `surface.input` derivations | **OPEN, Low severity** | Not independently re-checked |
+| D-12 | Ratification of `border.strong`/dark `surface.input` derivations | **CLOSED 2026-08-19** | `docs/branding-production/16-conflict-resolutions.md` §9 claimed this ratified 2026-08-09; independently re-checked this session — `brand/tokens/thiqa-tokens.json` contains the exact specified values (`borderStrong` `#4B5266`/`#AEB5C4`, `surfaceInput` `#FFFFFF`/`#121A2E`). This row's own "OPEN, not independently re-checked" was itself the stale claim |
 | D-13 | Sign-off on CR-3/CR-9 | **RESOLVED** (per plan) | Consistent with the theme-filename evidence (#10 above: `style_light.css`/`style_dark.css` filenames retained, matching CR-9) |
-| D-14 | Ratify `Q38` template-delivery interpretation | **OPEN, Medium severity** | Not independently re-checked; architectural sign-off, not an engineering artefact |
-| D-15 | Admin theme selector literal label ("Saudi Light/Dark" vs "Light/Dark") | **OPEN, Low severity — and the filenames confirm the fallback wording is what ships today** | Since the theme filenames are `style_light.css`/`style_dark.css` (CR-9, confirmed #10), the selector will show "Light"/"Dark" unless someone changes the label separately from the filename — this pass did not check the actual admin theme-selector UI copy live, so this remains a wording decision, not a verified UI fact |
-| D-16 | Canonical cache-key spec + test matrix | **OPEN, Medium severity** | Not independently re-checked; ties to D-5/A2 (no live Control Plane to key against yet) |
+| D-14 | Ratify `Q38` template-delivery interpretation | **CLOSED 2026-08-19** | `16-conflict-resolutions.md` §2 claimed the namespaced-Twig-path pattern adopted 2026-08-09; independently re-checked — `TwigOverrideListener.php` implements exactly the stated prohibition (`prependPath()`/unnamespaced `addPath()` forbidden for SaaS modules), matching the resolution's §2 spec |
+| D-15 | Admin theme selector literal label ("Saudi Light/Dark" vs "Light/Dark") | **CLOSED 2026-08-19 — Owner ruling, direct conversation** | `16-conflict-resolutions.md` §8 claimed plain "Light"/"Dark" was accepted — **this was independently checked and found wrong**: `ThemeVariant.php:46-47`'s `label()` method literally returns `'Saudi Light'`/`'Saudi Dark'`, contradicting the resolution doc. Surfaced to the Owner as a genuine open decision rather than trusting the resolution doc's false claim; **Owner ruled 2026-08-19: keep "Saudi Light"/"Saudi Dark" as shipped, no code change** |
+| D-16 | Canonical cache-key spec + test matrix | **CLOSED 2026-08-19** | `16-conflict-resolutions.md` §7 claimed the canonical `?t=`/`?v=`+`&rev=` spec defined 2026-08-09; independently re-checked — `saas_branding_revision` global and `branding-tokens.php`'s `?rev=` usage confirmed present in `BrandingGlobalKey.php`/`BrandingService.php`/`Bootstrap.php`, consistent with the spec |
 
-**Plainly stated:** D-3, D-4, D-5, D-6, D-7, D-9, D-10, D-11, D-12, D-14, D-15, D-16 remain open. Of
+**Plainly stated:** D-3, D-4, D-5, D-6, D-7, D-9, D-10, D-11 remain open. Of
 these, this session directly confirmed D-5, D-6, and D-9 are open (not just "still recorded as open" —
 actually re-derived from live command output and source grep this pass). None of the "blocking for
 release" items (D-3, D-9, D-10, D-11) were resolved or could be resolved by engineering work in this
 session; they require legal, product, and business decisions outside this pass's scope.
+
+**UPDATED 2026-08-19:** D-12, D-14, D-16 are now CLOSED (independently re-verified against real code/config,
+correcting this table's own stale "not independently re-checked" status — see their rows above). D-15 is
+also CLOSED, but only after the resolution document's own claim was found to be **factually wrong**
+(code showed the opposite of what it claimed) and a genuine Owner decision was obtained directly — see
+D-15's row for the full trace.
 
 ---
 

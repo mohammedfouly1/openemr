@@ -4,10 +4,19 @@
 **Basis:** `docs/evidence/EV-055-audit-phi-determination.md` §4 measure 5, which specifies this text
 must state what the log records, that values are encoded rather than encrypted, who can read it, and
 the retention. Nothing below is a technical finding — it restates EV-055's already-measured facts in
-customer-facing language. **This is a draft only.** It has not passed RDY-0003 claim review (no
-claim reviewer is named — see `docs/evidence/AGENT-CLAIMS.md` HR-08 row) and no Security Reviewer
-sign-off exists for the disclosure decision itself (see below). Do not publish, quote, or attach to a
-pilot agreement until both of those happen.
+customer-facing language.
+
+> **✅ APPROVED 2026-08-19 — Owner (Mohammed Elfouly), given directly in conversation.** Reviewed the
+> text below as written and approved it as-is, with no changes requested. This also serves as RDY-0003's
+> required first sample artefact passed through claim review — a named reviewer (the Owner, standing in
+> for the not-yet-separately-named claim reviewer role) actually reviewed a real customer-facing claim
+> and recorded a verdict, rather than the role sitting unused. **May now be published, quoted, and
+> attached to the pilot agreement.** The original draft-only caveat below is preserved for the record.
+>
+> *(Original caveat, superseded by the approval above, kept for the record.)* This is a draft only. It
+> has not passed RDY-0003 claim review (no claim reviewer is named — see `docs/evidence/AGENT-CLAIMS.md`
+> HR-08 row) and no Security Reviewer sign-off exists for the disclosure decision itself (see below). Do
+> not publish, quote, or attach to a pilot agreement until both of those happen.
 
 ---
 
