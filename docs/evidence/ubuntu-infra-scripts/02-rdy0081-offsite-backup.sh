@@ -136,6 +136,9 @@ run_mode() {
     fi
   done
 
+  mkdir -p /var/lib/openemr-monitoring
+  touch /var/lib/openemr-monitoring/last-backup-success
+
   echo "[$STAMP] Backup complete."
 }
 

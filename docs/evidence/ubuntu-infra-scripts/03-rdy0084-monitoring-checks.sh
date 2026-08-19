@@ -77,10 +77,17 @@ TIMEREOF
 }
 
 check_m1_availability() {
-  local code body_size
-  code=$(curl -s -o /tmp/m1-body -w '%{http_code}' --max-time 10 'http://localhost/interface/login/login.php?site=default')
-  body_size=$(stat -c%s /tmp/m1-body 2>/dev/null || echo 0)
-  rm -f /tmp/m1-body
+  local code body_size tmpfile
+  tmpfile=$(mktemp /tmp/m1-body.XXXXXX)
+  # Hit HTTPS directly (port 443 vhost serves the app); the port-80 vhost's
+  # only job is an unconditional redirect to the public HTTPS URL, which
+  # would otherwise route this check out through Cloudflare instead of
+  # testing the origin directly. -k because "localhost" won't match the
+  # demo.skyeagle.uk certificate CN -- that mismatch is expected here and
+  # is not what this check is verifying.
+  code=$(curl -sk -o "$tmpfile" -w '%{http_code}' --max-time 10 -H 'Host: demo.skyeagle.uk' 'https://localhost/interface/login/login.php?site=default')
+  body_size=$(stat -c%s "$tmpfile" 2>/dev/null || echo 0)
+  rm -f "$tmpfile"
   if [ "$code" = "200" ] && [ "$body_size" -gt 5120 ]; then
     log OK "M-1 availability: 200, ${body_size}B"
     rm -f "$STATE_DIR/m1-fail-count"
@@ -101,9 +108,14 @@ check_m2_error_rate() {
   [ -f "$errlog" ] || { log WARN "M-2 error rate: log file not found at $errlog"; return; }
   local since_min=5
   local fatal_count warn_count
-  fatal_count=$(find "$errlog" -newermt "-${since_min} minutes" 2>/dev/null | xargs -r grep -c "PHP Fatal error\|E_ERROR\|E_PARSE" 2>/dev/null || echo 0)
-  # Fallback: grep the whole file's tail for recency approximation if -newermt filtering above yields nothing usable
-  warn_count=$(tail -n 500 "$errlog" 2>/dev/null | grep -c "PHP Warning" || echo 0)
+  # grep -c always prints a valid count (including 0) but exits non-zero
+  # when that count is 0 -- a bare "|| echo 0" fallback would then wrongly
+  # APPEND a second "0" on the no-matches path, corrupting the value. "; true"
+  # discards only the exit status, leaving grep's own output untouched.
+  fatal_count=$(find "$errlog" -newermt "-${since_min} minutes" 2>/dev/null | xargs -r grep -c "PHP Fatal error\|E_ERROR\|E_PARSE" 2>/dev/null; true)
+  fatal_count=${fatal_count:-0}
+  warn_count=$(tail -n 500 "$errlog" 2>/dev/null | grep -c "PHP Warning"; true)
+  warn_count=${warn_count:-0}
   if [ "${fatal_count:-0}" -gt 0 ]; then
     send_alert ALERT "M-2 error rate: $fatal_count fatal/parse error(s) found"
   elif [ "${warn_count:-0}" -gt 10 ]; then
@@ -143,14 +155,15 @@ check_m4_database() {
 }
 
 check_m5_backup() {
-  # Relies on the RDY-0081 backup script's local dump as a proxy; a fuller
-  # check would query R2 directly (rclone lsf) for a same-day object.
-  local recent
-  recent=$(find /tmp -maxdepth 1 -name 'openemr-db-*.sql.gz' -newermt '-24 hours' 2>/dev/null | wc -l)
-  if [ "$recent" -eq 0 ]; then
-    send_alert PAGE "M-5 backup: no successful backup detected in the last 24h"
+  # The backup script (02-rdy0081-...) deletes its local temp dump after a
+  # successful upload, so there is nothing to find in /tmp by design -- it
+  # instead touches this marker file on success. Absence/staleness of the
+  # marker is the actual signal, not a leftover local file.
+  local marker=/var/lib/openemr-monitoring/last-backup-success
+  if [ -f "$marker" ] && [ "$(find "$marker" -newermt '-24 hours' 2>/dev/null | wc -l)" -gt 0 ]; then
+    log OK "M-5 backup: last success $(date -r "$marker" -Is)"
   else
-    log OK "M-5 backup: recent backup artifact found"
+    send_alert PAGE "M-5 backup: no successful backup detected in the last 24h"
   fi
 }
 
