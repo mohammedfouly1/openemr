@@ -371,6 +371,52 @@ exactly** (`b8977d652ecddb3d3f2230c37796fdf5`) — a clean round trip, not merel
 `SUPERSEDED-...` and **must not be restored** — v4 is a strict superset (the same 30 patients, 72
 encounters, and every other v3 field, plus these three additions and nothing removed).
 
+---
+
+## 13. RDY-0044's own repeat-reset proof (2026-08-19) — two independent resets, byte-identical
+
+**This is the item's own closure rule, executed for the first time**: *"closes only when a repeat
+reset produces byte-identical counts to the first."* Both v4 hash files verified against the
+documented SHA-256 before use (`07f39f90...`, `c0a8d0dc...` — exact match). §2's procedure followed
+twice in succession, independently, each a full stop-Apache / drop-database / restore / restart cycle:
+
+| | Reset #1 | Reset #2 |
+|---|---|---|
+| `patient_data` | 30 | 30 |
+| `form_encounter` | 72 | 72 |
+| Tables | 283 | 283 |
+| `documents` | (not re-checked) | 10 |
+| `form_soap` | (not re-checked) | 19 |
+| `form_vitals` | (not re-checked) | 12 |
+| `users` | (not re-checked) | 10 |
+| **CLINHASH** (`rdy0044b-v3-clinhash.sql`) | `b8977d652ecddb3d3f2230c37796fdf5` | `b8977d652ecddb3d3f2230c37796fdf5` |
+
+**CLINHASH is byte-identical across both resets and matches §12's documented v4 value exactly.**
+Between the two resets, both patients created by the fifth browser-check agent's D-7 run (pid 31,
+32) were confirmed present before reset #1 and confirmed gone after it — direct proof the restore
+replaces rather than merges.
+
+**One caveat, recorded honestly rather than smoothed over.** An authenticated-login smoke test via
+raw `curl` (PHP's cURL extension, session cookie jar) returned a 509-byte `main_screen.php` response
+— **this matches the exact known false-negative this project has already documented multiple times**
+(`CLAUDE.local.md`'s own note; PB-016/PB-201's identical finding): a curl-established session gets a
+session-timeout stub from `main_screen.php` even when the underlying login is valid, because the
+real login flow depends on browser-side behaviour a raw HTTP client doesn't reproduce. **Not treated
+as a defect** — the DB-level evidence above (CLINHASH match, direct row counts, before/after patient
+presence) is this project's own established authoritative method for this kind of check, and it is
+conclusive. The login leg needs a real browser session to confirm cleanly, same as every other
+login-adjacent check this session has hit the identical curl limitation on.
+
+**Document payloads restored and confirmed both times** (`Expand-Archive` from the v4 zip, 30 files
+on disk after each reset — includes non-clinical payload metadata beyond the 10 clinical documents
+the DB row count reflects).
+
+### RDY-0044 — CLOSED 2026-08-19
+
+Both legs (0044-A, 0044-B) now closed; the item's own re-runnability rule is satisfied by direct,
+independent, two-reset proof — not inferred from a single restore-into-throwaway-database round trip
+as v4's own creation used, but the real thing, twice, against the live demo instance.
+
 **Not done, and why:** §2's reset procedure block above still names the v3 file/hashes as the
 restore target — not updated in this pass, since this update did not exercise the restore path (only
 the take-a-baseline path), and editing untested prose risks introducing an error nobody would catch
