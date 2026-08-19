@@ -927,3 +927,27 @@ in this update was written without a corresponding live action (real HTTP round-
 real server log or DB row) behind it. One tooling limitation worth flagging for future browser-check
 agents: the file-upload MCP tool's local-path restriction has no obvious pre-authorized folder on this
 host — the File/DataTransfer-API workaround above is the reusable pattern.
+
+## Orchestrator (main session) — ninth browser-check agent dispatched, 2026-08-19 (continuing PB-434-460)
+
+**Continuing within the eighth agent's PB-434-460 reservation, starting PB-443** — not re-claiming a
+new range, per that agent's own closing note above. **Claiming:** RDY-0016 (remaining matrix legs),
+RDY-0041 (status check only — do not decide the "twice" wording question, only note if the Owner has
+ruled since), RDY-0060/0061 (SS-03…06, 08…12 — 9 remaining captures), RDY-0086 (per-screen Arabic/RTL
+walk, D-1…D-5/D-7). RDY-0090's reachable leg and RDY-0094 row 6 explicitly OUT OF SCOPE this dispatch
+— both are real defects already correctly documented as blocked/NO-GO by the eighth agent, being
+investigated in parallel by the orchestrator; not to be re-attempted or re-decided here.
+
+**Browser connectivity note**: device `93bb8839-1b42-4f7b-a294-10bf4203dc64` was unreachable at
+dispatch start (`list_connected_browsers` returned `[]` on repeated checks, consistent with
+`CLAUDE.local.md` §12's documented pairing instability). RDY-0016's remaining work did not need a
+browser (real authenticated HTTP via `docs/evidence/harnesses/rdy0016-*.php`, the same method
+PB-012/013/PB-073 established) and was completed first (see PB-443 in the main document): a
+bookkeeping correction (A-3/4/5/6-direct/8/9/11 were already PASS since 2026-08-14, re-confirmed
+fresh today) plus a genuine new negative-row FAILURE at A-7 ("cannot amend another clinician's
+note" — a different physician can open another clinician's real SOAP note by direct URL with no
+denial). RDY-0041's status check (no Owner ruling found on the "twice from a known reset state"
+wording question — left exactly as flagged, not decided) also needed no browser. RDY-0060/0061's
+remaining captures and RDY-0086's Arabic walk are genuinely browser-dependent (real screenshots) and
+are deferred pending reconnection — will be attempted if/when the browser becomes reachable this
+session, otherwise honestly recorded as not-attempted rather than faked.
