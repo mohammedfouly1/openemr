@@ -1069,7 +1069,7 @@ qualification*. Dependencies, not dates.
 |---|---|---|---|---|---|---|---|---|---|---|
 | **0071** | Documented export procedure covering CSV report export, full database export, and document/file export | GTM Pillar 2, D-2, MC-08, O-2/O-3 | Procedure written and executed (PB-045); 7 of 9 reachable CSV reports now verified exporting cleanly (PB-208), 1 had a genuine code defect (`pat_ledger.php`). **`pat_ledger.php` defect FIXED in code** (`6dea39a28`, `6ce9979f5`, code-review verified, `EV-071` §3.5.1). **Live HTTP round-trip obtained 2026-08-19** (browser-check agent, real authenticated session): direct-request CSV export returns `application/force-download`, genuine comma-separated data — the fix is confirmed live, not only by code review. **A separate, previously-unknown gap found in the same check: no UI control existed to trigger it** — only reachable via a hand-crafted request parameter, unlike the other 8 CSV-capable reports. **Fixed same day**: an "Export to CSV" button added to `pat_ledger.php` (mirrors the existing pattern in `appointments_report.php`), `php -l` clean; live UI click-through not obtained (browser extension disconnected before it could be exercised) | READY WITH MANDATORY QUALIFICATION — code defect fixed and live-verified; UI-trigger gap fixed same day but not yet click-tested live; reviewer sign-off (RDY-0003 discipline, not applicable to this DOCUMENTATION item) not separately required | DOCUMENTATION | **P0** | G3 G5 G6 | DevOps / Infrastructure | 0059 | NOT READY — see `EV-071` §5.2; new UI-button fix needs one live click-through before this closes |
 | 0072 | Schema / data-dictionary artefact the customer can be handed | GTM Pillar 2; audit §27.5 | Schema is open and documented upstream; **no customer-facing artefact** | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G6 | OpenEMR Engineer | 0071 | NOT READY |
-| **0073** | Termination and handover procedure — what is delivered, in what format, in what timeframe, by whom, and how it is verified received | GTM Pillar 2, O-3, O-11, §26 brief | **Written** (`EV-073-termination-and-handover.md`, 104 lines, issued 2026-08-14, Agent B) — this cell's "does not exist" was stale since that date. Its own acceptance criterion additionally requires the procedure to be referenced by RDY-0066 (scope template) and RDY-0068 (pilot agreement), and **a dry run performed against the demo system** — none of the three has happened yet | NOT READY — DOCUMENTATION, artefact exists, cross-referencing and dry run pending | DOCUMENTATION | **P0** | G3 G6 | Legal / Compliance + DevOps | 0071 | NOT READY — see `EV-073` |
+| **0073** | Termination and handover procedure — what is delivered, in what format, in what timeframe, by whom, and how it is verified received | GTM Pillar 2, O-3, O-11, §26 brief | **Written** (`EV-073-termination-and-handover.md`, issued 2026-08-14, Agent B). **This cell was stale as of 2026-08-19**: both cross-reference criteria were already met (`EV-066` §B.1/B.4, `EV-068` §1 element 11 — confirmed live, not re-asserted, by the RDY-0073 completion agent). **A full nine-step dry run against the demo system was performed 2026-08-19** (`EV-073` §6): T-1/T-2/T-3/T-4/T-7 executable and well-defined (T-3 re-confirmed live via the still-standing `EV-082` restored instance; T-4 cited from `EV-071`); T-8/T-9 destructive, verified conceptually only, not executed (T-9 found one genuine new gap — no deletion-certificate template file exists yet, though `EV-074`'s D-3 now specifies its required content) | **NOT READY — two genuine legs remain: T-5 (no external delivery channel exists) and T-6 (no external reviewer has confirmed the package readable), both human/infrastructure-blocked, not resolvable by any dry run** | DOCUMENTATION | **P0** | G3 G6 | Legal / Compliance + DevOps | 0071 | NOT READY — see `EV-073` §6 |
 | 0074 | Post-contract data deletion and backup-handling policy, including backups taken during the engagement | Brief §26 | Written 2026-08-16 (`EV-074-post-contract-deletion-policy.md`, AGENT-DOC) — this cell's "does not exist" was stale since that date. D-1 (30-day post-termination deletion) and D-2 (90-day backup ceiling) **Owner-approved as proposed, 2026-08-19** | **VERIFIED READY — CLOSED 2026-08-19** — see `EV-074` §5 | DOCUMENTATION | P1 | G3 | Legal / Compliance | 0073, 0081 | **CLOSED 2026-08-19 — see `EV-074-post-contract-deletion-policy.md` §5. D-5's off-instance leg remains prospective, pending RDY-0064's bucket — not a review gap** |
 
 ### 7.14 Domain M — Validation gates (G6, public launch)
@@ -2307,6 +2307,55 @@ closed, 27 open.** Full per-gate table and narrative in §47, PB-376 block.
 **Not done here:** RDY-0065 (qualification checklist) stays open — it needs three real qualification
 calls conducted, not a review; RDY-0069 (first real pilot) stays open — it needs a signed agreement to
 exist, not merely the requirements this entry approved.
+
+## PB-384 (2026-08-19) — **RDY-0073 completion agent: both cross-reference criteria confirmed adequate; a full nine-step demo-system dry run performed; RDY-0073 stays open on two genuine, unchanged gaps**
+
+**Assignment:** RDY-0073's acceptance criterion has three parts beyond the procedure itself existing —
+referenced by RDY-0066, referenced by RDY-0068, and a dry run performed against the demo system.
+`EV-073` §5 already carried a self-report that the two cross-references were met (2026-08-16,
+AGENT-DOC); this entry re-verifies that claim directly against both target files rather than taking it
+at face value, then performs the dry-run leg, which had not been attempted end-to-end before.
+
+**Cross-references — confirmed adequate, no edit needed.** Read `EV-065-066-069-commercial-artefacts.md`
+§B.1/§B.4 and `EV-068-pilot-requirements.md` §1 element 11/§5 directly. Both name `EV-073` by ID and
+incorporate its procedure by reference rather than restating it — the same "incorporate by reference,
+don't duplicate" convention element 11 itself models. Both citations were real and already in place;
+this pass confirms rather than adds them.
+
+**Dry run — all nine steps (T-1 through T-9) walked against the live seeded demo system, non-
+destructively.** T-1/T-2 are pure process steps, well-defined with no system dependency. T-3 (final
+backup, verified restorable) was re-confirmed live and read-only: `EV-082`'s restored instance
+(`openemr_rdy0082_restore` database, `sites/rdy0082restore/`) is still standing on this host today,
+proving the backup→restore→verify chain without touching the authoritative `openemr` schema. T-4
+(export package) was cited from `EV-071` rather than re-run, per this task's own briefing — and along
+the way this entry found the register's own RDY-0071 row (line 1070) had already been updated
+2026-08-19 by a concurrently-running browser-check agent with a live-verified `pat_ledger.php` export
+and a new not-yet-click-tested UI button, ahead of the `EV-071.md` file itself; recorded honestly as a
+race between two sessions, not fabricated by either. T-7 (remediation) is conceptually well-defined —
+it reuses the T-4 mechanism. **T-8 and T-9 are destructive and were verified conceptually only, exactly
+as this task's own instructions require, never executed:** T-8's mechanism (`users.active`,
+`users.authorized`, the `interface/usergroup/user_admin.php` admin UI) was confirmed real via read-only
+queries against the six seeded demo accounts, all still `active=1`, untouched. T-9's mechanism now has
+a defined timeframe and content spec via `EV-074` (closed 2026-08-19), but this dry run found a genuine
+new gap: **no deletion-certificate template file exists** (`docs/evidence/templates/` holds only
+`export-README.txt`) — named, not silently skipped.
+
+**Two legs remain genuinely unperformed, unchanged from before this session, and cannot be resolved by
+any dry run:** T-5 (no external delivery channel exists) and T-6 (no external reviewer has opened the
+package cold and confirmed it readable) — the same class of human/infrastructure-blocked criterion as
+`EV-071`'s own still-open reviewer leg. Full findings: `EV-073` §6.
+
+**Register row updated** (line 1072) to reflect the confirmed cross-references and the dry-run result
+honestly, replacing the stale "none of the three has happened yet" text. **RDY-0073 stays NOT READY** —
+two of its three acceptance parts are met; the third (dry run) is now substantially and honestly
+exercised but two of its nine steps remain genuinely blocked.
+
+**Gate-count sync.** No item closed this entry — no gate count moved (§0.0 Rule 3).
+
+**Not done here:** no external delivery channel was built and no external reviewer was found or
+simulated — both are out of this session's reach, and inventing either would violate this task's own
+honesty requirement. The deletion-certificate template gap found at T-9 was recorded, not filled — its
+creation was not part of this assignment.
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
