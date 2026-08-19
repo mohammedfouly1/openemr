@@ -297,6 +297,15 @@ locked *for MVP* on a Low-Medium confidence assumption.
 
 ### 1.4 The counts
 
+> ⚠ **This table's "Open P0" figures (23, per-gate breakdown) are STALE as of
+> 2026-08-19 evening** — last synced PB-424, mid-day. A rigorous re-derivation
+> the same evening (programmatic, re-runnable) found **15 open P0 items**, not
+> 23 — see `docs/evidence/EV-gate-count-sync-20260819-evening.md` for the full
+> list, per-gate breakdown, and exact method. That file was deliberately kept
+> separate (§0.0 Rule 2) rather than rewriting this large hand-cross-referenced
+> table in place; whoever next does a full sync should fold it in and remove
+> this notice.
+
 | Measure | Value |
 |---|---|
 | Readiness requirements registered (`RDY-*`) | **114** |
