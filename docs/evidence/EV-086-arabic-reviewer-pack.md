@@ -20,8 +20,10 @@ research task and is out of scope here — see requirements doc line ~9861.
 
 ## CLOSURE DISCIPLINE — read this before anything else
 
-- **Nothing in this pack closes RDY-0086, RDY-0087, or RDY-0063.** All three remain **NOT READY**
-  until HR-09 completes an actual review and records a verdict below.
+- **UPDATE 2026-08-19: HR-09 has now reviewed and passed both Arabic texts (§0, §2, §3.2).** This
+  closes the review leg of RDY-0086 and RDY-0087. **Neither item closes completely from this alone**
+  — RDY-0086 also needs the per-screen Arabic/RTL walk (§1.3), still outstanding pending a live
+  browser session. RDY-0063 was not part of this review pass and remains fully open.
 - **Every Arabic string in this pack is machine-assisted, not native or professionally
   translated.** Each one is individually marked:
 
@@ -46,14 +48,22 @@ competence on the reviewer's behalf.
 
 | Field | Entry |
 |---|---|
-| Reviewer name | |
-| **Basis of authority / responsibility** (native speaker / professional linguist / other — state which, and how) | |
-| Role | |
-| Organization | |
-| Review date | |
-| Items reviewed this pass (0086 / 0087 / 0063 — mark each) | |
-| Verdict per item (PASS / FAIL / CONDITIONAL, with reasoning) | |
-| Evidence reference | |
+| Reviewer name | Mohammed Elfouly |
+| **Basis of authority / responsibility** (native speaker / professional linguist / other — state which, and how) | **Native speaker** |
+| Role | Not stated as relevant by the reviewer |
+| Organization | Not stated as relevant by the reviewer |
+| Review date | 2026-08-19 |
+| Items reviewed this pass (0086 / 0087 / 0063 — mark each) | **0086** (§2 coverage-limitation disclosure) and **0087** (§3.2 PDF-limitation disclosure). **0063 (RTL capture spec) not reviewed this pass** — §4 is a capture specification, not Arabic text, and was not put to the reviewer |
+| Verdict per item (PASS / FAIL / CONDITIONAL, with reasoning) | **§2 (RDY-0086): PASS — all of it.** **§3.2 (RDY-0087): PASS.** Relayed by the Owner directly in conversation with the orchestrating session, 2026-08-19; no additional reasoning beyond the verdicts was given |
+| Evidence reference | This section (§0), addendum below |
+
+> **✅ Relayed by the Owner, 2026-08-19, given directly in conversation with the orchestrating
+> session — not a countersigned document, same convention as every other Owner-relayed review this
+> session (`EV-003` §1, PB-045's clinical verdicts, RDY-0055's Security Reviewer acceptance).** The
+> §2 and §3.2 Arabic texts below are cleared per this verdict — their "PREPARED, NOT REVIEWED"
+> markers are retired. **This does not review §4 (RDY-0063's capture specification) or perform the
+> per-screen Arabic/RTL walk** (§1.3/§4.3 below) — neither is Arabic text for a native reviewer to
+> assess; both still require a live browser session.
 
 ---
 
@@ -146,9 +156,8 @@ exact kind of dual-language disclosure.
 > roughly twenty code paths — mostly in patient records, reports and billing — still use
 > hard-coded left-alignment that the RTL stylesheet does not fully invert.
 
-**Arabic — ⚠ PREPARED, NOT REVIEWED. Awaiting HR-09.** Machine-assisted, not native or
-professionally translated. Do not use in any demo, pilot, or customer-facing context until HR-09
-reviews and either approves or replaces it:
+**Arabic — ✅ REVIEWED, PASS (Mohammed Elfouly, native speaker, 2026-08-19 — §0 above).** Machine-
+assisted in origin, now cleared by native-speaker review:
 
 > واجهة "ثقة" باللغة العربية ترجمة بشرية حقيقية وعالية الجودة — وليست ترجمة آلية — وتغطي 47.5% من
 > نصوص الواجهة (6,291 من أصل 13,235 عبارة)، مع تخطيط يعمل من اليمين إلى اليسار بشكل صحيح. هذا الرقم
@@ -193,10 +202,9 @@ customer contract requiring Arabic PDF output. This is a proven mechanism, not t
 > is a known limitation in the underlying PDF engine, not an incomplete translation, and we are tracking
 > it openly rather than working around it in a way that would produce broken-looking output.
 
-### 3.2 Arabic — ⚠ DRAFT, MACHINE-ASSISTED, UNREVIEWED — verbatim from EV-RB14 §6.2
+### 3.2 Arabic — ✅ REVIEWED, PASS (Mohammed Elfouly, native speaker, 2026-08-19 — §0 above) — verbatim from EV-RB14 §6.2
 
-**PREPARED, NOT REVIEWED. Awaiting HR-09.** Do not use in any demo, pilot, or customer-facing
-context until HR-09 reviews and either approves or replaces it:
+Machine-assisted in origin, now cleared by native-speaker review:
 
 > تدعم واجهة ثقة اللغة العربية والتخطيط من اليمين إلى اليسار في الشاشات المستخدمة في هذا العرض. مستندات
 > PDF — مثل الفواتير والوصفات الطبية والترويسات المطبوعة — غير متاحة بعد باللغة العربية؛ هذا قيد معروف في
@@ -306,5 +314,8 @@ for RDY-0013/0014/0015, RDY-0042 and RDY-0016's UI legs."
 **`Blocks`:** RDY-0086 → G1 G5 · RDY-0087 → G1 G5 · RDY-0063 → G6. No gate count moved by this
 pack (§0.0 Rule 3 — gate counts are recalculated only in a dedicated sync pass).
 
-**Status: RDY-0086, RDY-0087, RDY-0063 all remain NOT CLOSED.** This pack assembles what HR-09
-needs; it performs none of HR-09's review.
+**Status, updated 2026-08-19:** **RDY-0087 — the native-review leg is now the only leg it had, and
+it is done (§0, PASS).** See the main register row for RDY-0087's own closure. **RDY-0086 — review
+leg done (§0, PASS); per-screen walk (§1.3) still outstanding, item stays NOT CLOSED until it
+runs.** **RDY-0063 remains fully NOT CLOSED** — not reviewed this pass, and its capture session
+(§4.3) is also outstanding.
