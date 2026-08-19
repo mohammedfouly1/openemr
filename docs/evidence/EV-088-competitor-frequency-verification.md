@@ -265,6 +265,9 @@ from different network infrastructure rather than accepted as permanently unreac
 this agent, per the closure contract (§0.0 Rule 5) and this task's explicit instruction that closure is
 not this agent's call.
 
+**⚠ Superseded by §8 below (2026-08-19), which narrows this to 3 of the 9 still open — read §9's
+updated accounting before treating this section's "4 indirectly evidenced" figure as current.**
+
 ---
 
 ## 7. Addendum — second independent verification pass (2026-08-16, same session role)
@@ -316,6 +319,9 @@ not treat C-24's identity as settled** — it is at minimum a three-domain situa
 (`dentech.com` US / `dentech.com.sa` Saudi, access-blocked / `dentech.sa` unconfirmed relationship),
 not the two-domain collision Source C and §3 both describe.
 
+**§8 below (2026-08-19) substantially resolves this wrinkle** — see §8.4: "Tech Meta Solution" reads
+as the developer/operator brand behind `dentech.com.sa`, not a mismatched different company.
+
 ### 7.3 Corroboration, no new information
 
 This pass's independent fetches of C-15 (MediSys — live, substantive, matches §3's finding),
@@ -362,3 +368,138 @@ lines added by this addendum (from `## 7.` onward) returns 0. Recorded rather th
 adjusted, per the same discipline `EV-056-057-088-claim-discipline.md` §4.3 applied to its own
 author's violation: the honest number is 2-in-context, not a claimed 0 that does not survive
 literal reproduction of the command shown.
+
+---
+
+## 8. Third independent pass — dossier-scoped claim (2026-08-19)
+
+**Claimed, per `AGENT-CLAIMS.md`, before this section was written:** exactly `C-16`, `C-18`, `C-21`,
+`C-24` — the 4 dossiers this session's own re-read of §3/§4/§7 above found still genuinely open, after
+re-deriving that count from the dossier-level detail rather than trusting either prior summary number
+(see the claim commit for the full method). The other 5 (`C-15`, `C-19`, `C-20`, `C-22`, `C-26`) are
+not touched here — §3/§4/§7 already treat them as terminal (2 confirmed-real-and-live, 1 confirmed
+dead, 1 confirmed unchanged, 1 identity-resolved-with-claim-impact-assessed).
+
+**Method, for continuity with §2/§7:** WebFetch first, WebSearch fallback, capped at 2 direct-fetch
+attempts per URL per this task's own convention. Date accessed for all 4: **2026-08-19**.
+
+### 8.1 C-18 — MAEN.MEDS / M3n Technology: direct fetch now succeeds
+
+- **Accessed:** 2026-08-19, WebFetch to `meds.m3ntech.com` (the exact subdomain §3/§7 only ever saw
+  via WebSearch snippets) — **succeeded on the first attempt.**
+- **Found:** "M3N MEDS" (مؤسسة معن لتقنية المعلومات / M3nTech) — a web-based clinic management system,
+  bilingual (Arabic/English) login page, versioned **"Build 15"** with an update date of
+  **01/07/2026** — i.e. actively maintained into this year, not a stale snapshot. Username/password
+  authentication confirmed live.
+- **Not found:** No audit-trail, RBAC, configurability, or pricing claims on the login page itself
+  (expected — it is an authentication gate, not a marketing homepage); ZATCA/NAPHIS badges seen in
+  §3's WebSearch-only pass were not re-confirmed on this specific page (they may live on a different
+  page of the same product).
+- **Does the original claim still hold? No — and this is now confirmed, not inferred.** §3/§7 already
+  concluded C-18 "no longer holds as no verified marketing surface" from indexed search content alone;
+  this pass confirms the identical conclusion via a successful direct fetch of the live product. **C-18
+  moves from "indirectly evidenced" to resolved** — no further reachability research needed. The
+  MAEN.MEDS/MEDS(ambiguous)/MEDEX/Medex Horizon identity-cluster question (Source C §24.2 item 2)
+  remains untouched, as it was in §3 — that is a separate task.
+
+### 8.2 C-16 — TEKNOSys PolyCare: original domain still unreachable, identity now on firmer ground
+
+- **Accessed:** 2026-08-19, WebFetch to `teknosysweb.com` (bare domain) — **HTTP 520**, the same
+  Cloudflare error §3 and §7 both recorded against this exact domain. This is the **third independent
+  session** in which `teknosysweb.com` has returned this identical error — no longer read as
+  transient.
+- **Found (via WebSearch):** Search results show a **parallel page structure across both domains**:
+  `teknosysweb.com/about-us/` and `teknosys.net/about-us/` both indexed, and matching product-login
+  paths — `teknosysweb.com/inventory/signin/` alongside `teknosys.net/inventory/dashboard/`. This is
+  stronger, more specific evidence than §7.1 had (which relied on matching prose descriptions) — the
+  *same application paths* exist on both domains, consistent with one platform served from two
+  domains, not two coincidentally-similar companies.
+- **Not found:** No direct fetch of `teknosysweb.com` has ever succeeded, in any of 3 independent
+  sessions (§3, §7, this pass) — 6 total attempts, uniformly HTTP 520. `teknosys.net` was fetched
+  directly and succeeded in §7.1 (not repeated here).
+- **Does the original claim still hold? No, on identity — same-domain reachability remains
+  unresolved.** Treat `teknosysweb.com` itself as unlikely to answer a future direct-fetch attempt
+  without different network infrastructure (§6's own suggestion); `teknosys.net` is the reachable
+  surface for this vendor going forward. Recorded as **live real vendor, most likely same-entity as
+  the confirmed-reachable `teknosys.net`, original dossier domain durably unreachable** — better
+  evidenced than §7.1 but not fully closed, since "most likely" is not "confirmed."
+
+### 8.3 C-21 — HMISFOX: DNS failure now confirmed durable across 3 sessions; still the most stubborn of the 9
+
+- **Accessed:** 2026-08-19, WebFetch to `www.hmisfox.com` and `hmisfox.com` — **both `ENOTFOUND`**,
+  identical to every prior attempt. Across §3 (2 attempts), §7.3 (4 attempts), and this pass (2
+  attempts): **8 total direct-fetch attempts, 0 successes, 0 variation in error type.**
+- **Found (via WebSearch, fresh):** Search engines still index a live-looking site — homepage,
+  `/careers`, `/news-and-events/electronic-bills`, `/partners` — unchanged in kind from §3's finding.
+  One new identity nugget: a discrepancy between a stated 2013 founding and an on-site note suggesting
+  operation since 2008 under a named individual ("SAAD MUSLIM AL AMERI") — not resolved, not material
+  to the reachability question, recorded rather than chased further (identity-cluster work is out of
+  this file's scope per §5).
+- **Does the original claim still hold?** **Still ambiguous, but the ambiguity itself is now better
+  characterised.** This is not a transient error pattern like C-16's 520s or C-24's 403s — it is a
+  **consistent DNS resolution failure specific to this tool's network path**, while a completely
+  different piece of infrastructure (a search engine's crawler) evidently still reaches the domain.
+  That split — reachable to indexing, unreachable to direct fetch, unchanged across 3 independent
+  sessions — is itself the most stable finding available for C-21. **Not upgraded to "confirmed dead"**
+  (unlike C-20, which had a positive, reproducible "Account Suspended" response) and **not upgraded to
+  "confirmed live"** (no direct read ever succeeded). Recorded honestly as the one dossier of the 9
+  where more research through this tool's own network path is very unlikely to add anything further —
+  the next genuinely new step is a fetch from different infrastructure, not another attempt from here.
+
+### 8.4 C-24 — DenTech KSA: the domain cluster clarifies rather than resolves; content still unread
+
+- **Accessed:** 2026-08-19. Direct WebFetch to `dentech.sa` — **HTTP 403** (same block as
+  `dentech.com.sa` in §3/§7). Direct WebFetch to `dentechmeta.com` — **connection refused**
+  (`ECONNREFUSED`), a different failure mode from every other attempt in this file.
+- **Found (via WebSearch):** Two findings that materially reframe §7.2's "identity got more
+  complicated" note:
+  1. **"Tech Meta Solution" reads as the developer/operator brand, not a mismatched company.**
+     `dentechmeta.com`'s own indexed title is *"Tech Meta Solutions | Healthcare software development
+     company in Riyadh, Saudi Arabia"* — the same page-title string §7.2 found on
+     `dentech.com.sa/en/about-ar.html`. Read together, this is the same pattern already established
+     elsewhere in this file (M3n Technology develops M3N MEDS at `meds.m3ntech.com`; AFI Technologies
+     develops Solver Healthcare) — a developer company operating a distinctly-branded product site, not
+     an identity collision.
+  2. **A fourth domain surfaced:** `dentechksa.com` ("Dentech Ksa" — a login page), on top of the
+     `dentech.sa` ("Dentech AI — Dental ERP & Electronic Dental Records") §7.2 had already found.
+     `dentech.sa`'s own marketing text claims **"over 20 years of experience in the Saudi market"** —
+     the identical tenure claim WebSearch surfaces for `dentech.com.sa`. That specific, matching claim
+     is the strongest evidence in this file that `dentech.com.sa`, `dentech.sa` and `dentechksa.com`
+     are the same vendor's current/legacy/regional domains, not three separate competitors — but it is
+     still an inference from matching prose, not a direct read of any of them (all three either 403,
+     refuse connection, or were never tried this session).
+- **Not found:** No direct page content from any domain in the cluster — audit-trail, RBAC,
+  configurability and pricing claims remain completely unread, exactly as in §3 and §7.
+- **Does the original claim still hold?** **Identity substantially clarified, content question fully
+  open, unchanged from §7.** The three/four-domain situation reads far more like one vendor's domain
+  history than a genuine multi-competitor collision, but this file has still never successfully read a
+  single page of `dentech.com.sa`, `dentech.sa`, `dentechmeta.com` or `dentechksa.com` directly — every
+  attempt across 3 sessions has 403'd or refused the connection. This is the one dossier of the 4
+  claimed here where identity work moved furthest and content verification moved not at all.
+
+## 9. Updated remainder accounting (2026-08-19) — supersedes §6's "4 dossiers" language for these four
+
+**After this pass, 6 of 9 are terminal** (unchanged from §5's list plus one promotion): `C-15`, `C-18`,
+`C-19`, `C-20`, `C-22`, `C-26`. `C-18` is newly terminal this pass — §8.1's direct fetch confirms what
+§3/§7 could previously only infer from search snippets.
+
+**3 of 9 remain genuinely open** — `C-16`, `C-21`, `C-24` — each for a different, specific reason, not
+interchangeably "unverified":
+
+| Code | What's missing | What would resolve it |
+|---|---|---|
+| C-16 | A successful direct fetch of the *original dossier domain* (`teknosysweb.com`) itself — `teknosys.net` is reachable and matches on identity, but "most likely the same vendor" is not "confirmed" | A fetch of `teknosysweb.com` from different network infrastructure, or explicit same-entity confirmation (e.g. a page on either domain naming the other) |
+| C-21 | Any direct read at all — 8 attempts across 3 sessions, 0 successes, DNS failure every time, while search-engine indexing still finds the site | A fetch from different network infrastructure/DNS resolver; this tool's own path is very unlikely to ever succeed here |
+| C-24 | Any direct read at all — 403/refused on every domain in a now-4-domain cluster, across 3 sessions | A fetch from different network infrastructure, or a bot-blocking-tolerant method; identity clarity (§8.4) does not substitute for reading actual product-claim content |
+
+**Note on a discrepancy with the register:** `docs/Marketing-MVP-and-Launch-Readiness-
+Requirements.md` §47 (PB-300 sync, 2026-08-19) and `EV-GATE-SYNC-20260819.md:117` both already say "3
+remaining" for RDY-0088. Before this pass that number did not hold up against the dossier-level detail
+(this file's own `AGENT-CLAIMS.md` claim entry, written earlier today, shows the derivation — 4 were
+actually open, not 3). **After this pass, the count genuinely is 3** — but by coincidence of today's
+new work resolving C-18, not because the register's earlier arithmetic was correct. Recorded so a
+future reader does not conclude the register was right all along for the wrong reason.
+
+**RDY-0088 is still not closeable.** Even with 6 of 9 now terminal, none reached Source C's own
+Full/Verified depth standard (§2's own caveat, unchanged), and 3 dossiers remain genuinely open. No
+frequency figure is published in this file or anywhere else as a result of this pass.

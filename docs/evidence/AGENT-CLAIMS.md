@@ -475,6 +475,20 @@ as untouched in `EV-088` §5), and any frequency recomputation (`EV-088` §5/§6
 even full resolution of these 4 would not by itself meet Source C's Full/Verified depth standard
 required before recomputation).
 
+**DONE (not closed) — result of the claim above.** Full findings appended to `EV-088-competitor-
+frequency-verification.md` §8/§9. Of the 4 claimed: **`C-18` is now terminal** (direct WebFetch to the
+actual live product subdomain, `meds.m3ntech.com`, succeeded — confirms what §3/§7 could previously
+only infer from search snippets). **`C-16`, `C-21`, `C-24` remain open**, each for a distinct,
+specific-not-generic reason recorded in `EV-088` §9's table (original-domain reachability unconfirmed;
+durable DNS failure across 3 sessions/8 attempts; content unread across a now-4-domain cluster despite
+identity clarity). **Net: 6 of 9 dossiers now terminal, 3 remain** — `C-16`, `C-21`, `C-24`. This
+happens to match the PB-300/`EV-GATE-SYNC-20260819.md` "3 remaining" figure, but only as of this pass
+— before it, that figure did not hold up against the dossier-level detail (see the claim above). **Not
+closing RDY-0088** — its acceptance criterion needs Source C's Full/Verified depth re-run against all
+9, which homepage-level spot checks (this pass included) do not meet even for the 6 now-terminal
+dossiers; per this task's own instruction, the register row is left untouched rather than updated on
+partial progress.
+
 ## Agent (Claude Code) — RDY-0108, `audit_events_lab-order` metadata fix (2026-08-19)
 
 **Claim: RDY-0108 only** — "Add `audit_events_lab-order` to `$GLOBALS_METADATA` so lab-order events
