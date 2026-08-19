@@ -422,7 +422,7 @@ $twig = (new TwigContainer(null, OEGlobalsBag::getInstance()->getKernel()))->get
         // rewritten to the modern `option_id`/`title` shape, so the next
         // load doesn't have to redo the work.
         if ($valid_tabs !== $default_open_tabs) {
-            $session->set('default_open_tabs', $valid_tabs);
+            SessionUtil::setSession('default_open_tabs', $valid_tabs);
         }
         // For now, only the first tab is visible, this could be improved upon by further customizing the list options in a future feature request
         $visible = "true";

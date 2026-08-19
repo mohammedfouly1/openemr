@@ -727,13 +727,13 @@ class EncounterService extends BaseService
      * @param  $encounter_id The identifier of a particular encounter
      * @return string         sensitivity_level of first row of encounter data
      */
-    public function getSensitivity($pid, $encounter_id)
+    public function getSensitivity($pid, $encounter_id): string
     {
         $encounterResult = $this->search(['pid' => $pid, 'eid' => $encounter_id], $options = ['limit' => '1']);
         if ($encounterResult->hasData()) {
-            return $encounterResult->getData()[0]['sensitivity'];
+            return (string) ($encounterResult->getData()[0]['sensitivity'] ?? '');
         }
-        return [];
+        return '';
     }
 
     /**

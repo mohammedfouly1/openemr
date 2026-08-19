@@ -50,9 +50,9 @@ if (!str_starts_with((string) $_GET["formname"], 'LBF')) {
     // reachable by any role authorized for the form type in general. Apply the same
     // 'sensitivities' ACL object check already used to gate the Visit History listing
     // (interface/patient_file/history/encounters.php) so this entry point enforces it too.
-    if (!empty($pid) && !empty($encounter)) {
+    if (isset($pid, $encounter) && is_numeric($pid) && is_numeric($encounter)) {
         $sensitivity = (new EncounterService())->getSensitivity((int) $pid, (int) $encounter);
-        if (!empty($sensitivity) && !AclMain::aclCheckCore('sensitivities', (string) $sensitivity)) {
+        if ($sensitivity !== '' && !AclMain::aclCheckCore('sensitivities', $sensitivity)) {
             AccessDeniedHelper::denyWithTemplate("Sensitivity ACL check failed for encounter", xl("Not Authorized"));
         }
     }
