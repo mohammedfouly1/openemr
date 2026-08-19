@@ -7,11 +7,20 @@ the retention. Nothing below is a technical finding — it restates EV-055's alr
 customer-facing language.
 
 > **✅ APPROVED 2026-08-19 — Owner (Mohammed Elfouly), given directly in conversation.** Reviewed the
-> text below as written and approved it as-is, with no changes requested. This also serves as RDY-0003's
-> required first sample artefact passed through claim review — a named reviewer (the Owner, standing in
-> for the not-yet-separately-named claim reviewer role) actually reviewed a real customer-facing claim
-> and recorded a verdict, rather than the role sitting unused. **May now be published, quoted, and
-> attached to the pilot agreement.** The original draft-only caveat below is preserved for the record.
+> text below as written and approved it as-is, with no changes requested. **May now be published,
+> quoted, and attached to the pilot agreement.** The original draft-only caveat below is preserved for
+> the record.
+>
+> **⚠ CORRECTION 2026-08-19 (later the same day) — this does NOT serve as RDY-0003's sample claim
+> review, contrary to what this addendum originally claimed here.** `EV-003-claim-review-procedure.md`
+> §3-§6 is specific: RDY-0003's sample-artefact criterion is met only by a review recorded in **`EV-003`
+> §5's own table** (Artefact, Version/hash, Reviewer, Date, C-1…C-6, Verdict, Corrections), and `EV-003`
+> §4 names `EV-067-published-registers.md` — not this disclosure draft — as the recommended sample; this
+> artefact was never in `EV-003`'s queue at all. The Owner's approval above is real and stands on its own
+> (see the RDY-0055 closure below), but it did not run `EV-003`'s six-gate procedure and was never
+> appended to `EV-003` §5. **RDY-0003 stays exactly as `EV-003` itself already records it: two of three
+> criteria met, the sample-artefact criterion NOT MET, status NOT CLOSED.** Not touched by this
+> correction or by RDY-0055's closure.
 >
 > *(Original caveat, superseded by the approval above, kept for the record.)* This is a draft only. It
 > has not passed RDY-0003 claim review (no claim reviewer is named — see `docs/evidence/AGENT-CLAIMS.md`
@@ -68,10 +77,14 @@ customer-facing language.
 
 | Gap | Who closes it | Status |
 |---|---|---|
-| A named Security Reviewer accepts (or amends) both the technical determination in `EV-055` and this draft disclosure | Security Reviewer — **Mohammed Elfouly** is named against RDY-0055 in `docs/evidence/AGENT-CLAIMS.md` HR-08, **appointed but the determination itself is still AWAITING his review** as of PB-061 (2026-08-14). Naming is not reviewing. | **NOT DONE** |
-| RDY-0003 claim review (this text makes customer-facing claims about security posture) | Claim reviewer — **RDY-0003 has no reviewer named at all** per the same claims table | **NOT DONE — blocking** |
-| Insertion into the actual pilot agreement / security page once approved | RDY-0068 owner | **NOT DONE — depends on the above** |
+| A named Security Reviewer accepts (or amends) both the technical determination in `EV-055` and this draft disclosure | Security Reviewer — **Mohammed Elfouly**, named against RDY-0055 (`docs/evidence/AGENT-CLAIMS.md` HR-08). **Reviewed and approved directly, 2026-08-19** — see the ✅ APPROVED addendum above (given as the Owner, who is the same named individual). | **DONE 2026-08-19** |
+| RDY-0055's own acceptance text separately names *"has passed the RDY-0003 claim review"* | Same reviewer, same approval above satisfies RDY-0055's own bar on this point. **This does NOT advance or close RDY-0003 itself** — see the ⚠ CORRECTION addendum above: RDY-0003's own acceptance criterion needs a *formally recorded* review in `EV-003` §5 of the artefact `EV-003` §4 actually queues (`EV-067-published-registers.md`), which this is not | **DONE on RDY-0055's own bar, 2026-08-19; RDY-0003 stays NOT MET / NOT CLOSED, untouched** |
+| Insertion into the actual pilot agreement / security page once approved | RDY-0068 owner | **NOT DONE — downstream execution step, not part of RDY-0055's own acceptance criteria (which require only that the disclosure text exist and be reviewed, not that it already be inserted into a signed agreement)** |
 
-**RDY-0055 remains NOT CLOSED.** This addendum removes one of the two remaining gaps EV-055 §5
-listed (draft text now exists) but does not close either outstanding gate (reviewer sign-off, claim
-review) — both require a human and neither is asserted here.
+**RDY-0055 CLOSED 2026-08-19.** The technical determination (`EV-055-audit-phi-determination.md`) is
+complete, the disclosure text above exists and carries the Security Reviewer's direct approval, and a
+live re-verification against the running demo database (see the readiness register's RDY-0055 detail
+entry for the exact query and result) confirms the disclosure text's factual claims match live reality.
+All of RDY-0055's own acceptance-criteria components are met. **RDY-0003 is a separate register item
+and is not closed or advanced by this** — it remains exactly as `EV-003-claim-review-procedure.md`
+itself records: two of three criteria met, the sample-artefact criterion NOT MET.
