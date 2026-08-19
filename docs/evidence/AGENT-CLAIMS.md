@@ -965,3 +965,14 @@ it. Files changed: `interface/patient_file/encounter/view_form.php`,
 `73f906200` (register/PB-log update). Did not touch RDY-0060/0061/0086/0090/0094 or the demo
 database — a separate agent (Codex, briefed via a standalone prompt) is expected to work the
 remaining browser-dependent items; avoided any DB reseed to prevent colliding with it.
+
+## Codex built-in-browser continuation — PB-445…PB-448, 2026-08-19
+
+**Continuing the ninth browser-check claim in the still-reserved PB-434…PB-460 range.**
+PB-445…PB-448 are reserved for the user-requested direct built-in-browser work on
+RDY-0060/0061 (SS-03…SS-06 and SS-08…SS-12), RDY-0086 (Arabic/RTL D-1…D-5/D-7
+visual walk), RDY-0090 (one bounded About Thiqa attempt), and RDY-0094 sequencing only.
+The browser is one visible Codex in-app tab with one authenticated identity at a time.
+No Apache restart, database reset, or reseed is authorized by this claim. RDY-0094's
+stale-data evidence is checked before any calendar/flow recapture; no reseed will be
+performed without the Owner.
