@@ -540,3 +540,30 @@ gap is now one trivial CI commit.
 legs remain undefined — target confirmation and gap closure answer *which upstream* and *how far
 behind*, not *how we stay current going forward*. The push-credential blocker above (a) is also
 unchanged — 191 commits (was 162) now unpushed, for the same reason.
+
+---
+
+# ADDENDUM 2026-08-19 (second) — cadence recorded; rollback drill remains the only leg outstanding
+
+> **✅ Owner decision, given directly in conversation with the orchestrating session.** Approved the
+> proposed cadence as written, with no change requested.
+
+## Patch cadence — RDY-0045's third acceptance leg
+
+| Field | Value |
+|---|---|
+| **Owner** | OpenEMR Engineer (the role already assigned to this item in the register) |
+| **Review interval** | Monthly — `git fetch upstream rel-820`, read-only, then review the delta |
+| **Security-relevant commits** | Applied immediately on discovery, not batched to the monthly window |
+| **Non-security commits** | Batched and applied within the monthly review window |
+| **Target** | `upstream/rel-820`, per the first ADDENDUM above — re-confirmed at each review, since `rel-820` stops receiving fixes once 8.3.0 ships and the target question reopens at that point, not before |
+
+**This records the cadence leg of RDY-0045's acceptance criteria** ("a cadence with an owner and a
+review interval is recorded"). Two legs remain: **the rollback drill** (a tagged pre-update ref plus
+a proven database restore, per RDY-0082 — Owner-authorized 2026-08-19, scheduled to run once the two
+currently-active agents are confirmed finished, so it doesn't collide with their live session/data),
+and **the post-update smoke test** (application starts, authenticated login succeeds), which is the
+same drill's final step, not a separate action.
+
+**RDY-0045 does not close from this addendum.** The cadence is recorded; the drill that proves the
+rollback approach is still outstanding, deliberately deferred, not forgotten.

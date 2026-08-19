@@ -37,6 +37,7 @@ the first.
 | **PB-416** | **Orchestrator (main session)** — RDY-0087 closed 2026-08-19: Owner relayed HR-09 (Mohammed Elfouly)'s native-speaker PASS review of both Arabic disclosure texts; §40 row 9's stale "no font in tree" reason corrected to the actual GPOS-shaping finding. RDY-0086's review leg met by the same relay; its per-screen walk stays open. **Range claimed 2026-08-19.** |
 | **PB-417 … PB-420** | **Orchestrator (main session)** — sixth subagent, 2026-08-19: source/DB-read-only continuation of RDY-0090 (branding surface walk) and RDY-0094 (no-go rehearsal), deliberately excluding anything touching Apache/the DB/the browser to avoid contending with the still-running PB-407-412 browser dispatch. **Range claimed 2026-08-19.** |
 | **PB-421** | **Orchestrator (main session)** — Owner authorizes RDY-0025's Apache-restart fix and RDY-0044's repeat demo reset, 2026-08-19, both scheduled post-dispatch (once PB-407-412 and PB-417-420 are confirmed finished) to avoid disrupting either agent's live session/data. **Range claimed 2026-08-19.** |
+| **PB-422** | **Orchestrator (main session)** — Owner approves RDY-0045's monthly patch cadence, 2026-08-19: `git fetch upstream rel-820` monthly, security-relevant commits applied immediately, owner = OpenEMR Engineer. Records the cadence leg; only the rollback drill (already authorized, scheduled post-dispatch) remains. **Range claimed 2026-08-19.** |
 | PB-380 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
@@ -1022,7 +1023,7 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0045** | Close the upstream gap (**373 commits behind** at audit) and establish an ongoing patch cadence with a rollback approach and a regression check | GTM §25 Phase 2, §26 P0, L-27; audit EB-10 | *Historical (2026-08-09):* 0 ahead / 373 behind; HEAD dated 2026-07-04. **418-behind figure (2026-08-13) measured against the wrong target** (`upstream/master`, a pre-release branch) — `EV-045` (2026-08-14) found only 83 behind against the branch's actual release line, `upstream/rel-820`, with 3 lines of runtime code and zero security-relevant commits in the gap. **Owner confirmed `rel-820` as the maintenance target, 2026-08-19.** A read-only `git fetch upstream rel-820` run the same day found **the branch was already merged with `rel-820` on 2026-08-17** (`8e0eaba90`, "merge: adopt upstream/rel-820") — current gap is **1 commit behind**, a CI/docker byte-identical auto-sync with no runtime content. R-03 re-derived from Severe to Minor accordingly (§43) | READY WITH MANDATORY QUALIFICATION — target decided and gap closed to a trivial CI commit; **cadence, rollback approach and regression check are still undefined**, and git push (13 unpushed commits) remains blocked on credentials | PATCH / DEPENDENCY | **P0** | G3 G6 | OpenEMR Engineer | 0001, 0047 | NOT READY — target/gap legs resolved 2026-08-19; cadence/rollback/regression-check/push legs remain, see `EV-045` addendum |
+| **0045** | Close the upstream gap (**373 commits behind** at audit) and establish an ongoing patch cadence with a rollback approach and a regression check | GTM §25 Phase 2, §26 P0, L-27; audit EB-10 | *Historical (2026-08-09):* 0 ahead / 373 behind; HEAD dated 2026-07-04. **418-behind figure (2026-08-13) measured against the wrong target** (`upstream/master`, a pre-release branch) — `EV-045` (2026-08-14) found only 83 behind against the branch's actual release line, `upstream/rel-820`, with 3 lines of runtime code and zero security-relevant commits in the gap. **Owner confirmed `rel-820` as the maintenance target, 2026-08-19.** A read-only `git fetch upstream rel-820` run the same day found **the branch was already merged with `rel-820` on 2026-08-17** (`8e0eaba90`, "merge: adopt upstream/rel-820") — current gap is **1 commit behind**, a CI/docker byte-identical auto-sync with no runtime content. R-03 re-derived from Severe to Minor accordingly (§43). **Owner approved a monthly patch cadence, 2026-08-19** — `git fetch upstream rel-820` monthly, security-relevant commits applied immediately, non-security batched to the review window, owner = OpenEMR Engineer; see `EV-045` second addendum | READY WITH MANDATORY QUALIFICATION — target decided, gap closed to a trivial CI commit, cadence recorded; **only the rollback drill remains undefined** — Owner-authorized, scheduled once the two currently-active agents finish, per §0.0 collision-avoidance; git push (191 unpushed commits) remains blocked on credentials, unrelated to this item's own acceptance | PATCH / DEPENDENCY | **P0** | G3 G6 | OpenEMR Engineer | 0001, 0047 | NOT READY — only the rollback drill (+ its smoke test) remains; target/gap/cadence legs all resolved 2026-08-19, see `EV-045` |
 | **0046** | Resolve provenance of `oe-module-claimrev-connect` — gitignored, composer-installed, source not under version control | Audit §20.6 #12, L-27; GTM §24 | Supply-chain provenance gap | **VERIFIED READY — CLOSED BY PHASE 2B (PB-048)** — determination: RETAIN, fully traced, upstream-required, inert | PATCH / DEPENDENCY | **P0** | G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-14** |
 | **0047** | A documented, repeatable deployment runbook for a fresh clinic instance — every manual step, the expected Windows/Apache/MariaDB environment, environment-specific configuration separated from code | GTM §25 Phase 2 gate | **Written** (`EV-047-deployment-runbook.md`, 315 lines, issued 2026-08-14, Agent B) — this cell's "no runbook exists" was stale since that date. The document itself states its own acceptance criterion has not been met: **"has never been executed by anyone."** Someone who did not author it must follow it and not have to ask a question it fails to answer, against a real target — needs RDY-0064's hosting to exist for a full run | NOT READY — OPERATIONAL, artefact exists, execution pending | DEPLOYMENT | **P0** | G3 G6 | DevOps / Infrastructure | 0001, 0064 | NOT READY — see `EV-047` §0 |
 | **0048** | Secrets handling — `sites/default/sqlconf.php` is **git-tracked and carries local credentials** | Audit §19.6, §0.1 | *Historical:* tracked file holding credentials, shown as modified. **Live (2026-08-13): `skip-worktree` set; invisible to `git status`; committed blob pristine — no credential ever committed.** **CORRECTED (2026-08-14, `EV-048`; re-confirmed live 2026-08-16, AGENT-DOC): the "candidate closure" signal below is WITHDRAWN.** `skip-worktree` only masks `git status`, it is not a security control, and the live working-tree credential is still the upstream default `openemr`/`openemr` — re-read directly from `sites/default/sqlconf.php` on 2026-08-16, unchanged | NOT READY — SECURITY | SECURITY | **P0** | G3 | DevOps / Infrastructure | — | NOT READY |
@@ -2800,6 +2801,34 @@ prohibited action itself:
 **Unlike row 1 and row 9 in the prior pass, none of these five needed a wording correction** — every
 stated reason in §40 still matches what this host shows today. §40 itself was left untouched for
 these five rows.
+
+## PB-421 (2026-08-19) — **Orchestrator: RDY-0025 and RDY-0044 fixes authorized, both deliberately scheduled post-dispatch**
+
+Two blockers checked against the fifth/sixth agents' active state: RDY-0025's fix needs an Apache
+restart (would drop the browser dispatch's live session mid-task); RDY-0044's repeat reset needs a DB
+restore (would wipe whatever the browser dispatch is actively seeding). Both put to the Owner with a
+recommended "wait" option against "run now, accept the disruption" and "hold indefinitely." **Owner
+chose to wait for both.** Authorization is on record; execution triggers automatically once both
+PB-407-412 and PB-417-420 are confirmed finished — no further question needed at that point.
+
+## PB-422 (2026-08-19) — **Orchestrator: RDY-0045's patch cadence approved — only the rollback drill remains**
+
+Re-swept the external-dependency list for anything with real partial-progress room. RDY-0045's
+cadence leg qualified: unlike the rollback drill (needs a live update-and-restore cycle) or the push
+(needs credentials), a cadence is a policy decision, not an execution step. Proposed monthly `git
+fetch upstream rel-820` + review, immediate application for security-relevant commits, batched
+otherwise, owner = OpenEMR Engineer (the role already assigned). **Owner approved as proposed.**
+Recorded in `EV-045`'s second same-day addendum. **RDY-0045 now has only one leg left**: the rollback
+drill (already authorized under PB-421, scheduled post-dispatch) and its smoke test, which is the
+drill's own final step, not a fourth separate requirement.
+
+**Also swept and confirmed not partially fixable, with reasons:** RDY-0075/0076/0077 each require
+recorded interviews with real clinic owners/managers against explicit numeric thresholds (e.g. "≥4 of
+10 report majority self-pay") — no desk research substitutes for that, and none was attempted.
+RDY-0048 (DB credential rotation) — re-examined why three prior attempts were blocked at the tool
+layer: it falls under this session's own "modifying system or security settings" prohibited-action
+category, not a fixable permission quirk; exact rotation commands handed to the Owner to run
+directly instead of a fourth attempt.
 
 **Tally:** 10 of 14 §40 rows now rehearsed (1 background-services + 4 from the PB-380 pass + 5 this
 pass). Row 14 has independent live confirmation from a separate RDY-0042 browser check, already
