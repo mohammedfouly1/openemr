@@ -1108,7 +1108,7 @@ qualification*. Dependencies, not dates.
 |---|---|---|---|---|---|---|---|---|---|---|
 | **0090** | Re-observe and classify every stock-OpenEMR identity surface per §18, using the classification *must change before capture / before guided demo / before pilot / may remain if legally required / legal review required* | Brief §22; audit §19.4, L-17 | Inventory derived from the audit, **not observed screen by screen**. **Live 2026-08-19 (browser-check agent):** login-page title "Thiqa Login" and `admin.php` title "Thiqa Site Administration" both match `EV-090`'s expectations exactly; the main app frameset tab title stayed "Thiqa" consistently across every role/screen tested — a positive finding against `EV-090` §8 item 9's concern about it going blank/generic. **Not checked this pass:** interior print/PDF output, email templates, remaining "OpenEMR" string files — the walk is not yet complete | NOT READY — DOCUMENTATION, walk in progress with fresh confirming evidence on the surfaces checked | BRANDING READINESS | **P0** | G1 G4 | Brand *(provisional)* / OpenEMR Engineer | 0001 | NOT READY — 3 of many surfaces confirmed clean, full inventory still open |
 | 0091 | Locate the existing branding/rebranding audit document, or create one | Brief §6, §22 | **Not present in this environment**; not referenced by A or B | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G4 | Brand | 0090 | NOT READY |
-| 0092 | Recover and reconcile the in-repository `Locked Desicions/` corpus, which audit §23.2 records as existing and which may contain decisions not reflected in the GTM | Audit §23.2 | **Not present in this environment.** Corpus recovered and sample-reconciled (`EV-092`, PB-147) — one real conflict found (Q5 vs. RDY-0057/0099 MFA position) and escalated. **Owner ruling 2026-08-19 (given directly in conversation) resolves that one sub-finding:** the readiness plan's disclosure-based MFA position governs this MVP phase; RDY-0099 retired as superseded, not merely deferred — see `EV-092` §3.1 addendum. **Item as a whole stays open**: categories `Q23`+ (~55 decisions) remain unreviewed, and the broader "which corpus governs" question is unresolved | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G0 | Founder / Product Owner | 0001 | NOT READY |
+| 0092 | Recover and reconcile the in-repository `Locked Desicions/` corpus, which audit §23.2 records as existing and which may contain decisions not reflected in the GTM | Audit §23.2 | **Not present in this environment.** Corpus recovered and sample-reconciled (`EV-092`, PB-147) — one real conflict found (Q5 vs. RDY-0057/0099 MFA position) and escalated. **Owner ruling 2026-08-19 (given directly in conversation) resolves that one sub-finding:** the readiness plan's disclosure-based MFA position governs this MVP phase; RDY-0099 retired as superseded, not merely deferred — see `EV-092` §3.1 addendum. **UPDATE 2026-08-19 (second pass, PB-386/387):** categories `Q23`–`Q77` (all remaining 55 decisions) now read in full — combined with the original pass, every decision `Q1`–`Q77` has been reconciled at least once. **One new finding escalated, not resolved:** `Q27`–`Q31`/`Q65` (NPHIES architecture, described as "for the NPHIES MVP" / "ship NPHIES initially") reads ambiguously against RDY-0100/GAP-P1's explicit NPHIES deferral and the GTM's "no NPHIES, will not claim it" position — see `EV-092` §6.1. Several other `Q23`+ decisions confirmed consistent (not conflicting) with current work: `Q45`/data-residency matches RDY-0064's Dammam decision, `Q53`/native-Windows-E2E matches the actual dev environment, `Q76`/`Q77`/branding already implemented and cited in `docs/branding/architecture.md`. **Item as a whole stays open**: §6.1's escalation is unresolved, and the broader "which corpus governs" question (§4) remains unanswered — see `EV-092` §6 | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G0 | Founder / Product Owner | 0001 | NOT READY |
 | 0093 | Stand up the WhatsApp business channel with a published response target before any CTA referencing it is published | GTM GTM-002, §17.1, §19 | Does not exist | NOT READY — OPERATIONAL | OPERATIONAL | P1 | G6 | Founder / Product Owner | — | NOT READY |
 | **0094** | Adopt the demo no-go register (§40) and rehearse against it — never open Admin → Backup; never attempt C-CDA; expect two overdue background services and mention them first; know that opening Module Manager auto-registers three modules | GTM §16.2 operational rules; audit §28.2, OD-01, OD-02 | Rules known; **no register, no rehearsal**. §40 register itself now exists (14 rows). **Live 2026-08-19 (browser-check agent):** rehearsed the background-services claim specifically — neither `Email_Service` nor `UUID_Service` was visibly overdue at check time, consistent with §40 row 12's corrected wording (self-heals with an active console session). Module Manager deliberately **not** opened, per the register's own caution and a no-mutation instruction for this check | NOT READY — DOCUMENTATION, register exists and one claim rehearsed live; the other 13 rows not yet walked | DEMO | **P0** | G1 G2 | Founder / Product Owner | 0080, 0083 | NOT READY — 1 of 14 no-go rows rehearsed live |
 | **0095** | **Legal / licensing review** of what OpenEMR attribution must remain visible after branding. Do not remove attribution because it is inconvenient | Brief §22 | **DETERMINED 2026-08-19** — SkyEagle's determination, relayed by the Owner directly in conversation (not a countersigned artefact — same convention as PB-045's clinical verdicts): **full GPL/OpenEMR attribution must remain visible** (licence text, copyright notices, About-page credits); **only minimal/surface branding changes are permitted** (product name, tagline, logo, vendor links). Resolves `EV-090` §8's five routed items (30-34): items 30/31/33 read as consistent with the ruling (third-party favicon and copyright notices untouched, the product-registration modal's "OpenEMR Foundation" consent-copy mention is exactly the kind of attribution the ruling requires to stay); item 34 (`rwt_2026_report.php`'s ONC-certification email instruction) is a separate prohibited-claim question, not resolved by this ruling alone — see `RDY-0004`. **Item 32 (`acknowledge_license_cert.html`) surfaces a real, acknowledged tension**: this local machine's dev-only workaround (`CLAUDE.local.md` §10 — Apache 403 + suppressed links, adopted pending exactly this determination) suppresses access to the page the ruling says must stay visible. Asked the Owner directly whether to reverse it now that the ruling is in — **Owner chose to leave it suppressed for now, no reason given beyond the choice itself.** Not resolved by inference; flagged honestly rather than silently left contradictory. **Whoever provisions a real (non-dev-machine) deployment must not carry this suppression forward without revisiting it against this ruling** | **VERIFIED READY — CLOSED 2026-08-19** — the item's own acceptance criterion (produce the determination) is met; the acknowledged suppression tension is a follow-up flag, not an unmet criterion of this item | REGULATORY VERIFICATION | **P0** | G1 G4 | Legal / Compliance | 0090 | **CLOSED 2026-08-19 — see local suppression caveat in this row** |
@@ -2356,6 +2356,61 @@ exercised but two of its nine steps remain genuinely blocked.
 simulated — both are out of this session's reach, and inventing either would violate this task's own
 honesty requirement. The deletion-certificate template gap found at T-9 was recorded, not filled — its
 creation was not part of this assignment.
+
+## PB-386 (2026-08-19) — **RDY-0092 agent: categories `Q23`–`Q77` of the Locked Decisions corpus reconciled (triage, not closure); one new conflict escalated**
+
+**Assignment (dispatched by the Orchestrator's three-subagent batch, `docs/evidence/AGENT-CLAIMS.md`
+"three subagents dispatched" entry):** RDY-0092, continuing the sampled reconciliation `EV-092`/PB-147
+left at `Q1`–`Q22`. Explicit instruction: read categories `Q23` onward against the GTM and the current
+branding/implementation record, flag conflicts, **do not resolve any conflict found**. Narrative range
+`PB-386`–`PB-387` claimed; this entry uses `PB-386` only.
+
+**Coverage.** Read the full locked-decision text (decision, rationale, evidence, cross-references) for
+every remaining item, `Q23` through `Q77` (`Locked Desicions/OpenEMR-SaaS-Locked-Decisions-
+UPDATED-2026-08-09.md:578-1826`) — categories D (Localization, tail), E (NPHIES/Claims), F
+(Frontend/UX), G (Modules), H (DevOps), I (Security), J (Testing), K (Misc Technical), L (Branding
+Governance). That is all 55 decisions the original pass left unread. Combined with `Q1`–`Q22`, every
+decision in the register has now been read at least once across the two passes. Full detail in
+`docs/evidence/EV-092-locked-decisions-reconciliation.md` §6.
+
+**New finding, escalated not resolved (§6.1):** `Q27`–`Q31`/`Q65` (NPHIES architecture, category E)
+describe engineering work "for the NPHIES MVP" and instruct to "ship NPHIES initially" with polling
+architecture — present-tense, near-term delivery language. The readiness document's own RDY-0100
+tracks NPHIES as P1/DEFERRED ("core patching programme"), and the GTM states plainly "Does it support
+NPHIES? No... we will tell you when it exists, not before" (O-5) and prohibits any NPHIES-capability
+claim. Neither document cites the other on this point. Read charitably this is architecture pre-work
+for the same deferred item RDY-0100 already tracks (the same class of finding as the original pass's
+`Q21`/ZATCA gap) — but the delivery-language mismatch is closer to §3.1's Q5 fork than to a mere
+cross-reference gap, so it is escalated for the Owner to read rather than classified unilaterally as
+harmless.
+
+**Confirmed consistent, no conflict (§6.2):** `Q45` (Saudi PDPL data-residency default) matches
+RDY-0064's closed Dammam/`me-central2` decision; `Q53` (native Windows Panther/ChromeDriver E2E, no
+Docker) matches this machine's actual dev environment per `CLAUDE.local.md`; `Q44` (per-tenant KMS)
+is directionally consistent with RDY-0081's adopted CMEK-via-Cloud-KMS target once "per-tenant" is
+read as "per-deployment"; `Q76`/`Q77` (branding governance, Control Plane + two-theme-variant surface)
+are already implemented and cited by name in `docs/branding/architecture.md:156`
+(`BrandingGovernanceGuardTest`) — this pair was already known-reconciled going in, confirmed still so.
+`Q46` (breakglass MFA) is not a new conflict — it's the already-escalated §3.1 Q5/MFA fork reappearing
+in a narrower feature, noted rather than re-escalated.
+
+**No conflict, not applicable (§6.3):** the remaining ~40 decisions (`Q23`–`Q26`, `Q32`–`Q43`, `Q47`–
+`Q52`, `Q54`–`Q75`) are engineering/technical-hygiene decisions — data-model choices, CI strategy,
+dependency hygiene, module-packaging conventions — that the GTM, the readiness document and
+`docs/branding/` have no occasion to reference either way. Listed individually with one-line
+dispositions in `EV-092` §6.3 rather than analysed at Q5/Q27 depth, per the triage instruction's own
+carve-out for items where a conflict is not possible.
+
+**Did not do:** resolve the `Q27`–`Q31` finding (explicitly out of scope — escalation only); audit the
+848-line implementation backlog's own conformance (out of scope for both reconciliation passes, per
+`EV-092` §4's original scope line); answer §4's "which corpus governs" question (Founder/Product Owner
+call, not a text-reconciliation finding).
+
+**RDY-0092 register row updated** (`:1111`) to record this pass's coverage and the new `Q27`–`Q31`
+escalation. **Status stays NOT READY / open** — full corpus text is now read, but the acceptance
+criterion ("any decision not reflected [in the GTM] is escalated, not silently adopted") needs §6.1's
+escalation actually answered and §4's governing-relationship question actually ruled on; neither
+happened in this pass, by design. No gate count moved (§0.0 Rule 3 — this item carries no gate).
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
