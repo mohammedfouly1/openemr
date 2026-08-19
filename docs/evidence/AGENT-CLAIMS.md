@@ -979,3 +979,13 @@ The browser is one visible Codex in-app tab with one authenticated identity at a
 No Apache restart, database reset, or reseed is authorized by this claim. RDY-0094's
 stale-data evidence is checked before any calendar/flow recapture; no reseed will be
 performed without the Owner.
+
+## Codex built-in-browser retake continuation — PB-461…PB-470, 2026-08-19
+
+**Claiming:** RDY-0060/0061 for the requested SS-03…SS-09 and SS-12 retakes (SS-10/11
+status checks), and RDY-0086 for patient retries of D-2/D-3/D-4 and both D-7 screens.
+The work uses one visible in-app-browser tab, one identity at a time, explicit logout
+between roles, and waits up to 45 seconds before classifying a render as stuck. The final
+independent §8 pass scores content/surface/data correctness separately from the still-needed
+qualification embedding, which remains orchestrator-owned. No database mutation, Apache
+restart, force-push, reset, or push is authorized by this claim.
