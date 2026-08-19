@@ -129,10 +129,20 @@ there is no clinician-authored note anywhere in the system.
 This traces to PB-036: the seeder ran under the `admin` session, so `forms.user` is `admin` on all
 110 rows. The attribution is *present* (the PR-14 fix ensured that) but it is uniform.
 
-### 4.3 A-10 not executed
+### 4.3 A-10 — the two live-exploitable paths are fixed (updated 2026-08-19)
 
 *"Empty-spec ACL paths do not fail open"* requires targeted probes of the `aclCheckAcoSpec` /
-`aclCheckIssue` call sites rather than HTTP probes. **Not attempted here**, and not claimed.
+`aclCheckIssue` call sites rather than HTTP probes. **This section previously said "not attempted
+here, and not claimed" — stale as of 2026-08-19.** `PR-19` (`docs/branding/adr/patch-records.md`)
+landed the two fixes `EV-016-A10-fix-scope.md` §1a/§1b scoped, before this document was last
+touched: `AclMain::aclCheckForm()` now denies when no registry row exists (was: fail open), and
+`add_edit_issue.php`'s `$thistype` is validated against `$ISSUE_TYPES` before the ACL check (same
+fail-open mechanism, different call site). Directly verified live in source 2026-08-19 — both diffs
+present exactly as documented — and the two DB-backed unit tests (`AclMainTest.php`,
+`testAclCheckFormDeniesWhenNoRegistryRow` / `testAclCheckFormStillResolvesRegisteredForm`)
+independently re-run, still passing (3/3, 5 assertions). **Not yet done**: a live authenticated HTTP
+round-trip (needs browser access — see `patch-records.md` PR-19's own "Not verified" note), and the
+Owner decision on the 16 now-blocked form directories (`EV-016-A10-fix-scope.md` §3).
 
 ### 4.4 The UI-navigation legs
 
@@ -148,13 +158,13 @@ and A-6's UI halves remain unexercised.
 | Requirement | State |
 |---|---|
 | Every positive row succeeds | **Partial** — A-8 positive ✅, CTRL ✅, A-7/A-8 sensitivity legs now evidenced via real UI (§4.1); A-1/A-6 positive legs still need the UI walk |
-| Every negative row is denied | **32 of 32 originally executed probes denied correctly, plus the 3 live sensitivity-role probes in §4.1 (PB-410) all behaved as denials or redactions, none as an unintended positive** — A-10 remains unexecuted |
+| Every negative row is denied | **32 of 32 originally executed probes denied correctly, plus the 3 live sensitivity-role probes in §4.1 (PB-410) all behaved as denials or redactions, none as an unintended positive** — A-10's two live-exploitable paths fixed and unit-verified (§4.3, 2026-08-19); live HTTP round-trip still pending |
 | A single negative-row failure fails the matrix | **No failure occurred.** No row was *skipped silently* either |
 
-### Status: **RDY-0016 — NOT CLOSED. 32/32 originally executed probes pass; A-2/A-7/A-8's sensitivity legs now live-confirmed (PB-410, 2026-08-19); A-10 and A-1/A-6's UI halves remain unrun.**
+### Status: **RDY-0016 — NOT CLOSED. 32/32 originally executed probes pass; A-2/A-7/A-8's sensitivity legs live-confirmed (PB-410, 2026-08-19); A-10's two live-exploitable paths fixed and unit-verified (2026-08-19); A-1/A-6's UI halves and the orphaned-directory Owner decision remain.**
 
-**`Blocks`: G1 G3 G5.** No gate count moved (§0.0 Rule 3) — the item's own closure still needs A-10
-and the remaining UI legs before the matrix as a whole can close.
+**`Blocks`: G1 G3 G5.** No gate count moved (§0.0 Rule 3) — the item's own closure still needs the
+remaining UI legs and the §3 Owner decision before the matrix as a whole can close.
 
 ### What would close it
 
@@ -164,8 +174,11 @@ and the remaining UI legs before the matrix as a whole can close.
    2026-08-19**: RDY-0041's second D-7 run (PB-409) had `y.alharbi` author a real SOAP note on
    encounter 109, giving A-7 a genuine clinician-authored positive case for future re-runs of this
    specific leg.
-3. **Execute the A-10 call-site probes.** Still outstanding.
+3. ~~Execute the A-10 call-site probes~~ **FIXED AND UNIT-VERIFIED 2026-08-19** (`PR-19`) — live HTTP
+   round-trip confirmation still outstanding, needs browser access.
 4. **The remaining UI-navigation halves** (A-1, A-6) — the A-7/A-8 halves are now done (§4.1).
+5. **`EV-016-A10-fix-scope.md` §3's Owner decision** on the 16 now-blocked form directories — not yet
+   made; the fix currently defaults to "leave blocked" (Option A) without a formal sign-off.
 
 ---
 
