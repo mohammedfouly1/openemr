@@ -283,10 +283,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **32 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301, 2026-08-19 — RDY-0095's SkyEagle determination and RDY-0064's hosting provisioning both relayed by the Owner directly in conversation, unblocking RDY-0033/0034 which were already config-complete live). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
-| **Requirements still open** | **82** |
-| **Open P0** | **39** — 71 P0 less the 32 genuinely closed P0 IDs above. **PB-301 (2026-08-19): four-item decrement on the PB-300 baseline** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 2 · G1 12 · G2 8 · G3 15 · G4 2 · G5 13 · G6 19** — **PB-301 (2026-08-19): RDY-0033/0034 (G1 G2), RDY-0064 (G3 G6), RDY-0095 (G1 G4) decremented from the PB-300 baseline; G0 and G5 independently re-confirmed unchanged** |
+| **Requirements CLOSED** | **36 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370, 2026-08-19 — RDY-0055/0096's Owner decisions wired and live-verified; RDY-0003/0067 closed on a real claim review by the named reviewer, `EV-067` APPROVED FOR PUBLICATION). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
+| **Requirements still open** | **78** |
+| **Open P0** | **35** — 71 P0 less the 36 genuinely closed P0 IDs above. **PB-371 (2026-08-19): four-item decrement on the PB-301 baseline** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 1 · G1 12 · G2 8 · G3 13 · G4 2 · G5 11 · G6 17** — **PB-371 (2026-08-19): RDY-0003 (G0 G5), RDY-0055 (G3), RDY-0067 (G5 G6), RDY-0096 (G3 G6) decremented from the PB-301 baseline; G1, G2, G4 independently re-confirmed unchanged — none of the four block those gates** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -2090,6 +2090,66 @@ file it closes; this entry summarizes and points there, per §0.0 Rule 2.
 closes and what remains open, per §0.0 Rule 5 — recording what was received, from whom, by what route,
 not fabricating a closure. **`Blocks`:** per each RDY's own field (G0, G1, G2, G3, G5, G6 across the
 five items) — no gate count moved here.
+
+## PB-360-369 (2026-08-19) — **Agent G: RDY-0055 and RDY-0096 closed; RDY-0083 confirmed correctly stays open**
+
+**Scope:** finish three "decided, not yet implemented" items per direct task briefing.
+
+**RDY-0055 — CLOSED.** Live-reverified the disclosure text's claims against the running seeded
+database directly, not assumed from the earlier approval alone: `DESCRIBE log` confirms no `encrypt`
+column exists on this schema; 101,963/101,963 non-empty `comments` rows decode as base64;
+`LIKE '%Alharthi%'` returns 0 rows against raw `comments` but 3 against the decoded value — matching
+the disclosure text's own claims exactly, and independently reproducing `EV-055`'s original false-negative
+warning about searching base64 data in plaintext. Combined with the Security Reviewer's direct
+acceptance of the technical determination (recorded separately, PB-370 below), all of RDY-0055's
+acceptance criteria are met. **Does not close RDY-0003** — corrected mid-task after the orchestrator
+flagged that `EV-055`'s disclosure text was never in `EV-003`'s review queue; RDY-0003 needed its own,
+separate sample review (see PB-370).
+
+**RDY-0096 — CLOSED.** Wired the Owner's Level 1 (Business Hours) decision into `EV-066-pack.md` §9
+(scope template) and `EV-068-pilot-requirements.md` elements 5-7/§4 (pilot-agreement pack), in each
+document's own existing style. Keyword-scanned both afterward for "uptime"/"availability" — none
+present. All six required elements (channels, hours, response target, escalation, support-vs-project
+boundary, training) are now defined and reflected in both named downstream documents, satisfying the
+item's own acceptance criterion.
+
+**RDY-0083 — confirmed stays open, correctly.** No host exists that the Owner's chosen mechanism
+(a Windows Service) could be installed against or tested on — `EV-047` §9 already records the
+decision as explicitly not validated on this Drive-mounted demo host. No script or implementation was
+manufactured to appear as progress. **This is the right outcome, not a gap in this task** — the
+register already said implementation is deferred to real pilot-host provisioning, and nothing this
+session could reach changes that.
+
+**`Blocks`:** RDY-0055 → G3 · RDY-0096 → G3 G6. Gate-count decrement folded into PB-371's sync below,
+not recalculated here (§0.0 Rule 3 — one dedicated pass covers same-day closures from both this range
+and PB-370's).
+
+## PB-371 (2026-08-19) — **Orchestrator: RDY-0003 and RDY-0067 closed on a real claim review; combined gate-count sync for eight same-day closures**
+
+**Scope:** two things. First, record the actual review the Owner performed (prepared by the
+orchestrating session — mechanical scans, C-1/C-2/C-6 reading — but the verdict is his, not inferred):
+`EV-067-published-registers.md` reviewed against all six of `EV-003`'s named gates, verdict **APPROVED
+FOR PUBLICATION**, recorded in `EV-003` §5 and `EV-067` §9. This closes **RDY-0003** (all three of its
+own acceptance criteria genuinely met — named reviewer, written review step, one sample reviewed and
+recorded) and **RDY-0067** (the same artefact was its own fourth and final criterion).
+
+**Correction made in the same pass:** `EV-003`'s own §6 previously claimed closing RDY-0003 would also
+close "RDY-0067, 0056, 0057, 0088, and by extension RDY-0004" as a group. That overstated it — only
+RDY-0067 shares the reviewed artefact. RDY-0056/0057/0088 each name `EV-056-057-088-claim-discipline.md`
+as their own artefact, which has not itself been through this review step (its scans are clean, per
+that file's own §6, but the review-record step has not run against it). RDY-0004 needs its own check.
+Corrected in `EV-003` before the overstatement could propagate into a false closure of any of the four.
+
+**Second: the combined gate-count sync.** Eight P0 items closed today across three separate
+same-day passes (PB-301: RDY-0033, RDY-0034, RDY-0064, RDY-0095; PB-360-369: RDY-0055, RDY-0096;
+this entry: RDY-0003, RDY-0067) — each deferred its own gate-count recalculation per Rule 3, so this
+is the single dedicated sync covering all eight together, re-derived mechanically from §7.2–§7.17's
+`Blocks` fields exactly as every prior sync in this document has been. **71 P0 registered, 36 closed,
+35 open.** Full per-gate table and narrative immediately above, this section (§47).
+
+**Not done here:** RDY-0004, RDY-0056, RDY-0057, RDY-0088 remain open — each flagged above with
+exactly what it still needs, not silently left ambiguous now that RDY-0003's review mechanism has
+been demonstrated to work.
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
@@ -11380,27 +11440,35 @@ See PB-300 immediately below for the corrected table and narrative.**
 ~~|---|---:|---:|---:|---:|---:|---:|---:|~~
 ~~| **Open P0 (canonical, PB-300)** | **2** | **15** | **10** | **16** | **3** | **13** | **20** |~~
 
-### CURRENT — PB-301 (2026-08-19), same-day resync after four Owner decisions/relayed outcomes
+### PB-301 (2026-08-19) — superseded 30 minutes later by PB-371, retained for the record
 
-Re-derived the same way as PB-300 (register `Blocks` fields, rule 7). **71 P0 registered, 32 closed,
-39 open P0.** Four items closed since PB-300, all same day: RDY-0033, RDY-0034 (branding config
-already live, unblocked once RDY-0095 landed), RDY-0064 (hosting provisioning, Owner-relayed), RDY-0095
-(SkyEagle's determination, Owner-relayed — see that row for the acknowledged local-suppression tension
-it also surfaced).
+~~**71 P0 registered, 32 closed, 39 open P0.**~~
+
+~~| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |~~
+~~|---|---:|---:|---:|---:|---:|---:|---:|~~
+~~| **Open P0 (canonical, PB-301)** | **2** | **12** | **8** | **15** | **2** | **13** | **19** |~~
+
+### CURRENT — PB-371 (2026-08-19), same-day resync after four more closures
+
+**71 P0 registered, 36 closed, 35 open P0.** Four more items closed since PB-301, all same day:
+RDY-0055 (PHI disclosure — Security Reviewer accepted the technical determination, live-reverified
+against the seeded DB), RDY-0096 (support tier wired into the scope template and pilot pack),
+RDY-0003 and RDY-0067 (a real claim review — `EV-067` reviewed against all six named gates by the
+named reviewer, verdict APPROVED FOR PUBLICATION, recorded in `EV-003` §5 and `EV-067` §9).
 
 | | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Open P0 (canonical, PB-301)** | **2** | **12** | **8** | **15** | **2** | **13** | **19** |
+| **Open P0 (canonical, PB-371)** | **1** | **12** | **8** | **13** | **2** | **11** | **17** |
 
 | Gate | Status | Open P0 | Main blockers | Next action |
 |---|---|---|---|---|
-| **G0 Strategy governance** | **PARTIAL** | **2** | RDY-0002 CLOSED · remaining: no claim reviewer actually running a review (0003) — though `EV-055`'s disclosure-text review now stands as a first real sample; prohibited-claim list not packaged downstream, waits on 0003 (0004) | Package RDY-0004 now that 0003 has a sample review on record |
-| **G1 Flagship demo** | **PARTIAL** | **12** | **RDY-0033/0034/0095 all CLOSED today** — the licence/attribution determination landed (full attribution stays, minimal branding changes permitted) and the already-live branding config is now formally unblocked · remaining: RDY-0016's ACL fix scoped, unwritten; RDY-0042/0043/0038 still need a human at the keyboard (browser-check agent in flight); proof assets (0060–0062, 0086, 0090, 0094) still cascade from those | Browser-check agent's results, once back, likely close or advance several of the remaining items directly |
-| **G2 Seeded commercial demo** | **NOT READY** | **8** | **RDY-0033/0034 CLOSED today**, dropping off this gate too · RDY-0023's growth-chart criterion resolved (paediatric conversion seeded, `EV-044` §12), live-render confirmation in flight via the browser-check agent · RDY-0044's dataset content is now complete (v4 baseline), item stays open on its own both-legs-closed rule · 0025 still blocked on the host PHP-session bug | Once the browser-check agent confirms 0023/0042/0043 live, this gate has very little left |
-| **G3 Pilot operational readiness** | **NOT READY** | **15** | **RDY-0064 CLOSED today** (hosting provisioned, Owner-relayed) — drops the root of what was a 5-item cascade, though the downstream items (0081/0084/0085/0047's execution) still need real configuration work against the new host, not closed by this alone · RDY-0045 unchanged (merge done, push still blocked on credentials) · RDY-0048 unchanged (rotation blocked at the tool-permission layer three times) · RDY-0083 decided (pilot host: a proper Windows Service) but not implemented — correctly deferred to real pilot-host provisioning | Configure backup policy/TLS/monitoring against the now-provisioned host; push RDY-0045; Owner rotates RDY-0048 directly |
-| **G4 Ready for Phase 3 Brand** | **PARTIAL, was BLOCKED** | **2** | **RDY-0095 CLOSED today** — this gate's sole hard blocker is gone · remaining: RDY-0004 (downstream packaging, waits on 0003) and RDY-0090 (branding-surface walk, checklist ready, execution in flight via the browser-check agent) | Once RDY-0090's walk lands, this gate is very close |
-| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **13** | Unchanged by today's four closures (none of them block G5) — same items as before: 0003/0004/0016/0056/0057/0060–0062/0086, plus 0067 (waits on 0003), 0071 (code fixed, live-check in flight), 0078 (NPHIES source unreachable), 0088 (3 dossiers unreachable) | RDY-0078/0088's remainder are genuinely stuck on unreachable external sites, not on any decision |
-| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **19** | **RDY-0064 CLOSED today**, one fewer item · still requires G2 and G3 · RDY-0069 can't start without a pilot · **RDY-0075/0076/0077 still zero calls made** — unchanged, the item that has moved least in the whole register | **RDY-0075's first call is still the single most under-leveraged action available** — nothing today changed that ranking |
+| **G0 Strategy governance** | **PARTIAL** | **1** | **RDY-0003 CLOSED today** — a real review, by the named reviewer, on a real artefact · remaining: RDY-0004, packaging the prohibited-claim list downstream, now unblocked by 0003 but not yet done | RDY-0004 is now purely a packaging task, nothing left blocking it |
+| **G1 Flagship demo** | **PARTIAL** | **12** | Unchanged by today's four closures (none block G1) — RDY-0016's ACL fix scoped/unwritten; RDY-0042/0043/0038 in flight via the browser-check agent; proof assets (0060–0062, 0086, 0090, 0094) cascade from those | Browser-check agent's results still the next real movement here |
+| **G2 Seeded commercial demo** | **NOT READY** | **8** | Unchanged by today's four closures | Browser-check agent's results (0023/0042/0043) still the next movement |
+| **G3 Pilot operational readiness** | **NOT READY** | **13** | **RDY-0055 and RDY-0096 both CLOSED today** · remaining: RDY-0045 (push blocked on credentials), RDY-0048 (rotation blocked at tool-permission layer), RDY-0047/0073/0081/0084/0085 (need real configuration against the now-provisioned host), RDY-0083 (decided, deferred to real pilot-host provisioning), RDY-0065/0066/0068 (commercial documents still in draft) | Real configuration work against the provisioned host is now the largest remaining bucket in this gate |
+| **G4 Ready for Phase 3 Brand** | **PARTIAL** | **2** | Unchanged by today's four closures — RDY-0004 (shared with G0, now unblocked), RDY-0090 (walk in flight) | Same as G0/G1 |
+| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **11** | **RDY-0003 and RDY-0067 both CLOSED today** · remaining: RDY-0004, RDY-0016, RDY-0056/0057 (need their *own* artefact reviewed — `EV-056-057-088-claim-discipline.md`, not inherited from RDY-0067's review), RDY-0060–0062, 0071, 0078, 0086, 0088 | RDY-0056/0057/0088's own artefact is one more review, same reviewer, same mechanism — the fastest remaining item in this gate |
+| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **17** | **RDY-0067 and RDY-0096 both CLOSED today** · still requires G2 and G3 · RDY-0069 can't start without a pilot · RDY-0075/0076/0077 still zero calls made | RDY-0075's first call remains the single most under-leveraged action in the whole register |
 
 ### 47.1 The readiness questions, answered separately
 
