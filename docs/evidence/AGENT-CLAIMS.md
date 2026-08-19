@@ -721,3 +721,24 @@ never fabricate a human decision, sign-off, or a result it did not actually obta
 what it attempted vs. what actually succeeded, including partial/blocked outcomes; use its assigned
 PB sub-range only. Results will be verified against each item's own acceptance criteria before being
 accepted as closures, not taken at face value.
+
+**Update, same day:** the PB-384-385 (RDY-0073) and PB-386-387 (RDY-0092) agents have both completed.
+RDY-0073 stays open — T-5/T-6 (external delivery, cold-read by an outside reviewer) are genuinely
+human/infrastructure-blocked, not something a dry run can satisfy. RDY-0092 read the full remaining
+corpus and found one new real conflict (Q27-31/Q65 NPHIES engineering language vs. the GTM's locked
+NPHIES deferral) — routed to the Owner, not resolved. The PB-380-383 browser/live-system agent is
+still running.
+
+## Orchestrator (main session) — fourth subagent dispatched, 2026-08-19
+
+**Claiming:** RDY-0004 (prohibited-claim list packaging), RDY-0061 (capture rules), RDY-0086 (Arabic/
+RTL qualification script), and a config-verification-only pass on RDY-0060/0062 (the facility name and
+locale globals were checked directly against the live DB before this dispatch and already read
+`Thiqa Demo Eye Clinic` / `SAR` / `Asia/Riyadh` — contradicting the register's stale 2026-08-13 claim
+of `Your Clinic Name Here` / US locale; this agent confirms and corrects the record). Range
+`PB-390…PB-399` claimed in §0.0.
+
+**Deliberately NOT claimed here:** the actual screenshot/recording capture for RDY-0060/0062 — that
+needs the Chrome browser extension, which the PB-380-383 agent may still be using. Left for a
+follow-up pass once that agent is confirmed finished, to avoid two agents contending for one browser
+session.
