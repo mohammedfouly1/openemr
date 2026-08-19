@@ -853,3 +853,23 @@ from a known-clean state, not carrying over the earlier D-7 test patients (pid 3
 reset state" precondition it does not already have from the pre-dispatch reset above, that still needs
 explicit Owner authorization per the standing convention this session has used throughout, not a
 unilateral reset by this agent.
+
+## Orchestrator (main session) — eighth subagent dispatched, 2026-08-19 (browser, closing the pure-live-verification subset)
+
+**Claiming:** RDY-0016 (A-10 live HTTP round-trip + A-1/A-6 UI legs), RDY-0025 (document uploads),
+RDY-0029 (CDS alert active-presentation render), RDY-0041 (second independent clean D-7 run — the
+seventh subagent's PB-425 run already produced one clean isolated run; this needs a second, independent
+one to meet the "twice" bar), RDY-0045 (browser login walkthrough), RDY-0060/0061 (SS-02…SS-12 +
+review), RDY-0062 (isolated-session `[Refresh]` recording retry), RDY-0086 (per-screen Arabic/RTL walk,
+D-1…D-5/D-7 — not reached by the seventh subagent, browser disconnected first), RDY-0090
+(`product_reg.js.twig` modal-title leak, reachable leg only — the 3 OAuth2 template leaks are
+deliberately out of scope, OAuth is off), RDY-0094 (§40 row 6 live-render pass only — row 1/8/10 already
+addressed). Range `PB-434…PB-460` claimed in §0.0.
+
+**Single-tab discipline, no exceptions:** the seventh subagent's own finding (multi-tab session/ACL
+identity collision) is the working theory for this dispatch throughout. One tab, log out or close+reopen
+before switching role, never two authenticated tabs open at once.
+
+**Do NOT restart Apache or reset the database** unless a specific item's acceptance criteria requires it
+(RDY-0041 explicitly does — "from a known reset state," "twice" — see that item's own claim above for
+how this is handled) and it is recorded as a deliberate, isolated action, not a side effect.
