@@ -11145,34 +11145,44 @@ it as current.
 ~~| Including closed RDY-0001 | 4 | 29 | 33 | 27 | 3 | 17 | 21 |~~
 ~~| *Retired pre-Phase-2B figure* | *4* | *21* | *17* | *22* | *3* | *11* | *"G2+G3, plus 8"* |~~
 
-### CURRENT — PB-140 (2026-08-16), the first sync mechanically re-derived from §7.2–§7.18 cells
+### PB-140 (2026-08-16) — superseded, retained for the historical record only
 
 A register-reconciliation pass (PB-140) found that 22 Phase 2B P0 closures narrated in the PB log
 between PB-005 and PB-059 had never had their §7 row's `Status`/`Verdict` cell updated — only
-RDY-0001 and RDY-0080 had been. Those 22 rows are now corrected (each independently re-verified
-against its cited PB entry's evidence, not rubber-stamped), and the count below is read directly
+RDY-0001 and RDY-0080 had been. Those 22 rows were corrected (each independently re-verified
+against its cited PB entry's evidence, not rubber-stamped), and the count below was read directly
 from the corrected register, per rule 7 ("never inferred from prose"). **71 P0 registered, 24 closed,
 47 open P0.**
 
+~~| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |~~
+~~|---|---:|---:|---:|---:|---:|---:|---:|~~
+~~| **Open P0 (canonical, PB-140)** | **3** | **16** | **12** | **17** | **3** | **13** | **21** |~~
+
+**This table was left stale here for three further sync passes (PB-206, PB-216, and now PB-300) —
+each posted its corrected figures only as a log-entry table (lines ~2256, ~2872) without updating
+this dashboard section, reproducing exactly the drift pattern PB-140 itself was created to fix.
+See PB-300 immediately below for the corrected table and narrative.**
+
+### CURRENT — PB-300 (2026-08-19), full re-sync against §7.2–§7.17 plus a live-evidence pass
+
+Re-derived directly from the register's own `Blocks` fields under rule 7 (never inferred from
+prose) — see `docs/evidence/EV-GATE-SYNC-20260819.md` §5 for the full worked ID-by-ID derivation.
+**71 P0 registered, 28 closed, 43 open P0.** Every count matches the PB-216 (2026-08-16) baseline
+exactly except G0, which drops by one (RDY-0002 closed 2026-08-16, synced here 2026-08-19).
+
 | | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Open P0 (canonical, PB-140)** | **3** | **16** | **12** | **17** | **3** | **13** | **21** |
-
-The sum of per-gate counts (85) exceeds 47 because **one RDY commonly blocks several gates** — that
-is expected under rule 4 and is not a reconciliation error. See the PB-140 execution-log entry for
-the full worked derivation, the list of RDY IDs behind each gate figure, and the items deliberately
-left open (RDY-0013, 0037, 0038, 0043, 0044) with the specific evidence for why each is not yet
-closed.
+| **Open P0 (canonical, PB-300)** | **2** | **15** | **10** | **16** | **3** | **13** | **20** |
 
 | Gate | Status | Open P0 | Main blockers | Next action |
 |---|---|---|---|---|
-| **G0 Strategy governance** | **PARTIAL** | **3** | The registers are complete; the **governance mechanism** is not — no named claim reviewer, no adoption step, no acceptance record | Name a claim reviewer and issue §32 to Phases 3–5 (RDY-0003, RDY-0004) |
-| **G1 Flagship demo** | **PARTIAL** | **16** | Demo accounts, ACL, provider identity, facility, timezone, report/controller authorization and installer-credential rotation are now genuinely CLOSED · remaining: menu roles (0013) and locale/currency (0037, 0038) each need one manual browser session · `front_office` Add-Patient defect (0042) and menu form-rendering defect (0043) still unresolved · RDY-0016's full matrix, branding identity (0033/0034) and proof assets (0060–0062, 0086, 0090, 0094, 0095) remain | Perform the three outstanding manual browser sessions (0013, 0037, 0038) — the Owner has already ruled the method acceptable; nothing technical blocks it |
-| **G2 Seeded commercial demo** | **NOT READY** | **12** | Track D data is now mostly seeded and closed (0020–0022, 0024, 0026–0028, 0058, 0059) · remaining: 0023/0025 need a clinician+Owner decision and a browser session respectively · D-7 rehearsal (0041) and its two defects (0042, 0043) still open · branding identity and locale/currency still open | Execute the D-7 rehearsal (0041) once 0013/0042/0043 clear; resolve 0023/0025's person-dependencies |
-| **G3 Pilot operational readiness** | **NOT READY** | **17** | Backup EXECUTION closed (RDY-0080) · authorization/controller defects now closed (0050–0052) · credential rotation closed (0011, 0017) · still open: backup POLICY (0081), restore UNPROVEN (0082), upstream currency (0045), deployment runbook (0047), secrets handling (0048), background-service trigger (0083), monitoring (0084), audit-log PHI (0055), authorization matrix (0016) | Prove a restore into a disposable target (RDY-0082); define the backup policy (RDY-0081) |
-| **G4 Ready for Phase 3 Brand** | **BLOCKED** | **3** | **Licence/attribution determination absent** · branding surface never enumerated at surface level · no captures exist | Commission the licence review (RDY-0095) — it has no technical predecessor and it blocks branding |
-| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **13** | Authorization/controller items closed removed some load · registers not extracted · claim-reviewer/claim-discipline items (0003, 0056, 0057, 0088) still open · proof assets (0060–0062) still open | Extract the four status registers (RDY-0067) — it is content priority #1 and needs no engineering |
-| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **21** | G2 and G3 both open · hosting BLOCKED · pricing figures BLOCKED · Arabic message design PROVISIONAL — unaffected by this sync, no RDY in this gate's list was among the 22 closures | **Run V-1.** It requires no engineering, it sits at the root of the validation branch, and there is no technical reason it has not started |
+| **G0 Strategy governance** | **PARTIAL** | **2** | RDY-0002 CLOSED (Owner accepted VERDICT B, 2026-08-16) · remaining: no claim reviewer actually running a review (0003); prohibited-claim list not packaged downstream, waits on 0003 (0004) | Have the named reviewer (Mohammed Elfouly) run one sample review and record it |
+| **G1 Flagship demo** | **PARTIAL** | **15** | RDY-0013 CLOSED (PB-202, full navigation + registration proof) since this table was last current · RDY-0016's ACL fail-open path found and scoped, fix unwritten · RDY-0042/0043 attempted twice more (PB-217/218) and blocked both times by the coding-agent's own permission classifier refusing credential entry, even with directly-relayed Owner authorization — **not a product defect** · branding identity (0033/0034) waits on the licence determination (0095) · proof assets (0060–0062, 0086, 0090, 0094) cascade from the above | A human must perform the RDY-0042/0043/0038 logins directly, or adjust the session's permission settings — no further agent delegation clears these three |
+| **G2 Seeded commercial demo** | **NOT READY** | **10** | RDY-0037 CLOSED (PB-214, SAR now renders) and RDY-0035 CLOSED (PB-151, pqri placeholders cleared) since this table was last current · remaining: clinical depth (0023) is plain seeding work; documents (0025) blocked on a chronic host-level PHP session bug, not a code defect; 0033/0034/0038/0042/0043/0094 as under G1; D-7 rehearsal (0041) needs 0042/0043 verified first; demo reset (0044) is a bookkeeping close-out against an already-fixed v3 baseline | Seed RDY-0023's clinical depth now — no blocker; close out RDY-0044's bookkeeping against the existing v3-baseline evidence |
+| **G3 Pilot operational readiness** | **NOT READY** | **16** | RDY-0082 fully CLOSED (leg 6, PB-203, authenticated login on the restored instance with a negative control) since this table was last current · RDY-0045's upstream merge **has actually happened** (`8e0eaba90` on-branch) — only a `git push` (blocked on this host's GitHub credentials) remains, this is no longer an undecided item · RDY-0048's DB-password rotation is not merely unstarted, it was attempted three ways and blocked at the same permission-classifier layer as the G1 login items · RDY-0064 (hosting) is the root of a 5-item cascade (0081, 0084, 0085, 0096, plus 0047's full closure) · RDY-0083 (background-service runner) reads as a stale row — both services are live-confirmed active and ticking today, but no formal closure has been run against it | Push `pre-rel820-merge-20260817` and get RDY-0045 off the table; have the Owner rotate the DB credential directly; run RDY-0083 through the formal closure contract rather than treating it as still-open by default |
+| **G4 Ready for Phase 3 Brand** | **BLOCKED** | **3** | **Licence/attribution determination still absent** — commissioned to SkyEagle 2026-08-14, a 2026-08-16 background brief explicitly disclaims being a determination and leaves the actual decision block blank · branding surface walk checklist is issued but unexecuted (0090) | **This is the single highest-leverage open item in the entire register.** Nothing has moved on the actual determination since it was commissioned |
+| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **13** | Same underlying items as G0/G1/G3 above (0003, 0004, 0016, 0056, 0057, 0060–0062, 0086) plus: 0067's status-register extraction is mechanically simple but formally waits on 0003; 0071's code defect is now fixed but not live-verified (same permission-classifier block); 0078 needs primary ZATCA/NPHIES sources read, purely a research task; 0088 has 3 of 9 competitor dossiers left to re-verify | RDY-0078 and RDY-0088's remainder are both closable by research alone, today, with no blocker of any kind |
+| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **20** | Requires G2 and G3, both still open · RDY-0069 explicitly cannot start before a pilot exists · **RDY-0075/0076/0077 (V-1/V-2/V-3 market validation) have had zero calls made since commissioning** — this is the item that has moved least of anything in the register and has no technical predecessor of any kind | **Make the first RDY-0075 call.** Same conclusion as every prior sync: no engineering blocks it, and nothing else in this gate can be validated ahead of it |
 
 ### 47.1 The readiness questions, answered separately
 
