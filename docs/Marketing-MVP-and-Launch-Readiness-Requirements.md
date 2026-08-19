@@ -230,10 +230,16 @@ limit, name what would close it, and do not resolve it in the product's favour.*
 
 ### 1.2 The answer in six sentences
 
-The product is **demo-capable in a narrow, administrative band and nowhere else**: on the
-audited baseline, 6 of 22 demo scenarios were executable, all of them administrative or
-platform scenarios, because there are zero patients, zero encounters, zero appointments
-and one usable human login. Everything the GTM sells as a *clinical* proof — the
+*(On the original 2026-08-09 audited baseline: the product was demo-capable in a narrow,
+administrative band and nowhere else — 6 of 22 demo scenarios executable, all administrative or
+platform, because there were zero patients, zero encounters, zero appointments and one usable
+human login.)* **UPDATED 2026-08-19 — materially stale as a current claim:** the live instance now
+carries 30 seeded patients, 72 encounters, 37 appointments, and 10 `users`/7 `users_secure` logins
+across 6 role accounts, on a branded (`Thiqa`) surface with Saudi locale/currency/timezone
+configured. This does **not** mean the product is demo-ready end-to-end — the register still shows
+43 open P0 items across G0–G6 (§1.4) — but the specific "zero data, one login" claim is no longer
+true and should not be repeated as the reason clinical scenarios are blocked. Everything the GTM
+sells as a *clinical* proof — the
 reception-to-physician journey, reporting and export, the ophthalmology examination —
 is blocked not by engineering but by **configuration and data**, which Source B and
 Source A jointly estimate at 1–3 days of work with no development. Everything the GTM
@@ -631,7 +637,7 @@ accounts do not exist, and five of seven roles have never been populated.
 >
 > | Row | Phase 2A (this table) | Current, after Phase 2B |
 > |---|---|---|
-> | **OD-01** backup | CONFIRMED broken | **FIXED and proven — RDY-0080 CLOSED** (PB-001). Policy (0081) and restore (0082) still open |
+> | **OD-01** backup | CONFIRMED broken | **FIXED and proven — RDY-0080 CLOSED** (PB-001). **UPDATED 2026-08-19:** restore also now proven and CLOSED (RDY-0082, PB-203/205, 2026-08-16). Policy (RDY-0081 — off-instance target, schedule, retention, encryption) remains the only open item of the three |
 > | **L-24** 11 reports | CONFIRMED unprotected | **Code remediation complete and statically verified; positive/negative authenticated role acceptance pending** (PB-002) |
 > | **§20.6 #4/#5** AJAX ACL, RPT-0042 | CONFIRMED | **Same — code complete, acceptance pending** (PB-002) |
 >
@@ -9133,7 +9139,7 @@ rule counts it as still blocking **G2**, and **no gate count moves on this closu
 #### RDY-0080 — Backup configuration fix
 **Source:** Audit OD-01, CFG-0120, L-21, B7, GAP-0064; GTM §26 P0 · **Gates:** G2 (no-go) G3 · **Owner:** DevOps / Infrastructure
 **Current state:** `mysql_bin_dir = C:/xampp/mysql/bin`, **a path that does not exist** on this host (`Test-Path` = False). `realpath()` returns false, the command degrades to `\mysqldump`, and **there is no fallback**. The audit's own remediation note is specific: both `mysqldump.exe` and `mariadb-dump.exe` are present under `C:/openemr-stack/mariadb/bin`.
-**Gap (RESOLVED 2026-08-13, PB-001):** ~~Backup cannot execute.~~ **Backup execution is now proven** (twice, 283 tables, clean). The GTM's answer to "why pay us rather than download it yourself" cites *"backups that actually run rather than a shipped configuration that fails"* — that specific contradiction is closed. **It does not extend to RDY-0081 (policy: off-instance copy, schedule, retention, encryption) or RDY-0082 (restore), both still open.**
+**Gap (RESOLVED 2026-08-13, PB-001):** ~~Backup cannot execute.~~ **Backup execution is now proven** (twice, 283 tables, clean). The GTM's answer to "why pay us rather than download it yourself" cites *"backups that actually run rather than a shipped configuration that fails"* — that specific contradiction is closed. **UPDATED 2026-08-19: RDY-0082 (restore) is also now proven and CLOSED** (PB-203/205, 2026-08-16 — 7 of 7 acceptance legs met, including an authenticated login against the restored instance with a negative control). **It does not extend to RDY-0081** (policy: off-instance copy, schedule, retention, encryption — still genuinely open).
 **Why it blocks launch:** Selling "we back it up" without this is indefensible (GTM §26 P0). Until it is fixed, Admin → Backup is on the demo no-go list (RDY-0094).
 **Required action:** Correct `mysql_bin_dir` (and `perl_bin_dir`), then prove execution.
 **Acceptance criteria:** A backup initiated through the documented procedure completes without error and produces a file of plausible size; the operation is repeated once; **the resulting file is then used by RDY-0082** — a backup that has not been restored is not evidence of anything.
@@ -11654,7 +11660,7 @@ The distance to `PILOT READY` is measured in engineering and one decision.
 8. **D-7 status:** not attempted, no script, blocked on B1–B4 plus the `front_office` Add-Patient defect that sits on its very first step.
 9. **Branding-cleanliness status:** ~~100 % stock~~ **— UPDATED 2026-08-13: substantially branded.** Product name `Thiqa`, own tagline, `skyeagle.uk` links, donation/review/acknowledgement links off, login page titled *Thiqa Login*, and a `brand/` asset kit on disk. **Still open:** facility remains `Your Clinic Name Here`, regional configuration untouched, and the licence determination still nobody's.
 10. **Patch/dependency status:** ~~0 ahead / 373 behind at audit~~ **— UPDATED 2026-08-13: 33 ahead / 418 behind and divergent** (HEAD is no longer an ancestor of upstream), with **13 local commits unpushed**; one gitignored, composer-installed module of unknown provenance; no update method, no rollback, no cadence.
-11. **Backup/restore status:** **backup EXECUTION proven and CLOSED (RDY-0080, 2026-08-13 — ran twice, 283 tables, clean)**; **policy (RDY-0081) and restore (RDY-0082) still open**. Restore remains a hard G3 condition, and Admin → Backup stays on the demo no-go list until a restore is proven.
+11. **Backup/restore status:** *(2026-08-13: backup execution proven and closed; policy and restore still open.)* **UPDATED 2026-08-19:** restore is now also proven and CLOSED (RDY-0082, 2026-08-16 — 7 of 7 legs, including an authenticated restored-instance login with a negative control). **Still open: policy** (RDY-0081 — off-instance target, schedule, retention, encryption undefined). Admin → Backup stays on the demo no-go list regardless (RDY-0094), independent of restore's closure.
 12. **Background-service status:** *(2026-08-13: the runner had never executed; two active services stuck at 2021-01-18; no live trigger on any of four paths.)* **UPDATED 2026-08-19:** a Windows Scheduled Task trigger was built and proven 2026-08-14 (PB-071), re-confirmed ticking today. Held open (RDY-0083) for a different reason — the trigger depends on a live console session and does not survive logoff, which is fine for this demo host but not for a pilot host; the disclosure obligation now applies only if the console session has actually lapsed since last logon, not unconditionally.
 13. **Authorization/report status:** **11 reports remediated in Phase 2B PB-002 (2026-08-13) — Code remediation complete and statically verified; positive/negative authenticated role acceptance pending**, `amc_full_report.php` included, plus the admin AJAX endpoint (0053) and the RPT-0042 mismatch (0054). **Still open:** the controller map still covers 2 of 10 controllers (RDY-0052), and **the role matrix has still never been exercised** — which is why none of these is closed.
 14. **Hosting status:** **BLOCKED — DECISION.** Unevaluated in every source. Nothing about hosting may be published until two quotes and a residency position exist.
