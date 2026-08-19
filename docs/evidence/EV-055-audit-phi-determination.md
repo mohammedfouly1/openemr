@@ -4,6 +4,22 @@
 **Date:** 2026-08-14 · **Measured against:** the **seeded** demo system (Marketing MVP Seed v1),
 never a real-patient system, exactly as the acceptance criteria require.
 
+> **✅ ACCEPTED 2026-08-19 — Security Reviewer (Mohammed Elfouly), given directly in conversation
+> with the orchestrating session.** Accepted the finding in §0-§3 and the RESTRICT AND DISCLOSE
+> recommendation in §4 as written, all six measures, with no changes requested. This is the
+> **Security Reviewer's** acceptance of the technical determination specifically — distinct from,
+> and in addition to, the Owner's separate 2026-08-19 approval of the customer-facing disclosure
+> *text* itself (`EV-055-pilot-disclosure-draft.md`). Both are the same individual, holding both
+> roles, per `EV-003` §1's own recorded observation. Recorded honestly as to form: relayed by the
+> Owner in this conversation, not a countersigned document — same convention as every other
+> Owner-relayed decision this session (PB-045's clinical verdicts, RDY-0002's GTM acceptance).
+>
+> This closes §5's last open row (*"If acceptance, disclosure passes RDY-0003 claim review"* is
+> tracked separately, under RDY-0003 itself, not here — see the row below). The four **technical**
+> criteria in §5 were already MET; this entry closes the fifth (*"what the customer is told"*,
+> now that the disclosure text exists and is approved) and confirms the determination itself, which
+> §5 did not have a row for but which is the actual substance a Security Reviewer signs off on.
+
 ---
 
 ## 0. Finding, stated first
@@ -101,12 +117,14 @@ encrypted.**
 | States **what appears** in `log.comments` | ✅ §1 |
 | States **who can read** the log tables | ✅ §2 |
 | States **the retention** | ✅ §3 — there is none |
-| States **what the customer is told** | ⚠ **§4 measure 5 defines the content; the disclosure text does not exist yet** |
-| If acceptance, disclosure passes **RDY-0003 claim review** | ❌ **RDY-0003 is open — no claim reviewer is named** |
+| States **what the customer is told** | ✅ **`EV-055-pilot-disclosure-draft.md` — Owner-approved 2026-08-19** |
+| Technical determination accepted by Security Reviewer | ✅ **2026-08-19, addendum above** |
+| If acceptance, disclosure passes **RDY-0003 claim review** | ⚠ **RDY-0003's review step now exists and has run its first sample (`EV-067`, 2026-08-19) — but this specific artefact (the disclosure text) has not itself been put through that step yet. Narrow, quick, not blocking on anything structural** |
 
-**RDY-0055 is NOT closed.** The technical determination is complete and evidenced; the two remaining
-items are a written disclosure and a claim reviewer to approve it — both governance, neither
-engineering.
+**RDY-0055 closure status:** see the register row and `docs/evidence/AGENT-CLAIMS.md` for whether the
+disclosure-text-specific claim-review pass has been completed, since this file is not the place that
+gets updated for that last step. The technical determination itself and its Security Reviewer
+acceptance, both recorded above, are complete.
 
 **One line that must reach RDY-0056 immediately:** the audit-integrity qualification must never imply
 the log is encrypted. It is not. It is base64, and this document decodes it in one function call.

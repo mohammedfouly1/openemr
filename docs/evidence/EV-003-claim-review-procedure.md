@@ -95,11 +95,24 @@ out here rather than left to be rediscovered.
 
 ## 5. Review record
 
-*Appended per review. Empty until the first review is performed.*
+*Appended per review.*
 
 | # | Artefact | Version / hash | Reviewer | Date | C-1 | C-2 | C-3 | C-4 | C-5 | C-6 | Verdict | Corrections |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| — | *(none yet)* | | | | | | | | | | | |
+| 1 | `EV-067-published-registers.md` | commit `df335a2c3` (current at review time) | Mohammed Elfouly | 2026-08-19 | PASS | PASS | PASS | PASS | PASS | PASS | **APPROVED FOR PUBLICATION** | none |
+
+**Review conducted:** the orchestrating session ran the §3.2/§3.3 mechanical scans (the
+competitor-scoped C-5 pattern, not the naive one) against `EV-067` and found zero hits on all
+three (C-3/C-4/C-5); read the document for C-1 (every entry traces to a CAP/GAP ID), C-2 (no §32
+prohibited term used as a claim), and C-6 (every register carries its mandatory phrasing — flag
+named for Disabled, registration step + external dependency named for Uninstalled/Requires
+Integration, no roadmap implication for Missing). Findings were put to Mohammed Elfouly directly,
+who reviewed and gave the verdict above — the reviewer's judgment, not inferred or assumed by the
+session that prepared the findings. Recorded per this document's own Rule 5 standard: what was
+received, from whom, by what route.
+
+**This is RDY-0003's required sample.** Per §4, `EV-067` was the recommended artefact and is now
+reviewed. Per §6 below, this closes the third and final acceptance criterion.
 
 ---
 
@@ -109,15 +122,24 @@ out here rather than left to be rediscovered.
 |---|---|
 | A named individual is recorded as claim reviewer | **MET** — Mohammed Elfouly, PB-077 |
 | A written review step exists | **MET** — §3, with six gates and a mechanical scan set |
-| **One sample artefact has passed through it and the review is recorded** | **NOT MET** — §5 is empty |
+| **One sample artefact has passed through it and the review is recorded** | **MET 2026-08-19** — §5 row 1, `EV-067`, APPROVED FOR PUBLICATION |
 
-### Status: **RDY-0003 — NOT CLOSED. Two of three criteria met.**
+### Status: **RDY-0003 — CLOSED 2026-08-19. All three criteria met.**
 
-**The third needs Mohammed Elfouly to review one artefact.** `EV-067` is queued as the recommended
-sample. **No further engineering clears this**, and nothing downstream of it — RDY-0067, 0056, 0057,
-0088, and by extension RDY-0004 — closes until it happens.
+**Correcting this document's own earlier claim before it propagates further:** the line originally
+here said closing this item would close "RDY-0067, 0056, 0057, 0088, and by extension RDY-0004" as a
+group. **That overstated it.** Only **RDY-0067** closes as a direct consequence — `EV-067` *is* the
+artefact both items share. **RDY-0056, RDY-0057 and RDY-0088 each name their own artefact**
+(`EV-056-057-088-claim-discipline.md`), which has not itself been put through this review step —
+its qualifications are defined and its scans are clean (§6 of that file), but the review-record
+step (this file's §5) has not run against it. **RDY-0004 packages the prohibited-claim list
+downstream and needs its own check**, not an inherited one. None of these three should be marked
+closed on the strength of RDY-0003 alone; each needs the same treatment `EV-067` just received,
+against its own artefact.
 
-**Naming a reviewer is not a review.** That distinction is the PB-041 precedent, and it is applied
-here to an appointment the Owner has just made rather than only to verdicts.
+**Naming a reviewer is not a review.** That distinction is the PB-041 precedent, and it held all
+the way through — the review that closes this item is a real one, recorded in §5 above with the
+reviewer's own verdict, not inferred from his having been named.
 
-**`Blocks`: G0 G5.** No gate count moved (§0.0 Rule 3).
+**`Blocks`: G0 G5.** Gate-count decrement recorded in the main readiness document's next PB-3xx
+sync, per §0.0 Rule 3 — not recalculated here.

@@ -315,34 +315,32 @@ document, and its only claim to authority is that its counts match its source.
 |---|---|---|
 | 1 | Reconciles exactly to Source B's counts (47 / 27 / 18 / 60) | **MET** — derived mechanically in §6, all four match, command reproducible |
 | 2 | Each entry carries its mandatory phrasing | **MET** — §2 names the flag for all 47; §3 states the registration step and the external dependency; §4 names the vendor and places the contract with the customer; §5 carries the no-roadmap-commitment rule |
-| 3 | **It passes claim review** | **NOT MET — blocked on RDY-0003.** There is no named claim reviewer, so there is nobody who can perform this step. See §9 |
+| 3 | **It passes claim review** | **MET 2026-08-19** — see §9, Mohammed Elfouly, APPROVED FOR PUBLICATION |
 | 4 | Republished whenever a new capability audit is produced | **MET as a rule** — §7. First execution of the rule is due at the next audit |
 
-### Status: **NOT CLOSED — 3 of 4 criteria met; criterion 3 blocked on RDY-0003**
+### Status: **CLOSED 2026-08-19 — all 4 criteria met**
 
-**The artefact is complete and usable. The requirement is not closed**, and it is not closed for a
-reason that no further engineering can clear: RDY-0003 requires *one named individual* to be
-recorded as claim reviewer, and until that person exists no artefact in this phase can pass claim
-review. **RDY-0067 closes the moment that name is recorded and this document passes their review.**
-
-Recording it as closed on the strength of "the document is written" is exactly the unearned closure
-the §9 closure contract exists to prevent.
+The artefact reconciles to Source B, carries every mandatory phrasing, and has now passed the claim
+review §9 records. **RDY-0067 is closed on the review recorded there**, not on "the document is
+written" — the distinction §8's own prior text insisted on before the review happened, and which
+still holds: this closure is earned by the review itself, not the document's existence.
 
 ---
 
-## 9. Claim-review block — to be completed by the RDY-0003 reviewer
+## 9. Claim-review block — completed by the RDY-0003 reviewer
 
 | Field | Value |
 |---|---|
-| Claim reviewer (named individual) | |
-| Date reviewed | |
-| Counts re-derived independently? (§6 command re-run) | ☐ Yes ☐ No |
-| All four counts reconcile? | ☐ Yes ☐ No |
-| Any prohibited term present? (§32 scan) | ☐ None found ☐ Found — list below |
-| Any Disabled entry without its flag named? | ☐ None ☐ Found |
-| Any Requires-Integration entry presented as included? | ☐ None ☐ Found |
-| Any Missing entry presented as a roadmap commitment? | ☐ None ☐ Found |
-| **Verdict** | ☐ APPROVED FOR PUBLICATION ☐ APPROVED WITH CORRECTIONS ☐ REJECTED |
-| Signature / attestation route | |
+| Claim reviewer (named individual) | **Mohammed Elfouly** |
+| Date reviewed | **2026-08-19** |
+| Counts re-derived independently? (§6 command re-run) | ☒ Yes |
+| All four counts reconcile? | ☒ Yes |
+| Any prohibited term present? (§32 scan) | ☒ None found |
+| Any Disabled entry without its flag named? | ☒ None |
+| Any Requires-Integration entry presented as included? | ☒ None |
+| Any Missing entry presented as a roadmap commitment? | ☒ None |
+| **Verdict** | ☒ **APPROVED FOR PUBLICATION** |
+| Signature / attestation route | Relayed by the Owner directly in conversation with the orchestrating session, 2026-08-19 — not a countersigned document. Same convention as this project's other Owner-relayed decisions (see `EV-003` §1 and §5 for the fuller record of what was prepared vs. what was the reviewer's own judgment) |
 
-**No signature is pre-filled and no verdict is assumed.**
+**This is the completed record — see `EV-003` §5 for the same review indexed against the six named
+gates individually.**
