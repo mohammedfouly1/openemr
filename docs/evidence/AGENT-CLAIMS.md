@@ -1055,3 +1055,23 @@ reachable). Register row and `EV-048-secrets-handling.md` §2.5/§3 updated to r
 partial, not a closure — full closure needs either the remaining hygiene work or an explicit Owner
 risk-acceptance call, not made unilaterally here. No gate count moved (§0.0 Rule 3) — row stays
 open.
+
+## Orchestrator — PB-474, 2026-08-19 — RDY-0048 CLOSED: durable pre-commit control + documents-storage finding found already fixed
+
+Considered `git rm --cached` + `.gitignore` for `sites/default/sqlconf.php` (R-2) and rejected it
+after checking `library/sqlconf.php:26` -- a hard `require_once` on the site's sqlconf.php that
+fatals if the file is physically absent. Untracking it would break app boot on every fresh
+`git clone`/`openemr-cmd worktree add`, since `git checkout` never materializes an ignored,
+untracked path. Implemented the durable-mechanism half of R-3 instead: a new local
+`.pre-commit-config.yaml` hook (`tools/ci/verify-sqlconf-placeholder.php`) blocks any commit
+touching `sites/*/sqlconf.php` unless the staged content is byte-for-byte the known-safe upstream
+placeholder (`$login`/`$pass`/`$dbase` = `'openemr'`, `$config = 0`). Tested live: passes on the
+pristine committed blob, blocks on a real-credential copy with an explanatory message.
+Separately, re-checked the "documents-storage not `.gitignore`'d" finding carried forward since
+PB-034/PB-035 and found it already fixed at commit `4566752d3` (2026-08-13) -- the open-finding
+language in the register and the RDY-0048 card predated that fix and was stale.
+
+All three of RDY-0048's acceptance criteria are now met (no live credential can enter a tracked
+file going forward; history scan already clean; runbook already documents the handling). Register
+row, `EV-048-secrets-handling.md`, and Sec1.4 counts updated. Open P0: 12 -> 11. G3 6 -> 5; no other
+gate changes (RDY-0048 blocks G3 only).

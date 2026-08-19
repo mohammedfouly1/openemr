@@ -243,3 +243,9 @@ repos:
     language: system
     stages:
     - commit-msg
+
+  - id: verify-sqlconf-placeholder
+    name: Verify sqlconf.php stays a placeholder (RDY-0048)
+    entry: php tools/ci/verify-sqlconf-placeholder.php
+    language: system
+    files: ^sites/[^/]+/sqlconf\.php$
