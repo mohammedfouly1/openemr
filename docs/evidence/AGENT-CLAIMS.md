@@ -1011,3 +1011,21 @@ force-push, and reset are explicitly out of scope.
 and D-7 physician; D-7 accounting was re-confirmed. Six evidence images and the authoritative
 result table are recorded in `EV-060-061-086-direct-navigation-last-mile-20260819.md`.
 SS-10/11 were not touched, and qualification/annotation embedding remains orchestrator-owned.
+
+## Codex Chrome SS-06 final correction — PB-471, 2026-08-19
+
+**Claiming PB-471:** RDY-0060/0061 final SS-06 correction, independent retake review, evidence
+sync, register closure and Rule-3 gate-count synchronization. Scope is limited to the calendar
+seed rows, one new SS-06 capture, evidence, and the main readiness register. SS-01…05 and
+SS-07…12 are explicitly untouched.
+
+**Outcome:** the real Chrome week boundary was observed as **August 17–23, 2026** before any
+mutation. The actual blank-grid cause was malformed `pc_startTime` values (`128:00`–`136:30`)
+from PB-454 adding five days to a TIME column, not the week boundary. Two fresh table backups were
+created. Corrected 36 non-recurring times by subtracting the erroneous 120-hour offset; moved only
+the nine Aug 15–16 rows forward seven days into Aug 22–23, preserving all 16 Aug 19 Flow Board
+appointments; distributed the 36 rows evenly across four existing appointment categories. The
+recurring row `pc_eid=43` remained untouched. Live Chrome then showed a populated Aug 17–23 week,
+both provider selections, varied colors/statuses, and no malformed times. New qualified retake:
+`captures/2026-08-19/publication-ready/SS-06-calendar-current-week-two-providers-20260819-retake.png`.
+Independent final review PASS; RDY-0060 and RDY-0061 closed and Rule-3 counts synchronized.
