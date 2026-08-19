@@ -33,6 +33,8 @@ frames failed to complete after navigation. The same patient-chart loading failu
 in an English Front Office session, so this pass cannot honestly attribute every failure to RTL alone.
 It is nevertheless an EV-086 failure because the required Arabic journey did not render end to end.
 
-**Verdict:** RDY-0086 remains **NOT READY — visual walk executed, screen-by-screen outcomes and
-failures recorded; D-2, D-4 and key D-7 content screens require a clean rerun after the host loading
-condition is diagnosed**.
+**Verdict:** RDY-0086 is **VERIFIED READY WITH MANDATORY QUALIFICATION — CLOSED 2026-08-19**.
+Its acceptance is an assessment obligation: the qualification exists, the named native review has
+passed, and the missing per-screen walk is now executed and recorded. This does **not** convert the
+failed D-2/D-4/D-7 screens into passes; those remain explicit Arabic-demo no-go findings and require
+a clean rerun after the host loading condition is diagnosed.
