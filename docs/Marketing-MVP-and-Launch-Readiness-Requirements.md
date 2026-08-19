@@ -29,6 +29,7 @@ the first.
 | **PB-390 … PB-399** | **Orchestrator (main session)** — fourth subagent, 2026-08-19: RDY-0004 (prohibited-claim packaging), RDY-0061 (capture rules), RDY-0086 (Arabic/RTL qualification script) — pure documentation; RDY-0060/0062 config-verification only (facility name/currency/timezone already appear correctly set in the live DB, contradicting the register's stale 2026-08-13 claim — this agent confirms/corrects that, does not attempt the actual screenshot/recording capture, which needs the Chrome browser tool the PB-380-383 agent may still be using). **Range claimed 2026-08-19.** |
 | **PB-400 … PB-402** | **Orchestrator (main session)** — recording the Owner's ruling on RDY-0092's `Q27`-`Q31`/`Q65` NPHIES escalation, 2026-08-19: option (a) adopted (future-programme pre-work, no MVP-scope conflict); cross-link added to RDY-0100's two register rows rather than editing the checksummed Locked Decisions file. **Range claimed 2026-08-19.** |
 | **PB-403 … PB-405** | **Orchestrator (main session)** — correcting the "invisible, not redacted" sensitivity-gating claim to "redacted, not invisible" across five files, 2026-08-19, per Owner decision (correct now pending live confirmation, not wait): `EV-056-057-088-claim-discipline.md` §2.2 (the mandatory qualification itself, RDY-0057), `EV-016-authorization-matrix.md`, `EV-016`, and three spots in this document (§12.3, the A-2 matrix row, the role-card table) plus `docs/HISModulesUsers.md`. Based on two independent static-code reads (`interface/patient_file/history/encounters.php:506-511/533-536`), not yet a live browser confirmation. **Range claimed 2026-08-19.** |
+| **PB-406** | **Orchestrator (main session)** — Owner decision to merge `EV-004` §1.3's nine flagged GTM-pillar-only phrases into §32, 2026-08-19: added as §32 items 27–30. **Range claimed 2026-08-19.** |
 | PB-380 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
@@ -10972,6 +10973,15 @@ control list (RDY-0004).** Phases 3, 4 and 5 receive it verbatim.
 | 24 | Banned adjectives: best · leading · complete · comprehensive · enterprise-grade · AI-powered · seamless · fully integrated · end-to-end · hospital-grade | Unprovable | Audit §27.1; GTM §13.1 | Brand voice constraint | Vocabulary constraint | Copy constraint |
 | 25 | Manufactured trust: testimonials · clinic or hospital logos · customer counts · ROI statistics · **uptime or performance figures** · implementation-time claims · certification badges · "trusted by" strips | **We have no customers, and none has been measured** | GTM §21 | No logo-strip design | No copy | **No such section may exist** |
 | 26 | **Competitive frequency figures** ("0 of 16", "0 of 11 GCC") | 9 of 26 dossiers unverified | GTM §2.3, §35; RDY-0088 | — | **Publish the mechanism, not the number** | No figure on any page |
+| 27 | "Secure" (unqualified), "field-level security" | Unprovable adjective; sensitivity gating is encounter-level only, not field-level (L-28) | GTM Pillars 1/4 "Claims to avoid"; `EV-004` §1.3; RDY-0004 merge, 2026-08-19 | Brand voice must not claim "secure" unqualified | No copy | As copy — never unqualified |
+| 28 | "Full interoperability suite" | FHIR model classes exist with no service, controller or route behind them | GTM Pillar 2 "Claims to avoid"; `EV-004` §1.3; RDY-0004 merge, 2026-08-19 | — | No copy | No page |
+| 29 | "Automatic coding", "hundreds of specialty templates" | Billing generators are not pluggable (L-26); 18 forms ship, not hundreds | GTM Pillar 3 "Claims to avoid"; `EV-004` §1.3; RDY-0004 merge, 2026-08-19 | — | No copy | No page — state the true count (18) if templates are discussed at all |
+| 30 | "Affordable", "cheapest", "unlimited", "all-inclusive" | No competitor pricing data exists to support a comparative claim (RDY-0088 holds all frequency figures); "unlimited"/"all-inclusive" is untrue given items 1–13's explicit exclusions | GTM Pillar 4 "Claims to avoid"; `EV-004` §1.3; RDY-0004 merge, 2026-08-19 | — | No copy | No page |
+
+**Items 27–30 added 2026-08-19** (`EV-004` §1.3, RDY-0004): nine phrases the GTM's four pillar-level
+"Claims to avoid" tables prohibited but this list did not literally contain — Owner decision, given
+directly in conversation, to merge them into §32 so it is genuinely the single canonical downstream
+list rather than requiring a phase author to also cross-check four separate GTM pillar tables.
 
 **Pages that must not exist** (GTM §17.2): compliance · NPHIES/ZATCA/Saudi-readiness ·
 analytics/BI · mobile app · inpatient/hospital · ERP/accounting · LIS/RIS/PACS · dental ·

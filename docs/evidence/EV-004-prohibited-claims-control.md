@@ -66,6 +66,13 @@ should also read the relevant GTM pillar table's "Claims to avoid" row for their
 it is not a strict subset of §32 term-for-term. No new document was created to hold a second copy of
 either list — this table is the cross-reference, not a duplicate.
 
+> **✅ RESOLVED 2026-08-19 — Owner, given directly in conversation with the orchestrating session.**
+> Chose to merge all nine phrases into §32 now, rather than maintain them as a second cross-checked
+> source. Added as §32 items 27–30 (grouped by theme: security-adjacent, interoperability, coding/
+> templates, pricing) in `Marketing-MVP-and-Launch-Readiness-Requirements.md`. §32 is now the single
+> literal source for all ten origin lists checked in the table above — a Phase 3/4/5 author embedding
+> §32 verbatim no longer needs to separately re-check the four GTM pillar tables for their own pillar.
+
 ---
 
 ## 2. The enforcing reviewer
