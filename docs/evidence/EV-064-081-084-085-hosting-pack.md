@@ -175,6 +175,13 @@ remembering to delete old copies — it survives the exact "unattended trigger" 
 **This schedule requires the same Owner/Compliance review `EV-074`'s figures are still waiting on.**
 It is not implemented, because there is no bucket to implement it on yet (RDY-0064 blocked).
 
+> **✅ APPROVED AS PROPOSED — 2026-08-19, Owner, given directly in conversation with the orchestrating
+> session.** The 14-day/8-week/12-month tiered schedule above, and §3.3's 90-day CMEK rotation default,
+> are accepted as written, with no change requested. Relayed by the Owner in this conversation, not a
+> countersigned document — same convention as every other Owner-relayed decision this session. **This
+> closes the review gap only.** Implementation still requires RDY-0064's bucket to exist — see §3.6
+> and §7, unchanged by this approval.
+
 ### 3.3 Encryption at rest — CMEK
 
 | Item | Specification |
@@ -215,7 +222,7 @@ remains an open item for the Owner to assign, exactly as PB-023 left it.
 |---|---|---|
 | Off-instance bucket exists | BLOCKED — EXTERNAL PROVISIONING | Unchanged — still blocked on RDY-0064. **Now fully specified** (§3.1), so creation is mechanical once unblocked |
 | Encryption decision implemented (CMEK) | Pending bucket | Unchanged — pending bucket. **Now fully specified** (§3.3) |
-| Retention policy exists | Local retention implemented; cloud lifecycle pending | **Cloud lifecycle schedule now specified** (§3.2), pending Owner/Compliance review and a bucket to apply it to |
+| Retention policy exists | Local retention implemented; cloud lifecycle pending | **Cloud lifecycle schedule now specified and Owner-approved** (§3.2, 2026-08-19) — pending only a bucket to apply it to |
 | Scheduled backup copies successfully | Command scheduler-ready; schedule not installed | Unchanged |
 | Backup verified present at off-instance target | Pending bucket | **Verification mechanism now specified** (§3.1 last row, §3.4) |
 | Named human owner assigned | Role named; individual not yet named | Unchanged — not this document's decision to make |
@@ -365,7 +372,7 @@ per-item, so no reader has to infer it:
 | Item | Why it stays open |
 |---|---|
 | RDY-0064 | Decision recorded (PB-022); provisioning and the two quotes require a real account, real payment, and real vendor engagement — none performable by an agent |
-| RDY-0081 | Off-instance bucket, CMEK and cloud-side retention all require RDY-0064's bucket to exist; the schedule proposed here (§3.2) also needs Owner/Compliance review, same as `EV-074`'s figures |
+| RDY-0081 | Off-instance bucket, CMEK and cloud-side retention all require RDY-0064's bucket to exist. **The schedule's review gap closed 2026-08-19** (Owner-approved, §3.2) — the remaining blocker is execution only |
 | RDY-0084 | Requirements complete (already, per `EV-084`); nothing is implemented because there is no hosted pilot to monitor |
 | RDY-0085 | Specification complete (`EV-047` §10.5 + this pack's §5); every acceptance criterion needs a real reachable HTTPS instance |
 

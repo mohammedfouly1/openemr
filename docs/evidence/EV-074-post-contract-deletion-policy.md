@@ -8,6 +8,16 @@
 with *"a plausible-sounding '90 days'"*. This artefact answers it with a stated rule and states, where
 it cannot answer, exactly what remains a Legal decision.
 
+> **✅ APPROVED AS PROPOSED — 2026-08-19, Owner, given directly in conversation with the orchestrating
+> session.** D-1's 30-day figure and D-2's 90-day ceiling (§2, §4) are accepted as written, with no
+> change requested. Recorded honestly as to form: relayed by the Owner in this conversation, not a
+> countersigned document — same convention as every other Owner-relayed decision this session. This
+> is the Owner's own sign-off, standing in for the named Legal/Compliance reviewer role per this
+> document's `Owner` field, the same convention `EV-003` §1 already records for that same individual
+> holding more than one review role. **This does not assert that a primary Saudi retention/deletion
+> source was read** — §4's honesty about that gap is unchanged; what closes is the review step itself,
+> not a claim that legal research was performed that was not.
+
 ---
 
 ## 1. Why this cannot be a simple "delete everything at T+N days" policy
@@ -61,15 +71,16 @@ binding, exactly as `RDY-0074`'s own `Owner` field already says (Legal / Complia
 | Covers backups taken during the engagement | **MET** — D-2, D-5 |
 | States a timeframe | **MET** — D-1 (30 days), D-2 (90-day ceiling) |
 | Reflects RDY-0055 (PHI in the audit log) | **MET** — §1.1 |
-| Legal/Compliance review of the stated timeframes | **NOT MET** — §4; the numbers are proposed defaults pending review, not yet a binding policy |
+| Legal/Compliance review of the stated timeframes | **✅ MET 2026-08-19** — Owner approved as proposed, addendum above |
 
-### Status: **RDY-0074 — NOT CLOSED.** Policy structure and rule are written and internally
-consistent with RDY-0055/0073/0081; the specific timeframes need Legal/Compliance sign-off before
-they can be called a decision rather than a proposal. **This is a named human-blocked item, not an
-engineering gap** — the review is Legal/Compliance's, the same reviewer role RDY-0028 and RDY-0066
-already need.
+### Status: **RDY-0074 — CLOSED 2026-08-19.** Policy structure and rule are written and internally
+consistent with RDY-0055/0073/0081; the Owner approved D-1/D-2's timeframes as proposed, standing in
+for the named Legal/Compliance reviewer role. **D-5's off-instance leg still cannot be exercised**
+until RDY-0064's bucket exists, but that is an execution dependency, not a review gap — the policy
+itself, including its prospective D-5 rule, is now approved.
 
-**`Blocks`:** G3. No gate count moved (§0.0 Rule 3).
+**`Blocks`:** G3. Gate-count decrement recorded in the main readiness document's next PB-3xx sync,
+per §0.0 Rule 3 — not recalculated here.
 
 **Unblocks on Legal/Compliance sign-off of §2:** `EV-073`'s T-9 step gains its timeframe, closing one
 of `EV-073`'s two remaining acceptance gaps referenced from that side (the other is T-6, the customer

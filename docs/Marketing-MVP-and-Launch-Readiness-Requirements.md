@@ -24,7 +24,7 @@ the first.
 | **PB-300 … PB-349** | **Agent E (Gate-sync auditor)** — Claude Code, session performing a full G0–G6 open-blocker reconciliation as of 2026-08-19: re-verifying every RDY/DG/D/RB/BLK item against current repo state (commits through `7588b42e5`), classifying every still-open item as human-decision / external-dependency / actionable-now, and running the §47 Rule 3 gate-count sync. Read-only against code; writes limited to a new dated evidence file, one PB entry in this range, and the Rule 3 sync itself. **Range claimed 2026-08-19.** |
 | **PB-350 … PB-359** | **Agent F (Owner-decision scribe)** — Claude Code, session transcribing five decisions the Owner gave directly, in conversation, 2026-08-19: RDY-0084 (owner = role), RDY-0086/HR-09 (Arabic competence basis), RDY-0096 (support level selected), RDY-0092/RDY-0099 (Q5/MFA conflict ruling), RDY-0083 (pilot trigger = Windows Service). Documentation-only; no code, no database, no gate-count recalculation. **Range claimed 2026-08-19.** |
 | **PB-360 … PB-369** | **Agent G** — Claude Code, session closing out three "decided, not yet implemented" items per direct task briefing, 2026-08-19: RDY-0055 (live re-verification of the PHI disclosure text against the seeded demo DB, closure), RDY-0096 (Level 1 support definition wired into `EV-066-pack.md`/`EV-068-pilot-requirements.md`, closure), RDY-0083 (confirmed correctly stays open — no host exists to implement/test the Windows Service decision against). **Range claimed 2026-08-19.** |
-| **PB-370 … PB-379** | **Orchestrator (main session)** — recording three real reviews the Owner performed directly, 2026-08-19: EV-055's technical PHI determination (Security Reviewer acceptance), `EV-067`'s claim review (RDY-0003's sample artefact, per `EV-003` §4/§9), and `EV-056-057-088-claim-discipline.md`'s claim review (RDY-0056/0057/0088's own artefact, per `EV-003` §4 queue row 2) — all three prepared (mechanical scans, C-1/C-2/C-6 or C-1/C-2 read as applicable) before being put to the Owner, none fabricated. **Range claimed 2026-08-19.** |
+| **PB-370 … PB-379** | **Orchestrator (main session)** — recording five real decisions the Owner performed directly, 2026-08-19: EV-055's technical PHI determination, `EV-067`'s claim review (RDY-0003), `EV-056-057-088-claim-discipline.md`'s claim review (RDY-0056/0057/0088), `EV-074`'s post-contract deletion timeframes (RDY-0074), and `EV-064-081-084-085-hosting-pack.md` §3.2's backup-retention schedule (RDY-0081's review gap) — all five prepared (mechanical scans/reads as applicable) before being put to the Owner, none fabricated. **Range claimed 2026-08-19.** |
 | PB-380 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
@@ -283,9 +283,9 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **39 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370); **0056**, **0057**, **0088** (PB-372, 2026-08-19 — second claim review, `EV-056-057-088-claim-discipline.md` APPROVED FOR PUBLICATION, same reviewer). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
-| **Requirements still open** | **75** |
-| **Open P0** | **32** — 71 P0 less the 39 genuinely closed P0 IDs above. **PB-372 (2026-08-19): three-item decrement on the PB-371 baseline** |
+| **Requirements CLOSED** | **39 P0** (+ P1s **0018**, **0035**, **0053**, **0054**, **0074**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370); **0056**, **0057**, **0088** (PB-372); **0074** (PB-373, 2026-08-19 — Owner approved D-1/D-2's post-contract deletion timeframes as proposed). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
+| **Requirements still open** | **74** |
+| **Open P0** | **32** — 71 P0 less the 39 genuinely closed P0 IDs above (RDY-0074 is P1, so its closure moves "still open" but not this P0 count). **PB-372 (2026-08-19): three-item decrement on the PB-371 baseline** |
 | **Open P0 per gate** (canonical rule, locked §47) | **G0 1 · G1 10 · G2 8 · G3 13 · G4 2 · G5 8 · G6 16** — **PB-372 (2026-08-19): RDY-0056 (G1 G5), RDY-0057 (G1 G5), RDY-0088 (G5 G6) decremented from the PB-371 baseline; G0, G2, G3, G4 independently re-confirmed unchanged — none of the three block those gates** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
@@ -1069,7 +1069,7 @@ qualification*. Dependencies, not dates.
 | **0071** | Documented export procedure covering CSV report export, full database export, and document/file export | GTM Pillar 2, D-2, MC-08, O-2/O-3 | Procedure written and executed (PB-045); 7 of 9 reachable CSV reports now verified exporting cleanly (PB-208), 1 had a genuine code defect (`pat_ledger.php`). **`pat_ledger.php` defect FIXED in code** (`6dea39a28`, `6ce9979f5`, code-review verified, `EV-071` §3.5.1). **Owner ACCEPTED code-review-level verification as sufficient for the code-defect half, 2026-08-19, given directly in conversation** — the defect-fixed claim is closed on its own evidence; the live HTTP round-trip and reviewer sign-off remain explicitly outstanding, not silently folded in. 2 reports still empty on unrelated seed gaps | NOT READY — code defect fixed and accepted; live verification and reviewer sign-off outstanding | DOCUMENTATION | **P0** | G3 G5 G6 | DevOps / Infrastructure | 0059 | NOT READY — see `EV-071` §5.2 |
 | 0072 | Schema / data-dictionary artefact the customer can be handed | GTM Pillar 2; audit §27.5 | Schema is open and documented upstream; **no customer-facing artefact** | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G6 | OpenEMR Engineer | 0071 | NOT READY |
 | **0073** | Termination and handover procedure — what is delivered, in what format, in what timeframe, by whom, and how it is verified received | GTM Pillar 2, O-3, O-11, §26 brief | **Written** (`EV-073-termination-and-handover.md`, 104 lines, issued 2026-08-14, Agent B) — this cell's "does not exist" was stale since that date. Its own acceptance criterion additionally requires the procedure to be referenced by RDY-0066 (scope template) and RDY-0068 (pilot agreement), and **a dry run performed against the demo system** — none of the three has happened yet | NOT READY — DOCUMENTATION, artefact exists, cross-referencing and dry run pending | DOCUMENTATION | **P0** | G3 G6 | Legal / Compliance + DevOps | 0071 | NOT READY — see `EV-073` |
-| 0074 | Post-contract data deletion and backup-handling policy, including backups taken during the engagement | Brief §26 | Does not exist | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G3 | Legal / Compliance | 0073, 0081 | NOT READY |
+| 0074 | Post-contract data deletion and backup-handling policy, including backups taken during the engagement | Brief §26 | Written 2026-08-16 (`EV-074-post-contract-deletion-policy.md`, AGENT-DOC) — this cell's "does not exist" was stale since that date. D-1 (30-day post-termination deletion) and D-2 (90-day backup ceiling) **Owner-approved as proposed, 2026-08-19** | **VERIFIED READY — CLOSED 2026-08-19** — see `EV-074` §5 | DOCUMENTATION | P1 | G3 | Legal / Compliance | 0073, 0081 | **CLOSED 2026-08-19 — see `EV-074-post-contract-deletion-policy.md` §5. D-5's off-instance leg remains prospective, pending RDY-0064's bucket — not a review gap** |
 
 ### 7.14 Domain M — Validation gates (G6, public launch)
 
@@ -1086,7 +1086,7 @@ qualification*. Dependencies, not dates.
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
 | **0080** | Fix the backup configuration — `mysql_bin_dir` pointed at a non-existent XAMPP path | Audit OD-01, CFG-0120, L-21, B7, GAP-0064; GTM §26 P0 | *Historical:* backup cannot execute. **Live (2026-08-13): FIXED and proven — backup ran twice, 283 tables, clean** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-001)** | BACKUP / RESTORE | **P0** | G2(no-go) G3 | DevOps / Infrastructure | — | **CLOSED 2026-08-13** |
-| **0081** | Backup policy — target location, schedule, retention, encryption at rest, off-instance copy, and success verification | GTM §24, §25 Phase 2; brief §23 | No policy exists | NOT READY — OPERATIONAL | BACKUP / RESTORE | **P0** | G3 | DevOps / Infrastructure | 0080, 0064 | NOT READY |
+| **0081** | Backup policy — target location, schedule, retention, encryption at rest, off-instance copy, and success verification | GTM §24, §25 Phase 2; brief §23 | Fully specified (`EV-064-081-084-085-hosting-pack.md` §3): off-instance bucket, CMEK, and a 14-day/8-week/12-month retention schedule **Owner-approved as proposed, 2026-08-19**. Local execution/hashing/verification already implemented and proven (RDY-0080, closed). Off-instance leg (bucket, CMEK, cloud lifecycle) not yet built — blocked on RDY-0064's provisioning, an execution dependency, not a review gap | NOT READY — OPERATIONAL, policy reviewed and specified, execution pending real bucket | BACKUP / RESTORE | **P0** | G3 | DevOps / Infrastructure | 0080, 0064 | NOT READY — see `EV-064-081-084-085-hosting-pack.md` §3.6 |
 | **0082** | **Prove restore.** A backup produced by the documented procedure restores into a disposable instance; the application starts; authenticated login succeeds; defined row-count and checksum comparisons pass | GTM §25 Phase 2 gate; brief §23 | **Never tested** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-182/183/203)** — restore proven deterministic (2 independent runs, 283/283 table checksums, 14/14 row-count fields), ACL behavior confirmed on the restored instance, authenticated browser login proven with a negative control (PB-203) | BACKUP / RESTORE | **P0** | G3 G6 | DevOps / Infrastructure | 0080, 0081, 0047 | **CLOSED 2026-08-16** |
 | **0083** | Establish a background-service trigger. *(At the 2026-08-09 audit: two nominally active services (`Email_Service`, `UUID_Service`) had `next_run` stuck at 2021-01-18 and the runner had never executed; no live trigger existed on any of four paths.)* **STALE — corrected 2026-08-14 (PB-071), re-confirmed live 2026-08-19:** a Windows Scheduled Task trigger was built and proven (negative control included); both services are active and ticking (`next_run` current as of every live check since, including today). **Held open for a different, real reason (PB-181, AGENT-OPS, 2026-08-16 — per Owner instruction, not closed):** the trigger runs only as the logged-on console user and does not survive logoff — this host's Google Drive mount `G:` is per-session, so a `SYSTEM`-level task cannot see the application at all, and converting the trigger to survive logoff was tested and ruled out on this host. Named explicitly in §40 row 12 and RDY-0094's no-go card as a standing operational constraint. **Owner decision 2026-08-19 (given directly in conversation): the pilot-host trigger mechanism is a proper Windows Service** — specified in `EV-047` §9 addendum, explicitly NOT validated on this demo host (same `G:`-mount blindness PB-181 already found), implementation/testing deferred to real pilot-host provisioning (waits on RDY-0064) | Audit §19.7, OD-03, L-20, GAP-0063, B6; GTM §26 P0 | Runner built and proven (PB-071); held open on the console-session-survival limitation, not a functioning-vs-not question (`EV-083`) | **NOT READY — OPERATIONAL, working but fragile by design** | OPERATIONAL | **P0** | G2(disclose) G3 | DevOps / Infrastructure | 0001 | NOT READY — see `EV-083` |
 | **0084** | Define monitoring for a hosted pilot: application availability, error rate, disk capacity, database status, backup success, background-service health. **Name requirements, not a vendor** | Brief §23; GTM §24 | Nothing exists; diagnostics screen available. **Owner decision 2026-08-19 (given directly in conversation): "owner" in the six signals means a role (e.g. DevOps / Infrastructure), not a named individual** — closes `EV-084`'s sole reservation; tooling decision and RDY-0064 dependency remain open | NOT READY — OPERATIONAL | MONITORING | **P0** | G3 | DevOps / Infrastructure | 0064, 0083 | NOT READY |
@@ -2184,6 +2184,39 @@ Full per-gate table and narrative in §47, PB-372 block, immediately above.
 
 **Not done here:** RDY-0004 remains open — now unblocked by both claim reviews (its own packaging
 task, not itself reviewed), flagged above with what it still needs.
+
+## PB-373 (2026-08-19) — **Orchestrator: RDY-0074 closed on Owner approval of the post-contract deletion timeframes; three stale-status sweeps corrected**
+
+**Scope:** `EV-074-post-contract-deletion-policy.md`'s only unmet acceptance criterion was
+Legal/Compliance review of D-1 (30-day post-termination deletion) and D-2 (90-day backup-retention
+ceiling), both explicitly flagged in the document's own §4 as proposed defaults rather than a legal
+determination. Put to the Owner directly, prepared with a recommended "approve as proposed" choice
+and two alternatives (shorten the windows; hold for a primary legal source first). **Approved as
+proposed, no change requested.** Recorded in `EV-074` §5; closes RDY-0074 (P1, G3). This document's
+register row had also gone stale — it still read *"Does not exist"* though `EV-074` was written
+2026-08-16 (AGENT-DOC) — corrected in the same pass.
+
+**Same conversation, a second decision recorded:** RDY-0081's backup-retention schedule
+(`EV-064-081-084-085-hosting-pack.md` §3.2 — 14-day daily / 8-week weekly / 12-month monthly tiers,
+plus §3.3's 90-day CMEK rotation default) was put to the Owner alongside RDY-0074's question, same
+pattern. **Approved as proposed.** This closes only the review gap, not the item — RDY-0081 stays
+open, since the off-instance bucket, CMEK key and cloud lifecycle policy still require RDY-0064's
+provisioning to exist before they can be built. Recorded in `EV-064-081-084-085-hosting-pack.md` §3.2
+and reflected in its §3.6/§7 closure-condition tables.
+
+**Stale-status sweep, same pass.** Three narrative sections in this document had gone out of sync
+with their own register rows, all discovered while locating RDY-0074's card: the §8.10 RDY-0064 card
+still read *"BLOCKED — DECISION. NOT READY"* though the register row has shown **CLOSED 2026-08-19**
+since PB-301/PB-352; the §8.13 RDY-0095 card carried the same staleness; and five further scattered
+mentions (§39-area dimension table, §41.2/41.3 Phase-3-blocker tables, §42's numbered status list)
+repeated the same outdated BLOCKED/undefined language for RDY-0064, RDY-0081 and RDY-0095. All
+corrected to point at their actual current status **without re-closing anything** — no gate count
+changes from this sweep, only text accuracy (§0.0 Rule 3 unaffected, since no `Blocks` decrement is
+claimed by a documentation correction).
+
+**Gate-count sync.** One P1 item closed (RDY-0074) — does not move the Open-P0 figures. **Requirements
+still open: 74** (down from 75). RDY-0081 remains counted open (P0, G3) — its review gap closing is
+recorded but does not decrement any gate per §0.0 Rule 3, since the item itself is not closed.
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
@@ -9197,7 +9230,9 @@ All acceptance-criteria components are met and the decision is acceptance-with-d
 **Acceptance criteria:** A recorded decision naming the hosting model, region and residency position, supported by two quotes; the deployment runbook (RDY-0047) reflects it; **no hosting claim appears in any artefact until this record exists**.
 **Verification:** inspect the decision record and the two quotes.
 **Evidence artefact:** `EV-064 hosting-decision.md`
-**Status:** **BLOCKED — DECISION.** NOT READY
+**Status:** **CLOSED 2026-08-19 — Owner-relayed, region decided (Dammam / `me-central2`), provisioning
+reported complete.** See the §7.x register row for the caveat (not independently verified by this
+session) and the still-open downstream execution chain (0081/0084/0085/0047).
 
 ### 8.11 Cluster 11 — Commercial and pilot readiness (G3, G6)
 
@@ -9501,7 +9536,9 @@ ending, and that must be said before a prospect notices two overdue services aft
 **Required action:** Obtain a determination on what attribution must remain, where, and in what form. **Do not remove attribution because it is inconvenient.** Where obligations are unclear, mark `LEGAL / LICENSING REVIEW REQUIRED` and do not guess.
 **Acceptance criteria:** A written determination covering the login page, the main menu logo and link, footer text, printed and PDF output, system-generated documents and the About surface; RDY-0033 and RDY-0034 are executed consistently with it; the determination is handed to Phase 3 as a constraint.
 **Verification:** the determination is attached to the Phase 3 handoff.
-**Evidence artefact:** `EV-095 licence-attribution.md` · **Status:** **BLOCKED — DECISION.** NOT READY
+**Evidence artefact:** `EV-095 licence-attribution.md` · **Status:** **CLOSED 2026-08-19 — SkyEagle's
+determination relayed by the Owner: full attribution stays visible, only minimal/surface branding
+changes permitted.** See the §7.x register row for the acknowledged local-suppression tension.
 
 #### RDY-0096 — Support, escalation and training definition
 **Source:** GTM §15.3, §21, §24 · **Gates:** G3 G6 · **Deps:** RDY-0064, 0084 · **Owner:** Sales / Pilot Owner
@@ -9583,7 +9620,7 @@ These are P1 because they improve safety or credibility without blocking the loc
 | 0063 | Arabic/RTL capture equivalents | GTM WEB-003 | READY AFTER CONFIGURATION | Captures show untranslated elements rather than cropping them out |
 | 0070 | Funnel instrumentation | GTM §29 | NOT READY — DOCUMENTATION | Each of the 13 metrics has a definition and a place where it is recorded; **baselines, no targets** |
 | 0072 | Schema / data-dictionary artefact | Pillar 2 | NOT READY — DOCUMENTATION | A customer-usable artefact exists describing the 283-table schema at the level they need |
-| 0074 | Post-contract deletion and backup-handling policy | Brief §26 | NOT READY — DOCUMENTATION | Covers backups taken during the engagement, with a stated timeframe |
+| 0074 | Post-contract deletion and backup-handling policy | Brief §26 | **CLOSED 2026-08-19** | Covers backups taken during the engagement, with a stated timeframe |
 | 0079 | A-01 founder network + A-07/V-9 ophthalmology list | GTM A-01, A-07 | BLOCKED — VALIDATION | A counted list of warm introductions within 30 days; 30 named ophthalmology clinics, 5 reached |
 | 0087 | Arabic PDF limitation disclosed and on the no-go list | L-10 | READY WITH QUALIFICATION | Arabic PDF output is never demonstrated; the limitation is stated in the Arabic script |
 | 0089 | Arabic-language competitor review | WEB-003 PROVISIONAL | BLOCKED — VALIDATION | Until complete, ship a faithful translation of the locked English hierarchy and invent no Arabic-specific positioning |
@@ -10341,12 +10378,12 @@ not invent the answer.**
 |---|---|---|
 | Hosting model required by the strategy | **Known** | Per-clinic deployment, **database per site**, provisioned manually (CLM-0029, L-07). Hosting is **included** in the subscription by default; on-premise is a supported option **priced separately with the customer taking backup responsibility, in writing** |
 | Candidate environment requirements | **Partially known** | Windows host, PHP 8.3.33, MariaDB 11.8.8, Apache — from the audited install, not from a hosting design |
-| **Location / residency decision** | **BLOCKED — DECISION** | Nothing in either source addresses it |
+| **Location / residency decision** | **DECIDED 2026-08-19** | Dammam / `me-central2`, per PB-022 and RDY-0064 (closed, Owner-relayed; provisioning not independently verified by this session) |
 | Capacity assumptions | Unknown | No load data exists; there is no customer |
 | Isolation model | **Known and limited** | Site-per-database, **shared process, no tenant registry, no per-tenant keys**. This is OpenEMR multi-site, **not** SaaS tenant isolation |
 | Site / database isolation | As above | Must be described accurately to P-3 |
-| Backup location | Undefined | RDY-0081 |
-| Encryption | Undefined | Interacts with RDY-0055 |
+| Backup location | **Specified, Owner-approved, not yet built** | RDY-0081 — off-instance bucket + CMEK + 14d/8w/12mo retention specified in `EV-064-081-084-085-hosting-pack.md` §3, blocked on RDY-0064's bucket existing |
+| Encryption | **Specified, Owner-approved, not yet built** | RDY-0081 — CMEK via Cloud KMS, same blocker |
 | Monitoring | Undefined | RDY-0084 |
 | Patching | Undefined cadence | RDY-0045 |
 | SSL / TLS | **Absent on the audited install** | RDY-0085 |
@@ -11078,7 +11115,7 @@ to say first. That is D-1 working as designed.
 |---|---|---|
 | **Screenshot inventory that actually exists** | Phase 3 designs around real product visuals. Six screens are *capturable*; **none is captured.** The surface is **no longer stock-branded** (live 2026-08-13), but it still shows `Your Clinic Name Here`, a US state list and `$`, so captures would still fail the RDY-0061 rules | 0060 |
 | **Complete branding surface inventory** | §18 lists what the audit implies. Logos, favicons, printed headers, PDF output, browser titles and email templates were **never enumerated at surface level** | 0090 |
-| **Licence / attribution determination** | Phase 3 cannot specify a login page without knowing what attribution must remain | **0095 — BLOCKED** |
+| **Licence / attribution determination** | Phase 3 cannot specify a login page without knowing what attribution must remain | **0095 — CLOSED 2026-08-19** |
 | Screen dimensions / capture specifications | Not established | 0060, 0061 |
 | Product UI areas requiring visual cleanup | Only partially known — RTL breakage on legacy screens is documented, general UI cleanup is not | 0086, 0090 |
 
@@ -11086,12 +11123,12 @@ to say first. That is D-1 working as designed.
 
 | Blocker | Type | Status |
 |---|---|---|
-| RDY-0095 licence / attribution review | **BLOCKED — DECISION** | Must resolve first; branding work depends on it |
+| RDY-0095 licence / attribution review | **CLOSED 2026-08-19** | Resolved — branding work may proceed under the determination |
 | RDY-0090 branding surface inventory | Documentation | Must be observed, not inferred |
 | RDY-0060 capture set | Proof asset | Phase 3 can begin without it, but cannot finish |
 
-**Verdict: G4 is BLOCKED**, pending RDY-0095 and RDY-0090. Phase 3 may begin conceptual work
-in parallel at the accepted risk registered as R-15.
+**Verdict: G4 is PARTIAL**, pending RDY-0090 (RDY-0095 closed 2026-08-19). Phase 3 may begin
+conceptual work in parallel at the accepted risk registered as R-15.
 
 ### 41.4 What Phase 3 must NOT decide
 
@@ -11913,12 +11950,12 @@ The distance to `PILOT READY` is measured in engineering and one decision.
 6. **Demo-data status:** zero of every category; DEM-003 preserved in full; estimated 1–3 days, no development — but the estimate is untested (A-06) and must be instrumented.
 7. **Role-account status:** 1 usable login; 5 of 7 roles never populated; six accounts specified in §12; creation is minutes, correct configuration is not.
 8. **D-7 status:** not attempted, no script, blocked on B1–B4 plus the `front_office` Add-Patient defect that sits on its very first step.
-9. **Branding-cleanliness status:** ~~100 % stock~~ **— UPDATED 2026-08-13: substantially branded.** Product name `Thiqa`, own tagline, `skyeagle.uk` links, donation/review/acknowledgement links off, login page titled *Thiqa Login*, and a `brand/` asset kit on disk. **Still open:** facility remains `Your Clinic Name Here`, regional configuration untouched, and the licence determination still nobody's.
+9. **Branding-cleanliness status:** ~~100 % stock~~ **— UPDATED 2026-08-13: substantially branded.** Product name `Thiqa`, own tagline, `skyeagle.uk` links, donation/review/acknowledgement links off, login page titled *Thiqa Login*, and a `brand/` asset kit on disk. **Still open:** facility remains `Your Clinic Name Here`, regional configuration untouched. Licence determination **resolved 2026-08-19** (RDY-0095, closed — full attribution stays, only minimal/surface branding changes permitted).
 10. **Patch/dependency status:** ~~0 ahead / 373 behind at audit~~ **— UPDATED 2026-08-13: 33 ahead / 418 behind and divergent** (HEAD is no longer an ancestor of upstream), with **13 local commits unpushed**; one gitignored, composer-installed module of unknown provenance; no update method, no rollback, no cadence.
-11. **Backup/restore status:** *(2026-08-13: backup execution proven and closed; policy and restore still open.)* **UPDATED 2026-08-19:** restore is now also proven and CLOSED (RDY-0082, 2026-08-16 — 7 of 7 legs, including an authenticated restored-instance login with a negative control). **Still open: policy** (RDY-0081 — off-instance target, schedule, retention, encryption undefined). Admin → Backup stays on the demo no-go list regardless (RDY-0094), independent of restore's closure.
+11. **Backup/restore status:** *(2026-08-13: backup execution proven and closed; policy and restore still open.)* **UPDATED 2026-08-19:** restore is now also proven and CLOSED (RDY-0082, 2026-08-16 — 7 of 7 legs, including an authenticated restored-instance login with a negative control). **Policy specified and Owner-approved 2026-08-19** (RDY-0081 — off-instance target, schedule, retention, encryption all specified in `EV-064-081-084-085-hosting-pack.md` §3); **still open: execution**, blocked on RDY-0064's bucket existing. Admin → Backup stays on the demo no-go list regardless (RDY-0094), independent of restore's closure.
 12. **Background-service status:** *(2026-08-13: the runner had never executed; two active services stuck at 2021-01-18; no live trigger on any of four paths.)* **UPDATED 2026-08-19:** a Windows Scheduled Task trigger was built and proven 2026-08-14 (PB-071), re-confirmed ticking today. Held open (RDY-0083) for a different reason — the trigger depends on a live console session and does not survive logoff, which is fine for this demo host but not for a pilot host; the disclosure obligation now applies only if the console session has actually lapsed since last logon, not unconditionally.
 13. **Authorization/report status:** **11 reports remediated in Phase 2B PB-002 (2026-08-13) — Code remediation complete and statically verified; positive/negative authenticated role acceptance pending**, `amc_full_report.php` included, plus the admin AJAX endpoint (0053) and the RPT-0042 mismatch (0054). **Still open:** the controller map still covers 2 of 10 controllers (RDY-0052), and **the role matrix has still never been exercised** — which is why none of these is closed.
-14. **Hosting status:** **BLOCKED — DECISION.** Unevaluated in every source. Nothing about hosting may be published until two quotes and a residency position exist.
+14. **Hosting status:** **Region decided 2026-08-19** (Dammam / `me-central2`, RDY-0064 closed, Owner-relayed; provisioning reported complete but not independently verified by this session). **Still open:** the two comparable vendor quotes (§2 of `EV-064-081-084-085-hosting-pack.md` specifies the request). Nothing about hosting may be published until those exist.
 15. **Validation status:** V-1, V-2, V-3 and V-10 all unrun. The wedge the entire plan serves is unvalidated, and the GTM said to run them first.
 16. **Pricing-evidence status:** PRC-003 correctly BLOCKED; no figure invented anywhere; instrumentation for pilots #1 and #2 specified but not built.
 17. **Phase 3 handoff status:** BLOCKED on the licence/attribution determination (RDY-0095) and a branding *surface* inventory still not performed (RDY-0090) — **though branding is now applied and a `brand/` asset kit exists on disk**; positioning inputs themselves are ready.
