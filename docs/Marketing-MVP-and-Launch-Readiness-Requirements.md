@@ -24,7 +24,7 @@ the first.
 | **PB-300 … PB-349** | **Agent E (Gate-sync auditor)** — Claude Code, session performing a full G0–G6 open-blocker reconciliation as of 2026-08-19: re-verifying every RDY/DG/D/RB/BLK item against current repo state (commits through `7588b42e5`), classifying every still-open item as human-decision / external-dependency / actionable-now, and running the §47 Rule 3 gate-count sync. Read-only against code; writes limited to a new dated evidence file, one PB entry in this range, and the Rule 3 sync itself. **Range claimed 2026-08-19.** |
 | **PB-350 … PB-359** | **Agent F (Owner-decision scribe)** — Claude Code, session transcribing five decisions the Owner gave directly, in conversation, 2026-08-19: RDY-0084 (owner = role), RDY-0086/HR-09 (Arabic competence basis), RDY-0096 (support level selected), RDY-0092/RDY-0099 (Q5/MFA conflict ruling), RDY-0083 (pilot trigger = Windows Service). Documentation-only; no code, no database, no gate-count recalculation. **Range claimed 2026-08-19.** |
 | **PB-360 … PB-369** | **Agent G** — Claude Code, session closing out three "decided, not yet implemented" items per direct task briefing, 2026-08-19: RDY-0055 (live re-verification of the PHI disclosure text against the seeded demo DB, closure), RDY-0096 (Level 1 support definition wired into `EV-066-pack.md`/`EV-068-pilot-requirements.md`, closure), RDY-0083 (confirmed correctly stays open — no host exists to implement/test the Windows Service decision against). **Range claimed 2026-08-19.** |
-| **PB-370 … PB-379** | **Orchestrator (main session)** — recording five real decisions the Owner performed directly, 2026-08-19: EV-055's technical PHI determination, `EV-067`'s claim review (RDY-0003), `EV-056-057-088-claim-discipline.md`'s claim review (RDY-0056/0057/0088), `EV-074`'s post-contract deletion timeframes (RDY-0074), and `EV-064-081-084-085-hosting-pack.md` §3.2's backup-retention schedule (RDY-0081's review gap) — all five prepared (mechanical scans/reads as applicable) before being put to the Owner, none fabricated. **Range claimed 2026-08-19.** |
+| **PB-370 … PB-379** | **Orchestrator (main session)** — recording seven real decisions the Owner performed directly, 2026-08-19: EV-055's technical PHI determination, `EV-067`'s claim review (RDY-0003), `EV-056-057-088-claim-discipline.md`'s claim review (RDY-0056/0057/0088), `EV-074`'s post-contract deletion timeframes (RDY-0074), `EV-064-081-084-085-hosting-pack.md` §3.2's backup-retention schedule (RDY-0081's review gap), RDY-0042's disclose-not-fix call on the newly-found old-style-form crash, and RDY-0071's fix-now call on the newly-found missing CSV-export UI trigger — all seven prepared (mechanical scans/reads/live tests as applicable) before being put to the Owner, none fabricated. **Range claimed 2026-08-19.** |
 | PB-380 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
@@ -283,10 +283,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **39 P0** (+ P1s **0018**, **0035**, **0053**, **0054**, **0074**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370); **0056**, **0057**, **0088** (PB-372); **0074** (PB-373, 2026-08-19 — Owner approved D-1/D-2's post-contract deletion timeframes as proposed). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
-| **Requirements still open** | **74** |
-| **Open P0** | **32** — 71 P0 less the 39 genuinely closed P0 IDs above (RDY-0074 is P1, so its closure moves "still open" but not this P0 count). **PB-372 (2026-08-19): three-item decrement on the PB-371 baseline** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 1 · G1 10 · G2 8 · G3 13 · G4 2 · G5 8 · G6 16** — **PB-372 (2026-08-19): RDY-0056 (G1 G5), RDY-0057 (G1 G5), RDY-0088 (G5 G6) decremented from the PB-371 baseline; G0, G2, G3, G4 independently re-confirmed unchanged — none of the three block those gates** |
+| **Requirements CLOSED** | **40 P0** (+ P1s **0018**, **0035**, **0053**, **0054**, **0074**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370); **0056**, **0057**, **0088** (PB-372); **0074** (PB-373); **0042** (PB-374, 2026-08-19 — Owner decided disclose-not-fix on the confirmed old-style-form crash; comprehensive-form path verified live). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
+| **Requirements still open** | **73** |
+| **Open P0** | **31** — 71 P0 less the 40 genuinely closed P0 IDs above. **PB-374 (2026-08-19): one-item decrement on the PB-372 baseline (RDY-0074 is P1, no P0 effect)** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 1 · G1 9 · G2 7 · G3 13 · G4 2 · G5 8 · G6 16** — **PB-374 (2026-08-19): RDY-0042 (G1 G2) decremented from the PB-372 baseline — disclosed via demo no-go §40 row 14, not code-fixed; G0, G3, G4, G5, G6 independently re-confirmed unchanged** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -1002,7 +1002,7 @@ qualification*. Dependencies, not dates.
 |---|---|---|---|---|---|---|---|---|---|---|
 | **0040** | Write the D-7 journey as a step-by-step script — actor, screen, prerequisite, data, expected state change, proof point, claim demonstrated, qualification, failure condition | GTM DEM-002 D-7; brief §19 | Storyline named; **no script** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-046)** | DEMO | **P0** | G2 | Founder / Product Owner | 0020…0027 | **CLOSED 2026-08-14** |
 | **0041** | D-7 executes end-to-end **twice** from a known reset state under the intended role accounts, with no empty required screen, no unexpected authorization failure, no unhandled error and no unsupported claim | GTM §25 Phase 1 gate; brief §19 | Not attempted | NOT READY — OPERATIONAL | DEMO | **P0** | G2 G6 | Founder / Product Owner | 0040, 0044, 0010…0027 | NOT READY |
-| **0042** | Resolve the `front_office.json` defect: `Add Patient` is gated on `full_new_patient_form` with **no `!full_new_patient_form` counterpart** — a Front Office user may have no way to add a patient | Audit §14.3 | *Historical:* defect present upstream; global not re-observed. **Live (2026-08-13): defect CONFIRMED still present in `front_office.json`; the global sits at its upstream code default** | NOT READY — DEFECT | DEFECT | **P0** | G1 G2 | OpenEMR Engineer | 0001, 0013 | NOT READY |
+| **0042** | Resolve the `front_office.json` defect: `Add Patient` is gated on `full_new_patient_form` with **no `!full_new_patient_form` counterpart** — a Front Office user may have no way to add a patient | Audit §14.3 | *Historical:* defect present upstream; global not re-observed. **Live (2026-08-13): defect CONFIRMED still present in `front_office.json`; the global sits at its upstream code default.** **Live (2026-08-19, browser-check agent):** with the global at its default (`1`, comprehensive form), Front Office successfully created a real patient end-to-end (pid 31) — the menu-gating defect does not block the actual demo/pilot path. Toggling the global to `0` and testing the alternate path it would otherwise gate surfaced a **second, deeper defect**: the old-style form crashes on submit (HTTP 500, `fitness` NOT-NULL violation, `library/patient.inc.php:1067`) — see demo no-go §40 row 14. **Owner decision 2026-08-19: disclose the old-style form as unsupported rather than fix it; the comprehensive form is the only supported path for this MVP** | READY WITH MANDATORY QUALIFICATION — comprehensive-form path works and is confirmed live; the legacy toggle's menu-gating defect is disclosed as out of scope, not fixed | DEFECT | **P0** | G1 G2 | OpenEMR Engineer | 0001, 0013 | **CLOSED 2026-08-19 — disclosed via demo no-go §40 row 14, not code-fixed. Reopens if a future phase decides to support the legacy toggle** |
 | **0043** | Resolve `MainMenuRole.php:169-171` silently dropping the first form in every category, and `updateBlankForms()` also augmenting `Miscellaneous → Blank Forms` | Audit §14.4 | Upstream defects observed | NOT READY — DEFECT | DEFECT | **P0** | G1 G2 | OpenEMR Engineer | 0001, 0045 | NOT READY |
 | **0044** | Demo reset — **split by Track 0 (T0-3)** into **0044-A** (pre-seed safety/rollback snapshot) and **0044-B** (post-seed protected demo baseline, reset source for D-7) | GTM DEM-003 *Refresh*; brief §46 | **0044-A CLOSED** (PB-031, 2026-08-13). **0044-B: v4 baseline taken 2026-08-19** (`EV-044` §12) — supersedes v3, includes the PB-077 "change 2" dataset content (sensitivity-flagged encounter + clinician-authored note) that v2/v3 both shipped without, plus the RDY-0023 paediatric conversion and the PB-057 letterhead fix, all Owner-authorised directly in conversation. Dump verified by a clean restore-into-throwaway-database round trip, CLINHASH matched exactly | NOT READY — OPERATIONAL, baseline current and content-complete, item stays open on RDY-0044's own rule (closes only when both legs close and this is a live, re-runnable reset artefact rather than a one-time state) | DEMO | **P0** | G2 | Database / Demo Data | **0044-A:** 0080 · **0044-B:** 0020…0028, 0044-A, 0080, 0082 | NOT READY — see `EV-044` §12 |
 
@@ -1066,7 +1066,7 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0071** | Documented export procedure covering CSV report export, full database export, and document/file export | GTM Pillar 2, D-2, MC-08, O-2/O-3 | Procedure written and executed (PB-045); 7 of 9 reachable CSV reports now verified exporting cleanly (PB-208), 1 had a genuine code defect (`pat_ledger.php`). **`pat_ledger.php` defect FIXED in code** (`6dea39a28`, `6ce9979f5`, code-review verified, `EV-071` §3.5.1). **Owner ACCEPTED code-review-level verification as sufficient for the code-defect half, 2026-08-19, given directly in conversation** — the defect-fixed claim is closed on its own evidence; the live HTTP round-trip and reviewer sign-off remain explicitly outstanding, not silently folded in. 2 reports still empty on unrelated seed gaps | NOT READY — code defect fixed and accepted; live verification and reviewer sign-off outstanding | DOCUMENTATION | **P0** | G3 G5 G6 | DevOps / Infrastructure | 0059 | NOT READY — see `EV-071` §5.2 |
+| **0071** | Documented export procedure covering CSV report export, full database export, and document/file export | GTM Pillar 2, D-2, MC-08, O-2/O-3 | Procedure written and executed (PB-045); 7 of 9 reachable CSV reports now verified exporting cleanly (PB-208), 1 had a genuine code defect (`pat_ledger.php`). **`pat_ledger.php` defect FIXED in code** (`6dea39a28`, `6ce9979f5`, code-review verified, `EV-071` §3.5.1). **Live HTTP round-trip obtained 2026-08-19** (browser-check agent, real authenticated session): direct-request CSV export returns `application/force-download`, genuine comma-separated data — the fix is confirmed live, not only by code review. **A separate, previously-unknown gap found in the same check: no UI control existed to trigger it** — only reachable via a hand-crafted request parameter, unlike the other 8 CSV-capable reports. **Fixed same day**: an "Export to CSV" button added to `pat_ledger.php` (mirrors the existing pattern in `appointments_report.php`), `php -l` clean; live UI click-through not obtained (browser extension disconnected before it could be exercised) | READY WITH MANDATORY QUALIFICATION — code defect fixed and live-verified; UI-trigger gap fixed same day but not yet click-tested live; reviewer sign-off (RDY-0003 discipline, not applicable to this DOCUMENTATION item) not separately required | DOCUMENTATION | **P0** | G3 G5 G6 | DevOps / Infrastructure | 0059 | NOT READY — see `EV-071` §5.2; new UI-button fix needs one live click-through before this closes |
 | 0072 | Schema / data-dictionary artefact the customer can be handed | GTM Pillar 2; audit §27.5 | Schema is open and documented upstream; **no customer-facing artefact** | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G6 | OpenEMR Engineer | 0071 | NOT READY |
 | **0073** | Termination and handover procedure — what is delivered, in what format, in what timeframe, by whom, and how it is verified received | GTM Pillar 2, O-3, O-11, §26 brief | **Written** (`EV-073-termination-and-handover.md`, 104 lines, issued 2026-08-14, Agent B) — this cell's "does not exist" was stale since that date. Its own acceptance criterion additionally requires the procedure to be referenced by RDY-0066 (scope template) and RDY-0068 (pilot agreement), and **a dry run performed against the demo system** — none of the three has happened yet | NOT READY — DOCUMENTATION, artefact exists, cross-referencing and dry run pending | DOCUMENTATION | **P0** | G3 G6 | Legal / Compliance + DevOps | 0071 | NOT READY — see `EV-073` |
 | 0074 | Post-contract data deletion and backup-handling policy, including backups taken during the engagement | Brief §26 | Written 2026-08-16 (`EV-074-post-contract-deletion-policy.md`, AGENT-DOC) — this cell's "does not exist" was stale since that date. D-1 (30-day post-termination deletion) and D-2 (90-day backup ceiling) **Owner-approved as proposed, 2026-08-19** | **VERIFIED READY — CLOSED 2026-08-19** — see `EV-074` §5 | DOCUMENTATION | P1 | G3 | Legal / Compliance | 0073, 0081 | **CLOSED 2026-08-19 — see `EV-074-post-contract-deletion-policy.md` §5. D-5's off-instance leg remains prospective, pending RDY-0064's bucket — not a review gap** |
@@ -2217,6 +2217,48 @@ claimed by a documentation correction).
 **Gate-count sync.** One P1 item closed (RDY-0074) — does not move the Open-P0 figures. **Requirements
 still open: 74** (down from 75). RDY-0081 remains counted open (P0, G3) — its review gap closing is
 recorded but does not decrement any gate per §0.0 Rule 3, since the item itself is not closed.
+
+## PB-374 (2026-08-19) — **Orchestrator: 9-item browser-check agent returned; RDY-0042 closed on Owner disclose-not-fix decision; RDY-0071 advanced but not closed**
+
+**The background browser-check agent (`ac40c95e33d5a9533`, dispatched earlier this session) completed
+all 9 assigned checks** (RDY-0042, 0038, 0043, 0023, 0071, 0090, 0094, 0016, 0041), using a real
+authenticated session against `http://localhost:8300/` with demo role credentials. Five tabs entered
+an unresponsive state during the session (not from Logout — likely in-progress iframe forms) and were
+left open per the agent's own no-retry-loop instruction; this did not affect any collected evidence.
+
+**RDY-0042 — new defect found, put to the Owner, closed on disclosure.** The tracked defect (Front
+Office menu-gating) does not block the actual demo path: the comprehensive form (the global's default)
+created a real patient live (pid 31). Testing the alternate toggle state the original defect concerns
+surfaced a second, more severe defect underneath — the old-style form crashes on submit (HTTP 500,
+`fitness` NOT-NULL violation, `library/patient.inc.php:1067`). Put to the Owner with a recommended
+disclose-and-no-go option against a fix-the-legacy-path alternative. **Owner chose disclosure.**
+Recorded in demo no-go §40 row 14; RDY-0042 closed with a mandatory qualification, not a code fix.
+
+**RDY-0071 — advanced, not closed.** The live HTTP round-trip that was explicitly the item's last
+outstanding leg (per PB-208/AGENT-FIX071's own note) succeeded — the previously code-review-only CSV
+fix is now confirmed live. The same check found a distinct, previously-unknown gap: no UI control
+triggers the export, only a hand-crafted request parameter does. Put to the Owner alongside RDY-0042's
+question, with a recommended fix-now option against a disclose-and-defer alternative. **Owner chose
+to fix it.** An "Export to CSV" button was added to `interface/reports/pat_ledger.php`, mirroring the
+existing working pattern in `interface/reports/appointments_report.php` (same `theform`/
+`form_csvexport` field IDs); `php -l` clean. **Live click-through was not obtained** — the Chrome
+extension disconnected before it could be exercised. RDY-0071 stays open pending that one check,
+recorded honestly rather than claimed.
+
+**Seven further items got fresh live evidence, each reflected in its own register row, none closing
+outright this pass:** RDY-0038 (Saudi locale fields — PASS), RDY-0043 (encounter-forms menu defect —
+not reproduced, PASS), RDY-0023 (paediatric growth-chart fields — PASS, no data yet to plot), RDY-0090
+(branding walk — PASS on the items checked, coverage partial), RDY-0094 (demo no-go rehearsal — PASS
+on the checked claim), RDY-0016 (authorization matrix — 4 more probes run, matrix still incomplete),
+RDY-0041 (D-7 journey — end-to-end chain completed with one non-authorization UI quirk noted). A
+side benefit: the SOAP note created during RDY-0041's run is now the system's first genuinely
+clinician-authored form content, addressing a gap `EV-016` §4.2 had separately flagged.
+
+**Gate-count sync.** One P0 item closed (RDY-0042, G1 G2). **71 P0 registered, 40 closed, 31 open.**
+Full per-gate table and narrative in §47, PB-374 block.
+
+**Not done here:** the five stuck tabs left by the browser-check agent are not cleaned up by this
+entry — a browser-tooling housekeeping item, not a register item.
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
@@ -11084,6 +11126,7 @@ from evidence, not caution.
 | 11 | **The `admin` account** | Prohibited in any material, ever | Permanent | Never | — (use the demo administrator) |
 | 12 | **Background services screen — without pre-empting it** | ⚠ **CORRECTED AGAIN 2026-08-16 (PB-142, PB-181, AGENT-OPS).** A recurring trigger exists and is enabled — Windows Scheduled Task `\OpenEMR-Thiqa-BackgroundServices`, proven working at PB-071/EV-083. **But it runs as the logged-on console-session user and does not survive that session ending** (logoff, reboot, or the console window closing). Live regression observed 2026-08-16: `httpd`/`mariadbd` fully stopped and both active services found **~10 hours overdue** after an unobserved session end (PB-142). AGENT-OPS then tested whether this is a fixable misconfiguration (PB-181): registering the task with a non-interactive logon type (S4U/Batch/ServiceAccount) was refused (`Access is denied`) without host elevation this session could not self-serve, and even granted elevation, a non-interactive logon session cannot see the Google-Drive-mounted `G:` at all — the same per-session-mount constraint `CLAUDE.local.md` §4a documents for why Apache/MariaDB run as console processes, not Windows services, on this host. **This is a demo-host limitation, not a product defect, and it is not fixable without moving the trigger's working directory off a per-session network mount.** | Open (OD-03) — **console-session dependency, named and disclosed; not fixable on this host** | A pilot/production host whose application directory is **not** a per-session mount (i.e., not this demo host), running the trigger as a genuine Windows service account that survives logoff/reboot — see `EV-047` §9 | *"If this session's been unattended a while you may see two services show overdue — the trigger is real, it's proven, and it self-heals the moment someone is signed back in. On this specific demo host it depends on a console session staying open, because of how this host's storage is mounted. A production pilot host runs the same trigger as a proper Windows service account with no such dependency. I'd rather tell you that than have the screen surprise you."* |
 | 13 | **Telehealth, dispensary, group therapy** | Uninstalled or Disabled | Open | RDY-0103/0114 | *"Present in the software, switched off. Activation is a priced service, not a claim."* |
+| 14 | **Toggling `full_new_patient_form` to the old-style static Add-Patient form** | **CONFIRMED 2026-08-19 (browser-check agent, RDY-0042):** submitting the old-style form throws HTTP 500 — `Insert failed. SQL error Column 'fitness' cannot be null` (`library/patient.inc.php:1067`, `newPatientData()`). The comprehensive form (the global's default value, `1`) creates patients correctly — verified live, pid 31 created cleanly | Open — **Owner decision 2026-08-19: disclose, do not fix.** The comprehensive form is the only supported Add-Patient path for this MVP; the legacy toggle is out of scope | Never for this MVP — a future decision to support the legacy form would require fixing the `fitness` NOT-NULL gap first | *"Patient creation runs through one form in this product, the comprehensive one — that's deliberate, not a workaround. There's an older alternate form in the config that we don't use and don't support."* |
 
 **The principle behind every row:** the honest answer exists in every case and is
 *consistent with the positioning*. A no-go item is not something to hide — it is something
@@ -11531,26 +11574,42 @@ named reviewer, verdict APPROVED FOR PUBLICATION, recorded in `EV-003` §5 and `
 ~~|---|---:|---:|---:|---:|---:|---:|---:|~~
 ~~| **Open P0 (canonical, PB-371)** | **1** | **12** | **8** | **13** | **2** | **11** | **17** |~~
 
-### CURRENT — PB-372 (2026-08-19), same-day resync after the second claim review
+### PB-372 (2026-08-19) — superseded by PB-374, retained for the record
 
-**71 P0 registered, 39 closed, 32 open P0.** Three more items closed since PB-371, same day: RDY-0056,
-RDY-0057 and RDY-0088 — the second artefact through the RDY-0003 claim-review step,
+~~**71 P0 registered, 39 closed, 32 open P0.** Three more items closed since PB-371, same day:
+RDY-0056, RDY-0057 and RDY-0088 — the second artefact through the RDY-0003 claim-review step,
 `EV-056-057-088-claim-discipline.md`, reviewed against the same six gates by the same named reviewer,
-verdict APPROVED FOR PUBLICATION, recorded in `EV-003` §5 row 2 and `EV-056-057-088` §6.
+verdict APPROVED FOR PUBLICATION, recorded in `EV-003` §5 row 2 and `EV-056-057-088` §6.~~
+
+~~| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |~~
+~~|---|---:|---:|---:|---:|---:|---:|---:|~~
+~~| **Open P0 (canonical, PB-372)** | **1** | **10** | **8** | **13** | **2** | **8** | **16** |~~
+
+### CURRENT — PB-374 (2026-08-19), same-day resync after the 9-item browser-check run and RDY-0042's disclosure closure
+
+**71 P0 registered, 40 closed, 31 open P0.** One more item closed since PB-372: RDY-0042 — the
+browser-check agent confirmed the comprehensive-form Add-Patient path works end-to-end (pid 31
+created live) and surfaced a deeper crash in the legacy old-style form (HTTP 500, `fitness` NOT-NULL);
+Owner decided disclose-not-fix, recorded in demo no-go §40 row 14. **The same browser-check run also
+advanced RDY-0071** (live CSV round-trip confirmed; a newly-found missing UI trigger fixed same day in
+`pat_ledger.php`, not yet click-tested live — still open) and produced PASS/partial results on
+RDY-0038, RDY-0043, RDY-0023, RDY-0090, RDY-0094, RDY-0016 and RDY-0041, each reflected in its own
+register row; none of those seven close outright from this run (each has a stated remainder — see
+their rows) so none moves a gate count here.
 
 | | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Open P0 (canonical, PB-372)** | **1** | **10** | **8** | **13** | **2** | **8** | **16** |
+| **Open P0 (canonical, PB-374)** | **1** | **9** | **7** | **13** | **2** | **8** | **16** |
 
 | Gate | Status | Open P0 | Main blockers | Next action |
 |---|---|---|---|---|
 | **G0 Strategy governance** | **PARTIAL** | **1** | RDY-0004, packaging the prohibited-claim list downstream, now unblocked by both claim reviews but not yet done | RDY-0004 is now purely a packaging task, nothing left blocking it |
-| **G1 Flagship demo** | **PARTIAL** | **10** | **RDY-0056 and RDY-0057 both CLOSED today** · RDY-0016's ACL fix scoped/unwritten; RDY-0042/0043/0038 in flight via the browser-check agent; proof assets (0060–0062, 0086, 0090, 0094) cascade from those | Browser-check agent's results still the next real movement here |
-| **G2 Seeded commercial demo** | **NOT READY** | **8** | Unchanged by today's three closures (none block G2) | Browser-check agent's results (0023/0042/0043) still the next movement |
-| **G3 Pilot operational readiness** | **NOT READY** | **13** | Unchanged by today's three closures (none block G3) · remaining: RDY-0045 (push blocked on credentials), RDY-0048 (rotation blocked at tool-permission layer), RDY-0047/0073/0081/0084/0085 (need real configuration against the now-provisioned host), RDY-0083 (decided, deferred to real pilot-host provisioning), RDY-0065/0066/0068 (commercial documents still in draft) | Real configuration work against the provisioned host is still the largest remaining bucket in this gate |
-| **G4 Ready for Phase 3 Brand** | **PARTIAL** | **2** | Unchanged by today's three closures — RDY-0004 (shared with G0, now unblocked), RDY-0090 (walk in flight) | Same as G0/G1 |
-| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **8** | **RDY-0056, RDY-0057 and RDY-0088 all CLOSED today** · remaining: RDY-0004, RDY-0016, RDY-0060–0062, 0071, 0078, 0086 | RDY-0004's packaging is now the fastest remaining item in this gate |
-| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **16** | **RDY-0088 CLOSED today** · still requires G2 and G3 · RDY-0069 can't start without a pilot · RDY-0075/0076/0077 still zero calls made | RDY-0075's first call remains the single most under-leveraged action in the whole register |
+| **G1 Flagship demo** | **PARTIAL** | **9** | **RDY-0042 CLOSED today** (disclosed, not fixed) · RDY-0016's ACL fix scoped/unwritten, 4 of its probes now run; RDY-0043/0038/0023/0090/0094/0041 all have fresh live evidence this run, none yet closes outright | Remaining browser-check follow-ups (register rows) are the next real movement here |
+| **G2 Seeded commercial demo** | **NOT READY** | **7** | **RDY-0042 CLOSED today** | Same remaining follow-ups as G1 |
+| **G3 Pilot operational readiness** | **NOT READY** | **13** | Unchanged by today's closure (RDY-0042 doesn't block G3) · remaining: RDY-0045 (push blocked on credentials), RDY-0048 (rotation blocked at tool-permission layer), RDY-0047/0073/0084/0085 (need real configuration against the now-provisioned host), RDY-0081 (review approved, execution still blocked on RDY-0064's bucket), RDY-0083 (decided, deferred to real pilot-host provisioning), RDY-0065/0066/0068 (commercial documents still in draft) | Real configuration work against the provisioned host is still the largest remaining bucket in this gate |
+| **G4 Ready for Phase 3 Brand** | **PARTIAL** | **2** | Unchanged by today's closure — RDY-0004 (shared with G0, now unblocked), RDY-0090 (walk advanced this run, not yet complete) | Same as G0/G1 |
+| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **8** | Unchanged by today's closure (RDY-0042 doesn't block G5) · remaining: RDY-0004, RDY-0016, RDY-0060–0062, 0071 (advanced this run, UI-button click-test still needed), 0078, 0086 | RDY-0004's packaging is now the fastest remaining item in this gate |
+| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **16** | Unchanged by today's closure (RDY-0042 doesn't block G6) · still requires G2 and G3 · RDY-0069 can't start without a pilot · RDY-0075/0076/0077 still zero calls made | RDY-0075's first call remains the single most under-leveraged action in the whole register |
 
 ### 47.1 The readiness questions, answered separately
 

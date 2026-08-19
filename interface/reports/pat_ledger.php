@@ -402,6 +402,16 @@ if ($_REQUEST['form_csvexport']) {
             document.forms[0].elements['form_csvexport'].value = '';
             document.forms[0].submit();
         }
+        function checkCSVExport() {
+            var pat = document.forms[0].elements['form_patient'].value;
+            if(!pat || pat == 0) {
+                alert(<?php echo xlj('A Patient Must Be Selected to Generate This Report') ?>);
+                return false;
+            }
+            document.forms[0].elements['form_refresh'].value = true;
+            document.forms[0].elements['form_csvexport'].value = 'true';
+            document.forms[0].submit();
+        }
         function setpatient(pid, lname, fname, dob) {
           document.forms[0].elements['form_patient'].value = lname + ', ' + fname;
           document.forms[0].elements['form_pid'].value = pid;
@@ -612,6 +622,9 @@ if ($_REQUEST['form_csvexport']) {
                                                             <div class="btn-group" role="group">
                                                                 <a href='#' class='btn btn-primary btn-save' onclick="checkSubmit();" >
                                                                 <?php echo xlt('Submit'); ?>
+                                                                </a>
+                                                                <a href='#' class='btn btn-secondary btn-transmit' onclick="checkCSVExport();" >
+                                                                <?php echo xlt('Export to CSV'); ?>
                                                                 </a>
                                                                 <?php
                                                                 if ($_REQUEST['form_refresh'] || $_REQUEST['form_csvexport']) { ?>
