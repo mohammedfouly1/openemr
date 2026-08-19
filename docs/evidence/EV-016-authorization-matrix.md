@@ -161,10 +161,10 @@ and A-6's UI halves remain unexercised.
 | Every negative row is denied | **32 of 32 originally executed probes denied correctly, plus the 3 live sensitivity-role probes in §4.1 (PB-410) all behaved as denials or redactions, none as an unintended positive** — A-10's two live-exploitable paths fixed and unit-verified (§4.3, 2026-08-19); live HTTP round-trip still pending |
 | A single negative-row failure fails the matrix | **No failure occurred.** No row was *skipped silently* either |
 
-### Status: **RDY-0016 — NOT CLOSED. 32/32 originally executed probes pass; A-2/A-7/A-8's sensitivity legs live-confirmed (PB-410, 2026-08-19); A-10's two live-exploitable paths fixed and unit-verified (2026-08-19); A-1/A-6's UI halves and the orphaned-directory Owner decision remain.**
+### Status: **RDY-0016 — NOT CLOSED. 32/32 originally executed probes pass; A-2/A-7/A-8's sensitivity legs live-confirmed (PB-410, 2026-08-19); A-10's two live-exploitable paths fixed, unit-verified, and their orphaned-directory decision resolved (2026-08-19); only A-1/A-6's UI halves, most other matrix cells, and A-10's own live HTTP confirmation remain.**
 
 **`Blocks`: G1 G3 G5.** No gate count moved (§0.0 Rule 3) — the item's own closure still needs the
-remaining UI legs and the §3 Owner decision before the matrix as a whole can close.
+remaining UI legs and matrix cells before the matrix as a whole can close.
 
 ### What would close it
 
@@ -177,8 +177,8 @@ remaining UI legs and the §3 Owner decision before the matrix as a whole can cl
 3. ~~Execute the A-10 call-site probes~~ **FIXED AND UNIT-VERIFIED 2026-08-19** (`PR-19`) — live HTTP
    round-trip confirmation still outstanding, needs browser access.
 4. **The remaining UI-navigation halves** (A-1, A-6) — the A-7/A-8 halves are now done (§4.1).
-5. **`EV-016-A10-fix-scope.md` §3's Owner decision** on the 16 now-blocked form directories — not yet
-   made; the fix currently defaults to "leave blocked" (Option A) without a formal sign-off.
+5. ~~`EV-016-A10-fix-scope.md` §3's Owner decision~~ **RESOLVED 2026-08-19** — Option A confirmed
+   (all 16 directories stay blocked, a deliberate decision now, not just the fix's default).
 
 ---
 

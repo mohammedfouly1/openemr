@@ -154,6 +154,12 @@ completeness/quality** — only confirmed they exist and have working entry poin
 for any specific form, whoever implements it should open that form and confirm it's not a half-built
 stub.
 
+> **✅ RESOLVED 2026-08-19 — Owner decision, given directly in conversation with the orchestrating
+> session.** **Option A confirmed: all 16 directories stay blocked.** This is now a deliberate
+> decision, not merely the fix's safe-default behaviour — no further engineering action needed. If
+> any of these forms are needed for the product later, registering the specific ones required is a
+> separate future task, not implied or scheduled by this decision.
+
 ---
 
 ## 4. What I'm NOT scoping here
