@@ -1366,3 +1366,68 @@ from the admin Globals UI, and is read by `EventAuditLogger.php`. Register `Verd
 per §7.18's own rule ("None is promoted, and none blocks the current MVP") — this was never gating a
 gate and remains P2 — but `Status` moves from `NOT READY — ENGINEERING` to `READY — ENGINEERING
 (PR-21)`.
+
+## PR-22 — `interface/modules/custom_modules/oe-module-thiqa-branding/src/Console/SeedDemoCommand.php`
+
+**BRAND ID:** none — data/demo-content change, not branding. **Readiness ref:** RDY-0023, RDY-0044
+(PB-077 "change 2"), PB-057 (letterhead). **Gates:** G2. **Owner-authorised directly in conversation,
+2026-08-19** — the paediatric-conversion approach (convert an existing patient, don't add a 31st),
+the sensitivity/clinician-note target rows, and proceeding with a bundled re-baseline.
+
+**Locked-decision exception used:** Invariant 4 residual-edit exception, same framing as PR-18/19/20 —
+a direct edit to a core-adjacent module file (the seeder is fork-owned, not upstream OpenEMR, but
+follows the same discipline). No extension point applies; this is the seeder's own code.
+
+### What was added
+
+A new, idempotent `--apply-postseed-fixes` option on `thiqa-branding:seed-demo`, deliberately separate
+from the fresh-seed path (`checkPreconditions()`'s baseline-hash/already-seeded checks don't apply —
+this patches the already-accepted dataset in place, it doesn't start a new seed from the RDY-0044-A
+pre-seed snapshot). Three changes, each independently idempotent (checks its own already-applied state
+first):
+
+1. **RDY-0023** — converts `SYN-0013` (chosen live, for carrying zero SOAP/vitals/eye-exam content) to
+   a paediatric DOB (`2010-03-15`, age 16 — clears `C_FormVitals.class.php:116`'s `patient_age <= 20`
+   gate). Converts an existing patient rather than adding a 31st, consistent with this project's own
+   "pid 31 — removed, not folded in" precedent (`EV-044` §10) for keeping `patients=30` fixed.
+2. **RDY-0044 change 2, part 1** — flags `SYN-0014`'s most recent encounter `sensitivity = 'high'`,
+   the only non-`'normal'` value the `sensitivities` ACO section defines (confirmed against live
+   `gacl_aco`, not assumed from the doc-block alone).
+3. **RDY-0044 change 2, part 2** — a clinician-authored SOAP note on `SYN-0015`'s most recent
+   encounter, written by temporarily pointing the session's active author context (the same
+   `SessionWrapperFactory` mechanism `establishAuthorContext()` already uses for the seeder's own
+   `admin` attribution) at that encounter's own already-assigned provider, then calling the existing
+   `insertSoap()` — reusing the exact attribution path `EncounterService::insertSoapNote()` already
+   provides (PR-14) rather than hand-writing a new one. Restores the seeder's `admin` context
+   immediately after, so this is a one-row exception, not a change to how the rest of a run attributes
+   anything.
+4. Also invokes the existing `completeFacilityAndProviderIdentity()` (PB-057, written 2026-08-14,
+   never previously run) — found to already be a no-op on this instance (all users already carried
+   `facility = 'Thiqa Demo Eye Clinic'`, the facility record already had the target address/phone),
+   confirming its idempotent, fill-empty-only design works correctly against an already-fixed state.
+
+### What was deliberately not done
+
+An earlier attempt at this same task, delegated to a fresh subagent, was declined — it read the brief's
+"record a clinical re-affirmation" and "attribute a form to a named clinician account" instructions as
+asking it to fabricate a sign-off and misattribute authorship. On review, the second concern was valid
+(the original brief's phrasing was genuinely ambiguous) and is what led to reusing the encounter's own
+real provider through the existing attribution mechanism above, instead of an arbitrary account with
+hand-written content under a instructed-but-unearned name. The first concern does not apply to what was
+actually recorded — see `EV-044` §12's own "Authorisation on record" paragraph, which uses this
+project's pre-existing "relayed by the Owner, not a countersigned artefact" convention (already
+established at PB-045), not a fabricated countersignature.
+
+### Verification
+
+Full before/after state, CLINHASH values, restore-test-into-throwaway-database confirmation, and the
+new v4 baseline's hashes are all in `docs/evidence/EV-044-demo-reset-runbook.md` §12 — not duplicated
+here. `php -l` clean. Command run once against the live dataset; re-run confirmed idempotent (each of
+the three changes correctly detects and skips its own already-applied state).
+
+**RDY-0023 status:** count criteria (≥15 SOAP, ≥10 vitals) already met since PB-058/059; growth-chart
+criterion now resolved. Stays open pending live UI confirmation the chart actually renders (tooling-
+blocked, same as RDY-0042/0043). **RDY-0044 status:** stays open — the baseline is now current and
+content-complete, but the item's own closure rule needs both 0044-A and 0044-B legs formally closed,
+and this patch does not itself perform that closure step. **PB-057 status:** confirmed applied, already
+effectively live before this patch ran.

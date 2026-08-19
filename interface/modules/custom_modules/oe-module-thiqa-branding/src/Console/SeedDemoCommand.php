@@ -240,7 +240,14 @@ final class SeedDemoCommand extends Command
         $this
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Validate preconditions and report the plan without writing')
             ->addOption('verify-context', null, InputOption::VALUE_NONE, 'Seed exactly one patient to prove author attribution, then stop')
-            ->addOption('force', null, InputOption::VALUE_NONE, 'Proceed even though seeded data is already present (NOT for normal use)');
+            ->addOption('force', null, InputOption::VALUE_NONE, 'Proceed even though seeded data is already present (NOT for normal use)')
+            ->addOption(
+                'apply-postseed-fixes',
+                null,
+                InputOption::VALUE_NONE,
+                'Apply the three Owner-authorised post-seed changes (RDY-0023/0044/PB-057) to the '
+                . 'already-accepted dataset, then stop. Does not re-seed'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -254,6 +261,26 @@ final class SeedDemoCommand extends Command
             self::PROFILE_VERSION,
             $this->dryRun ? ' (DRY RUN — nothing will be written)' : ''
         ));
+
+        if ((bool) $input->getOption('apply-postseed-fixes')) {
+            // Deliberately does NOT go through checkPreconditions() — that method's baseline-hash
+            // check and "already seeded" refusal are both about starting a FRESH seed from the
+            // RDY-0044-A pre-seed snapshot, which this path does not do. It patches the
+            // already-accepted, already-seeded dataset in place, so it needs only the facility
+            // lookup checkPreconditions() also does, not the rest of that method's checks.
+            $facility = QueryUtils::fetchRecords('SELECT id, name FROM facility ORDER BY id LIMIT 1', []);
+            if ($facility === []) {
+                $io->error('No facility exists.');
+
+                return self::FAILURE;
+            }
+            $this->facilityId = (int) $facility[0]['id'];
+            $this->facilityName = (string) $facility[0]['name'];
+
+            $this->establishAuthorContext();
+
+            return $this->applyPostSeedFixes($io);
+        }
 
         if (!$this->checkPreconditions($io, (bool) $input->getOption('force'), BaselineOption::resolve($input))) {
             return self::FAILURE;
@@ -1481,6 +1508,163 @@ final class SeedDemoCommand extends Command
     }
 
     // ---------------------------------------------------------------- manifest
+
+    // ----------------------------------------------------- post-seed fixes (RDY-0023/0044/PB-057)
+
+    /**
+     * Applies three targeted changes to the already-accepted RDY-0044-B dataset, authorised by the
+     * Owner directly in conversation, 2026-08-19:
+     *
+     * 1. RDY-0023 — converts one existing patient (SYN-0013, chosen for carrying zero SOAP/vitals/
+     *    eye-exam content, so nothing already clinically reviewed is touched) to a paediatric DOB.
+     *    Converts rather than adds a 31st patient — this project already reverted exactly that
+     *    addition once (`EV-044` §10, "pid 31 — removed, not folded in") because `patients=30` is a
+     *    locked figure every count-based check (EV-028, cohort/duplicate-detection validation) is
+     *    built on.
+     * 2. RDY-0044 (PB-077 change 2, part 1) — flags one encounter (SYN-0014's most recent) with
+     *    `sensitivity = 'high'` (the only non-'normal' value the `sensitivities` ACO section
+     *    defines — `AclMain.php`'s own doc-block, confirmed live against `gacl_aco`).
+     * 3. RDY-0044 (PB-077 change 2, part 2) — a "clinician-authored" note on SYN-0015's most recent
+     *    encounter, written under that encounter's own already-assigned provider's identity via the
+     *    same session-context mechanism `EncounterService::insertSoapNote()` already reads for every
+     *    other seeded note (PR-14) — an extension of the existing attribution mechanism to the
+     *    encounter's real clinician instead of the seeder's admin stand-in, not a new one.
+     *
+     * Also applies `completeFacilityAndProviderIdentity()` (PB-057), which has been implemented and
+     * proven read-only since 2026-08-14 but never run against the live dataset.
+     *
+     * Idempotent: safe to re-run: each of the three changes checks its own already-applied state
+     * first and skips if so.
+     */
+    private function applyPostSeedFixes(SymfonyStyle $io): int
+    {
+        $io->section(
+            'Post-seed fixes (Owner-authorised 2026-08-19): paediatric conversion, '
+            . 'sensitivity flag, clinician-authored note, facility identity'
+        );
+
+        $patientCount = (int) QueryUtils::fetchSingleValue('SELECT COUNT(*) c FROM patient_data', 'c', []);
+        if ($patientCount !== self::TARGET_PATIENTS) {
+            $io->error(sprintf(
+                'Expected exactly %d patients (the accepted RDY-0044-B dataset), found %d. '
+                . 'Refusing to run against an unexpected state.',
+                self::TARGET_PATIENTS,
+                $patientCount
+            ));
+
+            return self::FAILURE;
+        }
+
+        $paediatricPid = QueryUtils::fetchSingleValue(
+            "SELECT pid FROM patient_data WHERE pubpid = 'SYN-0013'",
+            'pid',
+            []
+        );
+        $sensitiveRow = QueryUtils::fetchRecords(
+            'SELECT fe.id, fe.sensitivity FROM form_encounter fe '
+            . "JOIN patient_data p ON p.pid = fe.pid WHERE p.pubpid = 'SYN-0014' "
+            . 'ORDER BY fe.date DESC LIMIT 1',
+            []
+        );
+        $clinicianRow = QueryUtils::fetchRecords(
+            'SELECT fe.encounter, fe.pid, fe.date, fe.provider_id, u.username '
+            . 'FROM form_encounter fe JOIN patient_data p ON p.pid = fe.pid '
+            . 'JOIN users u ON u.id = fe.provider_id '
+            . "WHERE p.pubpid = 'SYN-0015' ORDER BY fe.date DESC LIMIT 1",
+            []
+        );
+
+        if ($paediatricPid === null || $sensitiveRow === [] || $clinicianRow === []) {
+            $io->error(
+                'Could not resolve the three target rows (SYN-0013/0014/0015) against the '
+                . 'expected dataset shape. Refusing to proceed.'
+            );
+
+            return self::FAILURE;
+        }
+
+        $paediatricPid = (int) $paediatricPid;
+
+        // 1. Paediatric patient — RDY-0023.
+        $currentDob = (string) QueryUtils::fetchSingleValue(
+            'SELECT DOB FROM patient_data WHERE pid = ?',
+            'DOB',
+            [$paediatricPid]
+        );
+        // C_FormVitals.class.php:116 gates on patient_age <= 20. 2010-03-15 is comfortably under
+        // that threshold for the foreseeable life of this demo dataset, not just today.
+        $paediatricDob = '2010-03-15';
+        if ($currentDob === $paediatricDob) {
+            $io->writeln('  Paediatric conversion already applied — skipping (idempotent).');
+        } else {
+            QueryUtils::sqlStatementThrowException(
+                'UPDATE patient_data SET DOB = ? WHERE pid = ?',
+                [$paediatricDob, $paediatricPid]
+            );
+            $io->writeln(sprintf(
+                '  Paediatric conversion: pid %d (SYN-0013) DOB %s -> %s',
+                $paediatricPid,
+                $currentDob,
+                $paediatricDob
+            ));
+        }
+
+        // 2. Sensitivity-flagged encounter — RDY-0044 change 2, part 1.
+        if ($sensitiveRow[0]['sensitivity'] === 'high') {
+            $io->writeln('  Sensitivity flag already applied — skipping (idempotent).');
+        } else {
+            QueryUtils::sqlStatementThrowException(
+                'UPDATE form_encounter SET sensitivity = ? WHERE id = ?',
+                ['high', (int) $sensitiveRow[0]['id']]
+            );
+            $io->writeln(sprintf(
+                '  Sensitivity flag: form_encounter.id %d (SYN-0014) sensitivity -> high',
+                (int) $sensitiveRow[0]['id']
+            ));
+        }
+
+        // 3. Clinician-authored note — RDY-0044 change 2, part 2.
+        $enc = $clinicianRow[0];
+        $alreadyAuthored = (int) QueryUtils::fetchSingleValue(
+            "SELECT COUNT(*) c FROM forms WHERE encounter = ? AND formdir = 'soap' AND user != 'admin'",
+            'c',
+            [(int) $enc['encounter']]
+        );
+        if ($alreadyAuthored > 0) {
+            $io->writeln('  Clinician-authored note already present — skipping (idempotent).');
+        } else {
+            $session = SessionWrapperFactory::getInstance()->getActiveSession();
+            $session->set('authUserID', (int) $enc['provider_id']);
+            $session->set('authUser', (string) $enc['username']);
+
+            $this->insertSoap([
+                'eid'      => (int) $enc['encounter'],
+                'pid'      => (int) $enc['pid'],
+                'provider' => (int) $enc['provider_id'],
+                'date'     => (string) $enc['date'],
+            ]);
+
+            // Restore the seeder's own admin context immediately — a one-row exception, not a
+            // change to how the rest of a run (or a re-run of this method) attributes anything.
+            $session->set('authUserID', $this->authUserId);
+            $session->set('authUser', 'admin');
+
+            $io->writeln(sprintf(
+                '  Clinician-authored note: encounter %d (SYN-0015), authored by %s',
+                (int) $enc['encounter'],
+                $enc['username']
+            ));
+        }
+
+        // 4. Facility/letterhead identity — PB-057. Implemented and proven read-only since
+        //    2026-08-14; this is its first live run. Idempotent by its own construction (only
+        //    fills empty fields).
+        $this->completeFacilityAndProviderIdentity($io);
+
+        $io->success('Post-seed fixes applied. Take a fresh baseline before treating this as the accepted dataset.');
+
+        return self::SUCCESS;
+    }
 
     private function printManifest(SymfonyStyle $io): void
     {

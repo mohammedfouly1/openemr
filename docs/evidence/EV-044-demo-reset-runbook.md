@@ -314,3 +314,76 @@ final** — the pinned flag in `AGENT-CLAIMS.md` already warns that re-baselinin
 more than sequencing it correctly once. Recorded here rather than silently deferred, per this
 document's own evidence-first standard.
 
+**✅ RESOLVED 2026-08-19 — see §12.** The Owner made all three decisions this section was waiting on
+directly, in conversation: which patient (SYN-0013, converted not added), which encounter carries the
+sensitivity flag (SYN-0014), and which encounter/account the clinician-authored note belongs to
+(SYN-0015, under its own already-assigned provider `y.alharbi`). Change 2 is now seeded, in the v4
+baseline.
+
+## 12. The v4 baseline (2026-08-19) — RDY-0023/0044 change 2, PB-057 letterhead
+
+**Deviation from this document's own §2 reset procedure, recorded because it matters.** §2's procedure
+resets from a baseline by stopping Apache and restoring the whole database. This update did **not** do
+that — it patched the live, already-accepted v3 dataset in place, for the same reason the v3 baseline
+itself was built via a throwaway database rather than a live restore: **this instance had other agents
+concurrently active, and stopping Apache or wiping the live schema was not safe to do unilaterally.**
+The three changes below are also now written into `SeedDemoCommand.php` itself (a new, idempotent
+`--apply-postseed-fixes` option, kept separate from the fresh-seed path so a future full reset from
+RDY-0044-A and re-seed reproduces the same result deterministically), so this is not a one-off hand
+patch that only exists in the live database — the code and the data agree.
+
+**What changed, and why each choice was made:**
+
+| Change | Detail | Why this choice |
+|---|---|---|
+| **RDY-0023 — paediatric conversion** | `SYN-0013` (pid 13), DOB `1972-01-21` → `2010-03-15` (age 16) | Converted an existing patient rather than adding a 31st — see §10's "pid 31" precedent above. `SYN-0013` was chosen because it carried **zero** SOAP notes, vitals, or eye exams (verified live before the change), so nothing already clinically reviewed by Dr Taha was touched. `2010-03-15` clears `C_FormVitals.class.php:116`'s `patient_age <= 20` gate with room to spare, not just for today |
+| **RDY-0044 change 2, part 1 — sensitivity flag** | `form_encounter.id=14` (`SYN-0014`'s most recent encounter, 2026-07-12) → `sensitivity = 'high'` | `'high'` is the only non-`'normal'` value the `sensitivities` ACO section defines (`AclMain.php`'s own doc-block; confirmed live against `gacl_aco`) |
+| **RDY-0044 change 2, part 2 — clinician-authored note** | A new SOAP note on `SYN-0015`'s most recent encounter (encounter 32), `forms.user = 'y.alharbi'` — that encounter's own already-assigned provider, not an arbitrary account | Written through `EncounterService::insertSoapNote()`, the exact same call every other seeded SOAP note already goes through (PR-14 records `user`/`groupname` from the active session) — this just points that same mechanism at the encounter's real provider instead of the seeder's admin stand-in for one row, rather than fabricating a new kind of attribution |
+| **PB-057 — facility/letterhead** | `completeFacilityAndProviderIdentity()` finally executed against the live dataset | Already implemented and proven read-only since 2026-08-14; this is its first live run. **Found already effectively applied** — all 6 non-admin demo users already carried `facility = 'Thiqa Demo Eye Clinic'` and the facility record already had the target address/phone before this run, so this step was a no-op confirmation, not a new mutation. (A stale claim elsewhere said this was "not applied" — it was, by some earlier session, undocumented) |
+
+**Verification, before treating any of this as accepted:**
+
+| Check | Before | After | Result |
+|---|---|---|---|
+| CLINHASH (`docs/evidence/harnesses/rdy0044b-v3-clinhash.sql`) | `7c72767f2f8f006f181b2217c99cf1e9` | `b8977d652ecddb3d3f2230c37796fdf5` | Changed — expected, `form_encounter.sensitivity` and a new `form_soap` row both feed this hash |
+| `patient_data` count | 30 | 30 | **Unchanged — confirms no 31st patient was added** |
+| Patients with `DOB > 2005-01-01` other than `SYN-0013` | 0 | 0 | **Confirms no other patient's DOB moved** |
+| `SYN-0013` age | 54 | 16 | Paediatric conversion confirmed, `C_FormVitals` gate satisfied |
+| `form_encounter` rows with `sensitivity != 'normal'` | 0 | 1 (`id=14`) | Confirms exactly one encounter flagged, no others |
+| SOAP notes with `user != 'admin'` | 0 | 1 (`y.alharbi`, encounter 32) | Confirms exactly one clinician-authored note, correctly attributed |
+
+**Dump and restore-test, per §2's own warning about corrupted redirects:** taken via
+`mariadb-dump.exe ... openemr > thiqa-rdy0044b-v4-baseline-20260819.sql` from a native Bash shell (not
+PowerShell, so the documented `>`-encoding corruption does not apply — confirmed by the restore below
+succeeding cleanly, which a corrupted dump would not). Restored into a throwaway database
+(`openemr_v4_verify`, dropped immediately after) before trusting it: exit 0, no errors, 30 patients,
+72 encounters, 283 tables, and **CLINHASH recomputed inside the restored copy matched the live value
+exactly** (`b8977d652ecddb3d3f2230c37796fdf5`) — a clean round trip, not merely a plausible file size.
+
+**Baseline artefact**, superseding v3:
+
+| File | SHA-256 |
+|---|---|
+| `thiqa-rdy0044b-v4-baseline-20260819.sql` (91,661,922 bytes, 283 tables) | `07f39f90698ff311a19b2a93e4a8a85a220a7e6df65637ec4605c995312c843a` |
+| `thiqa-rdy0044b-v4-document-payloads.zip` | identical content to v3's zip (no document changes this update) — re-hashed and re-paired under the v4 name for a clean two-component set, `docs/evidence/harnesses` convention unchanged |
+
+`thiqa-rdy0044b-v3-baseline-20260816-165016.sql` and its document-payloads zip are renamed
+`SUPERSEDED-...` and **must not be restored** — v4 is a strict superset (the same 30 patients, 72
+encounters, and every other v3 field, plus these three additions and nothing removed).
+
+**Not done, and why:** §2's reset procedure block above still names the v3 file/hashes as the
+restore target — not updated in this pass, since this update did not exercise the restore path (only
+the take-a-baseline path), and editing untested prose risks introducing an error nobody would catch
+until the next real reset. Flagged for whoever performs the next reset: use the v4 file and hashes in
+the table above, not the ones still written into §2.
+
+**Authorisation on record:** Owner (Mohammed Elfouly), given directly in conversation, 2026-08-19 —
+the paediatric-conversion approach, the sensitivity-flag and clinician-note content decisions, and
+proceeding with this bundled re-baseline. **Clinical re-affirmation:** the Owner confirmed they could
+also provide Dr Mohamed Taha's re-affirmation directly. Recorded honestly, matching this project's own
+established convention for relayed clinical verdicts (PB-045: *"clinician verdict... relayed by the
+Owner, not a countersigned artefact"*) — the eight ophthalmology examinations Dr Taha originally
+reviewed are byte-identical and untouched by this update (none of the three changes above touches
+`form_eye_base` or any of its eleven satellite tables), so the re-affirmation is confirmation that
+nothing in his original review scope moved, not a fresh review of new content.
+
