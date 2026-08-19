@@ -32,6 +32,7 @@ the first.
 | **PB-406** | **Orchestrator (main session)** — Owner decision to merge `EV-004` §1.3's nine flagged GTM-pillar-only phrases into §32, 2026-08-19: added as §32 items 27–30. **Range claimed 2026-08-19.** |
 | **PB-407 … PB-412** | **Orchestrator (main session)** — fifth subagent, 2026-08-19: the Chrome browser extension reconnected (device `1a030f48-96bf-43e4-86e4-6abe92e9f2f4`, "Browser 1") after several failed attempts; dispatched to finish every item still blocked on it — RDY-0016 (A-2/A-7 sensitivity live test, more probes), RDY-0023 (vitals seed + growth-chart render), RDY-0041 (second D-7 run, no DB reset), RDY-0060/0062 (screenshot/recording capture), RDY-0071 (CSV-button click-test). **First dispatch under this claim hit a genuine device-connectivity dead end (that device couldn't reach the app at all); a second device (`93bb8839-1b42-4f7b-a294-10bf4203dc64`) confirmed working and a redispatch is in flight — see `AGENT-CLAIMS.md`.** |
 | **PB-413** | **Orchestrator (main session)** — Owner ruling on `EV-092` §4's governing-relationship question, 2026-08-19: the Locked Decisions corpus is a future-phase roadmap, not binding on the current MVP — closes RDY-0092. **Range claimed 2026-08-19.** |
+| **PB-414** | **Orchestrator (main session)** — Owner confirms `upstream/rel-820` as RDY-0045's maintenance target, 2026-08-19; read-only `git fetch upstream` run on authorization found the branch already merged with `rel-820` (2026-08-17, `8e0eaba90`), gap now 1 trivial CI commit; R-03 re-derived Severe→Minor. **Range claimed 2026-08-19.** |
 | PB-380 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
@@ -1017,7 +1018,7 @@ qualification*. Dependencies, not dates.
 
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| **0045** | Close the upstream gap (**373 commits behind** at audit) and establish an ongoing patch cadence with a rollback approach and a regression check | GTM §25 Phase 2, §26 P0, L-27; audit EB-10 | *Historical (2026-08-09):* 0 ahead / 373 behind; HEAD dated 2026-07-04. **Live (2026-08-13): 33 ahead / 418 behind, DIVERGENT, 13 commits unpushed, upstream target undecided** | NOT READY — ENGINEERING | PATCH / DEPENDENCY | **P0** | G3 G6 | OpenEMR Engineer | 0001, 0047 | NOT READY |
+| **0045** | Close the upstream gap (**373 commits behind** at audit) and establish an ongoing patch cadence with a rollback approach and a regression check | GTM §25 Phase 2, §26 P0, L-27; audit EB-10 | *Historical (2026-08-09):* 0 ahead / 373 behind; HEAD dated 2026-07-04. **418-behind figure (2026-08-13) measured against the wrong target** (`upstream/master`, a pre-release branch) — `EV-045` (2026-08-14) found only 83 behind against the branch's actual release line, `upstream/rel-820`, with 3 lines of runtime code and zero security-relevant commits in the gap. **Owner confirmed `rel-820` as the maintenance target, 2026-08-19.** A read-only `git fetch upstream rel-820` run the same day found **the branch was already merged with `rel-820` on 2026-08-17** (`8e0eaba90`, "merge: adopt upstream/rel-820") — current gap is **1 commit behind**, a CI/docker byte-identical auto-sync with no runtime content. R-03 re-derived from Severe to Minor accordingly (§43) | READY WITH MANDATORY QUALIFICATION — target decided and gap closed to a trivial CI commit; **cadence, rollback approach and regression check are still undefined**, and git push (13 unpushed commits) remains blocked on credentials | PATCH / DEPENDENCY | **P0** | G3 G6 | OpenEMR Engineer | 0001, 0047 | NOT READY — target/gap legs resolved 2026-08-19; cadence/rollback/regression-check/push legs remain, see `EV-045` addendum |
 | **0046** | Resolve provenance of `oe-module-claimrev-connect` — gitignored, composer-installed, source not under version control | Audit §20.6 #12, L-27; GTM §24 | Supply-chain provenance gap | **VERIFIED READY — CLOSED BY PHASE 2B (PB-048)** — determination: RETAIN, fully traced, upstream-required, inert | PATCH / DEPENDENCY | **P0** | G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-14** |
 | **0047** | A documented, repeatable deployment runbook for a fresh clinic instance — every manual step, the expected Windows/Apache/MariaDB environment, environment-specific configuration separated from code | GTM §25 Phase 2 gate | **Written** (`EV-047-deployment-runbook.md`, 315 lines, issued 2026-08-14, Agent B) — this cell's "no runbook exists" was stale since that date. The document itself states its own acceptance criterion has not been met: **"has never been executed by anyone."** Someone who did not author it must follow it and not have to ask a question it fails to answer, against a real target — needs RDY-0064's hosting to exist for a full run | NOT READY — OPERATIONAL, artefact exists, execution pending | DEPLOYMENT | **P0** | G3 G6 | DevOps / Infrastructure | 0001, 0064 | NOT READY — see `EV-047` §0 |
 | **0048** | Secrets handling — `sites/default/sqlconf.php` is **git-tracked and carries local credentials** | Audit §19.6, §0.1 | *Historical:* tracked file holding credentials, shown as modified. **Live (2026-08-13): `skip-worktree` set; invisible to `git status`; committed blob pristine — no credential ever committed.** **CORRECTED (2026-08-14, `EV-048`; re-confirmed live 2026-08-16, AGENT-DOC): the "candidate closure" signal below is WITHDRAWN.** `skip-worktree` only masks `git status`, it is not a security control, and the live working-tree credential is still the upstream default `openemr`/`openemr` — re-read directly from `sites/default/sqlconf.php` on 2026-08-16, unchanged | NOT READY — SECURITY | SECURITY | **P0** | G3 | DevOps / Infrastructure | — | NOT READY |
@@ -2645,6 +2646,26 @@ current MVP.** This was the second and last of the two conditions `EV-092` §6.4
 RDY-0092's closure (the first, the NPHIES escalation, closed under PB-400). Recorded in `EV-092` §7.
 **RDY-0092 CLOSED 2026-08-19** — P1, blocks G0, no P0 gate-count effect. Requirements still open: 68
 (down from 69).
+
+## PB-414 (2026-08-19) — **Orchestrator: Owner confirms rel-820 as RDY-0045's upstream target; branch already merged, gap now 1 commit; R-03 re-derived**
+
+`EV-045`'s 2026-08-14 recommendation (adopt `upstream/rel-820`: the branch demonstrably forks from
+it, the real gap was 83 commits with 3 lines of runtime code and zero security-relevant content,
+`master` is a pre-release branch) put to the Owner with that recommendation against two alternatives
+(track master; hold). **Owner adopted `rel-820`**, and separately authorized the read-only
+`git fetch upstream` §5 had explicitly withheld pending that authority.
+
+**Fetch run same day, re-measured:** merge-base moved from `6125a2fd8` to `fdd10a7af`, ahead 37→191,
+behind 83→**1**. **Not new catch-up — the branch was already merged with `rel-820` on 2026-08-17**
+(`8e0eaba90`, regression-analyzed in the same `EV-045` file, no functional regression found), three
+days after the original analysis. The one remaining commit (`e686d23ae`) is a CI/docker auto-sync
+with no application-code content, consistent with the rest of the gap's profile.
+
+**R-03 re-derived** (§43 risk register): **Severe → Minor** — its severity was keyed on "418 behind,"
+measured against the wrong branch (`master`). RDY-0045's register row updated to match. **Item stays
+open** — cadence, rollback approach and regression check are still undefined, and the push-credential
+blocker (191, was 162, commits unpushed — this host's git credential helper authenticates as a user
+without write access to the target repo) is unchanged, both explicitly outside this decision's scope.
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
@@ -11669,7 +11690,7 @@ The GTM's risk register (R-01…R-14) is preserved and extended with readiness-s
 |---|---|---|---|---|---|---|---|
 | **R-01** | The self-pay segment is too small or unreachable (A-02) | Medium | **Fatal to the locked ICP** | V-1 before any build | V-1 result ≤2 of 10 | RCM-partnered motion: the partner handles NPHIES, we handle the record | G6 |
 | **R-02** | Marketing drifts back to NPHIES/ZATCA/AI language because competitors use it | **High** | **Severe — one prohibited claim destroys D-1 permanently** | §32 binding; named reviewer | Prohibited-term scan (T-23) on every artefact | Withdraw and correct publicly; the correction is itself consistent with the positioning | G0 G5 |
-| **R-03** | Selling hosting on an unpatched, **418-commits-behind and divergent** deployment | Medium | **Severe — security and reputational** | G3 is a hard gate before G6 | Upstream distance measured at each cadence review | Do not sell hosting; demo-only milestone | G3 |
+| **R-03** | Selling hosting on an unpatched deployment | Low *(re-derived 2026-08-19, `EV-045`)* | **Minor — re-derived down from Severe.** 418 was the distance to `upstream/master`, the wrong target (a pre-release branch). Against the correct target `upstream/rel-820`, the branch was actually merged 2026-08-17 (`8e0eaba90`); a fresh `git fetch upstream` today shows **1 commit behind**, a CI/docker byte-identical auto-sync with zero runtime or security content. **Owner confirmed `rel-820` as the maintenance target, 2026-08-19** | G3 is a hard gate before G6 | Upstream distance measured at each cadence review | Do not sell hosting until RDY-0045's cadence/rollback/regression-check legs also close — target confirmation alone doesn't satisfy those | G3 |
 | **R-04** | A prospect or competitor points out the product is OpenEMR-derived | **Certain** | **Low — if we said it first** | Disclosed in the category descriptor | Any surprise reaction in a demo | None needed if disclosed; **severe if concealed** | G4 |
 | **R-05** | The demo shows an empty screen or an error | Medium | High — **doubly damaging given the disclosure positioning** | Rehearse; never open Backup; state the two overdue services first; documented reset | D-7 acceptance runs | Stop, name it, move on — the honest response is on-brand | G1 G2 |
 | **R-06** | A design partner assumed invoicing or claims were included | Medium | High | O-4 in qualification; written exclusions; P-4 finance conversation before signature | The finance conversation | Exit under the pilot's documented exit clause | G3 |

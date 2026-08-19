@@ -499,3 +499,44 @@ helper authenticates to GitHub as `midodevelopper`, who lacks write access to
 `mohammedfouly1/openemr`; the tag and, after review, the branch both need pushing from a session/host
 with correct write credentials; (b) review the merge commit `8e0eaba90732fc4ec505516dbbb9cd08b102c821`
 and this regression analysis, then push the tag and (separately, on approval) the branch.
+
+---
+
+# ADDENDUM 2026-08-19 — Owner confirms `rel-820` as target; fresh fetch shows the merge already landed
+
+> **✅ Owner decision, given directly in conversation with the orchestrating session.** Presented with
+> §5's recommendation (adopt `upstream/rel-820`, on the evidence that the branch demonstrably forks
+> from it, the real gap is 83 commits with 3 lines of runtime code and zero security-relevant content,
+> and `master` is a pre-release branch) against two alternatives (track `master` instead; hold the
+> decision). **Chose to adopt `rel-820`.** Also authorized §5 action 1, the read-only
+> `git fetch upstream` that the brief had forbidden without Owner authority.
+
+**Fetch run same day:** `git fetch upstream rel-820` → `fdd10a7af..e686d23ae`. Re-measured:
+
+| | Then (2026-08-14, this document) | Now (2026-08-19) |
+|---|---:|---:|
+| Merge-base | `6125a2fd8` | `fdd10a7af` |
+| Ahead | 37 | 191 |
+| Behind | 83 | **1** |
+| HEAD an ancestor of `rel-820`? | No | No |
+
+**The jump isn't new catch-up work in this pass — it's that the branch was already merged with
+`rel-820` on 2026-08-17**, three days after this document was written: commit `8e0eaba90` ("merge:
+adopt upstream/rel-820 (EV-045/PB-191 decision pack)"), whose own regression analysis is above in this
+file (§"What this covers" / "No evidence of a functional regression"). That merge is why `HEAD`'s
+merge-base with the freshly-fetched `upstream/rel-820` lands exactly on rel-820's *old* tip
+(`fdd10a7af`) — everything up to that point is already incorporated. The 191 "ahead" figure is the
+accumulated Thiqa work since, not divergence.
+
+**The single remaining commit** (`e686d23ae`, `ci(docker): sync byte-identical files from master to
+rel-820 (auto) (#13618)`) is a CI/docker auto-sync commit with no application-code content — the same
+"CI/docs only, no runtime risk" pattern this document already established for the rest of the gap.
+
+**R-03 re-derived** (risk register, main requirements document §43): **Severe → Minor.** The severity
+was keyed on "418 behind," a figure measured against the wrong branch; against the real target the
+gap is now one trivial CI commit.
+
+**Still open, unchanged by this update:** RDY-0045's cadence, rollback approach and regression-check
+legs remain undefined — target confirmation and gap closure answer *which upstream* and *how far
+behind*, not *how we stay current going forward*. The push-credential blocker above (a) is also
+unchanged — 191 commits (was 162) now unpushed, for the same reason.
