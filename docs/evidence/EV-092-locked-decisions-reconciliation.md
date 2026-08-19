@@ -201,6 +201,26 @@ and cross-link RDY-0100/GAP-P1; or (b) if `Q27`–`Q31` were written with near-t
 intended, that is a direct conflict with the locked GTM's NPHIES-deferral position and needs the same
 kind of ruling §3.1 got for Q5.
 
+> **✅ RESOLVED 2026-08-19 — Owner, given directly in conversation with the orchestrating session.**
+> Chose **option (a)**: `Q27`–`Q31`/`Q65` describe the future NPHIES programme's own internal
+> architecture — pre-work analysis for whenever that engineering programme starts — not a claim that
+> NPHIES ships inside the current locked MVP. No conflict with the GTM's deferral position; the gap
+> was cross-referencing, not disagreement.
+>
+> **Where the clarifying note lives, and why not in the Locked Decisions file itself:**
+> `Locked Desicions/OpenEMR-SaaS-Locked-Decisions-UPDATED-2026-08-09.md` is checksummed —
+> `Locked Desicions/OpenEMR-SaaS-Decision-Documents-SHA256-UPDATED-2026-08-09.txt` records its
+> SHA-256 alongside the implementation-backlog file's. Editing it in place would silently break that
+> integrity record for what is meant to be a frozen historical artefact. The cross-link is added on
+> the readiness side instead — **RDY-0100's two register rows now name `Q27`–`Q31`/`Q65` explicitly**
+> (`Marketing-MVP-and-Launch-Readiness-Requirements.md`, both the condensed and detailed tables),
+> stating they are the same deferred item and pointing back here. Anyone reading `Q27`–`Q31` cold in
+> the original corpus still won't see the note — that is the accepted tradeoff of not touching a
+> checksummed file — but anyone reaching NPHIES from the readiness/GTM side now will.
+>
+> This closes §6.1's escalation. It does not close RDY-0092 as a whole — §6.4/§4's broader
+> "which corpus governs" question is untouched by this ruling.
+
 ### 6.2 Confirmed consistent, not a conflict — noted for completeness
 
 - **`Q45`** (Saudi PDPL data-residency default, KSA-resident production data) **is consistent with**
