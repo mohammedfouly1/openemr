@@ -568,7 +568,10 @@ $twig = (new TwigContainer(null, OEGlobalsBag::getInstance()->getKernel()))->get
 
     if ($allowRegisterDialog !== false) { // disable if running unit tests.
         // Include the product registration js, telemetry and usage data reporting dialog
-        echo $twig->render("product_registration/product_reg.js.twig", ['webroot' => OEGlobalsBag::getInstance()->getWebRoot()]);
+        echo $twig->render("product_registration/product_reg.js.twig", [
+            'webroot' => OEGlobalsBag::getInstance()->getWebRoot(),
+            'applicationTitle' => OEGlobalsBag::getInstance()->getString('openemr_name'),
+        ]);
     }
 
     ?>
