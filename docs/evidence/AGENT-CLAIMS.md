@@ -1087,3 +1087,23 @@ as the authoritative account. No remaining test-coverage gap exists for this ite
 open is the one product-authorization-policy question (cross-physician access to non-sensitive
 notes) already surfaced at PB-444, which needs an Owner ruling, not more testing. No gate count
 moved (§0.0 Rule 3) -- row stays open pending that ruling.
+
+## Orchestrator — PB-476/PB-477, 2026-08-19 — RDY-0041 and RDY-0016 CLOSED on direct Owner rulings
+
+Both items' remaining work was a single policy question each, not more testing or engineering --
+asked the Owner directly for both.
+
+**PB-476, RDY-0041:** two independent clean isolated D-7 runs (PB-425, PB-442) both reused the same
+PB-424 reset baseline rather than each starting from its own fresh reset, leaving open whether the
+item's "twice from a known reset state" wording requires a literal second reset. Owner ruled: two
+clean runs from one reset state is sufficient. Closed on that basis -- no further runs needed.
+
+**PB-477, RDY-0016:** the sensitivity-flagged cross-physician note-access bypass was already fixed
+and verified (PB-444); the separate, non-sensitivity-flagged case was deliberately left open as a
+policy question, not a defect. Owner ruled: allow it, matching current behaviour (physicians hold
+the `sensitivities` grant at group level regardless of authorship). No code change follows. With
+this ruling, all 32 harness-covered matrix cells pass and the one open question is resolved, so
+§23.4's pass condition ("every negative row is denied") is now met in full.
+
+Register rows, `§8.7` cards, and `§1.4` counts updated for both. Open P0: 11 -> 9. G1 1->0 (RDY-0016),
+G2 1->0 (RDY-0041), G3 5->4 (RDY-0016), G5 2->1 (RDY-0016), G6 10->9 (RDY-0041); G0/G4 unchanged.
