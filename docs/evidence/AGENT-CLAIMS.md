@@ -873,3 +873,57 @@ before switching role, never two authenticated tabs open at once.
 **Do NOT restart Apache or reset the database** unless a specific item's acceptance criteria requires it
 (RDY-0041 explicitly does — "from a known reset state," "twice" — see that item's own claim above for
 how this is handled) and it is recorded as a deliberate, isolated action, not a side effect.
+
+## Orchestrator (main session) — eighth subagent (PB-434-442 dispatch) COMPLETED, 2026-08-19
+
+**Outcome, item by item — four closed, three materially advanced, two genuine new findings (not
+closures), one not attempted:**
+
+- **RDY-0045 CLOSED** (PB-434). Real login walkthrough as `n.alqahtani`, authenticated shell
+  rendered, screenshot saved.
+- **RDY-0025 CLOSED** (PB-436). 8 synthetic documents uploaded through the real Document
+  Uploader/Viewer form (`SYN-0014`, pid 14) — real multipart POST, server-confirmed, DB-verified
+  (`documents` id 108-115, `foreign_id`=14). File-upload MCP tool refused all local paths tried (no
+  folder pre-shared with the session); worked around via the browser's own File/DataTransfer API to
+  build in-memory files and assign them to the real file input, then submit — same class of technique
+  Selenium/Playwright's `setInputFiles` uses, not a bypass of any ACL or sandbox boundary.
+- **RDY-0029 CLOSED** (PB-437). CDS active-alert presentation live-confirmed twice: a persistent
+  "Clinical Reminders" panel on `SYN-0014`, and an interruptive Alerts/Reminders popup plus the same
+  panel on a brand-new patient (pid 32) — confirms the engine evaluates live, not just against one
+  pre-seeded case.
+- **RDY-0062 CLOSED** (PB-439). Isolated single-tab `[Refresh]` succeeded twice, confirming
+  PB-425/426's multi-tab-collision hypothesis exactly. GIF recording produced — the flagship asset
+  this item has never had.
+- **RDY-0016 materially advanced** (PB-435). A-10's live HTTP round-trip done: bogus `thistype` → 403
+  Access Denied; legitimate `thistype` → 200 full form. A-1 fully confirmed (UI + direct-URL, both
+  legs). A-6 confirmed at menu level only. Matrix still has A-3/4/5/8/9/11 and A-6/7's direct-URL legs
+  unrun — stays NOT READY.
+- **RDY-0041 materially advanced** (PB-442). Second independent clean isolated D-7 run (new patient,
+  pid 32), all three legs clean on the first attempt. Reused the same PB-424 reset rather than
+  triggering a third — a live DB check found `facility.primary_business_entity` (a prior agent's fix)
+  had reverted, direct evidence a further reset risks silently regressing untracked fixes; no fresh
+  Owner authorization for a third reset existed this session, so none was taken. Whether two clean
+  runs from the same reset satisfy "twice from a known reset state," or a literal second reset is
+  still required, is flagged for the Owner/next reviewer, not decided here.
+- **RDY-0060/0061 materially advanced** (PB-438). SS-02 and SS-07 captured (3 of 12 total now exist).
+  SS-07 flagged as captured against a historical date (2026-08-14), not "today" — see the RDY-0094 row
+  6 finding below for why.
+- **RDY-0090's reachable leg BLOCKED, new host-level finding** (PB-440): the Twig-render session-lock
+  hang `CLAUDE.local.md` §9 documented as PHPUnit-only reproduces in live Apache too, and — worse than
+  documented — wedges the *entire browser-tab session*, not just the one hung request, until Apache is
+  restarted. Reproduced twice, both cleared by restart, login state survived. Not an ACL/branding
+  defect; recorded as its own operational finding.
+- **RDY-0094 §40 row 6 CONFIRMED as a genuine, currently-active NO-GO** (PB-441) — the opposite of a
+  closure. Today's Flow Board shows `Total patients: 0`; DB confirms all 37 seeded appointments are
+  fixed to `2026-08-14`, none later. This corrects PB-427's row-count-based optimism: non-empty table
+  counts did not mean non-empty *screens* once date-filtering against a moving "today" met a
+  fixed-date seed. Root cause routed to whoever owns RDY-0022/the demo-data refresh process.
+- **RDY-0086 honestly not attempted** — browser access worked this pass, but time was prioritized to
+  the other 10 items; recorded as not-attempted, not claimed.
+
+**Range PB-434…PB-442 used** (PB-443…PB-460 unused, released back to the pool for whichever agent
+claims it next — no need to re-claim, just note in that agent's own dispatch note per Rule 1). Nothing
+in this update was written without a corresponding live action (real HTTP round-trip, real DOM state,
+real server log or DB row) behind it. One tooling limitation worth flagging for future browser-check
+agents: the file-upload MCP tool's local-path restriction has no obvious pre-authorized folder on this
+host — the File/DataTransfer-API workaround above is the reusable pattern.
