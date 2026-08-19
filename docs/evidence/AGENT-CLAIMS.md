@@ -795,3 +795,44 @@ per-screen walk, or re-touching any of the PB-407-412 dispatch's six items) — 
 state with the still-running browser dispatch (`a1122332bd54186f0`) and restarting Apache or
 resetting the DB out from under it mid-test would corrupt its work. This agent's tools are limited to
 Read/Grep/Bash-for-read-only-queries; it should not open any browser MCP tool at all.
+
+## Orchestrator (main session) — fifth subagent (PB-407-412 dispatch) COMPLETED, 2026-08-19
+
+**Outcome, item by item — two closed, three materially advanced, none fabricated:**
+
+- **RDY-0071 CLOSED** (PB-407). Real click on the live "Export to CSV" button (`k.alotaibi`,
+  `SYN-0013`'s ledger); real CSV file downloaded to disk and read back (header row + one real billed
+  line item, SAR 250.00). First click's network trace showed a transient 503 (DriveFS latency, per
+  `CLAUDE.local.md` §8), second click clean 200 — not a code defect.
+- **RDY-0023 CLOSED** (PB-408). Real Vitals entry via `y.alharbi` on `SYN-0013`'s encounter (Weight
+  128 lb, Height 64 in, save.php 200); real rendered growth chart with the plotted data point,
+  screenshot saved. Flagged, not resolved: this mutates the RDY-0044-B protected baseline;
+  re-baselining is a follow-up for whoever owns it, not done here.
+- **RDY-0041 second D-7 run executed, NOT closed** (PB-409). Front Office (new patient, pid 32) and
+  Physician (encounter 109 + full SOAP note, clinician-authored not `admin`) legs both clean.
+  Accounting leg hit a reproducible **"Authentication Error"**, root-caused via `php_error.log` to the
+  host's known broken session persistence (CSRF failures, `session.save_path` → non-writable
+  `C:\Windows`) — a host/environment defect, not an app defect, reproduced twice including on a fresh
+  login. Both preconditions of the item (a second full run, a known reset state) remain unmet.
+- **RDY-0016's A-2/A-7 sensitivity gating live-confirmed** (PB-410) — the task's most important ask.
+  Three roles tested live against `SYN-0014`'s real `sensitivity='high'` encounter: Front Office
+  blocked at a coarser "Encounters not authorized" gate; Accounting sees the row with Issue/Reason/
+  Coding redacted to literal `"(No access)"` — **confirming "redacted, not invisible" live**, settling
+  `EV-056-057-088` §2.2/§2.3's pending correction; Physician (not the encounter's own author) sees the
+  same encounter **fully unredacted** — a genuine new finding that this ACL configuration does not
+  sensitivity-gate physicians at all, flagged for whoever next revises the A-7 expected-behaviour text.
+  RDY-0016 itself stays open (A-10 and most matrix cells still unrun).
+- **RDY-0060/0062 partially advanced** (PB-411). SS-01 (Audit Log Tamper Report, clean result)
+  captured and saved. Attempting RDY-0062's live "run it" recording surfaced a new, reproducible
+  blocker: clicking `[Refresh]` on the same report produces `"...Not Authorized"`, root-caused to the
+  same host session-persistence defect as RDY-0041's failure (not an ACL issue — `n.alqahtani` is a
+  genuine Administrator). 11 of 12 SS-0x captures remain outstanding.
+- **Gate-count sync performed** (PB-412), correctly folding in RDY-0078's closure from the concurrent
+  sixth-subagent-adjacent session (PB-415) that this dispatch had not itself made, before applying
+  this dispatch's own two P0 closures. Final: 71 P0 registered, 47 closed, 24 open; full per-gate
+  table in the §47 CURRENT block.
+
+**All five register rows (§7.x), the §1.4 summary counts, the §47 CURRENT block, and both affected
+evidence files (`EV-056-057-088-claim-discipline.md`, `EV-016-authorization-matrix.md`) updated in the
+same pass.** Range PB-407…PB-412 fully used. Nothing in this update was written without a
+corresponding live action (real HTTP request, real DOM state, or real server log line) behind it.

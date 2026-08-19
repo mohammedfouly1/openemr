@@ -93,26 +93,26 @@ PB-014 predicted five rows were blocked on Track D seeding. **Track D has since 
 and 72 encounters, and four of those rows are still blocked** — for reasons the seed did not
 address.
 
-### 4.1 No sensitivity-flagged encounter exists
+### 4.1 ✅ RESOLVED 2026-08-19 (PB-410) — sensitivity-flagged encounter seeded and live-tested
 
-```sql
-SELECT sensitivity, COUNT(*) FROM form_encounter GROUP BY sensitivity;
--- normal   72
-```
+*Historical (as originally written): all 72 encounters were `sensitivity = 'normal'`; RDY-0030 not
+yet seeded.* **Both preconditions since resolved.** A sensitivity-flagged encounter was added
+2026-08-19 (`SYN-0014` pid 14, encounter 31, 2026-07-12, `sensitivity='high'`; encounter 61,
+2026-04-28, `sensitivity='normal'`, same patient, for a same-patient control), and a live browser
+session exercised it the same day (PB-410, fifth browser-check agent):
 
-**All 72 encounters are `sensitivity = 'normal'`.** RDY-0030 (*"an encounter with sensitivity
-set"*) is **P1** and was not seeded.
-
-| Row | Leg blocked |
+| Row | Result |
 |---|---|
-| **A-2** | Front Office *"cannot see any encounter carrying a non-empty sensitivity value — invisible, not redacted"* **(⚠ this expected-behavior wording corrected 2026-08-19 — see `EV-056-057-088` §2.2 addendum: two independent static-code reads found the row is redacted, not invisible; re-read this row's own expected behavior as "redacted" accordingly)**. **No such encounter existed at the time this row was written.** A sensitivity-flagged encounter now exists (`SYN-0014` encounter 31, added 2026-08-19) but a live browser session to actually exercise this row has not yet been available |
-| **A-7** | Clinician *"cannot see `high`-sensitivity encounters"* |
-| **A-8** | Accounting *"cannot see sensitivity-flagged encounters"* |
+| **A-2** | Front Office (`r.aldosari`) — Visit History renders `"(Encounters not authorized)"` for the whole screen: blocked at a coarser gate than sensitivity, for either encounter, regardless of flag. **Not the redaction path** — a stronger, screen-level denial |
+| **A-7** | Physician (`y.alharbi`, not the encounter's own author — provider_id 6, encounter's is 7) — the `sensitivity='high'` encounter (2026-07-12) renders **fully unredacted**: Reason/Form "Ophthalmology consultation (SYNTHETIC DEMO) / SOAP", Coding "CPT4 - 99214", no "(No access)" anywhere. **New finding: this account's `physicians` ACL group is not gated by sensitivity at all**, even viewing a different clinician's patient — the original expected-behaviour text ("cannot see `high`-sensitivity encounters") does not hold for this role in this configuration. Flagged for whoever next revises §23.4's expected-behaviour column; not resolved here |
+| **A-8** | Accounting (`k.alotaibi`, holds no `sensitivities` ACL grant) — **both** encounters (the `sensitivity='high'` 2026-07-12 row and the `sensitivity='normal'` 2026-04-28 row) render with date/provider/insurance visible and Issue/Reason/Coding showing literal `"(No access)"`. **This is the live confirmation that the row is redacted, not invisible** — matching `encounters.php:506-511/533-536` exactly. The identical redaction on both rows (regardless of sensitivity value) shows Accounting's denial is a blanket per-role restriction on those columns, not a per-record differential — a same-patient control the original static-code read could not establish |
 
-**This is the sharpest finding in this entry.** Sensitivity gating is a named limitation in the
-claim register (L-28, MC-16, RDY-0057) and is the mechanism behind a Pillar 1 statement. **It has
-never been exercised, in either direction, on any dataset.** One seeded encounter closes three
-matrix legs at once.
+**This is the sharpest finding in this entry, now closed out.** Sensitivity gating is a named
+limitation in the claim register (L-28, MC-16, RDY-0057) and is the mechanism behind a Pillar 1
+statement. **It has now been exercised live, in three directions, on real data.** The
+redaction-not-invisibility qualification (`EV-056-057-088` §2.2/§2.3) is confirmed for the
+non-clinical roles it describes; the Physician finding is a new, separate nuance not yet reflected
+in the qualification text.
 
 ### 4.2 Every clinical form is authored by `admin`
 
@@ -136,9 +136,10 @@ This traces to PB-036: the seeder ran under the `admin` session, so `forms.user`
 
 ### 4.4 The UI-navigation legs
 
-A-1, A-6, A-7 and A-8 each specify *"UI navigation **and** direct URL"*. **Only the direct-URL half
-is evidenced above.** The UI half needs the manual browser session already outstanding for
-RDY-0013/0014/0015 and RDY-0042 — one session can discharge all of them.
+A-1, A-6, A-7 and A-8 each specify *"UI navigation **and** direct URL"*. **The direct-URL half is
+evidenced above. The UI half for A-7/A-8's sensitivity legs is now also evidenced (§4.1, PB-410) —
+real UI navigation to Visit History under Front Office, Accounting and Physician accounts.** A-1's
+and A-6's UI halves remain unexercised.
 
 ---
 
@@ -146,24 +147,25 @@ RDY-0013/0014/0015 and RDY-0042 — one session can discharge all of them.
 
 | Requirement | State |
 |---|---|
-| Every positive row succeeds | **Partial** — A-8 positive ✅, CTRL ✅; A-1/A-6/A-7 positive legs need the UI walk |
-| Every negative row is denied | **32 of 32 executed probes denied correctly**, but **A-2 entirely, and the sensitivity legs of A-7 and A-8, could not be executed** |
-| A single negative-row failure fails the matrix | **No failure occurred.** No row was *skipped silently* either — the four unexecutable rows are named above |
+| Every positive row succeeds | **Partial** — A-8 positive ✅, CTRL ✅, A-7/A-8 sensitivity legs now evidenced via real UI (§4.1); A-1/A-6 positive legs still need the UI walk |
+| Every negative row is denied | **32 of 32 originally executed probes denied correctly, plus the 3 live sensitivity-role probes in §4.1 (PB-410) all behaved as denials or redactions, none as an unintended positive** — A-10 remains unexecuted |
+| A single negative-row failure fails the matrix | **No failure occurred.** No row was *skipped silently* either |
 
-### Status: **RDY-0016 — NOT CLOSED. 32/32 executed probes pass; 4 rows unexecutable on the current dataset.**
+### Status: **RDY-0016 — NOT CLOSED. 32/32 originally executed probes pass; A-2/A-7/A-8's sensitivity legs now live-confirmed (PB-410, 2026-08-19); A-10 and A-1/A-6's UI halves remain unrun.**
 
-**`Blocks`: G1 G3 G5.** No gate count moved (§0.0 Rule 3).
+**`Blocks`: G1 G3 G5.** No gate count moved (§0.0 Rule 3) — the item's own closure still needs A-10
+and the remaining UI legs before the matrix as a whole can close.
 
 ### What would close it
 
-1. **Seed one sensitivity-flagged encounter** (RDY-0030) → unblocks A-2 and the sensitivity legs of
-   A-7 and A-8. *Track D / dataset owner — Agent B has not mutated the dataset.*
-2. **Author at least one form as a clinician** (not `admin`) → gives A-7 a positive case.
-3. **Execute the A-10 call-site probes.**
-4. **One manual browser session** for the UI-navigation halves, shared with RDY-0013/0014/0015/0042.
-
-Items 1 and 2 are dataset changes against the RDY-0044-B baseline and need the same decision as
-EV-083 §4.3. **Deliberately not applied.**
+1. ~~Seed one sensitivity-flagged encounter~~ **DONE 2026-08-19** — `SYN-0014` encounter 31,
+   `sensitivity='high'`.
+2. **Author at least one form as a clinician** (not `admin`) — **also incidentally satisfied
+   2026-08-19**: RDY-0041's second D-7 run (PB-409) had `y.alharbi` author a real SOAP note on
+   encounter 109, giving A-7 a genuine clinician-authored positive case for future re-runs of this
+   specific leg.
+3. **Execute the A-10 call-site probes.** Still outstanding.
+4. **The remaining UI-navigation halves** (A-1, A-6) — the A-7/A-8 halves are now done (§4.1).
 
 ---
 

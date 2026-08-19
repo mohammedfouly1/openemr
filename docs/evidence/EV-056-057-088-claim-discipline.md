@@ -77,24 +77,41 @@ register for exactly this reason (`EV-067` §5.1).
 > denies. A second layer, `src/Services/EncounterService.php:450-452` (FHIR/REST), similarly returns an
 > explicit denial string rather than omitting the record. **Corrected to the direction the code
 > actually supports — redaction, not invisibility — because the prior wording overstated the privacy
-> protection in customer-facing material.** Still not confirmed against live rendered output (§2.3
-> below); if a live test contradicts this, correct again.
+> protection in customer-facing material.** **✅ CONFIRMED against live rendered output 2026-08-19
+> (PB-410) — see §2.3 below.** The Accounting role's Visit History screen for `SYN-0014`'s real
+> `sensitivity='high'` encounter renders the row (date, provider, insurance) with Issue/Reason/Coding
+> showing the literal text `"(No access)"` — exactly as this qualification now states.
 
 **Prohibited:** *"field-level security"*, *"granular data-level permissions"*, *"record-level
 encryption"*, and (as of this correction) **"invisible"** in connection with sensitivity gating.
 
-### 2.3 ⚠ A material weakness in the sensitivity claim, found while writing this
+### 2.3 ✅ RESOLVED 2026-08-19 (PB-410, fifth browser-check agent) — live-confirmed, redacted not invisible
 
-**Sensitivity gating has never been exercised, in either direction, on any dataset — and as of
-2026-08-19 still has not been exercised live**, though a sensitivity-flagged encounter now exists
-(`SYN-0014` encounter 31, `sensitivity='high'`, added 2026-08-19) and the browser tooling needed to
-observe it live has been unavailable every time it's been attempted since. The mechanism behind this
-qualification remains **unverified at runtime** (`EV-016` §4.1/§4.4).
+**Sensitivity gating has now been exercised live**, closing the gap this section originally flagged.
+Live test against the real data (`SYN-0014` pid 14, encounter 31, `sensitivity='high'`, 2026-07-12):
 
-**Consequence for claim discipline:** until a live test actually renders the gated encounter under a
-non-privileged role, **any statement about sensitivity behaviour is an assertion from source reading,
-not a demonstrated capability.** It must be phrased accordingly, and it must not be demonstrated live.
-Recorded here rather than left to be discovered when a prospect asks to see it.
+- **Front Office** (`r.aldosari`) — the encounters screen renders `"(Encounters not authorized)"`
+  for the whole tab; a coarser gate than sensitivity, applying regardless of any encounter's flag.
+- **Accounting** (`k.alotaibi`, holds no `sensitivities` ACL grant) — the encounter row **renders**
+  (date, provider, insurance visible) with Issue/Reason/Coding showing literal `"(No access)"` text.
+  **This is the live confirmation that the qualification's wording ("redacted to '(No access)', the
+  row itself still appears") is correct** — matching the `encounters.php:506-511/533-536` code read
+  exactly. Control check on `SYN-0013`'s `sensitivity='normal'` encounters under the same login showed
+  the identical "(No access)" pattern — Accounting's redaction is a blanket per-role denial of those
+  columns, not a per-record differential keyed to the specific sensitivity value.
+- **Physician** (`y.alharbi`, not the encounter's own author) — the same `sensitivity='high'`
+  encounter renders **fully unredacted** (Reason/Form and Coding both visible, no "(No access)"
+  anywhere). New finding, not previously documented: the `physicians` ACL group in this configuration
+  is not gated by sensitivity at all, even across different clinicians' patients.
+
+**Consequence for claim discipline:** the qualification at the top of §2.2 is now a demonstrated
+capability, not merely an assertion from source reading, for the Accounting/Front-Office-style
+non-clinical roles it was written to describe. The Physician finding above is a separate, narrower
+nuance (clinical roles are not sensitivity-gated at all in this configuration) that does not appear in
+the current qualification text and should be considered if this claim is ever extended to describe
+clinician-vs-clinician sensitivity behaviour specifically — not addressed by this correction, flagged
+for whoever next revises the qualification. Full detail: `docs/Marketing-MVP-and-Launch-Readiness-
+Requirements.md` PB-410; `EV-016-authorization-matrix.md` §4.1 (updated in the same pass).
 
 ---
 
