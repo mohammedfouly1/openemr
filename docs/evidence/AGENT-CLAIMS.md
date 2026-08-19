@@ -1029,3 +1029,14 @@ recurring row `pc_eid=43` remained untouched. Live Chrome then showed a populate
 both provider selections, varied colors/statuses, and no malformed times. New qualified retake:
 `captures/2026-08-19/publication-ready/SS-06-calendar-current-week-two-providers-20260819-retake.png`.
 Independent final review PASS; RDY-0060 and RDY-0061 closed and Rule-3 counts synchronized.
+
+## Orchestrator — PB-472, 2026-08-19 — RDY-0090 closed on Owner risk-acceptance instruction
+
+Recorded the Owner's direct instruction to close RDY-0090 as PASS-ALL, given in conversation
+2026-08-19, after Codex's 34-item live walk (`EV-090-live-rendered-surface-review-20260819.md`)
+found no branding defects on any of the 9 reachable surfaces but left print preview, PDF
+generation, email rendering, and Physician/Accounting-role surfaces genuinely unverified (no
+agent had OS print-dialog access or a safe mail-capture channel). Register row and §1.4 counts
+updated to reflect closure while explicitly recording this as a risk-acceptance decision, not a
+claim that the unverified legs were inspected and found clean -- distinct from this document's
+usual evidence-first closures. Open P0: 13 -> 12. G1 2->1, G4 2->1; all other gates unchanged.
