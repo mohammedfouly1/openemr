@@ -2802,6 +2802,12 @@ $GLOBALS_METADATA = [
             '1',                              // default
             xl('Enable logging of ordering activities.') . ' (' . xl('Note that Audit Logging needs to be enabled above') . ')'
         ],
+        'audit_events_lab-order' => [
+            xl('Audit Logging Lab Order'),
+            'bool',                           // data type
+            '1',                              // default
+            xl('Enable logging of lab order activities.') . ' (' . xl('Note that Audit Logging needs to be enabled above') . ')'
+        ],
         'audit_events_lab-results' => [
             xl('Audit Logging Lab Results'),
             'bool',                           // data type

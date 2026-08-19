@@ -474,3 +474,33 @@ direct re-derivation from the dossier text. Recorded here per this repo's eviden
 as untouched in `EV-088` §5), and any frequency recomputation (`EV-088` §5/§6 already establish that
 even full resolution of these 4 would not by itself meet Source C's Full/Verified depth standard
 required before recomputation).
+
+## Agent (Claude Code) — RDY-0108, `audit_events_lab-order` metadata fix (2026-08-19)
+
+**Claim: RDY-0108 only** — "Add `audit_events_lab-order` to `$GLOBALS_METADATA` so lab-order events
+can be audited at all," §7.18 Domain Q, P2. Fixed and closed at the engineering level in this entry
+(PR-21, `docs/branding/adr/patch-records.md`); register `Status` moved to `READY — ENGINEERING
+(PR-21)`, `Verdict` stays `DEFERRED` per §7.18's own rule that nothing in that table is promoted into
+the current MVP.
+
+`library/globals.inc.php` was missing the `audit_events_lab-order` entry from `$GLOBALS_METADATA`
+entirely — confirmed absent by grep before touching anything. This was not just a missing admin
+checkbox: `src/Common/Logging/EventAuditLogger.php:77` already reads
+`$bag->getBoolean('audit_events_lab-order')` as one of its `eventTypeFlags`, and lines 195-196 map
+`procedure_order`/`procedure_order_code` to that same `'lab-order'` category — so the flag was silently
+always `false` with no global to flip it. Added the sibling entry (same five-element shape as
+`audit_events_order`/`audit_events_lab-results`, label "Audit Logging Lab Order," default `'1'`)
+immediately after `audit_events_order`. Grepped `audit_events_lab-results` across `library/`,
+`src/Common`, `src/Services`, `tests/` as a proxy for how any `audit_events_*` key is consumed — no
+other fixed list, migration, or default-enabled set needed touching; `EventAuditLogger.php` already
+expected the key by name.
+
+**Verification:** `php -l` clean on `library/globals.inc.php`. No isolated PHPUnit test enumerates
+`$GLOBALS_METADATA` or `audit_events_*` (searched `tests/Tests/Isolated`, no matches), so none existed
+to run or update — verification bar for a metadata-table entry is the clean lint plus the array shape
+matching its siblings exactly.
+
+**Not claiming:** any other RDY item, any change to `EventAuditLogger.php` itself (already correct —
+it was the metadata that was missing, not the consumer), or a live authenticated-UI screenshot showing
+the new checkbox (Globals-screen admin session not exercised here; the code-level fix and shape match
+to its five siblings is the appropriate bar for a P2 metadata-table entry, per the task's own framing).

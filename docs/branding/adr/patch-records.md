@@ -1186,3 +1186,80 @@ for RDY-0042/0043/0048) — code-traced and reasoned above instead, consistent w
 from `EV-016-A10-acl-probes.md` §1, but the full positive/negative authorization matrix (§23.4) this
 requirement calls for has never been executed under real role sessions, and §3's Owner decision on the
 16 directories remains open.
+
+## PR-21 — `library/globals.inc.php`
+
+**BRAND ID:** none — **a correctness/defect fix, not branding.** Seventh non-branding entry, recorded
+because Invariant 4 / Q1 governs every core edit regardless of motive. **Readiness ref:** RDY-0108
+(Audit PL-02, GAP-0070, EB-02). **Gates:** none — RDY-0108's own `Blocks` field is `—`; it sits in the
+§7.18 Domain Q (P1–P3, market-expansion) table, which the register explicitly states blocks no current
+gate. **Agent:** this session (Claude Code), assigned the single item.
+
+**Locked-decision exception used:** Invariant 4 residual-edit exception. `$GLOBALS_METADATA` is a
+core configuration table read directly by the admin Globals UI and by `OEGlobalsBag`; there is no
+module extension point or event that adds an entry to it.
+
+### What was wrong
+
+`library/globals.inc.php`'s `$GLOBALS_METADATA` array defines one entry per configurable global,
+including five sibling `audit_events_*` categories (`patient-record`, `scheduling`, `order`,
+`lab-results`, `security-administration`) starting at line ~2785. `audit_events_lab-order` was never
+defined among them — confirmed absent by direct grep of the file and the wider `library`/`src` tree
+before this fix.
+
+This was not merely a missing admin-UI checkbox. `src/Common/Logging/EventAuditLogger.php:77` already
+reads this exact key — `'lab-order' => $bag->getBoolean('audit_events_lab-order')` — as part of the
+`eventTypeFlags` passed into `AuditConfig`, and lines 195-196 of the same file map the `procedure_order`
+and `procedure_order_code` tables to the `'lab-order'` event category. With no `$GLOBALS_METADATA` entry,
+`OEGlobalsBag::getBoolean()` had no stored value to read and the flag always evaluated `false` — lab
+order activity could never be audited, and no administrator could turn it on, because the setting did
+not exist anywhere to be turned on. This matches the audit's own characterization exactly: "Global
+undefined... lab-order events can never be audited."
+
+### The fix
+
+Added the missing entry immediately after its most closely related sibling, `audit_events_order`,
+matching the exact five-element-array shape (label, `'bool'` data type, default, description) used by
+every other `audit_events_*` entry, with wording that mirrors the existing `order`/`lab-results` naming
+pair (`Audit Logging Order` / `Audit Logging Lab Results`) rather than reusing `audit_events_order`'s
+label verbatim:
+
+```diff
+         'audit_events_order' => [
+             xl('Audit Logging Order'),
+             'bool',                           // data type
+             '1',                              // default
+             xl('Enable logging of ordering activities.') . ' (' . xl('Note that Audit Logging needs to be enabled above') . ')'
+         ],
++        'audit_events_lab-order' => [
++            xl('Audit Logging Lab Order'),
++            'bool',                           // data type
++            '1',                              // default
++            xl('Enable logging of lab order activities.') . ' (' . xl('Note that Audit Logging needs to be enabled above') . ')'
++        ],
+         'audit_events_lab-results' => [
+```
+
+Default `'1'` matches every other `audit_events_*` sibling except `audit_events_cdr` (off by default,
+a distinct high-volume category) — consistent with the rest of the group, not a new policy choice.
+
+**Nothing else needed changing.** `EventAuditLogger.php` already referenced the key by name; the
+metadata entry alone is what makes it configurable and gives `getBoolean()` a real (non-default-false)
+value to read. Grepped `audit_events_lab-results` (the nearest sibling key, as a proxy for how any
+`audit_events_*` key is consumed) across `library/`, `src/Common`, `src/Services`, and `tests/` — the
+only two hits outside `globals.inc.php` were `library/sql.inc.php` (an unrelated `audit_events_cdr`
+check) and `EventAuditLogger.php` itself. No fixed checkbox list, migration, or default-enabled list
+elsewhere in the codebase enumerates `audit_events_*` keys separately from `$GLOBALS_METADATA`.
+
+### Verification
+
+`php -l` clean on `library/globals.inc.php`. No existing isolated PHPUnit test enumerates
+`$GLOBALS_METADATA` or `audit_events_*` (searched `tests/Tests/Isolated` for both strings — no
+matches), so none needed updating; verification bar for a metadata-table entry is a clean lint plus
+the array shape matching its siblings exactly, both satisfied by inspection above.
+
+**RDY-0108 status:** engineering fix complete — `audit_events_lab-order` now exists, is configurable
+from the admin Globals UI, and is read by `EventAuditLogger.php`. Register `Verdict` stays **DEFERRED**
+per §7.18's own rule ("None is promoted, and none blocks the current MVP") — this was never gating a
+gate and remains P2 — but `Status` moves from `NOT READY — ENGINEERING` to `READY — ENGINEERING
+(PR-21)`.
