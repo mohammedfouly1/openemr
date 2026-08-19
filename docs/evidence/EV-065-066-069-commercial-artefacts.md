@@ -120,9 +120,15 @@ hosting, patching, backup and support for the term · training at implementation
 | Names invoicing/VAT/ZATCA and claims/NPHIES as excluded, in customer-facing language | **MET** — §B.2 |
 | Requires a signed scope acknowledgement | **MET** — B-1 |
 | The P-4 finance conversation is a required step before signature | **MET** — B-2 |
-| **Legal/compliance review recorded** | **NOT MET** |
+| **Legal/compliance review recorded** | **✅ MET 2026-08-19** |
 
-**RDY-0066: NOT CLOSED** on the legal review. **`Blocks`: G3 G6.** It is also cited by **RDY-0073**,
+> **✅ APPROVED AS WRITTEN — 2026-08-19, Owner, given directly in conversation with the orchestrating
+> session.** §B.1's inclusions, §B.2's exclusions (in the customer-facing language quoted above), and
+> §B.3's two required pre-signature steps (B-1 scope acknowledgement, B-2 finance-persona conversation)
+> are accepted with no change requested. Relayed by the Owner in this conversation, not a
+> countersigned document — same convention as every other Owner-relayed decision this session.
+
+**RDY-0066: CLOSED 2026-08-19.** It is also cited by **RDY-0073**,
 whose acceptance requires the scope template to reference the termination procedure — **§B.1 does,
 via `EV-073`.**
 

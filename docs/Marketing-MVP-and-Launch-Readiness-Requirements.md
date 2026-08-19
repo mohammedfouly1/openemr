@@ -24,7 +24,7 @@ the first.
 | **PB-300 … PB-349** | **Agent E (Gate-sync auditor)** — Claude Code, session performing a full G0–G6 open-blocker reconciliation as of 2026-08-19: re-verifying every RDY/DG/D/RB/BLK item against current repo state (commits through `7588b42e5`), classifying every still-open item as human-decision / external-dependency / actionable-now, and running the §47 Rule 3 gate-count sync. Read-only against code; writes limited to a new dated evidence file, one PB entry in this range, and the Rule 3 sync itself. **Range claimed 2026-08-19.** |
 | **PB-350 … PB-359** | **Agent F (Owner-decision scribe)** — Claude Code, session transcribing five decisions the Owner gave directly, in conversation, 2026-08-19: RDY-0084 (owner = role), RDY-0086/HR-09 (Arabic competence basis), RDY-0096 (support level selected), RDY-0092/RDY-0099 (Q5/MFA conflict ruling), RDY-0083 (pilot trigger = Windows Service). Documentation-only; no code, no database, no gate-count recalculation. **Range claimed 2026-08-19.** |
 | **PB-360 … PB-369** | **Agent G** — Claude Code, session closing out three "decided, not yet implemented" items per direct task briefing, 2026-08-19: RDY-0055 (live re-verification of the PHI disclosure text against the seeded demo DB, closure), RDY-0096 (Level 1 support definition wired into `EV-066-pack.md`/`EV-068-pilot-requirements.md`, closure), RDY-0083 (confirmed correctly stays open — no host exists to implement/test the Windows Service decision against). **Range claimed 2026-08-19.** |
-| **PB-370 … PB-379** | **Orchestrator (main session)** — recording seven real decisions the Owner performed directly, 2026-08-19: EV-055's technical PHI determination, `EV-067`'s claim review (RDY-0003), `EV-056-057-088-claim-discipline.md`'s claim review (RDY-0056/0057/0088), `EV-074`'s post-contract deletion timeframes (RDY-0074), `EV-064-081-084-085-hosting-pack.md` §3.2's backup-retention schedule (RDY-0081's review gap), RDY-0042's disclose-not-fix call on the newly-found old-style-form crash, and RDY-0071's fix-now call on the newly-found missing CSV-export UI trigger — all seven prepared (mechanical scans/reads/live tests as applicable) before being put to the Owner, none fabricated. **Range claimed 2026-08-19.** |
+| **PB-370 … PB-379** | **Orchestrator (main session)** — recording nine real decisions the Owner performed directly, 2026-08-19: EV-055's technical PHI determination, `EV-067`'s claim review (RDY-0003), `EV-056-057-088-claim-discipline.md`'s claim review (RDY-0056/0057/0088), `EV-074`'s post-contract deletion timeframes (RDY-0074), `EV-064-081-084-085-hosting-pack.md` §3.2's backup-retention schedule (RDY-0081's review gap), RDY-0042's disclose-not-fix call, RDY-0071's fix-now call, and the scope-template/pilot-agreement-pack approvals (RDY-0066, RDY-0068) — all nine prepared (mechanical scans/reads/live tests as applicable) before being put to the Owner, none fabricated. **Range claimed 2026-08-19; PB-376 is the last entry this range accommodates before a new range is needed.** |
 | PB-380 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
@@ -283,10 +283,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **42 P0** (+ P1s **0018**, **0035**, **0053**, **0054**, **0074**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370); **0056**, **0057**, **0088** (PB-372); **0074** (PB-373); **0042** (PB-374, 2026-08-19 — Owner decided disclose-not-fix on the confirmed old-style-form crash; comprehensive-form path verified live); **0038**, **0043** (PB-375, 2026-08-19 — browser-check agent's live evidence: RDY-0038's two untested legs both confirmed, RDY-0043's audited defect not reproduced live). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
-| **Requirements still open** | **71** |
-| **Open P0** | **29** — 71 P0 less the 42 genuinely closed P0 IDs above. **PB-375 (2026-08-19): two-item decrement on the PB-374 baseline** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 1 · G1 7 · G2 5 · G3 13 · G4 2 · G5 8 · G6 16** — **PB-375 (2026-08-19): RDY-0038 (G1 G2), RDY-0043 (G1 G2) decremented from the PB-374 baseline; G0, G3, G4, G5, G6 independently re-confirmed unchanged** |
+| **Requirements CLOSED** | **44 P0** (+ P1s **0018**, **0035**, **0053**, **0054**, **0074**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync); **0033**, **0034**, **0064**, **0095** (PB-301); **0003**, **0055**, **0067**, **0096** (PB-360/370); **0056**, **0057**, **0088** (PB-372); **0074** (PB-373); **0042** (PB-374); **0038**, **0043** (PB-375); **0066**, **0068** (PB-376, 2026-08-19 — Owner approved the scope template and pilot-agreement requirements pack as written). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
+| **Requirements still open** | **69** |
+| **Open P0** | **27** — 71 P0 less the 44 genuinely closed P0 IDs above. **PB-376 (2026-08-19): two-item decrement on the PB-375 baseline** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 1 · G1 7 · G2 5 · G3 11 · G4 2 · G5 8 · G6 15** — **PB-376 (2026-08-19): RDY-0066 (G3 G6), RDY-0068 (G3) decremented from the PB-375 baseline; G0, G1, G2, G4, G5 independently re-confirmed unchanged** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -1056,9 +1056,9 @@ qualification*. Dependencies, not dates.
 | RDY | Requirement | Source | Audited state | Status | Gap type | Pri | Blocks | Owner | Deps | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
 | **0065** | Qualification checklist operationalising GTM §5.1 / §5.2, each disqualifier citing its GAP/L ID | GTM ICP-001, ICP-002, §18 | Criteria defined; **no artefact** | NOT READY — DOCUMENTATION | COMMERCIAL | **P0** | G3 G6 | Sales / Pilot Owner | 0002 | NOT READY |
-| **0066** | Written scope template with **inclusions and exclusions**, and the four status registers attached | GTM §18 *Scope*, §24 | Model defined; **no template** | NOT READY — DOCUMENTATION | COMMERCIAL | **P0** | G3 G6 | Sales / Pilot Owner | 0067 | NOT READY |
+| **0066** | Written scope template with **inclusions and exclusions**, and the four status registers attached | GTM §18 *Scope*, §24 | Written (`EV-065-066-069-commercial-artefacts.md` Part B, AGENT-DOC) — inclusions/exclusions in customer-facing language, four status registers attached (`EV-067`), two required pre-signature steps. **Owner-approved as written, 2026-08-19** | **VERIFIED READY — CLOSED 2026-08-19** — see Part B §B.4 | COMMERCIAL | **P0** | G3 G6 | Sales / Pilot Owner | 0067 | **CLOSED 2026-08-19 — see `EV-065-066-069-commercial-artefacts.md` Part B** |
 | **0067** | Publishable status-register artefact reproducing 47 Disabled · 27 Uninstalled · 18 Requires-Integration · 60 Missing, reconciled to Source B's counts | GTM Pillar 4, PRC-001, GTM-004; audit §25 | *Historical:* not extracted or published. **`EV-067-published-registers.md` written 2026-08-14** (Agent B) — counts reconcile mechanically (§6), mandatory phrasing present for all four registers. **Claim review completed 2026-08-19**: Mohammed Elfouly, APPROVED FOR PUBLICATION, `EV-067` §9 | **VERIFIED READY — CLOSED 2026-08-19** — all 4 of RDY-0067's own acceptance criteria met, including the claim-review criterion that was the sole remaining gap | DOCUMENTATION | **P0** | G5 G6 | Product Marketing | 0001, 0003 | **CLOSED 2026-08-19 — see `EV-067` §8-§9** |
-| **0068** | Pilot agreement: 60–90 day paid design-partner engagement, defined success gate, exit criteria, hypercare period, data-migration boundary | GTM §15.3 *Trial/pilot*, §18, §25 Phase 4 | Model defined; **no agreement** | NOT READY — DOCUMENTATION | COMMERCIAL | **P0** | G3 | Sales / Pilot Owner + Legal | 0065, 0066, 0073 | NOT READY |
+| **0068** | Pilot agreement: 60–90 day paid design-partner engagement, defined success gate, exit criteria, hypercare period, data-migration boundary | GTM §15.3 *Trial/pilot*, §18, §25 Phase 4 | Requirements pack written (`EV-068-pilot-requirements.md`, AGENT-DOC) — all 14 elements addressed, binary success gate, exit clause, hypercare period, RDY-0055's PHI determination reflected. **Owner-approved as written, 2026-08-19.** Does not draft the actual legal agreement — specifies what it must contain | **VERIFIED READY — CLOSED 2026-08-19** — see `EV-068` §6. Actual agreement drafting is downstream work | COMMERCIAL | **P0** | G3 | Sales / Pilot Owner + Legal | 0065, 0066, 0073 | **CLOSED 2026-08-19 — see `EV-068-pilot-requirements.md` §6** |
 | **0069** | Instrument pilots #1 and #2 for cost evidence: implementation hours, configuration hours, migration hours, hosting cost, backup/storage cost, support hours, patch burden, training effort, third-party spend | GTM PRC-003, §29, V-8; brief §29 | Nothing measured | **BLOCKED — VALIDATION** | COMMERCIAL | **P0** | G6 | Founder / Product Owner | 0068 | NOT READY |
 | 0070 | Funnel instrumentation and metric definitions per GTM §29, with baselines rather than targets | GTM GTM-003, §29 | No instrumentation | NOT READY — DOCUMENTATION | COMMERCIAL | P1 | G6 | Sales / Pilot Owner | 0065 | NOT READY |
 
@@ -2281,6 +2281,31 @@ required D-7 runs attempted, one non-authorization UI quirk on its last leg).
 
 **Gate-count sync.** Two more P0 items closed today (RDY-0038, RDY-0043), both G1 G2. **71 P0
 registered, 42 closed, 29 open.** Full per-gate table and narrative in §47, PB-375 block.
+
+## PB-376 (2026-08-19) — **Orchestrator: RDY-0066 and RDY-0068 closed on Owner approval of the scope template and pilot-agreement requirements pack**
+
+**Scope:** two commercial-document packs, both already written and internally complete, each with a
+single unmet criterion — Legal/Compliance/Owner sign-off. Put to the Owner together, same pattern
+used for RDY-0074/0081: prepared findings, recommended "approve as written," presented alternatives.
+
+**RDY-0066** (`EV-065-066-069-commercial-artefacts.md` Part B) — the pilot scope template: what's
+included, what's excluded in customer-facing language (invoicing/VAT/ZATCA, claims/NPHIES, inpatient
+systems, analytics/BI, mobile app, enforced MFA, migration lock-in, third-party integrations), and two
+required pre-signature steps (a signed scope acknowledgement; a recorded finance-persona conversation).
+**Approved as written, no change requested.**
+
+**RDY-0068** (`EV-068-pilot-requirements.md`) — the pilot agreement requirements pack: a 4-condition
+binary success gate with no partial-credit reading, a 30-day no-penalty exit clause, a 30-day hypercare
+period at the standard support level, and RDY-0055's audit-log PHI condition disclosed before
+signature. Does not draft the actual legal agreement — specifies what it must contain. **Approved as
+written, no change requested.**
+
+**Gate-count sync.** Two more P0 items closed (RDY-0066: G3 G6, RDY-0068: G3). **71 P0 registered, 44
+closed, 27 open.** Full per-gate table and narrative in §47, PB-376 block.
+
+**Not done here:** RDY-0065 (qualification checklist) stays open — it needs three real qualification
+calls conducted, not a review; RDY-0069 (first real pilot) stays open — it needs a signed agreement to
+exist, not merely the requirements this entry approved.
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
@@ -11618,29 +11643,37 @@ Owner decided disclose-not-fix, recorded in demo no-go §40 row 14.~~
 ~~|---|---:|---:|---:|---:|---:|---:|---:|~~
 ~~| **Open P0 (canonical, PB-374)** | **1** | **9** | **7** | **13** | **2** | **8** | **16** |~~
 
-### CURRENT — PB-375 (2026-08-19), same-day resync after logging the remaining browser-check results
+### PB-375 (2026-08-19) — superseded by PB-376, retained for the record
 
-**71 P0 registered, 42 closed, 29 open P0.** Two more items closed since PB-374, both from the same
-9-item browser-check run: **RDY-0038** (the two legs PB-028/PB-141 left untested — phone acceptance,
-metric-units rendering — both confirmed live) and **RDY-0043** (the audited menu-drops-first-form
-defect not reproduced live; both category-first items render as real, correctly-bound DOM elements).
-RDY-0071 stays open pending one live click-through of the new UI button; RDY-0023, RDY-0090, RDY-0094,
-RDY-0016 and RDY-0041 each got fresh live evidence logged in their own rows but none closes this pass
-— see PB-374's narrative for the detail.
+~~**71 P0 registered, 42 closed, 29 open P0.** Two more items closed since PB-374, both from the same
+9-item browser-check run: RDY-0038 (both untested legs confirmed live) and RDY-0043 (audited defect
+not reproduced live).~~
+
+~~| | G0 | G1 | G2 | G3 | G4 | G5 | G6 |~~
+~~|---|---:|---:|---:|---:|---:|---:|---:|~~
+~~| **Open P0 (canonical, PB-375)** | **1** | **7** | **5** | **13** | **2** | **8** | **16** |~~
+
+### CURRENT — PB-376 (2026-08-19), same-day resync after the commercial-artefact reviews
+
+**71 P0 registered, 44 closed, 27 open P0.** Two more items closed since PB-375: **RDY-0066** (scope
+template — inclusions/exclusions and the two pre-signature steps, Owner-approved as written) and
+**RDY-0068** (pilot agreement requirements pack — success gate, exit criteria, hypercare period, PHI
+disclosure, Owner-approved as written). Both were the same "requirements complete, pending
+Legal/Compliance/Owner sign-off" pattern already used to close RDY-0074/0081's review gaps.
 
 | | G0 | G1 | G2 | G3 | G4 | G5 | G6 |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| **Open P0 (canonical, PB-375)** | **1** | **7** | **5** | **13** | **2** | **8** | **16** |
+| **Open P0 (canonical, PB-376)** | **1** | **7** | **5** | **11** | **2** | **8** | **15** |
 
 | Gate | Status | Open P0 | Main blockers | Next action |
 |---|---|---|---|---|
 | **G0 Strategy governance** | **PARTIAL** | **1** | RDY-0004, packaging the prohibited-claim list downstream, now unblocked by both claim reviews but not yet done | RDY-0004 is now purely a packaging task, nothing left blocking it |
-| **G1 Flagship demo** | **PARTIAL** | **7** | **RDY-0038 and RDY-0043 both CLOSED today**, RDY-0042 CLOSED the day before · RDY-0016's ACL matrix still mostly unrun; RDY-0023/0090/0094/0041 each have fresh live evidence with a stated remainder | Continuing the browser-check follow-ups (0016's remaining probes, 0023's one vitals row, 0041's second run) is the next real movement here |
-| **G2 Seeded commercial demo** | **NOT READY** | **5** | **RDY-0038 and RDY-0043 both CLOSED today** | Same remaining follow-ups as G1 |
-| **G3 Pilot operational readiness** | **NOT READY** | **13** | Unchanged by today's closures (neither blocks G3) · remaining: RDY-0045 (push blocked on credentials), RDY-0048 (rotation blocked at tool-permission layer), RDY-0047/0073/0084/0085 (need real configuration against the now-provisioned host), RDY-0081 (review approved, execution still blocked on RDY-0064's bucket), RDY-0083 (decided, deferred to real pilot-host provisioning), RDY-0065/0066/0068 (commercial documents still in draft) | Real configuration work against the provisioned host is still the largest remaining bucket in this gate |
-| **G4 Ready for Phase 3 Brand** | **PARTIAL** | **2** | Unchanged by today's closures — RDY-0004 (shared with G0, now unblocked), RDY-0090 (walk advanced, not yet complete) | Same as G0/G1 |
-| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **8** | Unchanged by today's closures (neither blocks G5) · remaining: RDY-0004, RDY-0016, RDY-0060–0062, 0071 (advanced, UI-button click-test still needed), 0078, 0086 | RDY-0004's packaging is now the fastest remaining item in this gate |
-| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **16** | Unchanged by today's closures (neither blocks G6) · still requires G2 and G3 · RDY-0069 can't start without a pilot · RDY-0075/0076/0077 still zero calls made | RDY-0075's first call remains the single most under-leveraged action in the whole register |
+| **G1 Flagship demo** | **PARTIAL** | **7** | Unchanged by today's two closures (neither blocks G1) · RDY-0016's ACL matrix still mostly unrun; RDY-0023/0090/0094/0041 each have fresh live evidence with a stated remainder | Continuing the browser-check follow-ups (0016's remaining probes, 0023's one vitals row, 0041's second run) is the next real movement here |
+| **G2 Seeded commercial demo** | **NOT READY** | **5** | Unchanged by today's two closures (neither blocks G2) | Same remaining follow-ups as G1 |
+| **G3 Pilot operational readiness** | **NOT READY** | **11** | **RDY-0066 and RDY-0068 both CLOSED today** · remaining: RDY-0045 (push blocked on credentials), RDY-0048 (rotation blocked at tool-permission layer), RDY-0047/0073/0084/0085 (need real configuration against the now-provisioned host), RDY-0081 (review approved, execution still blocked on RDY-0064's bucket), RDY-0083 (decided, deferred to real pilot-host provisioning), RDY-0065 (needs three real calls, not a review question) | Real configuration work against the provisioned host is now the largest remaining bucket in this gate |
+| **G4 Ready for Phase 3 Brand** | **PARTIAL** | **2** | Unchanged by today's two closures — RDY-0004 (shared with G0, now unblocked), RDY-0090 (walk advanced, not yet complete) | Same as G0/G1 |
+| **G5 Ready for Phase 4 Messaging** | **NOT READY** | **8** | Unchanged by today's two closures (neither blocks G5) · remaining: RDY-0004, RDY-0016, RDY-0060–0062, 0071 (advanced, UI-button click-test still needed), 0078, 0086 | RDY-0004's packaging is now the fastest remaining item in this gate |
+| **G6 Ready for Phase 5 Website PRD** | **NOT READY** | **15** | **RDY-0066 CLOSED today** · still requires G2 and G3 · RDY-0069 can't start without a pilot · RDY-0075/0076/0077 still zero calls made | RDY-0075's first call remains the single most under-leveraged action in the whole register |
 
 ### 47.1 The readiness questions, answered separately
 

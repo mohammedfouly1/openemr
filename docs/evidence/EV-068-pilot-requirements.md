@@ -96,11 +96,21 @@ before signature:**
 | The exit clause is written before the first pilot is offered | **MET** — §3, written now; **no pilot has been offered yet, so this ordering is satisfied by construction** |
 | RDY-0055's PHI determination is reflected | **MET** — §5 |
 
-### Status: **RDY-0068 — requirements COMPLETE. NOT CLOSED** — pending Legal/Compliance review (per
-the item's own dual ownership, Sales/Pilot Owner **+ Legal**) before this pack is used to draft an
-actual agreement. **Not closed by this agent.**
+> **✅ APPROVED AS WRITTEN — 2026-08-19, Owner, given directly in conversation with the orchestrating
+> session.** §2's success gate (4 binary conditions, no partial credit), §3's exit criteria (30 days'
+> written notice, no early-exit penalty), §4's hypercare period (30 days post-go-live, standard Level-1
+> target), and §5's PHI-disclosure requirement are accepted as written, with no change requested.
+> Relayed by the Owner in this conversation, not a countersigned document — same convention as every
+> other Owner-relayed decision this session, and the same dual ownership (Sales/Pilot Owner + Legal)
+> this item's card names, standing in for both per `EV-003` §1's convention for one individual holding
+> more than one review role.
 
-**`Blocks`:** G3. No gate count moved (§0.0 Rule 3).
+### Status: **RDY-0068 — CLOSED 2026-08-19.** Requirements complete and Owner-approved; this pack is
+now cleared to be used to draft the actual legal agreement — drafting itself is downstream work, not
+a re-opening of this item.
+
+**`Blocks`:** G3. Gate-count decrement recorded in the main readiness document's next PB-3xx sync,
+per §0.0 Rule 3 — not recalculated here.
 
 **Consequence for `RDY-0073` and `RDY-0069`:** `EV-073`'s acceptance table records *"Referenced by the
 pilot agreement (RDY-0068): NOT MET — RDY-0068 does not exist yet."* **RDY-0068 exists as of this
