@@ -274,10 +274,10 @@ locked *for MVP* on a Low-Medium confidence assumption.
 | — P1 (market expansion / high-value near-term) | **26** |
 | — P2 (competitive enhancement) | **11** |
 | — P3 / later / optional | **6** |
-| **Requirements CLOSED** | **27 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
-| **Requirements still open** | **87** |
-| **Open P0** | **44** — 71 P0 less the 27 genuinely closed P0 IDs above. **PB-216 (2026-08-16): single-item decrement on PB-206's baseline (RDY-0037, `Blocks` = G2 only)** |
-| **Open P0 per gate** (canonical rule, locked §47) | **G0 3 · G1 15 · G2 10 · G3 16 · G4 3 · G5 13 · G6 20** — **PB-216 (2026-08-16), single-item decrement on the PB-206 mechanical baseline** |
+| **Requirements CLOSED** | **28 P0** (+ P1s **0018**, **0035**, **0053**, **0054**) — RDY-0001 (2A); **0080** (PB-001); **0010**, **0011**, **0012**, **0013**, **0014**, **0015**, **0017** (PB-005/020/029/202); **0020**, **0021**, **0022**, **0024**, **0026**, **0027**, **0028** (PB-045/055/058/059); **0032**, **0036** (PB-016); **0037** (PB-214, code fix PR-18); **0040** (PB-046); **0046** (PB-048); **0050**, **0051**, **0052** (PB-013); **0058**, **0059** (PB-045); **0082** (PB-182/183/203/205); **0002** (PB-300 sync, Owner acceptance recorded `EV-WAVE3-decisions-20260816.md`, register row synced 2026-08-16 at `aa39f8b7d`, dashboard count synced 2026-08-19). See PB-140 for the register-reconciliation history and PB-206 for the mechanical re-derivation method |
+| **Requirements still open** | **86** |
+| **Open P0** | **43** — 71 P0 less the 28 genuinely closed P0 IDs above. **PB-300 (2026-08-19): single-item decrement on PB-216's baseline (RDY-0002, `Blocks` = G0 only)** |
+| **Open P0 per gate** (canonical rule, locked §47) | **G0 2 · G1 15 · G2 10 · G3 16 · G4 3 · G5 13 · G6 20** — **PB-300 (2026-08-19), single-item decrement on the PB-216 baseline; every other gate independently re-derived from §7.2–§7.17's `Blocks` fields and confirmed unchanged — see `docs/evidence/EV-GATE-SYNC-20260819.md` §5** |
 | **Sub-requirement closed without a count change** | **RDY-0044-A** — CLOSED 2026-08-13 (PB-031). RDY-0044 is **one** RDY ID and closes only when both A and B close, so under the §47 canonical rule it still counts as open and still blocks **G2**. **The count is deliberately not moved.** Its practical effect is real nonetheless: **Track D's hard stop is lifted** |
 | Requirements whose current state is ~~carried from the 2026-08-09 audit, not re-observed~~ | ~~114 (all)~~ **0 — superseded by Phase 2A.** Every register row now carries either live evidence or an explicit `NOT REACHED BY RDY-0001` marker (§7.21); no row is silently carried from the audit |
 | §7.21 live-evidence entries | **35**, of which **5** are marked `NOT REACHED BY RDY-0001` |
@@ -1258,7 +1258,7 @@ every card — writing a closure plan does not close anything.
 **Verification:** the acceptance record is inspected against GTM §35.
 **Evidence artefact:** `EV-002 gtm-acceptance.md`
 **Rollback requirement:** none.
-**Status:** NOT READY
+**Status:** CLOSED 2026-08-16 — Owner accepted VERDICT B directly; decision recorded in `docs/evidence/EV-WAVE3-decisions-20260816.md`. Register row synced `aa39f8b7d`; this detail-section field was drifted from it until PB-300's sync (2026-08-19).
 
 #### RDY-0003 — Claim register binding, with a named reviewer
 **Source:** GTM MSG-002, §25 Phase 0; audit §27.4 · **Priority:** P0 · **Gates:** G0 G5 · **Owner:** Product Marketing
