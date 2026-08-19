@@ -996,3 +996,18 @@ after a genuine 45-second retry. RDY-0086 patience fixed D-2 ACL, but not D-3 af
 Demographics or D-4 Forms Administration; D-7 was not freshly retried. Evidence and the
 independent content/surface/data review are in
 `EV-060-061-086-patient-retakes-20260819.md`.
+
+## Codex built-in-browser direct-navigation continuation — PB-464…PB-467, 2026-08-19
+
+**Claiming:** RDY-0060/0061 for the SS-05 and SS-12 last-mile retakes, and RDY-0086 for
+direct-URL retries of D-3, D-4, and both D-7 role screens. This continuation uses one
+in-app-browser tab, one authenticated identity at a time, and explicit logout between roles.
+PB-464…PB-467 are reserved for the resulting evidence and register updates. SS-10/11,
+qualification/annotation embedding, database reseeding/reset, server restart, push,
+force-push, and reset are explicitly out of scope.
+
+**PB-464…PB-467 outcome:** SS-05 was retaken with a fully visible temporary `DRAFT:` marker
+(original restored, never saved). Fresh direct navigation fixed SS-12 and RDY-0086 D-3, D-4,
+and D-7 physician; D-7 accounting was re-confirmed. Six evidence images and the authoritative
+result table are recorded in `EV-060-061-086-direct-navigation-last-mile-20260819.md`.
+SS-10/11 were not touched, and qualification/annotation embedding remains orchestrator-owned.

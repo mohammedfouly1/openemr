@@ -38,3 +38,15 @@ Its acceptance is an assessment obligation: the qualification exists, the named 
 passed, and the missing per-screen walk is now executed and recorded. This does **not** convert the
 failed D-2/D-4/D-7 screens into passes; those remain explicit Arabic-demo no-go findings and require
 a clean rerun after the host loading condition is diagnosed.
+
+## 4. PB-464…PB-467 direct-navigation update
+
+| Screen | Updated result | Evidence |
+|---|---|---|
+| D-3 Layout Editor / Demographics | **PASS WITH QUALIFICATION.** Fresh direct URL rendered the populated RTL layout; untranslated controls remain visible. | `captures/2026-08-19/RDY-0086-D3-layout-editor-demographics-rtl-direct-navigation.png` |
+| D-4 Forms Administration | **PASS WITH QUALIFICATION.** Fresh direct URL rendered the populated Arabic/English form table. | `captures/2026-08-19/RDY-0086-D4-forms-admin-rtl-direct-navigation.png` |
+| D-7 physician | **PASS WITH QUALIFICATION.** `y.alharbi`, direct SYN-0006/pid 6 dashboard; populated problem and prescription panels rendered. | `captures/2026-08-19/RDY-0086-D7-physician-SYN-0006-rtl-direct-navigation.png` |
+| D-7 accounting | **PASS WITH QUALIFICATION, RE-CONFIRMED.** Direct report URL rendered RTL controls; report not submitted. | `captures/2026-08-19/RDY-0086-D7-accounting-report-rtl-direct-navigation.png` |
+
+This update supersedes the earlier blank/loading classifications for these four rows. It does not
+change the underlying partial-translation qualification.
