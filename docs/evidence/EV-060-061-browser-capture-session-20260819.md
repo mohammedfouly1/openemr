@@ -61,3 +61,13 @@ The strongest content candidates are SS-04, SS-09, and SS-10, but none is public
 
 **Verdict:** RDY-0060 and RDY-0061 remain **NOT READY — materially advanced, review completed,
 retakes explicitly enumerated**.
+
+## PB-461…PB-463 patient-retake addendum
+
+The appointment rebase unblocked real SS-06/07 captures. The continuation retook
+SS-03/04/06/07/08/09, retained content-correct SS-10/11, and patiently retried SS-12.
+SS-03/04/06/07/08/09 now pass the independent content/surface/data review, but all still
+need the orchestrator-owned qualification/annotation embedding; SS-04 also still needs
+outer-browser P-3 verification. SS-05 was not retaken and SS-12 remains blank after a
+45-second post-Demographics wait. Full inventory and paths:
+`EV-060-061-086-patient-retakes-20260819.md`.

@@ -989,3 +989,10 @@ between roles, and waits up to 45 seconds before classifying a render as stuck. 
 independent §8 pass scores content/surface/data correctness separately from the still-needed
 qualification embedding, which remains orchestrator-owned. No database mutation, Apache
 restart, force-push, reset, or push is authorized by this claim.
+
+**PB-461…PB-463 outcome:** six clean underlying content retakes were produced for
+SS-03/04/06/07/08/09; SS-10/11 were retained; SS-05 was not retaken; SS-12 stayed blank
+after a genuine 45-second retry. RDY-0086 patience fixed D-2 ACL, but not D-3 after
+Demographics or D-4 Forms Administration; D-7 was not freshly retried. Evidence and the
+independent content/surface/data review are in
+`EV-060-061-086-patient-retakes-20260819.md`.
