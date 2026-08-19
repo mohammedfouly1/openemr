@@ -1075,3 +1075,15 @@ All three of RDY-0048's acceptance criteria are now met (no live credential can 
 file going forward; history scan already clean; runbook already documents the handling). Register
 row, `EV-048-secrets-handling.md`, and Sec1.4 counts updated. Open P0: 12 -> 11. G3 6 -> 5; no other
 gate changes (RDY-0048 blocks G3 only).
+
+## Orchestrator — PB-475, 2026-08-19 — RDY-0016 stale §8.7 card corrected; harness re-confirmed 32/32
+
+Found the §8.7 detailed card for RDY-0016 disagreed with the register's own summary row: the card
+still listed A-3/A-4/A-5/A-8/A-9/A-11 as unrun, but the register row already recorded (PB-443) that
+these were re-confirmed via a re-runnable harness on 2026-08-14 and again same-day. Re-ran
+`docs/evidence/harnesses/rdy0016-matrix.php` live just now to be certain before touching the doc:
+`EXECUTED: 32 PASS: 32 FAIL: 0`, unchanged. Updated the card to match the register and point at it
+as the authoritative account. No remaining test-coverage gap exists for this item -- what remains
+open is the one product-authorization-policy question (cross-physician access to non-sensitive
+notes) already surfaced at PB-444, which needs an Owner ruling, not more testing. No gate count
+moved (§0.0 Rule 3) -- row stays open pending that ruling.
