@@ -504,3 +504,48 @@ matching its siblings exactly.
 it was the metadata that was missing, not the consumer), or a live authenticated-UI screenshot showing
 the new checkbox (Globals-screen admin session not exercised here; the code-level fix and shape match
 to its five siblings is the appropriate bar for a P2 metadata-table entry, per the task's own framing).
+
+## Agent (Claude Code) — RDY-0049, Windows OS-guard on three Unix-only `config.php` settings (2026-08-19)
+
+**Claim: RDY-0049 only** — "Replace the three Unix-only commands configured on a Windows host (`lpr`,
+`enscript`, `/usr/bin/file`)," §7.7 Domain F, P1. Fixed at the engineering level in this entry (PR-20,
+`docs/branding/adr/patch-records.md`); register row's `Audited state` updated to describe precisely
+what changed, `Status`/`Verdict` left `NOT READY` — this does not meet the closure bar because the OFX
+bank-ID placeholder half of the same requirement is untouched and no printer/fax hardware exists on
+this host to demonstrate a working pipeline against.
+
+`sites/default/config.php` set `OPENEMR_PRINT_COMMAND`, `OPENEMR_HYLAFAX_ENSCRIPT`, and
+`$GLOBALS['oer_config']['documents']['file_command_path']` unconditionally to Unix values, with no OS
+guard, on an instance that runs natively on Windows (`CLAUDE.local.md`). PB-163 (2026-08-16,
+AGENT-SEC) had already live-measured all three broken on this exact host — `lpr`/`enscript` absent
+from `PATH`, `/usr/bin/file` absent from the Windows filesystem `Test-Path` sees — but explicitly left
+the fix unapplied as out of that agent's database-only remit, and left the `file_command_path`
+call-site search unattempted as "too slow on this filesystem." This session re-ran that search via
+`git grep -n file_command_path -- . ':!vendor' ':!node_modules'` (reads the object database, not the
+Drive-mounted working tree file-by-file, so it completes where a plain `rg`/`grep` walk of `src/`
+timed out repeatedly in this same session) and confirmed **zero runtime consumers anywhere in tracked
+code** — only `docs/` prose and a PHPStan baseline entry referencing the same assignment line. Also
+confirmed the two real call sites for the other two constants are unchanged by this fix:
+`interface/billing/sl_eob_search.php:633` and `interface/fax/fax_dispatch.php:316`.
+
+Gated all three on `PHP_OS_FAMILY === 'Windows'`: the `else` branch is the exact pre-existing Unix
+value, byte-for-byte, so every Unix deployment of this fork is unaffected. The Windows branch uses
+`'print /d:PRN'` for the print command — not invented, it is upstream's own suggestion already sitting
+in `config.php`'s pre-existing comment above that line — and an empty string for the other two, since
+no drop-in Windows lpr/enscript/`file` substitute exists and fabricating one would misrepresent what
+this patch does. `docs/evidence/EV-047-deployment-runbook.md:157`'s separate suggestion (PHP's built-in
+`fileinfo`/`finfo_open` could replace `/usr/bin/file`'s *purpose* for MIME detection) was read and
+deliberately not acted on here — it describes a possible change to the document-upload code path,
+which reads nothing from `file_command_path` today, so it is out of this fix's scope, not overlooked.
+
+**Verification:** `"/c/openemr-stack/php/php.exe" -l sites/default/config.php` → `No syntax errors
+detected`. No dedicated PHPUnit test exists for this file, matching how this project's other
+config-constant fixes have been verified — `php -l` plus the reasoning trace in PR-20 is the bar. Ran
+`git diff` on the readiness register before staging and confirmed exactly one hunk (the RDY-0049 row),
+so no concurrent agent's edit to that shared file was at risk of being overwritten.
+
+**Not claiming:** the OFX bank-ID placeholders (`123456789` × 2, same RDY-0049 requirement text, left
+untouched — different setting, no code guard applies to a placeholder value), a working Windows print
+or fax pipeline (none exists; not fabricated), or any live-hardware print/fax test (would require
+physical or virtual printer/fax hardware not present on this host, same constraint PB-163 already
+recorded for the unclicked UI action).

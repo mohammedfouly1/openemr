@@ -7,10 +7,24 @@
 // 10 CPI, 6 LPI, 65 columns, 54 lines per page.
 // If lpr services are installed on Windows this setting will be similar.
 // Otherwise configure it as needed (print /d:PRN) might be an option for Windows parallel printers.
-const OPENEMR_PRINT_COMMAND = 'lpr -P HPLaserjet6P -o cpi=10 -o lpi=6 -o page-left=72 -o page-top=72';
+// RDY-0049: this deployment also runs natively on Windows (no lpr service —
+// see CLAUDE.local.md). Unix/Linux hosts keep the historical lpr value
+// verbatim (zero behavior change); Windows hosts get upstream's own
+// documented alternative from the comment above instead of a command that
+// does not exist on this platform.
+const OPENEMR_PRINT_COMMAND = PHP_OS_FAMILY === 'Windows'
+    ? 'print /d:PRN'
+    : 'lpr -P HPLaserjet6P -o cpi=10 -o lpi=6 -o page-left=72 -o page-top=72';
 
 // Enscript command used by HylaFAX (fax_dispatch.php).
-const OPENEMR_HYLAFAX_ENSCRIPT = 'enscript -M Letter -B -e^ --margins=36:36:36:36';
+// RDY-0049: no Windows enscript/HylaFAX equivalent exists on this stack, and
+// none is invented here — left deliberately empty so a Windows host cannot
+// silently try to run a nonexistent binary if sendfax is ever turned on
+// (currently off, see the 'sendfax' setting below). Unix/Linux hosts keep
+// the historical value verbatim.
+const OPENEMR_HYLAFAX_ENSCRIPT = PHP_OS_FAMILY === 'Windows'
+    ? ''
+    : 'enscript -M Letter -B -e^ --margins=36:36:36:36';
 
 //used differently by different applications, intuit programs only like numbers
 $GLOBALS['oer_config']['ofx']['bankid']     = "123456789";
@@ -23,7 +37,15 @@ $GLOBALS['oer_config']['prescriptions']['format'] = "";
 
 // Document storage repository document root. Must include a trailing slash.
 $GLOBALS['oer_config']['documents']['repopath'] = $GLOBALS['OE_SITE_DIR'] . "/documents/";
-$GLOBALS['oer_config']['documents']['file_command_path'] = "/usr/bin/file";
+// RDY-0049: /usr/bin/file is a Unix-only path with no call site anywhere in
+// this codebase version (confirmed tree-wide via `git grep file_command_path`)
+// — left as an honest empty string on Windows rather than a path that
+// provably does not exist on this host, since there is nothing here for a
+// Windows value to substitute for. Unix/Linux hosts keep the historical
+// value verbatim.
+$GLOBALS['oer_config']['documents']['file_command_path'] = PHP_OS_FAMILY === 'Windows'
+    ? ''
+    : "/usr/bin/file";
 
 //Name of prescription graphic in interface/pic/ directory without preceding slash. Can be JPEG or PNG, normally 3 inches wide.
 $GLOBALS['oer_config']['prescriptions']['logo_pic'] = "Rx.png";

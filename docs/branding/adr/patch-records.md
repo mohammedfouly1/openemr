@@ -1187,6 +1187,109 @@ from `EV-016-A10-acl-probes.md` §1, but the full positive/negative authorizatio
 requirement calls for has never been executed under real role sessions, and §3's Owner decision on the
 16 directories remains open.
 
+## PR-20 — `sites/default/config.php`
+
+**BRAND ID:** none — **a correctness/defect fix, not branding.** Recorded because Invariant 4 / Q1
+governs every core edit regardless of motive. **Readiness ref:** RDY-0049 (Audit §19.6, OD-04, L-21;
+diagnosed but not applied at PB-163, `AGENT-CLAIMS.md`). **Gates:** G3. **Agent:** this session
+(Claude Code).
+
+**Locked-decision exception used:** Invariant 4 residual-edit exception. `sites/default/config.php` is
+a tracked site-config file with no module extension point, event, or filter through which the three
+constants/settings below could be overridden per-deployment.
+
+### What was wrong
+
+`sites/default/config.php` defines three settings that assume a Unix host, unconditionally, with no OS
+guard — while this Thiqa instance runs natively on Windows (Apache + PHP + MariaDB as console
+processes, no Docker; see `CLAUDE.local.md`):
+
+- Line 10, `OPENEMR_PRINT_COMMAND` — `'lpr -P HPLaserjet6P ...'`, consumed by
+  `interface/billing/sl_eob_search.php:633` (`(new Process([OPENEMR_PRINT_COMMAND, ...]))->run()`).
+  PB-163 measured `lpr` absent from `PATH` on this host.
+- Line 13, `OPENEMR_HYLAFAX_ENSCRIPT` — `'enscript -M Letter ...'`, consumed by
+  `interface/fax/fax_dispatch.php:316` via `exec(... escapeshellcmd(OPENEMR_HYLAFAX_ENSCRIPT) ...)`.
+  PB-163 measured `enscript` absent from `PATH`. Separately dead on this instance regardless of OS:
+  `$GLOBALS['oer_config']['prescriptions']['sendfax']` (config.php line 46, now line ~68) is `''`,
+  which is the documented off-switch for the only caller of `sendfax`/HylaFAX, so this code path is not
+  currently reachable. Fixed anyway, since `sendfax` could be turned on later.
+- Line 26, `$GLOBALS['oer_config']['documents']['file_command_path']` — `"/usr/bin/file"`. PB-163
+  flagged this as "worth flagging as possibly-vestigial config" but left the tree-wide search
+  unattempted as "too slow on this filesystem." This session re-ran it via `git grep -n
+  file_command_path -- . ':!vendor' ':!node_modules'` (git grep reads from the object database rather
+  than walking the Drive-mounted working tree file-by-file, which sidesteps the slowness PB-163 hit).
+  Result: the only tracked-code hit is the assignment itself; every other match is `docs/` prose or the
+  PHPStan baseline entry pointing back at the same assignment line. **Confirmed: zero runtime consumers
+  in this codebase version.** `docs/evidence/EV-047-deployment-runbook.md:157` separately notes PHP's
+  built-in `fileinfo` extension (`finfo_open`/`mime_content_type`) could replace `/usr/bin/file`'s
+  *purpose* for document MIME detection — but that is a statement about what the document-upload code
+  path could be changed to use, not about this setting, which nothing reads. No such replacement is
+  invented here; inventing functionality for a value nothing consumes would misrepresent what changed.
+
+### The fix
+
+All three now branch on `PHP_OS_FAMILY === 'Windows'`. Unix/Linux hosts keep the exact pre-existing
+value in the `else` branch — zero behavior change for any Unix deployment of this fork. Windows hosts
+get:
+
+- `OPENEMR_PRINT_COMMAND` → `'print /d:PRN'` — not a guess; it is the Windows alternative
+  `config.php`'s own pre-existing comment (line 9, untouched) already names: *"Otherwise configure it
+  as needed (print /d:PRN) might be an option for Windows parallel printers."*
+- `OPENEMR_HYLAFAX_ENSCRIPT` → `''` — no drop-in Windows enscript/HylaFAX equivalent exists, and none
+  is fabricated. An empty string is honest ("not configured for this platform") rather than a command
+  that would fail at exec time the same way the Unix value already does on this host.
+- `file_command_path` → `''` — same reasoning; nothing reads this value on either OS, so the fix is
+  only about not asserting a path (`/usr/bin/file`) that is provably absent from this Windows
+  filesystem (PB-163's `Test-Path 'C:\usr\bin\file'` → `False`, `.exe` variant also `False`).
+
+None of the three constants/settings becomes *undefined* on Windows — PB-163 explicitly flagged that an
+undefined constant is a PHP 8.2+ fatal error, worse than the current silent-fail-at-invocation state.
+Both `const` declarations remain always-defined; only the value differs by OS. A short comment above
+each cites RDY-0049 and states the guard is deliberate, not an oversight, so a future editor does not
+"simplify" it back to a single unconditional value.
+
+```diff
++const OPENEMR_PRINT_COMMAND = PHP_OS_FAMILY === 'Windows'
++    ? 'print /d:PRN'
++    : 'lpr -P HPLaserjet6P -o cpi=10 -o lpi=6 -o page-left=72 -o page-top=72';
+-const OPENEMR_PRINT_COMMAND = 'lpr -P HPLaserjet6P -o cpi=10 -o lpi=6 -o page-left=72 -o page-top=72';
+
++const OPENEMR_HYLAFAX_ENSCRIPT = PHP_OS_FAMILY === 'Windows'
++    ? ''
++    : 'enscript -M Letter -B -e^ --margins=36:36:36:36';
+-const OPENEMR_HYLAFAX_ENSCRIPT = 'enscript -M Letter -B -e^ --margins=36:36:36:36';
+
++$GLOBALS['oer_config']['documents']['file_command_path'] = PHP_OS_FAMILY === 'Windows'
++    ? ''
++    : "/usr/bin/file";
+-$GLOBALS['oer_config']['documents']['file_command_path'] = "/usr/bin/file";
+```
+
+**Not attempted, and why:** no functioning Windows print/fax pipeline is built or claimed. There is no
+Windows `lpr` service on this host and no drop-in HylaFAX substitute; inventing one would be dishonest
+about what this patch does. This closes the "references a nonexistent Unix path/binary" defect, not
+the underlying "no printer/fax hardware integration exists on Windows" gap — those are different
+claims, and only the first is being made here. Printing/faxing themselves remain untested against real
+hardware, consistent with PB-163's own note that clicking the actual UI action would create real
+statements/faxes with no rollback story.
+
+### Verification
+
+`"/c/openemr-stack/php/php.exe" -l sites/default/config.php` → `No syntax errors detected`. No dedicated
+PHPUnit test exists for this file (a pure config constant, not a service under test), consistent with
+how this project's other config-only fixes have been verified — `php -l` plus the reasoning trace above
+is the evidence bar. `git grep -n "OPENEMR_PRINT_COMMAND\|OPENEMR_HYLAFAX_ENSCRIPT"` re-run after the
+edit confirms the only two call sites (`sl_eob_search.php:633`, `fax_dispatch.php:316`) are unchanged
+and still reference the same two constant names — only the constants' values became OS-conditional, not
+their call sites.
+
+**RDY-0049 status:** not fully CLOSED. This removes the Windows host's reference to Unix-only
+commands/paths that provably do not exist on it, and keeps every Unix deployment byte-for-byte
+unchanged — but it does not demonstrate a working Windows print or fax pipeline (none exists to
+demonstrate), so per this document's own Rule 5 closure contract it stays open pending a documented
+"unsupported on Windows" disposition decision for printing/faxing, or a real Windows print driver
+integration if one is later scoped.
+
 ## PR-21 — `library/globals.inc.php`
 
 **BRAND ID:** none — **a correctness/defect fix, not branding.** Seventh non-branding entry, recorded
