@@ -698,3 +698,26 @@ fields (G3 for 0055; G3, G6 for 0096) would move counts — a concurrent session
 this exact file, with its own uncommitted RDY-0003/RDY-0067 closures (G0, G5, G6) sitting in the
 working tree at the same time. Recalculating now risks exactly the collision Rule 3 exists to prevent.
 Left for a genuine dedicated sync pass once all concurrent closures for this window have landed.
+
+## Orchestrator (main session) — three subagents dispatched for directly-actionable remaining work, 2026-08-19
+
+**Claiming, on behalf of the dispatched subagents:** RDY-0023 (vitals seed + growth-chart render),
+RDY-0041 (second D-7 run), RDY-0071 (CSV-button click-test), RDY-0090/0094/0016 (continued observation
+walks), RDY-0073 (cross-reference + demo-system dry run), RDY-0092 (Locked Decisions corpus
+reconciliation, triage only). Range `PB-380…PB-389` claimed in §0.0 — sub-ranges assigned per agent to
+avoid collision between them: PB-380-383 (browser/live-system agent), PB-384-385 (RDY-0073 agent),
+PB-386-387 (RDY-0092 agent).
+
+**Explicitly NOT claimed, and why:** RDY-0047, RDY-0084, RDY-0085 were considered for this batch and
+excluded — each genuinely requires a real reachable hosted instance to close (`EV-064-081-084-085-
+hosting-pack.md` §7 states this for all three explicitly), and no such instance is reachable from this
+session (RDY-0064's provisioning is Owner-relayed, not independently verified or accessible here). An
+earlier summary in this conversation mischaracterized these three as "execution work I can do myself"
+— corrected here before any agent attempted them, rather than let a subagent discover the same
+boundary the hard way or improvise around it.
+
+**Each dispatched agent is instructed to:** read this file and confirm no collision before writing;
+never fabricate a human decision, sign-off, or a result it did not actually obtain; report exactly
+what it attempted vs. what actually succeeded, including partial/blocked outcomes; use its assigned
+PB sub-range only. Results will be verified against each item's own acceptance criteria before being
+accepted as closures, not taken at face value.
