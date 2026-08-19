@@ -5,17 +5,12 @@
 # reasoning as the RDY-0083 script (system-configuration change). Run
 # yourself as a user with sudo.
 #
-# PREREQUISITE you must do first, manually, in the Cloudflare dashboard --
-# this cannot be done via API:
-#   1. Enable R2 on the account (dashboard: R2 -> "Enable R2"; accepting
-#      whatever terms/billing setup Cloudflare requires). The API confirmed
-#      2026-08-19 that R2 is NOT yet enabled on this account
-#      ("Please enable R2 through the Cloudflare Dashboard").
-#   2. Create a bucket, e.g. named "thiqa-demo-backups".
-#   3. R2 API credentials are already saved locally at
-#      C:\openemr-stack\secrets\cloudflare-api-token.json (r2_s3_compatible
-#      block) -- rotate/reissue if it's been long enough that you no longer
-#      trust it (it was pasted into a chat session, see that file's own note).
+# PREREQUISITE (DONE, 2026-08-19): R2 is enabled and the bucket
+# "skyeaglebucket" exists on this Cloudflare account, confirmed by the
+# Owner. R2 API credentials are the same ones already saved locally at
+# C:\openemr-stack\secrets\cloudflare-api-token.json (r2_s3_compatible
+# block) -- rotate/reissue if it's been long enough that you no longer
+# trust it (it was pasted into a chat session, see that file's own note).
 #
 # Usage on the VM (after the prerequisite above):
 #   chmod +x 02-rdy0081-offsite-backup.sh
@@ -126,18 +121,18 @@ run_mode() {
   echo "[$STAMP] $TABLE_COUNT tables in dump (compare against a known-good baseline before trusting this backup)."
 
   echo "[$STAMP] Uploading to R2..."
-  rclone --config "$BACKUP_DIR/rclone.conf" copy "$WORKDIR" "r2:thiqa-demo-backups/$STAMP/" --progress
+  rclone --config "$BACKUP_DIR/rclone.conf" copy "$WORKDIR" "r2:skyeaglebucket/$STAMP/" --progress
 
   echo "[$STAMP] Verifying upload..."
-  rclone --config "$BACKUP_DIR/rclone.conf" ls "r2:thiqa-demo-backups/$STAMP/"
+  rclone --config "$BACKUP_DIR/rclone.conf" ls "r2:skyeaglebucket/$STAMP/"
 
   echo "[$STAMP] Pruning backups older than $RETENTION_DAYS days..."
   CUTOFF=$(date -d "-$RETENTION_DAYS days" +%Y%m%d)
-  rclone --config "$BACKUP_DIR/rclone.conf" lsf "r2:thiqa-demo-backups/" | while read -r dir; do
+  rclone --config "$BACKUP_DIR/rclone.conf" lsf "r2:skyeaglebucket/" | while read -r dir; do
     d="${dir%%-*}"
     if [[ "$d" =~ ^[0-9]{8}$ ]] && [ "$d" -lt "$CUTOFF" ]; then
       echo "  pruning $dir"
-      rclone --config "$BACKUP_DIR/rclone.conf" purge "r2:thiqa-demo-backups/$dir"
+      rclone --config "$BACKUP_DIR/rclone.conf" purge "r2:skyeaglebucket/$dir"
     fi
   done
 
