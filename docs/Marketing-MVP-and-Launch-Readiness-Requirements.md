@@ -22,7 +22,8 @@ the first.
 | **PB-140 … PB-219** | **Agent C (Orchestrator)** — Claude Code, the session coordinating Phase 2B execution via specialist subagents (AGENT-DOC, AGENT-CONF, AGENT-SEC, AGENT-DATA, AGENT-OPS, AGENT-GIT, AGENT-CAP). Sub-ranges to be allocated to each subagent from within this range. **Range claimed 2026-08-16.** |
 | **PB-220 … PB-299** | **Agent D (Auditor / independent executor)** — Claude Code, the session that audited Agent C's PB-140/141 register sync (`docs/evidence/EV-AUDIT-agentA-20260816.md` — filename predates this identity naming) and now picks up genuinely unclaimed, non-colliding work per `AGENT-CLAIMS.md`. **Range claimed 2026-08-16.** |
 | **PB-300 … PB-349** | **Agent E (Gate-sync auditor)** — Claude Code, session performing a full G0–G6 open-blocker reconciliation as of 2026-08-19: re-verifying every RDY/DG/D/RB/BLK item against current repo state (commits through `7588b42e5`), classifying every still-open item as human-decision / external-dependency / actionable-now, and running the §47 Rule 3 gate-count sync. Read-only against code; writes limited to a new dated evidence file, one PB entry in this range, and the Rule 3 sync itself. **Range claimed 2026-08-19.** |
-| PB-350 … | unallocated — claim a range in this table before using it |
+| **PB-350 … PB-359** | **Agent F (Owner-decision scribe)** — Claude Code, session transcribing five decisions the Owner gave directly, in conversation, 2026-08-19: RDY-0084 (owner = role), RDY-0086/HR-09 (Arabic competence basis), RDY-0096 (support level selected), RDY-0092/RDY-0099 (Q5/MFA conflict ruling), RDY-0083 (pilot trigger = Windows Service). Documentation-only; no code, no database, no gate-count recalculation. **Range claimed 2026-08-19.** |
+| PB-360 … | unallocated — claim a range in this table before using it |
 
 **Write your range into this table before your first entry.** If you find your range exhausted,
 claim another here rather than borrowing.
@@ -1024,7 +1025,7 @@ qualification*. Dependencies, not dates.
 | 0054 | Resolve the RPT-0042 ACL mismatch — menu declares `patients\|lab`, file enforces `acct\|rep` | Audit §16.6, §20.6 #5 | Mismatch present | **VERIFIED READY — CLOSED BY PHASE 2B (PB-013)** | AUTHORIZATION | P2 | G3 | OpenEMR Engineer | 0001 | **CLOSED 2026-08-13** |
 | **0055** | Decide and document the handling of **PHI in the audit trail**: bound SQL parameters are appended verbatim to `log.comments` as base64, log encryption is off and its code path was deliberately removed. On a system with real patient data this places PHI, in plaintext base64, in the audit table | Audit §20.4 limitation 3, L-23 | Latent — no data exists yet, so no PHI is exposed **today** | **NOT READY — DEFECT** *(activates at pilot)* | SECURITY | **P0** | G3 | Security Reviewer | 0001, 0068 | NOT READY |
 | **0056** | Enforce audit-integrity claim discipline — a **hash, not an HMAC**; rows **not chained**; deleting a `log` row and its `log_comment_encrypt` partner is undetectable. "Immutable" and "blockchain" are prohibited | Audit §20.4, L-23; GTM MC-02, Pillar 1 | Qualification defined; discipline unenforced | READY WITH MANDATORY QUALIFICATION | AUTHORIZATION | **P0** | G1 G5 | Product Marketing | 0003 | NOT READY |
-| **0057** | Enforce sensitivity and MFA disclosure discipline — sensitivity gates **encounters only**, not demographics, problem lists, notes, documents or the API (L-28); MFA **cannot be mandated** (L-03, PL-01) and must be stated before it is discussed | Audit §15.1, §20.2, L-03, L-28; GTM MC-16, P-3 persona | Both correct in the sources; **no enforcement mechanism** | READY WITH MANDATORY QUALIFICATION | AUTHORIZATION | **P0** | G1 G5 | Product Marketing | 0003 | NOT READY |
+| **0057** | Enforce sensitivity and MFA disclosure discipline — sensitivity gates **encounters only**, not demographics, problem lists, notes, documents or the API (L-28); MFA **cannot be mandated** (L-03, PL-01) and must be stated before it is discussed | Audit §15.1, §20.2, L-03, L-28; GTM MC-16, P-3 persona | Both correct in the sources; **no enforcement mechanism**. **Owner ruling 2026-08-19 (given directly in conversation) confirms this disclosure-based position governs over Locked Decisions Q5 for the current MVP phase** — see `EV-092` §3.1 addendum; RDY-0099's centralized `force_mfa` proposal retired accordingly, not this item's position | READY WITH MANDATORY QUALIFICATION | AUTHORIZATION | **P0** | G1 G5 | Product Marketing | 0003 | NOT READY |
 
 ### 7.9 Domain H — Reporting and export (G2)
 
@@ -1085,8 +1086,8 @@ qualification*. Dependencies, not dates.
 | **0080** | Fix the backup configuration — `mysql_bin_dir` pointed at a non-existent XAMPP path | Audit OD-01, CFG-0120, L-21, B7, GAP-0064; GTM §26 P0 | *Historical:* backup cannot execute. **Live (2026-08-13): FIXED and proven — backup ran twice, 283 tables, clean** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-001)** | BACKUP / RESTORE | **P0** | G2(no-go) G3 | DevOps / Infrastructure | — | **CLOSED 2026-08-13** |
 | **0081** | Backup policy — target location, schedule, retention, encryption at rest, off-instance copy, and success verification | GTM §24, §25 Phase 2; brief §23 | No policy exists | NOT READY — OPERATIONAL | BACKUP / RESTORE | **P0** | G3 | DevOps / Infrastructure | 0080, 0064 | NOT READY |
 | **0082** | **Prove restore.** A backup produced by the documented procedure restores into a disposable instance; the application starts; authenticated login succeeds; defined row-count and checksum comparisons pass | GTM §25 Phase 2 gate; brief §23 | **Never tested** | **VERIFIED READY — CLOSED BY PHASE 2B (PB-182/183/203)** — restore proven deterministic (2 independent runs, 283/283 table checksums, 14/14 row-count fields), ACL behavior confirmed on the restored instance, authenticated browser login proven with a negative control (PB-203) | BACKUP / RESTORE | **P0** | G3 G6 | DevOps / Infrastructure | 0080, 0081, 0047 | **CLOSED 2026-08-16** |
-| **0083** | Establish a background-service trigger. *(At the 2026-08-09 audit: two nominally active services (`Email_Service`, `UUID_Service`) had `next_run` stuck at 2021-01-18 and the runner had never executed; no live trigger existed on any of four paths.)* **STALE — corrected 2026-08-14 (PB-071), re-confirmed live 2026-08-19:** a Windows Scheduled Task trigger was built and proven (negative control included); both services are active and ticking (`next_run` current as of every live check since, including today). **Held open for a different, real reason (PB-181, AGENT-OPS, 2026-08-16 — per Owner instruction, not closed):** the trigger runs only as the logged-on console user and does not survive logoff — this host's Google Drive mount `G:` is per-session, so a `SYSTEM`-level task cannot see the application at all, and converting the trigger to survive logoff was tested and ruled out on this host. Named explicitly in §40 row 12 and RDY-0094's no-go card as a standing operational constraint | Audit §19.7, OD-03, L-20, GAP-0063, B6; GTM §26 P0 | Runner built and proven (PB-071); held open on the console-session-survival limitation, not a functioning-vs-not question (`EV-083`) | **NOT READY — OPERATIONAL, working but fragile by design** | OPERATIONAL | **P0** | G2(disclose) G3 | DevOps / Infrastructure | 0001 | NOT READY — see `EV-083` |
-| **0084** | Define monitoring for a hosted pilot: application availability, error rate, disk capacity, database status, backup success, background-service health. **Name requirements, not a vendor** | Brief §23; GTM §24 | Nothing exists; diagnostics screen available | NOT READY — OPERATIONAL | MONITORING | **P0** | G3 | DevOps / Infrastructure | 0064, 0083 | NOT READY |
+| **0083** | Establish a background-service trigger. *(At the 2026-08-09 audit: two nominally active services (`Email_Service`, `UUID_Service`) had `next_run` stuck at 2021-01-18 and the runner had never executed; no live trigger existed on any of four paths.)* **STALE — corrected 2026-08-14 (PB-071), re-confirmed live 2026-08-19:** a Windows Scheduled Task trigger was built and proven (negative control included); both services are active and ticking (`next_run` current as of every live check since, including today). **Held open for a different, real reason (PB-181, AGENT-OPS, 2026-08-16 — per Owner instruction, not closed):** the trigger runs only as the logged-on console user and does not survive logoff — this host's Google Drive mount `G:` is per-session, so a `SYSTEM`-level task cannot see the application at all, and converting the trigger to survive logoff was tested and ruled out on this host. Named explicitly in §40 row 12 and RDY-0094's no-go card as a standing operational constraint. **Owner decision 2026-08-19 (given directly in conversation): the pilot-host trigger mechanism is a proper Windows Service** — specified in `EV-047` §9 addendum, explicitly NOT validated on this demo host (same `G:`-mount blindness PB-181 already found), implementation/testing deferred to real pilot-host provisioning (waits on RDY-0064) | Audit §19.7, OD-03, L-20, GAP-0063, B6; GTM §26 P0 | Runner built and proven (PB-071); held open on the console-session-survival limitation, not a functioning-vs-not question (`EV-083`) | **NOT READY — OPERATIONAL, working but fragile by design** | OPERATIONAL | **P0** | G2(disclose) G3 | DevOps / Infrastructure | 0001 | NOT READY — see `EV-083` |
+| **0084** | Define monitoring for a hosted pilot: application availability, error rate, disk capacity, database status, backup success, background-service health. **Name requirements, not a vendor** | Brief §23; GTM §24 | Nothing exists; diagnostics screen available. **Owner decision 2026-08-19 (given directly in conversation): "owner" in the six signals means a role (e.g. DevOps / Infrastructure), not a named individual** — closes `EV-084`'s sole reservation; tooling decision and RDY-0064 dependency remain open | NOT READY — OPERATIONAL | MONITORING | **P0** | G3 | DevOps / Infrastructure | 0064, 0083 | NOT READY |
 | **0085** | TLS/HTTPS, domain and DNS for any instance a customer touches. The audited install serves **HTTP on port 8300**; SMART/FHIR would also require TLS later | Audit §0.1, §32.1 #10 | HTTP only | NOT READY — OPERATIONAL | DEPLOYMENT | **P0** | G3 G6 | DevOps / Infrastructure | 0064, 0047 | NOT READY |
 
 ### 7.16 Domain O — Arabic, RTL and research-provisional items (G1, G5, G6)
@@ -1104,11 +1105,11 @@ qualification*. Dependencies, not dates.
 |---|---|---|---|---|---|---|---|---|---|---|
 | **0090** | Re-observe and classify every stock-OpenEMR identity surface per §18, using the classification *must change before capture / before guided demo / before pilot / may remain if legally required / legal review required* | Brief §22; audit §19.4, L-17 | Inventory derived from the audit, **not observed screen by screen** | NOT READY — DOCUMENTATION | BRANDING READINESS | **P0** | G1 G4 | Brand *(provisional)* / OpenEMR Engineer | 0001 | NOT READY |
 | 0091 | Locate the existing branding/rebranding audit document, or create one | Brief §6, §22 | **Not present in this environment**; not referenced by A or B | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G4 | Brand | 0090 | NOT READY |
-| 0092 | Recover and reconcile the in-repository `Locked Desicions/` corpus, which audit §23.2 records as existing and which may contain decisions not reflected in the GTM | Audit §23.2 | **Not present in this environment** | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G0 | Founder / Product Owner | 0001 | NOT READY |
+| 0092 | Recover and reconcile the in-repository `Locked Desicions/` corpus, which audit §23.2 records as existing and which may contain decisions not reflected in the GTM | Audit §23.2 | **Not present in this environment.** Corpus recovered and sample-reconciled (`EV-092`, PB-147) — one real conflict found (Q5 vs. RDY-0057/0099 MFA position) and escalated. **Owner ruling 2026-08-19 (given directly in conversation) resolves that one sub-finding:** the readiness plan's disclosure-based MFA position governs this MVP phase; RDY-0099 retired as superseded, not merely deferred — see `EV-092` §3.1 addendum. **Item as a whole stays open**: categories `Q23`+ (~55 decisions) remain unreviewed, and the broader "which corpus governs" question is unresolved | NOT READY — DOCUMENTATION | DOCUMENTATION | P1 | G0 | Founder / Product Owner | 0001 | NOT READY |
 | 0093 | Stand up the WhatsApp business channel with a published response target before any CTA referencing it is published | GTM GTM-002, §17.1, §19 | Does not exist | NOT READY — OPERATIONAL | OPERATIONAL | P1 | G6 | Founder / Product Owner | — | NOT READY |
 | **0094** | Adopt the demo no-go register (§40) and rehearse against it — never open Admin → Backup; never attempt C-CDA; expect two overdue background services and mention them first; know that opening Module Manager auto-registers three modules | GTM §16.2 operational rules; audit §28.2, OD-01, OD-02 | Rules known; **no register, no rehearsal** | NOT READY — DOCUMENTATION | DEMO | **P0** | G1 G2 | Founder / Product Owner | 0080, 0083 | NOT READY |
 | **0095** | **Legal / licensing review** of what OpenEMR attribution must remain visible after branding. Do not remove attribution because it is inconvenient | Brief §22 | **Not assessed by any source** | **BLOCKED — DECISION** | REGULATORY VERIFICATION | **P0** | G1 G4 | Legal / Compliance | 0090 | NOT READY |
-| **0096** | Define support channels, published hours, response target, escalation path and training plan. **No uptime figure may be published — none has been measured** | GTM §15.3 *Support/Training*, §21, §24 | Model defined; **nothing operational** | NOT READY — DOCUMENTATION | COMMERCIAL | **P0** | G3 G6 | Sales / Pilot Owner | 0064, 0084 | NOT READY |
+| **0096** | Define support channels, published hours, response target, escalation path and training plan. **No uptime figure may be published — none has been measured** | GTM §15.3 *Support/Training*, §21, §24 | Model defined; **nothing operational**. **Owner decision 2026-08-19 (given directly in conversation): Level 1 — Business Hours selected; response target of first response within 1 business day confirmed**, no longer a candidate — see `EV-096` addendum. Still not met: reflected in the scope template and pilot agreement | NOT READY — DOCUMENTATION | COMMERCIAL | **P0** | G3 G6 | Sales / Pilot Owner | 0064, 0084 | NOT READY |
 
 ### 7.18 Domain Q — Market-expansion and enhancement roadmap (P1–P3, carried from GTM §26 unchanged)
 
@@ -1119,7 +1120,7 @@ current MVP.** Their priority is the GTM's, not this document's.
 |---|---|---|---|---|---|---|---|
 | 0097 | ZATCA Phase 2 / VAT in the billing chain | GAP-P1; GAP-0052/0053, L-11, EXT-01 | **Schema change** — no tax field exists anywhere in `billing`, `ar_activity`, `payments`, `prices`, `fee_schedule` | P1 | Market expansion only | NOT READY — ENGINEERING | DEFERRED |
 | 0098 | Arabic completion + RTL remediation + Arabic-shaping PDF font | GAP-P1; L-08/09/10, CLM-0030 | Translation (incl. `list_options`, `layout_options`) + per-screen engineering | P1 | Market expansion only | NOT READY — ENGINEERING | DEFERRED |
-| 0099 | MFA enforcement (`force_mfa` global wired into `main_screen.php`) | GAP-P1; CAP-0218, L-03, EB-01 | Development, **Small** per audit EB-01 | P1 | Enterprise security review | NOT READY — ENGINEERING | DEFERRED |
+| 0099 | MFA enforcement (`force_mfa` global wired into `main_screen.php`) | GAP-P1; CAP-0218, L-03, EB-01 | Development, **Small** per audit EB-01 | P1 | Enterprise security review | **RETIRED — SUPERSEDED (Owner ruling 2026-08-19, given directly in conversation, see `EV-092` §3.1 addendum)** | **RETIRED — not merely deferred.** This exact `force_mfa` core-global mechanism is superseded by Locked Decisions Q5's centralized-Keycloak MFA direction; RDY-0057's disclosure-based position governs this MVP phase instead |
 | 0100 | NPHIES pathway | GAP-P1; GAP-0046, L-26, EXT-02 | **Core patching programme** — `BillingProcessor` hard-coded dispatch ladder, no factory or event | P1 | The insurance-clinic majority | NOT READY — ENGINEERING | DEFERRED |
 | 0101 | Repeatable multi-customer provisioning automation (not multi-tenancy) | GAP-P1; GAP-0043, L-07 | Automation over the existing per-site model | P1 | Scaling Phase 4 | NOT READY — ENGINEERING | DEFERRED |
 | 0102 | Narrow operational dashboards — **not** a BI programme | GTM §26 P2; GAP-0040/0041 | `chart.js` vendored but has no first-party consumer | P2 | — | NOT READY — ENGINEERING | DEFERRED |
@@ -2009,6 +2010,46 @@ PB-202 closed it four days earlier).
 reconciliation and classification exercise, not a code-fix session. RDY-0016's scoped fix,
 RDY-0083's formal closure check, and RDY-0071's live-verification remain open for whoever picks them up
 next, with pointers above to exactly what's needed.
+
+## PB-350 (2026-08-19) — **Agent F: five direct Owner decisions recorded (RDY-0084, RDY-0086/HR-09, RDY-0096, RDY-0092/RDY-0099, RDY-0083)**
+
+**Scope:** transcribe five decisions the Owner (Mohammed Elfouly) gave **directly in conversation with
+the orchestrating session, 2026-08-19** — not relayed through any agent. Documentation-only: no code, no
+database, no gate-count recalculation (§0.0 Rule 3). Full text of each addendum lives in the evidence
+file it closes; this entry summarizes and points there, per §0.0 Rule 2.
+
+1. **RDY-0084** — "owner" in the six monitoring signals means a **role** (e.g. DevOps / Infrastructure),
+   not a named individual. Closes `EV-084-monitoring-requirements.md`'s sole reservation (addendum
+   added). **Does not close RDY-0084** — the tooling decision and the RDY-0064 hosting dependency are
+   untouched.
+2. **RDY-0086 / HR-09** — the Owner's basis of authority as Arabic/RTL reviewer is **"Native Arabic
+   speaker."** Closes the missing-basis-statement gap `EV-WAVE3-decisions-20260816.md` left open on
+   2026-08-16 (addendum added); HR-04's register row for HR-09 updated to carry the statement. **Does
+   not close RDY-0086 or RDY-0063** — the actual screen-walk and qualification script are untouched.
+3. **RDY-0096** — **Level 1, Business Hours** selected; response target of **first response within 1
+   business day confirmed**, no longer a candidate (`EV-096-options.md` addendum + inline table update).
+   **Does not close RDY-0096** — its acceptance criterion also requires the decision reflected in the
+   scope template and pilot agreement, which remains undone.
+4. **RDY-0092 / RDY-0099** — ruling on the Q5-vs-MFA-disclosure conflict `EV-092`'s §3.1 escalated: the
+   readiness plan's disclosure-based position (RDY-0057) **governs for this MVP phase**; RDY-0099's
+   `force_mfa` core-global proposal is **retired as superseded** by Locked Decisions Q5's
+   centralized-Keycloak direction, not merely left deferred (`EV-092` §3.1 addendum + Status update;
+   register rows for RDY-0092, RDY-0099 and a pointer on RDY-0057 updated). **Does not close RDY-0092**
+   — this resolves one sub-finding; categories `Q23`+ (~55 decisions) remain unreviewed, and the
+   broader "which corpus governs" question is unresolved.
+5. **RDY-0083** — the pilot-host background-service trigger mechanism is a **proper Windows Service**
+   (`EV-047-deployment-runbook.md` §9 addendum + register row/detail-section addendum). **Recorded as
+   explicitly NOT validated on this demo host** — PB-181's own investigation (AGENT-OPS, 2026-08-16)
+   already found that a non-interactive execution context, which a Windows Service typically runs
+   under, hits the identical `G:`-mount blindness that ruled out a SYSTEM-context scheduled task here.
+   The decision is for a real pilot host (not Drive-mounted), so this is not a contradiction of that
+   finding — implementation/testing is deferred to real pilot-host provisioning, which itself waits on
+   RDY-0064. **Does not close RDY-0083** — this decides a future mechanism, not an implementation.
+
+**None of the five closes its parent RDY item.** Each addendum states precisely what narrow gap it
+closes and what remains open, per §0.0 Rule 5 — recording what was received, from whom, by what route,
+not fabricating a closure. **`Blocks`:** per each RDY's own field (G0, G1, G2, G3, G5, G6 across the
+five items) — no gate count moved here.
 
 ## PB-201 (2026-08-16) — **AGENT-BROWSER: zero of five assigned items testable — `claude-in-chrome` unavailable in this session, no substitute attempted**
 
@@ -7910,7 +7951,7 @@ development and does not belong in Phase 2B.
 | **HR-06** | RDY-0003 | **Mohammed Elfouly** | **Claim reviewer** *(also holds HR-02 — same person, both roles)* | n/a — procedure, not dataset | — | **APPOINTED 2026-08-14 (PB-077) — AWAITING FIRST REVIEW.** Procedure written at `EV-003`; §5 review record is **empty**. Recommended sample artefact: `EV-067` | — | `docs/evidence/EV-003-claim-review-procedure.md` | **NO — naming is not reviewing** |
 | **HR-07** | RDY-0095 | **Mohammed Elfouly** *(named 2026-08-14, PB-061; supersedes the organisation-level "SkyEagle" assignment)* | Licence / attribution determination | n/a — determination, not dataset | — | **COMMISSIONED 2026-08-14 (PB-077) — DETERMINATION OUTSTANDING.** 8 closed-form questions; §6 block blank. **⚠ Self-review — the named reviewer is on the vendor side; independent counter-read recommended** | — | `docs/evidence/EV-095-licence-attribution-pack.md` | **NO** |
 | **HR-08** | RDY-0055 | **Mohammed Elfouly** | **Security Reviewer** — audit-trail PHI determination | n/a — determination, not dataset | — | **APPOINTED 2026-08-14 (PB-061) — AWAITING DETERMINATION.** Finding to accept or reject is measured, not asserted: **6,073 audit rows contain patient surnames**, `log.comments` is **base64, not encrypted**, and **no retention policy exists**. Evidence: `EV-055` | — | `docs/evidence/EV-055-audit-phi-determination.md` | **NO — naming is not determining** |
-| **HR-09** | RDY-0086 / 0087 / 0063 / 0089 | **Mohammed Elfouly** | **Arabic / RTL reviewer** (four items, one appointment) | demo-surface screens; capture set | — | **APPOINTED 2026-08-14 (PB-061) — AWAITING REVIEW.** **⚠ Competence not evidenced by this document.** The role assesses Arabic and RTL adequacy, so the reviewer should **state their Arabic-language basis of authority** in the first review record, as HR-02 already requires | — | — | **NO** |
+| **HR-09** | RDY-0086 / 0087 / 0063 / 0089 | **Mohammed Elfouly** | **Arabic / RTL reviewer** (four items, one appointment) | demo-surface screens; capture set | — | **APPOINTED 2026-08-14 (PB-061) — AWAITING REVIEW.** **Basis of authority: native Arabic speaker** (Owner-stated 2026-08-19, given directly in conversation with the orchestrating session — `EV-WAVE3-decisions-20260816.md` addendum). This closes the missing-basis-statement gap flagged since PB-061; the first actual review record is still outstanding | — | — | **NO** |
 | **HR-10** | RDY-0002 | **Mohammed Elfouly** | GTM currency acceptance | `Product-Positioning-and-GTM-Locked-Strategy.md` 2026-08-11 | — | **APPOINTED 2026-08-14 (PB-061) — AWAITING ACCEPTANCE RECORD.** **⚠ Category check for the Owner:** the register assigns RDY-0002 to **Founder / Product Owner**. If the named reviewer does not hold that role, this appointment delegates it — legitimate, but it should be a deliberate delegation rather than a filing accident | — | — | **NO** |
 | **HR-03a** | RPT-0009 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
 | **HR-03b** | RPT-0028 authz | *(not yet assigned)* | Product Owner | n/a — decision, not dataset | — | **AWAITING DECISION** | — | — | **NO** |
@@ -9209,6 +9250,17 @@ the account-menu dropdown; a wrong-password attempt against the same account was
 **Verification:** `EV-083` §6 (trigger build and negative control); live re-confirmation 2026-08-19 (this session).
 **Evidence artefact:** `EV-083-background-service-trigger.md` · **Rollback:** the scheduled task is removable; prior `next_run` values recorded · **Status:** NOT READY — working on this host, unresolved for a pilot host
 
+**Owner decision 2026-08-19 (given directly in conversation with the orchestrating session, not
+relayed through any agent):** of the three live options named in "Required action" above, the
+**pilot-host trigger mechanism is a proper Windows Service.** This decision is about what a real
+pilot host's runbook specifies — `EV-047` §9 has been updated accordingly — and is explicitly **NOT
+validated on this demo host**: PB-181's own investigation already found that a non-interactive
+execution context (which a Windows Service typically runs under) hits the identical `G:`-mount
+blindness that ruled out the SYSTEM-context scheduled-task alternative here. Implementation and
+testing of the Windows Service is deferred to real pilot-host provisioning, which itself waits on
+RDY-0064. **This does not close RDY-0083** — it decides a mechanism for future implementation, not an
+implementation itself.
+
 #### RDY-0084 — Monitoring requirements
 **Source:** Brief §23; GTM §24 · **Gates:** G3 · **Deps:** RDY-0064, 0083 · **Owner:** DevOps / Infrastructure
 **Current state:** Nothing. The product ships a diagnostics screen, an IP tracker and a background-services report — useful, but they are screens someone must remember to open.
@@ -9217,6 +9269,12 @@ the account-menu dropdown; a wrong-password attempt against the same account was
 **Acceptance criteria:** Each of the six has a defined signal, threshold, destination and owner; the monitoring decision record names whether tooling has been selected, or states explicitly that it has not.
 **Verification:** inspect the requirements document against the six items.
 **Evidence artefact:** `EV-084 monitoring-requirements.md` · **Status:** NOT READY
+
+**Owner decision 2026-08-19 (given directly in conversation with the orchestrating session, not
+relayed through any agent):** "owner" in the acceptance criterion means a **role** (e.g. DevOps /
+Infrastructure), not a named individual — closes `EV-084`'s sole reservation (`EV-084` addendum).
+**This does not close RDY-0084** — the tooling decision (§5 of `EV-084`) is still deliberately not
+made, and implementation remains gated on RDY-0064.
 
 #### RDY-0085 — TLS, domain and DNS
 **Source:** Audit §0.1, §32.1 #10 · **Gates:** G3 G6 · **Deps:** RDY-0064, 0047 · **Owner:** DevOps / Infrastructure
@@ -9307,6 +9365,13 @@ ending, and that must be said before a prospect notices two overdue services aft
 **Acceptance criteria:** All six elements are defined and are reflected in the scope template and pilot agreement; **no uptime or performance figure appears anywhere**; the response target is one the team has agreed it can meet with current staffing.
 **Verification:** inspect against the scope template; keyword-scan artefacts for uptime and availability figures.
 **Evidence artefact:** `EV-096 support-definition.md` · **Status:** NOT READY
+
+**Owner decision 2026-08-19 (given directly in conversation with the orchestrating session, not
+relayed through any agent):** **Level 1 — Business Hours** selected from `EV-096-options.md`'s
+three-tier card; response target of **first response within 1 business day confirmed**, no longer a
+candidate (`EV-096` addendum). **This does not close RDY-0096** — the acceptance criterion also
+requires the decision to be "reflected in the scope template and pilot agreement," which is not yet
+done (`EV-066-pack.md`, `EV-068-pilot-requirements.md` untouched by this decision).
 
 ---
 
