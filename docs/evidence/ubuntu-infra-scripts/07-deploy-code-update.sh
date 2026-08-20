@@ -120,6 +120,23 @@ restore_perms() {
         ;;
     esac
   done <<< "$list"
+
+  # `git diff --name-only` lists FILES, so the loop above misses any
+  # DIRECTORY git had to create for a new path -- those stay root-owned.
+  # The 2026-08-20 run left 40 such directories (all under docs/, tests/,
+  # .github/, .agents/; no runtime path, no functional impact, but wrong).
+  # Sweep whatever the checkout left as root, excluding .git internals and
+  # sites/ (which is legitimately www-data-owned).
+  local n
+  n=$(find "$REPO" -user root \
+        -not -path "$REPO/.git/*" -not -path "$REPO/sites/*" \
+        -printf . 2>/dev/null | wc -c)
+  if [ "$n" -gt 0 ]; then
+    find "$REPO" -user root \
+      -not -path "$REPO/.git/*" -not -path "$REPO/sites/*" \
+      -exec chown "$owner" {} +
+    echo "  swept $n root-owned path(s) left by the checkout back to $owner"
+  fi
 }
 
 availability_check() {

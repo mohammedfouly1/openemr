@@ -156,3 +156,29 @@ do not themselves authenticate, backs up the old cnf, verifies both
 `SELECT 1` and `mysqldump`, clears M-4's fail counter, re-runs all six
 monitoring signals, and runs a real backup so M-5's marker is refreshed and
 the whole path is proven rather than assumed.
+
+### Deployment record — 2026-08-20
+
+First use of `07`. `demo-openemr` moved `6de7cdcc1` → `987a38c44`
+(288 commits, 537 files, 21 of them runtime). Verified afterwards, live and
+independently of the script's own output: HEAD correct; both local
+modifications (`sqlconf.php`, `Custom.json`) preserved; `config.php` back to
+600 `www-data`; the deleted `CreateReleaseChangelogCommand.php` gone and the
+new `AGENTS.md` present; `library/globals.inc.php` carrying the new
+`audit_events_lab-order` entry; 0 Q77 forbidden themes; HTTP 200/7693B; all
+six monitoring signals OK; rollback tag `pre-update-20260820T070530Z` in
+place. No `composer install` and no front-end rebuild were needed, as
+predicted.
+
+One defect found in `07` by that run: `git diff --name-only` lists files, so
+`restore_perms()` missed **directories** git created for new paths, leaving
+40 of them root-owned (all under `docs/`, `tests/`, `.github/`, `.agents/` —
+no runtime path, no functional impact). Fixed by a sweep that chowns anything
+left as root outside `.git/` and `sites/`. To repair a tree deployed before
+that fix:
+
+```bash
+sudo find /var/www/openemr -user root \
+  -not -path '/var/www/openemr/.git/*' -not -path '/var/www/openemr/sites/*' \
+  -exec chown myriamviens2:myriamviens2 {} +
+```
