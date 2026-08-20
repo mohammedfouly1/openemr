@@ -185,7 +185,7 @@ curl -X GET 'https://localhost:9300/apis/default/fhir/metadata' \
     ],
     "software": {
         "name": "OpenEMR",
-        "version": "7.0.4"
+        "version": "8.2.0"
     },
     "implementation": {
         "description": "OpenEMR FHIR API",
@@ -435,7 +435,7 @@ The resources that OpenEMR supports is documented via Swagger. You can see this 
 - - Sexual Orientation
 - - Uncategorized Observations
 - DiagnosticReport for Laboratory Results ([swagger](https://demo.openemr.io/openemr/swagger/#/fhir/get_fhir_DiagnosticReport))
-- ServiceRequest([swagger](https://demo.openemr.io/openemr/swagger/#/fhir/get_fhir_ServiceCategory))
+- ServiceRequest([swagger](https://demo.openemr.io/openemr/swagger/#/fhir/get_fhir_ServiceRequest))
 - Media ([swagger](https://demo.openemr.io/openemr/swagger/#/fhir/get_fhir_Media))
 - Specimen ([swagger](https://demo.openemr.io/openemr/swagger/#/fhir/get_fhir_Specimen))
 

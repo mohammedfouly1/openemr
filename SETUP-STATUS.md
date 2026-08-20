@@ -2,7 +2,10 @@
 
 _Last updated: 2026-08-07. Supersedes the earlier Docker-based plan._
 
-**Status: WORKING.** App runs at <http://localhost:8300/>, login `admin` / `pass`.
+**Status: WORKING.** App runs at <http://localhost:8300/>. The installer-default
+`admin` / `pass` login was rotated 2026-08-16 and no longer authenticates; the
+current credential lives only in `C:\openemr-stack\secrets\thiqa-demo-credentials.json`,
+not in this repo.
 
 ---
 
@@ -48,7 +51,7 @@ C:\openemr-stack\start-openemr.ps1   # start Apache + MariaDB
 C:\openemr-stack\stop-openemr.ps1    # clean shutdown (flushes InnoDB)
 ```
 
-- App: <http://localhost:8300/> — `admin` / `pass`
+- App: <http://localhost:8300/> — `admin` / `<rotated 2026-08-16, see secrets file>`
 - DB:  `127.0.0.1:3306`, root has no password, **bound to loopback only**
 - App DB user: `openemr` / `openemr`, database `openemr`
 

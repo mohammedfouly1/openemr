@@ -199,7 +199,7 @@ See [Authentication Guide](AUTHENTICATION.md) for OAuth2 flows:
 - [Authorization Code Grant](AUTHENTICATION.md#authorization-code-grant) (recommended)
 - [Password Grant](AUTHENTICATION.md#password-grant) (not recommended)
 - [Refresh Token Grant](AUTHENTICATION.md#refresh-token-grant)
--
+
 Patients authenticate using [Password Grant](AUTHENTICATION.md#password-grant) with `user_role=patient`.
 
 ### Limitations

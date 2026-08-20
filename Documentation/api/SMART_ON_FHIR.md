@@ -571,7 +571,7 @@ if (patientId) {
 }
 ```
 
-### Receiving Encounter Context
+### Encounter Context
 
 **Token response (when encounter available):**
 ```json
