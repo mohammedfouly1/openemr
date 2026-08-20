@@ -12,7 +12,7 @@
 | HEAD commit subject | `refactor(oe-module-faxsms): Fix SignalWire fax support in oe-module-faxsms (#12526)` | `git log -1` |
 | Total commits in history | 12,803 | `git rev-list --count HEAD` |
 | Oldest commit in history | `7080e87b` — 2005-03-09 | `git log --reverse -1` (full OpenEMR history preserved) |
-| Distance behind upstream | **UNKNOWN — cannot be computed without upstream remote.** _Recommendation_: add `upstream` remote pointing at `https://github.com/openemr/openemr.git` and run `git fetch upstream && git log --oneline HEAD..upstream/master`. **Not executed here — outside read-only mandate; requires operator approval.** | n/a |
+| Distance behind upstream | **UNKNOWN — cannot be computed without upstream remote.** _Recommendation_: add `upstream` remote pointing at `https://github.com/openemr/openemr.git` and run `git fetch upstream && git log --oneline HEAD..upstream/master`. **Not executed here — outside read-only mandate; requires operator approval.** **Resolved in a later audit pass** — see `docs/discovery/openemr-decision-evidence/02-repository-baseline.md` and `05-upstream-fork-drift.md`: the `upstream` remote was added, and the fork's HEAD (`631f2b38`) was found to be a strict ancestor of `upstream/master` — i.e. the fork carried **zero commits of its own** and was simply upstream master as of 2026-07-04 (measured as 373 commits behind `upstream/master` on re-check 2026-08-07). Note both this file and the evidence-collection audit predate the branch's later upstream sync work; treat the 373-commit figure as a point-in-time measurement, not a current status. | n/a |
 
 ## OpenEMR Version (Pinned)
 

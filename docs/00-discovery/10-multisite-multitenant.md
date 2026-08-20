@@ -406,6 +406,14 @@ brings the surface easily above 2,000 code sites. UNKNOWN —
 grep tool's JSON output exceeded 64 KiB on ripgrep runs. Order of
 magnitude is confirmed: thousands, not hundreds.
 
+_Resolved 2026-08-19, see `docs/discovery/openemr-decision-evidence/21-recommended-decision-updates.md`
+(Q11) and `15-security-compliance-code-evidence.md §5.1`: the full data-access surface
+was counted at **6,785** call sites (`sqlStatement(` 2,025 + `QueryUtils::` 1,653 +
+`sqlQuery(` 1,454 + `sqlFetchArray(` 1,354 + `sqlInsert(` 251 + Doctrine DBAL 48) —
+roughly **3.6× larger** than the 1,875-site estimate this section used to size Model B.
+The conclusion (Model A / DB-per-tenant) is unchanged and, if anything, reinforced; only
+the magnitude of what Model B would cost to abandon changes._
+
 ---
 
 ## 11. URL / subdomain routing feasibility

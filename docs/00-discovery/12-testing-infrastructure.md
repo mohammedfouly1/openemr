@@ -28,7 +28,7 @@ Three top-level XML configs exist (`phpunit.xml.dist` does **not** — the check
 |---|---|---|
 | `phpunit.xml` | `tests/bootstrap.php` (`phpunit.xml:14`) | DB-backed integration suite. Requires container + MySQL. |
 | `phpunit-isolated.xml` | none (no `bootstrap=` attr) | Pure-PHP tests; no DB, no `interface/globals.php`. |
-| `phpunit.integration.xml` | none | Small `tests/Tests/Integration/` sub-suite (api + RestControllers/Subscriber). |
+| `phpunit.integration.xml` | none | References a `tests/Tests/Integration/` sub-suite (api + RestControllers/Subscriber). **Resolved 2026-08-19** — see `docs/discovery/openemr-decision-evidence/09-test-and-ci-inventory.md §3`: the directory is vestigial, not small — `git ls-files "tests/Tests/Integration/**"` returns 0 rows and neither path this config references exists on disk. Nothing invokes this config anywhere (0 hits in workflows, composer.json, package.json, devtools). |
 
 Both DB and isolated configs register the same PHPUnit extension: `OpenEMR\PHPUnit\Extension` (`phpunit.xml:33`, `phpunit-isolated.xml:32`). The isolated config includes a shutdown safety-net that aborts with exit 70 if the extension did not bootstrap (`tests/bootstrap.php:22-28`).
 
@@ -248,8 +248,8 @@ CLAUDE.md's claim ("forbidden globals, forbidden direct instantiations, namespac
 
 **UNKNOWNs:**
 
-- Whether `phpunit-isolated.xml` is actually run in CI (no `.github/workflows/` inspection performed here — deferred to a later CI-audit report).
+- Whether `phpunit-isolated.xml` is actually run in CI (no `.github/workflows/` inspection performed here — deferred to a later CI-audit report). **Resolved 2026-08-19** — see `docs/discovery/openemr-decision-evidence/09-test-and-ci-inventory.md §4`: yes, `isolated-tests.yml` runs it across PHP 8.2–8.6 on every push/PR to `master`/`rel-*`, and blocks the required-check aggregator on failure.
 - Whether the DB suite runs against a fresh DB per CI job or a persistent one (would determine severity of the prefix-cleanup risk).
-- Current numeric coverage % — `codecov.yml:24` implies it drifted upward from the historical ~4% floor but the actual value is on Codecov's site, not in-repo.
+- Current numeric coverage % — `codecov.yml:24` implies it drifted upward from the historical ~4% floor but the actual value is on Codecov's site, not in-repo. **Resolved 2026-08-19** — see `docs/discovery/openemr-decision-evidence/09-test-and-ci-inventory.md §5`: live Codecov API returned 27.53% (2026-07-21), re-measured at 28.66% (2026-08-07) — both materially above the stale ~4% figure still recorded in `codecov.yml:24`.
 - Whether `symfony/panther`'s local ChromeDriver fallback (`BaseTrait.php:79`) works on Windows hosts or is Linux-only in practice.
-- The `tests/Tests/Integration/` tree referenced by `phpunit.integration.xml:34-38` was not enumerated — may be small or vestigial.
+- The `tests/Tests/Integration/` tree referenced by `phpunit.integration.xml:34-38` was not enumerated — may be small or vestigial. **Resolved 2026-08-19** — confirmed vestigial (0 tracked files); see the `phpunit.integration.xml` row in §2 above.

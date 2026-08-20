@@ -5,11 +5,13 @@ _Read-only synthesis. Draws exclusively from prior Phase 0–14 reports under
 `$v_acl=13` (`01-repo-inventory.md:28-29`). No `upstream` remote configured
 (`01-repo-inventory.md:8`)._
 
-**Phase 5 (`06-api-surface.md`) does not yet exist** in `docs/00-discovery/` at
+**Phase 5 (`06-api-surface.md`) did not yet exist** in `docs/00-discovery/` at
 time of writing. All REST/FHIR facts below cite Phase 2 (`03-directory-map.md`),
 Phase 6 (`07-modules-and-extensibility.md`), and Phase 7
 (`08-billing-claims-insurance.md §4`) which re-derived the surface from source.
-**Re-integrate this section once Phase 5 lands.**
+**`06-api-surface.md` has since been added and is now present in this directory** —
+the "re-integrate" instruction below and the FHIR paragraph in §6 predate it and
+should be read alongside that file rather than as still-pending work.
 
 ---
 
@@ -270,12 +272,12 @@ are core. Also `RestApiResourceServiceEvent` (override an existing resource
 service) and `RestApiScopeEvent` (extend OAuth2 scope list) are the
 sanctioned extension seams (`07-modules-and-extensibility.md §4`).
 
-> **Phase 5 gap:** Precise FHIR resource-per-verb inventory (which resources
+> **Phase 5 gap (closed):** Precise FHIR resource-per-verb inventory (which resources
 > are read-only like `Coverage`, which have create/update/delete) was not
 > yet catalogued in a `06-api-surface.md` at time of this synthesis. Phase 8
 > (`08-billing-claims-insurance.md §4 Option A, §7 UNKNOWN #1`) re-derived
-> that `Claim` is not routed at all and `Coverage` is read-only. Reintegrate
-> this section when Phase 5 lands.
+> that `Claim` is not routed at all and `Coverage` is read-only. `06-api-surface.md`
+> has since been added — see its §4 and §12 for the full per-resource table.
 
 ### Multi-tenant
 
@@ -323,6 +325,16 @@ Theme via new SCSS entrypoint. Two upgrade-safe surfaces:
    `13-i18n-localization.md UNKNOWN` and `09-frontend-ui.md §2, §10` do not
    confirm a `sites/<tenant>/documents/theme/` convention specifically —
    flagged UNKNOWN.
+
+   **Resolved 2026-08-19 — the path does not exist**, see
+   `docs/discovery/openemr-decision-evidence/14-frontend-ui-evidence.md` and
+   `21-recommended-decision-updates.md` (Q59): `sites/<tenant>/documents/theme/` has
+   **zero runtime references** anywhere in tracked PHP, Twig or JS — it existed only in
+   this discovery corpus's own prior notes. Per-tenant branding today is logos only, via
+   `LogoService` (`src/Services/LogoService.php:75-108`). The recommended path forward is
+   CSS-variable design tokens over the shared immutable theme bundle, not a per-tenant
+   `.css`/`.js` override — the latter would introduce XSS, data-exfiltration and
+   cross-tenant asset-leakage risk that the evidence file details in full.
 2. **New SCSS entrypoint under `interface/themes/`** — Webpack builds
    `interface/themes/*.scss` 1:1 into `public/themes/*.css`
    (`09-frontend-ui.md §2` — `webpack.themes.js:70-72`). Adding a new
@@ -443,11 +455,12 @@ Execute in order. Each step is an `openemr-cmd` invocation (see
 1. **Actual drift from `openemr/openemr` master** — unmeasurable until an
    `upstream` remote is added; §5.1 gives the exact commands but they were
    not executed (read-only mandate). Carried from `01-repo-inventory.md:15`.
-2. **Phase 5 (`06-api-surface.md`) not yet written** — precise FHIR
+2. **Phase 5 (`06-api-surface.md`) not yet written at time of writing** — precise FHIR
    resource-per-verb table (which resources are read-only vs full-CRUD)
    was re-derived by Phase 7 (`08-billing-claims-insurance.md §4, §7 UNKNOWN #1`)
-   but not comprehensively catalogued. Re-integrate §6 (FHIR paragraph)
-   once Phase 5 lands.
+   but not comprehensively catalogued. **`06-api-surface.md` now exists** in this
+   directory and comprehensively catalogues the resource-per-verb table at its §4;
+   §6's FHIR paragraph above can be read alongside it.
 3. **`sites/<tenant>/documents/theme/` convention** — not verified in prior
    reports; `09-frontend-ui.md §2` documents `interface/themes/*.scss`
    compilation and `interface/globals.php:634` runtime default, but does
@@ -475,4 +488,9 @@ Execute in order. Each step is an `openemr-cmd` invocation (see
 8. **Hardcoded `GITHUB_COMPOSER_TOKEN*` in `docker/development-easy/docker-compose.yml:75-77`
    to rotate** (`14-security-compliance.md §9`) — two live-shaped `ghp_*`
    tokens committed. Independent of upgrade strategy but flagged since
-   any rebase will preserve them.
+   any rebase will preserve them. **Re-scoped 2026-08-19** — see
+   `docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md §2`:
+   the actual footprint is 12 token values across 4 compose files (3 obfuscation layers
+   each), not 2 values in 1 file. Also, per that evidence file, these tokens are
+   committed in upstream `openemr/openemr` (the fork has zero own commits), so rotation
+   is upstream's action; the fork's obligation is containment.

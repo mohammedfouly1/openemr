@@ -279,6 +279,11 @@ storage class is `library/classes/Document.class.php`.
   suggesting whitelist enforcement lives in the *caller* (e.g.
   `library/documents.php` `addNewDocument`) rather than the class itself.
   Not verified.**
+
+  _Resolved 2026-08-19, see `docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md §4.2`:
+  `isWhiteFile()` is consulted from only 2 of 26 `createDocument(` call sites, both gated
+  behind the operator-disableable `secure_upload` global. The remaining 24 paths were not
+  individually triaged — flagged `manual_review_required` there, not fully closed here._
 - **Filename sanitization.** `convert_safe_file_dir_name` and
   `check_file_dir_name` (`library/sanitize.inc.php:60-73`) are the
   helpers; whether every caller applies them is not exhaustively verified
@@ -358,6 +363,13 @@ contextual encryption) but the *root* keys are direct random bytes.
 the file is encrypted via `encryptForFilesystem` before writing to disk
 or CouchDB. **Default value of `drive_encryption`** — not verified here;
 **UNKNOWN — inspect `library/globals.inc.php` for the default.**
+
+_Resolved 2026-08-19, see `docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md §8`
+and `21-recommended-decision-updates.md` (Q47): both `drive_encryption` and
+`database_encryption` default to `'1'` (ON) at `library/globals.inc.php:1028-1040`. No
+patch is needed — only a provisioning guarantee that tenants never turn it off. That
+finding does **not** mean PHI columns are encrypted at the database layer — see the same
+evidence file §8 on `encryptStandard` coverage._
 
 ### 5.6 Call sites (encrypted columns)
 
@@ -467,6 +479,13 @@ Selected call sites:
 flags are changed (`interface/super/edit_globals.php:316` for the
 `gbl_force_log_breakglass` toggle). **UNKNOWN — full checksum chain
 verification workflow and cadence not audited here.**
+
+_Resolved 2026-08-19, see `docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md §7`
+and `21-recommended-decision-updates.md` (Q68): there is no chain and no verifier at all.
+`LogTablesSink.php:63` computes an unkeyed `hash('sha3-512', ...)` over the row's own
+fields only — no previous-row hash, no HMAC key, and a `verifyChecksum` grep returns 0
+hits repo-wide. This is an integrity checksum against accidental corruption, not a
+tamper-evident chain; describing it as tamper-proof is incorrect._
 
 ### 6.5 Retention / rotation
 
@@ -583,13 +602,19 @@ GITHUB_COMPOSER_TOKEN_ENCODED_ALTERNATE: '103 104 112 95 57 54 108 115 88 116 87
    revoked legacy PAT, a placeholder for a hex-only build value, or a
    SHA-1 fingerprint. Its value alone would fail a GitHub API auth check
    in the modern token scheme.
-2. Line 76 (`_ENCODED`) — base64 decodes to
-   `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`. **This is a
+2. Line 76 (`_ENCODED`) — base64 decodes to a `[REDACTED]` value. **This is a
    correctly-shaped GitHub PAT (`ghp_` prefix + 36 chars).**
 3. Line 77 (`_ENCODED_ALTERNATE`) — the space-delimited decimals decode
-   (as an ASCII byte sequence) to
-   `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`. **This is a second,
+   (as an ASCII byte sequence) to a `[REDACTED]` value. **This is a second,
    distinct correctly-shaped GitHub PAT.**
+
+   _Redacted 2026-08-19 during a documentation audit: the decoded plaintext values were
+   printed verbatim in this file, which is itself a credential-exposure instance
+   independent of the underlying token's live/revoked status. The later evidence pass
+   (`docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md §1,
+   §2`) documents the same finding — 12 token values across 4 compose files, not 2 —
+   under an explicit "never print values" discipline; follow that file's redaction
+   convention for any future citation of this finding._
 
 **Assessment.** Lines 76 and 77 are two distinct real-looking GitHub
 personal access tokens, deliberately obfuscated (base64 and a
@@ -603,18 +628,39 @@ regenerated. Fork's origin (`openemr/openemr` upstream) should be
 checked; if this file was inherited, upstream needs notification. If it
 originated in this fork, immediate rotation is required.
 
+**RESOLVED 2026-08-19 (orchestrator, PB-478): this file's own open question above is answered — the
+lines are inherited, not fork-originated.** `git blame docker/development-easy/docker-compose.yml`
+traces line 75 to `a12706b44` (Stephen Nielson, 2025-03-03) and lines 76-77 to `db6ec665c8` (Brady
+Miller, 2026-01-04) — both upstream OpenEMR maintainer commits, 159 commits deep in this file's
+history, already public on `openemr/openemr` for months independent of this fork. Per this
+section's own stated conditional: **this is the "inherited" branch, so the action is notifying
+upstream, not rotating/purging as if the fork caused it.** The three-way-encoded pattern (raw hex,
+base64, decimal-array, all under `_ENCODED`/`_ENCODED_ALTERNATE` names) also reads more like a
+deliberate secret-scanning-tooling test fixture than an accidental leak — not confirmed, but worth
+weighing before treating it as a live incident. See the parallel correction at
+`docs/00-discovery/SUMMARY-locked-decision-candidates.md` row 22 for the full reasoning and why
+recommended action 2 below (history rewrite) is not something a fork should attempt on shared
+upstream commits.
+
 **Recommended action (informational):**
 1. Revoke both decoded tokens at
    https://github.com/settings/tokens (or the org PAT admin, depending
-   on account).
-2. Purge from git history via `git filter-repo` or BFG (rewrite has
-   coordination cost — deploy keys, cached clones, etc).
+   on account). **Applies only if you are the token owner or an upstream maintainer** — a fork
+   contributor cannot revoke a credential they don't control.
+2. ~~Purge from git history via `git filter-repo` or BFG~~ — **does not apply to this fork**: these
+   are shared upstream commits; rewriting them breaks every future upstream merge and isn't a
+   fork's call to make on maintainers' own history. If remediation is warranted, it belongs
+   upstream, not here.
 3. Replace with a Docker-buildkit secret or an env-var injected at
-   `docker compose up` time, never checked into the compose file.
+   `docker compose up` time, never checked into the compose file. **Same caveat as #2** — this is a
+   change to upstream's own file; propose it upstream rather than diverging this fork from it.
 4. Add pre-commit hook `gitleaks` / `trufflehog` regex rules to catch
-   `ghp_`, `gho_`, `github_pat_`, and base64/decimal-encoded variants.
+   `ghp_`, `gho_`, `github_pat_`, and base64/decimal-encoded variants. **This one is fork-actionable**
+   regardless of the above — it doesn't touch upstream's file, just adds detection for any future
+   fork-originated secret, which is a real and independent gap worth closing.
 
-**Classification: security incident — credential exposure in VCS.**
+**Classification: downgraded from "security incident — credential exposure in VCS" to "upstream
+question to report, not a fork action item" — see 2026-08-19 correction above.**
 
 ---
 
@@ -671,6 +717,13 @@ originated in this fork, immediate rotation is required.
   upstream `openemr/openemr` but may not have been synced to this
   fork's `.github/` dir; check upstream if a security policy is
   required.**
+
+  _Resolved 2026-08-19, see `docs/discovery/openemr-decision-evidence/15-security-compliance-code-evidence.md §3`
+  and `21-recommended-decision-updates.md` (Q50): `.github/SECURITY.md` and
+  `.github/dependabot.yml` were confirmed present (`git ls-files`) in the later evidence
+  pass — the glob miss here was a tooling gap, not an actual absence. The file directs
+  reporters to OpenEMR's own security team, which the later pass flags as the real,
+  narrower action item for a fork holding Saudi tenant PHI._
 - **`docker/security/`.** No such directory exists in the tree.
 - **`X-Forwarded-For` trust.**
   `library/sanitize.inc.php:35-39` reads

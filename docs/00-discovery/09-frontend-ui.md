@@ -465,13 +465,19 @@ exact PHP entry that includes `dicom_launcher.js` was not confirmed by
 grep**; likely under `interface/patient_file/documents/` per the file's
 location but not proven here.
 
+_Resolved 2026-08-19, see `docs/discovery/openemr-decision-evidence/13-localization-arabic-evidence.md §5.4`:
+full chain traced — a document click/menu link opens `library/dicom_frame.php`, which
+renders `templates/dicom/dicom-viewer.html.twig`, which emits the `<script>` tags for the
+DWV bundle plus `library/js/dwv/{dicom_launcher.js,dicom_gui.js,dwv_i18n.js}`. Not under
+`interface/patient_file/documents/` as guessed here — the entry is `library/dicom_frame.php`._
+
 ---
 
 ## 10. Effort classes — findings, not decisions
 
 | Frontend strategy | Effort | Constraints | Evidence |
 |-------------------|--------|-------------|----------|
-| (a) **Restyle existing UI** — Bootstrap themes + Twig template overrides, no shell change | **Low** (weeks) | Cosmetic only; still Knockout MVVM + iframe-per-tab; still 611+ legacy PHP pages inside tabs unaffected by shell CSS | `interface/themes/*.scss` (17 entries), `webpack.themes.js:70-72` (one bundle per theme), `interface/globals.php:634` (default swap trivial) |
+| (a) **Restyle existing UI** — Bootstrap themes + Twig template overrides, no shell change | **Low** (weeks) | Cosmetic only; still Knockout MVVM + iframe-per-tab; still hundreds of legacy PHP pages inside tabs unaffected by shell CSS (§5's 611 is a *line* count across 108 files, not a page count — see correction below) | `interface/themes/*.scss` (17 entries), `webpack.themes.js:70-72` (one bundle per theme), `interface/globals.php:634` (default swap trivial) |
 | (b) **New screens as Twig-rendered custom-module pages matching existing shell** | **Low–Medium** | Must live in a tab iframe; must respect ACL via `AclMain::aclCheckCore`; menu item added via `MenuEvent::MENU_UPDATE` subscriber; renders through `TwigContainer` (autoescape OFF globally per Phase 1 — module must escape explicitly) | `src/Menu/MenuEvent.php:17,28,34`, `src/Menu/MainMenuRole.php:67-72`, `interface/main/tabs/main.php:407` (menu dispatched), Phase 6 event catalog |
 | (c) **Modern SPA (React/Vue/Angular) inside one main tab** | **Medium** | Lives inside a single tab `<iframe>` per `tabs_template.html.twig:38`; auth via existing session cookie or OAuth2 patient/user tokens; can post-message to `top` via `frame_proxies.js`; cannot own the top nav | `interface/main/tabs/main.php:479-480` (app1 iframe escape hatch), `main.php:371` (frame_proxies loaded), Phase 5 OAuth2 inventory |
 | (d) **Modern SPA replacing the shell entirely, REST/FHIR only** | **High** (quarters) | Rebuild: menu system + JSON schema, ACL wiring, tab manager, i18n via `library/ajax/i18n_generator.php` port, Twig-rendered legacy modules (all 1057+ `interface/**/*.php` pages must be reimplemented or proxied), menu-event hook loses value | `main.php` is 577 lines wiring six Twig fragments, four KO view-models, seven event dispatch points, three ACL-driven globals loads; 1057 PHP files under `interface/`; only ~92.5% of them are raw-echo pages per Phase 1 |
@@ -493,3 +499,10 @@ location but not proven here.
 - **CKEditor 5 Arabic translation bundling** — requires inspecting built assets under `public/` (npm build not permitted in read-only run).
 - **PHP entry that includes `dicom_launcher.js`** — grep for the include from `interface/patient_file/documents/` was not exhaustively confirmed; UNKNOWN — requires additional grep or product-owner input on which module owns DICOM view.
 - **How many of the 611 grid-class-using files are inside tab iframes vs are new-shell code** — the count is line-based, not file-based; file-level responsiveness coverage requires per-file inspection.
+  **Confirmed 2026-08-19, see `docs/discovery/openemr-decision-evidence/19-q72-ui-responsiveness-summary.md`**
+  ("Reconciliation with the prior '611 files use grid classes' claim"): the 611 figure is
+  a **line count across 108 distinct files** (re-run verbatim, same result), not a file
+  count — this doc's own effort-classes table at §10 row (a) restated it as "611+ ...
+  pages," which is the exact mis-description the later pass flagged and has now been
+  corrected above. The wider scanner in that report finds 1,149 files with at least one
+  grid/utility pattern using the full Bootstrap 4 pattern set across all UI file types.

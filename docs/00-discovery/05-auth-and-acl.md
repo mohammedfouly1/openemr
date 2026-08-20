@@ -258,6 +258,16 @@ standalone provider. Standalone-encounter is advertised but not exercised.
 Well-known: `/fhir/.well-known/smart-configuration` served by
 `src/RestControllers/SMART/SMARTConfigurationController.php:35-41`.
 
+> **Correction, 2026-08-19** — see `docs/discovery/openemr-decision-evidence/11-authentication-authorization-evidence.md §7`
+> and `21-recommended-decision-updates.md` (Q10): the later evidence pass found this
+> premise does not hold. `context-standalone-encounter` is explicitly **commented out**
+> at `src/FHIR/SMART/Capability.php:50` and its constant is never referenced elsewhere —
+> it is not advertised, so there is no conformance lie. The real, narrower defect:
+> `CONTEXT_EHR_ENCOUNTER` **is** advertised while the `launch/encounter` scope is absent
+> from both grantable scope lists (`ServerScopeListEntity.php:53`, `ScopeRepository.php:248`),
+> so a client following the shipped `SMART_ON_FHIR.md` example would fail. The UNKNOWN #5
+> below should be read against this corrected premise, not the original one.
+
 Scope reservation set (non-resource scopes): `openid`, `fhirUser`,
 `online_access`, `offline_access`, `launch`, `launch/patient`, `api:oemr`,
 `api:fhir`, `api:port`

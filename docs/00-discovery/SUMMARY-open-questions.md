@@ -4,6 +4,17 @@ Synthesised from all 16 prior reports (`00-environment.md` through `15-upgrade-a
 
 Answer format: append an `### A<n>` fenced block under each question with author + date.
 
+> **Pointer, added 2026-08-19.** These Q1–Q75 questions were later taken up as the explicit
+> scope of a dedicated repository-evidence audit — see
+> `docs/discovery/openemr-decision-evidence/00-executive-summary.md` for the outcome
+> summary and `21-recommended-decision-updates.md` for the per-question resolution detail.
+> That audit answered 56 of the 75 fully, found 4 **contradicted** the premise stated here
+> (Q10, Q47, Q50, Q59 — the repository refutes the assumption the question was built on)
+> and materially **re-scoped** 7 more (including Q11, Q37/Q70, Q43, Q49, Q51, Q68, Q69).
+> Before treating any question below as still open, check whether `21-recommended-decision-updates.md`
+> already answers it — this file's questions remain the accurate record of what was asked
+> at audit time; they are not all still unanswered today.
+
 ---
 
 ## A — Foundational locks (must be answered before Document 0 ships)

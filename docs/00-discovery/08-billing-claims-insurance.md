@@ -3,8 +3,10 @@
 Read-only audit. Every claim cites `file:line`. Cross-references Phase 3 (`04-database-schema.md`),
 Phase 0 (`02-tech-stack.md`), Phase 12 (`13-i18n-localization.md`).
 
-**Note:** Phase 5 (`06-api-surface.md`) does not exist in `docs/00-discovery/` at time of writing;
+**Note:** Phase 5 (`06-api-surface.md`) did not exist in `docs/00-discovery/` at time of writing;
 FHIR surface facts below were re-derived from source. Flagged as UNKNOWN where relevant.
+**`06-api-surface.md` was added later and is now present in this directory** — see that
+file for the full FHIR resource-per-verb table (§4) and route inventory.
 
 ---
 

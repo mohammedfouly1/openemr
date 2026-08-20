@@ -115,6 +115,17 @@ Extracted from `sql/database.sql` (line numbers noted):
 
 **Anomaly:** `documents.id` and `insurance_companies.id` are declared `NOT NULL default '0'` without `auto_increment` — the application assigns IDs manually. `UNKNOWN — reason for this deviation; likely legacy artifact.`
 
+_Resolved 2026-08-19, see `docs/discovery/openemr-decision-evidence/10-database-and-tenancy-evidence.md §2`
+and the companion `evidence/snippets/q57-{documents,insurance-companies}-id-trace.md`:
+`documents.id` is non-`AUTO_INCREMENT` by inertia (no documented reason survives, but
+converting it is technically safe — no writer ever inserts `id=0`). `insurance_companies.id`
+is **deliberately** non-`AUTO_INCREMENT` — an in-source comment at
+`src/Services/InsuranceCompanyService.php:433-436` documents that it shares an id-space
+with `pharmacies` via the `addresses` satellite table; converting it in isolation would
+silently corrupt address lookups. Recommendation for new SaaS tables: `bigint
+AUTO_INCREMENT PRIMARY KEY` + `uuid binary(16)` shadow, and never share id-spaces across
+tables._
+
 ---
 
 ## 6. Foreign-Key Reality
@@ -269,6 +280,13 @@ Doctrine Migrations (once activated per §7c) uses `CreateTableTrait` deliberate
 - Adding real `FOREIGN KEY` constraints from `custom_*` into core tables would change platform behavior (§6). Recommend soft references + indexed columns.
 
 `UNKNOWN — no formal upstream policy statement guarantees the "custom_" prefix will remain reserved for downstream forks; this is inferred from 36 upgrade files with zero counter-examples of the prefixed form.`
+
+_Re-scoped 2026-08-19, see `docs/discovery/openemr-decision-evidence/evidence/snippets/q68-custom-prefix-evidence.md`:
+the "unclaimed" finding is re-confirmed across six evidence channels, but the later pass
+recommends **`saas_` instead of `custom_`** as the actual prefix to adopt — `custom_` is
+semantically overloaded with the `interface/modules/custom_modules/` directory-naming
+convention, and no shipped module actually uses a bare `custom_` prefix (they use
+`<vendor-slug>_<domain>_` or bare descriptive names instead)._
 
 ---
 
