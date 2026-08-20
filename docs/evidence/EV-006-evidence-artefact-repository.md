@@ -55,7 +55,7 @@ the §38 table (`Marketing-MVP-and-Launch-Readiness-Requirements.md` §38).
 | EV-088 | **Present** (bundled with EV-056-057) |
 | EV-090 | **Present** |
 | EV-095 | **Present** (`EV-095-licence-attribution-pack.md`) |
-| EV-094, EV-096 | Written by this session (see `EV-094-demo-no-go-register.md`, `EV-096-support-definition.md`) |
+| EV-094, EV-096 | Written by this session (see `EV-094-demo-no-go-register.md`, `EV-096-options.md`) |
 
 ## 4. Finding
 
