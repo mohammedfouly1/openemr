@@ -1,5 +1,13 @@
 # PHASE 2B — CONTINUATION PROMPT (paste this into a new Claude session)
 
+> ⚠ **This snapshot is from 2026-08-13 and is now stale in several respects** (notably §2's
+> "418 behind upstream and divergent" — the `upstream/rel-820` merge actually landed 2026-08-17,
+> leaving only a 1-commit residual gap; also the P0/gate counts, HEAD SHA and closed-item list below
+> have all moved). **Before acting on any figure in this document, re-verify it against
+> `docs/gap-inventory-and-fix-groups-2026-08-19.md` and the live register in
+> `docs/Marketing-MVP-and-Launch-Readiness-Requirements.md`.** The rules, locked decisions and
+> known-defect list further down are still a reasonable orientation; the numbers are not.
+
 ---
 
 You are continuing **Phase 2B — Execute & Close P0 Readiness Gaps** on the OpenEMR/Thiqa project.
