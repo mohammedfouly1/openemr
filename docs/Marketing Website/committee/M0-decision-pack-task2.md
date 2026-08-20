@@ -1,10 +1,11 @@
 # M0 — DECISION PACK — TASK 2
 
 **Dispatch ID:** `COM-20260820-001`
-**STATUS: IN PROGRESS** — stages 1–8 of §7.2 complete (silent round, publication and the adversarial
-round, incl. terminal C-4, have run). Awaiting M5's single meta-review of §11 (R12). Permitted
-terminal status once that lands: **`FINAL — PRE-POLICY OVERAGE DISCLOSED`** (Owner budget directive,
-`COM-20260820-001-budget-directive.md`). Not `COMMITTEE COMPLETE`; not `STANDARD BUDGET PASS`.
+**STATUS: FINAL — PRE-POLICY OVERAGE DISCLOSED.** All twelve §7.2 stages complete. M5's single
+meta-review of §11 landed 2026-08-20 and is recorded in §12; under R12 the pack closes there and no
+recursive review is created. Not `COMMITTEE COMPLETE`; not `STANDARD BUDGET PASS` — the budget
+checker FAIL is disclosed verbatim in `M0-dispatch-log.md` and in §4 (Owner budget directive,
+`COM-20260820-001-budget-directive.md`, whose Owner authorship is itself flagged unverified).
 
 All twelve §7.2 sections are present below, per the rule that a missing section is a failed
 deliverable even when the honest content is "not applicable this task" (§7.2 header).
@@ -349,10 +350,42 @@ run — already recorded, restated here per R6 (never edited away), not re-litig
 
 ## 12 · META-REVIEW
 
-**PENDING M5.** Not written by M0. The Orchestrator dispatches M5's single meta-review of §11 above
-(R12); M0 does not evaluate it afterward.
+**COMPLETE — R12 satisfied. Recorded by the Orchestrator; not written or answered by M0.**
+
+M5's single meta-review of §11 is at `M5-compliance-review-task2.md`, appended section
+`META-REVIEW OF M0 §11 (R12)` (4,997 chars of a 5,000 cap). **Five of seven tests ACCEPTED**,
+including that M6 was correctly not penalised for the stale-pointer dispatch defect, that all three
+of M0's self-recorded errors are present and unsoftened, that both amendments carry the five §7.4
+fields as `PROPOSED — Owner decision required` without being enacted (R11), that §9's two
+divergences were preserved with no invented middle option (R4), and that the status claim is
+truthful. M5 accepted M0's withdrawal of the M7 proposal as correctly reasoned.
+
+**Two objective errors — M0 may correct these, and only these (R12):**
+
+| # | Error | Correction |
+|---|---|---|
+| **C1** | §11 E1's "16/16 verdicts" and §10's "13 of 16 layers" | M6 §1.1 carries **18** rows: **15 of 18** APPROVE / APPROVE WITH CHANGES, 3 not. Propagates M6's own slip (already M5-08). Substance unaffected |
+| **C2** | §10 states only the `noindex` exposure as M5-B03's clearing condition | M5-B03 carries **two**: the second is the review gate restated to cover *deployment* rather than merge — the actual finding |
+
+**Two substantive disagreements — routed to the Owner, unanswered. M0 does not get to reply (R12):**
+
+- **D1 — E1 did not grade M4 against its own acceptance criteria.** §8.4's two `LOCKED` elements
+  ("no prohibited page appears"; "the disqualification path is preserved and instrumented") went
+  ungraded; only the C-2 attack clause was scored, and §7.1 field counts were carried for M6 alone.
+  M4 met both criteria — the defect is uneven application of §7.4's "quote the criterion and the
+  evidence", not a bad outcome.
+- **D2 — E2 omits a mandated criterion that has a real answer.** §7.4 E2 requires *"was there a
+  question no agent owned"*; it is unanswered, and there was one. **§13.8 Q2 (Thiqa vs SkyEagle) is
+  positioning**, M2 and M3 were idle, M6-Q02 offered only cost-of-deciding-late, and §10 records "no
+  opinion offered" — against §14's requirement that all four §13.8 questions be addressed. **GA4's
+  own residency** is a second unowned question.
+
+**M5 recorded no manufactured objection**; both disagreements cite fixed §7.4 criteria with evidence,
+consistent with §7.4's rule that coverage, not objection count, measures adversary performance.
 
 ---
 
-**End of stage 1–8 closure record for `COM-20260820-001`.** Pack remains `IN PROGRESS` until §12
-closes.
+**End of record for `COM-20260820-001`. Pack is FINAL.** Twelve of twelve §7.2 stages complete.
+Live for Owner decision: the PDPL lead-data residency ruling (clears M5-B02), the STEP0-001 D-a
+status (clears M5-B01), the preview-exposure fix (clears M5-B03), §13.8 Q2 branding (D2 above), the
+two proposed §6.3/§6.4 amendments, and confirmation of the budget directive's authorship.
