@@ -667,9 +667,14 @@ the audit-trail claim (MC-01, D-1) cannot afford.
 
 **Upstream-first path (Q1).** This is an upstream `rel-820` defect, not Thiqa-introduced — the omission
 is present in unmodified upstream source. **It should be contributed upstream**, which would also
-retire this patch record. Not done in this phase: the branch is 418 commits behind and divergent, and
-the upstream maintenance target (`master` vs `rel-820`) is still undecided under RDY-0045. Recorded as
-the intended disposition rather than left implicit.
+retire this patch record. Not done in this phase — recorded as the intended disposition rather than
+left implicit. *(**Corrected 2026-08-19**: this paragraph previously said "the branch is 418 commits
+behind and divergent, and the upstream maintenance target (`master` vs `rel-820`) is still undecided
+under RDY-0045." That figure measured the branch against the wrong reference (`upstream/master`) and is
+a retracted stale claim; the Owner has since confirmed `upstream/rel-820` as the maintenance target, and
+the branch was found already merged with `rel-820` (2026-08-17), leaving a 1-commit residual gap — see
+`docs/Marketing-MVP-and-Launch-Readiness-Requirements.md` PB-414. This does not change PR-14's own
+disposition: the fix still has not been contributed upstream.)*
 
 **Verification:** the accepted demo dataset must contain **zero unattributed seeded SOAP form
 registrations**, verified by query, not by inspection — see PB-037.
@@ -738,9 +743,12 @@ which is what the correct behaviour looks like and is strong evidence the guard 
 than an intent.
 
 **Upstream-first path (Q1):** this is an upstream defect affecting every OpenEMR installation and
-**should be contributed upstream**, which would retire this patch record. Not done in this phase —
-the upstream maintenance target is still undecided (RDY-0045, EV-045). Recorded as the intended
-disposition.
+**should be contributed upstream**, which would retire this patch record. Not done in this phase.
+Recorded as the intended disposition. *(**Corrected 2026-08-19**: this line previously said "the
+upstream maintenance target is still undecided (RDY-0045, EV-045)" — superseded; the Owner has since
+confirmed `upstream/rel-820` as the target and the branch was found already merged with it
+(2026-08-17, 1-commit residual gap) — see `docs/Marketing-MVP-and-Launch-Readiness-Requirements.md`
+PB-414. This does not change PR-15's own disposition: the fix still has not been contributed upstream.)*
 
 **Verification:** `scratchpad/menu-verify.php` builds the menu through the real code path and
 reconciles it against `registry`; before/after runs are quoted above. `php -l` and `phpcs` clean.
@@ -805,8 +813,12 @@ since the full form is the longer of the two.
 
 **Upstream-first path (Q1):** an upstream defect affecting every OpenEMR installation using the
 `front_office` menu role, and it **should be contributed upstream**, which would retire this record.
-Not done in this phase — the upstream maintenance target is undecided (RDY-0045, EV-045). Recorded
-as the intended disposition.
+Not done in this phase. Recorded as the intended disposition. *(**Corrected 2026-08-19**: this line
+previously said "the upstream maintenance target is undecided (RDY-0045, EV-045)" — superseded; the
+Owner has since confirmed `upstream/rel-820` as the target and the branch was found already merged
+with it (2026-08-17, 1-commit residual gap) — see
+`docs/Marketing-MVP-and-Launch-Readiness-Requirements.md` PB-414. This does not change PR-16's own
+disposition: the fix still has not been contributed upstream.)*
 
 **Verification:** JSON re-parsed and validated (`json_last_error_msg()` → *No error*); both
 counterparts confirmed present; before/after probe quoted above.

@@ -61,11 +61,15 @@ silently shipping.
   exactly the approved 17-file set (light/dark × plain/compact/RTL/RTL-compact + PDF/RTL-PDF + tabs
   variants + 3 non-theme shells), zero `solar`/`manila`/`cobalt_blue`/`forest_green` output files
   (`docs/branding/remaining-dependencies.md` row 10/43).
-- **The admin theme-selector label wording is a separate, still-open decision (D-15, Low severity).** Since
-  the filenames are `style_light.css`/`style_dark.css` (per CR-9, filenames retained), the selector shows
-  generic "Light"/"Dark" labels rather than "Saudi Light"/"Saudi Dark" unless a maintainer changes the
-  label text separately — this ADR's decision governs *build output*, not that cosmetic wording, and does
-  not resolve D-15.
+- **The admin theme-selector label wording (D-15) is CLOSED, and this section's original claim about it
+  was wrong — corrected 2026-08-19.** This paragraph originally asserted the selector shows generic
+  "Light"/"Dark" labels rather than "Saudi Light"/"Saudi Dark". Independent re-verification in
+  `docs/branding/remaining-dependencies.md` (D-15 row) found the opposite directly in source:
+  `ThemeVariant.php:46-47`'s `label()` method literally returns `'Saudi Light'`/`'Saudi Dark'`. That
+  finding was surfaced to the Owner as a genuine open decision rather than trusting this document's
+  claim, and the **Owner ruled 2026-08-19: keep "Saudi Light"/"Saudi Dark" as shipped, no code change.**
+  D-15 is therefore CLOSED, not open, and no label-text change is pending. See
+  `docs/branding/remaining-dependencies.md` §4, D-15 for the full trace.
 - **A stale `globals` value is handled gracefully, not defensively re-validated.** This ADR relies on
   pre-existing `file_exists()` behaviour rather than adding a new guard against an invalid theme value —
   if that upstream gate's behaviour ever changes, this decision's "no core patch" property would need

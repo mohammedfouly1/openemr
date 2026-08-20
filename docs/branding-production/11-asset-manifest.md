@@ -6,13 +6,24 @@ Regenerated from actual physical files after Codex's original run, with tokens/f
 
 ## Counts
 
+**FLAGGED FOR HUMAN REVIEW (2026-08-19):** the table below was never updated after the Revision 4 note
+further down this document (the `Q25` Amiri PDF font addition). Revision 4 states the asset count grew
+103 → 107 with 4 new files under `brand/typography/fonts/pdf/`
+(`Amiri-Regular.ttf`, `Amiri-Bold.ttf`, `OFL.txt`, `README-amiri.md`), but the `brand/typography/` row
+below still reads 12 and the Total still reads 103, unchanged from before that revision. Independently
+counting the files on disk this session (`Get-ChildItem -Recurse -File`, excluding `manifests/`) found
+**108** files under `brand/`, not 107 or 103 — one more than Revision 4's own stated figure. This
+document does not resolve which of 103/107/108 is the live correct count; a maintainer should
+regenerate this table from `brand/manifests/asset-manifest.json` (or re-run the counting script) rather
+than trust either number below.
+
 | Subfolder | File count |
 |---|---:|
 | `brand/master/` | 8 |
 | `brand/logos/` | 32 |
 | `brand/favicon/` | 5 |
 | `brand/tokens/` | 1 |
-| `brand/typography/` | 12 (4 Inter woff2 + 4 IBM Plex Sans Arabic woff2 + specimen PNG + fonts.scss + tokens.json + weight-contract.md) |
+| `brand/typography/` | 12 (4 Inter woff2 + 4 IBM Plex Sans Arabic woff2 + specimen PNG + fonts.scss + tokens.json + weight-contract.md) — **stale, see flag above; 16 files found on disk this session (includes the 4-file `fonts/pdf/` Amiri addition from Revision 4)** |
 | `brand/colors/` | 2 |
 | `brand/smart/` | 1 |
 | `brand/email/` | 1 |
@@ -20,7 +31,7 @@ Regenerated from actual physical files after Codex's original run, with tokens/f
 | `brand/guidelines/` | 2 |
 | `brand/previews/` | 24 |
 | `brand/qa/` | 10 |
-| **Total assets** | **103** |
+| **Total assets** | **103 — stale, see flag above** |
 
 ## Manifest files
 

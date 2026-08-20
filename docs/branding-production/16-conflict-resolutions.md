@@ -17,7 +17,7 @@ or database value was changed.**
 | 5 | D-11 — acknowledgements page | **SCOPED** — itemised disposition request prepared for counsel (§5). Counsel opinion remains external |
 | 6 | D-4 — native Arabic proofreading | **SCOPED** — handoff package defined with safety-priority ordering (§6). Proofreading remains external |
 | 7 | CR-20 / D-16 — cache-key specification | **CLOSED** — canonical specification and test matrix defined (§7) |
-| 8 | CR-18 / D-15 — theme selector labels | **CLOSED** — "Light" / "Dark" accepted in the admin selector (§8) |
+| 8 | CR-18 / D-15 — theme selector labels | **CLOSED, but not as decided here — corrected 2026-08-19.** This document decided "Light"/"Dark"; the shipped code was found to already return "Saudi Light"/"Saudi Dark", and the Owner ruled 2026-08-19 to keep that shipped behaviour instead. See §8 |
 | 9 | CR-10 / D-12 — `border.strong`, dark `surface.input` | **CLOSED** — both ratified into the token contract and re-hashed (§9) |
 
 Four items (2, 4, 7, 8, 9 — five in fact) are fully closed. Four (1, 3, 5, 6) are reduced from open
@@ -298,12 +298,25 @@ omitting the revision would leave branding stale across a branding change. Both 
 
 ## 8. Theme selector labels — "Light" / "Dark" accepted
 
+> **CORRECTED 2026-08-19 (D-15).** This section's "Verified behaviour" claim below was checked against
+> the actually-shipped code and found wrong: `interface/modules/custom_modules/oe-module-thiqa-branding/src/Theme/ThemeVariant.php:46-47`'s
+> `label()` method literally returns `'Saudi Light'`/`'Saudi Dark'`, not the generic "Light"/"Dark" this
+> section predicted from `edit_globals.php`'s filename-derivation logic. The branding module apparently
+> supplies its own label rather than relying on that core fallback. This was surfaced to the Owner as a
+> genuine open decision rather than silently trusting this document, and the **Owner ruled 2026-08-19:
+> keep "Saudi Light"/"Saudi Dark" as shipped, no code change.** The "Decision" line immediately below
+> ("Accept 'Light' and 'Dark' in the administration selector") is therefore superseded — the shipped,
+> Owner-ratified behaviour is the opposite of what was decided here. See
+> `docs/branding/remaining-dependencies.md` §4, D-15, and `docs/branding/adr/ADR-BRAND-004-q77-theme-surface-exclusion.md`
+> for the full trace.
+
 **Verified behaviour.** `interface/super/edit_globals.php:736-742` derives the dropdown label as
 `ucfirst(str_replace('_', ' ', substr($filename, 6)))` with `.css` stripped. `style_light.css` therefore
 displays as **"Light"**, and `style_dark.css` as **"Dark"**. Keeping the filenames (decision CR-9) means
-administrators will not see the words "Saudi Light" / "Saudi Dark".
+administrators will not see the words "Saudi Light" / "Saudi Dark". *(See the 2026-08-19 correction
+above: the branding module overrides this with its own label, so this prediction did not hold.)*
 
-**Decision.** Accept "Light" and "Dark" in the administration selector.
+**Decision (superseded 2026-08-19 — see correction above).** Accept "Light" and "Dark" in the administration selector.
 
 **Rationale.** `Q77` explicitly states the solution *"SHOULD be implemented at the build/deployment layer
 rather than by adding a recurring OpenEMR core selector patch"* — and its evidence section singles out this

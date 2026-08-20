@@ -144,7 +144,7 @@ All nine items were resolved on the recommended advice. Resolutions are recorded
 | 5 | D-11 — acknowledgements page | **SCOPED.** Five-item disposition request prepared for counsel; authentication-gating identified as separable from the content review |
 | 6 | D-4 — Arabic proofreading | **SCOPED.** Handoff package defined with safety-priority review ordering and required return evidence |
 | 7 | CR-20 / D-16 — cache keys | **CLOSED.** Canonical per-asset-type specification (§3.8.1) + 8-case test matrix |
-| 8 | CR-18 / D-15 — theme labels | **CLOSED.** "Light" / "Dark" accepted in the admin selector; `Q77` itself argues against patching that file |
+| 8 | CR-18 / D-15 — theme labels | **CLOSED, but not as decided here — corrected 2026-08-19.** This row decided "Light"/"Dark"; the shipped code was later found to already return "Saudi Light"/"Saudi Dark" (`ThemeVariant.php:46-47`), and the Owner ruled 2026-08-19 to keep that shipped behaviour instead — no code change. See `docs/branding/remaining-dependencies.md` §4, D-15, and `docs/branding-production/16-conflict-resolutions.md` §8 |
 | 9 | CR-10 / D-12 — token gaps | **CLOSED.** `borderStrong`, `surfaceInput`, `surfaceInputOnRaised` ratified into the token contract; 4 new contrast pairs, all PASS; 38 pairs total, 0 FAIL |
 
 #### Update — 2026-08-09, later the same day
@@ -1164,7 +1164,7 @@ clearance of the product name), **D-9** (`Q25`-compliant Arabic PDF fonts — *n
 | ID | Item | Blocks | Owner | Severity |
 |---|---|---|---|---|
 | **D-14** | Ratify the `Q38` interpretation for template delivery: confirm that the namespaced `TemplatePageEvent` route (CR-7 revised) is the required pattern, and that no unnamespaced core-template shadowing is permitted without an ADR | WS-C/WS-E delivery mechanism | Architecture owner | Medium — mechanism, not outcome |
-| **D-15** | Decide whether the administration theme selector must literally display *"Saudi Light" / "Saudi Dark"* (it will display **"Light" / "Dark"** if filenames are retained) | Product acceptance wording only | Product owner | Low |
+| **D-15** | Decide whether the administration theme selector must literally display *"Saudi Light" / "Saudi Dark"* (it will display **"Light" / "Dark"** if filenames are retained) | Product acceptance wording only | Product owner | Low — **CLOSED 2026-08-19, and this row's own prediction was wrong**: the shipped `ThemeVariant.php:46-47` already returns "Saudi Light"/"Saudi Dark", not "Light"/"Dark", and the Owner ruled to keep that. See `docs/branding/remaining-dependencies.md` §4, D-15 |
 | **D-16** | Approve the canonical cache-key specification per asset type, and the accompanying test matrix (upgrade, rollback, two tenants at equal revision, CDN/proxy keys, query ordering, no topology disclosure) | `MVP-010` AC-4 acceptance | Architecture + platform | Medium |
 
 ## 6.6 Phase 4 exit criteria

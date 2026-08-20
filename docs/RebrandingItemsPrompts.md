@@ -19,7 +19,7 @@
    - I. Brand-guideline supporting sheets (5 prompts)
 5. [Section 5 — Post-generation checklist](#section-5--post-generation-checklist).
 
-The full list is **49 prompts** — every surface named in [docs/rebranding.md](rebranding.md) §§4–14 plus every acceptance surface in the Brand Design Requirements Document is covered.
+The full list is **49 prompts** — every surface named in [docs/rebranding.md](rebranding.md) plus every acceptance surface in the Brand Design Requirements Document is covered. *(The `§§4–14` figure previously here, and the per-row section numbers in the "Coverage cross-reference" table near the end of this file, do not match `docs/rebranding.md`'s current section numbering — see the flag note above that table, added 2026-08-19.)*
 
 ---
 
@@ -1688,6 +1688,25 @@ After deletion, regenerate `brand/manifests/SHA256SUMS` (so the removed brand/le
 ---
 
 ## Coverage cross-reference to [docs/rebranding.md](rebranding.md)
+
+> **FLAGGED FOR HUMAN REVIEW (2026-08-19).** The `rebranding.md item` column below cites section numbers
+> (§4–§20) that do not match `docs/rebranding.md`'s current, final section structure — confirmed by
+> reading that file in full this session. That document's actual sections are: §0 audit header, §1 Locked
+> Decisions compliance, §2 audit-of-the-audit, §3 current DB branding, §4 what Group 1A got right, §5 new
+> findings, §6 bidirectional asset analysis, §7 reconciliation of inconsistencies, §8 outbound network
+> identity audit, §9 the canonical 136-item BRAND inventory (9.1–9.10), §10 replacement input
+> requirements, §11 Group 1D closure, §12 final gap model, §13 G-07/`Q76`, §14 G-09/`Q77`, §15 patch
+> inventory, §16 Group 2 action classification (incl. the authoritative §16.2 per-ID mapping), §17
+> restoration proof, §18 corrections register, §19 final coverage matrix, §20 the three final registers,
+> §21 end-state integrity, §22 final verdict, §23 Group 2/3 outcomes cross-reference. None of these match
+> the topics the table below assigns to the same numbers (e.g. this table's "§8 RTL/Arabic surfaces" is
+> actually `rebranding.md`'s outbound-network-call audit; its "§14 mandatory patches" is actually the
+> `Q77` theme-surplus decision, with the actual mandatory-patch list at §15). This table was evidently
+> written against an earlier, differently-numbered draft of `rebranding.md` and never updated after that
+> document's Group 1C/1D renumbering. The prompt content above this table (Sections 1–7) is unaffected —
+> only this final cross-reference table's section citations are stale. Left un-rewritten here rather than
+> guessed row-by-row, since correcting 17 rows to the right §9.x subsection each requires re-deriving
+> intent, not a single-fact lookup.
 
 Every item flagged in the OpenEMR brand-and-identity discovery in [docs/rebranding.md](rebranding.md) is covered by at least one prompt above:
 

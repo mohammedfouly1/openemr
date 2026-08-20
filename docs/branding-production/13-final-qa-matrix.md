@@ -2,6 +2,16 @@
 
 **Status:** **35 PASS; 0 CONDITIONAL** (revision 2, 2026-08-09 — the single CONDITIONAL gate was discharged by decision D-1; see [15-decision-record.md](15-decision-record.md))
 
+**FLAGGED FOR HUMAN REVIEW (2026-08-19):** this document is still at revision 2 and its asset-count
+figures below ("103 canonical names", "103 asset rows + 14 md rows = 117 SHA256SUMS entries") were never
+carried forward to match the later revision 3/4 figures in
+[11-asset-manifest.md](11-asset-manifest.md) and [12-release-verification.md](12-release-verification.md)
+(103 → 107 assets, 117 → 123 manifest entries, after the `Q25` Amiri PDF font addition). Independently
+counting files on disk this session found yet a third figure (108) — see the flag in
+`11-asset-manifest.md`'s Counts section. This document's per-gate PASS verdicts are not affected by the
+count discrepancy, but the specific numbers quoted below should not be cited as current without
+reconciling against the other two documents first.
+
 Supersedes Codex's 21 PASS / 16 BLOCKED matrix. Blocks were cleared by (a) discovering missed handoff inputs (token JSON, Design Requirements doc, Recraft mockups), (b) computing WCAG contrast against the real tokens, (c) re-exporting 3 legacy rasters at correct dimensions, (d) vendoring Inter + IBM Plex Sans Arabic, (e) copying the operator-supplied `design_evidence` mockups into the appropriate `brand/*` subfolders.
 
 ## Matrix

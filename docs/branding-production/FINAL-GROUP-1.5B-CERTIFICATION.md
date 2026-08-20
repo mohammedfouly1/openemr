@@ -1,9 +1,17 @@
 # FINAL — Group 1.5B Certification (CORRECTED)
 
+**FLAGGED FOR HUMAN REVIEW (2026-08-19):** this document's asset/entry counts (103 assets, 14 evidence
+documents, 117/117 SHA-256 verification) were never carried forward to the later revision 3/4 figures
+recorded in [11-asset-manifest.md](11-asset-manifest.md) and
+[12-release-verification.md](12-release-verification.md) (107 assets + 16 docs = 123 entries, after the
+`Q25` Amiri PDF font addition). A disk recount this session found a third figure again (108) — see the
+flag in `11-asset-manifest.md`. This document's PASS verdicts are not affected, but its specific counts
+should not be cited as current without reconciling against those two documents first.
+
 ## Authoritative output roots
 
-- [brand/](../../brand/) — 103 physical assets across master, logos, favicon, tokens, typography (incl. vendored fonts), colors, smart, email, rtl, guidelines, previews, qa, manifests.
-- [docs/branding-production/](.) — 14 evidence documents.
+- [brand/](../../brand/) — 103 physical assets across master, logos, favicon, tokens, typography (incl. vendored fonts), colors, smart, email, rtl, guidelines, previews, qa, manifests. *(Stale count — see flag above.)*
+- [docs/branding-production/](.) — 14 evidence documents. *(Stale count — see flag above; later revisions record 16.)*
 
 ## Baseline / integrity
 

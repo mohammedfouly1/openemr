@@ -60,7 +60,7 @@ mariadb -u root --host=127.0.0.1 --port=3306 openemr -e "SELECT gl_name, gl_valu
 | 097 | SET-CONFIG | DONE | QRDA Cat III org name derives from `openemr_name` | `ExportCat3Service.php:430`, `QrdaReportService.php:218` (unmodified) | Value flows from 001 |
 | 107 | SET-CONFIG | DONE | Prescription email subject/body derives from `openemr_name` | `C_Prescription.class.php:1016,1122,1132` (unmodified) | Value flows from 001 |
 | 109 | SET-CONFIG | DONE | `statement_logo` filename unchanged; file contents replaced | `globals.statement_logo = 'practice_logo.gif'`; `sites/default/images/practice_logo.gif` | DB query + `cmp` against `brand/logos/legacy/practice_logo.gif` — byte-identical |
-| 110 | SET-CONFIG | **BLOCKED** | Facility name is tenant data, not a global; deliberately excluded from the profile | `facility.name = 'Your Clinic Name Here'` (unchanged) | `SELECT id,name FROM facility` 2026-08-10; `branding-profile.json` "omitted" list confirms deliberate exclusion. Blocked on **D-6/D-7** (tenant provisioning) |
+| 110 | SET-CONFIG | **BLOCKED** | Facility name is tenant data, not a global; deliberately excluded from the profile | `facility.name = 'Your Clinic Name Here'` (unchanged, as of the 2026-08-10 query below) | `SELECT id,name FROM facility` 2026-08-10; `branding-profile.json` "omitted" list confirms deliberate exclusion. Blocked on **D-6/D-7** (tenant provisioning). **CORRECTED 2026-08-19:** the live demo DB's `facility.name` is no longer this placeholder — it was set to `Thiqa Demo Eye Clinic` out-of-band via demo seeding (PB-016, 2026-08-13; see `docs/Marketing-MVP-and-Launch-Readiness-Requirements.md`), not by the branding-profile mechanism this row tracks. This row's own SET-CONFIG action remains correctly excluded from `branding-profile.json` (facility name is still tenant data, D-6/D-7 tenant-provisioning automation is still unbuilt) — only the specific DB value cited here is stale |
 
 ## REPLACE-ASSET (20 items)
 
@@ -284,9 +284,12 @@ accidentally broken), and traceable to a backlog reference.
    confirming they are not wired into either `mpdf` or `dompdf`. D-9 remains fully open, not
    partially mitigated.
 6. **Two SET-CONFIG items are correctly left as tenant-provisioning placeholders, not defects**:
-   BRAND-070 (portal address) and BRAND-110 (facility name, still literally "Your Clinic Name Here").
-   Both are deliberately excluded from `branding-profile.json` with documented rationale, and both are
-   genuinely blocked on tenant provisioning (D-6/D-7), not oversights.
+   BRAND-070 (portal address) and BRAND-110 (facility name). Both are deliberately excluded from
+   `branding-profile.json` with documented rationale, and both are genuinely blocked on tenant
+   provisioning (D-6/D-7) as a *mechanism*, not oversights. **CORRECTED 2026-08-19:** BRAND-110's DB
+   value itself is no longer "Your Clinic Name Here" — it was changed to `Thiqa Demo Eye Clinic` via
+   out-of-band demo seeding (PB-016), not via the branding-profile mechanism this row evaluates. See
+   the row-110 note in the SET-CONFIG table above.
 7. **All 15 PRESERVE items and the single PROHIBITED item are confirmed intact**, including an exact
    byte-count match for every regulatory/trademark asset (CMS-1500, UB-04, the card-network logo, the
    acknowledgements page) against the Group-1 discovery baseline, and a passing, independently-run
@@ -349,7 +352,7 @@ strikethrough and their evidence, rather than deleted, so the record shows what 
 | 102 | **NOT DONE** | `xl()`/`xlt()`-wrapped "OpenEMR" strings remain: **46 occurrences across 20 files** in fork-owned application code. Largest clusters: `library/globals.inc.php` (16), then `ScopeRepository.php` / `ServerScopeListEntity.php` / `interface/main/backup.php` (3 each). The mechanism to close these now exists (`tools/branding/brand-strings.json` + `apply-brand-strings.php`); the remaining work is enumerating them and agreeing the English replacements. **Method, so the number is reproducible:** recursive scan of `src/ interface/ library/ templates/ portal/` for `/xlt?\(\s*['"][^'"]*OpenEMR/`, **excluding** `oe-module-claimrev-connect` (a third-party Composer dependency relocated into the tree, not fork code), `vendor/`, `node_modules/` and `.claude/worktrees/`. Occurrences and matching lines both equal 46 — no line carries two matches. *(This supersedes a "43" figure quoted earlier the same day: that was a bare `grep \| wc -l` whose scope and metric were not stated, and it is not reproducible. See `docs/RebrandingBugs.md` §10.)* |
 | 103 | **NOT DONE** | 924 catalogue lines containing "OpenEMR" — no bulk catalogue edit yet |
 | 104 | PARTIAL | Arabic round-trip tooling built but not executed against the DB. *(Distinct from the English rebrand rows, which **were** applied — 33 changes, see BRAND-127…129 below)* |
-| 110 | BLOCKED | Facility name is tenant data, correctly deferred to provisioning, blocked on D-6/D-7 |
+| 110 | BLOCKED | Facility name is tenant data, correctly deferred to provisioning, blocked on D-6/D-7 (mechanism). **Corrected 2026-08-19:** the live DB value is no longer "Your Clinic Name Here" — set to `Thiqa Demo Eye Clinic` via out-of-band demo seeding (PB-016), not this mechanism |
 | 111 | PARTIAL | PDF CSS build exists; Amiri Arabic fonts still not wired into mpdf/dompdf — blocked on D-9 (`docs/RebrandingBugs.md` RB-14) |
 | 119 | **NOT DONE — reclassified** | Duplicate favicon `<link>`. §16.2 says PATCH, the plan defers it. Resolved 2026-08-10 in favour of **DEFER**, recorded rather than left contradictory — see `docs/RebrandingBugs.md` RB-23 |
 | ~~127~~ | **DONE** | OAuth2 authorization titles (×3) now render "Thiqa Authorization" — via the **catalogue**, which is the action §16.2 assigns (SET-TRANSLATION, `Trk = NO`). Source literals are deliberately unchanged and now guarded at zero occurrences. Verified: `xl('OpenEMR Authorization')` → `Thiqa Authorization` |

@@ -11,6 +11,15 @@ now formally locked as **`Q76`** (branding token materialisation) and **`Q77`** 
 `Locked Desicions/OpenEMR-SaaS-Locked-Decisions-UPDATED-2026-08-09.md`, Section L, with the SHA-256
 governance manifest re-issued and independently verified (§21).
 
+> **FLAGGED FOR HUMAN REVIEW (2026-08-19).** This document treats `Q76`/`Q77` and the wider Locked
+> Decisions register as unconditionally binding on Group 2 implementation throughout (§1, §13.5, §14.4,
+> §20, §22). A later Owner ruling (recorded 2026-08-19, per this repo's memory of the governance
+> discussion) holds that the Locked Decisions corpus is "future-phase roadmap, not binding on the
+> current MVP" — a nuanced governance question this document predates and does not address, and which
+> this pass does not attempt to resolve on the document's behalf. A maintainer should reconcile whether
+> `Q76`/`Q77` specifically (as opposed to the corpus generally) are still treated as binding for the
+> current MVP before citing this document's verdict as current governance status.
+
 ---
 
 ## 0-A. AUTHORITATIVE ARTIFACT IDENTITY
