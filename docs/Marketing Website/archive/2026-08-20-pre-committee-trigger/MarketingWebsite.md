@@ -8,8 +8,6 @@
 
 `SEED-001` — **The date re-base and the database reset are separate jobs**, ruled 2026-08-20. The re-base is scheduled, non-destructive and whole-week; the reset stays **manual and Owner-authorised** until a clean demo-host baseline exists and passes restore verification.
 
-`NOGO-001` — **§40 re-classified for an unaccompanied visitor**, ruled 2026-08-20. 12 of the 14 no-go rows are already enforced by `STEP0-001` D-c; row 9 is restricted for the demo Physician role only; row 7 is accepted and disclosed on the site.
-
 > **Task 1 is HELD.** `SEED-001` amends STEP0-001's sequence premise: the seeding automation now ships in halves, and only the re-base is ready. **No customer-access design and no credential issuance** until the Owner rules whether a scheduled re-base *alone* fires DEM-001's revisit trigger. STEP0-001 itself stands unchanged.
 
 ## Work map
@@ -44,10 +42,3 @@
 ## Authority rule
 
 The audit and locked-decision register outrank marketing copy. A convenient statement without evidence is not publishable.
-
-## Calling the committee
-
-Begin a request with **`Committee:`** (the spelling **`Comittee:`** is also recognised). This
-mandates M0-first classification, explicit agent selection, preflight, real dispatch, skill/model
-registration, individual outputs, M5 review and a final decision pack. Without those files, the
-truthful status is `NOT DISPATCHED`.

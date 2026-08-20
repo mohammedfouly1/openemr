@@ -5,7 +5,7 @@ One file per agent. **Agents write here and nowhere else** — see
 
 | File | Owner |
 |---|---|
-| `M0-decision-pack-<task>.md` | M0 Chair — runtime-neutral |
+| `M0-decision-pack-<task>.md` | M0 Committee Head (Fable 5) |
 | `M1-market-intelligence.md` | M1 Market & Competitor Intelligence |
 | `M2-strategy-and-ideas.md` | M2 Strategy & Ideas |
 | `M3-messaging-and-content.md` | M3 Messaging & Content |
@@ -28,22 +28,6 @@ A valid invocation produces all of the following with one matching `COM-YYYYMMDD
 3. A terminal M5 review when the work feeds a decision or customer-facing artefact.
 4. `M0-decision-pack-<task>.md` with all twelve sections and a final status.
 
-The log records reported runtime identifiers or disclosed absence, skills requested/available/audited/used, times,
+The log records assigned and observed models, skills requested/available/audited/used, times,
 failures, output paths and each agent's position. If these artefacts do not exist, the committee was
 not dispatched regardless of what analysis appears in chat or shell history.
-
-## Mandatory budget proof
-
-Default depth is `STANDARD`; it is not unlimited. Character caps and scope gates are authoritative
-in CommitteeSystem.md §6.6. Every output records its limit, actual characters, words, approved
-extension and deferred findings. Before `FINAL`, M0 runs:
-
-```powershell
-.agents/skills/comittee/scripts/check_dispatch_budget.ps1 `
-  -CommitteeDir "docs/Marketing Website/committee" `
-  -DispatchId COM-YYYYMMDD-NNN
-```
-
-An agent must stop and obtain written Owner approval before exceeding a cap or expanding scope.
-Unapproved overage is `HELD`. Evidence is written once in `COM-<id>-evidence-index.md`; later files
-reference evidence and finding IDs instead of duplicating them.
