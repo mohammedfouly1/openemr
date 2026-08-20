@@ -115,4 +115,26 @@ sites/*/documents/[0-9]*/
 # but its author.
 /scratchpad/
 /tmp-phpstan/
+# Scratch site directories created while restoring a database snapshot for
+# investigation (e.g. sites/rdy0082restore/ from RDY-0082). OpenEMR requires a
+# full site skeleton alongside each restored database, so the copy carries a
+# sqlconf.php holding that database's credentials plus a fresh OAuth keypair.
+#
+# The keypair is already covered by the certificates rule above, but sqlconf.php
+# is not, and a single `git add -A` would commit live database credentials for
+# an instance nobody else can reach.
+#
+# Named explicitly rather than matched by a `sites/*restore*/` wildcard: sites/
+# holds real, tracked deployment content, and a pattern broad enough to catch
+# future scratch sites is also broad enough to hide a legitimate one. Add the
+# next scratch site by name.
+sites/rdy0082restore/
+
+# Word artifacts in the EHI export diagram tree. Graphviz sources there use the
+# .dot extension, which Windows also registers to Microsoft Word as a legacy
+# template type -- so opening one to read it and saving silently drops a .docx
+# beside the real source. Every one of these is an accident; no .docx is tracked
+# anywhere in this repository.
+Documentation/EHI_Export/docs/diagrams/**/*.docx
+
 # ===== Thiqa SaaS fork — end fork-owned rules =====
