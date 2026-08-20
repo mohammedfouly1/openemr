@@ -68,3 +68,48 @@ tail -f /var/log/openemr-monitoring.log
 - Both need at least one real restore test (0081) and one real fired-alert
   test (0084) before either item can honestly move to CLOSED — a script
   existing is not the same as it being proven to work end to end.
+
+## `07-deploy-code-update.sh` — routine code updates (added 2026-08-20)
+
+Not an RDY item; this is the ordinary "the workstation has moved ahead of
+the VM, bring the VM up to date" procedure, written down so it is
+repeatable instead of improvised each time.
+
+The deployed tree at `/var/www/openemr` is a **depth-1 shallow clone in
+detached HEAD**, cloned from `https://github.com/mohammedfouly1/openemr.git`
+(`origin`). It has no branch and no history, so `git pull` does not work
+there — the update is `git fetch --depth=1 origin <branch>` followed by
+`git checkout --detach FETCH_HEAD`, which is what this script does.
+
+Prerequisite: **the branch must already be pushed to GitHub.** The VM pulls
+from `origin`, never from the Windows workstation — an `rsync`/`scp` from
+Windows would carry CRLF into every shebang (see
+`../../demo-deployment-readiness.md` §24). Confirm with
+`git ls-remote origin refs/heads/feat/thiqa-branding-foundation` on the
+workstation and check it matches local `HEAD`.
+
+```bash
+sudo ./07-deploy-code-update.sh preflight   # read-only; changes nothing
+sudo ./07-deploy-code-update.sh run
+sudo ./07-deploy-code-update.sh verify      # re-runnable any time
+sudo ./07-deploy-code-update.sh rollback    # to the pre-update commit
+```
+
+What `run` does, in order: off-site backup (reuses script 02 if installed) →
+tags the current commit so the shallow clone's old commit survives `gc` →
+depth-1 fetch → prints the runtime-file change set plus `sql/`, theme and
+`composer.lock` impact → refuses to continue if a locally-modified file is
+also modified upstream → checkout → restores ownership/modes (`sites/*` back
+to `www-data` 600, everything else to the tree owner, because a root-run
+checkout leaves new files root-owned) → optional `composer install` →
+`apache2ctl configtest` + `systemctl reload apache2` → verify.
+
+Two files in the deployed tree are locally modified and **must survive every
+update**: `sites/default/sqlconf.php` (the rotated RDY-0048 DB password) and
+`sites/default/documents/custom_menus/patient_menus/Custom.json`. Step 4b is
+the mechanical guard — it aborts rather than clobbering either.
+
+`verify` checks: HEAD sha, the two local modifications still present,
+`sqlconf.php`/`config.php` mode and owner, the Q77 forbidden-theme count
+(expect 0), an M-1-style availability probe against the origin's HTTPS vhost,
+a full monitoring run, and the background-services timer state.
