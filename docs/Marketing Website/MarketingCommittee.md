@@ -52,21 +52,48 @@ governed documents or makes commits.
 and correct for this one: the scarce resource here is not ideas, it is *permissible* ideas. §32
 removes most of the standard playbook, so the binding constraint is the filter, not the generator.
 
-### 2.1 Model authorisation, and why the assignment matters
+### 2.1 Model authorisation
 
-| Role | Model | Rationale |
+| Role | Model | Tier | Rationale |
+|---|---|---|---|
+| M0 Committee Head | **Fable 5** | A | Owner-authorised, 2026-08-20 |
+| M1–M7 | **Opus 5** | A | Owner-authorised, 2026-08-20 |
+| Fallback, any agent | **Sonnet 5** | B | Owner-authorised where Opus 5 is unavailable |
+| M0 fallback | Opus 5, then Sonnet 5 | A → B | *Orchestrator's reading — not stated explicitly. Correct it if wrong* |
+
+**Tier ladder** (an authorisation ordering, not a claim about relative capability):
+**Tier A** = Opus 5, Fable 5 · **Tier B** = Sonnet 5.
+
+### 2.2 THE ADVERSARY PARITY INVARIANT — M0 owns and enforces this
+
+**A reviewer weaker than the thing it reviews rubber-stamps.** This is precisely the failure
+`EV-095` named about itself: *"a determination that only ever agreed with the commissioner is weak
+evidence precisely when it is most needed."*
+
+> **INVARIANT.** In any dispatch, the tier of **M5** — and of **M6** where technical work is
+> reviewed — must be **greater than or equal to the highest tier of any generating agent in that
+> same dispatch.**
+>
+> `tier(M5) ≥ max( tier(every generating agent dispatched) )`
+
+**If a generator runs Tier A while M5 runs Tier B, the dispatch is INVALID** and its output may not
+be used, quoted, or carried into a decision pack. Not "degraded" — invalid.
+
+**Remedies, in order of preference, when Opus 5 is unavailable:**
+
+| # | Remedy | Effect |
 |---|---|---|
-| M0 Committee Head | **Fable 5** | Owner-authorised |
-| M1–M7 | **Opus 5** | Owner-authorised |
-| Fallback, any agent | **Sonnet 5** | Owner-authorised where Opus 5 is unavailable |
-| M0 fallback | Opus 5, then Sonnet 5 | *Orchestrator's reading of the instruction — not stated explicitly. Correct it if wrong* |
+| **R1** | **Downgrade every generator to Sonnet 5 as well.** Parity holds at Tier B | Preferred — the committee still runs, uniformly |
+| **R2** | **Hold the dispatch** until Opus 5 is available for M5 | Use when the task is consequential and can wait |
+| **R3** | Run generators at Tier A with M5 at Tier B | **NEVER. Prohibited.** |
 
-**One consequence worth stating.** M5 is the adversary that can block a deliverable. **A reviewer
-weaker than the thing it reviews rubber-stamps.** Because every agent runs on Opus 5, M5 is never
-outmatched by what it audits. If a fallback ever puts a generator on Opus 5 while M5 drops to
-Sonnet 5, **that dispatch is invalid** — either raise M5 or lower the generator. This is exactly
-the failure `EV-095` named about itself: *"a determination that only ever agreed with the
-commissioner is weak evidence precisely when it is most needed."*
+**Silent runtime fallback is the real hazard.** A model may downgrade at dispatch time without
+anyone deciding it. **M0 therefore records the model each agent *actually ran on*, not the model it
+was assigned** — and where that cannot be observed, M0 records it as unobserved rather than
+assuming the assignment held.
+
+**M0's own tier is exempt from the invariant.** M0 chairs and records; it does not review content
+for compliance, so an M0 fallback does not invalidate a dispatch. It is still recorded.
 
 ---
 
@@ -150,26 +177,165 @@ Each brief is written to be pasted into a dispatch. Every agent also reads §7.
 
 ### M0 · Committee Head — **Fable 5**
 
-**Mandate.** Chair the committee. Classify decisions under Rule A, run the rounds under Rule B,
-compile the decision pack, record dissent.
+**Mandate.** Chair the committee, guard the parity invariant, and write the complete record —
+from the classification decision through to final resolution — plus a standing evaluation of the
+agents, the balance and the rules.
 
-**In scope:** classification; sequencing; convening the right subset of agents; challenging weak
-reasoning; producing the decision pack for the Owner.
-**Out of scope:** generating marketing content; overriding M5's veto; editing any shared document;
-deciding a genuinely-open question itself.
+**Four functions, in this order of authority:**
+1. **Classifier** — the first act on every task, before anything else happens
+2. **Parity gatekeeper** — no dispatch proceeds until §2.2 is satisfied
+3. **Recorder** — every step written exactly, nothing summarised away
+4. **Evaluator** — of the committee itself, including the rules that govern it
 
-**Deliverable:** `committee/M0-decision-pack-<task>.md` containing —
-- the Rule A classification of every item, with the reason
-- each agent's independent answer, **verbatim and unedited**
-- M5's and M6's objections, verbatim
-- convergences and divergences, clearly separated
-- **a recommendation, explicitly labelled as a recommendation**, and the open question put to the Owner
+**Out of scope.** Generating marketing content · overriding M5's veto · deciding a
+genuinely-open question · **enacting** a rule change (M0 proposes; the Owner decides) · editing
+any shared or governed document · running git.
 
-**Hard constraints.** M0 never edits another agent's words. M0 never resolves a divergence by
-choosing. M0 never presents a compromise position that no agent proposed.
+---
 
-**Acceptance:** the Owner can read the pack and make the decision without opening any other file,
-and every dissent survives intact.
+#### M0 duty sequence — D1 … D9, performed in order
+
+**D1 · CLASSIFY — always first.**
+Before convening anyone, before assigning a model, before reading a single agent's opinion, M0
+classifies every item in the task under **Rule A**:
+
+| Class | M0 must record |
+|---|---|
+| **Evidence-determined** | The exact `file:line`, command or document section that determines it, **and the answer it determines** |
+| **Constraint-determined** | The §32 item number or the locked decision ID that governs |
+| **Genuinely open** | Why the evidence does *not* settle it, and what evidence would |
+
+Classification comes first because it decides everything downstream: which agents fire, whether
+deliberation is even permitted, and how much work the task actually is. **Most of what looks like
+a marketing decision here is already decided** — classifying first is what stops the committee
+re-litigating locked decisions, which is risk **R-02** (*High likelihood / Severe impact*).
+
+If M0 classifies an item as *open* and M5 believes it is *constraint-determined*, **M5 may
+reclassify unilaterally** and M0 records the correction.
+
+**D2 · DERIVE THE FIRING SET.**
+From the classification, determine which agents fire and which stay idle — with the reason for
+each. An item classified evidence-determined convenes nobody; it is answered and closed.
+
+**D3 · PARITY GATE.**
+Apply §2.2 across the firing set derived in D2. Record: intended model per agent, tier, the
+computed invariant, and **PASS or INVALID**. On INVALID, apply R1 or R2 and record which. **No
+agent is dispatched before this gate returns PASS.**
+
+**D4 · SILENT INDEPENDENT ROUND.**
+Dispatch the generating agents in parallel. **No agent sees another's output.** Record the exact
+brief issued to each — verbatim, not paraphrased — so a reader can tell whether a difference in
+answers came from the agents or from the briefs.
+
+**D5 · SIMULTANEOUS PUBLICATION.**
+Release all independent answers at once, **verbatim and unedited**.
+
+**D6 · ADVERSARIAL ROUND.**
+Dispatch M5 (and M6 for technical work) with every output. Record objections verbatim, including
+objections M0 disagrees with.
+
+**D7 · CONVERGENCE / DIVERGENCE ANALYSIS.**
+Separate the two, explicitly. Independent agreement is a genuine signal. **Divergence is a
+finding, not a defect** — it is reported *as* divergence and never smoothed into a compromise no
+agent proposed.
+
+**D8 · RESOLUTION.**
+Produce the decision pack. For each item: the classification, the route it travelled, and either
+the determined answer or the open question put to the Owner with the live options. Any M0
+recommendation is **explicitly labelled a recommendation**, never presented as the outcome.
+
+**D9 · EVALUATION.**
+The standing retrospective — §M0-E below. Performed on every task, not only when something goes
+wrong.
+
+---
+
+#### M0 mandatory record template
+
+M0's deliverable is `committee/M0-decision-pack-<task>.md`, and it carries **all nine sections**.
+A missing section is a failed deliverable, including when the honest content is *"not applicable
+this task"*.
+
+```
+1.  TASK           verbatim as received, with who requested it and when
+2.  CLASSIFICATION every item, its class, and the reason — the D1 table
+3.  FIRING SET     who fires, who is idle, why for each
+4.  PARITY GATE    assigned model · tier · invariant computed · PASS/INVALID · remedy applied
+5.  BRIEFS ISSUED  the exact brief given to each agent, verbatim
+6.  INDEPENDENT    each agent's answer, verbatim and unedited
+    ANSWERS
+7.  ADVERSARIAL    M5 (and M6) objections verbatim, each PASS / PASS WITH REQUIRED
+    ROUND          CHANGE / BLOCK, with the §32 item or file:line
+8.  RESOLUTION     convergences · divergences · determined answers · open questions
+                   for the Owner · M0's recommendation, labelled as such
+9.  EVALUATION     agents · balance · rules · proposed amendments (§M0-E)
+```
+
+**Also recorded, every time:** the model each agent **actually ran on** (or `UNOBSERVED`), the
+wall-clock sequence, and anything that failed, timed out or was retried. **A dispatch that partly
+failed is recorded as partly failed** — never quietly re-run until it looks clean.
+
+---
+
+#### §M0-E · The evaluation mandate
+
+Section 9 of every pack. Three levels, each with fixed criteria so it is assessment rather than
+impression.
+
+**E1 · Per-agent evaluation** — every agent that fired:
+
+| Criterion | Test |
+|---|---|
+| Acceptance | Did it meet the acceptance criteria in its own §4 brief? Quote the criterion and the evidence |
+| Rule G | Does **every** finding carry basis, falsifier and confidence? Count the ones that do not |
+| Scope | Did it stay inside its brief, or drift into another agent's lane? |
+| Independence | Any sign of anchoring — echoing another agent's framing it should not have seen? |
+| Usefulness | Did it change the answer, or restate what the briefing pack already said? |
+
+**Special test for M5 and M6:** did the adversary find something substantive, or explain with
+reasoning why nothing was warranted? **An adversarial pass that finds nothing twice running is
+itself a finding about the review**, and M0 must say so plainly.
+
+**E2 · Committee balance evaluation:**
+- Was the **4 generate : 2 adversary** ratio right for *this* task?
+- Did any agent sit idle that should have fired — or fire and add nothing?
+- Did two agents duplicate each other? Where does the boundary need redrawing?
+- Was there a question **no agent owned**? *(This is how M7 was found — WEB-003 mandates Arabic
+  parity and no conventional committee owned it.)*
+- Is the roster missing a function, or carrying one it does not need?
+
+**E3 · Rules evaluation:**
+- Which rules were **invoked**, how often, and did each help or obstruct?
+- Which rules were **never invoked** — dead weight, or quietly doing their job?
+- Was any rule **ambiguous in practice** — did two agents read it differently?
+- Did any rule produce a **result nobody wanted**?
+
+**Proposed amendments** — each stated as:
+
+```
+RULE        the rule id and its current text
+OBSERVED    what actually happened, with the evidence
+PROBLEM     what the rule caused or failed to prevent
+PROPOSED    the exact replacement text
+COST        what this amendment gives up
+STATUS      PROPOSED — Owner decision required
+```
+
+**M0 proposes rule changes. M0 never enacts one.** A chair that can rewrite its own rules is
+unaccountable — so **M5 reviews §M0-E itself**, on the same standard as any other deliverable. The
+auditor gets audited.
+
+---
+
+**Hard constraints.**
+- M0 **never edits another agent's words.** Verbatim means verbatim.
+- M0 **never resolves a divergence by choosing**, and never presents a compromise no agent proposed.
+- M0 **never dispatches before the D3 parity gate returns PASS.**
+- M0 **never omits a template section** to make a pack tidier.
+- M0 records its **own** fallback, mis-classification or error in §9, against itself.
+
+**Acceptance.** The Owner can read the pack alone, make the decision, and reconstruct exactly how
+it was reached — including every dissent, every model actually used, and every step that failed.
 
 ---
 
@@ -461,6 +627,57 @@ by it.
 19,000-line corpus — and, more importantly, so they all work from the *same* facts rather than
 seven slightly different derivations.
 
+### 6.1 Dispatch modes
+
+Two modes. **Any agent M1–M7 is dispatchable singly, on request, at any time.**
+
+| Mode | When | M0's role |
+|---|---|---|
+| **FULL ROUND** | A decision is needed | All nine duties, D1–D9 |
+| **SINGLE-AGENT** | One agent's output is wanted — research, a draft, a check | **D1, D3 and D9 only**, abbreviated. No independent round to run |
+
+### 6.2 Single-agent dispatch — the standing procedure
+
+Any of M1–M7 may be dispatched alone. It is still governed, just more lightly.
+
+**M0 performs three duties, and may not skip them:**
+
+1. **D1 Classify** — one line. *"Is what is being asked already determined by evidence or by
+   constraint?"* If it is, M0 says so and the dispatch may be unnecessary. This costs seconds and
+   regularly saves a whole agent run.
+2. **D3 Parity gate** — §2.2 still applies **whenever the output will be reviewed**. A lone
+   generator on Tier A whose output M5 will later review on Tier B is the invariant breach arriving
+   one step later than usual.
+3. **D9 Evaluation** — short form. Did the agent meet its acceptance criteria; anything to note.
+
+**M5 review requirement, stated precisely** — this is the one place the rules could be read two ways:
+
+| Output type | M5 review |
+|---|---|
+| **Customer-facing, or feeding a decision** | **Required before use.** No exceptions |
+| **Pure internal research**, not yet destined for a page or a decision | Optional — but the file is **stamped `NOT CLAIM-REVIEWED`** at the top, and that stamp is removed only by an actual M5 pass |
+
+The stamp exists because internal research has a habit of becoming a slide, and then a page. It
+must never lose track of whether anyone checked it.
+
+**On-demand dispatch record.** Even a single-agent run produces an M0 entry — appended to
+`committee/M0-dispatch-log.md`, not a full pack:
+
+```
+DATE · REQUESTED BY · AGENT · MODEL ASSIGNED · MODEL OBSERVED
+CLASSIFICATION (one line)
+PARITY GATE: PASS / N-A / INVALID + remedy
+OUTPUT FILE
+M5 REVIEW: DONE / NOT CLAIM-REVIEWED
+NOTES: anything that failed, timed out or was retried
+```
+
+### 6.3 Readiness state
+
+All eight agents are **briefed and dispatch-ready now**. Nothing further is required before a
+dispatch except the request itself and M0's D1/D3 pass. The `committee/` directory exists; the
+briefing pack in §7 is complete; every brief in §4 carries its own acceptance criteria.
+
 ---
 
 ## 7. THE BRIEFING PACK — every agent reads this
@@ -605,6 +822,7 @@ proof rather than read a claim about it. **A single Administrator credential wou
 
 | Failure | Why it happens | Control |
 |---|---|---|
+| **Silent model downgrade** | A fallback fires at dispatch time and nobody decides it; the adversary quietly ends up weaker than what it reviews | **§2.2 invariant · M0 duty D3 · observed-model recording** |
 | **Manufactured consensus** | Same model family, sequential exposure | Rule B silent independent round |
 | **Re-litigating locked decisions** | Competitors market what we cannot; agents notice and drift | Rule A classification; M2's reopening tag |
 | **Rubber-stamp review** | Reviewer weaker than the reviewed, or reviewer authored it | All agents on Opus 5; M5 never generates |
@@ -618,5 +836,17 @@ proof rather than read a claim about it. **A single Administrator credential wou
 
 ## 9. Status
 
-**CHARTER — proposed, not yet exercised.** No agent has been dispatched. Model authorisation is
-recorded in §2.1 as received. Nothing here closes an RDY item or alters a locked decision.
+**CHARTER — active and dispatch-ready. Not yet exercised.**
+
+| Item | State |
+|---|---|
+| Agent briefs M0–M7 | **Complete**, each with its own acceptance criteria |
+| Briefing pack (§7) | **Complete and self-contained** |
+| Model authorisation | **Received** — Owner, directly in conversation, 2026-08-20 (§2.1) |
+| Parity invariant | **Defined and assigned to M0** (§2.2, duty D3) |
+| Output directory | **Created** — `committee/`, write-isolation contract in its README |
+| Task 1 and Task 2 | **Specified, ready to dispatch** (§5) |
+| Single-agent dispatch | **Available for any of M1–M7, on request** (§6.2) |
+| Agents dispatched to date | **None** |
+
+Nothing here closes an RDY item or alters a locked decision.
