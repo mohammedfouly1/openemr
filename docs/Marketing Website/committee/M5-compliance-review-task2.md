@@ -197,9 +197,8 @@ recorded result and no item is untested.
 
 # META-REVIEW OF M0 §11 (R12)
 
-**Scope.** M0's `11 · EVALUATION` only, with §9/§10 as context for fidelity. My terminal review above
-is not reopened; the architecture, M4 and M6 are not re-audited. One pass, then FINAL. **Separate
-budgets:** the review above is 14,854 of 15,000; this section is capped at 5,000.
+**Scope.** M0's `11 · EVALUATION` only, §9/§10 as context. My terminal review above is not reopened; the architecture, M4 and M6 are not re-audited. One pass, then FINAL. **Separate budgets:**
+the review above is 14,854 of 15,000; this section is capped at 5,000.
 
 | # | Test | Result |
 |---|---|---|
@@ -211,23 +210,22 @@ budgets:** the review above is 14,854 of 15,000; this section is capped at 5,000
 | 6 | §10 answers both questions; BLOCKs attributed | **ACCEPTED**, with **C2** |
 | 7 | Status claim truthful | **ACCEPTED** |
 
-**1.** M6 is **not** penalised for stale pointers — §4 states "Do not score M6 or M4 down for stale
-pointers" and E1 raises only the self-count, correctly called "not a coverage gap". Right call, and
-I record it as sound. M6's and M5's gradings enumerate their real §8.6 / §8.5 criteria verifiably.
+**1.** M6 is **not** penalised for stale pointers — §4 says "Do not score M6 or M4 down for stale
+pointers" and E1 raises only the self-count, correctly called "not a coverage gap". Right call. The
+M6 and M5 gradings enumerate their real §8.6 / §8.5 criteria verifiably.
 
 **3.** All three self-errors are present and unsoftened: the `git remote -v` breach (restated, not
-edited away, R6); the pointer-directed §13.6 rows 3/7 convergence, stated "against the chair, not the
-agents who read the pack as instructed"; the withdrawn D3b/Owner-exception framing, superseded in
-§4's closure addendum. §8.0 satisfied.
+edited away, R6); the §13.6 rows 3/7 convergence, stated "against the chair, not the
+agents who read the pack as instructed"; the withdrawn D3b/Owner-exception framing. §8.0 satisfied.
 
-**4.** Both amendments carry RULE / OBSERVED / PROBLEM / PROPOSED / COST under `PROPOSED — Owner
-decision required, not enacted (R11)`, and each addresses its named failure — the R8 gap (the charter
-was never in §6.3's hashed set) and the §6.4 blind spot (an in-place edit inside an already-untracked
-directory produces no porcelain line). **M0 proposed; it did not enact.**
+**4.** Both carry RULE / OBSERVED / PROBLEM / PROPOSED / COST under `PROPOSED — Owner decision
+required, not enacted (R11)`, and each addresses its named failure — the R8 gap (the charter was
+never in §6.3's hashed set) and the §6.4 blind spot (an in-place edit inside an already-untracked
+directory leaves no porcelain line). **M0 proposed; it did not enact.**
 
-**5.** Both divergences stay recognisable as disagreements — (a) sets M6's ranking beside M4's
-locked-decision objection with no middle option invented; (b) keeps the instrument/merits split. The
-convergence caveat *discounts* signal rather than inflating it. No smoothing.
+**5.** Both stay recognisable as disagreements — (a) sets M6's ranking beside M4's locked-decision
+objection with no middle option invented; (b) keeps the instrument/merits split; the convergence
+caveat discounts signal rather than inflating it. No smoothing.
 
 **7.** `STATUS: IN PROGRESS`; terminal named `FINAL — PRE-POLICY OVERAGE DISCLOSED`; "Not `COMMITTEE
 COMPLETE`; not `STANDARD BUDGET PASS`" at the pack head; "**Budget checker: FAIL, disclosed,
@@ -238,40 +236,39 @@ pre-policy … Not budget-compliant**" verbatim, not characterised. Truthful.
 **C1 · TRANSCRIPTION ERROR — layer count.** E1 credits M6 with "16/16 verdicts"; §10 says "13 of 16
 layers APPROVE or APPROVE WITH CHANGES". M6's §1.1 table carries **18** rows (L01-L09, L10a/b/c,
 L11-L13, S01-S03), of which **15** are APPROVE or APPROVE WITH CHANGES and 3 are not (L09, L10b,
-L10c). Correct: **18/18** and **15 of 18**. This propagates M6's own slip, already corrected at
-M5-08; the substance — three non-approvals — is unaffected. Re-runnable:
+L10c). Correct: **18/18** and **15 of 18**. It propagates M6's own slip (M5-08); the substance —
+three non-approvals — is unaffected. Re-runnable:
 `sed -n '150,170p' M6-architecture-audit.md | grep -c "^| L"` → 18.
 
 **C2 · CITATION ERROR — M5-B03's clearing condition.** §10 states the preview BLOCK clears when the
 custom-preview-domain exposure closes. My STATUS carries **two** conditions: that exposure closes
-**and** the review gate is restated to cover *deployment*, not merge alone. The second is the actual
-finding — EV-003 sits after the exposure it exists to prevent. As written, §10 reads as though
-M6-V05's free header fix alone clears it.
+**and** the review gate is restated to cover *deployment*, not merge alone — the second being the
+actual finding, that EV-003 sits after the exposure it exists to prevent. As written, §10 reads as
+though M6-V05's free header fix alone clears it.
 
 ## Substantive disagreements — recorded, routed to the Owner; M0 does not answer
 
 **D1 · E1 did not grade M4 against its own acceptance.** §7.4 E1 requires the criterion **quoted**
 with its evidence. §8.4's acceptance is "the funnel answers Challenges 1 and 4 concretely; **no
 prohibited page appears**; **the disqualification path is preserved and instrumented**", plus the C-2
-attack clause. E1 grades only the last — "met its narrow question and its attack mandate". The two
-`LOCKED` elements go ungraded, though M4 met both (M4-03; M4-14/M4-23). E1 also counts §7.1 field
-compliance for M6 alone; the others (23/23, 26/26, my check 5) are not carried. The grading is not
-wrong; the method §7.4 fixes was not applied evenly.
+attack clause. E1 grades the last only — "met its narrow question and its attack mandate". The two
+`LOCKED` elements go ungraded, though M4 met both (M4-03; M4-14/M4-23). E1 also counts §7.1 fields
+for M6 alone; 23/23 and 26/26 (my check 5) are not carried. The grading is not wrong; the method
+§7.4 fixes was not applied evenly.
 
 **D2 · E2 omits a mandated criterion that has a real answer.** §7.4 E2 asks, among fixed items,
 "**was there a question no agent owned**", and where two agents' boundary moves. E2 answers the firing
-set and the M7 question, then stops. There **was** such a question: **§13.8 Q2** (Thiqa or SkyEagle) is
+set and the M7 question, then stops. There **was** one: **§13.8 Q2** (Thiqa or SkyEagle) is
 positioning, M2 and M3 were idle, M6-Q02 offered only cost-of-deciding-late, and §10 records "no
-opinion offered" — yet §14's acceptance required all four §13.8 questions addressed. **GA4's own
-residency** (M6-L12(b), my M5-07) is a second: technical for M6, not a claim for M5, legal for
+opinion offered" — yet §14 required all four §13.8 questions addressed. **GA4's own
+residency** (M6-L12(b), my M5-07) is a second — technical for M6, not a claim for M5, legal for
 neither. Both belong in E2.
 
 **On E2's withdrawal, separately: ACCEPTED.** M5-05 finds MC-15 and MC-19/20/25 have no page in
-*either* language, so the defect is missing content, not asymmetric content, and an equal-prominence
-check has nothing to run against until the WEB-002 nodes return. Premature is the right word, and it
-is M4's lane first.
+*either* language, so the defect is missing content, not asymmetric content, and equal-prominence
+has nothing to run against until the WEB-002 nodes return. Premature is right; M4's lane first.
 
 **No other objection** — coverage, not objection count (§7.4).
 
-**Runtime:** `NOT REPORTED BY RUNTIME`. **Characters, this section:** 4,9xx of 5,000 (`wc -m` from
-the `# META-REVIEW` heading).
+**Runtime:** `NOT REPORTED BY RUNTIME`. **This section:** 4,997 of 5,000 characters (`wc -m` from the
+`# META-REVIEW` heading).
