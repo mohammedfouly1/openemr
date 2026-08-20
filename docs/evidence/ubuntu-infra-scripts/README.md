@@ -113,3 +113,46 @@ the mechanical guard — it aborts rather than clobbering either.
 `sqlconf.php`/`config.php` mode and owner, the Q77 forbidden-theme count
 (expect 0), an M-1-style availability probe against the origin's HTTPS vhost,
 a full monitoring run, and the background-services timer state.
+
+## `08-fix-backup-db-credentials.sh` — incident fix (added 2026-08-20)
+
+**Incident, found 2026-08-20 10:00 by the first `07` run.** RDY-0048's
+password rotation (script `04`, 2026-08-19 ~23:41) updated
+`sites/default/sqlconf.php` — which is what the application reads, so the
+app never broke — but did **not** update `/root/.my.cnf.openemr-backup`.
+Both other pieces of infrastructure read that file:
+
+| Reader | Command | Effect |
+|---|---|---|
+| `02-rdy0081-offsite-backup.sh` | `mysqldump --defaults-extra-file` | daily 03:00 backup failing since the rotation |
+| `03-rdy0084-monitoring-checks.sh` | M-4's `mariadb -e "SELECT 1"` | 619 consecutive failed checks by 10:00 |
+
+Evidence: `mysqldump: Got error: 1045 "Access denied for user
+'openemr'@'localhost'"`, and `[PAGE] M-4 database: FAILED 619 consecutive
+checks` — 619 minutes back from 10:00:23 lands at ~23:41 on 2026-08-19,
+matching `sqlconf.php`'s mtime.
+
+Three things this incident is real evidence for, beyond the fix:
+
+1. **RDY-0084's missing paging destination is not a theoretical gap.** M-4
+   detected this correctly and immediately, and paged 619 times into a log
+   file nobody was reading. The detection worked; the delivery does not exist.
+2. **M-5 was still green and would have stayed green until ~20:21 that
+   evening**, because its window is 24h and the last good backup predated
+   the rotation. A backup that silently stops working is invisible for a
+   whole day by design here.
+3. **Any future credential rotation must update both files**, or `04`'s
+   rotation script should be extended to rewrite the cnf itself. It was not,
+   and the RDY-0048 closure note does not mention the dependency.
+
+```bash
+sudo ./08-fix-backup-db-credentials.sh check   # read-only diagnosis
+sudo ./08-fix-backup-db-credentials.sh fix     # rewrite, verify, prove
+```
+
+`fix` re-derives the credentials from `sqlconf.php` (never printing them,
+never putting them on a command line), refuses to write if those credentials
+do not themselves authenticate, backs up the old cnf, verifies both
+`SELECT 1` and `mysqldump`, clears M-4's fail counter, re-runs all six
+monitoring signals, and runs a real backup so M-5's marker is refreshed and
+the whole path is proven rather than assumed.

@@ -187,7 +187,19 @@ run_mode() {
   if [ "${SKIP_BACKUP:-0}" = "1" ]; then
     echo "  skipped (SKIP_BACKUP=1)"
   elif [ -x "$BACKUP_SCRIPT" ]; then
-    "$BACKUP_SCRIPT" run
+    if ! "$BACKUP_SCRIPT" run; then
+      echo >&2
+      echo "!! The pre-update backup FAILED. Stopping before any change." >&2
+      echo "   If mysqldump reported 'Access denied for user openemr', the" >&2
+      echo "   cause is /root/.my.cnf.openemr-backup holding a password from" >&2
+      echo "   before the RDY-0048 rotation. Fix it with:" >&2
+      echo "     sudo ./08-fix-backup-db-credentials.sh check" >&2
+      echo "     sudo ./08-fix-backup-db-credentials.sh fix" >&2
+      echo "   then re-run this script. Deploying without a backup is" >&2
+      echo "   possible via SKIP_BACKUP=1, but fix the backup first --" >&2
+      echo "   a broken backup is a bigger problem than a stale deploy." >&2
+      exit 1
+    fi
   else
     echo "  !! $BACKUP_SCRIPT not found -- continuing without a fresh" >&2
     echo "     backup. Code rollback still works via the tag below." >&2
