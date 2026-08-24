@@ -28,6 +28,7 @@
 | 16 | **PRE-09 / S1-P1-06 FIXED — VERIFIED; D-8 correctly remains OPEN.** `88ff342894c9543fe30b8e6b6a046ca2f56fd1b7` reconciles `RebrandingPlan.md`, `remaining-dependencies.md` and ADR-BRAND-001 with current execution: the endpoint is the browser-serving route, but `BrandingMaterialiser` still invokes `TokenCssWriter` and commits both static variants, including for an empty overlay. The new contract guard passed 2 tests / 19 assertions; materialiser/writer plus contract passed 34 / 165; canonical gate passed 12/12 artefacts, 123/123 manifest and 162 / 2,147; all exit 0. A reversible false-closure mutation failed 1/1, exit 1, and the plan was restored exactly to SHA-256 `796AC7096B052EE984E327A7DF2411351AA73AA3860D8675886422335820F828`. No runtime state was changed. Next incomplete task: S1-P1-10 false PDF-font capability claim. |
 | 17 | **PRE-09 / S1-P1-10 FIXED — VERIFIED; Arabic PDF capability remains unavailable by recorded Owner decision.** `723170df701ddb948a95b8177d100411fc71b0d9` removes the false installer claim that Amiri is registered with mPDF, distinguishes asset delivery from engine support, corrects the stale IBM-Plex PDF recommendation, and installs a canonical truthfulness guard. Current runtime evidence is mPDF 8.3.1, dompdf 3.1.5, DejaVu Sans default, and no Amiri/Noto registration; EV-RB14 records the shaping failure and Owner-adopted Option C through pilot. Targeted 2 tests / 20 assertions and canonical 164 / 2,167 passed; manifest returned from the expected 121/123 pre-reissue failure to 123/123 after exactly two documented hash reissues. The old claim caused the named test to fail exit 1 and exact installer restoration was verified. Next incomplete task: S1-P1-11 operational Thiqa identity classification/neutralization. |
 | 18 | **PRE-09 / S1-P1-11 FIXED — VERIFIED; live infrastructure and compatibility history preserved.** `29be1fcd5b14001ce2a1a0d1aa390ef10aa617a0` classifies the ten relevant operational occurrences, neutralizes only the reusable date-rebase labels and stale hypothetical bucket example, and explicitly preserves the historical deployment branch, production module directory, pre-existing external bucket and historical records. No remote host, installed unit, branch, module, bucket or backup was changed. The contract passed 2 tests / 14 assertions; both edited shells passed `bash -n`; canonical gate passed 12/12 artefacts, 123/123 manifest and 166 / 2,181. A reintroduced Thiqa service label failed the named test exit 1, followed by exact script restoration and final passes. Next incomplete task: S2-P1-18 branding-health truthfulness. |
+| 19 | **PRE-09 / S2-P1-18 FIXED — VERIFIED; the live tenant now reports the truth and exits 0.** `1474263b4` introduces `BrandingObservationPlane`, which names the served route (overlay globals → revision-keyed `<link>` → `branding-tokens.php`) and the unserved static-artefact route (`public/branding/<site>/tokens-*.css`, D-8) and owns the single severity rule. Every finding declares its plane; the report keeps served-plane inconsistencies and static-artefact advisories in separate lists and refuses a finding placed on the wrong plane; only served-plane findings reach `statusFor()`. Two new served-plane cases (`overlay_without_revision`, `unrenderable_token_overlay`) close the under-measured half, and the overlay is read through the runtime's own `TokenOverlay::fromJson()`. The gate gap is closed: the Observability suite and `VerifyCommandTest` now run inside `composer branding-ci`, pinned by a new truthfulness contract. Live `verify` moved from `inconsistent` / exit 1 to `never materialised` / exit 0 with one advisory, with the database and both generated files unchanged. Targeted 65 tests / 684 assertions; canonical gate 12/12 artefacts, 123/123 manifest, 219 tests / 2,413 assertions; all exit 0. Next incomplete task: S1-P1-04 guardrail namespace cross-check. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -49,15 +50,15 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          29be1fcd5b14001ce2a1a0d1aa390ef10aa617a0 (before Rev 18 checkpoint commit)
-CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 18 checkpoint edit;
+CURRENT OBSERVED HEAD:          1474263b4 (S2-P1-18 repair; observed before the Rev 19 checkpoint commit)
+CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 19 checkpoint edit;
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
 SKYEAGLE MIGRATION STARTED:     NO
 SKYEAGLE BRANDING CHANGES:      NONE
-REPOSITORY WRITES THIS SESSION: S1-P1-11 operational identity classification, neutral reusable
-                                date-rebase labels and deterministic regression guard;
-                                this checkpoint
+REPOSITORY WRITES THIS SESSION: S2-P1-18 served/static branding-health plane separation, two new
+                                served-plane findings, CI gating of the health suite, correction of
+                                three records carrying the superseded RB-11 reading; this checkpoint
 CURRENT PROGRAMME:              PRE-SKYEAGLE three-scan audit/remediation/certification
 FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
                                 SAFE TO START SKYEAGLE MIGRATION: YES
@@ -86,6 +87,7 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `88ff34289` | PRE-09 / S1-P1-06 | Reconciled all three authoritative D-8 records with shipped materialisation behavior, retained D-8 as OPEN, corrected the associated risk/closure counts, and added a canonical regression guard against false closure. |
 | `723170df7` | PRE-09 / S1-P1-10 | Removed the false Amiri/mPDF registration claim, kept D-9 and the accepted pilot limitation explicit, corrected stale PDF evidence, added a truthfulness guard, and re-issued exactly two covered-document hashes. |
 | `29be1fcd5` | PRE-09 / S1-P1-11 | Classified operational identity, neutralized only safe reusable labels/stale examples, preserved live/historical/compatibility identifiers, and added a canonical regression guard. |
+| `1474263b4` | PRE-09 / S2-P1-18 | Separated the served branding plane from the unserved static-artefact plane, made only served-plane findings fail a health probe, added two served-plane cases the old model could not see, read the overlay through the runtime parser, gated the health suite in `composer branding-ci`, and corrected the three records that had drifted on the RB-11 reading. |
 
 Add a row for every further remediation commit.
 
@@ -106,7 +108,7 @@ under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
 Those landed-work verification steps and the next eleven PRE-09 repairs are now complete; see revisions 6…18.
-**Exact next incomplete item:** PRE-09 / S2-P1-18 branding-health truthfulness.
+**Exact next incomplete item:** PRE-09 / S1-P1-04 guardrail namespace cross-check.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -169,7 +171,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 13 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). **Next:** S2-P1-18 branding-health truthfulness, then the remaining finding register in dependency order. |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 13 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). **Next:** S1-P1-04 guardrail namespace cross-check, then the remaining finding register in dependency order. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -203,13 +205,22 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 9 open · P2 4 open
-                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-25.
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 8 open · P2 4 open
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-25.
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
                     P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix)
                     -> 15 (S1-P1-15 fix) -> 14 (S1-P1-17 fix) -> 13 (S1-P1-02 fix)
                     -> 12 (S1-P1-05 fix) -> 11 (S1-P1-06 fix) -> 10 (S1-P1-10 fix)
-                    -> 9 (S1-P1-11 fix).
+                    -> 9 (S1-P1-11 fix) -> 8 (S2-P1-18 fix).
+                    STILL OPEN (P1): S1-P1-04; S2-P1-19; S2-P1-20; S2-P1-21(P1 slot);
+                    S2-P1-22; S2-P1-23; S2-P1-24; S2-P1-26.
+                    NOTE ON THE COUNT: only 7 of those 8 have a written section in this
+                    checkpoint (§6 documents S1-P1-04, S2-P1-20, S2-P1-22, S2-P1-23,
+                    S2-P1-24, S2-P1-26). The arithmetic above therefore carries one
+                    unlabelled P1 slot inherited from Scan-2's register that was never
+                    transcribed here. Treat the seven documented findings as the
+                    actionable set and resolve the discrepancy at PRE-25 rather than
+                    inventing a finding to fill the slot.
                     Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
                     repairing it. It stays open until the guardrail constants gain a real
                     cross-check against the production namespace.
@@ -744,6 +755,39 @@ recorded `Status: healthy, Revision: 1, Materialised at 2026-08-10T18:50:40+00:0
 now drifted twice on the same fact, in opposite directions. The empty revision propagates into live HTML
 as `&rev=0` on the login logo. Root condition: `BrandingHealthCheck` cross-references the revision (route a)
 against file-existence on the *unserved* route (b). **Nothing gates on this exit code** — no CI, no deploy script.
+
+**Status: FIXED — VERIFIED (continuation Rev 19).** The finding was reproduced exactly before repair, then
+repaired at the root: the two delivery planes are now distinct types, and only the served one can fail a
+health probe. The tenant's rendering never needed changing — it was already correct — so this repair changes
+what is *measured and reported*, not what is served. The live database and both generated files were read
+but never written.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S2-P1-18
+Previous status: CONFIRMED — HEALTH CHECK MEASURES THE WRONG PLANE; NOT GATED
+Current status: FIXED — VERIFIED
+Implementation commit: 1474263b4
+Pre-repair reproduction: verify --site=default -> Status inconsistent; Revision 0; both stylesheets present; 1 inconsistency stylesheet_without_revision; true exit 1
+Post-repair live result: same tenant -> Status never materialised (rendering product defaults); Serves tenant overlay no; both stylesheets reported "(not served)"; 1 advisory; true exit 0
+Root-cause repair: BrandingObservationPlane names Served vs StaticArtefact and owns failsHealth(); every BrandingInconsistency case declares its plane by exhaustive match; BrandingHealthReport carries inconsistencies and advisories separately and throws on a finding placed on the wrong plane; statusFor() receives served-plane findings only
+Served-plane cases added: overlay_without_revision; unrenderable_token_overlay
+Wire compatibility: revision_without_stylesheet and stylesheet_without_revision keep their exact string values and only change plane; no identifier renamed or removed
+Parser reuse: overlay emptiness answered by TokenOverlay::fromJson(), the same parser BrandingConfigFactory runs per request; the contract test asserts BrandingHealthCheck contains no independent json_decode
+CI gating (the finding's second half): composer branding-ci now runs tests/Tests/Isolated/Modules/ThiqaBranding/Observability and Console/VerifyCommandTest.php; BrandingCiContractTest fails if either path is removed
+Files changed: BrandingObservationPlane.php (new); BrandingInconsistency.php; BrandingHealthCheck.php; BrandingHealthReport.php; VerifyCommand.php; composer.json; BrandingHealthTruthfulnessContractTest.php (new); BrandingCiContractTest.php; BrandingHealthCheckTest.php; VerifyCommandTest.php; runbook.md; architecture.md; remaining-dependencies.md; closure-evidence-pack.md; patch-records.md (PR-35)
+Targeted positive: 65 tests / 684 assertions / exit 0
+Canonical positive: 12/12 generated artefacts; 123/123 manifest; 219 tests / 2,413 assertions; true exit 0; 2026-08-24T16:58:55.5198033Z–17:01:16.2506635Z; 140.731 s
+Lint/style/diff: PHP lint 9/9 exit 0; PHPCS 9/9 exit 0; composer validate --strict exit 0; git diff --check exit 0
+Negative control: stylesheet_without_revision reclassified back to the Served plane; named contract 6 tests / 13 assertions / 2 failures / true exit 1
+Restoration: BrandingInconsistency.php restored exactly to SHA256 2CDD62DDB5544CD8155FD27E2F0C6E9063F144117527FCA88D914E774A8D88CD; temporary backup removed; targeted suite then passed 65 / 684 exit 0
+Documentation drift corrected: remaining-dependencies.md area 42 and surprise 8; closure-evidence-pack.md item 1; architecture.md Plane 2 status. All three carried RB-11's superseded "Status: healthy / Revision: 1" reading; each now states the current live reading beside the query that produces it
+Live database mutated: NO (read-only SELECT before and after; all seven saas_branding_* values length-identical)
+Generated stylesheets mutated: NO (both still 1,522 / 1,553 bytes, mtime 2026-08-10T18:50:40Z)
+Apache / browser touched: NO / NO
+Manifest-covered files changed: NONE (the manifest covers docs/branding-production/*.md; every document edited here is under docs/branding/); manifest nevertheless verified 123/123 inside branding-ci
+Remaining limitation: D-8 stays OPEN by design — the materialiser still writes the unserved static stylesheets, and this repair deliberately does not change that. It makes the consequence visible and non-failing instead of silently wrong. The live tenant keeps printing one advisory until those two orphaned files are cleared, which is optional housekeeping rather than recovery.
+Next incomplete PRE-* task: PRE-09 / S1-P1-04 — make a production namespace rename that misses a guardrail constant fail deterministically
+```
 
 ### S2-P1-20 — A ledger item marked FIXED is not fixed (RB-22)
 Verified by orchestrator:
@@ -1308,7 +1352,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S2-P1-18; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 continues at S1-P1-04; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 
