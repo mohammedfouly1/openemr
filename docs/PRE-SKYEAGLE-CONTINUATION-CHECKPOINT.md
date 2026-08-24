@@ -42,6 +42,8 @@
 
 | 26 | **Self-review pass over this session's own work — two checks, both now permanent.** Explicitly **not** the independent Scan-3 audit: this is the author reviewing the author, and independence is the property it lacks. (1) **Installer-time safety.** `library/globals.inc.php` is `require`d by `library/classes/Installer.class.php:827` *during installation*, and `xlp()` now runs inside it — adding an `OEGlobalsBag::getInstance()->getString('openemr_name')` call to a path where no database, session or bootstrap exists. Exercised cold: `getInstance()` succeeds, `getString()` returns `''`, and composition yields `'Enable  Standard REST API'` — a double space, **not** a throw. Benign, and those label strings are not displayed during install; recorded rather than "fixed", because the honest alternative (falling back to a hardcoded name) would reintroduce the leak. (2) **Every shipped pattern composes.** `ProductContextTranslation` throws on a stray `%`, so a bad target key or definition would not fail a build — it would fatal whichever page rendered it, in whichever locale reached it. All 56 contract patterns and all 39 `xlp()` literals in the tree compose; the 14 literals with no contract are exactly the Class-B set, as expected. That invariant is now a gated test (`testEveryContractPatternComposes`) rather than a one-off script. **A scratch-scanner bug is recorded too:** the first run reported 3 patterns "would throw", which was a greedy Twig regex capturing whole template blocks as if they were literals — the tool was wrong, not the code, and the corrected run is clean. Targeted 17 tests / 388 assertions; PHPCS 1/1; all exit 0. |
 
+| 27 | **SCAN 3 DISPATCHED — five independent fresh agents.** PRE-09 is complete (apart from the asset-blocked Arabic logo variant), so the programme moved to its adversarial stage. The orchestrator did **not** run Scan 3 itself: having performed the remediation for 20+ findings, an orchestrator-run adversarial pass cannot supply the independence PRE-25 depends on, and a certification resting on a self-audit would be precisely the false green this corpus exists to prevent. Spawning was put to the Owner and explicitly authorised before dispatch. The five workstreams — 3A translation-contract subsystem, 3B CI gate and guardrail false-greens, 3C brand leaks (live + source, incl. Arabic/RTL), 3D documentation truthfulness (told to falsify this file's own claims), 3E rename blast radius — are all read-only, forbidden from mutating the live database, and briefed on the host's traps (no Docker, hanging Twig render tests, timing-out repo-wide greps, and the sibling worktree that poisons any drive-rooted scan). Results are **not yet in**; nothing here should be read as a Scan-3 outcome. Next: reconcile the five reports, then PRE-25. |
+
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
 
@@ -131,7 +133,7 @@ under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
 Those landed-work verification steps and the next eleven PRE-09 repairs are now complete; see revisions 6…18.
-**Exact next incomplete item:** **PRE-18…24 (Scan 3, adversarial red-team with fresh agents)**, then PRE-25 final reconciliation and certification. Every documented P0/P1/P2 finding is closed, except S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist.
+**Exact next incomplete item:** reconcile the five Scan-3 agent reports (dispatched 2026-08-24), then PRE-25 certification. PRE-09 is complete apart from S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -203,7 +205,7 @@ implemented yet.
 | PRE-15 | Scan-2F Runtime surfaces | Agent 2F | R | **DONE** (two runs) | §15 SCAN2F |
 | PRE-16 | Scan-2G Materialisation / tenant safety | orchestrator continuation | R/W (reversible runtime proof) | **DONE — VERIFIED; LIVE STATE RESTORED** | §15 SCAN2G and §16 continuation evidence |
 | PRE-17 | Scan-2H Telemetry / network egress | Agent 2H | R | **DONE** | §15 SCAN2H |
-| PRE-18…24 | Scan-3A…3G adversarial red-team | fresh agents | R | **NOT STARTED** | Gated behind Scan-1 exit |
+| PRE-18…24 | Scan-3A…3E adversarial red-team | fresh agents | R | **DISPATCHED (2026-08-24)** | Five independent read-only agents, launched only after the Owner explicitly authorised spawning them. Scoped to five attack surfaces rather than the original seven letters: **3A** translation-contract subsystem (orphaning, page-fatal patterns, install-vs-upgrade divergence, rollback); **3B** CI gate and guardrail false-greens; **3C** brand leaks on live and source surfaces incl. Arabic/RTL; **3D** documentation truthfulness (falsify the corpus's own claims, including this file's); **3E** rename blast radius and silent breakage. Each was told to falsify rather than inherit, given the host constraints (no Docker, Twig render tests hang, scoped searches, sibling-worktree exclusion), and bound to read-only with no live-DB mutation. |
 | PRE-25 | Final reconciliation / certification | orchestrator | R | **NOT STARTED** | — |
 
 **Orchestrator's own guardrail proof:** two direct PHPUnit runs exceeded timeout on the Drive mount without
@@ -225,7 +227,12 @@ SCAN 1:  COMPLETE as an investigation — every P0 and high-severity P1 independ
 SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F, 2G, 2H).
          2A failed (6 empty returns) but its target claim was proven directly by the orchestrator.
          2B's missing zero-match-filter experiment was completed during the S1-P1-03 repair.
-SCAN 3:  NOT STARTED
+SCAN 3:  DISPATCHED 2026-08-24 — five independent fresh agents (3A translation subsystem,
+         3B CI gate/guardrails, 3C brand leaks, 3D documentation truthfulness,
+         3E rename blast radius). Read-only; results not yet reconciled.
+         Independence matters here: the orchestrator performed the remediation for
+         20+ findings, so an orchestrator-run Scan 3 could not supply the property
+         PRE-25 depends on. Spawning was authorised by the Owner before dispatch.
 
 KNOWN OPEN P0 FINDINGS:  NONE
 REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 2 unlabelled slots only · P2 0 open (4 fixed)
