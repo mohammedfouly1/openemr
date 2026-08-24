@@ -52,10 +52,9 @@ require a genuinely static asset.
 **Note on a stale cross-reference in the plan itself.** `docs/RebrandingPlan.md` §3.11 (deliverable
 "D1.1... `ADR-BRAND-001`") still describes this ADR as recording "option (b)" — that line predates the
 CR-19 revision two sections earlier (§3.2.2) and was never updated after the revision. This ADR records
-the decision that was actually implemented and shipped: **option (a)**, confirmed directly from the shipped
-code by `docs/branding/multi-tenant-white-label-readiness.md` §1.7 ("the response is immutable and
-revision-keyed... nothing here writes to disk"). A future editor of `RebrandingPlan.md` §3.11 should
-correct "option (b)" to "option (a)" to match this record and the shipped implementation.
+the browser-serving decision that was implemented: **option (a)**. The correction below records the
+simultaneous option-(b) materialisation writer; "nothing here writes to disk" is true only of the request
+path, not the shipped system as a whole. `RebrandingPlan.md` §3.11 now names both facts.
 
 > **Correction 2026-08-10 (`docs/RebrandingBugs.md` RB-04) — both routes are live, so "no writable
 > directory" is not true of the shipped system.**
@@ -69,9 +68,9 @@ correct "option (b)" to "option (a)" to match this record and the shipped implem
 > Three consequences, stated rather than smoothed over:
 >
 > 1. **Dependency D-8 (writable, execution-denied volume) is NOT eliminated.** The deployed image needs
->    that directory writable. `RebrandingPlan.md` §6.5 and `docs/branding/remaining-dependencies.md` both
->    record D-8 as "RESOLVED by design change"; that is accurate for the *recommended* route and inaccurate
->    for the *shipped* system.
+>    that directory writable. `RebrandingPlan.md` §6.5 and `docs/branding/remaining-dependencies.md` now
+>    both record D-8 as re-opened; the earlier "RESOLVED by design change" count described the recommended
+>    route rather than the shipped system.
 > 2. **Nothing serves those files.** The only reader is `FilesystemStylesheetProbe`, i.e. the health check
 >    — so they are write-only artefacts, and `thiqa-branding:verify` reporting "Light token stylesheet:
 >    present / healthy" describes a file that is never on the serving path.
@@ -83,9 +82,10 @@ correct "option (b)" to "option (a)" to match this record and the shipped implem
 > **Fixed so far:** the directory is now git-ignored (`.gitignore`), so tenant runtime state can no longer
 > be committed into the source tree by a routine `git add -A`.
 >
-> **Still open — a design decision, not a defect to patch silently:** whether to keep (a) and make (b)
-> opt-in, or keep both and re-open D-8. Until that is decided, treat D-8 as **OPEN** and do not cite "no
-> writable directory" as a property of the shipped image.
+> **Still open — re-verified 2026-08-24 after S1-P0-09:** whether to keep (a) and make (b) opt-in, or keep
+> both and retain D-8. The repaired consumer chain uses (a), while current materialiser/writer execution
+> still commits both static variants. Treat D-8 as **OPEN** and do not cite "no writable directory" as a
+> property of the shipped image.
 
 ### The new-entry-file theme strategy
 

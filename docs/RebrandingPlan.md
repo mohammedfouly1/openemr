@@ -100,7 +100,7 @@ The consolidated list of what remains open is §1.3.
 | **CR-16** | AC-1 — PDF fonts conflict with `Q25` | **ACCEPTED — the most serious finding of the review.** `Q25` names *Amiri and/or Noto Naskh Arabic*; §3.7.4 had proposed IBM Plex Sans Arabic for PDF. Corrected. |
 | **CR-17** | AC-2 — `Q38` namespace vs. unnamespaced Twig shadowing | **ACCEPTED in substance.** A better, fully namespaced mechanism exists for CR-7; CR-8's zero-core-edit claim is retracted. |
 | **CR-18** | AC-3 — theme display labels | **ACCEPTED.** Verified at `interface/super/edit_globals.php:736-742`: the selector renders `ucfirst(str_replace('_',' ', substr($file, 6)))`, so `style_light.css` displays as **"Light"**, not "Saudi Light". |
-| **CR-19** | AC-4 — writable CSS inside the module code tree | **ACCEPTED.** Leads to a design change that removes dependency D-8 entirely (§3.2.2 revised). |
+| **CR-19** | AC-4 — writable CSS inside the module code tree | **ACCEPTED as design intent; not fully implemented.** The PHP endpoint removes D-8 only if the static writer is disabled. Current `BrandingMaterialiser` still invokes `TokenCssWriter`, so RB-04 re-opened D-8; see §3.2.2 and §6.5. |
 | **CR-20** | AC-5 / first audit item 2 — cache-key composition underspecified | **ACCEPTED.** Needs a canonical per-asset-type URL specification and tests. *(Note: the first audit cited `?v=$v_database`; the actual variable is `$v_js_includes` — `interface/globals.php:479`.)* |
 | — | D-ID numbering drift | **ACCEPTED.** Four misnumbered references corrected (PDF fonts D-10→D-9 ×2, registration D-11→D-10, counsel D-12→D-11), plus the *"9 strings"* → *"9 IDs / 10 strings"* count. |
 | — | First audit, *Additional Conflict 4* — `LogoService` falls back to `sites/default/` | **REJECTED on evidence.** `src/Services/LogoService.php:77-87` builds its search path from `OE_SITE_DIR` and `getImagesAbsolute()`; the fallback is **`public/images/logos/`**, never another site's directory. The underlying *concern* — an unprovisioned tenant showing upstream marks — is real and was already addressed by the build-layer product-default overlay (§3.7.6). |
@@ -348,12 +348,15 @@ audit (CR-19).**
 | (b) Static file written at materialisation time | `…/public/branding/<site_id>/tokens.css`, atomic temp-file + rename | **Demoted to fallback.** Clean cache semantics, but it requires runtime writes beneath installed module code, weakening supply-chain and incident-response guarantees for signed images. Retain only where a platform prefers a genuinely static asset; then mount **only** that exact path read-write, deny script execution, enforce a MIME/filename allowlist, and use atomic revision directories. |
 | (c) Inline `<style>` in the head | No head-HTML injection event exists for the main shell (only `Header::setupHeader()` string output); would need a core patch | **Rejected** — breaches Invariant 4 for no benefit |
 
-**Consequence of the revision:** dependency **D-8 (writable, execution-denied volume) is eliminated** on
-the recommended path. It returns only if a deployment chooses fallback (b).
+**Design consequence of the revision:** dependency **D-8 (writable, execution-denied volume) would be
+eliminated** if the recommended endpoint were the only active route. The shipped implementation keeps
+fallback (b) active unconditionally, so RB-04 re-opened D-8. This was re-verified after S1-P0-09: the
+browser consumer uses route (a), but `BrandingMaterialiser` still stages and commits both static variants.
 
-Under option (b), when Tier 2 is empty (the default) **no file is emitted and no `<link>` is added at
-all** — the product renders purely from the immutable bundle, and the branding layer adds literally zero
-bytes to the page.
+The option-(b) design requirement was that an empty Tier 2 emit no file and add no `<link>`. Current
+materialisation violates the first half by writing the resolved Tier-1 palette even for an empty overlay;
+route (a) remains the only linked browser consumer. Closing D-8 requires removing or making the static
+writer explicitly opt-in, then repeating the materialisation/runtime chain.
 
 ## 3.3 Component inventory
 
@@ -772,7 +775,7 @@ tenants changes data, not code.
 
 | Deliverable | Form |
 |---|---|
-| D1.1 Architecture Decision Record `ADR-BRAND-001` | Records the five-plane model, option (b) for token CSS delivery, and the new-entry-file theme strategy |
+| D1.1 Architecture Decision Record `ADR-BRAND-001` | Records the five-plane model, option (a) as the browser delivery route, the still-active option-(b) writer that re-opens D-8, and the new-entry-file theme strategy |
 | D1.2 Token contract specification | Canonical key list, tier assignment, validation rules, `border.strong` / dark `surface.input` resolutions |
 | D1.3 Interface contracts | `BrandingServiceInterface` + all value-object signatures (no bodies) |
 | D1.4 Control Plane branding contract | Table shapes, revision semantics, materialisation job payload — handed to `MVP-014` |
@@ -1131,7 +1134,7 @@ Group 1 used as certification gate 6.
 | V-02 | Materialiser run twice produces byte-identical state (idempotence); `globals` overwritten by the next sync (never authoritative) | AC-6 |
 | V-03 | CP unreachable → tenant renders last-good; `kill -9` mid-materialisation → revision *n−1* fully intact | AC-7 |
 | V-04 | `public/themes/` has only the approved set; a `globals` row forced to `style_solar.css` falls back to `style_light.css` | AC-8, `Q77` |
-| V-05 | All 33 WCAG pairs recomputed by `ContrastCalculator`; **zero FAIL** after D-1 is applied | D-1 |
+| V-05 | All 38 WCAG pairs recomputed by `ContrastCalculator`; **zero FAIL** after D-1 is applied | D-1 |
 | V-06 | `brand/manifests/SHA256SUMS` verifies **fully** at release time — run `php tools/branding/verify-brand-manifest.php` (exit 0 = every entry verifies). *Corrected 2026-08-10 (RB-21/RB-25): the manifest holds **123** entries, not the 117 this row previously hardcoded; it was re-issued and expanded by `d9757fc55`. The check is now "every entry verifies", not a fixed count, so a legitimate kit re-issue cannot make the gate stale again.* | R5 `12-…md`; `tools/branding/verify-brand-manifest.php` |
 | V-07 | Arabic session serves `rtl_style_light.css` **and** `rtl_compact_style_light.css` (the CR-3 regression test) | CR-3 |
 | V-08 | `SessionUtil` identity constants unchanged; `sites/*/config.php` unreferenced by branding code | C6, C1 |
@@ -1149,17 +1152,18 @@ Group 1 used as certification gate 6.
 | **D-5** | Control Plane (`MVP-014`) not yet built | End-to-end `Q76` materialisation; A1/A2 | Platform | Blocking for AC-6/7 |
 | **D-6** | Second provisioned tenant (G-10b) | A1, A2 | Provisioning | Blocking `MVP-010` acceptance |
 | **D-7** | ≥1 patient and a portal patient credential in a test tenant | A5, A6 | QA/provisioning | Blocking acceptance |
-| ~~D-8~~ | ~~Writable, execution-denied volume inside the module tree~~ — **ELIMINATED 2026-08-09** by the CR-19 redesign: the recommended Tier 2 route (module PHP endpoint) performs no runtime writes. Returns only if a deployment elects fallback (b) | — | Platform | **RESOLVED by design change** |
+| **D-8** | Writable, execution-denied volume inside the module tree — **RE-OPENED 2026-08-10 (RB-04), re-verified 2026-08-24 after S1-P0-09.** The endpoint is the linked browser route, but `BrandingMaterialiser` still stages and commits `tokens-{light,dark}.css` through `TokenCssWriter`; fallback (b) is therefore active, not elected | Plane 2 materialisation; immutable deployment | Platform | **OPEN — blocks a read-only module tree** |
 | **D-9** | **`Q25`-compliant Arabic PDF fonts** — Amiri and/or Noto Naskh Arabic in TTF/OTF, with **both** `mpdf/mpdf` and `dompdf/dompdf` explicitly configured, then shaping/embedding/RTL/numeral tests. *(Revised: IBM Plex Sans Arabic does not satisfy `Q25` — CR-16.)* | BRAND-111/086; Arabic PDFs | Branding + platform | **Blocking AR print** |
 | **D-10** | Decision: repoint or disable product registration (BRAND-113) | Core patch 3 | Product owner | Blocking that patch |
 | **D-11** | Counsel review of `acknowledge_license_cert.html` (OpenEMR Foundation branding, 8 third-party identities incl. personal emails, ONC claims) on a **publicly reachable, unauthenticated** page | BRAND-063/118 disposition | Legal | Blocking public launch |
 | **D-12** | Ratification of `border.strong` and dark `surface.input` derivations (CR-10) | Token contract freeze | Token owner | Low |
 | ~~D-13~~ | ~~Sign-off on CR-3 and CR-9~~ — **CLOSED 2026-08-09.** Both accepted as recommended; corrections applied to `14-string-replacement-map.md` | — | String-map / product owners | **RESOLVED** |
 
-**Register status after the 2026-08-09 decisions and external audit:** 4 of 13 dependencies closed
-(D-1, D-2, D-8, D-13). The remaining **blocking-for-release** items are **D-3** (legal + integration
-clearance of the product name), **D-9** (`Q25`-compliant Arabic PDF fonts — *newly escalated*),
-**D-10** (registration endpoint) and **D-11** (counsel review of the acknowledgements page).
+**Current register status (reconciled 2026-08-24): 3 of 13 dependencies closed**
+(D-1, D-2, D-13). D-8 is open because both delivery mechanisms remain active. The remaining
+**blocking-for-release** items are **D-3** (legal + integration clearance of the product name), **D-8**
+(writable module-tree output), **D-9** (`Q25`-compliant Arabic PDF fonts), **D-10** (registration endpoint)
+and **D-11** (counsel review of the acknowledgements page).
 
 ### 6.5.1 Open items added by the external audit
 
@@ -1277,8 +1281,9 @@ computed from R4 §16.2 and must reconcile exactly.
 | D-3 | Legal product name; MSH-3/QRDA clearance | Legal + integration | WS-A | ⏳ **Open** |
 | D-10 | Repoint vs disable product registration | Product owner | Core patch 3 | ⏳ **Open** |
 
-**Phase 3 is unblocked** except for the two rows still open, both of which affect a small, well-identified
-set of values (the product name and one endpoint URL) rather than the architecture.
+**Phase 3 value application is unblocked** except for the two rows still open, both of which affect a
+small, well-identified set of values (the product name and one endpoint URL). Immutable deployment remains
+blocked by D-8: the repaired endpoint consumer did not disable the simultaneous static writer.
 
 ---
 
@@ -1288,7 +1293,7 @@ set of values (the product name and one endpoint URL) rather than the architectu
 |---|---|---|---|---|
 | R-1 | Upstream rebase conflicts in the authoritative patch-record inventory | Medium | Medium | Minimal diffs; upstream-first PRs; V-09 rebase dry-run against every recorded file each cycle (`Q2` monthly review) |
 | R-2 | Upstream adds a new theme, silently entering the product | Low | Medium | Entry-map assertion (WP-2.7d), re-verified each rebase per `Q77` |
-| R-3 | ~~Tier 2 token CSS requires a writable module tree, conflicting with a read-only image~~ | **Closed** | — | **Retired 2026-08-09 (CR-19).** The recommended route emits CSS from a module endpoint and writes nothing, so the image stays immutable. Risk returns only on fallback route (b) |
+| R-3 | Tier 2 token CSS still requires a writable module tree because fallback route (b) remains active | **Certain while `TokenCssWriter` is wired** | **High for immutable deployments** | Keep D-8 open. Remove or explicitly opt in to the static writer, then repeat the automated materialisation proof and reversible light/dark browser chain before claiming a read-only image |
 | R-4 | Arabic PDF shaping fails in mPDF | Medium | High for AR print | D-9 tested early, in Phase 2, not at acceptance |
 | R-5 | Product name changes after slug freeze | Low | Medium | Module directory rename is cheap before first release, expensive after — freeze at D-3 |
 | R-6 | `openemr_name` change breaks an HL7/QRDA integration partner | Medium | **High** | D-3 integration-owner sign-off; MSH-3 is a machine contract, not a label |
@@ -1315,7 +1320,9 @@ set of values (the product name and one endpoint URL) rather than the architectu
   (CR-7) and the login logo `alt` (CR-8) are deliverable with zero tracked-file modification.
 - **One real defect caught in the input** (CR-3): storing an `rtl_`-prefixed theme filename in `globals`
   would have shipped a broken compact stylesheet to every Arabic session.
-- **Thirteen dependencies are named, owned and dated rather than discovered late** — three of which
-  (WCAG link colour, `.example` URLs, legal product name) block release and none of which block starting.
+- **Thirteen dependencies are named, owned and dated rather than discovered late** — five of which
+  (legal product name, writable token output, Arabic PDF shaping, product-registration disposition and
+  acknowledgements-page legal review) currently block release; none blocks the remaining brand-neutral
+  PRE work.
 
 **No code, configuration, asset or database change has been made. This document is planning output only.**
