@@ -44,6 +44,8 @@
 
 | 27 | **SCAN 3 DISPATCHED — five independent fresh agents.** PRE-09 is complete (apart from the asset-blocked Arabic logo variant), so the programme moved to its adversarial stage. The orchestrator did **not** run Scan 3 itself: having performed the remediation for 20+ findings, an orchestrator-run adversarial pass cannot supply the independence PRE-25 depends on, and a certification resting on a self-audit would be precisely the false green this corpus exists to prevent. Spawning was put to the Owner and explicitly authorised before dispatch. The five workstreams — 3A translation-contract subsystem, 3B CI gate and guardrail false-greens, 3C brand leaks (live + source, incl. Arabic/RTL), 3D documentation truthfulness (told to falsify this file's own claims), 3E rename blast radius — are all read-only, forbidden from mutating the live database, and briefed on the host's traps (no Docker, hanging Twig render tests, timing-out repo-wide greps, and the sibling worktree that poisons any drive-rooted scan). Results are **not yet in**; nothing here should be read as a Scan-3 outcome. Next: reconcile the five reports, then PRE-25. |
 
+| 28 | **SCAN 3 COMPLETE — five independent agents, one P0 found and fixed, six findings open.** `5d519342d`. **Scan-3A found S3-P0-28 and proved it by execution:** the installer SQL and the PHP upgrade migration disagreed on whether an explicit contract definition or the neutralised legacy string wins. They differ on real shipped data (French: `de %s` vs `d'%s`), so every site installed from this branch would die on its first `sql_upgrade.php` with an uncaught `Conflicting target definition for lang_id 8` — after DDL, before the version bump, unrecoverable without hand-editing, and **not reproducible on this dev database**. Pre-existing since S1-P0-13; survived Scan 1, Scan 2, and the orchestrator's own self-review at Rev 26. Fixed with one precedence rule in both paths, three regression tests, and a negative control that reproduces the exact exception. Also fixed: S3-P2-29 (SQL could store an un-renderable two-placeholder value; now requires exactly one occurrence, proven on a disposable DB seeded with a deliberate double). **Scan-3B** hardened six gate assertions that checked a guard's *text* rather than its *effect* — including one where deleting `'8.2'` from the matrix switched the entire branding gate off with every leg green. **Scan-3D** found the PRE-09 ledger row still reading "IN PROGRESS — 13 items verified" beside its own evidence cell listing 18 and concluding complete, two stale `architecture.md` line refs, and an arithmetic error in this file's own Class-B accounting (corrected to 14 literals / 17 sites). **Scan-3C** found the sharpest critique of this session's architecture: `xl_product_name()` has two callers while `xlp()` and the `|xlp` filter — the very functions built to compose the product name — both bypass it, so Arabic sessions still get a Latin wordmark almost everywhere (S3-P1-32, open). **Scan-3E** corrected an orchestrator docblock that claimed test coverage it did not have, and contributed the Arabic substring trap (`ثقة` inside `منبثقة`). One 3E claim was **refuted** on verification. Gate: 12/12 artefacts, 123/123 manifest, 261 tests / 3,370 assertions, exit 0. **Certification remains NOT PASSED** — six findings open. |
+
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
 
@@ -64,7 +66,7 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          177d5dc97 (S2-P1-26 Class A; the Rev 24/25 work follows in this commit)
+CURRENT OBSERVED HEAD:          5d519342d (Scan-3 remediation; before the Rev 28 checkpoint commit)
 CURRENT GIT STATUS:             ?? .claude/ (observed after the Rev 22 commit; .claude/ stays untracked
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
@@ -133,7 +135,7 @@ under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
 Those landed-work verification steps and the next eleven PRE-09 repairs are now complete; see revisions 6…18.
-**Exact next incomplete item:** reconcile the five Scan-3 agent reports (dispatched 2026-08-24), then PRE-25 certification. PRE-09 is complete apart from S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist.
+**Exact next incomplete item:** the six OPEN Scan-3 findings (§15B register), in this order — **S3-P1-32** (route `xlp()` and the `|xlp` filter through `xl_product_name()`, the single change with the widest Arabic impact), **S3-P1-31** (placeholder guard in the language editor), then **S3-P1-33/34** and the two P2 governance items. **PRE-25 certification cannot be attempted while these are open.** Separately, `S3-OBS-01` (admin.php served without authentication) is outside branding and needs its own review.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -205,7 +207,7 @@ implemented yet.
 | PRE-15 | Scan-2F Runtime surfaces | Agent 2F | R | **DONE** (two runs) | §15 SCAN2F |
 | PRE-16 | Scan-2G Materialisation / tenant safety | orchestrator continuation | R/W (reversible runtime proof) | **DONE — VERIFIED; LIVE STATE RESTORED** | §15 SCAN2G and §16 continuation evidence |
 | PRE-17 | Scan-2H Telemetry / network egress | Agent 2H | R | **DONE** | §15 SCAN2H |
-| PRE-18…24 | Scan-3A…3E adversarial red-team | fresh agents | R | **DISPATCHED (2026-08-24)** | Five independent read-only agents, launched only after the Owner explicitly authorised spawning them. Scoped to five attack surfaces rather than the original seven letters: **3A** translation-contract subsystem (orphaning, page-fatal patterns, install-vs-upgrade divergence, rollback); **3B** CI gate and guardrail false-greens; **3C** brand leaks on live and source surfaces incl. Arabic/RTL; **3D** documentation truthfulness (falsify the corpus's own claims, including this file's); **3E** rename blast radius and silent breakage. Each was told to falsify rather than inherit, given the host constraints (no Docker, Twig render tests hang, scoped searches, sibling-worktree exclusion), and bound to read-only with no live-DB mutation. |
+| PRE-18…24 | Scan-3A…3E adversarial red-team | fresh agents | R | **COMPLETE (2026-08-24) — 5 of 5 returned; 1 P0 found and fixed** | All five reported. Scan-3A found **S3-P0-28**, a fresh-install-versus-upgrade precedence divergence that would have wedged every upgrade uncatchably; fixed and regression-pinned. 3B hardened six gate assertions; 3C found the composition architecture's real reach gap; 3D found three documentation defects including a stale headline status; 3E found one live-state gap and corrected an orchestrator docblock. **7 new findings remain open** — see §15B. Originally: | Five independent read-only agents, launched only after the Owner explicitly authorised spawning them. Scoped to five attack surfaces rather than the original seven letters: **3A** translation-contract subsystem (orphaning, page-fatal patterns, install-vs-upgrade divergence, rollback); **3B** CI gate and guardrail false-greens; **3C** brand leaks on live and source surfaces incl. Arabic/RTL; **3D** documentation truthfulness (falsify the corpus's own claims, including this file's); **3E** rename blast radius and silent breakage. Each was told to falsify rather than inherit, given the host constraints (no Docker, Twig render tests hang, scoped searches, sibling-worktree exclusion), and bound to read-only with no live-DB mutation. |
 | PRE-25 | Final reconciliation / certification | orchestrator | R | **NOT STARTED** | — |
 
 **Orchestrator's own guardrail proof:** two direct PHPUnit runs exceeded timeout on the Drive mount without
@@ -227,14 +229,31 @@ SCAN 1:  COMPLETE as an investigation — every P0 and high-severity P1 independ
 SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F, 2G, 2H).
          2A failed (6 empty returns) but its target claim was proven directly by the orchestrator.
          2B's missing zero-match-filter experiment was completed during the S1-P1-03 repair.
-SCAN 3:  DISPATCHED 2026-08-24 — five independent fresh agents (3A translation subsystem,
-         3B CI gate/guardrails, 3C brand leaks, 3D documentation truthfulness,
-         3E rename blast radius). Read-only; results not yet reconciled.
-         Independence matters here: the orchestrator performed the remediation for
-         20+ findings, so an orchestrator-run Scan 3 could not supply the property
-         PRE-25 depends on. Spawning was authorised by the Owner before dispatch.
+SCAN 3:  COMPLETE 2026-08-24 — five independent fresh agents, all returned, results
+         reconciled in §15B. Independence was the point: the orchestrator performed the
+         remediation for 20+ findings, so an orchestrator-run Scan 3 could not supply the
+         property PRE-25 depends on. Spawning was authorised by the Owner before dispatch.
+         IT PAID FOR ITSELF: Scan-3A found a P0 (S3-P0-28) that would have wedged every
+         upgrade of every site installed from this branch, uncatchably, mid-run — a defect
+         that had survived the entire Scan-1/Scan-2 programme and the orchestrator's own
+         self-review, and that does not reproduce on this dev database.
+         7 new findings remain OPEN (1 accepted trade, 6 unfixed).
 
-KNOWN OPEN P0 FINDINGS:  NONE
+KNOWN OPEN P0 FINDINGS:  NONE. (S3-P0-28 was found by Scan-3A on 2026-08-24 and FIXED the
+                         same day — see §15B. It is the only P0 raised after Scan 1.)
+
+SCAN-3 REGISTER:    S3-P0-28  translation precedence divergence      FIXED — VERIFIED
+                    S3-P2-29  SQL could store a 2-placeholder value  FIXED — VERIFIED
+                    S3-P1-30  `skip` costs Arabic 8 strings          ACCEPTED, quantified
+                    S3-P1-31  language editor has no `%s` guard      OPEN
+                    S3-P1-32  xlp()/|xlp bypass the Arabic resolver  OPEN
+                    S3-P1-33  setup.php entirely unbranded           OPEN (known: §14)
+                    S3-P1-34  questionnaire disclaimer names OpenEMR OPEN (JS-side)
+                    S3-P2-35  deployed assets outside the manifest   OPEN (governance)
+                    S3-P2-36  Q77 theme check skips in CI            OPEN (CI infra)
+                    S3-OBS-01 admin.php renders its site table with
+                              no authentication — OUTSIDE branding,
+                              recorded so it is not dropped          NEEDS OWN REVIEW
 REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 2 unlabelled slots only · P2 0 open (4 fixed)
                     FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-04; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-22; S2-P1-23; S2-P1-25; S2-P1-26.
                     PARTLY FIXED: S2-P1-24 — juxtaposition and text-variant halves closed;
