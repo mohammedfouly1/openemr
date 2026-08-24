@@ -14,6 +14,7 @@
 | 2 | **PRE-10 CLOSED — proven by execution.** Orchestrator read the real `MODULE_NAMESPACE` constants from all four shipped rule files and evaluated the shipped comparison against both namespaces; all four go inert under a SkyEagle namespace. Ledger row and §16 rewritten; §4 scan states and §1 git status refreshed. See §16 PRE-10 for the evidence and the one residual gap. |
 | 3 | **PRE-09 remediation BEGUN — first item complete. S2-P1-25 FIXED.** Brand-manifest gate restored from RED (119/123, exit 1) to GREEN (123/123, exit 0) by re-issuing five hashes; reason recorded in `12-release-verification.md` Revision 5. Committed `45e9eb4f3`. **HEAD is no longer the scan baseline** — see §1. |
 | 4 | **HEAD literal removed from §1** — a checkpoint cannot hold its own commit hash, and every later commit would stale a pinned value; the remediation-commit table is now the durable record. **New finding S2-P1-26** added from Agent 2E addendum 3 (20 reachable unbranded keys; a leak class with no catalogue row that SET-TRANSLATION structurally cannot fix; `applicationTitle` already 7 call sites deep). P1 count 16 → 17 open. |
+| 5 | **Phase 1 continuation reconstruction complete (2026-08-24).** Re-derived branch `feat/thiqa-branding-foundation`, HEAD `26c32fcb3c027702d9b6fe167017487469a19e5d`, status `?? .claude/`, five registered worktrees, and the five commits after the scan baseline. MariaDB and Apache were both unavailable during the bounded probes. Toolchain paths/versions were inventoried without running tests or analysis. Active task is verification of already-landed commits: `45e9eb4f3`, then `aebcfdfc5` + `26c32fcb3`; no duplicate repair has been started. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -35,6 +36,7 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
+CURRENT OBSERVED HEAD:          26c32fcb3c027702d9b6fe167017487469a19e5d (Phase 1, 2026-08-24)
 CURRENT GIT STATUS:             ?? .claude/
                                 (this checkpoint is committed as of Rev 3)
                                 tree otherwise clean — no tracked file modified outside the commit below
@@ -52,15 +54,29 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | Commit | Task | What it did |
 |---|---|---|
 | `45e9eb4f3` | PRE-09 (1st item) | `prebrand: re-issue four stale brand-manifest hashes and record why` — restored the release gate from RED (119/123, exit 1) to GREEN (123/123, exit 0). Five entries re-issued (the four drifted documents plus `12-release-verification.md`, which was edited to record the reason and is itself manifest-covered). Entries **re-issued, never deleted**, per RB-25. No SkyEagle change. |
+| `aebcfdfc5` | PRE-09 / S1-P0-01 (verification pending) | Added PR-23…PR-28 coverage for the eight previously unrecorded core branding edits. Phase 1 confirmed this commit is landed; substantive invariant verification has not yet run. |
+| `26c32fcb3` | PRE-09 / S1-P0-01 (verification pending) | Corrected the stale PR-30 reference in the patch-record reconciliation table. Phase 1 confirmed this commit is landed; substantive invariant verification has not yet run. |
 
 Add a row for every further remediation commit.
 
 **Live stack state at checkpoint time (re-derived, not inherited):**
 
 ```text
-MariaDB 127.0.0.1:3306   UP        (SELECT succeeded)
-Apache  localhost:8300   NOT RESPONDING   (curl → HTTP 000)
+MariaDB 127.0.0.1:3306   NOT RESPONDING   (Phase 1: SELECT probe exit 1, connection refused)
+Apache  localhost:8300   NOT RESPONDING   (Phase 1: curl HTTP 000, exit 1, 2 s connection timeout)
 ```
+
+**Phase 1 continuation state (2026-08-24): COMPLETE.** Governing checkpoint, `CLAUDE.md`,
+`CLAUDE.local.md`, and applicable root `AGENTS.md` were read in full. The branch, HEAD, status, five
+registered worktrees, latest 15 commits, five commits after baseline, and changed-file names for every
+recent PRE-SKYEAGLE commit were re-derived with bounded read-only commands. Tool inventory: PHP 8.3.33 at
+`C:\openemr-stack\php\php.exe`; PHPUnit 11.5.55 at `vendor\bin\phpunit`; PHPStan 2.1.56 at
+`vendor\bin\phpstan`; Composer 2.10.2 at `C:\openemr-stack\composer.phar`; Node v24.18.1 and npm 11.16.0
+under `C:\Program Files\nodejs`; required PHPStan override
+`C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
+mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
+**Exact next incomplete item:** E1 / S2-P1-25 verification of `45e9eb4f3`, followed by E2 / S1-P0-01
+substantive invariant verification of `aebcfdfc5` and `26c32fcb3`, before any duplicate repair.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -446,6 +462,25 @@ translation call → **55 live call-site lines**.
 > The *process* gap it exposed is NOT fixed and remains open as **S1-P1-03** — the verifier is still invoked
 > by zero of the 64 workflows, which is why a red gate survived five days undetected. Original finding retained
 > below as the record.
+
+**Continuation verification (2026-08-24):**
+
+```yaml
+TASK/FINDING ID: S2-P1-25
+Previous status: FIXED_AND_REVERIFIED (inherited checkpoint claim)
+Current status: FIXED — VERIFIED
+What changed: No duplicate repair. Independently verified landed commit 45e9eb4f3.
+Files changed by repair: brand/manifests/SHA256SUMS; docs/branding-production/12-release-verification.md
+Commit hash: 45e9eb4f3944fed783ac0ef48673cedb32b26ca2
+Tests/commands executed: git show of commit and both changed files; php tools/branding/verify-brand-manifest.php
+Exact exit codes: git show 0; manifest verifier 0
+Tests and assertions executed: Manifest entries 123; verified 123; problems 0
+Runtime evidence: START 2026-08-24T06:38:07.1424797Z; END 2026-08-24T06:38:14.7066533Z; duration 7.564 s; no timeout
+Independent verification: Five hashes were re-issued (four drifted documents plus the explanation document); no entries deleted; Revision 5 durably records why.
+Rollback method: Branch at the parent commit and cherry-pick subsequent accepted changes; do not use destructive reset/revert.
+Remaining risks: S1-P1-03 remains open because CI still does not run the otherwise-correct verifier.
+Next incomplete task: E2 / S1-P0-01 invariant verification for aebcfdfc5 and 26c32fcb3.
+```
 
 `php tools/branding/verify-brand-manifest.php` → **TRUE exit code 1**, `119/123 verified, 4 problem(s)`:
 
