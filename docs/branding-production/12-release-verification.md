@@ -1,8 +1,41 @@
-# 12 — Release Verification (CORRECTED — REVISION 4)
+# 12 — Release Verification (CORRECTED — REVISION 5)
 
-**Status:** **PASS**
+**Status:** **PASS** (restored — see Revision 5)
 
-**Revision 4 (2026-08-09) — current.** Re-verified after the `Q25` Arabic PDF fonts were installed and registered (`brand/typography/fonts/pdf/`, asset IDs THIQA-100–103): **107 assets + 16 docs = 123 SHA256SUMS entries**, verified 123/123 by two independent hashers. Both Amiri TTFs carry a valid `0x00010000` TrueType signature and ship with their OFL-1.1 licence text.
+**Revision 5 (2026-08-24) — current. Manifest re-issued for four documents; the gate had been RED for five days, undetected.**
+
+`php tools/branding/verify-brand-manifest.php` reported `119/123 verified, 4 problem(s)`, exit code **1**,
+with hash mismatches on:
+
+| Document | Recorded (stale) | Actual |
+|---|---|---|
+| `11-asset-manifest.md` | `96d2e073…` | `8430d6ab…` |
+| `13-final-qa-matrix.md` | `2c8f0eb6…` | `71d38514…` |
+| `16-conflict-resolutions.md` | `3c051c90…` | `53d135e2…` |
+| `FINAL-GROUP-1.5B-CERTIFICATION.md` | `8df6fecf…` | `3f50e739…` |
+
+**Why they drifted.** All four were edited on 2026-08-19 by the documentation-correction pass that added the
+`FLAGGED FOR HUMAN REVIEW` notes and the D-15 correction. Their content changes were legitimate and are
+committed. What did not happen was the hash re-issue. The manifest was last re-issued `b3b821ffa`
+(2026-08-10), so from 2026-08-19 the release gate was failing and nobody ran the verifier to notice.
+
+**This is exactly the RB-25 failure mode**, whose standing obligation reads: *"run
+`php tools/branding/verify-brand-manifest.php` before **and** after editing anything under
+`docs/branding-production/`."* The obligation existed, was written down, and was not followed. Recording that
+plainly rather than silently re-issuing, because the process gap is the more useful finding.
+
+**Action taken:** the four entries were **re-issued, not deleted** (per RB-25's rule), against the committed
+content. This document was updated first and its own entry re-issued in the same pass — note that
+`12-release-verification.md` is itself one of the 16 manifest-covered documents, so *documenting a re-issue
+necessarily invalidates the manifest again*. The correct order is always: edit the document, then recompute,
+then verify.
+
+**Structural note for whoever wires the CI gate (S1-P1-03).** `verify-brand-manifest.php` is invoked by
+**zero** of the repository's 64 GitHub workflows. It is a correct tool that nothing runs automatically —
+which is why a red gate survived five days. It also only detects manifest→disk drift, never disk→manifest:
+a new unmanifested file under `brand/` passes silently.
+
+**Revision 4 (2026-08-09).** Re-verified after the `Q25` Arabic PDF fonts were installed and registered (`brand/typography/fonts/pdf/`, asset IDs THIQA-100–103): **107 assets + 16 docs = 123 SHA256SUMS entries**, verified 123/123 by two independent hashers. Both Amiri TTFs carry a valid `0x00010000` TrueType signature and ship with their OFL-1.1 licence text.
 
 **Revision 3 (2026-08-09).** Re-issued after the nine-item conflict resolution
 ([16-conflict-resolutions.md](16-conflict-resolutions.md)): **103 assets + 16 docs = 119 SHA256SUMS
