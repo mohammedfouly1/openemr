@@ -22,6 +22,7 @@
 | 10 | **S1-P0-13 + S2-P0-21 FIXED — VERIFIED.** Commits `948e4a6d1`, `02671f0c9`, and `2baf7322a` implement the neutral renderer, authoritative 28-language contract, generated installer supplement, release-prep regeneration, journal schema, automatic upgrade migration, deterministic rollback command, and full regression matrix. Final targeted PHPUnit: 41 tests / 134 assertions / exit 0. PHPCS: 18 files / exit 0. The final supplement was applied twice to a disposable MariaDB database: 1 target constant, 28 definitions, 3 RTL definitions, 0 orphans, 0 duplicate pairs; the exact database was dropped and confirmed absent. The live `openemr` DB was never mutated. PR-29…PR-32 expand the patch inventory from 33 to 49 distinct production files. Next incomplete task: S1-P1-03 CI wiring. |
 | 11 | **PRE-09 / S1-P1-03 FIXED — VERIFIED; PRE-11 completed.** `597276b09d507cc0e61a2c8784bd49c670c1d020` adds the canonical `composer branding-ci` gate to the existing `Isolated Tests` workflow; `ff6e35b4f4ddca0b16eb7a52c4489e7390664157` adds the runbook and PR-33 governance record. Final aggregate: 12/12 generated artefacts, 123/123 manifest entries, 91 tests / 264 assertions, exit 0. Reversible negative controls proved generated drift exit 3, manifest mismatch exit 1, 12 guardrail violations across all four required identifiers exit 1, and zero tests exit 1 after the repair (versus exit 0 before). All temporary mutations were exactly restored. Workflow YAML, Composer config, PHP syntax and PHPCS passed locally. GitHub-hosted execution: NO. Next incomplete task: S1-P1-15 backup retention. |
 | 12 | **PRE-09 / S1-P1-15 FIXED — VERIFIED.** `77d2b3e12914cd172d72d47b6fe4543750b70735` introduces the neutral `managed-db-backup-v1-<label>-<timestamp>.sql` contract, strict verified legacy recognition, deterministic mixed-family retention and defensive deletion. `8eb4ea7f8dbaf92f023f2a745a17f767f6a15f07` adds the full temporary-directory matrix to `composer branding-ci`; `64d2ba23c46336ee567cfcac944f08668be466a5` documents migration/rollback and PR-34. Final targeted result: 56 tests / 1,422 assertions / exit 0, no skips. Canonical gate: 12/12 artefacts, 123/123 manifest, 147 tests / 1,687 assertions / exit 0. Negative control proved a neutral-prefix-only selector ignored three legacy files while the repaired selector retained one ordered archive and left unrelated SQL untouched. All fixture directories removed. Real backup directory touched: NO. Live database touched: NO. Next incomplete task: S1-P1-17 disabled-token contract decision. |
+| 13 | **PRE-09 / S1-P1-17 FIXED — VERIFIED.** `0af1ce1740f1e1caf6d8536a18cee4c2c50917a5` preserves the deliberate 11-key tenant allowlist, keeps inactive controls outside WCAG SC 1.4.3/1.4.11, and adds a separate 1.5:1 product distinguishability floor between the disabled primary fill and both the enabled fill and page background. Exact source counts are 11 overridable / 10 WCAG-gated / 1 product-gated. Light/dark, malformed value, empty-overlay/downstream, canonical/legacy CSS names, fixed disabled opacity and live consumer tests passed. Final targeted: 261 tests / 773 assertions; downstream: 153 / 577; canonical gate: 12/12 artefacts, 123/123 manifest, 147 / 1,687; all exit 0. A reversible threshold mutation made the named negative test fail (exit 1) and exact source hash restoration was verified before the same test passed. Eight compiled theme files were updated by hash; all 28 runtime theme files match the complete local build. Next incomplete task: S1-P1-02 dead translation overrides. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -43,14 +44,14 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          64d2ba23c46336ee567cfcac944f08668be466a5 (before Rev 12 checkpoint commit)
-CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 12 checkpoint edit;
+CURRENT OBSERVED HEAD:          0af1ce1740f1e1caf6d8536a18cee4c2c50917a5 (before Rev 13 checkpoint commit)
+CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 13 checkpoint edit;
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
 SKYEAGLE MIGRATION STARTED:     NO
 SKYEAGLE BRANDING CHANGES:      NONE
-REPOSITORY WRITES THIS SESSION: S1-P1-15 neutral managed-backup retention, isolated tests, CI wiring,
-                                runbook, canonical contract, PR-34 patch record;
+REPOSITORY WRITES THIS SESSION: S1-P1-17 disabled-token product validation, regression tests, fixed
+                                component opacity contract, generated runtime CSS and aligned documentation;
                                 this checkpoint
 CURRENT PROGRAMME:              PRE-SKYEAGLE three-scan audit/remediation/certification
 FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
@@ -74,6 +75,7 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `77d2b3e12` | PRE-09 / S1-P1-15 | Added neutral versioned backup names, verified legacy compatibility, parsed-timestamp mixed retention, fail-closed scan/selection/deletion logic, and explicit command reporting. |
 | `8eb4ea7f8` | PRE-09 / S1-P1-15 | Added the destructive-safety/migration matrix using only validated unique temporary directories and wired it into the canonical branding CI gate. |
 | `64d2ba23c` | PRE-09 / S1-P1-15 | Added the canonical backup naming/retention/migration/rollback contract, operator runbook section and PR-34 governance record. |
+| `0af1ce174` | PRE-09 / S1-P1-17 | Preserved all 11 intended tenant overrides, added the separate 1.5:1 disabled-state product rule, locked light/dark component opacity, and reconciled source, tests and documentation. |
 
 Add a row for every further remediation commit.
 
@@ -157,7 +159,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 7 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). **Remaining:** S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 8 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). **Next:** S1-P1-02 dead translation overrides, then the remaining finding register in dependency order. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -191,11 +193,11 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 15 open · P2 4 open
-                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-03; S1-P1-15; S2-P0-21; S2-P1-25.
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 14 open · P2 4 open
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-03; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-25.
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
                     P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix)
-                    -> 15 (S1-P1-15 fix).
+                    -> 15 (S1-P1-15 fix) -> 14 (S1-P1-17 fix).
                     Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
                     repairing it. It stays open until the guardrail constants gain a real
                     cross-check against the production namespace.
@@ -554,6 +556,37 @@ A tenant value for this key passes on hex-format validation alone. Not a WCAG vi
 are exempt) but the contract must become deliberate.
 **Decision required:** keep overridable with a distinguishability constraint / make non-overridable /
 keep and document why. Source and docs must stop contradicting.
+
+**Status: FIXED — VERIFIED (continuation Rev 13).** The authoritative 11-key allowlist remains intact.
+`interactive.primary.disabled` is the sole tenant override without a WCAG contrast rule, because inactive
+controls are exempt from SC 1.4.3 and SC 1.4.11. `TokenValidator` now applies a separate product rule: at
+least 1.5:1 luminance separation from both `interactive.primary.default` and `background`, re-evaluated when
+either tenant-overridable primary fill changes. `insufficient_state_separation` is a distinct wire reason and
+is never described as a WCAG failure. The live component rule keeps the canonical tenant variable, Tier-1
+fallback and Bootstrap's fixed disabled opacity.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S1-P1-17
+Previous status: OPEN — DECISION REQUIRED
+Current status: FIXED — VERIFIED
+Decision: Option B — preserve tenant capability with a separate non-WCAG distinguishability rule
+Reason: ADR-BRAND-003, the runbook, readiness evidence, enum and exact allowlist tests all deliberately specify 11 overrides; making disabled non-overridable would remove intended capability, while format-only validation could let it disappear into the enabled fill or canvas
+Code/files changed: TokenKey.php; TokenValidator.php; RejectionReason.php; _overrides.scss; TokenKeyTest.php; TokenValidatorTest.php; TokenGeneratorIsolatedTest.php; architecture.md; ADR-BRAND-003; multi-tenant-white-label-readiness.md; runbook.md
+Tests executed: focused key/validator/generator suite; downstream service/materialiser/config/console suite; named reversible negative; restored named positive; generator check; manifest verifier; composer branding-ci; PHP lint; PHPCS; local theme build and 28-file hash reconciliation
+Tests/assertions: focused 261/773; downstream 153/577; negative 1/1 failure as expected; restored positive 1/3; branding-ci 147/1687
+Exit codes: focused 0; downstream 0; negative 1 expected; restored positive 0; generator 0; manifest 0; branding-ci 0; lint 0; PHPCS 0; webpack/build 0
+Positive controls: exact source counts 11 overridable / 10 WCAG-gated / disabled product floor 1.5; valid light #E5B0A5 and dark #6B3D36 accepted; compiled light/dark disabled consumers use --interactive-primary-disabled and opacity .65
+Negative controls: background-identical disabled fill rejected; enabled fill collapsing onto disabled rejected; malformed rgba rejected; threshold temporarily changed 1.5 -> 1.0 and named regression failed exit 1
+Runtime evidence: webpack 5.108.1 built 18 top-level + 10 misc CSS with 187 warnings and no errors; exactly eight affected theme files copied after hash comparison; destination 28/28 byte-matches build; forbidden stale theme count 0
+Database touched: NO
+Database restored: NOT APPLICABLE
+Temporary files removed/restored: threshold mutation restored in finally; TokenValidator SHA256 8E729125794B2B57DF824BF9D6584DA4C99CB0C091EC09532FAD3F4D3313AD58; orphan PHP process count returned to 0
+Independent verification: final composer branding-ci rechecked 12/12 generated artefacts, 123/123 manifest and a non-empty 147-test suite; documentation scan and executable source count agree
+Commit hash: 0af1ce1740f1e1caf6d8536a18cee4c2c50917a5
+Not-passes retained: first focused run caught the stale #DDDDDD fixture (261 tests, 1 failure, exit 1); one group command ran zero tests and is NOT PASS; one broad run was stopped incomplete at 793/1359 and both exact orphan PHP processes were terminated; one stale generator path exited 1 before the real entry point passed
+Remaining limitations: browser/live-DB mutation was neither required nor performed; the fixed opacity was proven in both compiled variants and existing S1-P0-09/PRE-16 live consumer proof remains authoritative
+Next incomplete PRE-* task: PRE-09 / S1-P1-02 — remove or migrate exactly two dead translation overrides without disturbing the neutral database-upgrade contract
+```
 
 ### S2-P1-18 — The live tenant is in an INCONSISTENT branding state
 `php bin/console thiqa-branding:verify --site=default`:
@@ -1134,7 +1167,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S1-P1-17; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 continues at S1-P1-02; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 
