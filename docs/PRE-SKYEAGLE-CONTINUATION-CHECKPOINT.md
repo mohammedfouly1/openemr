@@ -23,6 +23,7 @@
 | 11 | **PRE-09 / S1-P1-03 FIXED — VERIFIED; PRE-11 completed.** `597276b09d507cc0e61a2c8784bd49c670c1d020` adds the canonical `composer branding-ci` gate to the existing `Isolated Tests` workflow; `ff6e35b4f4ddca0b16eb7a52c4489e7390664157` adds the runbook and PR-33 governance record. Final aggregate: 12/12 generated artefacts, 123/123 manifest entries, 91 tests / 264 assertions, exit 0. Reversible negative controls proved generated drift exit 3, manifest mismatch exit 1, 12 guardrail violations across all four required identifiers exit 1, and zero tests exit 1 after the repair (versus exit 0 before). All temporary mutations were exactly restored. Workflow YAML, Composer config, PHP syntax and PHPCS passed locally. GitHub-hosted execution: NO. Next incomplete task: S1-P1-15 backup retention. |
 | 12 | **PRE-09 / S1-P1-15 FIXED — VERIFIED.** `77d2b3e12914cd172d72d47b6fe4543750b70735` introduces the neutral `managed-db-backup-v1-<label>-<timestamp>.sql` contract, strict verified legacy recognition, deterministic mixed-family retention and defensive deletion. `8eb4ea7f8dbaf92f023f2a745a17f767f6a15f07` adds the full temporary-directory matrix to `composer branding-ci`; `64d2ba23c46336ee567cfcac944f08668be466a5` documents migration/rollback and PR-34. Final targeted result: 56 tests / 1,422 assertions / exit 0, no skips. Canonical gate: 12/12 artefacts, 123/123 manifest, 147 tests / 1,687 assertions / exit 0. Negative control proved a neutral-prefix-only selector ignored three legacy files while the repaired selector retained one ordered archive and left unrelated SQL untouched. All fixture directories removed. Real backup directory touched: NO. Live database touched: NO. Next incomplete task: S1-P1-17 disabled-token contract decision. |
 | 13 | **PRE-09 / S1-P1-17 FIXED — VERIFIED.** `0af1ce1740f1e1caf6d8536a18cee4c2c50917a5` preserves the deliberate 11-key tenant allowlist, keeps inactive controls outside WCAG SC 1.4.3/1.4.11, and adds a separate 1.5:1 product distinguishability floor between the disabled primary fill and both the enabled fill and page background. Exact source counts are 11 overridable / 10 WCAG-gated / 1 product-gated. Light/dark, malformed value, empty-overlay/downstream, canonical/legacy CSS names, fixed disabled opacity and live consumer tests passed. Final targeted: 261 tests / 773 assertions; downstream: 153 / 577; canonical gate: 12/12 artefacts, 123/123 manifest, 147 / 1,687; all exit 0. A reversible threshold mutation made the named negative test fail (exit 1) and exact source hash restoration was verified before the same test passed. Eight compiled theme files were updated by hash; all 28 runtime theme files match the complete local build. Next incomplete task: S1-P1-02 dead translation overrides. |
+| 14 | **PRE-09 / S1-P1-02 FIXED — VERIFIED.** `2b801e668097599ac3e870448d340567929b4767` removes exactly the two dead OAuth overrides from the active catalogue and records exact-value English retirement metadata; the three Zend overrides remain active and verified against live consumers. Fresh/upgrade/customized-tenant policy, tenant-title English rendering, no stale consumers and the neutral database-upgrade contract are automated. Targeted result: 44 tests / 227 assertions / exit 0. Canonical gate: 12/12 artefacts, 123/123 manifest, 157 tests / 1,760 assertions / exit 0. Live dry-run planned exactly two deletes; before/after hashes for all five definitions of each constant were identical. A reversible decision mutation produced two failures / exit 1, then exact source hash restoration and the full targeted pass were verified. Next incomplete task: S1-P1-05 WCAG evidence counts. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -44,14 +45,14 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          0af1ce1740f1e1caf6d8536a18cee4c2c50917a5 (before Rev 13 checkpoint commit)
-CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 13 checkpoint edit;
+CURRENT OBSERVED HEAD:          2b801e668097599ac3e870448d340567929b4767 (before Rev 14 checkpoint commit)
+CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 14 checkpoint edit;
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
 SKYEAGLE MIGRATION STARTED:     NO
 SKYEAGLE BRANDING CHANGES:      NONE
-REPOSITORY WRITES THIS SESSION: S1-P1-17 disabled-token product validation, regression tests, fixed
-                                component opacity contract, generated runtime CSS and aligned documentation;
+REPOSITORY WRITES THIS SESSION: S1-P1-02 exact-value retirement of two dead English overrides,
+                                regression tests and aligned catalogue/governance documentation;
                                 this checkpoint
 CURRENT PROGRAMME:              PRE-SKYEAGLE three-scan audit/remediation/certification
 FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
@@ -76,6 +77,7 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `8eb4ea7f8` | PRE-09 / S1-P1-15 | Added the destructive-safety/migration matrix using only validated unique temporary directories and wired it into the canonical branding CI gate. |
 | `64d2ba23c` | PRE-09 / S1-P1-15 | Added the canonical backup naming/retention/migration/rollback contract, operator runbook section and PR-34 governance record. |
 | `0af1ce174` | PRE-09 / S1-P1-17 | Preserved all 11 intended tenant overrides, added the separate 1.5:1 disabled-state product rule, locked light/dark component opacity, and reconciled source, tests and documentation. |
+| `2b801e668` | PRE-09 / S1-P1-02 | Retired exactly two dead OAuth English overrides by exact managed value, preserved customized/non-English definitions and the three live Zend overrides, removed stale consumer metadata, and added fresh/upgrade/existing-tenant regression coverage without disturbing the neutral database-upgrade contract. |
 
 Add a row for every further remediation commit.
 
@@ -95,8 +97,8 @@ recent PRE-SKYEAGLE commit were re-derived with bounded read-only commands. Tool
 under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
-Those landed-work verification steps and the next five PRE-09 repairs are now complete; see revisions 6…12.
-**Exact next incomplete item:** PRE-09 / S1-P1-17 disabled-token validation contract decision.
+Those landed-work verification steps and the next seven PRE-09 repairs are now complete; see revisions 6…14.
+**Exact next incomplete item:** PRE-09 / S1-P1-05 WCAG evidence counts.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -159,7 +161,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 8 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). **Next:** S1-P1-02 dead translation overrides, then the remaining finding register in dependency order. |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 9 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). **Next:** S1-P1-05 WCAG evidence counts, then the remaining finding register in dependency order. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -193,11 +195,11 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 14 open · P2 4 open
-                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-03; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-25.
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 13 open · P2 4 open
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-25.
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
                     P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix)
-                    -> 15 (S1-P1-15 fix) -> 14 (S1-P1-17 fix).
+                    -> 15 (S1-P1-15 fix) -> 14 (S1-P1-17 fix) -> 13 (S1-P1-02 fix).
                     Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
                     repairing it. It stays open until the guardrail constants gain a real
                     cross-check against the production namespace.
@@ -427,6 +429,38 @@ enforce the disabled-token validation contract**. No SkyEagle rebranding began.
 references; `OpenEMR Login` → one CSS comment only. The `consumers` arrays are factually wrong.
 **Agent 2E resolved the other three as LIVE:** `OpenEMR Application`, `Welcome to OpenEMR`, `OpenEMR` are
 still consumed by Zend `.phtml` layouts. So cleanup is exactly **two** entries, not five.
+
+**Status: FIXED — VERIFIED (continuation Rev 14).** The two dead keys are absent from active
+`english_overrides` and recorded under `retired_english_overrides` without consumers. The tenant-scoped
+apply tool deletes only a `lang_id=1` definition whose binary value exactly equals the former managed value;
+an absent row is already clean, a different/custom value is preserved, and constants plus every non-English
+definition are untouched. The three live Zend overrides remain active. OAuth uses tenant-provided
+`applicationTitle` plus translated `Authorization` / `Login` phrases. The stale database-upgrade
+`carry_forward` entry is gone; the verified `%s Database Upgrade` durable contract remains authoritative.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S1-P1-02
+Previous status: CONFIRMED — REPAIR PENDING
+Current status: FIXED — VERIFIED
+Implementation commit: 2b801e668097599ac3e870448d340567929b4767
+Files changed: brand-strings.json; apply-brand-strings.php; RetiredEnglishOverrideDecision.php; BrandStringCatalogueIsolatedTest.php; MandatoryCoreStringPatchesIsolatedTest.php; changes.md; patch-records.md; rebranding.md
+Dead entries confirmed: OpenEMR Authorization -> Thiqa Authorization; OpenEMR Login -> Thiqa Login
+Live entries preserved: OpenEMR Application -> Thiqa Application; Welcome to OpenEMR -> Welcome to Thiqa; OpenEMR -> Thiqa
+Automated compatibility matrix: fresh row absent -> AlreadyAbsent; exact managed upgrade row -> DeleteManaged; customized existing tenant -> PreserveDifferent; case-different value preserved; Unicode exact value deleted
+English rendering: all three OAuth templates use tenant applicationTitle plus translated Authorization; oauth2-login also uses tenant applicationTitle plus translated Login; no compound dead key remains in a consumer
+Translation safety: deletion is constrained by def_id, cons_id, lang_id=1 and binary exact definition; lang_constants and non-English definitions are never deleted
+Neutral upgrade contract: carry_forward is empty; contrib/util/language_translations/contracts/database-upgrade.json remains target_key %s Database Upgrade with both legacy keys recorded
+Targeted positive: 44 tests / 227 assertions / exit 0
+Canonical positive: 12/12 generated artefacts; 123/123 manifest; 157 tests / 1,760 assertions / exit 0
+Lint/style: PHP lint 4/4 exit 0; JSON parse exit 0; PHPCS 4/4 exit 0
+Negative control: decision mutation forced every present row to PreserveDifferent; 5 tests / 15 assertions / 2 expected failures / exit 1
+Restoration: enum SHA256 BE962162E74DDBBB86A5B650FEBF965C88C647A72EB31F35E26F19C6250028A5 restored exactly; targeted suite then passed 44/227 exit 0; negative source and PHP session directory removed
+Live read-only proof: dry-run exit 0 planned exactly 2 deletes and found 3 active rows already correct; before/after each dead constant retained 5 definitions with identical SHA256 hashes 446e9d1c94a999d19f389f498b422c529fa6b15af01100ecccb3965c644d6817 and d2960d67f19225ce396cf365dcd0a5857f3d98759385ccec878f1aaf78c1093d
+Live database mutated: NO
+Not-passes retained: first command selected the DB-backed bootstrap and exited 70 before tests; first corrected isolated run executed 39 tests / 212 assertions but exited 2 on provider autoload; first PHPCS command named nonexistent phpcs.xml and exited 16; each was corrected and none was called a pass
+Warnings: canonical PHPUnit could not write its optional .phpunit.result.cache on the mounted tree; complete results and true exit 0 were captured
+Next incomplete PRE-* task: PRE-09 / S1-P1-05 — re-derive WCAG evidence counts and correct only genuine drift
+```
 
 ### S1-P1-03 — Branding gates are not wired into CI
 `grep -rn "branding-tokens-check|verify-brand-manifest|generate-tokens" .github/` → **nothing**, across
@@ -1167,7 +1201,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S1-P1-02; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 continues at S1-P1-05; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 
