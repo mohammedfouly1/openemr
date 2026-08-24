@@ -1443,3 +1443,139 @@ blocked, same as RDY-0042/0043). **RDY-0044 status:** stays open — the baselin
 content-complete, but the item's own closure rule needs both 0044-A and 0044-B legs formally closed,
 and this patch does not itself perform that closure step. **PB-057 status:** confirmed applied, already
 effectively live before this patch ran.
+
+---
+
+# PR-23 … PR-28 — the eight core edits that had no record (PRE-SKYEAGLE audit, 2026-08-24)
+
+*Eight files, six records: PR-25 covers the three `templates/oauth2/*.twig` files as one change.*
+
+> **Why these exist.** The PRE-SKYEAGLE audit (finding **S1-P0-01**) found eight branding-motivated edits to
+> tracked OpenEMR core files with **no patch record at all** — a `Q1` governance breach. They were introduced
+> by three self-labelled branding commits and were never folded into this document's coverage. The edits
+> themselves are sound; only the records were missing. These eight records close that gap. **No code is
+> changed by adding them.**
+>
+> **Correction to this document's own text.** The reconciliation note above (the paragraph beginning *"The
+> count reached 23 briefly and was brought back down to 17"*) states that the `templates/oauth2/*.twig` edits
+> were reverted and *"are correctly **absent** from this document."* **That was true when written and is now
+> false.** Commit `39d3f056b` (2026-08-19) re-introduced edits to all three of those templates — by a
+> different, non-orphaning mechanism (a Twig variable, not a literal rename), so it is **not** a repeat of
+> RB-01 — and this document was edited afterwards (`39a64d316`, 2026-08-20) without re-auditing file coverage.
+> The claim is superseded by PR-25/PR-26 below.
+>
+> **Corrected footprint:** 25 previously-documented core files + these 8 = **33**. Every "6" / "7" / "17" /
+> "22" figure elsewhere in this document and in `RebrandingPlan.md` §5.4/§5.9 is stale.
+
+---
+
+## PR-23 — `interface/main/tabs/main.php`
+
+**BRAND ID:** 001 (derived). **Commit:** `5b64dd078` (2026-08-19). **Rebase risk:** LOW for the branding
+hunk. Note this file has **two unrelated changes** against the fork base — the branding hunk below, and a
+separate `$session->set(...)` → `SessionUtil::setSession(...)` change belonging to the RDY-005x session-write
+hardening series, which is **not** branding and is **not** covered by this record.
+
+```diff
+-        echo $twig->render("product_registration/product_reg.js.twig", ['webroot' => ...->getWebRoot()]);
++        echo $twig->render("product_registration/product_reg.js.twig", [
++            'webroot' => OEGlobalsBag::getInstance()->getWebRoot(),
++            'applicationTitle' => OEGlobalsBag::getInstance()->getString('openemr_name'),
++        ]);
+```
+
+Supplies the branded product name to the registration modal template as a Twig variable rather than baking it
+into a translated literal. **Upstream-PR intent: moderate** — passing an application title into a template is
+generically useful, not fork-specific.
+
+## PR-24 — `templates/product_registration/product_reg.js.twig`
+
+**BRAND ID:** 001 (derived). **Commit:** `5b64dd078`. **Rebase risk:** LOW.
+
+```diff
+-        'title': "OpenEMR Product Registration"|xla,
++        'title': applicationTitle ~ " " ~ ("Product Registration"|xla),
+```
+
+> **⚠ CARRIES A MEASURED TRANSLATION REGRESSION — finding S2-P1-27, open.**
+> The retired constant `OpenEMR Product Registration` holds **9 definitions** (langs 6, 17, 19, 20, 21, 29,
+> 34, 37, 59) and is now **orphaned** — nothing renders it. The replacement constant `Product Registration`
+> has **zero rows in `lang_constants`**. Verified live 2026-08-24:
+> `SELECT COUNT(*) FROM lang_constants WHERE constant_name='Product Registration'` → **0**.
+> Net effect: the modal title now renders **English in all nine locales that previously had a translation**.
+>
+> **This is not RB-01** (no rows were destroyed; the old rows still exist), but it is the same family of
+> mistake: decomposing a translated literal without seeding the replacement constant. **Remediation is to
+> seed `Product Registration` from the 9 orphaned rows with the product token stripped**, or to adopt the
+> placeholder form (`xla('%s Product Registration')` + substitution) so word order stays translator-controlled.
+
+## PR-25 — `templates/oauth2/oauth2-login.html.twig`, `patient-select.html.twig`, `scope-authorize.html.twig`
+
+**BRAND ID:** 127, 128. **Commit:** `39d3f056b` (2026-08-19). **Rebase risk:** LOW (zero upstream commits
+touch these files since the fork base).
+
+```diff
+-{% block title %}{{ "OpenEMR Authorization"|xlt }}{% endblock %}
++{% block title %}{{ applicationTitle }} {{ "Authorization"|xlt }}{% endblock %}
+-  ...value="api">{{"OpenEMR Login"|xlt }}...
++  ...value="api">{{ applicationTitle }} {{ "Login"|xlt }}...
+```
+
+**Translation impact — measured, and better than first reported.** `OpenEMR Authorization` had 5 definitions
+and **0 Arabic**; the replacement `Authorization` has **10** definitions and **0 Arabic**. Locale coverage
+therefore **doubled**; Arabic was absent both before and after. An earlier audit note claiming "a translation
+loss in the product's primary target locale" is **incorrect** and is withdrawn here.
+The residual concern is real but narrower: **bare juxtaposition hardcodes English word order**, so an RTL
+locale renders `Thiqa الولوج`. Prefer a placeholder-bearing key on any future change.
+These three files carry a **zero-count guard** in
+`tests/Tests/Isolated/BrandingCoreStrings/MandatoryCoreStringPatchesIsolatedTest.php` — they must never
+contain a product-name literal.
+
+## PR-26 — `src/RestControllers/AuthorizationController.php`
+
+**BRAND ID:** 127, 128 (supporting). **Commit:** `39d3f056b`. **Rebase risk:** **MEDIUM — highest of this
+set.** Three upstream commits touch this file since the fork base; it is the most churned of the eight.
+
+Supplies `applicationTitle` from `$this->globalsBag->getString('openemr_name')` into the OAuth2 Twig context
+(two call sites: `:836` and `:1111`). **Upstream-PR intent: moderate.**
+
+## PR-27 — `src/RestControllers/SMART/SMARTAuthorizationController.php`
+
+**BRAND ID:** 127, 128 (supporting). **Commit:** `39d3f056b`. **Rebase risk:** LOW (zero upstream commits).
+Same mechanism as PR-26, at `:290` and `:319`.
+
+## PR-28 — `webpack.themes.js`
+
+**BRAND ID:** 076, 077. **Commit:** `32764921c` (2026-08-10). **Rebase risk:** **MEDIUM** — build config is a
+common upstream-churn target, and this is the `Q77` enforcement point.
+
+Repoints the `style_light` / `style_dark` entry family (plus compact/rtl/rtl_compact = 8 entries) at the
+fork-owned `oe-styles/style_thiqa_{light,dark}.scss` sources, and removes the 16 surplus-theme entries.
+**Entry *names* are deliberately unchanged** so `css_header`, `config/config.yaml` and the
+`interface/globals.php:476` `file_exists()` fallback keep working — see `ADR-BRAND-004`. Guarded by
+`BrandingGovernanceGuardTest`.
+
+**This record's absence was the most consequential of the eight**: `webpack.themes.js` is the single file
+enforcing locked decision `Q77`, and it was carrying that duty with no `Q1` record.
+
+---
+
+### Reconciliation after PR-23 … PR-28
+
+| Source | Figure | Assessment |
+|---|---|---|
+| `RebrandingPlan.md` §5.9 exit criterion | "exactly the 6 recorded files" | **Stale** |
+| `RebrandingPlan.md` §5.4 corrected table | "7 files" | **Stale** — mandatory WS-C subset only |
+| This document, pre-audit | 17 | **Stale** — predated PR-14…PR-22 |
+| This document, PR-01…PR-22 | 25 files | Correct for that set |
+| **This document, current (PR-01…PR-30)** | **33 files** | **Current** |
+
+**V-09 must now be re-run against all 33.** Live `git merge-tree HEAD <upstream>` on 2026-08-24 reported
+**47 conflicting paths**; of the recorded set only `src/Services/EncounterService.php` (PR-14, a non-branding
+defect fix) conflicts. None of these eight conflict today — but `AuthorizationController.php` (PR-26) and
+`webpack.themes.js` (PR-28) carry real upstream churn and are the watch items.
+
+**Measured churn since the fork base** (`git rev-list --count b91c12aee..<upstream> -- <path>`), correcting a
+long-standing assumption: `setup.php` has **zero** upstream commits, contradicting PR-10's "high upstream
+churn" rating. The genuinely highest-churn recorded file is `interface/globals.php` (**6**), rated only
+"Medium" and conflict-free today.
