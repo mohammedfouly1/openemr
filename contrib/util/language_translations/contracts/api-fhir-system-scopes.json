@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "api-fhir-system-scopes-neutral-v1",
+    "target_key": "Enable %s FHIR System Scopes.",
+    "legacy_keys": {
+        "Enable OpenEMR FHIR System Scopes.": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

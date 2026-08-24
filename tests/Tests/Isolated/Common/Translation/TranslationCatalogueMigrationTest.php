@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace OpenEMR\Tests\Isolated\Common\Translation;
 
+use OpenEMR\Common\Translation\ProductContextTranslation;
 use OpenEMR\Common\Translation\TranslationCatalogueContract;
 use OpenEMR\Common\Translation\TranslationCatalogueMigration;
 use OpenEMR\Common\Translation\TranslationCatalogueStore;
@@ -194,6 +195,94 @@ final class TranslationCatalogueMigrationTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('drifted');
         $this->migration()->rollback($this->contract(), $store);
+    }
+
+    // --------------------------------------- schema v2: missing-identity policy (S2-P1-26)
+
+    /**
+     * The default refuses. A translation that never named the product has no placeholder position
+     * to infer, and silently dropping it would lose that locale without anyone noticing.
+     */
+    public function testADefinitionWithoutTheIdentityLiteralIsFatalByDefault(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('OpenEMR Users', [3 => 'Usuarios de OpenEMR', 7 => 'משתמשים']);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('without losing identity context');
+        $this->migration()->forward($this->legacyContract('%s Users', 'OpenEMR Users', 'fail'), $store);
+    }
+
+    /**
+     * `skip` is the deliberate opt-out, and it is what makes the PHP upgrade path agree with the
+     * generated installer SQL, which has always skipped these rows. Measured on the real
+     * catalogue, every brand-bearing key has one to four of them.
+     */
+    public function testSkipPolicyLeavesUntranslatedIdentityRowsBehind(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('OpenEMR Users', [3 => 'Usuarios de OpenEMR', 7 => 'משתמשים', 22 => 'مستخدمو OpenEMR']);
+
+        $result = $this->migration()->forward($this->legacyContract('%s Users', 'OpenEMR Users', 'skip'), $store);
+
+        self::assertSame('applied', $result->action);
+        self::assertSame(
+            [3 => 'Usuarios de %s', 22 => 'مستخدمو %s'],
+            $store->definitionsOf('%s Users'),
+            'Only rows that actually named the product may be carried forward.',
+        );
+        // The source is never touched, so other call sites keep their translations.
+        self::assertSame(
+            [3 => 'Usuarios de OpenEMR', 7 => 'משתמשים', 22 => 'مستخدمو OpenEMR'],
+            $store->definitionsOf('OpenEMR Users'),
+        );
+    }
+
+    /** An explicit contract definition settles the language regardless of policy. */
+    public function testAnExplicitDefinitionCoversALanguageThatNeverNamedTheProduct(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('OpenEMR Users', [7 => 'משתמשים']);
+
+        $contract = TranslationCatalogueContract::fromJson(<<<'JSON'
+            {
+                "schema": "openemr-translation-contract/2",
+                "id": "users-explicit",
+                "target_key": "%s Users",
+                "legacy_keys": {"OpenEMR Users": "OpenEMR"},
+                "definitions": {"7": "משתמשי %s"}
+            }
+            JSON);
+
+        $result = $this->migration()->forward($contract, $store);
+
+        self::assertSame('applied', $result->action);
+        self::assertSame([7 => 'משתמשי %s'], $store->definitionsOf('%s Users'));
+    }
+
+    /** Every carried-forward pattern must still be composable, whichever policy applied. */
+    public function testEveryCarriedPatternRemainsComposable(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('OpenEMR Users', [3 => 'Usuarios de OpenEMR', 22 => 'مستخدمو OpenEMR']);
+
+        $this->migration()->forward($this->legacyContract('%s Users', 'OpenEMR Users', 'skip'), $store);
+
+        foreach ($store->definitionsOf('%s Users') as $pattern) {
+            self::assertNotSame('', ProductContextTranslation::compose($pattern, 'Thiqa'));
+        }
+    }
+
+    private function legacyContract(string $target, string $legacyKey, string $policy): TranslationCatalogueContract
+    {
+        return TranslationCatalogueContract::fromJson(json_encode([
+            'schema' => 'openemr-translation-contract/2',
+            'id' => 'legacy-' . $policy . '-' . $legacyKey,
+            'target_key' => $target,
+            'legacy_keys' => [$legacyKey => 'OpenEMR'],
+            'on_missing_identity' => $policy,
+            'definitions' => (object) [],
+        ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
     }
 
     // ------------------------------------------------- schema v2: derive-from carry-forward

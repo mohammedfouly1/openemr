@@ -828,7 +828,7 @@ function writeITLine($it_array): void
     ++$opt_line_no;
     $bgcolor = "#" . (($opt_line_no & 1) ? "ddddff" : "ffdddd");
     echo " <tr>\n";
-    echo ctSelector($opt_line_no, $it_array, 'category', $ISSUE_TYPE_CATEGORIES, xl('OpenEMR Application Category'));
+    echo ctSelector($opt_line_no, $it_array, 'category', $ISSUE_TYPE_CATEGORIES, xlp('%s Application Category'));
     echo ctGenCBox($opt_line_no, $it_array, 'active', xl('Is this active?'));
     echo ctGenCell($opt_line_no, $it_array, 'ordering', 4, 10, xl('Order{{Sequence}}'));
     echo ctGenCell($opt_line_no, $it_array, 'type', 15, 75, xl('Issue Type'));
@@ -1294,7 +1294,7 @@ function writeITLine($it_array): void
                     <th><?php echo xlt('Check Out'); ?></th>
                     <th><?php echo xlt('Code(s)'); ?></th>
                 <?php elseif ($list_id == 'issue_types') : ?>
-                    <th><?php echo xlt('OpenEMR Application Category'); ?></th>
+                    <th><?php echo text(xlp('%s Application Category')); ?></th>
                     <th><?php echo xlt('Active{{Issue}}'); ?></th>
                     <th><?php echo xlt('Order{{Sequence}}'); ?></th>
                     <th><?php echo xlt('Type'); ?></th>

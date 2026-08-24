@@ -36,6 +36,8 @@
 
 | 23 | **PRE-09 / S2-P1-26 SUBSTANTIALLY FIXED — VERIFIED. Class B complete; Class A specified.** The finding's counts were re-derived by exact quoted-literal extraction rather than the substring matching it used — which had inflated the bare `OpenEMR` key to "52 call sites". True figures over 4,105 files: **Class A** (has a catalogue row, a contract can neutralise) 20 literals / 22 sites; **Class B** (no row at all, no override can ever reach it) 22 literals / 25 sites; 49 dead entries. The structural half is therefore *larger* than recorded, not smaller. Class B is fully converted (15 literals / 18 sites) via a new PHP `xlp()` helper mirroring the Twig filter — safe by construction, since with no catalogue row nothing can be orphaned. **Six strings naming the OpenEMR Foundation, the upstream community or ONC certification are deliberately preserved and now locked by test**: neutralising them would make the software assert something untrue about who holds a certification or who should receive a report. Two more are excluded for mechanical reasons (one JS-side `xl()`, one carrying two `OpenEMR` occurrences against a one-placeholder contract). Class A remains open with its mechanism already built and its recipe written down. Targeted 13 tests / 474 assertions; canonical gate 12/12 artefacts, 123/123 manifest, 253 tests / 3,224 assertions, exit 0. The gate also gained an explicit 1800 s `config.process-timeout` budget after a **passing** suite was killed by Composer's 300 s default — the per-script `@putenv` form was tried first and does not work, because Composer reads the timeout at startup. |
 
+| 24 | **PRE-09 / S2-P1-26 Class A CLOSED — VERIFIED. S2-P1-26 is now fully fixed.** All 20 catalogued brand-bearing literals have a schema-v2 `legacy_keys` contract and all 22 call sites are converted, including `interface/login_screen.php:29` — the login page, the finding's most-exposed surface. **A latent defect shipped at Rev 22 was found and fixed first:** the generated installer SQL skipped a translation that never named the product, while the PHP upgrade migration **threw** on it — the same contract producing different catalogues on fresh install versus upgrade, which is the divergence S2-P0-21 exists to prevent. Measured, not hypothetical: every brand-bearing key has 1–4 such rows, and the two contracts shipped at Rev 22 (`OpenEMR Application`, `Welcome to OpenEMR`) have two each, so they **would have aborted a real upgrade**. My own new contract test caught it, not inspection. `MissingIdentityPolicy` now makes the choice explicit per contract — `fail` stays the default because silently losing a locale is worse than a loud stop; `skip` is the declared opt-in on all 22 legacy contracts, with its cost stated (those locales fall back to the neutral English pattern at that one call site). Disposable-database proof on `openemr_prebrand_classa_20260824_202517`: applied twice, identical counts (31 constants, 46 definitions, 0 orphans, 0 duplicate pairs), Arabic carried forward as `يتطلب %s جافاسكريبت…` with the placeholder in the *translator's* word order, and the rows lacking the literal correctly skipped; dropped and confirmed absent, live DB intact at 13,235 constants. Targeted 61 tests / 495 assertions; canonical gate 12/12 artefacts, 123/123 manifest, 255 tests / 3,271 assertions; PHPCS 27/27; all exit 0. |
+
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
 
@@ -221,20 +223,20 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 4 open · P2 0 open (4 fixed)
-                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-04; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-22; S2-P1-23; S2-P1-25.
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 3 open · P2 0 open (4 fixed)
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-04; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-22; S2-P1-23; S2-P1-25; S2-P1-26.
                     PARTLY FIXED: S2-P1-24 (juxtaposition half closed; variant-selection half open).
                     REFUTED IN PART, REMAINDER FIXED: S2-P1-20 (see Correction K).
-                    NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
+                    NEW since: S2-P1-26 (English leak surface + uncatalogued leak class) - now itself FIXED at Rev 23/24.
                     P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix)
                     -> 15 (S1-P1-15 fix) -> 14 (S1-P1-17 fix) -> 13 (S1-P1-02 fix)
                     -> 12 (S1-P1-05 fix) -> 11 (S1-P1-06 fix) -> 10 (S1-P1-10 fix)
                     -> 9 (S1-P1-11 fix) -> 8 (S2-P1-18 fix) -> 7 (S1-P1-04 fix)
                     -> 6 (S2-P1-20 refuted-in-part + remainder fixed)
-                    -> 5 (S2-P1-23 fix) -> 4 (S2-P1-22 fix).
+                    -> 5 (S2-P1-23 fix) -> 4 (S2-P1-22 fix) -> 3 (S2-P1-26 fix).
                     P2 all fixed: S1-P2-07; S1-P2-12; S1-P2-14; S1-P2-16.
-                    STILL OPEN (P1): S2-P1-24 (second half only); S2-P1-26; plus two
-                    unlabelled slots.
+                    STILL OPEN (P1): S2-P1-24 (second half only); plus two unlabelled
+                    slots.
                     S2-P1-22/23/24 were ONE workstream and were fixed together at Rev 22:
                     ten call sites now compose a single translatable unit, and schema-v2
                     derive_from carries every existing translation forward, so no locale
@@ -243,8 +245,7 @@ REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 4 open · P2 0 open (4 fi
                     Arabic logo variant) is a different mechanism — those surfaces pick the
                     wrong *variant* of the product name rather than mistranslating a phrase
                     — and is scoped but not built.
-                    NOTE ON THE COUNT: only 2 of those 4 have a written section in this
-                    checkpoint (§6 documents S2-P1-24 and S2-P1-26). The
+                    NOTE ON THE COUNT: only 1 of those 3 has a written section in this\n                    checkpoint (§6 documents S2-P1-24). The
                     arithmetic carries two unlabelled P1 slots inherited from Scan-2's
                     register that were never transcribed here (the numbering gap at
                     S2-P1-19 and S2-P1-21 is where they sit). Treat the four documented
@@ -1102,8 +1103,8 @@ translation call → **55 live call-site lines**.
   plus `contrib/`, `sites/`, `Documentation/`, `tests/`; fixed-string matching also misses literals split
   across lines.
 
-**Status: SUBSTANTIALLY FIXED — VERIFIED (continuation Rev 23). Class B fully converted; Class A specified
-and not yet built. The finding's own counts are corrected below.**
+**Status: FIXED — VERIFIED. Class B at continuation Rev 23, Class A at Rev 24. The finding's own counts are
+corrected below.**
 
 **Measurement corrected.** The original figures came from `git grep -F -f`, which matches a key as a
 *substring* of a line — so every long key's line also counted as a hit for the bare key `OpenEMR`, inflating
@@ -1140,18 +1141,29 @@ scope descriptions across `ScopeRepository` and `ServerScopeListEntity`.
 | `questionnaire_assessments.php:337` copyright disclaimer | **JavaScript** `xl()`, not PHP — a different mechanism needing a JS-side composition helper. |
 | `globals.inc.php:4443` theme-select description | Contains **two** `OpenEMR` occurrences; `ProductContextTranslation` accepts exactly one placeholder by design. Needs either a two-placeholder contract or a rewrite. |
 
-**Class A (20 literals / 22 sites) remains OPEN, and the mechanism for it already exists.** Each needs a
-schema-v2 contract with `legacy_keys: {"<old key>": "OpenEMR"}` and `target_key` = the same sentence with
-`OpenEMR` replaced by `%s`; the SQL and PHP carry-forward paths built for S2-P1-22 then neutralise every
-locale's translation automatically. It is 20 formulaic contract files plus 22 call-site edits. It was not
-attempted here rather than half-attempted: converting a call site *without* its contract is exactly the
-orphaning regression that was caught and reverted at Rev 21. The highest-exposure member is
-`interface/login_screen.php:29` — the login page.
+**Class A is now also CLOSED (continuation Rev 24).** All 20 literals have a schema-v2 contract with
+`legacy_keys: {"<old key>": "OpenEMR"}` and a target that is the same sentence with the literal replaced by
+`%s`, and all 22 call sites are converted — including the highest-exposure member,
+`interface/login_screen.php:29`, the login page.
+
+**A latent defect had to be fixed first, and it was already shipped in Rev 22.** The two carry-forward paths
+disagreed about a translation that never named the product: the generated installer SQL skipped it
+(`LOCATE(literal, definition) > 0`), while the PHP upgrade migration **threw**. Same contract, different
+catalogue on fresh install versus upgrade — the divergence S2-P0-21 exists to prevent. Not hypothetical:
+every brand-bearing key has 1–4 such rows, and `OpenEMR Application` / `Welcome to OpenEMR` (shipped at
+Rev 22) have two each, so those contracts **would have aborted a real upgrade**. It was caught by a contract
+test written for this task, not by inspection.
+
+`MissingIdentityPolicy` now makes the choice explicit per contract: `fail` remains the default because
+silently losing a locale is worse than a loud stop, and `skip` is the opt-in all 22 legacy contracts
+declare. The cost is stated rather than hidden — those specific locales fall back to the neutral English
+pattern at that one call site, because a sentence that never mentioned the product has no placeholder
+position to infer and guessing one produces a subtly wrong string in a language the author cannot read.
 
 ```yaml
 TASK/FINDING ID: PRE-09 / S2-P1-26
 Previous status: CONFIRMED — leak surface + uncatalogued class, counts unverified
-Current status: SUBSTANTIALLY FIXED — VERIFIED (Class B complete; Class A specified, not built)
+Current status: FIXED — VERIFIED (Class B at Rev 23; Class A at Rev 24)
 Measurement method: exact quoted-literal extraction from xl/xlt/xla/xlj calls and "..."|xl* Twig filters over 4,105 files; documented exclusions applied
 Counts re-derived: Class A 20 literals / 22 sites; Class B 22 literals / 25 sites; dead catalogue entries 49
 Original counts corrected: 23 reachable -> 20 Class A; 46 dead -> 49; "52 sites for the bare OpenEMR key" was a substring artefact and is withdrawn
@@ -1161,9 +1173,10 @@ New helper: xlp() in library/translation.inc.php, composing through ProductConte
 Targeted: ProductNameCompositionContractTest 13 tests / 474 assertions / exit 0
 Lint/style: PHP lint 8/8 exit 0; PHPCS 8/8 exit 0
 Live database touched: NO (read-only SELECT to dump the 69 brand-bearing keys)
-Remaining work, specified: 20 Class-A contracts + 22 call-site edits; a JS composition helper; a decision on the two-placeholder string
+Class A closed at Rev 24: 20 schema-v2 legacy contracts and all 22 call sites, including interface/login_screen.php:29. A latent defect was found and fixed doing it - the installer SQL skipped a translation lacking the brand literal while the PHP upgrade migration threw, so one contract produced different catalogues on install versus upgrade; the two contracts shipped at Rev 22 would have aborted a real upgrade. MissingIdentityPolicy makes the choice explicit (fail = default, skip = declared opt-in).
+Remaining work, specified: a JS-side composition helper for questionnaire_assessments.php:337; a decision on the one two-placeholder string (globals.inc.php:4443)
 Gate budget change: composer.json config.process-timeout raised to 1800. The 253-test gate measured 457-607 s here once the src/ edits invalidated the PHPStan cache, and CI always pays that cold-cache cost; Composer's 300 s default killed a PASSING suite and produced a red indistinguishable from a real failure. Asserted by BrandingCiContractTest. The per-script "@putenv COMPOSER_PROCESS_TIMEOUT" form was tried first and does NOT work - Composer reads the timeout at startup, before script steps run.
-Next incomplete PRE-* task: S2-P1-26 Class A, then the variant-selection half of S2-P1-24
+Next incomplete PRE-* task: the variant-selection half of S2-P1-24
 ```
 
 ### S2-P1-25 — Brand manifest release gate was RED (4 files) — ✅ **FIXED, commit `45e9eb4f3`**

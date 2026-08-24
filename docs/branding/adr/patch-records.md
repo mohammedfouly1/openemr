@@ -1956,6 +1956,51 @@ Twig filter from PR-39.
 PR-40 adds **8** newly edited non-module production files. The authoritative inventory is therefore
 **67 distinct files**, covered by PR-01…PR-40.
 
+---
+
+# PR-41 — neutralise the catalogued brand-leak class (2026-08-24)
+
+**Files:** `src/Common/Translation/MissingIdentityPolicy.php` (new);
+`src/Common/Translation/TranslationCatalogueContract.php`;
+`src/Common/Translation/TranslationCatalogueMigration.php`; 20 new contract JSON files; and the
+22 converted call sites in `interface/login_screen.php`, `interface/main/backup.php` (×3),
+`interface/patient_file/letter.php`, `interface/usergroup/mfa_totp.php`,
+`interface/smart/register-app.php`, `interface/super/edit_list.php` (×2),
+`interface/code_systems/dataloads_ajax.php`, `library/classes/Installer.class.php`,
+`library/formdata.inc.php` (×2), `library/globals.inc.php` (×8).
+**Rebase risk:** MEDIUM — `globals.inc.php` is the fork's highest-churn file.
+
+This completes **S2-P1-26**. PR-40 handled the uncatalogued class; this one handles the 20 literals that
+*do* have a `lang_constants` row, where a bare call-site edit would orphan every locale's translation.
+Each gets a schema-v2 contract with `legacy_keys: {"<sentence>": "OpenEMR"}` and a target that is the same
+sentence with the literal replaced by `%s`; the carry-forward then rewrites each locale's own translation
+in place, so word order stays the translator's.
+
+**One defect had to be fixed before any of this could ship, and it was already latent in PR-39.** The two
+carry-forward paths disagreed about a translation that never named the product: the generated installer SQL
+skipped it (`LOCATE(literal, definition) > 0`), while the PHP upgrade migration threw. A fresh install and
+an upgrade therefore produced different catalogues from the same contract — the divergence S2-P0-21 exists
+to prevent. It is not hypothetical: measured on a real catalogue, **every** brand-bearing key has one to
+four such rows, and `OpenEMR Application` and `Welcome to OpenEMR` — shipped in PR-39 — have two each, so
+those contracts would have aborted a real upgrade.
+
+`MissingIdentityPolicy` makes the choice explicit per contract. `fail` stays the default, because silently
+losing a locale is worse than a loud stop; `skip` is the opt-in these 22 contracts declare, and it is what
+makes PHP agree with the SQL. There is no third option worth having: a translation that never mentioned
+the product has no placeholder position to infer, and guessing one produces a subtly wrong sentence in a
+language the author cannot read. The cost is stated rather than hidden — those specific locales fall back
+to the neutral English pattern at that one call site.
+
+**Upstream-first path (Q1):** as with PR-39/PR-40, the mechanism is generic i18n infrastructure; only the
+contract contents are fork-specific.
+
+### Reconciliation after PR-41
+
+PR-41 adds **9** newly edited non-module production files (`login_screen.php`, `backup.php`, `letter.php`,
+`mfa_totp.php`, `register-app.php`, `edit_list.php`, `dataloads_ajax.php`, `Installer.class.php`,
+`formdata.inc.php`); `globals.inc.php` was already counted by PR-40. The authoritative inventory is
+therefore **76 distinct files**, covered by PR-01…PR-41.
+
 **One gate change came with it.** `composer.json` now sets `config.process-timeout` to 1800. Composer kills
 a child process after 300 seconds by default, and the gate — a 253-test suite including PHPStan
 RuleTestCase analysis, which CI always pays with a **cold** cache — measured 457–607 seconds here once the

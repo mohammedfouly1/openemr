@@ -119,7 +119,7 @@ $user_full_name = $user_name['fname'] . " " . $user_name['lname'];
                                                     <?php echo xlt('Invalid password'); ?>
                                                 </div>
                                             <?php } ?>
-                                            <p><?php echo xlt('In order to register your device, please provide your OpenEMR login password'); ?></p>
+                                            <p><?php echo text(xlp('In order to register your device, please provide your %s login password')); ?></p>
                                             <div class="col-sm-4 offset-sm-4">
                                                 <input type="password" class="form-control" id="clearPass" name="clearPass" placeholder="<?php echo xla('Password'); ?>:" >
                                             </div>

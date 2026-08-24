@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "formdata-escaping-error-neutral-v1",
+    "target_key": "There was an %s SQL Escaping ERROR of the following string",
+    "legacy_keys": {
+        "There was an OpenEMR SQL Escaping ERROR of the following string": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

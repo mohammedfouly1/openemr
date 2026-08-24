@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "ldap-login-embed-neutral-v1",
+    "target_key": "Embed {login} where the %s login name of the user is to be; for example: uid={login},dc=example,dc=com",
+    "legacy_keys": {
+        "Embed {login} where the OpenEMR login name of the user is to be; for example: uid={login},dc=example,dc=com": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

@@ -90,7 +90,7 @@ $dsiTypesStringNames = DecisionSupportInterventionService::DSI_TYPES_CLIENT_STRI
 <head>
     <?php Header::setupHeader(); ?>
 
-    <title><?php echo xlt('OpenEMR App Registration'); ?></title>
+    <title><?php echo text(xlp('%s App Registration')); ?></title>
     <style>
         .hidden {
             display: none;

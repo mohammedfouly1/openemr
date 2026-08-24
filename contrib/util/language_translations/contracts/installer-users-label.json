@@ -1,9 +1,9 @@
 {
     "schema": "openemr-translation-contract/2",
-    "id": "zend-application-neutral-v1",
-    "target_key": "%s Application",
+    "id": "installer-users-label-neutral-v1",
+    "target_key": "%s Users",
     "legacy_keys": {
-        "OpenEMR Application": "OpenEMR"
+        "OpenEMR Users": "OpenEMR"
     },
     "on_missing_identity": "skip",
     "definitions": {}

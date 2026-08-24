@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "login-requires-javascript-neutral-v1",
+    "target_key": "%s requires Javascript to perform user authentication.",
+    "legacy_keys": {
+        "OpenEMR requires Javascript to perform user authentication.": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

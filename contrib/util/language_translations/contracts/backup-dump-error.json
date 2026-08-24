@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "backup-dump-error-neutral-v1",
+    "target_key": "An error occurred while dumping %s web directory tree",
+    "legacy_keys": {
+        "An error occurred while dumping OpenEMR web directory tree": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace OpenEMR\Tests\Isolated\BrandingCi;
 
+use OpenEMR\Common\Translation\MissingIdentityPolicy;
 use OpenEMR\Common\Translation\TranslationCatalogueContractSet;
 use OpenEMR\Common\Translation\TranslationDerivation;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -233,6 +234,78 @@ final class ProductNameCompositionContractTest extends TestCase
                 $literal,
                 $source,
                 $relativePath . ' still bakes "' . $literal . '" into a translatable key.',
+            );
+        }
+    }
+
+    /**
+     * Class A: the literal HAD a catalogue row, so the call-site change is only safe alongside a
+     * contract that carries every locale's translation onto the neutral key. Converting one
+     * without the other is the orphaning regression this programme already caught once and
+     * reverted, so the pairing is asserted rather than trusted.
+     */
+    public function testEveryClassAConversionHasAContractThatPopulatesIt(): void
+    {
+        $set = TranslationCatalogueContractSet::fromProjectDirectory($this->root());
+
+        $legacyTargets = [];
+        foreach ($set->all() as $contract) {
+            if ($contract->legacyKeys !== []) {
+                $legacyTargets[$contract->targetKey] = $contract;
+            }
+        }
+
+        // Every neutral key a converted class-A site composes, and the file it lives in.
+        $conversions = [
+            'interface/login_screen.php' => '%s requires Javascript to perform user authentication.',
+            'interface/main/backup.php' => 'Dumping %s database',
+            'interface/patient_file/letter.php' => 'Ensure %s has write privileges to directory',
+            'interface/super/edit_list.php' => '%s Application Category',
+            'library/classes/Installer.class.php' => '%s Users',
+            'library/formdata.inc.php' => 'There was an %s SQL Escaping ERROR of the following string',
+            'interface/smart/register-app.php' => '%s App Registration',
+            'interface/usergroup/mfa_totp.php' => 'In order to register your device, please provide your %s login password',
+        ];
+
+        foreach ($conversions as $relativePath => $neutralKey) {
+            $source = $this->read($this->root() . '/' . $relativePath);
+
+            self::assertStringContainsString(
+                $neutralKey,
+                $source,
+                $relativePath . ' should compose "' . $neutralKey . '".',
+            );
+            self::assertArrayHasKey(
+                $neutralKey,
+                $legacyTargets,
+                $relativePath . ' composes "' . $neutralKey . '" but no carry-forward contract '
+                . 'creates it, so every locale that had a translation would silently drop to English.',
+            );
+        }
+    }
+
+    /**
+     * A carry-forward contract must state what happens to a translation that never named the
+     * product. The default is to refuse; choosing to leave those rows behind is a real, bounded
+     * loss of one locale at one call site, so it has to be written down in the contract rather
+     * than inferred.
+     */
+    public function testEveryLegacyContractDeclaresItsMissingIdentityPolicy(): void
+    {
+        $set = TranslationCatalogueContractSet::fromProjectDirectory($this->root());
+
+        foreach ($set->all() as $contract) {
+            if ($contract->legacyKeys === [] || $contract->definitions !== []) {
+                continue;
+            }
+
+            // A legacy contract shipping no explicit definitions relies entirely on the transform,
+            // so it is exactly the case where a missing literal would otherwise abort an upgrade.
+            self::assertSame(
+                MissingIdentityPolicy::Skip,
+                $contract->onMissingIdentity,
+                $contract->id . ' carries translations forward with no explicit definitions, so it '
+                . 'must state how a translation lacking the brand literal is handled.',
             );
         }
     }

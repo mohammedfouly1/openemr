@@ -39,6 +39,7 @@ final readonly class TranslationCatalogueContract
         public string $hash,
         public ?TranslationDerivation $derivation = null,
         public string $schema = self::SCHEMA,
+        public MissingIdentityPolicy $onMissingIdentity = MissingIdentityPolicy::Fail,
     ) {
     }
 
@@ -80,6 +81,18 @@ final readonly class TranslationCatalogueContract
         $id = self::requiredString($data, 'id');
         $targetKey = self::requiredString($data, 'target_key');
         self::assertPattern($targetKey, 'target_key');
+
+        $onMissingIdentity = $data['on_missing_identity'] ?? MissingIdentityPolicy::Fail->value;
+        if (!is_string($onMissingIdentity)) {
+            throw new \InvalidArgumentException('on_missing_identity must be a string.');
+        }
+        $missingIdentityPolicy = MissingIdentityPolicy::tryFrom($onMissingIdentity);
+        if (!$missingIdentityPolicy instanceof MissingIdentityPolicy) {
+            throw new \InvalidArgumentException('on_missing_identity must be one of: fail, skip.');
+        }
+        if ($missingIdentityPolicy !== MissingIdentityPolicy::Fail && $schema !== self::SCHEMA_V2) {
+            throw new \InvalidArgumentException('on_missing_identity requires schema ' . self::SCHEMA_V2 . '.');
+        }
 
         $legacyKeys = $data['legacy_keys'] ?? null;
         if (!is_array($legacyKeys)) {
@@ -124,6 +137,7 @@ final readonly class TranslationCatalogueContract
             hash('sha256', $json),
             $derivation,
             $schema,
+            $missingIdentityPolicy,
         );
     }
 

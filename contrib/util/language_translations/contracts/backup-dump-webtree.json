@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "backup-dump-webtree-neutral-v1",
+    "target_key": "Dumping %s web directory tree",
+    "legacy_keys": {
+        "Dumping OpenEMR web directory tree": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

@@ -120,7 +120,7 @@ if (!empty($_POST['formaction']) && ($_POST['formaction'] == "generate")) {
 
     if (! fwrite($fh, $temp_bodytext)) {
         echo xlt('Error while saving to the file') . ' ' . text($template_dir) . "/autosaved" . ' . ' .
-             xlt('Ensure OpenEMR has write privileges to directory') . ' ' . text($template_dir)  . "/ ." ;
+             text(xlp('Ensure %s has write privileges to directory')) . ' ' . text($template_dir)  . "/ ." ;
         die;
     }
 

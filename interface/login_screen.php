@@ -26,7 +26,7 @@ $session = SessionWrapperFactory::getInstance()->getCoreSession();
 <a href='<?php echo "$rootdir/login/login.php?site=" . attr_url($session->get('site_id')); ?>'><?php echo xlt('Follow manually'); ?></a>
 
 <p>
-<?php echo xlt('OpenEMR requires Javascript to perform user authentication.'); ?>
+<?php echo text(xlp('%s requires Javascript to perform user authentication.')); ?>
 
 </body>
 </html>

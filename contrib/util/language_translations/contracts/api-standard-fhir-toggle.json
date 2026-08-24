@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "api-standard-fhir-toggle-neutral-v1",
+    "target_key": "Enable %s Standard FHIR REST API",
+    "legacy_keys": {
+        "Enable OpenEMR Standard FHIR REST API": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

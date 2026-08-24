@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "letter-write-privileges-neutral-v1",
+    "target_key": "Ensure %s has write privileges to directory",
+    "legacy_keys": {
+        "Ensure OpenEMR has write privileges to directory": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

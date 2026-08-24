@@ -222,7 +222,7 @@ $activeAccordionSection = $_GET['aas'] ?? '0';
                         });
                     });
                     // Initial tooltip
-                    $(`#${dbName}_unsupportedmsg`).attr({"title": "<?php echo xla("OpenEMR does not recognize the incoming file in the contrib directory. This is most likely because you need to configure the release in the supported_external_dataloads table in the MySQL database."); ?>", "data-toggle":"tooltip", "data-placement":"bottom"}).tooltip();
+                    $(`#${dbName}_unsupportedmsg`).attr({"title": "<?php echo attr(xlp('%s does not recognize the incoming file in the contrib directory. This is most likely because you need to configure the release in the supported_external_dataloads table in the MySQL database.')); ?>", "data-toggle":"tooltip", "data-placement":"bottom"}).tooltip();
 
                     $(`#${dbName}_dirmsg`).attr({"title": "<?php echo xla("Please create the following directory before proceeding"); ?>: contrib/" + (dbName).toLowerCase(), "data-toggle":"tooltip", "data-placement":"bottom"}).tooltip();
 

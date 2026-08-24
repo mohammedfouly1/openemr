@@ -502,7 +502,7 @@ if ($form_step == 0) {
 }
 
 if ($form_step == 1) {
-    $form_status .= xl('Dumping OpenEMR database') . "...||br-placeholder||";
+    $form_status .= xlp('Dumping %s database') . "...||br-placeholder||";
     echo brCustomPlaceholder(text($form_status));
     if (file_exists($TAR_FILE_PATH)) {
         if (! unlink($TAR_FILE_PATH)) {
@@ -535,7 +535,7 @@ if ($form_step == 2) {
 }
 
 if ($form_step == 3) {
-    $form_status .= xl('Dumping OpenEMR web directory tree') . "...||br-placeholder||";
+    $form_status .= xlp('Dumping %s web directory tree') . "...||br-placeholder||";
     echo brCustomPlaceholder(text($form_status));
     $cur_dir = getcwd();
     chdir($globalsBag->getString('webserver_root'));
@@ -573,7 +573,7 @@ if ($form_step == 3) {
 
     $arch_file = $BACKUP_DIR . DIRECTORY_SEPARATOR . "openemr.tar.gz";
     if (!create_tar_archive($arch_file, "gz", $file_list)) {
-        die(xlt("An error occurred while dumping OpenEMR web directory tree"));
+        die(text(xlp("An error occurred while dumping %s web directory tree")));
     }
 
     chdir($cur_dir);

@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "api-portal-rest-toggle-neutral-v1",
+    "target_key": "Enable %s Patient Portal REST API (EXPERIMENTAL)",
+    "legacy_keys": {
+        "Enable OpenEMR Patient Portal REST API (EXPERIMENTAL)": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

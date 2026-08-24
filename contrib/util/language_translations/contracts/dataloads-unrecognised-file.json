@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "dataloads-unrecognised-file-neutral-v1",
+    "target_key": "%s does not recognize the incoming file in the contrib directory. This is most likely because you need to configure the release in the supported_external_dataloads table in the MySQL database.",
+    "legacy_keys": {
+        "OpenEMR does not recognize the incoming file in the contrib directory. This is most likely because you need to configure the release in the supported_external_dataloads table in the MySQL database.": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

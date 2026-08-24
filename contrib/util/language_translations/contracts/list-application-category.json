@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "list-application-category-neutral-v1",
+    "target_key": "%s Application Category",
+    "legacy_keys": {
+        "OpenEMR Application Category": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

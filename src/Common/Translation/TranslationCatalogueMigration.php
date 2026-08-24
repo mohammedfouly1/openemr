@@ -145,7 +145,13 @@ final class TranslationCatalogueMigration
             }
             foreach ($store->definitions($sourceId) as $languageId => $definition) {
                 if (!str_contains($definition, $identity)) {
-                    if (!isset($desired[$languageId])) {
+                    // A translation that never named the product has no placeholder position to
+                    // infer, and inventing one produces a subtly wrong sentence in a language the
+                    // author cannot read. An explicit contract definition settles it; otherwise
+                    // the contract's own policy decides, and `skip` here is what makes the PHP
+                    // upgrade path agree with the generated installer SQL, which has always
+                    // skipped these rows.
+                    if (!isset($desired[$languageId]) && $contract->onMissingIdentity->isFatal()) {
                         throw new \RuntimeException(
                             "Cannot neutralise source-only definition for lang_id {$languageId} without losing identity context.",
                         );

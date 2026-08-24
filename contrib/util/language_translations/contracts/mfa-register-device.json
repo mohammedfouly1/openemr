@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "mfa-register-device-neutral-v1",
+    "target_key": "In order to register your device, please provide your %s login password",
+    "legacy_keys": {
+        "In order to register your device, please provide your OpenEMR login password": "OpenEMR"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

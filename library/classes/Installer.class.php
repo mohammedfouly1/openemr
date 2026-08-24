@@ -1095,7 +1095,7 @@ $config = 1; /////////////
 
         // Create ARO groups.
         $users = $gacl->add_group('users', 'OpenEMR Users', 0, 'ARO');
-        // xl('OpenEMR Users')
+        // xlp('%s Users')
         $admin = $gacl->add_group('admin', 'Administrators', $users, 'ARO');
         // xl('Administrators')
         $clin  = $gacl->add_group('clin', 'Clinicians', $users, 'ARO');

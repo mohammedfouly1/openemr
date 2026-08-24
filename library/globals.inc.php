@@ -2278,7 +2278,7 @@ $GLOBALS_METADATA = [
             xl('LDAP - Distinguished Name of User'),
             'text',
             '',
-            xl('Embed {login} where the OpenEMR login name of the user is to be; for example: uid={login},dc=example,dc=com')
+            xlp('Embed {login} where the %s login name of the user is to be; for example: uid={login},dc=example,dc=com')
         ],
         'gbl_ldap_exclusions' => [
             xl('LDAP - Login Exclusions'),
@@ -3261,31 +3261,31 @@ $GLOBALS_METADATA = [
         ],
 
         GlobalConnectorsEnum::REST_FHIR_API->value => [
-            xl('Enable OpenEMR Standard FHIR REST API'),
+            xlp('Enable %s Standard FHIR REST API'),
             'bool',
             '0',
-            xl('Enable OpenEMR Standard FHIR RESTful API.')
+            xlp('Enable %s Standard FHIR RESTful API.')
         ],
 
         GlobalConnectorsEnum::REST_SYSTEM_SCOPES_API->value => [
             xlp('Enable %s FHIR System Scopes (Turn on only if you know what you are doing)'),
             'bool',
             '0',
-            xl('Enable OpenEMR FHIR System Scopes.')
+            xlp('Enable %s FHIR System Scopes.')
         ],
 
         GlobalConnectorsEnum::REST_API->value => [
-            xl('Enable OpenEMR Standard REST API'),
+            xlp('Enable %s Standard REST API'),
             'bool',
             '0',
-            xl('Enable OpenEMR Standard RESTful API.')
+            xlp('Enable %s Standard RESTful API.')
         ],
 
         GlobalConnectorsEnum::REST_PORTAL_API->value => [
-            xl('Enable OpenEMR Patient Portal REST API (EXPERIMENTAL)'),
+            xlp('Enable %s Patient Portal REST API (EXPERIMENTAL)'),
             'bool',
             '0',
-            xl('Enable OpenEMR Patient Portal RESTful API.')
+            xlp('Enable %s Patient Portal RESTful API.')
         ],
 
         GlobalConnectorsEnum::OAUTH_PASSWORD_GRANT->value => [
@@ -3473,7 +3473,7 @@ $GLOBALS_METADATA = [
             xl('Sphere Void/Credit Confirmation PIN'),
             'encrypted_hash',
             '',
-            xl('Sphere Void/Credit Confirmation Password. OpenEMR confirms pin/password before proceeding with void/credit.')
+            xlp('Sphere Void/Credit Confirmation Password. %s confirms pin/password before proceeding with void/credit.')
         ],
 
         'medex_enable' => [
