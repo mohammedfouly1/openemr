@@ -41,6 +41,10 @@ final class BrandingCiContractTest extends TestCase
         self::assertStringContainsString('tests/Tests/Isolated/BrandingCi', $tests);
         self::assertStringContainsString('tests/Tests/Isolated/PHPStan/ThiqaBranding', $tests);
         self::assertStringContainsString('tests/Tests/Isolated/BrandingCoreStrings', $tests);
+        self::assertStringContainsString(
+            'tests/Tests/Isolated/Modules/ThiqaBranding/Console/BackupRetentionTest.php',
+            $tests,
+        );
         self::assertStringNotContainsString('|| true', implode("\n", $gate));
     }
 
