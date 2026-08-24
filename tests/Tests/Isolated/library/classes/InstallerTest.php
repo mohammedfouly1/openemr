@@ -102,6 +102,32 @@ class InstallerTest extends TestCase
         $this->installer = new Installer($installSettings, new NullLogger());
     }
 
+    public function testDurableTranslationContractLoadsAfterLocalTranslationSeed(): void
+    {
+        $paths = array_keys($this->installer->dumpfiles);
+        $translationIndex = array_search($this->installer->translation_sql, $paths, true);
+        $contractIndex = array_search($this->installer->translation_contract_sql, $paths, true);
+
+        self::assertIsInt($translationIndex);
+        self::assertIsInt($contractIndex);
+        self::assertSame($translationIndex + 1, $contractIndex);
+    }
+
+    public function testDurableTranslationContractLoadsAfterOnlineDevelopmentTranslations(): void
+    {
+        $installer = new Installer([
+            'development_translations' => '1',
+            'site' => 'default',
+        ], new NullLogger());
+        $paths = array_keys($installer->dumpfiles);
+        $translationIndex = array_search($installer->devel_translation_sql, $paths, true);
+        $contractIndex = array_search($installer->translation_contract_sql, $paths, true);
+
+        self::assertIsInt($translationIndex);
+        self::assertIsInt($contractIndex);
+        self::assertSame($translationIndex + 1, $contractIndex);
+    }
+
     public function testLoginIsValid(): void
     {
         $this->assertTrue($this->installer->login_is_valid());

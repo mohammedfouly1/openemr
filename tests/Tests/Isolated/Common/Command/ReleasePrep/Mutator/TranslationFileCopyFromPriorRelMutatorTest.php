@@ -28,15 +28,17 @@ use Symfony\Component\Process\Process;
 final class TranslationFileCopyFromPriorRelMutatorTest extends TestCase
 {
     private const RELATIVE_PATH = 'contrib/util/language_translations/currentLanguage_utf8.sql';
+    private const SUPPLEMENT_PATH = 'contrib/util/language_translations/durableTranslationContracts_utf8.sql';
 
     private string $tmpDir = '';
 
     protected function setUp(): void
     {
         $this->tmpDir = sys_get_temp_dir() . '/openemr-tfc-' . bin2hex(random_bytes(8));
-        if (!mkdir($this->tmpDir . '/contrib/util/language_translations', 0700, true)) {
+        if (!mkdir($this->tmpDir . '/contrib/util/language_translations/contracts', 0700, true)) {
             throw new \RuntimeException('Failed to create tmp dir');
         }
+        $this->writeContract();
     }
 
     protected function tearDown(): void
@@ -62,8 +64,25 @@ final class TranslationFileCopyFromPriorRelMutatorTest extends TestCase
         $this->writeLocal($priorBlob);
 
         $factory = $this->stubProcessFactory(true, $priorBlob, '');
-        $result = (new TranslationFileCopyFromPriorRelMutator($factory))->apply($this->context('rel-810'));
+        $mutator = new TranslationFileCopyFromPriorRelMutator($factory);
+        $mutator->apply($this->context('rel-810'));
+        $result = $mutator->apply($this->context('rel-810'));
         self::assertFalse($result->changed());
+    }
+
+    public function testRegeneratesDurableSupplementAfterPriorBlobCopy(): void
+    {
+        $priorBlob = "-- prior translation snapshot\n";
+        $this->writeLocal($priorBlob);
+        file_put_contents($this->tmpDir . '/' . self::SUPPLEMENT_PATH, '-- stale supplement');
+
+        $factory = $this->stubProcessFactory(true, $priorBlob, '');
+        $result = (new TranslationFileCopyFromPriorRelMutator($factory))->apply($this->context('rel-810'));
+
+        self::assertTrue($result->changed());
+        self::assertSame([self::SUPPLEMENT_PATH], $result->changedFiles);
+        self::assertStringContainsString("'%s Database Upgrade'", $this->readSupplement());
+        self::assertStringContainsString("'Actualización base de datos %s'", $this->readSupplement());
     }
 
     public function testThrowsWhenPrevRelBranchMissing(): void
@@ -81,10 +100,9 @@ final class TranslationFileCopyFromPriorRelMutatorTest extends TestCase
     {
         $this->writeLocal('foo');
 
-        // Simulate fetch failure (factory returns Process objects that
-        // will report unsuccessful exit). We use a real Process that
-        // runs `false` to get a non-zero exit.
-        $factory = static fn (array $cmd, string $cwd): Process => new Process(['false'], $cwd);
+        // Simulate fetch failure with the current PHP executable so this
+        // remains portable across Windows and POSIX test environments.
+        $factory = static fn (array $cmd, string $cwd): Process => self::exitProcess(1, $cwd);
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessageMatches('/git fetch.*failed/');
         (new TranslationFileCopyFromPriorRelMutator($factory))->apply($this->context('rel-810'));
@@ -99,9 +117,9 @@ final class TranslationFileCopyFromPriorRelMutatorTest extends TestCase
         $factory = static function (array $cmd, string $cwd) use (&$callCount): Process {
             $callCount++;
             if ($callCount === 1) {
-                return new Process(['true'], $cwd);
+                return self::exitProcess(0, $cwd);
             }
-            return new Process(['false'], $cwd);
+            return self::exitProcess(1, $cwd);
         };
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessageMatches('/git show.*failed/');
@@ -121,30 +139,37 @@ final class TranslationFileCopyFromPriorRelMutatorTest extends TestCase
     /**
      * Build a process factory that returns Processes which, when
      * ->run() is invoked, behave according to the stubbed values. We
-     * achieve this by chaining real `printf`/`true`/`false` invocations.
+     * achieve this with the PHP executable already running the tests.
      *
      * @return \Closure(list<string>, string): Process
      */
     private function stubProcessFactory(bool $success, string $stdout, string $stderr): \Closure
     {
         return static function (array $cmd, string $cwd) use ($success, $stdout, $stderr): Process {
-            // First call: fetch (no stdout consumed). Second: show (stdout
-            // is the blob). Easiest cross-platform stub: shell with printf
-            // for show, true/false for fetch. But we'd need state to
-            // distinguish. Instead, return a Process whose command writes
-            // the desired stdout/stderr and exits with the right code.
             if ($cmd[1] === 'show') {
-                // Use bash to emit exact bytes; encode via base64 to
-                // handle arbitrary content (newlines, quotes, etc.).
-                $b64 = base64_encode($stdout);
-                $shell = 'printf %s "' . $b64 . '" | base64 -d; '
-                    . 'printf %s "' . base64_encode($stderr) . '" | base64 -d >&2; '
-                    . 'exit ' . ($success ? 0 : 1);
-                return Process::fromShellCommandline($shell, $cwd);
+                return self::outputProcess($success ? 0 : 1, $stdout, $stderr, $cwd);
             }
-            // fetch: just succeed/fail without output.
-            return Process::fromShellCommandline($success ? 'true' : 'false', $cwd);
+            return self::exitProcess($success ? 0 : 1, $cwd);
         };
+    }
+
+    private static function exitProcess(int $exitCode, string $cwd): Process
+    {
+        return self::outputProcess($exitCode, '', '', $cwd);
+    }
+
+    private static function outputProcess(int $exitCode, string $stdout, string $stderr, string $cwd): Process
+    {
+        $code = 'fwrite(STDOUT, base64_decode($argv[1])); '
+            . 'fwrite(STDERR, base64_decode($argv[2])); exit((int) $argv[3]);';
+        return new Process([
+            PHP_BINARY,
+            '-r',
+            $code,
+            base64_encode($stdout),
+            base64_encode($stderr),
+            (string) $exitCode,
+        ], $cwd);
     }
 
     private function writeLocal(string $content): void
@@ -163,6 +188,32 @@ final class TranslationFileCopyFromPriorRelMutatorTest extends TestCase
             throw new \RuntimeException('Cannot read local file');
         }
         return $contents;
+    }
+
+    private function readSupplement(): string
+    {
+        $contents = file_get_contents($this->tmpDir . '/' . self::SUPPLEMENT_PATH);
+        if ($contents === false) {
+            throw new \RuntimeException('Cannot read supplement');
+        }
+        return $contents;
+    }
+
+    private function writeContract(): void
+    {
+        $json = <<<'JSON'
+            {
+                "schema": "openemr-translation-contract/1",
+                "id": "test-contract",
+                "target_key": "%s Database Upgrade",
+                "legacy_keys": {"Legacy Database Upgrade": "Legacy"},
+                "definitions": {"3": "Actualización base de datos %s"}
+            }
+            JSON;
+        $path = $this->tmpDir . '/contrib/util/language_translations/contracts/database-upgrade.json';
+        if (file_put_contents($path, $json) === false) {
+            throw new \RuntimeException('Cannot write test contract');
+        }
     }
 
     private function removeRecursive(string $path): void

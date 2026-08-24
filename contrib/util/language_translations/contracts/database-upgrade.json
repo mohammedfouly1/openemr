@@ -1,0 +1,39 @@
+{
+    "schema": "openemr-translation-contract/1",
+    "id": "database-upgrade-neutral-v1",
+    "target_key": "%s Database Upgrade",
+    "legacy_keys": {
+        "OpenEMR Database Upgrade": "OpenEMR",
+        "Thiqa Database Upgrade": "Thiqa"
+    },
+    "definitions": {
+        "3": "Actualización base de datos %s",
+        "4": "Actualización base de datos %s",
+        "5": "%s Datenbank Update",
+        "6": "%s DB upgrade",
+        "7": "שדרוג מסד נתונים של %s",
+        "8": "Mettre à jour la base de donnée de %s",
+        "11": "%s数据库升级",
+        "12": "%s數據庫升級",
+        "13": "Модернизация базы данных %s",
+        "14": "%s տվյալների բազայի թարմացում",
+        "16": "Upgrade Database %s",
+        "17": "Ενημέρωση βάσης δεδομένων του %s",
+        "19": "Actualização da base de dados %s",
+        "20": "Atualização do banco de dados %s",
+        "21": "Actualização da base de dados %s",
+        "22": "ترقية قاعدة بيانات %s",
+        "24": "%s Veri Tabanı Güncellemesi",
+        "27": "Aggiornamento Database di %s",
+        "28": "%s डेटाबेस नवीनीकरण",
+        "29": "Actualizarea bazei de date %s",
+        "30": "%s Cơ sở dữ liệu Nâng cấp",
+        "33": "Upgrade databáze %s",
+        "34": "Оновлення бази даних %s",
+        "37": "ارتقاء پایگاه داده %s",
+        "40": "%sデータベースアップグレード",
+        "47": "%s डेटाबेस अपग्रेड",
+        "50": "%s डेटाबेस नवीनीकरण",
+        "59": "%s dummy"
+    }
+}

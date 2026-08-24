@@ -64,6 +64,7 @@ class Installer implements InstallerInterface
     public string $server;
     public string $site;
     public string $source_site_id;
+    public string $translation_contract_sql;
     public string $translation_sql;
 
     /**
@@ -118,6 +119,7 @@ class Installer implements InstallerInterface
         // Record names of sql table files
         $this->main_sql = __DIR__ . '/../../sql/database.sql';
         $this->translation_sql = __DIR__ . '/../../contrib/util/language_translations/currentLanguage_utf8.sql';
+        $this->translation_contract_sql = __DIR__ . '/../../contrib/util/language_translations/durableTranslationContracts_utf8.sql';
         $this->devel_translation_sql = "http://translations.openemr.io/languageTranslations_utf8.sql";
         $this->ippf_sql = __DIR__ . "/../../sql/ippf_layout.sql";
         $this->cvx = __DIR__ . "/../../sql/cvx_codes.sql";
@@ -1756,6 +1758,10 @@ $config = 1; /////////////
                 // Use the local translation set
                 $dumpfiles[ $this->translation_sql ] = "Language Translation (utf8)";
             }
+            // Apply repository-owned contracts after either translation source.
+            // Branch-cut automation replaces currentLanguage_utf8.sql wholesale;
+            // this separate generated supplement remains authoritative and durable.
+            $dumpfiles[ $this->translation_contract_sql ] = "Durable Translation Contracts (utf8)";
 
             if ($this->ippf_specific) {
                 $dumpfiles[ $this->ippf_sql ] = "IPPF Layout";

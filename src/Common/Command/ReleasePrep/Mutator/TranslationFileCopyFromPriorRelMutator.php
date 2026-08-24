@@ -7,8 +7,9 @@
  * ~23 MB; the bot fetches the prior rel's blob via git rather than
  * synthesising the content.
  *
- * Idempotent: if the local file already matches the prior rel's blob,
- * no-op.
+ * After replacing the upstream snapshot, regenerate the separate durable
+ * translation-contract supplement from its checked-in JSON source. This keeps
+ * repository-owned neutral keys safe from the wholesale prior-branch copy.
  *
  * Implementation: shells out to git via the Symfony Process component.
  * `git fetch <openemr-remote> <prevRelBranch>` brings the ref in as
@@ -30,11 +31,15 @@ namespace OpenEMR\Common\Command\ReleasePrep\Mutator;
 use OpenEMR\Common\Command\ReleasePrep\MutatorContext;
 use OpenEMR\Common\Command\ReleasePrep\MutatorInterface;
 use OpenEMR\Common\Command\ReleasePrep\MutatorResult;
+use OpenEMR\Common\Translation\TranslationCatalogueContract;
+use OpenEMR\Common\Translation\TranslationContractSqlRenderer;
 use Symfony\Component\Process\Process;
 
 final readonly class TranslationFileCopyFromPriorRelMutator implements MutatorInterface
 {
     private const RELATIVE_PATH = 'contrib/util/language_translations/currentLanguage_utf8.sql';
+    private const CONTRACT_PATH = 'contrib/util/language_translations/contracts/database-upgrade.json';
+    private const SUPPLEMENT_PATH = 'contrib/util/language_translations/durableTranslationContracts_utf8.sql';
     private const DEFAULT_REMOTE_URL = 'https://github.com/openemr/openemr.git';
 
     /**
@@ -43,6 +48,7 @@ final readonly class TranslationFileCopyFromPriorRelMutator implements MutatorIn
     public function __construct(
         private ?\Closure $processFactory = null,
         private string $remoteUrl = self::DEFAULT_REMOTE_URL,
+        private ?TranslationContractSqlRenderer $renderer = null,
     ) {
     }
 
@@ -99,14 +105,26 @@ final readonly class TranslationFileCopyFromPriorRelMutator implements MutatorIn
         }
         $priorContent = $show->getOutput();
 
-        if ($priorContent === $localCurrent) {
-            return MutatorResult::noop();
+        $changed = [];
+        if ($priorContent !== $localCurrent) {
+            if (file_put_contents($path, $priorContent) === false) {
+                throw new \RuntimeException('Cannot write ' . $path);
+            }
+            $changed[] = self::RELATIVE_PATH;
         }
 
-        if (file_put_contents($path, $priorContent) === false) {
-            throw new \RuntimeException('Cannot write ' . $path);
+        $contract = TranslationCatalogueContract::fromFile($context->projectDir . '/' . self::CONTRACT_PATH);
+        $supplement = ($this->renderer ?? new TranslationContractSqlRenderer())->render($contract);
+        $supplementPath = $context->projectDir . '/' . self::SUPPLEMENT_PATH;
+        $currentSupplement = is_file($supplementPath) ? file_get_contents($supplementPath) : false;
+        if ($currentSupplement !== $supplement) {
+            if (file_put_contents($supplementPath, $supplement) === false) {
+                throw new \RuntimeException('Cannot write ' . $supplementPath);
+            }
+            $changed[] = self::SUPPLEMENT_PATH;
         }
-        return new MutatorResult([self::RELATIVE_PATH]);
+
+        return $changed === [] ? MutatorResult::noop() : new MutatorResult($changed);
     }
 
     /**
