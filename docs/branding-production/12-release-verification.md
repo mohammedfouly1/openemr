@@ -1,8 +1,17 @@
-# 12 — Release Verification (CORRECTED — REVISION 5)
+# 12 — Release Verification (CORRECTED — REVISION 6)
 
-**Status:** **PASS** (restored — see Revision 5)
+**Status:** **PASS** (current — see Revision 6)
 
-**Revision 5 (2026-08-24) — current. Manifest re-issued for four documents; the gate had been RED for five days, undetected.**
+**Revision 6 (2026-08-24) — current. Manifest re-issued for the S1-P1-05 evidence correction.**
+
+Current `brand/qa/wcag-contrast-results.json` was independently re-derived as **38 pairs / 35 PASS /
+3 ADVISORY / 0 FAIL**. `08-wcag-contrast.md` still reported revision 2's 34 / 31 / 3 counts and omitted
+the four passing `borderStrong` UI rows already present in the machine evidence. The document was corrected
+without changing the token source or machine evidence. Per RB-25, the entries for
+`08-wcag-contrast.md` and this self-referential release-verification document were re-issued, never removed;
+the verifier must pass 123/123 after both final document bytes are fixed.
+
+**Revision 5 (2026-08-24). Manifest re-issued for four documents; the gate had been RED for five days, undetected.**
 
 `php tools/branding/verify-brand-manifest.php` reported `119/123 verified, 4 problem(s)`, exit code **1**,
 with hash mismatches on:

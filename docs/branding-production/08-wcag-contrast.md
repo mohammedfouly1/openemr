@@ -1,6 +1,11 @@
-# 08 — WCAG 2.2 Numeric Contrast Validation (CORRECTED — REVISION 2)
+# 08 — WCAG 2.2 Numeric Contrast Validation (CORRECTED — REVISION 3)
 
 **Status:** **PASS — 0 FAIL pairs, 0 gates blocked.**
+
+**Revision 3 (2026-08-24):** current machine evidence was re-derived rather than inherited. The JSON
+contains **38 evaluated pairs: 35 PASS, 3 ADVISORY, 0 FAIL**. Four passing `borderStrong` UI pairs had
+been added to the machine evidence during conflict resolution, but this document still reported revision
+2's 34 / 31 / 3 counts and omitted those rows. The four rows and current counts are now synchronized.
 
 **Revision 2 (2026-08-09):** the two Light-theme link FAIL pairs recorded in revision 1 are **resolved**.
 The token owner adopted the proposed correction (decision **D-1**, recorded in
@@ -18,13 +23,13 @@ Implementation (revision 1): `tmp/task-wcag.ps1` — a scratch PowerShell refere
 Implementation (revision 2): recomputed independently **twice** — once in PHP 8.3 and once in PowerShell —
 with both implementations agreeing to 2 dp on every pair, and reproducing every revision-1 figure exactly.
 Group 2 replaces the scratch script with a tested in-repository `ContrastCalculator` (plan WP-2.3).
-Full machine-readable output: [brand/qa/wcag-contrast-results.json](../../brand/qa/wcag-contrast-results.json) — **34** evaluated pairs.
+Full machine-readable output: [brand/qa/wcag-contrast-results.json](../../brand/qa/wcag-contrast-results.json) — **38** evaluated pairs.
 
-## Result summary (revision 2)
+## Result summary (revision 3)
 
 | Verdict | Count |
 |---|---:|
-| PASS | 31 |
+| PASS | 35 |
 | FAIL | **0** |
 | ADVISORY | 3 — 1 × `text.disabled` (WCAG explicitly exempts inactive UI components from 1.4.3) + 2 × `border.default` vs `background` at 1.24 / 1.44 (a subtle divider by design; borders here convey no information, so SC 1.4.11 does not apply) |
 
@@ -33,10 +38,15 @@ Full machine-readable output: [brand/qa/wcag-contrast-results.json](../../brand/
 > `SC 1.4.11 UI 3:1 (advisory)` and the prose called them a *structural non-issue* — the machine output
 > contradicted itself and the document. Their status is now `ADVISORY`, matching the vocabulary already
 > used for `text.disabled`. **No ratio was changed:** the borders still measure 1.24 and 1.44, and that is
-> the intended visual design. Machine output and prose now agree: 31 PASS, 3 ADVISORY, 0 FAIL, 34 pairs.
+> the intended visual design. At revision 2, machine output and prose agreed on 31 PASS, 3 ADVISORY,
+> 0 FAIL, 34 pairs.
 
-Pair count rose from 33 to 34 because `link hover on surface` was not evaluated in revision 1; it is now
-included for symmetry with `link default on surface`.
+> **CORRECTION S1-P1-05 (revision 3).** Machine evidence later gained four passing `borderStrong` UI
+> pairs without the prose being carried forward. Current machine output and prose now agree on
+> **35 PASS, 3 ADVISORY, 0 FAIL, 38 pairs**.
+
+Pair count rose from 33 to 34 in revision 2 because `link hover on surface` was not evaluated in revision
+1. Revision 3 records the four `borderStrong` pairs already present in the current machine evidence.
 
 ## Light theme
 
@@ -51,14 +61,16 @@ included for symmetry with `link default on surface`.
 | link default on surface | `#2C5F94` | `#FFFFFF` | 6.62 | 4.5 | PASS |
 | link hover on background | `#1E4574` | `#FAFAF8` | 9.31 | 4.5 | PASS |
 | link hover on surface | `#1E4574` | `#FFFFFF` | 9.73 | 4.5 | PASS |
-| primary CTA text on primary bg (`interactive.primary`) | `#FFFFFF` | `#C43F2E` | 5.12 | 4.5 | PASS |
+| primary CTA text on primary bg (interactive.primary) | `#FFFFFF` | `#C43F2E` | 5.12 | 4.5 | PASS |
 | secondary CTA text on secondary bg | `#FFFFFF` | `#0B1B4D` | 16.43 | 4.5 | PASS |
 | focus ring on background (UI) | `#3E7FBD` | `#FAFAF8` | 4.04 | 3.0 | PASS |
 | success text on success bg | `#2F6B45` | `#E9F5EE` | 5.67 | 4.5 | PASS |
 | warning text on warning bg | `#8A5314` | `#FCEFE0` | 5.58 | 4.5 | PASS |
 | critical text on critical bg | `#8E271D` | `#FBE9E7` | 7.29 | 4.5 | PASS |
 | info text on info bg | `#264C74` | `#E8F0FA` | 7.72 | 4.5 | PASS |
-| border.default on background | `#E4E2DC` | `#FAFAF8` | 1.24 | (advisory) | STRUCTURAL — subtle divider by design |
+| border.default on background (UI) | `#E4E2DC` | `#FAFAF8` | 1.24 | 3.0 (advisory) | ADVISORY — subtle divider by design |
+| borderStrong on background (UI) | `#4B5266` | `#FAFAF8` | 7.45 | 3.0 | PASS |
+| borderStrong on surface (UI) | `#4B5266` | `#FFFFFF` | 7.78 | 3.0 | PASS |
 
 ## Dark theme
 
@@ -73,14 +85,16 @@ included for symmetry with `link default on surface`.
 | link default on background | `#8FC1EE` | `#0B1220` | 9.83 | 4.5 | PASS |
 | link default on surface | `#8FC1EE` | `#121A2E` | 9.09 | 4.5 | PASS |
 | link hover on background | `#B7D9F5` | `#0B1220` | 12.71 | 4.5 | PASS |
-| primary CTA text on primary bg | `#0B1220` | `#FF6F5E` | 6.85 | 4.5 | PASS |
+| primary CTA text on primary bg (interactive.primary) | `#0B1220` | `#FF6F5E` | 6.85 | 4.5 | PASS |
 | secondary CTA text on secondary bg | `#0B1220` | `#F5F6F8` | 17.31 | 4.5 | PASS |
 | focus ring on background (UI) | `#8FC1EE` | `#0B1220` | 9.83 | 3.0 | PASS |
 | success text on success bg | `#8FD1A6` | `#173425` | 7.62 | 4.5 | PASS |
 | warning text on warning bg | `#F0B45C` | `#3A2A12` | 7.49 | 4.5 | PASS |
 | critical text on critical bg | `#F29088` | `#3A1815` | 6.90 | 4.5 | PASS |
 | info text on info bg | `#8FC1EE` | `#132437` | 8.26 | 4.5 | PASS |
-| border.default on background | `#26314A` | `#0B1220` | 1.44 | (advisory) | STRUCTURAL — subtle divider by design |
+| border.default on background (UI) | `#26314A` | `#0B1220` | 1.44 | 3.0 (advisory) | ADVISORY — subtle divider by design |
+| borderStrong on background (UI) | `#AEB5C4` | `#0B1220` | 9.10 | 3.0 | PASS |
+| borderStrong on surface (UI) | `#AEB5C4` | `#121A2E` | 8.41 | 3.0 | PASS |
 
 ## Resolution of the 2 revision-1 FAIL pairs (Light theme link colour) — APPLIED
 
@@ -117,5 +131,5 @@ roles were in scope for D-1.
 - `docs/Thiqa_Group_1_5B_Handoff/table (1).md` pre-computed:
   - "white text on bright coral ≈ 2.7:1" → matches `#FFFFFF` on `#FF6F5E` = 2.63:1 (this pair is NOT used at runtime; `interactive.primary.default` is `coralDeep` #C43F2E which passes at 5.12:1). Matches.
   - "coral brand color as text/icon on dark background ~6.9:1" → matches `dark.brand.coral` (`#FF6F5E`) on `dark.background` (`#0B1220`) = 6.85:1. Matches.
-- Numeric ratios above are reproducible from [brand/tokens/thiqa-tokens.json](../../brand/tokens/thiqa-tokens.json) using the W3C formula stated under *Method*; revision 2 was verified by two independent implementations.
+- Numeric ratios above are reproducible from [brand/tokens/thiqa-tokens.json](../../brand/tokens/thiqa-tokens.json) using the W3C formula stated under *Method*; revision 2 was verified by two independent implementations and revision 3 by the repository `ContrastCalculatorTest` (110 tests / 264 assertions).
 - The `table (1).md` note *"white text on bright coral ≈ 2.7:1"* still holds and is still not a runtime pair: production buttons use `interactive.primary.default` (`#C43F2E`) at 5.12:1.
