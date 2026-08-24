@@ -75,6 +75,9 @@ use OpenEMR\Common\Database\QueryUtils;
 use OpenEMR\Common\Session\SessionUtil;
 use OpenEMR\Common\Session\SessionWrapperFactory;
 use OpenEMR\Common\Translation\ProductContextTranslation;
+use OpenEMR\Common\Translation\QueryUtilsTranslationCatalogueStore;
+use OpenEMR\Common\Translation\TranslationCatalogueContract;
+use OpenEMR\Common\Translation\TranslationCatalogueMigration;
 use OpenEMR\Common\Uuid\UuidRegistry;
 use OpenEMR\Core\Header;
 use OpenEMR\Core\OEGlobalsBag;
@@ -512,6 +515,17 @@ header('Content-type: text/html; charset=utf-8');
                         echo "<script>serverStatus('Patch', 0, 1);</script>";
                         $sqlUpgradeService->upgradeFromSqlFile('patch.sql');
                     }
+                    $translationContract = TranslationCatalogueContract::fromFile(
+                        __DIR__ . '/contrib/util/language_translations/contracts/database-upgrade.json',
+                    );
+                    $translationMigration = (new TranslationCatalogueMigration())->forward(
+                        $translationContract,
+                        new QueryUtilsTranslationCatalogueStore(),
+                    );
+                    echo '<p class="text-success">' . text(
+                        'Translation catalogue: ' . $translationMigration->action
+                        . '; definitions changed: ' . $translationMigration->definitionsChanged,
+                    ) . "</p><br />\n";
                     flush();
 
                     echo "<br /><p class='text-success'>Updating UUIDs (this could take some time)<br />\n";

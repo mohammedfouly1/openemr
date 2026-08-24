@@ -1,6 +1,6 @@
 -- Generated from contrib/util/language_translations/contracts/database-upgrade.json.
 -- Contract: database-upgrade-neutral-v1
--- SHA256: 92546f143071e53e4721a07c2502ffa0e4a91f8402ea54a016d372a8e78ca62a
+-- SHA256: d3dae438a4e6c14754525101bf20149825177df63b2b0c1557e6d3155f7f3496
 -- Do not edit this generated file directly.
 
 INSERT INTO `lang_constants` (`constant_name`)
@@ -97,7 +97,7 @@ WHERE NOT EXISTS (
 );
 
 INSERT INTO `lang_definitions` (`cons_id`, `lang_id`, `definition`)
-SELECT @openemr_translation_contract_cons_id, 19, 'Actualização da base de dados %s' FROM DUAL
+SELECT @openemr_translation_contract_cons_id, 19, '%s Base de Dados Actualizada' FROM DUAL
 WHERE NOT EXISTS (
     SELECT 1 FROM `lang_definitions`
     WHERE `cons_id` = @openemr_translation_contract_cons_id AND `lang_id` = 19
@@ -111,7 +111,7 @@ WHERE NOT EXISTS (
 );
 
 INSERT INTO `lang_definitions` (`cons_id`, `lang_id`, `definition`)
-SELECT @openemr_translation_contract_cons_id, 21, 'Actualização da base de dados %s' FROM DUAL
+SELECT @openemr_translation_contract_cons_id, 21, '%s Base de Dados Actualizada' FROM DUAL
 WHERE NOT EXISTS (
     SELECT 1 FROM `lang_definitions`
     WHERE `cons_id` = @openemr_translation_contract_cons_id AND `lang_id` = 21

@@ -86,6 +86,19 @@
 --  #IfTextNullFixNeeded
 --    desc: convert all text fields without default null to have default null.
 --    arguments: none
+#IfNotTable translation_migration_journal
+CREATE TABLE `translation_migration_journal` (
+  `migration_id` varchar(191) NOT NULL,
+  `contract_hash` char(64) NOT NULL,
+  `status` varchar(32) NOT NULL,
+  `before_state` longtext NOT NULL,
+  `after_state` longtext NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`migration_id`)
+) ENGINE=InnoDB;
+#EndIf
+
 
 --  #IfTableEngine
 --    desc:      Execute SQL if the table has been created with given engine specified.

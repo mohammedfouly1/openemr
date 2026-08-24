@@ -3,7 +3,7 @@
 --
 -- Keep v_database in sync with $v_database in version.php.
 -- CI will fail if they don't match.
--- v_database: 541
+-- v_database: 542
 --
 
 --
@@ -3545,6 +3545,24 @@ CREATE TABLE `lang_definitions` (
   UNIQUE KEY `def_id` (`def_id`),
   KEY `cons_id` (`cons_id`),
   KEY `lang_cons` (`lang_id`, `cons_id`)
+) ENGINE=InnoDB;
+
+-- --------------------------------------------------------
+
+--
+-- Durable journal for reversible translation-catalogue migrations.
+--
+
+DROP TABLE IF EXISTS `translation_migration_journal`;
+CREATE TABLE `translation_migration_journal` (
+  `migration_id` varchar(191) NOT NULL,
+  `contract_hash` char(64) NOT NULL,
+  `status` varchar(32) NOT NULL,
+  `before_state` longtext NOT NULL,
+  `after_state` longtext NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`migration_id`)
 ) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
