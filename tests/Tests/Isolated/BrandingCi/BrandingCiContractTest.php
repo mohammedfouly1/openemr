@@ -45,6 +45,18 @@ final class BrandingCiContractTest extends TestCase
             'tests/Tests/Isolated/Modules/ThiqaBranding/Console/BackupRetentionTest.php',
             $tests,
         );
+
+        // S2-P1-18: the health check's own behaviour, and the command that reports it, are
+        // gated rather than left to a human remembering to run `verify` by hand.
+        self::assertStringContainsString(
+            'tests/Tests/Isolated/Modules/ThiqaBranding/Observability',
+            $tests,
+        );
+        self::assertStringContainsString(
+            'tests/Tests/Isolated/Modules/ThiqaBranding/Console/VerifyCommandTest.php',
+            $tests,
+        );
+
         self::assertStringNotContainsString('|| true', implode("\n", $gate));
     }
 

@@ -37,11 +37,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * two read methods of the globals interface. It is safe to run against production on a
  * schedule.
  *
- * **Exit codes**: `0` when the tenant's state is coherent — including a tenant that has
- * never been materialised, which renders product defaults and is a correct state, and
- * including a merely stale one. `1` when the state contradicts itself or could not be read,
- * so the command works directly as a health probe. `2` when the invocation itself was wrong
- * (no `--site`), which is an operator error rather than a finding about the tenant.
+ * **Exit codes**: `0` when the tenant's *served* state is coherent — including a tenant that
+ * has never been materialised, which renders product defaults and is a correct state,
+ * including a merely stale one, and including one carrying static-artefact advisories.
+ * `1` when the served state contradicts itself or could not be read, so the command works
+ * directly as a health probe. `2` when the invocation itself was wrong (no `--site`), which
+ * is an operator error rather than a finding about the tenant.
+ *
+ * **Advisories never change the exit code.** They describe the generated
+ * `public/branding/<site>/tokens-*.css` files, which no page links (D-8), so they are worth
+ * printing and worth eventually clearing but cannot make a correctly rendering tenant fail a
+ * probe. Failing on one is exactly what finding S2-P1-18 recorded.
  */
 #[AsCommand(
     name: 'thiqa-branding:verify',
@@ -61,11 +67,14 @@ final class VerifyCommand extends Command
         $this->getDefinition()->addOption(SiteOption::define());
 
         $this->setHelp(
-            'Reports the tenant\'s branding revision, when it was last materialised, whether '
-            . 'the generated token stylesheets are present, and whether those facts agree with '
-            . 'each other.' . PHP_EOL . PHP_EOL
-            . 'Nothing is written, on any path. Exits non-zero when the state is inconsistent '
-            . 'or unreadable, so it can be used unchanged as a health check.',
+            'Reports the tenant\'s branding revision, when it was last materialised, whether a '
+            . 'tenant token overlay is actually being served, and whether those facts agree '
+            . 'with each other.' . PHP_EOL . PHP_EOL
+            . 'The generated token stylesheets on disk are reported too, but they are not '
+            . 'served to any page, so a disagreement about them prints as an advisory and '
+            . 'never changes the exit code.' . PHP_EOL . PHP_EOL
+            . 'Nothing is written, on any path. Exits non-zero when the served state is '
+            . 'inconsistent or unreadable, so it can be used unchanged as a health check.',
         );
     }
 
@@ -87,6 +96,13 @@ final class VerifyCommand extends Command
         return $report->isFailure() ? Command::FAILURE : Command::SUCCESS;
     }
 
+    /**
+     * Served facts first, then the unserved ones, each labelled with which it is.
+     *
+     * The stylesheet rows used to sit beside the revision with nothing to say that no page
+     * loads them, so an operator reading `present` next to `Revision 0` had every reason to
+     * conclude the tenant was broken. They now say so on their own line.
+     */
     private function render(SymfonyStyle $io, BrandingHealthReport $report): void
     {
         $io->definitionList(
@@ -96,14 +112,20 @@ final class VerifyCommand extends Command
             ['Materialised' => $report->revision->isMaterialised() ? 'yes' : 'never'],
             ['Materialised at' => $report->materialisedAtIso() ?? 'not recorded'],
             ['Age' => $this->age($report)],
-            ['Light token stylesheet' => $report->lightStylesheetPresent ? 'present' : 'absent'],
-            ['Dark token stylesheet' => $report->darkStylesheetPresent ? 'present' : 'absent'],
+            ['Serves tenant overlay' => $this->overlay($report)],
+            ['Light token stylesheet (not served)' => $report->lightStylesheetPresent ? 'present' : 'absent'],
+            ['Dark token stylesheet (not served)' => $report->darkStylesheetPresent ? 'present' : 'absent'],
         );
+
+        if ($report->hasAdvisories()) {
+            $io->section('Advisories (generated files nothing serves — rendering is unaffected)');
+            $io->listing($report->advisoryMessages());
+        }
 
         if ($report->hasInconsistencies()) {
             $io->section('Inconsistencies');
             $io->listing($report->messages());
-            $io->error('This tenant\'s branding state is not self-consistent.');
+            $io->error('This tenant\'s served branding state is not self-consistent.');
 
             return;
         }
@@ -117,7 +139,21 @@ final class VerifyCommand extends Command
             return;
         }
 
-        $io->success('This tenant\'s branding state is self-consistent.');
+        $io->success('This tenant\'s served branding state is self-consistent.');
+    }
+
+    /** What the browser would actually fetch, stated as a count rather than a bare flag. */
+    private function overlay(BrandingHealthReport $report): string
+    {
+        if (!$report->servesTenantOverlay) {
+            return 'no (rendering the product palette)';
+        }
+
+        return sprintf(
+            'yes (%d light, %d dark token overrides)',
+            $report->lightOverlayTokenCount,
+            $report->darkOverlayTokenCount,
+        );
     }
 
     /** Whole days where that reads naturally, seconds while it is still fresh. */

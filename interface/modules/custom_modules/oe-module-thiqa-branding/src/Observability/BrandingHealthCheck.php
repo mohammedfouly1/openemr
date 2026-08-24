@@ -19,6 +19,7 @@ use DateTimeInterface;
 use LogicException;
 use OpenEMR\Modules\ThiqaBranding\Asset\BrandingRevision;
 use OpenEMR\Modules\ThiqaBranding\Config\BrandingGlobalKey;
+use OpenEMR\Modules\ThiqaBranding\Config\TokenOverlay;
 use OpenEMR\Modules\ThiqaBranding\Materialisation\BrandingGlobalsWriterInterface;
 use OpenEMR\Modules\ThiqaBranding\Tenant\SiteId;
 use OpenEMR\Modules\ThiqaBranding\Theme\ThemeVariant;
@@ -30,6 +31,27 @@ use RuntimeException;
  * Plan §4.3 WP-2.12's health check, as a plain service. VerifyCommand is a thin CLI
  * wrapper over it; nothing here knows that a console exists, so the same check can back a
  * monitoring endpoint or an administration screen without being reimplemented.
+ *
+ * **It measures the served state.** A tenant's branding reaches a browser by exactly one
+ * route: the overlay stored in `saas_branding_tokens_light`/`_dark` decides whether
+ * BrandingService emits a `<link>` at all, the revision keys that link's URL, and
+ * `public/branding-tokens.php` renders the overlay when the link is followed. Those facts,
+ * plus the materialisation stamp written with them, are the served plane, and only a
+ * disagreement among them can change what a user sees.
+ *
+ * The generated `public/branding/<site>/tokens-{light,dark}.css` files are a second,
+ * unserved route: TokenCssWriter still commits them on every materialisation, including
+ * for an empty overlay, and nothing but this check's own probe ever opens the directory
+ * (dependency D-8). Their state is still reported — a missing file after a materialisation
+ * is real evidence of a run that did not finish — but as an advisory on its own plane,
+ * never as a failure. Finding S2-P1-18 is what this separation repairs: cross-referencing
+ * the revision against file existence reported the live tenant as `inconsistent`, exit 1,
+ * while its served branding was completely correct.
+ *
+ * **The overlay is read through the runtime's own parser.** TokenOverlay::fromJson() is
+ * what BrandingConfigFactory uses on every request, so "does this tenant serve an overlay"
+ * is answered here exactly as the endpoint will answer it, rather than approximated with a
+ * second emptiness test that could disagree with the page.
  *
  * **Read-only, and structurally so.** The only database surface it holds is
  * BrandingGlobalsWriterInterface, of which it calls exactly two methods —
@@ -44,12 +66,6 @@ use RuntimeException;
  * current. Staleness is therefore measured purely as the age of the tenant's own
  * `saas_branding_materialised_at` stamp. That is a weaker signal than a CP comparison and
  * is reported as its own non-failing status rather than as an inconsistency.
- *
- * **What "inconsistent" means.** The materialisation transaction (plan §4.4) moves three
- * things together and writes the revision last: the token stylesheets, the stamp, and the
- * revision global. Every case in BrandingInconsistency is one of those three having moved
- * without the others — the observable signature of a run that did not finish, or of a hand
- * edit. That is the class of fault this check exists to surface.
  */
 final readonly class BrandingHealthCheck
 {
@@ -105,15 +121,20 @@ final readonly class BrandingHealthCheck
             return BrandingHealthReport::unreadable($site);
         }
 
-        $rawStamp = $stored[BrandingGlobalKey::MaterialisedAt->value] ?? '';
+        $rawStamp = $this->rawValue($stored, BrandingGlobalKey::MaterialisedAt);
+        $rawLightOverlay = $this->rawValue($stored, BrandingGlobalKey::TokensLight);
+        $rawDarkOverlay = $this->rawValue($stored, BrandingGlobalKey::TokensDark);
 
-        $inconsistencies = [];
+        $lightOverlay = TokenOverlay::fromJson($rawLightOverlay);
+        $darkOverlay = TokenOverlay::fromJson($rawDarkOverlay);
+
+        $findings = [];
 
         $materialisedAt = null;
         if ($rawStamp !== '') {
             $parsed = DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $rawStamp);
             if ($parsed === false) {
-                $inconsistencies[] = BrandingInconsistency::UnreadableMaterialisationStamp;
+                $findings[] = BrandingInconsistency::UnreadableMaterialisationStamp;
             } else {
                 $materialisedAt = $parsed;
             }
@@ -124,26 +145,42 @@ final readonly class BrandingHealthCheck
             : null;
 
         if ($age !== null && $age < 0) {
-            $inconsistencies[] = BrandingInconsistency::StampInTheFuture;
+            $findings[] = BrandingInconsistency::StampInTheFuture;
         }
+
+        // Stored but unrenderable, on either variant, is one finding: the operator's next
+        // step is the same whichever variant lost its overlay.
+        if ($this->isUnrenderable($rawLightOverlay, $lightOverlay)
+            || $this->isUnrenderable($rawDarkOverlay, $darkOverlay)) {
+            $findings[] = BrandingInconsistency::UnrenderableTokenOverlay;
+        }
+
+        $servesOverlay = !$lightOverlay->isEmpty() || !$darkOverlay->isEmpty();
 
         if ($revision->isMaterialised()) {
             if (!$light || !$dark) {
-                $inconsistencies[] = BrandingInconsistency::RevisionWithoutStylesheet;
+                $findings[] = BrandingInconsistency::RevisionWithoutStylesheet;
             }
 
             if ($rawStamp === '') {
-                $inconsistencies[] = BrandingInconsistency::MissingMaterialisationStamp;
+                $findings[] = BrandingInconsistency::MissingMaterialisationStamp;
             }
         } else {
+            if ($servesOverlay) {
+                $findings[] = BrandingInconsistency::OverlayWithoutRevision;
+            }
+
             if ($light || $dark) {
-                $inconsistencies[] = BrandingInconsistency::StylesheetWithoutRevision;
+                $findings[] = BrandingInconsistency::StylesheetWithoutRevision;
             }
 
             if ($rawStamp !== '') {
-                $inconsistencies[] = BrandingInconsistency::StampWithoutRevision;
+                $findings[] = BrandingInconsistency::StampWithoutRevision;
             }
         }
+
+        $inconsistencies = $this->onPlane($findings, BrandingObservationPlane::Served);
+        $advisories = $this->onPlane($findings, BrandingObservationPlane::StaticArtefact);
 
         return BrandingHealthReport::of(
             $site,
@@ -152,8 +189,12 @@ final readonly class BrandingHealthCheck
             $age,
             $light,
             $dark,
+            $servesOverlay,
+            $lightOverlay->count(),
+            $darkOverlay->count(),
             $this->statusFor($revision, $age, $inconsistencies),
             $inconsistencies,
+            $advisories,
         );
     }
 
@@ -164,8 +205,52 @@ final readonly class BrandingHealthCheck
     }
 
     /**
+     * A stored overlay that produced nothing.
+     *
+     * TokenOverlay::fromJson() is total: blank, malformed and shape-violating documents all
+     * come back empty. Only the first of those is a legitimate "no overlay", so a non-blank
+     * raw value with an empty parse is the silent-degradation case.
+     */
+    private function isUnrenderable(string $raw, TokenOverlay $overlay): bool
+    {
+        return $raw !== '' && $overlay->isEmpty();
+    }
+
+    /**
+     * The trimmed value behind one branding global, with absent and blank collapsed.
+     *
+     * The same rule BrandingConfigFactory::raw() applies, for the same reason: a blank
+     * global is indistinguishable from an unset one at the globals layer, so the check must
+     * not treat a row of spaces as configuration the page would honour.
+     *
+     * @param array<string, string> $stored
+     */
+    private function rawValue(array $stored, BrandingGlobalKey $key): string
+    {
+        return trim($stored[$key->value] ?? '');
+    }
+
+    /**
+     * @param list<BrandingInconsistency> $findings
+     *
+     * @return list<BrandingInconsistency>
+     */
+    private function onPlane(array $findings, BrandingObservationPlane $plane): array
+    {
+        return array_values(array_filter(
+            $findings,
+            static fn (BrandingInconsistency $finding): bool => $finding->plane() === $plane,
+        ));
+    }
+
+    /**
      * Inconsistency outranks everything: a contradictory state cannot also be called
      * healthy, and its age is not worth reporting on until it is resolved.
+     *
+     * Only served-plane findings reach this method. Advisories about the unserved static
+     * files are deliberately not an input: no state of a file nothing reads can make a
+     * rendered page wrong, and failing on one produced exactly the false alarm S2-P1-18
+     * recorded.
      *
      * @param list<BrandingInconsistency> $inconsistencies
      */

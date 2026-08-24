@@ -55,11 +55,13 @@ plane, what actually exists in the working tree versus what is still design inte
 │   Commands: ApplyProfileCommand, VerifyCommand, MaterialiseCommand           │
 │   (Bootstrap::registerConsoleCommands(), on CommandRunnerFilterEvent)        │
 │                                                                                │
-│   STATUS: BUILT, isolated-tested, NEVER RUN LIVE for a Tier-2 overlay.       │
-│   `apply-profile` (Tier-1 product globals: openemr_name etc.) HAS run        │
-│   against sites/default. `materialise` (the Tier-2 tenant token/logo         │
-│   overlay this plane exists to atomically apply) has not — verify still      │
-│   reports revision 0. (multi-tenant-white-label-readiness.md §1.5)           │
+│   STATUS: BUILT, isolated-tested, RUN LIVE then ROLLED BACK. Corrected       │
+│   2026-08-24 (S2-P1-18): `materialise` HAS run against sites/default —       │
+│   twice (RB-11, PRE-16) — and both runs were restored afterwards, so         │
+│   verify reports revision 0 again. Read that as "no overlay is live",        │
+│   NOT as "materialise never ran": the RB-11 stylesheets are still on         │
+│   disk. `apply-profile` (Tier-1 globals) has run and was not rolled          │
+│   back. (multi-tenant-white-label-readiness.md §1.5)                         │
 └───────────────┬──────────────────────────────────────────────────────────────┘
                 │  writes only into the tenant's own scope — SiteId + assertBoundTo()
                 ▼

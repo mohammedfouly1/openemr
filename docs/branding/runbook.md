@@ -326,26 +326,49 @@ Two independent, both genuinely read-only, both run for real in this session aga
 C:\openemr-stack\php\php.exe bin\console thiqa-branding:verify --site=default
 ```
 
-**Actual output, captured live in this session (2026-08-10, this host, `sites/default`):**
+**Actual output, captured live on this host (`sites/default`) after the S2-P1-18 repair:**
 ```
- ------------------------ -------------------------------------------------
-  Site                     default
-  Status                   never materialised (rendering product defaults)
-  Revision                 0
-  Materialised             never
-  Materialised at          not recorded
-  Age                      unknown
-  Light token stylesheet   absent
-  Dark token stylesheet    absent
- ------------------------ -------------------------------------------------
+ ------------------------------------- -------------------------------------------------
+  Site                                  default
+  Status                                never materialised (rendering product defaults)
+  Revision                              0
+  Materialised                          never
+  Materialised at                       not recorded
+  Age                                   unknown
+  Serves tenant overlay                 no (rendering the product palette)
+  Light token stylesheet (not served)   present
+  Dark token stylesheet (not served)    present
+ ------------------------------------- -------------------------------------------------
 
- [OK] This tenant's branding state is self-consistent.
+Advisories (generated files nothing serves — rendering is unaffected)
+---------------------------------------------------------------------
+
+ * A generated token stylesheet is on disk but no revision is recorded. These files are not served to any page, so rendering is unaffected.
+
+ [OK] This tenant's served branding state is self-consistent.
 ```
 This independently reproduces `docs/branding/remaining-dependencies.md`'s area-42 finding: the one
 existing tenant has never had a Tier-2 overlay materialised. "Never materialised" is reported as a
-**consistent, healthy state** (`BrandingHealthCheck::statusFor()`, lines 172-190 — it is
+**consistent, healthy state** (`BrandingHealthCheck::statusFor()` — it is
 `BrandingHealthStatus::NeverMaterialised`, not `Inconsistent`), because it correctly describes a tenant
 rendering pure Tier-1 (product) defaults with no overlay ever attempted — this is by design, not a defect.
+
+**Why the two stylesheet rows say "not served", and why they are only an advisory.** A tenant's branding
+reaches a browser by exactly one route: the overlay in `saas_branding_tokens_light`/`_dark` decides whether
+a `<link>` is emitted at all, the revision keys that link's URL, and `public/branding-tokens.php` renders
+the overlay. The generated `public/branding/<site>/tokens-*.css` files are a **second route that nothing
+links** — `TokenCssWriter` still commits them on every materialisation, including for an empty overlay
+(dependency **D-8**, still open). Their state is reported because a file missing after a materialisation is
+real evidence of a run that did not finish, but no state of a file nothing reads can change a rendered page,
+so it never fails the probe.
+
+> **Two earlier versions of this section were wrong, in opposite directions.** RB-11 recorded
+> `Status: healthy, Revision: 1`; an earlier revision of this document recorded both stylesheets `absent`.
+> Finding **S2-P1-18** then found the shipped check itself reporting `inconsistent`, exit 1, for a tenant
+> whose rendering was entirely correct — because it cross-referenced the revision against file existence on
+> the unserved route. The output above is the post-repair truth. `BrandingHealthTruthfulnessContractTest`
+> (inside `composer branding-ci`) now fails if the served/advisory distinction is removed from the code or
+> from this document.
 
 **CI/Docker (documented, not executed here):**
 ```bash
@@ -358,15 +381,36 @@ transaction (`BrandingHealthCheck.php:34-40`) — confirmed by reading the sourc
 task's constraint. It is documented as safe to run against production on a schedule
 (`VerifyCommand.php:35-38`).
 
-**Exit codes:** `0` the tenant's state is coherent (including "never materialised" and "merely stale") ·
-`1` the state contradicts itself or could not be read — usable directly as a health probe · `2` the
-invocation itself was wrong (missing `--site`).
+**Exit codes:** `0` the tenant's **served** state is coherent (including "never materialised", "merely
+stale", and any number of static-artefact advisories) · `1` the served state contradicts itself or could
+not be read — usable directly as a health probe · `2` the invocation itself was wrong (missing `--site`).
 
-**What "inconsistent" would look like**, so it's recognisable if seen: `BrandingInconsistency` cases fire
-when the three things a materialisation moves together (stylesheets, the materialisation stamp, the
-revision) have drifted apart — e.g. a revision recorded as materialised but a stylesheet missing, or a
-stylesheet present with no revision recorded. Any of these prints under an `Inconsistencies` section and
-the command exits `1`.
+**What "inconsistent" would look like**, so it's recognisable if seen. Every `BrandingInconsistency` case
+carries a `BrandingObservationPlane`, and the plane decides severity:
+
+| Finding | Plane | Effect |
+|---|---|---|
+| `state_unreadable` | served | exit 1 |
+| `missing_materialisation_stamp` | served | exit 1 |
+| `unreadable_materialisation_stamp` | served | exit 1 |
+| `stamp_without_revision` | served | exit 1 |
+| `stamp_in_the_future` | served | exit 1 |
+| `overlay_without_revision` | served | exit 1 |
+| `unrenderable_token_overlay` | served | exit 1 |
+| `revision_without_stylesheet` | static artefact | advisory, exit 0 |
+| `stylesheet_without_revision` | static artefact | advisory, exit 0 |
+
+Served-plane findings print under an `Inconsistencies` section and the command exits `1`. Static-artefact
+findings print under `Advisories` and do not change the exit code. The identifiers are unchanged wire
+values — a monitor already matching `stylesheet_without_revision` keeps working and simply stops seeing it
+under a failing status.
+
+Two of the served cases are newer and worth knowing by name. `overlay_without_revision` means tenant
+colours are being served under the cache key of a tenant that has none — the overlay reached `globals`
+outside the materialisation transaction. `unrenderable_token_overlay` means an overlay global holds
+something that `TokenOverlay::fromJson()` cannot turn into any token; that parser is deliberately total, so
+without this case the tenant would silently render the product palette while the record claimed an overlay
+was live.
 
 ### 6.2 Generated-artefact drift: `generate-tokens.php --check`
 
@@ -454,11 +498,15 @@ genuinely self-contradictory state — e.g. hand-edited `globals`, or a filesyst
 the database): this is outside what a retry fixes, since the materialiser's own idempotence check compares
 against the *recorded* revision, which may itself be the inconsistent value. This situation is not covered
 by any command in this module — it needs manual inspection of the specific `BrandingInconsistency` case
-reported (`BrandingHealthCheck.php:110-146` enumerates the four possible cases:
-`UnreadableMaterialisationStamp`, `StampInTheFuture`, `RevisionWithoutStylesheet`/`MissingMaterialisationStamp`,
-`StylesheetWithoutRevision`/`StampWithoutRevision`) before deciding whether a targeted `globals` correction
-or a fresh materialisation (§2) is the right fix. No live example of this state has been observed on this
-system; nothing in this codebase automates its resolution.
+reported (see the plane table in §6.1 for the full set and which of them can fail the command) before
+deciding whether a targeted `globals` correction or a fresh materialisation (§2) is the right fix. No live
+example of a served-plane inconsistency has been observed on this system; nothing in this codebase automates
+its resolution.
+
+An `Advisories` section is a different situation and does **not** call for this procedure: it reports the
+generated `public/branding/<site>/tokens-*.css` files, which no page links (D-8). The live tenant carries one
+today — both files exist from an earlier materialisation whose `globals` were later restored. Clearing it is
+optional housekeeping, not recovery.
 
 ---
 

@@ -312,7 +312,7 @@
         "branding-ci": [
             "@branding-tokens-check",
             "@php tools/branding/verify-brand-manifest.php",
-            "@php vendor/bin/phpunit -c phpunit-isolated.xml --no-coverage --fail-on-empty-test-suite --fail-on-incomplete --fail-on-risky tests/Tests/Isolated/BrandingCi tests/Tests/Isolated/BrandingCoreStrings tests/Tests/Isolated/PHPStan/ThiqaBranding tests/Tests/Isolated/Modules/ThiqaBranding/Console/BackupRetentionTest.php"
+            "@php vendor/bin/phpunit -c phpunit-isolated.xml --no-coverage --fail-on-empty-test-suite --fail-on-incomplete --fail-on-risky tests/Tests/Isolated/BrandingCi tests/Tests/Isolated/BrandingCoreStrings tests/Tests/Isolated/PHPStan/ThiqaBranding tests/Tests/Isolated/Modules/ThiqaBranding/Console/BackupRetentionTest.php tests/Tests/Isolated/Modules/ThiqaBranding/Observability tests/Tests/Isolated/Modules/ThiqaBranding/Console/VerifyCommandTest.php"
         ],
         "phpunit-isolated": "phpunit -c phpunit-isolated.xml",
         "rector-check": "php -d memory_limit=4g ./vendor/bin/rector process --dry-run",

@@ -73,7 +73,7 @@ prevents verification or completion).
 | 39 | Error pages | VC | **DONE-VERIFIED (source) / PARTIAL (runtime)** | `templates/error/404.html.twig:3` reads `"Thiqa 404 Error"|xlt` — confirmed by direct read. `MandatoryCoreStringPatchesIsolatedTest`: 23/23 pass, including this exact string. Could **not** confirm live: unauthenticated `GET /interface/login/does-not-exist.php` hits Apache's own stock 404 (file genuinely absent, PHP never runs), not this Twig template — see Surprises |
 | 40 | HTTP headers / cookies | VC | **DONE-VERIFIED (session-constant subset)** | See V-08 below — all 6 identity constants confirmed unchanged |
 | 41 | Role-independent branding | VC | **DONE-VERIFIED** | See A7 below — zero ACL/role references in module source |
-| 42 | Control Plane token ownership / materialisation | VC | **PARTIAL — first materialisation has now run** *(corrected 2026-08-10, RB-11)* | This row previously read `never materialised` / `Revision: 0`; that was true when written and is now stale. `php bin/console thiqa-branding:verify --site=default` → `Status: healthy`, `Revision: 1`, `Materialised at: 2026-08-10T18:50:40+00:00`; `globals.saas_branding_revision = 1`. **Caveat that keeps this PARTIAL rather than DONE:** the run carried an **empty Tier-2 overlay** (`saas_branding_tokens_light`/`_dark` both `''`), so the transaction and revision-bump path were exercised but no tenant token overlay has yet reached a rendered page. AC-6 closes on a non-empty overlay, not on this |
+| 42 | Control Plane token ownership / materialisation | VC | **PARTIAL — a materialisation has run; the tenant no longer records it** *(re-corrected 2026-08-24, S2-P1-18)* | This row has now been written three ways, so the current live reading is stated with its query. RB-11 recorded `Status: healthy`, `Revision: 1`, `Materialised at: 2026-08-10T18:50:40+00:00` on 2026-08-10, and that run genuinely happened — its two generated stylesheets are still on disk with that exact mtime. But the tenant's `globals` were subsequently restored to their pre-run values, so **that reading is no longer true**: `SELECT gl_name, CHAR_LENGTH(gl_value) FROM globals WHERE gl_name LIKE 'saas_branding_%'` returns length 0 for `saas_branding_revision`, `_materialised_at`, `_tokens_light` and `_tokens_dark`, and `thiqa-branding:verify --site=default` reports `never materialised (rendering product defaults)`, exit 0, with one static-artefact advisory for the orphaned files. **What keeps this PARTIAL:** the transaction and revision-bump path have been exercised (twice — RB-11 and the PRE-16 runtime proof), but no tenant token overlay is live today and AC-6 closes on a non-empty overlay reaching a rendered page, not on a completed run |
 | 43 | Theme surplus disposition | VC | **DONE-VERIFIED** | Same evidence as #10 |
 | 44 | Cross-tenant branding acceptance | IDA | **BLOCKED** | `ls sites/` → only `default`. D-6, unresolved |
 
@@ -216,16 +216,26 @@ D-15's row for the full trace.
    theory, not a repeated failure-under-load to nail down the mechanism.
 
 8. ~~**Live materialisation has genuinely never run, even once, against the only existing tenant.**~~
-   **SUPERSEDED 2026-08-10 (`docs/RebrandingBugs.md` RB-11).** This was accurate when written. A
-   materialisation has since run: `thiqa-branding:verify --site=default` now reports `Status: healthy`,
-   `Revision: 1`, `Materialised at: 2026-08-10T18:50:40+00:00`, corroborated independently by
-   `SELECT gl_value FROM globals WHERE gl_name = 'saas_branding_revision'` → `1`.
+   **SUPERSEDED 2026-08-10 (`docs/RebrandingBugs.md` RB-11); the superseding text itself CORRECTED
+   2026-08-24 (S2-P1-18).** Materialisation has run — twice, counting the PRE-16 runtime proof — and both
+   runs were then rolled back to the tenant's pre-run globals.
 
-   **Read the caveat before upgrading any acceptance criterion on the strength of it.** The run carried an
-   **empty Tier-2 overlay** — `saas_branding_tokens_light` and `saas_branding_tokens_dark` are both `''` —
-   so what executed is the transaction, the atomic file staging and the revision bump. **No tenant token
-   overlay has yet reached a rendered page.** `MVP-010` AC-6 closes on a materialisation with a non-empty
-   overlay whose `<link>` is then observable in the HTML, and that has still not happened.
+   **What RB-11 recorded is no longer the live reading.** It reported `Status: healthy`, `Revision: 1`,
+   `Materialised at: 2026-08-10T18:50:40+00:00`, and that was true when written. Today
+   `SELECT gl_name, CHAR_LENGTH(gl_value) FROM globals WHERE gl_name LIKE 'saas_branding_%'` returns
+   length 0 for `saas_branding_revision` and `saas_branding_materialised_at`, and
+   `thiqa-branding:verify --site=default` reports `never materialised (rendering product defaults)`,
+   exit 0. The only surviving trace of the RB-11 run is the pair of generated stylesheets still on disk
+   with mtime `2026-08-10T18:50:40Z` — which nothing serves, and which `verify` now reports as a
+   static-artefact advisory rather than an inconsistency.
+
+   **Read the caveat before upgrading any acceptance criterion on the strength of either run.** Both
+   carried an **empty Tier-2 overlay** — `saas_branding_tokens_light` and `saas_branding_tokens_dark` are
+   both `''` — so what executed is the transaction, the atomic file staging and the revision bump. The
+   PRE-16 proof did drive a non-empty overlay through to a real browser computed-style change, but it was
+   deliberately restored afterwards, so **no tenant token overlay is live today.** `MVP-010` AC-6 closes on
+   a materialisation with a non-empty overlay whose `<link>` is then observable in the HTML *and left in
+   place*, and that has still not happened.
 
    The materialisation also produced the two unlinked `tokens-{light,dark}.css` files that re-opened
    dependency **D-8** — see RB-04. S1-P0-09 later proved that a non-empty overlay reaches a real browser

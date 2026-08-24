@@ -1688,3 +1688,54 @@ and update this one canonical list rather than adding a parallel workflow.
 
 `composer.json` was already counted by PR-33, so PR-34 adds **0** distinct files. The authoritative inventory
 remains **51 distinct files**, covered by PR-01…PR-34.
+
+---
+
+# PR-35 — branding health measures the served state (2026-08-24)
+
+**Files:** `interface/modules/custom_modules/oe-module-thiqa-branding/src/Observability/BrandingObservationPlane.php`
+(new), `.../Observability/BrandingInconsistency.php`, `.../Observability/BrandingHealthCheck.php`,
+`.../Observability/BrandingHealthReport.php`, `.../src/Console/VerifyCommand.php`, `composer.json`.
+**Rebase risk:** LOW — every changed source file is module-owned and has no upstream counterpart;
+`composer.json` extends the same `branding-ci` path list PR-33/PR-34 already own.
+
+Finding **S2-P1-18** recorded `thiqa-branding:verify --site=default` reporting `Status: inconsistent`,
+exit 1, for a tenant whose rendering was entirely correct. The cause was a category error rather than a
+bug in any one line: the check cross-referenced a **served** fact (`saas_branding_revision`) against an
+**unserved** one (whether `public/branding/<site>/tokens-*.css` existed on disk). Nothing links those
+files — `TokenCssWriter` writes them on every materialisation, including for an empty overlay, and only
+`FilesystemStylesheetProbe::is_file()` ever touches them (dependency **D-8**, still open).
+
+PR-35 makes the distinction explicit and testable. `BrandingObservationPlane` names the two planes and
+owns the single severity rule (`failsHealth()`); every `BrandingInconsistency` case declares its plane
+through an exhaustive `match`; the report carries served-plane `inconsistencies` and static-artefact
+`advisories` in separate lists and refuses a finding placed on the wrong one. Only served-plane findings
+reach `statusFor()`, so an advisory can never change a status or an exit code.
+
+Two served-plane cases were added, because the served plane had been under-measured while the unserved one
+was over-measured. `overlay_without_revision` catches tenant colours being served under the cache key of a
+tenant that has none. `unrenderable_token_overlay` catches an overlay global holding something
+`TokenOverlay::fromJson()` cannot render — that parser is deliberately total, so before this the tenant
+would silently fall back to the product palette with nothing reporting it.
+
+**Existing wire identifiers are unchanged.** `revision_without_stylesheet` and `stylesheet_without_revision`
+keep their values and merely move plane, so a monitor already matching on them keeps working.
+
+The overlay is read through `TokenOverlay::fromJson()` — the same parser `BrandingConfigFactory` runs on
+every request — rather than a second emptiness test that could disagree with the rendered page.
+
+`composer.json` adds the Observability suite and `VerifyCommandTest` to the fail-closed `branding-ci`
+command, and `tests/Tests/Isolated/BrandingCi/BrandingHealthTruthfulnessContractTest.php` pins the plane
+map, the served/advisory behaviour, the parser reuse and the runbook vocabulary. The finding noted that
+nothing gated on this exit code; it is gated now.
+
+**Upstream-first path (Q1):** none applies. Both planes and the health check are branding-layer concepts
+with no upstream OpenEMR equivalent; there is nothing to contribute upstream and nothing upstream to
+inherit from.
+
+### Reconciliation after PR-35
+
+`composer.json` was already counted by PR-33. The five module source files are new patch-inventory entries
+in the module tree, which the authoritative production/delivery inventory has always counted separately
+from module-owned code, so PR-35 adds **0** distinct non-module production files. The authoritative
+inventory remains **51 distinct files**, covered by PR-01…PR-35.

@@ -161,14 +161,17 @@ passing at real, cited numbers (393/393, 54/54, 110/110, 50/51-then-1/1, 20/20, 
 suites cited in §1–§2 above). What is not done, and must not be represented as done:
 
 1. ~~**Live materialisation has never executed, even once, against the one tenant that exists.**~~
-   **SUPERSEDED 2026-08-10 (RB-11).** A materialisation *has* since run. `thiqa-branding:verify
-   --site=default` now reports `Status: healthy`, `Revision: 1`, `Materialised at:
-   2026-08-10T18:50:40+00:00`, and `globals.saas_branding_revision = 1`. **The important caveat, which
-   stops this being a clean win:** the run materialised with an **empty Tier-2 overlay**
-   (`saas_branding_tokens_light` and `_dark` are both `''`), so what was exercised is the transaction and
-   revision-bump path, **not** a real token overlay reaching a rendered page. AC-6 is not closed by this;
-   a materialisation with a non-empty overlay, and the resulting `<link>` captured on a rendered page, is
-   what would close it.
+   **SUPERSEDED 2026-08-10 (RB-11); the superseding text CORRECTED 2026-08-24 (S2-P1-18).** A
+   materialisation *has* run, and RB-11's reading — `Status: healthy`, `Revision: 1`, `Materialised at:
+   2026-08-10T18:50:40+00:00` — was true when written. **It is not the live reading now.** The tenant's
+   globals were subsequently restored: `saas_branding_revision` and `saas_branding_materialised_at` are
+   both empty today, and `thiqa-branding:verify --site=default` reports `never materialised (rendering
+   product defaults)`, exit 0. **The caveat that stopped this being a clean win still stands, and is now
+   larger:** the run materialised with an **empty Tier-2 overlay** (`saas_branding_tokens_light` and
+   `_dark` are both `''`), so what was exercised is the transaction and revision-bump path, **not** a
+   token overlay reaching a rendered page — and even that record no longer survives in the tenant. AC-6 is
+   not closed by this; a materialisation with a non-empty overlay, its `<link>` captured on a rendered
+   page, and the result left in place, is what would close it.
 2. **Cross-tenant isolation (A1/A2) has not been demonstrated at all** — blocked on D-6, no second
    tenant provisioned. *(Unchanged and still the largest gap.)*
 3. ~~**The SMART dark-token acceptance criterion (R-SMART-DARK) is not actually met**~~ **CORRECTED

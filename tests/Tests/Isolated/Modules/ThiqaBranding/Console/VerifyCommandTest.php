@@ -114,13 +114,44 @@ final class VerifyCommandTest extends TestCase
 
     public function testAnInconsistentTenantExitsNonZero(): void
     {
-        $this->store(4, self::FRESH_STAMP);
-        $tester = $this->tester(new InMemoryStylesheetProbe(light: false, dark: true));
+        $this->globals->stored[BrandingGlobalKey::Revision->value] = '4';
+        $tester = $this->tester(new InMemoryStylesheetProbe());
 
         $tester->execute(['--site' => self::SITE], ['interactive' => false]);
 
         self::assertSame(Command::FAILURE, $tester->getStatusCode());
         self::assertStringContainsString('Inconsistencies', $tester->getDisplay());
+    }
+
+    /**
+     * The finding S2-P1-18 case: generated files on disk with no revision. Nothing serves
+     * those files, so the command has to print them, name them as unserved, and still exit
+     * zero — the old behaviour failed a tenant whose rendering was entirely correct.
+     */
+    public function testStaticArtefactAdvisoriesArePrintedButExitZero(): void
+    {
+        $tester = $this->tester(new InMemoryStylesheetProbe(light: true, dark: true));
+
+        $tester->execute(['--site' => self::SITE], ['interactive' => false]);
+
+        $display = $tester->getDisplay();
+
+        self::assertSame(Command::SUCCESS, $tester->getStatusCode());
+        self::assertStringContainsString('Advisories', $display);
+        self::assertStringContainsString('not served', $display);
+        self::assertStringNotContainsString('Inconsistencies', $display);
+    }
+
+    /** What the browser would fetch is stated outright, not left to be inferred. */
+    public function testTheServedOverlayIsReportedExplicitly(): void
+    {
+        $this->store(4, self::FRESH_STAMP);
+        $tester = $this->tester(new InMemoryStylesheetProbe());
+
+        $tester->execute(['--site' => self::SITE], ['interactive' => false]);
+
+        self::assertStringContainsString('Serves tenant overlay', $tester->getDisplay());
+        self::assertStringContainsString('rendering the product palette', $tester->getDisplay());
     }
 
     public function testAnUnreadableTenantExitsNonZero(): void
