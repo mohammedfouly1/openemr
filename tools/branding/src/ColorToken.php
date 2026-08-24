@@ -49,6 +49,15 @@ final readonly class ColorToken
 
     public function cssVariable(): string
     {
+        return '--' . $this->slug();
+    }
+
+    /**
+     * Compatibility name emitted for existing compiled consumers while the
+     * identity-neutral custom property above remains the canonical contract.
+     */
+    public function legacyCssVariable(): string
+    {
         return '--thiqa-' . $this->slug();
     }
 }

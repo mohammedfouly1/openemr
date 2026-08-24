@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 // GENERATED FILE — DO NOT EDIT.
 //
-// Thiqa CSS custom properties, with --oe-* compatibility aliases.
+// Identity-neutral CSS custom properties, with legacy and --oe-* compatibility aliases.
 //
 // Produced by tools/branding/bin/generate-tokens.php from:
 //   brand/tokens/thiqa-tokens.json
@@ -22,176 +22,272 @@
 
 @mixin thiqa-css-variables-light {
     /* Brand palette */
-    --thiqa-brand-navy:                    #0B1B4D;
-    --thiqa-brand-coral:                   #FF6F5E;
-    --thiqa-brand-coral-deep:              #C43F2E;
-    --thiqa-brand-sage:                    #5FA777;
-    --thiqa-brand-sky:                     #3E7FBD;
-    --thiqa-brand-amber:                   #C77A1E;
-    --thiqa-brand-critical:                #C0392B;
+    --brand-navy:                          #0B1B4D;
+    --brand-coral:                         #FF6F5E;
+    --brand-coral-deep:                    #C43F2E;
+    --brand-sage:                          #5FA777;
+    --brand-sky:                           #3E7FBD;
+    --brand-amber:                         #C77A1E;
+    --brand-critical:                      #C0392B;
 
     /* Surfaces, borders and lines */
-    --thiqa-background:                    #FAFAF8;
-    --thiqa-surface:                       #FFFFFF;
-    --thiqa-surface-raised:                #FFFFFF;
-    --thiqa-surface-sunken:                #F2F1EE;
-    --thiqa-surface-input:                 #FFFFFF;
-    --thiqa-surface-input-on-raised:       #FFFFFF;
-    --thiqa-border:                        #E4E2DC;
-    --thiqa-border-strong:                 #4B5266;
-    --thiqa-divider:                       #ECEAE5;
+    --background:                          #FAFAF8;
+    --surface:                             #FFFFFF;
+    --surface-raised:                      #FFFFFF;
+    --surface-sunken:                      #F2F1EE;
+    --surface-input:                       #FFFFFF;
+    --surface-input-on-raised:             #FFFFFF;
+    --border:                              #E4E2DC;
+    --border-strong:                       #4B5266;
+    --divider:                             #ECEAE5;
 
     /* Text */
-    --thiqa-text-primary:                  #0B1B4D;
-    --thiqa-text-secondary:                #4B5266;
-    --thiqa-text-disabled:                 #9CA0AC;
-    --thiqa-text-inverse:                  #FFFFFF;
+    --text-primary:                        #0B1B4D;
+    --text-secondary:                      #4B5266;
+    --text-disabled:                       #9CA0AC;
+    --text-inverse:                        #FFFFFF;
 
     /* Semantic status */
-    --thiqa-semantic-success-bg:           #E9F5EE;
-    --thiqa-semantic-success-text:         #2F6B45;
-    --thiqa-semantic-success-border:       #BFE3CC;
-    --thiqa-semantic-warning-bg:           #FCEFE0;
-    --thiqa-semantic-warning-text:         #8A5314;
-    --thiqa-semantic-warning-border:       #F0CE9E;
-    --thiqa-semantic-critical-bg:          #FBE9E7;
-    --thiqa-semantic-critical-text:        #8E271D;
-    --thiqa-semantic-critical-border:      #F0BDB6;
-    --thiqa-semantic-info-bg:              #E8F0FA;
-    --thiqa-semantic-info-text:            #264C74;
-    --thiqa-semantic-info-border:          #BBD3EE;
+    --semantic-success-bg:                 #E9F5EE;
+    --semantic-success-text:               #2F6B45;
+    --semantic-success-border:             #BFE3CC;
+    --semantic-warning-bg:                 #FCEFE0;
+    --semantic-warning-text:               #8A5314;
+    --semantic-warning-border:             #F0CE9E;
+    --semantic-critical-bg:                #FBE9E7;
+    --semantic-critical-text:              #8E271D;
+    --semantic-critical-border:            #F0BDB6;
+    --semantic-info-bg:                    #E8F0FA;
+    --semantic-info-text:                  #264C74;
+    --semantic-info-border:                #BBD3EE;
 
     /* Interactive */
-    --thiqa-interactive-primary-default:   #C43F2E;
-    --thiqa-interactive-primary-hover:     #A8351F;
-    --thiqa-interactive-primary-active:    #8E2B18;
-    --thiqa-interactive-primary-disabled:  #EAC1BA;
-    --thiqa-interactive-primary-text-on:   #FFFFFF;
-    --thiqa-interactive-secondary-default: #0B1B4D;
-    --thiqa-interactive-secondary-hover:   #0E2461;
-    --thiqa-interactive-secondary-text-on: #FFFFFF;
-    --thiqa-interactive-focus-ring:        #3E7FBD;
+    --interactive-primary-default:         #C43F2E;
+    --interactive-primary-hover:           #A8351F;
+    --interactive-primary-active:          #8E2B18;
+    --interactive-primary-disabled:        #EAC1BA;
+    --interactive-primary-text-on:         #FFFFFF;
+    --interactive-secondary-default:       #0B1B4D;
+    --interactive-secondary-hover:         #0E2461;
+    --interactive-secondary-text-on:       #FFFFFF;
+    --interactive-focus-ring:              #3E7FBD;
 
     /* Links */
-    --thiqa-link-default:                  #2C5F94;
-    --thiqa-link-hover:                    #1E4574;
+    --link-default:                        #2C5F94;
+    --link-hover:                          #1E4574;
+
+    /* ------------------------------------------------------------------
+     * Legacy identity-specific aliases. New consumers use the
+     * canonical names above; these aliases preserve older selectors.
+     * ------------------------------------------------------------------ */
+    --thiqa-brand-navy:                    var(--brand-navy);
+    --thiqa-brand-coral:                   var(--brand-coral);
+    --thiqa-brand-coral-deep:              var(--brand-coral-deep);
+    --thiqa-brand-sage:                    var(--brand-sage);
+    --thiqa-brand-sky:                     var(--brand-sky);
+    --thiqa-brand-amber:                   var(--brand-amber);
+    --thiqa-brand-critical:                var(--brand-critical);
+    --thiqa-background:                    var(--background);
+    --thiqa-surface:                       var(--surface);
+    --thiqa-surface-raised:                var(--surface-raised);
+    --thiqa-surface-sunken:                var(--surface-sunken);
+    --thiqa-surface-input:                 var(--surface-input);
+    --thiqa-surface-input-on-raised:       var(--surface-input-on-raised);
+    --thiqa-border:                        var(--border);
+    --thiqa-border-strong:                 var(--border-strong);
+    --thiqa-divider:                       var(--divider);
+    --thiqa-text-primary:                  var(--text-primary);
+    --thiqa-text-secondary:                var(--text-secondary);
+    --thiqa-text-disabled:                 var(--text-disabled);
+    --thiqa-text-inverse:                  var(--text-inverse);
+    --thiqa-semantic-success-bg:           var(--semantic-success-bg);
+    --thiqa-semantic-success-text:         var(--semantic-success-text);
+    --thiqa-semantic-success-border:       var(--semantic-success-border);
+    --thiqa-semantic-warning-bg:           var(--semantic-warning-bg);
+    --thiqa-semantic-warning-text:         var(--semantic-warning-text);
+    --thiqa-semantic-warning-border:       var(--semantic-warning-border);
+    --thiqa-semantic-critical-bg:          var(--semantic-critical-bg);
+    --thiqa-semantic-critical-text:        var(--semantic-critical-text);
+    --thiqa-semantic-critical-border:      var(--semantic-critical-border);
+    --thiqa-semantic-info-bg:              var(--semantic-info-bg);
+    --thiqa-semantic-info-text:            var(--semantic-info-text);
+    --thiqa-semantic-info-border:          var(--semantic-info-border);
+    --thiqa-interactive-primary-default:   var(--interactive-primary-default);
+    --thiqa-interactive-primary-hover:     var(--interactive-primary-hover);
+    --thiqa-interactive-primary-active:    var(--interactive-primary-active);
+    --thiqa-interactive-primary-disabled:  var(--interactive-primary-disabled);
+    --thiqa-interactive-primary-text-on:   var(--interactive-primary-text-on);
+    --thiqa-interactive-secondary-default: var(--interactive-secondary-default);
+    --thiqa-interactive-secondary-hover:   var(--interactive-secondary-hover);
+    --thiqa-interactive-secondary-text-on: var(--interactive-secondary-text-on);
+    --thiqa-interactive-focus-ring:        var(--interactive-focus-ring);
+    --thiqa-link-default:                  var(--link-default);
+    --thiqa-link-hover:                    var(--link-hover);
 
     /* ------------------------------------------------------------------
      * OpenEMR compatibility aliases. Existing selectors read these names;
-     * each one resolves to a Thiqa token above, never to a literal colour.
+     * each one resolves to the canonical token above, never a literal.
      * ------------------------------------------------------------------ */
 
     /* Main canvas */
-    --oe-body-bg:                          var(--thiqa-background);
-    --oe-body-color:                       var(--thiqa-text-primary);
+    --oe-body-bg:                          var(--background);
+    --oe-body-color:                       var(--text-primary);
 
     /* Surface / cards / modals */
-    --oe-surface-bg:                       var(--thiqa-surface);
+    --oe-surface-bg:                       var(--surface);
 
     /* Top navbar */
-    --oe-navbar-bg:                        var(--thiqa-brand-navy); /* variant-specific: the navy brand colour in light, the raised surface in dark */
-    --oe-navbar-color:                     var(--thiqa-text-inverse);
-    --oe-navbar-link-hover-bg:             var(--thiqa-surface-sunken); /* must read lighter than the bar it sits on, in either variant */
-    --oe-navbar-link-hover-color:          var(--thiqa-text-primary);
-    --oe-navbar-link-active-bg:            var(--thiqa-interactive-primary-default);
-    --oe-navbar-link-active-color:         var(--thiqa-interactive-primary-text-on);
+    --oe-navbar-bg:                        var(--brand-navy); /* variant-specific: the navy brand colour in light, the raised surface in dark */
+    --oe-navbar-color:                     var(--text-inverse);
+    --oe-navbar-link-hover-bg:             var(--surface-sunken); /* must read lighter than the bar it sits on, in either variant */
+    --oe-navbar-link-hover-color:          var(--text-primary);
+    --oe-navbar-link-active-bg:            var(--interactive-primary-default);
+    --oe-navbar-link-active-color:         var(--interactive-primary-text-on);
 
     /* Fieldsets & boxes */
-    --oe-fieldset-bg:                      var(--thiqa-surface-sunken);
-    --oe-fieldset-color:                   var(--thiqa-text-primary);
+    --oe-fieldset-bg:                      var(--surface-sunken);
+    --oe-fieldset-color:                   var(--text-primary);
 
     /* Search bar / global search */
-    --oe-search-bg:                        var(--thiqa-divider); /* one step more recessed than a fieldset */
+    --oe-search-bg:                        var(--divider); /* one step more recessed than a fieldset */
 
     /* General surface override for panels, widgets, etc */
-    --oe-panel-bg:                         var(--thiqa-surface);
+    --oe-panel-bg:                         var(--surface);
 }
 
 @mixin thiqa-css-variables-dark {
     /* Brand palette */
-    --thiqa-brand-navy:                    #7C8CE0;
-    --thiqa-brand-coral:                   #FF6F5E;
-    --thiqa-brand-coral-deep:              #FF8B7C;
-    --thiqa-brand-sage:                    #8FD1A6;
-    --thiqa-brand-sky:                     #8FC1EE;
-    --thiqa-brand-amber:                   #F0B45C;
-    --thiqa-brand-critical:                #F29088;
+    --brand-navy:                          #7C8CE0;
+    --brand-coral:                         #FF6F5E;
+    --brand-coral-deep:                    #FF8B7C;
+    --brand-sage:                          #8FD1A6;
+    --brand-sky:                           #8FC1EE;
+    --brand-amber:                         #F0B45C;
+    --brand-critical:                      #F29088;
 
     /* Surfaces, borders and lines */
-    --thiqa-background:                    #0B1220;
-    --thiqa-surface:                       #121A2E;
-    --thiqa-surface-raised:                #17213A;
-    --thiqa-surface-sunken:                #0E1526;
-    --thiqa-surface-input:                 #121A2E;
-    --thiqa-surface-input-on-raised:       #0B1220;
-    --thiqa-border:                        #26314A;
-    --thiqa-border-strong:                 #AEB5C4;
-    --thiqa-divider:                       #1E2740;
+    --background:                          #0B1220;
+    --surface:                             #121A2E;
+    --surface-raised:                      #17213A;
+    --surface-sunken:                      #0E1526;
+    --surface-input:                       #121A2E;
+    --surface-input-on-raised:             #0B1220;
+    --border:                              #26314A;
+    --border-strong:                       #AEB5C4;
+    --divider:                             #1E2740;
 
     /* Text */
-    --thiqa-text-primary:                  #F5F6F8;
-    --thiqa-text-secondary:                #AEB5C4;
-    --thiqa-text-disabled:                 #6B7280;
-    --thiqa-text-inverse:                  #0B1220;
+    --text-primary:                        #F5F6F8;
+    --text-secondary:                      #AEB5C4;
+    --text-disabled:                       #6B7280;
+    --text-inverse:                        #0B1220;
 
     /* Semantic status */
-    --thiqa-semantic-success-bg:           #173425;
-    --thiqa-semantic-success-text:         #8FD1A6;
-    --thiqa-semantic-success-border:       #2B5A3E;
-    --thiqa-semantic-warning-bg:           #3A2A12;
-    --thiqa-semantic-warning-text:         #F0B45C;
-    --thiqa-semantic-warning-border:       #5C4520;
-    --thiqa-semantic-critical-bg:          #3A1815;
-    --thiqa-semantic-critical-text:        #F29088;
-    --thiqa-semantic-critical-border:      #5C2A24;
-    --thiqa-semantic-info-bg:              #132437;
-    --thiqa-semantic-info-text:            #8FC1EE;
-    --thiqa-semantic-info-border:          #254361;
+    --semantic-success-bg:                 #173425;
+    --semantic-success-text:               #8FD1A6;
+    --semantic-success-border:             #2B5A3E;
+    --semantic-warning-bg:                 #3A2A12;
+    --semantic-warning-text:               #F0B45C;
+    --semantic-warning-border:             #5C4520;
+    --semantic-critical-bg:                #3A1815;
+    --semantic-critical-text:              #F29088;
+    --semantic-critical-border:            #5C2A24;
+    --semantic-info-bg:                    #132437;
+    --semantic-info-text:                  #8FC1EE;
+    --semantic-info-border:                #254361;
 
     /* Interactive */
-    --thiqa-interactive-primary-default:   #FF6F5E;
-    --thiqa-interactive-primary-hover:     #FF8672;
-    --thiqa-interactive-primary-active:    #E85C4C;
-    --thiqa-interactive-primary-disabled:  #5A3530;
-    --thiqa-interactive-primary-text-on:   #0B1220;
-    --thiqa-interactive-secondary-default: #F5F6F8;
-    --thiqa-interactive-secondary-hover:   #D8DCE6;
-    --thiqa-interactive-secondary-text-on: #0B1220;
-    --thiqa-interactive-focus-ring:        #8FC1EE;
+    --interactive-primary-default:         #FF6F5E;
+    --interactive-primary-hover:           #FF8672;
+    --interactive-primary-active:          #E85C4C;
+    --interactive-primary-disabled:        #5A3530;
+    --interactive-primary-text-on:         #0B1220;
+    --interactive-secondary-default:       #F5F6F8;
+    --interactive-secondary-hover:         #D8DCE6;
+    --interactive-secondary-text-on:       #0B1220;
+    --interactive-focus-ring:              #8FC1EE;
 
     /* Links */
-    --thiqa-link-default:                  #8FC1EE;
-    --thiqa-link-hover:                    #B7D9F5;
+    --link-default:                        #8FC1EE;
+    --link-hover:                          #B7D9F5;
+
+    /* ------------------------------------------------------------------
+     * Legacy identity-specific aliases. New consumers use the
+     * canonical names above; these aliases preserve older selectors.
+     * ------------------------------------------------------------------ */
+    --thiqa-brand-navy:                    var(--brand-navy);
+    --thiqa-brand-coral:                   var(--brand-coral);
+    --thiqa-brand-coral-deep:              var(--brand-coral-deep);
+    --thiqa-brand-sage:                    var(--brand-sage);
+    --thiqa-brand-sky:                     var(--brand-sky);
+    --thiqa-brand-amber:                   var(--brand-amber);
+    --thiqa-brand-critical:                var(--brand-critical);
+    --thiqa-background:                    var(--background);
+    --thiqa-surface:                       var(--surface);
+    --thiqa-surface-raised:                var(--surface-raised);
+    --thiqa-surface-sunken:                var(--surface-sunken);
+    --thiqa-surface-input:                 var(--surface-input);
+    --thiqa-surface-input-on-raised:       var(--surface-input-on-raised);
+    --thiqa-border:                        var(--border);
+    --thiqa-border-strong:                 var(--border-strong);
+    --thiqa-divider:                       var(--divider);
+    --thiqa-text-primary:                  var(--text-primary);
+    --thiqa-text-secondary:                var(--text-secondary);
+    --thiqa-text-disabled:                 var(--text-disabled);
+    --thiqa-text-inverse:                  var(--text-inverse);
+    --thiqa-semantic-success-bg:           var(--semantic-success-bg);
+    --thiqa-semantic-success-text:         var(--semantic-success-text);
+    --thiqa-semantic-success-border:       var(--semantic-success-border);
+    --thiqa-semantic-warning-bg:           var(--semantic-warning-bg);
+    --thiqa-semantic-warning-text:         var(--semantic-warning-text);
+    --thiqa-semantic-warning-border:       var(--semantic-warning-border);
+    --thiqa-semantic-critical-bg:          var(--semantic-critical-bg);
+    --thiqa-semantic-critical-text:        var(--semantic-critical-text);
+    --thiqa-semantic-critical-border:      var(--semantic-critical-border);
+    --thiqa-semantic-info-bg:              var(--semantic-info-bg);
+    --thiqa-semantic-info-text:            var(--semantic-info-text);
+    --thiqa-semantic-info-border:          var(--semantic-info-border);
+    --thiqa-interactive-primary-default:   var(--interactive-primary-default);
+    --thiqa-interactive-primary-hover:     var(--interactive-primary-hover);
+    --thiqa-interactive-primary-active:    var(--interactive-primary-active);
+    --thiqa-interactive-primary-disabled:  var(--interactive-primary-disabled);
+    --thiqa-interactive-primary-text-on:   var(--interactive-primary-text-on);
+    --thiqa-interactive-secondary-default: var(--interactive-secondary-default);
+    --thiqa-interactive-secondary-hover:   var(--interactive-secondary-hover);
+    --thiqa-interactive-secondary-text-on: var(--interactive-secondary-text-on);
+    --thiqa-interactive-focus-ring:        var(--interactive-focus-ring);
+    --thiqa-link-default:                  var(--link-default);
+    --thiqa-link-hover:                    var(--link-hover);
 
     /* ------------------------------------------------------------------
      * OpenEMR compatibility aliases. Existing selectors read these names;
-     * each one resolves to a Thiqa token above, never to a literal colour.
+     * each one resolves to the canonical token above, never a literal.
      * ------------------------------------------------------------------ */
 
     /* Main canvas */
-    --oe-body-bg:                          var(--thiqa-background);
-    --oe-body-color:                       var(--thiqa-text-primary);
+    --oe-body-bg:                          var(--background);
+    --oe-body-color:                       var(--text-primary);
 
     /* Surface / cards / modals */
-    --oe-surface-bg:                       var(--thiqa-surface);
+    --oe-surface-bg:                       var(--surface);
 
     /* Top navbar */
-    --oe-navbar-bg:                        var(--thiqa-surface-raised); /* variant-specific: the navy brand colour in light, the raised surface in dark */
-    --oe-navbar-color:                     var(--thiqa-text-primary);
-    --oe-navbar-link-hover-bg:             var(--thiqa-border); /* must read lighter than the bar it sits on, in either variant */
-    --oe-navbar-link-hover-color:          var(--thiqa-text-primary);
-    --oe-navbar-link-active-bg:            var(--thiqa-interactive-primary-default);
-    --oe-navbar-link-active-color:         var(--thiqa-interactive-primary-text-on);
+    --oe-navbar-bg:                        var(--surface-raised); /* variant-specific: the navy brand colour in light, the raised surface in dark */
+    --oe-navbar-color:                     var(--text-primary);
+    --oe-navbar-link-hover-bg:             var(--border); /* must read lighter than the bar it sits on, in either variant */
+    --oe-navbar-link-hover-color:          var(--text-primary);
+    --oe-navbar-link-active-bg:            var(--interactive-primary-default);
+    --oe-navbar-link-active-color:         var(--interactive-primary-text-on);
 
     /* Fieldsets & boxes */
-    --oe-fieldset-bg:                      var(--thiqa-surface-sunken);
-    --oe-fieldset-color:                   var(--thiqa-text-primary);
+    --oe-fieldset-bg:                      var(--surface-sunken);
+    --oe-fieldset-color:                   var(--text-primary);
 
     /* Search bar / global search */
-    --oe-search-bg:                        var(--thiqa-divider); /* one step more recessed than a fieldset */
+    --oe-search-bg:                        var(--divider); /* one step more recessed than a fieldset */
 
     /* General surface override for panels, widgets, etc */
-    --oe-panel-bg:                         var(--thiqa-surface);
+    --oe-panel-bg:                         var(--surface);
 }
 
 // Pick the variant before importing this partial; light is the default.

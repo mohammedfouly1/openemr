@@ -20,9 +20,11 @@ namespace OpenEMR\Branding;
  * applies the light one to `:root` as the default. A dark entry file overrides
  * with `:root { @include thiqa-css-variables-dark; }`.
  *
- * Every block emits the `--thiqa-*` tokens first and then the thirteen
- * `--oe-*` names existing OpenEMR selectors already read, defined as
- * `var(--thiqa-*)` aliases so the two can never disagree.
+ * Every block emits identity-neutral canonical tokens first. The historical
+ * `--thiqa-*` names and the thirteen `--oe-*` names existing OpenEMR selectors
+ * already read are compatibility aliases of that canonical surface. Tenant
+ * materialisation writes the same canonical names, so Tier 1 and Tier 2 cannot
+ * drift into parallel namespaces.
  */
 final readonly class CssVariablesRenderer
 {
@@ -41,7 +43,7 @@ final readonly class CssVariablesRenderer
     public function render(array $palettes): GeneratedFile
     {
         $body = GeneratedHeader::scss(
-            'Thiqa CSS custom properties, with --oe-* compatibility aliases.',
+            'Identity-neutral CSS custom properties, with legacy and --oe-* compatibility aliases.',
             $this->sources,
         );
 
@@ -118,6 +120,7 @@ final readonly class CssVariablesRenderer
         $width = 0;
         foreach ($palette->entries() as $entry) {
             $width = max($width, strlen($entry->token->cssVariable()) + 1);
+            $width = max($width, strlen($entry->token->legacyCssVariable()) + 1);
         }
         foreach ($this->oeMap->variables() as $oeVariable) {
             $width = max($width, strlen($oeVariable->name) + 1);
@@ -139,8 +142,20 @@ final readonly class CssVariablesRenderer
 
         $lines[] = '';
         $lines[] = self::INDENT . '/* ------------------------------------------------------------------';
+        $lines[] = self::INDENT . ' * Legacy identity-specific aliases. New consumers use the';
+        $lines[] = self::INDENT . ' * canonical names above; these aliases preserve older selectors.';
+        $lines[] = self::INDENT . ' * ------------------------------------------------------------------ */';
+
+        foreach ($palette->entries() as $entry) {
+            $lines[] = self::INDENT
+                . str_pad($entry->token->legacyCssVariable() . ':', $width + 1)
+                . 'var(' . $entry->token->cssVariable() . ');';
+        }
+
+        $lines[] = '';
+        $lines[] = self::INDENT . '/* ------------------------------------------------------------------';
         $lines[] = self::INDENT . ' * OpenEMR compatibility aliases. Existing selectors read these names;';
-        $lines[] = self::INDENT . ' * each one resolves to a Thiqa token above, never to a literal colour.';
+        $lines[] = self::INDENT . ' * each one resolves to the canonical token above, never a literal.';
         $lines[] = self::INDENT . ' * ------------------------------------------------------------------ */';
 
         $group = null;

@@ -1,8 +1,10 @@
 // -----------------------------------------------------------------------------
 // Thiqa component corrections (hand-authored, fork-owned).
 //
-// Everything here is expressed in $thiqa-* tokens, so the same partial produces
-// the correct result in both variants. It is imported near the end of each entry
+// Tier-1 values remain available as $thiqa-* compile-time fallbacks. Tenant-
+// overridable components consume identity-neutral CSS custom properties, so the
+// same validated contract is shared by light, dark and materialised overlays.
+// This partial is imported near the end of each entry
 // file — after `../core`, `../theme-defaults` and the CSS custom properties, and
 // before `../oe-bootstrap` — which is the same slot upstream's light and dark
 // themes use for their own corrections.
@@ -103,65 +105,65 @@ a,
 .link_submit,
 .more,
 .back {
-  color: $thiqa-link-default;
+  color: var(--link-default, #{$thiqa-link-default});
 }
 
 a:hover,
 a:focus {
-  color: $thiqa-link-hover;
+  color: var(--link-hover, #{$thiqa-link-hover});
 }
 
 // -----------------------------------------------------------------------------
 // Buttons
 // -----------------------------------------------------------------------------
 .btn-primary {
-  background-color: $thiqa-interactive-primary-default;
-  border-color: $thiqa-interactive-primary-default;
-  color: $thiqa-interactive-primary-text-on;
+  background-color: var(--interactive-primary-default, #{$thiqa-interactive-primary-default});
+  border-color: var(--interactive-primary-default, #{$thiqa-interactive-primary-default});
+  color: var(--interactive-primary-text-on, #{$thiqa-interactive-primary-text-on});
 
   &:hover,
   &:focus {
-    background-color: $thiqa-interactive-primary-hover;
-    border-color: $thiqa-interactive-primary-hover;
-    color: $thiqa-interactive-primary-text-on;
+    background-color: var(--interactive-primary-hover, #{$thiqa-interactive-primary-hover});
+    border-color: var(--interactive-primary-hover, #{$thiqa-interactive-primary-hover});
+    color: var(--interactive-primary-text-on, #{$thiqa-interactive-primary-text-on});
   }
 
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active {
-    background-color: $thiqa-interactive-primary-active;
-    border-color: $thiqa-interactive-primary-active;
-    color: $thiqa-interactive-primary-text-on;
+    background-color: var(--interactive-primary-active, #{$thiqa-interactive-primary-active});
+    border-color: var(--interactive-primary-active, #{$thiqa-interactive-primary-active});
+    color: var(--interactive-primary-text-on, #{$thiqa-interactive-primary-text-on});
   }
 
   &:disabled,
   &.disabled {
-    background-color: $thiqa-interactive-primary-disabled;
-    border-color: $thiqa-interactive-primary-disabled;
-    color: $thiqa-interactive-primary-text-on;
+    background-color: var(--interactive-primary-disabled, #{$thiqa-interactive-primary-disabled});
+    border-color: var(--interactive-primary-disabled, #{$thiqa-interactive-primary-disabled});
+    color: var(--interactive-primary-text-on, #{$thiqa-interactive-primary-text-on});
   }
 }
 
 .btn-secondary {
-  background-color: $thiqa-interactive-secondary-default;
-  border-color: $thiqa-interactive-secondary-default;
-  color: $thiqa-interactive-secondary-text-on;
+  background-color: var(--interactive-secondary-default, #{$thiqa-interactive-secondary-default});
+  border-color: var(--interactive-secondary-default, #{$thiqa-interactive-secondary-default});
+  color: var(--interactive-secondary-text-on, #{$thiqa-interactive-secondary-text-on});
 
   &:hover,
   &:focus {
-    background-color: $thiqa-interactive-secondary-hover;
-    border-color: $thiqa-interactive-secondary-hover;
-    color: $thiqa-interactive-secondary-text-on;
+    background-color: var(--interactive-secondary-hover, #{$thiqa-interactive-secondary-hover});
+    border-color: var(--interactive-secondary-hover, #{$thiqa-interactive-secondary-hover});
+    color: var(--interactive-secondary-text-on, #{$thiqa-interactive-secondary-text-on});
   }
 }
 
 .btn-outline-primary {
-  border-color: $thiqa-interactive-primary-default;
-  color: $thiqa-interactive-primary-default;
+  border-color: var(--interactive-primary-default, #{$thiqa-interactive-primary-default});
+  color: var(--interactive-primary-default, #{$thiqa-interactive-primary-default});
 
   &:hover,
   &:focus {
-    background-color: $thiqa-interactive-primary-default;
-    color: $thiqa-interactive-primary-text-on;
+    background-color: var(--interactive-primary-default, #{$thiqa-interactive-primary-default});
+    color: var(--interactive-primary-text-on, #{$thiqa-interactive-primary-text-on});
   }
 }
 
@@ -171,22 +173,22 @@ a:focus {
 
   &:hover,
   &:focus {
-    background-color: $thiqa-interactive-secondary-default;
-    border-color: $thiqa-interactive-secondary-default;
-    color: $thiqa-interactive-secondary-text-on;
+    background-color: var(--interactive-secondary-default, #{$thiqa-interactive-secondary-default});
+    border-color: var(--interactive-secondary-default, #{$thiqa-interactive-secondary-default});
+    color: var(--interactive-secondary-text-on, #{$thiqa-interactive-secondary-text-on});
   }
 }
 
 .btn:focus,
 .btn.focus {
-  box-shadow: 0 0 0 0.2rem rgba($thiqa-interactive-focus-ring, 0.35);
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--interactive-focus-ring, #{$thiqa-interactive-focus-ring}) 35%, transparent);
 }
 
 // -----------------------------------------------------------------------------
 // Focus visibility — one ring colour everywhere
 // -----------------------------------------------------------------------------
 :focus-visible {
-  outline: 2px solid $thiqa-interactive-focus-ring;
+  outline: 2px solid var(--interactive-focus-ring, #{$thiqa-interactive-focus-ring});
   outline-offset: 1px;
 }
 
@@ -226,8 +228,8 @@ input[type="number"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus {
   background-color: $thiqa-surface-input;
-  border-color: $thiqa-interactive-focus-ring;
-  box-shadow: 0 0 0 0.2rem rgba($thiqa-interactive-focus-ring, 0.35);
+  border-color: var(--interactive-focus-ring, #{$thiqa-interactive-focus-ring});
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--interactive-focus-ring, #{$thiqa-interactive-focus-ring}) 35%, transparent);
   color: $thiqa-text-primary;
 }
 
@@ -329,7 +331,7 @@ input.list-group-item,
 }
 
 .menuEntries li .menuLabel:hover {
-  color: $thiqa-link-hover !important;
+  color: var(--link-hover, #{$thiqa-link-hover}) !important;
 }
 
 .menuDisabled {
@@ -341,11 +343,11 @@ ul.tabNav a {
 }
 
 ul.tabNav li.current a {
-  color: $thiqa-interactive-primary-default;
+  color: var(--interactive-primary-default, #{$thiqa-interactive-primary-default});
 }
 
 .documents_list a {
-  color: $thiqa-link-default;
+  color: var(--link-default, #{$thiqa-link-default});
 }
 
 // -----------------------------------------------------------------------------

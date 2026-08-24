@@ -284,23 +284,30 @@ class TokenGeneratorIsolatedTest extends TestCase
     {
         return [
             'light background and text' => [
-                '--thiqa-background:                    #FAFAF8;',
+                '--background:                          #FAFAF8;',
                 'smart-style_light.json.twig',
                 ['"color_background": "#FAFAF8"', '"color_text": "#0B1B4D"'],
             ],
             'dark background and text' => [
-                '--thiqa-background:                    #0B1220;',
+                '--background:                          #0B1220;',
                 'smart-style_dark.json.twig',
                 ['"color_background": "#0B1220"', '"color_text": "#F5F6F8"'],
             ],
         ];
     }
 
-    public function testCssVariablesExposeBothThiqaAndOeNames(): void
+    public function testCssVariablesExposeCanonicalLegacyAndOeNames(): void
     {
         $css = self::artefact('_css-variables.scss');
 
-        $this->assertStringContainsString('--thiqa-interactive-primary-default:', $css);
+        $this->assertSame(2, substr_count($css, '--interactive-primary-default:'));
+        $this->assertSame(
+            2,
+            preg_match_all(
+                '/--thiqa-interactive-primary-default:\s+var\(--interactive-primary-default\);/',
+                $css,
+            ),
+        );
         $this->assertStringContainsString('@mixin thiqa-css-variables-light {', $css);
         $this->assertStringContainsString('@mixin thiqa-css-variables-dark {', $css);
 
@@ -329,9 +336,49 @@ class TokenGeneratorIsolatedTest extends TestCase
         );
         $this->assertSame(
             2,
-            preg_match_all('/' . preg_quote($name, '/') . ':\s+var\(--thiqa-[a-z0-9-]+\);/', $css),
-            $name . ' must alias a Thiqa token in both mixins, never a literal colour.',
+            preg_match_all('/' . preg_quote($name, '/') . ':\s+var\(--[a-z0-9-]+\);/', $css),
+            $name . ' must alias a canonical identity-neutral token in both mixins, never a literal colour.',
         );
+    }
+
+    /**
+     * Tier 2 emits these identity-neutral names. Both generated variants must
+     * supply Tier-1 defaults, and real component rules must consume the same
+     * names so a materialised overlay changes rendered UI instead of creating
+     * an inert parallel namespace.
+     */
+    public function testLightAndDarkTenantTokensHaveLiveComponentConsumers(): void
+    {
+        $css = self::artefact('_css-variables.scss');
+        $overridesPath = self::repoRoot() . '/interface/themes/thiqa/_overrides.scss';
+        $overrides = file_get_contents($overridesPath);
+
+        $this->assertNotFalse($overrides, 'The hand-authored component override partial must be readable.');
+
+        $expected = [
+            '--interactive-primary-default',
+            '--interactive-primary-hover',
+            '--interactive-primary-active',
+            '--interactive-primary-disabled',
+            '--interactive-primary-text-on',
+            '--interactive-secondary-default',
+            '--interactive-secondary-hover',
+            '--interactive-secondary-text-on',
+            '--interactive-focus-ring',
+            '--link-default',
+            '--link-hover',
+        ];
+
+        foreach ($expected as $name) {
+            $this->assertSame(2, substr_count($css, $name . ':'), $name . ' needs light and dark defaults.');
+            $this->assertStringContainsString('var(' . $name . ',', $overrides, $name . ' needs a live consumer.');
+        }
+
+        $this->assertStringContainsString(
+            'background-color: var(--interactive-primary-default,',
+            $overrides,
+        );
+        $this->assertStringContainsString('color: var(--link-default,', $overrides);
     }
 
     /**
