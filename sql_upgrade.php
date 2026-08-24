@@ -74,6 +74,7 @@ use OpenEMR\Common\Csrf\CsrfUtils;
 use OpenEMR\Common\Database\QueryUtils;
 use OpenEMR\Common\Session\SessionUtil;
 use OpenEMR\Common\Session\SessionWrapperFactory;
+use OpenEMR\Common\Translation\ProductContextTranslation;
 use OpenEMR\Common\Uuid\UuidRegistry;
 use OpenEMR\Core\Header;
 use OpenEMR\Core\OEGlobalsBag;
@@ -149,6 +150,10 @@ SessionUtil::setSession([
 CsrfUtils::setupCsrfKey($session);
 
 $sqlUpgradeService = new SQLUpgradeService();
+$databaseUpgradeTitle = ProductContextTranslation::compose(
+    xl('%s Database Upgrade'),
+    OEGlobalsBag::getInstance()->getString('openemr_name'),
+);
 
 header('Content-type: text/html; charset=utf-8');
 
@@ -156,7 +161,7 @@ header('Content-type: text/html; charset=utf-8');
 <!-- @todo Adding DOCTYPE html breaks BS width/height percentages. Why? -->
 <html>
 <head>
-    <title>Thiqa Database Upgrade</title>
+    <title><?php echo text($databaseUpgradeTitle); ?></title>
     <?php Header::setupHeader(); ?>
     <link rel="shortcut icon" href="public/images/favicon.ico" />
     <script>
@@ -411,7 +416,7 @@ header('Content-type: text/html; charset=utf-8');
         <div class="text-center">
             <div class="row">
                 <div class="col-12">
-                    <h2><?php echo xlt("Thiqa Database Upgrade"); ?></h2>
+                    <h2><?php echo text($databaseUpgradeTitle); ?></h2>
                 </div>
             </div>
             <div class="row">
