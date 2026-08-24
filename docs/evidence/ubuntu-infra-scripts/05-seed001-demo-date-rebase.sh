@@ -1,5 +1,5 @@
 #!/bin/bash
-# SEED-001 — whole-week date re-base for the Thiqa demo seed, on demo-openemr
+# SEED-001 — whole-week date re-base for the OpenEMR demo seed, on demo-openemr
 #
 # Prepared by Claude Code, 2026-08-20. NOT executed automatically — same
 # reasoning as scripts 01-04 (installs a systemd unit; system-configuration
@@ -297,7 +297,7 @@ GATE
 
   cat > /etc/systemd/system/openemr-date-rebase.service << UNITEOF
 [Unit]
-Description=Thiqa demo seed whole-week date re-base (SEED-001)
+Description=OpenEMR demo seed whole-week date re-base (SEED-001)
 After=network.target mariadb.service
 
 [Service]
@@ -309,7 +309,7 @@ UNITEOF
   # re-based state rather than the state it is about to replace.
   cat > /etc/systemd/system/openemr-date-rebase.timer << 'UNITEOF'
 [Unit]
-Description=Run the Thiqa demo date re-base daily
+Description=Run the OpenEMR demo date re-base daily
 
 [Timer]
 OnCalendar=*-*-* 02:30:00

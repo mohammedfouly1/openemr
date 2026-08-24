@@ -7,6 +7,23 @@ configuration is something Claude Code does not do directly, even with
 explicit user authorization (a hard boundary, not a missing permission).
 Run these yourself, or hand them to whoever has sudo on that host.
 
+## Operational identity classification (S1-P1-11, 2026-08-24)
+
+This directory mixes reusable scripts with captured deployment evidence. Identity-bearing strings are
+therefore classified before any future rename:
+
+| Occurrence | Classification | Disposition |
+|---|---|---|
+| Date-rebase source comment and generated systemd descriptions | Safe-to-neutralize operator labels | Source now says **OpenEMR demo**. This repository edit does not alter an already-installed remote unit; reconcile that unit only during a separately authorized infrastructure migration. |
+| `feat/thiqa-branding-foundation` in `07-deploy-code-update.sh` and this README | Branch name in a historical, SHA-pinned deployment transaction | Preserve exactly. The script records the branch/commit that was actually deployed; it is not a reusable product-name setting. Generate a new reviewed update script for a future branch. |
+| `oe-module-thiqa-branding` in the captured change inventory | Production compatibility identifier | Preserve exactly until an explicitly authorized module migration changes the real directory and all consumers together. |
+| Former `thiqa-demo-backups` README example | Stale hypothetical resource name | Removed. Verification now requires the operator to supply the existing bucket name rather than minting or assuming an identity-bearing resource. |
+| `skyeaglebucket` in script 02 | Pre-existing external bucket identifier | Preserve; do not rename, copy, or migrate it in PRE-SKYEAGLE work. It is infrastructure state, not authorization to begin product rebranding. |
+| Product names in handoff/readiness history outside this directory | Historical evidence | Preserve. Historical records are not reusable configuration. |
+
+The classification deliberately does not rename a live service, branch, module, bucket, backup object, or
+historical record.
+
 ## Order and dependencies
 
 1. **`01-rdy0083-background-services-scheduler.sh`** — no prerequisites.
@@ -14,11 +31,10 @@ Run these yourself, or hand them to whoever has sudo on that host.
    2 minutes. Fixes the root cause behind the RDY-0090 Twig-render hang
    findings (see `../EV-090-twig-render-hang-root-cause.md`).
 
-2. **`02-rdy0081-offsite-backup.sh`** — **prerequisite: enable R2 in the
-   Cloudflare dashboard first** (confirmed 2026-08-19 via API that it is
-   not yet enabled on this account — this step cannot be done via API, it
-   needs a human in the dashboard). Then create a bucket
-   (e.g. `thiqa-demo-backups`). R2 S3-compatible credentials are already
+2. **`02-rdy0081-offsite-backup.sh`** — R2 and its current external bucket
+   were subsequently confirmed present by the Owner (the script records the
+   exact existing identifier). Do not create or rename a bucket merely to run
+   this evidence procedure. R2 S3-compatible credentials are already
    saved at `C:\openemr-stack\secrets\cloudflare-api-token.json`
    (`r2_s3_compatible` block) — reissue if you no longer trust that value
    (it was pasted into a chat session).
@@ -51,7 +67,8 @@ mariadb -u root openemr -e "SELECT name, next_run FROM background_services WHERE
 
 # 0081
 sudo /usr/local/bin/openemr-offsite-backup.sh run   # or wait for the daily timer
-rclone --config /etc/openemr-backup/rclone.conf ls r2:thiqa-demo-backups/
+R2_BUCKET=REPLACE_WITH_EXISTING_BUCKET
+rclone --config /etc/openemr-backup/rclone.conf ls "r2:${R2_BUCKET}/"
 
 # 0084
 tail -f /var/log/openemr-monitoring.log

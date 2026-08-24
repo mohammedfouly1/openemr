@@ -7,6 +7,11 @@
 # over SSH are blocked for this agent regardless of authorization. Run it
 # yourself on the VM as a user with sudo.
 #
+# IDENTITY CLASSIFICATION (S1-P1-11): this is a SHA-pinned record of one
+# historical deployment transaction, not a reusable product-name template.
+# Preserve its branch and module-directory compatibility identifiers exactly;
+# generate a newly reviewed script for a future deployment target.
+#
 #   gcloud compute ssh demo-openemr --zone=us-central1-a \
 #       --project=project-c2365b97-e364-4ea0-bc2
 #   # copy this file across (or paste it), then:
