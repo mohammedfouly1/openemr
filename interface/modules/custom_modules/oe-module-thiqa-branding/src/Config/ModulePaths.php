@@ -30,7 +30,15 @@ namespace OpenEMR\Modules\ThiqaBranding\Config;
  *  - `tools/branding/install-assets.php` is a build-time tool under the `OpenEMR\Branding\`
  *    autoload prefix. The module's own prefix is not in the root autoloader, so the tool
  *    cannot load this class. `ModulePathContractTest` asserts its literal matches instead.
- *  - `webpack.themes.js` and `.gitignore` are not PHP at all, and the same test pins them.
+ *  - `.gitignore` is not PHP at all, and the same test pins it — the most expensive one to get
+ *    wrong quietly, since after a rename it simply stops matching and the next commit sweeps in
+ *    every tenant's materialised branding output as if it were source.
+ *
+ * `webpack.themes.js` is **not** in that list, despite appearing on the module's inherited
+ * rename-surface inventory. Reading it shows it references the SCSS source tree
+ * (`oe-styles/style_thiqa_*.scss` → `interface/themes/thiqa/`) and never this directory, so there
+ * is nothing here for it to agree with. *(Corrected 2026-08-24 after Scan-3E caught this docblock
+ * claiming the test pinned webpack when it deliberately does not.)*
  *
  * A constant cannot cross those boundaries; a test can, so the coupling is enforced where it
  * can actually be enforced instead of being left to memory.

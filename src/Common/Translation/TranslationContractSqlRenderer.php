@@ -182,7 +182,13 @@ final class TranslationContractSqlRenderer
             '    FROM `lang_definitions` `d`',
             '    INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`',
             "    WHERE BINARY `c`.`constant_name` = '{$source}'",
-            "      AND LOCATE('{$literal}', `d`.`definition`) > 0",
+            // Exactly one occurrence, not merely at least one. A definition naming the product
+            // twice would neutralise to a two-placeholder pattern, which ProductContextTranslation
+            // refuses — so the row would install cleanly and then fatal the page that rendered it.
+            // The PHP path already validates each candidate through compose(); this is the SQL
+            // mirror of that guard, and without it the two paths fail in opposite directions.
+            "      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, "
+                . "'{$literal}', '')) = CHAR_LENGTH('{$literal}')",
             '      AND ' . self::NO_PERCENT_IN_SOURCE,
             ') AS `src`',
             'LEFT JOIN `lang_definitions` `existing`',

@@ -197,6 +197,93 @@ final class TranslationCatalogueMigrationTest extends TestCase
         $this->migration()->rollback($this->contract(), $store);
     }
 
+    // ------------------------------------- precedence: explicit beats carry-forward (S3-P0-28)
+
+    /**
+     * An explicit contract definition must WIN over the neutralised legacy string.
+     *
+     * The generated installer SQL inserts explicit definitions first and anti-joins the
+     * carry-forward against rows already present, so SQL has always preferred the explicit value.
+     * The PHP path used to overwrite it. On real shipped data those differ — the contract declares
+     * French "Mettre à jour la base de donnée de %s" while the upstream seed's legacy row
+     * neutralises to "…d'%s" — so a site installed from the SQL and then upgraded through the PHP
+     * path hit "Conflicting target definition for lang_id 8", uncaught, mid-upgrade.
+     */
+    public function testAnExplicitDefinitionBeatsTheNeutralisedLegacyValue(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('OpenEMR Database Upgrade', [8 => "Mettre a jour la base de donnee d'OpenEMR"]);
+
+        $contract = TranslationCatalogueContract::fromJson(json_encode([
+            'schema' => 'openemr-translation-contract/1',
+            'id' => 'precedence-test',
+            'target_key' => '%s Database Upgrade',
+            'legacy_keys' => ['OpenEMR Database Upgrade' => 'OpenEMR'],
+            'definitions' => ['8' => 'Mettre a jour la base de donnee de %s'],
+        ], JSON_THROW_ON_ERROR));
+
+        $this->migration()->forward($contract, $store);
+
+        self::assertSame(
+            [8 => 'Mettre a jour la base de donnee de %s'],
+            $store->definitionsOf('%s Database Upgrade'),
+            'The explicit contract definition must win, matching what the installer SQL inserts.',
+        );
+    }
+
+    /**
+     * The other half of the same rule: carry-forward still fills a language the contract does not
+     * mention. Losing that would silently drop translations for every locale outside the explicit
+     * set, which is the failure this whole subsystem exists to prevent.
+     */
+    public function testCarryForwardStillFillsLanguagesTheContractDoesNotDeclare(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('OpenEMR Database Upgrade', [
+            8 => "Mettre a jour la base de donnee d'OpenEMR",
+            77 => 'Bespoke OpenEMR upgrade',
+        ]);
+
+        $contract = TranslationCatalogueContract::fromJson(json_encode([
+            'schema' => 'openemr-translation-contract/1',
+            'id' => 'precedence-gapfill',
+            'target_key' => '%s Database Upgrade',
+            'legacy_keys' => ['OpenEMR Database Upgrade' => 'OpenEMR'],
+            'definitions' => ['8' => 'Mettre a jour la base de donnee de %s'],
+        ], JSON_THROW_ON_ERROR));
+
+        $this->migration()->forward($contract, $store);
+
+        self::assertSame(
+            [8 => 'Mettre a jour la base de donnee de %s', 77 => 'Bespoke %s upgrade'],
+            $store->definitionsOf('%s Database Upgrade'),
+        );
+    }
+
+    /**
+     * The end-to-end shape of the reported defect: the target already holds what the installer SQL
+     * would have written, and a later upgrade must be a clean no-op rather than a thrown conflict.
+     */
+    public function testUpgradingASiteInstalledFromTheSqlPathDoesNotConflict(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('OpenEMR Database Upgrade', [8 => "Mettre a jour la base de donnee d'OpenEMR"]);
+        // What the generated supplement inserts on a fresh install:
+        $store->seedConstant('%s Database Upgrade', [8 => 'Mettre a jour la base de donnee de %s']);
+
+        $contract = TranslationCatalogueContract::fromJson(json_encode([
+            'schema' => 'openemr-translation-contract/1',
+            'id' => 'precedence-upgrade',
+            'target_key' => '%s Database Upgrade',
+            'legacy_keys' => ['OpenEMR Database Upgrade' => 'OpenEMR'],
+            'definitions' => ['8' => 'Mettre a jour la base de donnee de %s'],
+        ], JSON_THROW_ON_ERROR));
+
+        $result = $this->migration()->forward($contract, $store);
+
+        self::assertSame('already_current', $result->action);
+    }
+
     // --------------------------------------- schema v2: missing-identity policy (S2-P1-26)
 
     /**

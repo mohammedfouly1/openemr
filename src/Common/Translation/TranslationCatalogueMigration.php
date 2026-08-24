@@ -166,8 +166,25 @@ final class TranslationCatalogueMigration
                 $sourceCandidates[$languageId] = $candidate;
             }
         }
+        // An explicit contract definition is AUTHORITATIVE; carry-forward only fills gaps.
+        //
+        // This used to be an unconditional overwrite, which made the PHP upgrade path prefer the
+        // neutralised legacy string while the generated installer SQL prefers the explicit one —
+        // its carry-forward statement anti-joins against rows already inserted. The two paths then
+        // disagreed on real shipped data: `database-upgrade.json` declares French as
+        // "Mettre à jour la base de donnée de %s", while the upstream seed's legacy row is
+        // "…de donnée d'OpenEMR", which neutralises to "…de donnée d'%s".
+        //
+        // The consequence was not cosmetic. A site installed by this branch's installer got the SQL
+        // value; the first `sql_upgrade.php` run then computed the PHP value, found it different
+        // from what was already there, and threw "Conflicting target definition for lang_id 8" —
+        // uncaught, after the DDL had applied and before the version row was bumped, leaving the
+        // upgrade wedged and unrecoverable without hand-editing lang_definitions. Found by the
+        // Scan-3A adversarial pass, which reproduced both halves.
+        //
+        // One precedence rule, both paths: `??=`.
         foreach ($sourceCandidates as $languageId => $candidate) {
-            $desired[$languageId] = $candidate;
+            $desired[$languageId] ??= $candidate;
         }
         ksort($desired);
         return $desired;

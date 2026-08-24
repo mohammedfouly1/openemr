@@ -196,7 +196,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 13 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). ✅ All four P2 findings closed (`97f6952cf`). ✅ S2-P1-22 + S2-P1-23 + the juxtaposition half of S2-P1-24 closed together by the multi-key contract subsystem and the `xlp` composition filter (`6edc03b8b`). ✅ S2-P1-26 Class B — the uncatalogued leak class no override could reach — converted, with the Foundation/ONC preserve list locked by test (`6da352e9a`). ✅ S2-P1-26 Class A: 20 legacy contracts + 22 call sites, after fixing a latent install-vs-upgrade divergence that would have aborted real upgrades (`177d5dc97`). ✅ S2-P1-24 text half: the shell selects the Arabic product name by language. **PRE-09 IS COMPLETE** apart from S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist. **Next:** Scan 3 (PRE-18…24), then PRE-25. |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **COMPLETE — 18 items verified** (one sub-item, S2-P1-24's Arabic logo variant, is blocked on an approved asset that does not exist) | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). ✅ All four P2 findings closed (`97f6952cf`). ✅ S2-P1-22 + S2-P1-23 + the juxtaposition half of S2-P1-24 closed together by the multi-key contract subsystem and the `xlp` composition filter (`6edc03b8b`). ✅ S2-P1-26 Class B — the uncatalogued leak class no override could reach — converted, with the Foundation/ONC preserve list locked by test (`6da352e9a`). ✅ S2-P1-26 Class A: 20 legacy contracts + 22 call sites, after fixing a latent install-vs-upgrade divergence that would have aborted real upgrades (`177d5dc97`). ✅ S2-P1-24 text half: the shell selects the Arabic product name by language. **PRE-09 IS COMPLETE** apart from S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist. **Next:** Scan 3 (PRE-18…24), then PRE-25. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -1164,7 +1164,7 @@ DEAD     row exists, never reached                                    49
 So the structural half of the finding is **larger** than recorded — 22 uncatalogued literals, not the ~7 it
 listed — and the reachable-and-branded half is 20, not 23.
 
-**Class B is fully converted (15 literals / 18 call sites).** These are the safe ones by construction: with
+**Class B is fully converted (14 literals / 17 call sites).** These are the safe ones by construction: with
 no catalogue row there is nothing to orphan, so they need no contract at all. A new PHP helper `xlp()`
 (`library/translation.inc.php`) mirrors the Twig filter — translate the pattern, compose `openemr_name`,
 return unescaped so the call site escapes once. Converted: the six `globals.inc.php` labels (theme
@@ -1662,6 +1662,226 @@ See §5 S1-P0-09. Additional historical findings:
 - Branding module zero-network guarantee independently re-verified by grep: no `curl_`, no HTTP client
   imports, all 9 `file_get_contents`/`fopen` calls are local paths.
 - `trackApiRequestEvent()` has **no callers** — dead code.
+
+---
+
+## 15B. SCAN-3 RESULTS (adversarial, independent agents — dispatched 2026-08-24)
+
+> **Agent reports are evidence, not verdicts.** Every claim below was re-checked by the orchestrator
+> before being recorded, and one was refuted. An adversarial finding that is wrong is still a finding
+> about the audit, not about the code.
+
+### Scan-3A — translation subsystem: **COMPLETE. Found a P0 that would have wedged every upgrade.**
+
+**S3-P0-28 (NEW, P0) — FIXED, VERIFIED.** The SQL and PHP carry-forward paths disagreed on
+*precedence*, and the disagreement was reachable on real shipped data.
+
+The generated installer SQL inserts explicit contract definitions first and anti-joins the legacy
+carry-forward against rows already present, so **explicit wins**. `desiredDefinitions()` did the
+opposite — an unconditional `$desired[$languageId] = $candidate` — so **legacy won**. On
+`database-upgrade.json` those differ for French: the contract declares
+`Mettre à jour la base de donnée de %s`, while the upstream seed's legacy row is
+`…de donnée d'OpenEMR`, neutralising to `…de donnée d'%s`. Verified directly in
+`currentLanguage_utf8.sql`.
+
+Consequence, as Scan-3A demonstrated by execution: a site installed by this branch's installer gets
+the SQL value; its first `sql_upgrade.php` run computes the PHP value, finds a mismatch, and throws
+`Conflicting target definition for lang_id 8`. That call site has **no try/catch**, and the version
+row is bumped *after* it — so the upgrade dies mid-run with DDL already applied and the version never
+advanced, and re-running throws again. Unrecoverable without hand-editing `lang_definitions`. It does
+not reproduce on this dev database, which has no `%s Database Upgrade` row, so local testing would
+have missed it.
+
+**This was pre-existing, not introduced by the Rev 22 work** — the PHP path has overwritten since
+S1-P0-13, and adding v2 legacy SQL only made the asymmetry reachable in more contracts.
+
+Fixed by making one precedence rule hold in both paths (`??=`): an explicit contract definition is
+authoritative, carry-forward fills gaps only. Three regression tests pin it — explicit wins, gaps
+still fill, and an SQL-installed site upgrades to `already_current`. Negative control: reverting to
+`=` reproduces `RuntimeException: Conflicting target definition for lang_id 8` and fails all three;
+source restored by hash.
+
+**S3-P2-29 (NEW, P2 latent) — FIXED.** The SQL legacy statement used a bare `REPLACE()` with no
+composability check, while the PHP path validates every candidate through `compose()`. A source
+definition naming the product **twice** would therefore install cleanly as a two-placeholder pattern
+and then fatal whichever page rendered it. No such row exists today, but the derivation deliberately
+re-derives from upstream translations as they change. The SQL now requires the literal to occur
+**exactly once**. Proven on a disposable database seeded with a deliberate `OpenEMR … OpenEMR` row:
+supplement applied twice, 47 definitions, 0 duplicate pairs, **0 two-placeholder definitions**.
+
+**S3-P1-30 (NEW, P1) — ACCEPTED, NOT FIXED; the cost is now quantified.** Scan-3A measured what
+`on_missing_identity: "skip"` actually costs: **22 contracts drop at least one locale, and Arabic —
+this fork's primary target — loses 8 previously-translated strings**, including
+`interface/main/backup.php:505,538`. Rev 24 described this trade honestly but did not measure it; the
+number belongs on the record. The only alternative remains authoring per-language definitions, which
+this programme will not fabricate. `database-upgrade.json` shows the pattern for whoever supplies
+them: explicit definitions for exactly the affected locales.
+
+**S3-P1-31 (NEW, P1) — OPEN.** `interface/language/lang_definition.php:123,150` inserts and updates
+translations with no placeholder validation, so an admin editing `%s Login` and dropping the `%s`
+makes `compose()` throw and takes the OAuth2 login page to a 500 for that locale. The language editor
+needs the same guard the contract loader applies. Not fixed here: it is a separate surface from the
+branding work and deserves its own change.
+
+**Verified sound by 3A** (independent confirmation): no code path deletes a pre-existing translation;
+forward→rollback→forward→rollback replay is byte-identical; drift is detected rather than overwritten;
+the store uses `FOR UPDATE` on every decision read; contract-set invariants (duplicate id, duplicate
+target, derivation chains) all reject; the deployed supplement is not stale; and every Twig call site
+escapes exactly once despite `autoescape=false`.
+
+### Scan-3B — CI gate: **COMPLETE. Gate is not lying today; six string-shaped assertions hardened.**
+
+3B's bottom line is the useful part: the gate passes honestly right now, and its hardest attack
+surface — the namespace-scoped guardrails — it could not defeat. The exposure was that several
+assertions checked that a guard's *text* was present rather than that the guard had *effect*.
+
+Fixed this session:
+- **P1-1** the gate is pinned to `matrix.php-version == '8.2'` and nothing asserted 8.2 was in the
+  matrix. Deleting that one line switched the whole branding gate off with every leg green.
+  Now cross-asserted; negative control removed `'8.2'` and the test failed with the matrix listed,
+  then the workflow was restored by hash.
+- **P1-2** `|| true` was forbidden in the composer script but not in the workflow step. Now blocked
+  there too, along with `|| :`, `; exit 0`, `|| echo` and `set +e`.
+- **P1-4** manifest verification was strictly manifest→disk, so deleting a line un-guarded a file and
+  reported one *more* clean entry. A reverse sweep now requires every file under `brand/` to be
+  covered (manifests and `.gitattributes` excepted as metadata).
+- **P1-5** `--fail-on-empty-test-suite` fires only when the *whole* run is empty, so a gated
+  directory could lose every test and stay green. Each gated path must now exist and contain at
+  least one `*Test.php`.
+- **P2-1** `assertStringNotContainsString('paths:')` never blocked `paths-ignore:`, which skips the
+  workflow entirely. Both spellings now blocked.
+
+Recorded, **not** fixed — these are governance/CI-infrastructure decisions rather than defects:
+- **P1-3 / P2-3** the manifest covers `brand/**` sources but **not the artefacts the product actually
+  serves** — deployed logos, favicon, fonts under `public/`, and compiled `public/themes/*.css`.
+  Those can be replaced with anything while the gate prints `123/123 verified`. Closing this means
+  extending the manifest's scope, which changes a documented 123-entry re-issue discipline.
+- **P1-6** the Q77 deployed-theme check (`BrandingGovernanceGuardTest`) calls `markTestSkipped` when
+  `public/themes/` is absent, CI has no webpack step, and the gate does not pass `--fail-on-skipped`
+  — so the check a locked decision depends on runs in **no** CI job while reporting green.
+- **P2-2** the four guardrails are enforced by the separate PHPStan workflow, and nothing asserts the
+  module directory is inside PHPStan's analysed paths; adding it to `excludePaths` would make all
+  four inert with every branding test still green.
+- **P2-4** the workflow triggers only on `master` and `rel-*`, so the working branch gets no branding
+  gate until a PR targets one of those.
+
+### Scan-3C — brand leaks: **COMPLETE. Confirms the composition work, and finds the surface it does
+not reach.**
+
+3C's central finding is the sharpest available critique of this session's own architecture:
+**`xl_product_name()` has exactly two callers**, both in `interface/main/tabs/main.php`, while there
+are ~30 raw `openemr_name` reads — *including `xlp()` itself and the `|xlp` Twig filter*. So the two
+functions built to compose the product name into translated prose both bypass the Arabic resolver. An
+Arabic session gets Arabic chrome with a Latin wordmark embedded in it everywhere except the main
+shell's browser tab. That is a real, coherent gap and it is **OPEN** (recorded as **S3-P1-32**); the
+fix is to route `xlp()` and the Twig filter through `xl_product_name()`, which is small but changes
+every composed surface at once and deserves its own verified change rather than a rushed one here.
+
+Also open, from 3C: `setup.php` is entirely unbranded and live-reachable (**S3-P1-33**, ~20
+user-visible strings including an `open-emr.org` link — note §14 already classified these as safe raw
+literals, so this is a known-but-undone item rather than a new discovery); the questionnaire liability
+disclaimer names the wrong legal entity (**S3-P1-34**, already recorded at Rev 23 as the JS-side
+exclusion); and a P2 tail of eye-exam titles, orders help text, portal metadata, a SMART JSON
+`publisher`, and an inactive `*OpenEMR` apps row.
+
+3C independently confirmed clean: the login page (1 match, the session cookie), FHIR metadata (0),
+OIDC discovery (0), `admin.php`, `templates/login/**`, and `library/js/*.js`.
+
+> **One observation from 3C that is outside branding and should not be lost:** it reports `admin.php`
+> rendering its full site table **without authentication**. That is a security question, not a
+> branding one, and it is recorded here only so it is not dropped — it needs its own investigation.
+
+### Scan-3D — documentation truthfulness: **COMPLETE. Corpus held up; three real defects, all fixed.**
+
+3D could not falsify a single "FIXED — VERIFIED" status, and independently confirmed all 24 cited
+commit hashes, the patch-record arithmetic (51→59→67→76), the live login-page byte count, the 13,235
+`lang_constants` figure, the four RTL locales, and the gate at 257 tests / 3,338 assertions.
+
+Fixed from its report:
+- The PRE-09 ledger row said **"IN PROGRESS — 13 items verified"** while the evidence cell in the
+  same row listed 18 ✅ and concluded PRE-09 was complete. The headline status of the whole
+  remediation programme was stale by five items and by its own conclusion.
+- `architecture.md` cited `Bootstrap.php:97-100` for `GlobalsInitializedEvent`; those lines are
+  docblock prose and the real registration is `:107` — drift from the S1-P2-12 refactor.
+- `architecture.md` cited `TokenKey.php:161-209`; actual `:164-212`. (Its substantive claim,
+  "exactly 11 overridable keys", 3D counted and confirmed.)
+- **An arithmetic error in this checkpoint's own Rev 23**, which 3D flagged without being able to
+  re-derive: Class B was written as "15 literals / 18 sites" converted, but 15 + 6 preserved + 2
+  excluded = 23 against a Class-B total of 22, and Rev 26 said 14. Resolved from the source data:
+  **14 literals / 17 sites** converted, 6 preserved, 2 excluded = 22. Corrected.
+
+### Scan-3E — rename blast radius: **COMPLETE. One new P1, one correction against the orchestrator's
+own work, one refuted claim.**
+
+**S3-P1-27 (NEW, P1) — the live database has none of the neutral translation keys, so this instance
+is currently rendering English where it used to render Arabic.**
+
+Independently confirmed by direct query:
+
+```text
+lang_definitions containing 'Thiqa'                     27
+lang_id = 1 (English) override rows still present        5   (all five marked "retired")
+constant 'Thiqa Database Upgrade' still present          1   (cons_id 13235)
+constants matching '%s'  (the 28 contracts' targets)     0   <-- none of them exist here
+```
+
+The contracts, the generated supplement and the journalled migration are all correct and proven on
+disposable databases — but **this** database has been through neither a fresh install nor
+`sql_upgrade.php` since they landed, so no neutral key exists in it. Today, a call site composing
+`About %s` finds no row, falls back to the key's own English text, and an Arabic session sees
+`About Thiqa` where it previously saw `حول Thiqa`. The old constants still hold their translations,
+now unreferenced.
+
+This is **not** a design defect — the carry-forward exists precisely so nothing is lost — it is an
+**unapplied migration**. It is also the sharpest fresh-install-versus-upgrade divergence currently
+live: a fresh install seeded from today's artefacts is correct; this upgraded instance is not, and
+stays wrong indefinitely until the migration runs.
+
+**Required operational step, not yet performed:**
+
+```powershell
+C:\openemr-stack\php\php.exe bin\console openemr:translation-catalogue-migrate
+C:\openemr-stack\php\php.exe tools\branding\apply-brand-strings.php --site=default   # retires the 5 English overrides
+```
+
+Both are transactional and journalled, and the first supports `--rollback`. **Deliberately not run by
+this session:** every task in this programme has held to "live database mutated: NO", and mutating the
+demo tenant is an operator decision with an audience. The dry run planned exactly five deletions and
+wrote nothing.
+
+**Correction against the orchestrator's own work (accepted).** `ModulePaths`' docblock claimed
+`webpack.themes.js` and `.gitignore` were both pinned by `ModulePathContractTest`. Only `.gitignore`
+is; the webpack assertion was deliberately removed when webpack turned out never to reference the
+module directory, and the docblock was not updated to match. A doc overstating its own test coverage
+is exactly the defect class this programme exists to catch. Fixed.
+
+**Refuted (do not reintroduce).** 3E reported that `style_thiqa_light.scss:73`'s comment —
+"`--thiqa-*` plus the `--oe-*` compatibility aliases" — was stale because "no `--thiqa-` var is
+emitted". False. Counted as occurrences rather than matching lines: `_css-variables.scss` emits
+`--thiqa-*` 86 times and `--oe-*` 27; compiled `style_light.css` carries 43 and 20. Those are the
+compatibility aliases S1-P0-09 deliberately retained at Rev 8. The comment is accurate.
+
+**Already remediated, which 3E did not know.** Its recommendation to "add an assertion that the rule's
+`MODULE_NAMESPACE` equals the module's actual PSR-4 prefix" is `ThiqaBrandingGuardrailScopeTest`,
+added at Rev 20 — it derives the namespace from the module's own composer.json, asserts all four rule
+constants against it in both directions, and pins the fixture namespaces. The hazard 3E describes is
+real and was closed before it looked.
+
+**Corroborated (independent confirmation of existing records):** the `modules.mod_directory`
+self-disable (§9), the untracked font/theme paths (§9), the `Thiqa Database Upgrade` catalogue key
+(S1-P0-13), and the safe raw literals in §14.
+
+**Genuinely new and worth keeping — the Arabic substring trap.** A naive
+`REPLACE(definition,'ثقة',…)` sweep during a rename would corrupt unrelated Arabic UI text: `ثقة` is a
+substring of `منبثقة` ("popup"). Verified — all four rows matching `%ثقة%` are false positives
+("Enable Clinical Reminder Popup", "Popups", "Pop ups need to be enabled…", "View events in a popup
+window?"), and **zero** rows contain the brand itself. The Arabic product name lives only in
+`globals.saas_branding_product_name_ar`, so an Arabic catalogue sweep is pure risk with no benefit.
+
+**Also new: console command names are an out-of-repo coupling.** Seven `thiqa-branding:*` command
+names are referenced by operator runbooks, cron entries and systemd units that live outside this
+repository. 3E checked `docs/evidence/ubuntu-infra-scripts/` and found none of the eight scripts
+currently invoke one, so live infrastructure is unaffected today; the exposure is operator procedure.
 
 ---
 

@@ -52,7 +52,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Enable OpenEMR FHIR System Scopes.'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -83,7 +83,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Enable OpenEMR Patient Portal RESTful API.'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -114,7 +114,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Enable OpenEMR Patient Portal REST API (EXPERIMENTAL)'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -145,7 +145,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Enable OpenEMR Standard FHIR RESTful API.'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -176,7 +176,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Enable OpenEMR Standard FHIR REST API'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -207,7 +207,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Enable OpenEMR Standard RESTful API.'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -238,7 +238,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Enable OpenEMR Standard REST API'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -269,7 +269,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Dumping OpenEMR database'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -300,7 +300,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'An error occurred while dumping OpenEMR web directory tree'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -331,7 +331,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Dumping OpenEMR web directory tree'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -572,7 +572,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'OpenEMR does not recognize the incoming file in the contrib directory. This is most likely because you need to configure the release in the supported_external_dataloads table in the MySQL database.'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -603,7 +603,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'There was an OpenEMR SQL Escaping ERROR of the following string'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -634,7 +634,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'OpenEMR Users'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -695,7 +695,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Embed {login} where the OpenEMR login name of the user is to be; for example: uid={login},dc=example,dc=com'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -726,7 +726,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Ensure OpenEMR has write privileges to directory'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -757,7 +757,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'OpenEMR Application Category'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -788,7 +788,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'OpenEMR requires Javascript to perform user authentication.'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -819,7 +819,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'In order to register your device, please provide your OpenEMR login password'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -940,7 +940,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'OpenEMR App Registration'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -971,7 +971,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Sphere Void/Credit Confirmation Password. OpenEMR confirms pin/password before proceeding with void/credit.'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -1002,7 +1002,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'OpenEMR Application'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`
@@ -1033,7 +1033,7 @@ FROM (
     FROM `lang_definitions` `d`
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'Welcome to OpenEMR'
-      AND LOCATE('OpenEMR', `d`.`definition`) > 0
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`

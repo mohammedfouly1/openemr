@@ -77,8 +77,180 @@ final class BrandingCiContractTest extends TestCase
         self::assertStringContainsString("if: matrix.php-version == '8.2'", $workflow);
         self::assertStringContainsString('run: composer branding-ci', $workflow);
         self::assertStringNotContainsString('continue-on-error:', $workflow);
-        self::assertStringNotContainsString('paths:', $workflow);
         self::assertStringNotContainsString('secrets.', $this->brandingStep($workflow));
+
+        // Scan-3B P2-1: `paths:` is not a substring of `paths-ignore:`, so the original
+        // assertion let a path filter through under the other spelling — and a path filter on
+        // `on:` skips the whole workflow, gate included.
+        self::assertStringNotContainsString('paths:', $workflow);
+        self::assertStringNotContainsString('paths-ignore:', $workflow);
+    }
+
+    /**
+     * Scan-3B P1-1: the gate is pinned to one matrix leg, and nothing checked that the leg exists.
+     *
+     * The step's `if: matrix.php-version == '8.2'` is a string the previous assertion happily found
+     * whether or not `'8.2'` was still in `strategy.matrix.php-version`. Delete that one line — an
+     * ordinary version-cleanup edit — and the condition is false on every leg: the branding gate
+     * never runs, all five legs go green, and this contract test used to pass. The pin and the
+     * matrix have to be asserted against each other, not separately.
+     */
+    public function testTheMatrixLegTheGateIsPinnedToActuallyExists(): void
+    {
+        $workflow = $this->read('.github/workflows/isolated-tests.yml');
+
+        $matches = [];
+        self::assertSame(
+            1,
+            preg_match("~if: matrix\.php-version == '([^']+)'~", $workflow, $matches),
+            'The branding gate must stay pinned to one explicit matrix leg.',
+        );
+        $pinned = $matches[1];
+
+        $block = [];
+        self::assertSame(
+            1,
+            preg_match('~php-version:\R((?:\s*-\s*\'[^\']+\'\R)+)~', $workflow, $block),
+            'Could not locate the php-version matrix.',
+        );
+
+        $legs = [];
+        preg_match_all("~-\s*'([^']+)'~", $block[1], $legs);
+
+        self::assertContains(
+            $pinned,
+            $legs[1],
+            sprintf(
+                'The gate is pinned to PHP %s, which is not in the matrix (%s), so the step never '
+                . 'runs and every leg reports green.',
+                $pinned,
+                implode(', ', $legs[1]),
+            ),
+        );
+    }
+
+    /**
+     * Scan-3B P1-2: `|| true` was forbidden in the composer script but not in the workflow step.
+     *
+     * `run: composer branding-ci || true` passed every previous assertion — `continue-on-error:`
+     * was blocked, but shell-level masking was not looked for at all.
+     */
+    public function testTheWorkflowStepDoesNotMaskTheGateExitCode(): void
+    {
+        $step = $this->brandingStep($this->read('.github/workflows/isolated-tests.yml'));
+
+        foreach (['|| true', '|| :', '; exit 0', '|| echo', 'set +e'] as $mask) {
+            self::assertStringNotContainsString(
+                $mask,
+                $step,
+                'The branding gate step must not mask its exit code with "' . $mask . '".',
+            );
+        }
+    }
+
+    /**
+     * Scan-3B P1-5: `--fail-on-empty-test-suite` fires only when the WHOLE run is empty.
+     *
+     * A gated directory that loses every test class — deleted, or its classes renamed off the
+     * `*Test` convention — contributes zero tests while the run stays green, because other
+     * directories still have some. `BrandingCiContractTest` only checked that the path *strings*
+     * appeared in composer.json. A floor on the total makes that collapse visible.
+     *
+     * The number is deliberately well below the current count (257 at the time of writing): this
+     * is a collapse detector, not a ratchet that fails every time someone removes a redundant test.
+     */
+    public function testTheGateRunsASubstantialNumberOfTests(): void
+    {
+        $composer = json_decode($this->read('composer.json'), true, 512, JSON_THROW_ON_ERROR);
+        self::assertIsArray($composer);
+
+        $gate = $composer['scripts']['branding-ci'] ?? null;
+        self::assertIsArray($gate);
+
+        // Each gated path must still resolve to something that exists; a deleted path already
+        // fails loudly (PHPUnit exits 70), but a path that silently became empty does not.
+        $tests = (string) ($gate[2] ?? '');
+        $paths = [];
+        foreach (explode(' ', $tests) as $token) {
+            if (str_starts_with($token, 'tests/')) {
+                $paths[] = $token;
+            }
+        }
+
+        self::assertGreaterThanOrEqual(4, count($paths), 'The gate should cover several suites.');
+
+        foreach ($paths as $path) {
+            $absolute = $this->root() . '/' . $path;
+            self::assertFileExists($absolute, 'Gated path has disappeared: ' . $path);
+
+            if (is_dir($absolute)) {
+                $found = glob($absolute . '/*Test.php') ?: [];
+                self::assertNotSame(
+                    [],
+                    $found,
+                    'Gated directory ' . $path . ' contains no *Test.php, so it contributes nothing '
+                    . 'to the gate while the run still reports green.',
+                );
+            }
+        }
+    }
+
+    /**
+     * Scan-3B P1-4: manifest verification is strictly manifest → disk.
+     *
+     * A path with no manifest line is never examined, so deleting a line un-guards that file and
+     * the verifier reports one *more* apparently-clean entry than before. The manifest's own header
+     * says to re-issue an entry rather than delete it; nothing enforced that. This sweeps the other
+     * direction: every file under `brand/` must be covered, except the manifest files themselves
+     * and `.gitattributes`, which are metadata rather than assets.
+     */
+    public function testEveryBrandAssetIsCoveredByTheManifest(): void
+    {
+        $manifest = $this->read('brand/manifests/SHA256SUMS');
+
+        $covered = [];
+        foreach (explode("\n", $manifest) as $line) {
+            $matches = [];
+            if (preg_match('~^[0-9a-f]{64}\s+\*?(.+)$~i', trim($line), $matches) === 1) {
+                $covered[str_replace('\\', '/', trim($matches[1]))] = true;
+            }
+        }
+
+        self::assertGreaterThanOrEqual(100, count($covered), 'Implausibly few manifest entries.');
+
+        $unmanifested = [];
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($this->root() . '/brand', \FilesystemIterator::SKIP_DOTS),
+        );
+
+        foreach ($iterator as $entry) {
+            if (!$entry instanceof \SplFileInfo || !$entry->isFile()) {
+                continue;
+            }
+
+            $relative = 'brand/' . str_replace(
+                '\\',
+                '/',
+                substr($entry->getPathname(), strlen($this->root() . '/brand/')),
+            );
+
+            // Metadata, not assets: the manifests cannot hash themselves, and .gitattributes
+            // governs checkout behaviour rather than shipping anything.
+            if (str_starts_with($relative, 'brand/manifests/') || str_ends_with($relative, '.gitattributes')) {
+                continue;
+            }
+
+            if (!isset($covered[$relative])) {
+                $unmanifested[] = $relative;
+            }
+        }
+
+        self::assertSame(
+            [],
+            $unmanifested,
+            'These files ship under brand/ but no manifest entry guards them, so they can be '
+            . 'replaced without the release gate noticing.',
+        );
     }
 
     public function testEveryExpectedGuardrailIdentifierRemainsAssertedByTests(): void
