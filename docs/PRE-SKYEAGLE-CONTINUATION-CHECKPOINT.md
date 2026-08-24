@@ -30,6 +30,7 @@
 | 18 | **PRE-09 / S1-P1-11 FIXED — VERIFIED; live infrastructure and compatibility history preserved.** `29be1fcd5b14001ce2a1a0d1aa390ef10aa617a0` classifies the ten relevant operational occurrences, neutralizes only the reusable date-rebase labels and stale hypothetical bucket example, and explicitly preserves the historical deployment branch, production module directory, pre-existing external bucket and historical records. No remote host, installed unit, branch, module, bucket or backup was changed. The contract passed 2 tests / 14 assertions; both edited shells passed `bash -n`; canonical gate passed 12/12 artefacts, 123/123 manifest and 166 / 2,181. A reintroduced Thiqa service label failed the named test exit 1, followed by exact script restoration and final passes. Next incomplete task: S2-P1-18 branding-health truthfulness. |
 | 19 | **PRE-09 / S2-P1-18 FIXED — VERIFIED; the live tenant now reports the truth and exits 0.** `1474263b4` introduces `BrandingObservationPlane`, which names the served route (overlay globals → revision-keyed `<link>` → `branding-tokens.php`) and the unserved static-artefact route (`public/branding/<site>/tokens-*.css`, D-8) and owns the single severity rule. Every finding declares its plane; the report keeps served-plane inconsistencies and static-artefact advisories in separate lists and refuses a finding placed on the wrong plane; only served-plane findings reach `statusFor()`. Two new served-plane cases (`overlay_without_revision`, `unrenderable_token_overlay`) close the under-measured half, and the overlay is read through the runtime's own `TokenOverlay::fromJson()`. The gate gap is closed: the Observability suite and `VerifyCommandTest` now run inside `composer branding-ci`, pinned by a new truthfulness contract. Live `verify` moved from `inconsistent` / exit 1 to `never materialised` / exit 0 with one advisory, with the database and both generated files unchanged. Targeted 65 tests / 684 assertions; canonical gate 12/12 artefacts, 123/123 manifest, 219 tests / 2,413 assertions; all exit 0. Next incomplete task: S1-P1-04 guardrail namespace cross-check. |
 | 20 | **PRE-09 / S1-P1-04 FIXED — VERIFIED. S2-P1-20 PARTLY REFUTED (Correction K), remainder FIXED — VERIFIED.** `2df9b5eb1`. S1-P1-04: `ThiqaBrandingGuardrailScopeTest` locates the module by a brand-neutral anchor (`src/Config/BrandingGlobalKey.php` / the Q58 `saas_branding_` prefix), derives the production namespace from its PSR-4 autoload prefix, cross-checks that against all 92 shipped source files, and asserts each rule's `MODULE_NAMESPACE` equals it — failing in both directions. Negative control renamed production to a SkyEagle prefix with the constants left alone: 7 failures / exit 1, naming all four rules as "would go inert". S2-P1-20: the four identical Inter hashes reproduced exactly, but a WOFF2 table-directory decode found `fvar`/`gvar`/`HVAR` in every Inter file and none in any IBM Plex file — Inter is one **variable** face, the shipped CSS declares it at `font-weight: 400 700`, and RB-22's "FIXED" is accurate. The rendering claim is withdrawn as Correction K. The real gap — nothing verified that a *static* family's declared weights map to distinct faces — is closed by `BrandingFontFaceDistinctnessContractTest`; the three unreferenced duplicate binaries are pinned rather than deleted, since retiring them is an Owner asset-governance decision. Targeted 9/240 and 5/218; full guardrail suite 63/320; canonical gate 12/12 artefacts, 123/123 manifest, 233 tests / 2,871 assertions; all exit 0. Next incomplete task: S2-P1-23 RTL word-order regression. |
+| 21 | **All four P2 findings FIXED — VERIFIED. S2-P1-22/23/24 investigated to a specified, evidence-backed stop.** `97f6952cf`. S1-P2-07: counts re-derived on disk (18 top-level CSS, 19 entries, 28 files) and corrected to 18/4 in the runbook and changes.md row 076. S1-P2-12: `Config\ModulePaths` becomes the single owner of the module directory name; `Bootstrap`, `BrandingService` and the Twig namespace now derive every path, and `ModulePathContractTest` guards the three consumers that cannot share a PHP constant (`install-assets.php`, `.gitignore`, the Twig rule tip). One inherited claim corrected: `webpack.themes.js` does **not** reference the module directory. S1-P2-14: `RebrandingBugs.md` §10 now records four worktrees, explains why no gitignore mechanism can reach the sibling, and adds it as a path exclusion plus a standing `git worktree list` check. S1-P2-16: command count corrected 3 → 6 in all three places, with the blast-radius consequence stated. **S2-P1-23/22/24: a repair was implemented across all seven juxtaposition sites and then deliberately reverted** — live catalogue counts showed the finding's own recommended fix orphans 10–34 translations per call site (the RB-01 failure mode). The tree was restored exactly and nothing was committed; the safe design, the blocking single-key limitation of the contract subsystem, and the unescaped-`applicationTitle` trap are now specified in full under S2-P1-23. Targeted 93 tests / 830 assertions; canonical gate 12/12 artefacts, 123/123 manifest, 238 tests / 2,886 assertions; all exit 0. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -51,15 +52,19 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          2df9b5eb1 (S1-P1-04 + S2-P1-20 repair; before the Rev 20 checkpoint commit)
-CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 19 checkpoint edit;
+CURRENT OBSERVED HEAD:          97f6952cf (P2 repairs; before the Rev 21 checkpoint commit)
+CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 21 checkpoint edit;
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
 SKYEAGLE MIGRATION STARTED:     NO
 SKYEAGLE BRANDING CHANGES:      NONE
-REPOSITORY WRITES THIS SESSION: S2-P1-18 served/static branding-health plane separation, two new
-                                served-plane findings, CI gating of the health suite, correction of
-                                three records carrying the superseded RB-11 reading; this checkpoint
+REPOSITORY WRITES THIS SESSION: S2-P1-18 branding-health plane separation and CI gating; S1-P1-04
+                                guardrail-scope cross-check; S2-P1-20 font-face distinctness contract
+                                (finding refuted in part); all four P2 repairs including
+                                Config\ModulePaths; documentation corrections; this checkpoint.
+                                S2-P1-22/23/24 were implemented and DELIBERATELY REVERTED — the
+                                working tree was restored exactly and nothing was committed; see the
+                                blocking-constraint block under S2-P1-23 for why and for the design.
 CURRENT PROGRAMME:              PRE-SKYEAGLE three-scan audit/remediation/certification
 FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
                                 SAFE TO START SKYEAGLE MIGRATION: YES
@@ -88,6 +93,7 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `88ff34289` | PRE-09 / S1-P1-06 | Reconciled all three authoritative D-8 records with shipped materialisation behavior, retained D-8 as OPEN, corrected the associated risk/closure counts, and added a canonical regression guard against false closure. |
 | `723170df7` | PRE-09 / S1-P1-10 | Removed the false Amiri/mPDF registration claim, kept D-9 and the accepted pilot limitation explicit, corrected stale PDF evidence, added a truthfulness guard, and re-issued exactly two covered-document hashes. |
 | `29be1fcd5` | PRE-09 / S1-P1-11 | Classified operational identity, neutralized only safe reusable labels/stale examples, preserved live/historical/compatibility identifiers, and added a canonical regression guard. |
+| `97f6952cf` | PRE-09 / S1-P2-07 + S1-P2-12 + S1-P2-14 + S1-P2-16 | Made `Config\ModulePaths` the single owner of the module directory name and guarded the three consumers that cannot share a PHP constant; corrected the CSS release counts to 18/4, the worktree hygiene rule to four (naming the un-excludable sibling), and the console-command count to six with its blast-radius consequence. Also corrected the inherited claim that `webpack.themes.js` references the module directory — it does not. |
 | `2df9b5eb1` | PRE-09 / S1-P1-04 + S2-P1-20 | Added the independent guardrail-scope cross-check (module PSR-4 prefix vs all four rule constants, both directions), and the font-face distinctness contract (a shared face must be variable; a static family must be byte-distinct). Refuted S2-P1-20's rendering claim with a WOFF2 table-directory decode and recorded it as Correction K. No production source, font binary or asset manifest changed. |
 | `1474263b4` | PRE-09 / S2-P1-18 | Separated the served branding plane from the unserved static-artefact plane, made only served-plane findings fail a health probe, added two served-plane cases the old model could not see, read the overlay through the runtime parser, gated the health suite in `composer branding-ci`, and corrected the three records that had drifted on the RB-11 reading. |
 
@@ -110,7 +116,7 @@ under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
 Those landed-work verification steps and the next eleven PRE-09 repairs are now complete; see revisions 6…18.
-**Exact next incomplete item:** PRE-09 / S2-P1-23 RTL word-order regression.
+**Exact next incomplete item:** PRE-09 / S2-P1-22+23+24 as ONE workstream — generalise the translation-contract subsystem to multiple keys with a derive-from carry-forward, per the blocking-constraint block under S2-P1-23. Then S2-P1-26.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -173,7 +179,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 13 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). **Next:** S2-P1-23 RTL word order, then S2-P1-22 / S2-P1-24 / S2-P1-26 in the same Arabic-leak family. |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 13 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). ✅ All four P2 findings closed (`97f6952cf`). **Next:** S2-P1-22+23+24 as one workstream — the naive fix was implemented, proven to regress 10–34 locales per call site, and reverted; it needs the multi-key translation contract specified under S2-P1-23. Then S2-P1-26. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -207,7 +213,7 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 6 open · P2 4 open
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 6 open · P2 0 open (4 fixed)
                     FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-04; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-25.
                     REFUTED IN PART, REMAINDER FIXED: S2-P1-20 (see Correction K).
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
@@ -216,8 +222,17 @@ REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 6 open · P2 4 open
                     -> 12 (S1-P1-05 fix) -> 11 (S1-P1-06 fix) -> 10 (S1-P1-10 fix)
                     -> 9 (S1-P1-11 fix) -> 8 (S2-P1-18 fix) -> 7 (S1-P1-04 fix)
                     -> 6 (S2-P1-20 refuted-in-part + remainder fixed).
+                    P2 all fixed: S1-P2-07; S1-P2-12; S1-P2-14; S1-P2-16.
                     STILL OPEN (P1): S2-P1-22; S2-P1-23; S2-P1-24; S2-P1-26, plus one
                     unlabelled slot.
+                    S2-P1-22/23/24 are ONE workstream, not three: all three reduce to the
+                    same bare-juxtaposition class across seven template sites, and all
+                    three are blocked on generalising the single-key translation-contract
+                    subsystem so existing definitions can be carried forward. The design
+                    and the evidence are under S2-P1-23. Do not attempt them separately,
+                    and do not apply the recommended fix without the carry-forward.
+                    S2-P1-24 has a second, unblocked half (session-language product-name
+                    selection) that has not been diagnosed yet.
                     NOTE ON THE COUNT: only 4 of those 6 have a written section in this
                     checkpoint (§6 documents S2-P1-22, S2-P1-23, S2-P1-24, S2-P1-26). The
                     arithmetic carries two unlabelled P1 slots inherited from Scan-2's
@@ -894,6 +909,18 @@ Welcome to OpenEMR     has_arabic=0  (9)
 English overrides live at `lang_id=1`. With no Arabic row, `xl()` falls through to the **English source
 literal** — still the *unbranded* `OpenEMR …` string. Arabic users see OpenEMR branding today.
 
+**Re-verified live 2026-08-24 (read-only), with two updates.**
+(1) It is now **three** surfaces, not five: S1-P1-02 retired `OpenEMR Authorization` and `OpenEMR Login` as
+dead configuration. The live counts for the three that remain are `OpenEMR` 8 defs / 1 English override /
+**0 Arabic**, `OpenEMR Application` 9 / 1 / **0**, `Welcome to OpenEMR` 9 / 1 / **0** — the finding
+reproduces exactly.
+(2) Their consumers are three Zend `<title>` tags
+(`Application/view/layout/layout.phtml:6`, `Documents/view/layout/layout.phtml:18`,
+`Application/view/layout/sendto.phtml:6`), and the correct repair is the **same** mechanism S2-P1-23 needs.
+**See the blocking-constraint block under S2-P1-23** — for these three keys the carry-forward is the
+already-proven `neutraliseLegacyDefinition()` transform, but the contract subsystem must be generalised to
+more than one key first. Do not fix this one in isolation.
+
 ### S2-P1-23 — Commit `39d3f056b` introduced an RTL regression
 It replaced `{{ "OpenEMR Authorization"|xlt }}` with `{{ applicationTitle }} {{ "Authorization"|xlt }}`.
 `Authorization` (cons_id 992) has 10 definitions and **no Arabic row**, where the retired constant had 5.
@@ -902,12 +929,88 @@ statement:** this commit was praised as "a better mechanism that destroys no tra
 holds, the second was incomplete. Recommended fix is a placeholder-bearing translatable key
 (`xlt('%s Database Upgrade')` + `sprintf`), not bare juxtaposition.
 
+> ### ⚠️ BLOCKING CONSTRAINT DISCOVERED 2026-08-24 — the recommended fix, applied as written, is a regression
+>
+> **Do not apply the placeholder-key fix without the carry-forward described below.** An implementation
+> attempt was made this session, completed across all seven call sites, and then **deliberately reverted**
+> after live catalogue counts showed it would silently drop existing translations. The working tree was
+> restored exactly (`git status` clean); nothing was committed.
+>
+> **The seven sites are one defect class, not three findings.** A repo-wide template scan found the
+> `{{ translatedPhrase }} {{ applicationTitle }}` juxtaposition in seven places across five templates —
+> the four OAuth sites S2-P1-23 names, plus `templates/core/about.html.twig:4,10` (this is the
+> `حول Thiqa` of **S2-P1-24**), `templates/insurance_companies/general_list.html.twig:4`, and
+> `templates/product_registration/product_reg.js.twig:6`.
+>
+> **Why the naive fix regresses.** Changing the key at a call site changes what `xl()` looks up, and the
+> new placeholder key has no definitions in any locale. Live counts (`lang_constants` joined to
+> `lang_definitions`, this host, read-only):
+>
+> ```text
+> constant_name           defs   lang_id=1 override   lang_id=22 (Arabic)
+> About                     24            0                    1
+> Authorization             10            0                    0
+> Insurance Companies       33            0                    -
+> Login                     34            0                    1
+> OpenEMR                    8            1                    0
+> OpenEMR Application        9            1                    0
+> Welcome to OpenEMR         9            1                    0
+> ```
+>
+> So `About` → `About %s` orphans 24 translations **at that call site**, `Login` → `%s Login` orphans 34,
+> `Insurance Companies` 33, `Authorization` 10. Arabic specifically *loses* the `About` and `Login`
+> translations it currently has. The finding's premise — that these sites are already unbranded in Arabic —
+> holds only for `Authorization`; for the others the naive fix trades an RTL word-order defect for a
+> translation loss across 10–34 locales. That is the RB-01 failure mode in miniature, and it is exactly what
+> this corpus exists to prevent.
+>
+> **The safe design, specified.** Placeholder key **plus mechanical carry-forward**, where each locale's new
+> pattern is its existing translation with `%s` inserted at the position the source uses today:
+> `%s <translated>` where the name currently leads (`%s Authorization`, `%s Login`),
+> `<translated> %s` where it currently trails (`About %s`, `Insurance Companies %s`). Rendering is then
+> **byte-identical to today in every locale**, and the join point moves from PHP a translator cannot reach
+> into catalogue data a translator can reorder. Nothing is authored and no grammar is fabricated.
+>
+> For the three brand-bearing keys (`OpenEMR`, `OpenEMR Application`, `Welcome to OpenEMR` — the S2-P1-22
+> set) the carry-forward is the *existing* `TranslationCatalogueContract::neutraliseLegacyDefinition()`
+> transform: replace the brand literal with `%s`. That path already works and is proven by S1-P0-13.
+>
+> **What blocks it.** The shipped contract subsystem is **single-key**:
+> `TranslationCatalogueContract`, `TranslationContractSqlRenderer`, `TranslationCatalogueMigration`,
+> `TranslationCatalogueMigrationCommand` and `TranslationFileCopyFromPriorRelMutator` are all built around
+> one contract file with one `target_key` (`contracts/database-upgrade.json`). Closing S2-P1-22/23/24 needs
+> that generalised to N contracts plus a `derive_from` rule (`source_key` + `placement: prefix|suffix`) so
+> the ~110 carried-forward definitions are *derived mechanically at generation time* rather than hand-copied
+> into JSON. Schema v2, renderer, migration, journal, release-prep regeneration, a fresh migration matrix and
+> a disposable-database proof — the same shape and size as the S1-P0-13 arc that took four commits.
+>
+> **Also required by the same change, and easy to miss:** `TwigContainer` constructs its environment with
+> `['autoescape' => false]`, so today's `{{ applicationTitle }}` in the three OAuth templates is emitted
+> **unescaped**. Any composed replacement must apply exactly one explicit escaper (`|text` in HTML, `|attr`
+> in an attribute), matching the compose-then-escape-once contract `sql_upgrade.php` already follows.
+>
+> **Recommended vehicle:** a Twig filter (`xlp`) that returns the composed value *unescaped* so the call
+> site keeps choosing its own escaper. That was built and reverted with the rest; it is a ~15-line addition
+> to `TwigExtension` and is not the hard part.
+
 ### S2-P1-24 — The Arabic wordmark is stored but never rendered
 `globals.saas_branding_product_name_ar = ثقة` is populated and module code to consume it exists
 (`BrandingService.php:107-108`, `BrandAssetResolver.php:74,164-166`). The Arabic authenticated shell
 (77,733 B, RTL stylesheets applied, UI chrome genuinely translated) still shows `<title>Thiqa</title>`,
 `var WindowTitleBase = "Thiqa"`, `حول Thiqa` (verb translated, product name Latin), and a byte-identical
 navbar with no Arabic logo variant.
+
+**Partly diagnosed 2026-08-24.** The `حول Thiqa` symptom is **not** a separate defect: it is
+`templates/core/about.html.twig:4,10` doing `{{ "About"|xlt }} {{ applicationTitle|text }}` — the same
+bare-juxtaposition class as S2-P1-23, and two of the seven sites that scan found. It is therefore blocked
+behind the same carry-forward work; `About` carries 24 definitions including a live Arabic one, so changing
+its key naively would *remove* Arabic rather than fix it. See the blocking-constraint block under S2-P1-23.
+
+The remaining half of this finding — `<title>Thiqa</title>`, `WindowTitleBase`, and the absent Arabic logo
+variant — is a **different** mechanism and is still undiagnosed: those surfaces read `openemr_name`
+unconditionally rather than selecting `saas_branding_product_name_ar` by session language. That part needs
+its own investigation of how core resolves the session language, and it is not blocked by the translation
+contract work.
 
 ### S2-P1-26 — English brand-leak surface the rename does NOT cover, and a class SET-TRANSLATION cannot reach
 **Origin** Agent 2E addendum 3 · **Method:** 69 brand-bearing keys dumped, one `git grep -F -f` pass over
@@ -986,6 +1089,12 @@ was a pipeline artefact (`$?` after `| tail` reports tail's status) and is WITHD
 shells" while enumerating **4** shells. Actual: **18 `.css` files** at top level (+1 `misc/` directory = 19
 entries). `docs/demo-deployment-readiness.md:1591` already says 18. Correct runbook + changes.md to 18/4.
 
+**Status: FIXED — VERIFIED (continuation Rev 21).** Re-derived on disk: 18 top-level `.css`, 19 directory
+entries, 10 files in `misc/`, 28 files in total. The 18 are the 14 theme outputs plus exactly the 4 shells
+both documents were already listing (`style.css`, `directional.css`, `ajax_calendar_ie.css`,
+`jquery.autocomplete.css`). Both the runbook bullet and changes.md row 076 now say 18/4 and carry a dated
+note explaining the arithmetic, so the correction cannot be mistaken for a new count.
+
 ### S1-P2-12 — Module-directory literal hand-typed five times
 Canonical: `BrandingService.php:60-61` (`TOKEN_STYLESHEET_RELATIVE_PATH`), `Bootstrap.php:74`
 (`TWIG_NAMESPACE`, referenced symbolically everywhere — safe). Non-canonical duplicates that fail
@@ -995,6 +1104,24 @@ Canonical: `BrandingService.php:60-61` (`TOKEN_STYLESHEET_RELATIVE_PATH`), `Boot
 Counter-example worth copying: `tools/branding/src/CliOptions.php:27` `DEFAULT_FONT_URL_BASE` is a single
 parameterised source of truth.
 
+**Status: FIXED — VERIFIED (continuation Rev 21).** `Config\ModulePaths` is the single owner: every
+PHP-side path derives from one `DIRECTORY_NAME`. `Bootstrap::TWIG_NAMESPACE`, the dark-logo filesystem and
+web paths, the tenant-branding root, the profile path, the template root and both `BrandingService` path
+constants are now derived rather than retyped. The two public `BrandingService` constants keep their names
+because `public/branding-tokens.php` and the module documentation reference them.
+
+Three consumers **cannot** share a PHP constant and are guarded instead of wired, by
+`ModulePathContractTest` inside `composer branding-ci`: `tools/branding/install-assets.php` (build-time
+tool under the `OpenEMR\Branding\` prefix; the module's prefix is not in the root autoloader),
+`.gitignore` (the most expensive silent failure — after a rename it stops matching and the next commit
+sweeps in every tenant's materialised output as source), and the Twig rule's operator tip, already pinned
+by PR-36.
+
+**One inherited claim corrected:** `webpack.themes.js` appears on the §10 rename-surface list, but reading
+it shows it references the SCSS source tree (`oe-styles/style_thiqa_*.scss` → `interface/themes/thiqa/`)
+and **never the module directory**. It is therefore not part of this coupling and is not guarded here. A
+first version of the contract asserted it and failed, which is how this was caught.
+
 ### S1-P2-14 / PRE-ORCH-01 — Sibling worktree outside exclusion coverage
 `.git/info/exclude:11` excludes `**/.claude/worktrees/`, covering three worktrees. It **cannot** cover
 `G:/My Drive/OpenEMR.worktrees/sds` — a sibling directory outside the repo root, registered as a git
@@ -1002,11 +1129,31 @@ worktree at `631f2b38c` (pre-branding baseline). `RebrandingBugs.md` §10's meas
 only `.claude/worktrees/`. Any scan rooted at `G:\My Drive\` ingests a full pre-branding codebase copy.
 Must be added to: measurement hygiene · exclusion documentation · Scan-3 rollback register.
 
+**Status: FIXED — VERIFIED (continuation Rev 21).** `RebrandingBugs.md` §10 item 3 now reads "four agent
+worktrees, and only three of them are inside the repository", shows the sibling in the `git worktree list`
+output, and states plainly why no gitignore mechanism can ever reach it — an exclude file governs only
+paths inside its own working tree, so the sibling is invisible to exactly the tools (`git status`, a
+repo-rooted ripgrep) that make the other three safe. The hygiene rule now names
+`G:/My Drive/OpenEMR.worktrees/` as a **path** exclusion alongside `.claude/worktrees/`, `vendor/`,
+`node_modules/` and `oe-module-claimrev-connect`, and adds the standing instruction to run
+`git worktree list` before trusting any repository-wide figure, since it is the only command that reveals
+the sibling and the set can change between sessions. The sibling is registered to branch `agents/sds` and
+is left in place: removing another agent's worktree is not this programme's call. Re-derived live —
+`git worktree list` returns 5 entries, 4 of them worktrees.
+
 ### S1-P2-16 — Architecture doc undercounts commands 3 → 6
 Actual: `apply-profile`, `backup`, `materialise`, `provision-report-acl`, `seed-demo`, `verify`.
 The three omitted own the **most** persisted state (gacl ACL objects, ~19 clinical/demo tables, backup
 artefacts) — none of it branding state. The module has accreted a deployment/ops toolkit under a branding
 namespace, so "rename the branding module" has a much wider blast radius than the doc implies.
+
+**Status: FIXED — VERIFIED (continuation Rev 21).** `architecture.md` now says six in all three places it
+counted: the Plane 2 diagram box (which listed only three by name), the Plane-boundary prose at §1 ("the
+three console commands are registered only on `CommandRunnerFilterEvent`"), and divergence row §8.4 (which
+said "Three commands exist"). Row 8.4 also now carries the consequence rather than just the count — that
+the three unlisted commands own the module's heaviest persisted state and none of it is branding state, so
+the rename blast radius is materially wider than either the plan or the previous row implied. Verified
+against `Bootstrap.php`, which registers all six on `CommandRunnerFilterEvent`.
 
 ---
 
@@ -1435,7 +1582,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S2-P1-23; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 continues at the S2-P1-22/23/24 workstream, then S2-P1-26; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 
