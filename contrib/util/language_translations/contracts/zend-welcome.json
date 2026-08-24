@@ -1,0 +1,9 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "zend-welcome-neutral-v1",
+    "target_key": "Welcome to %s",
+    "legacy_keys": {
+        "Welcome to OpenEMR": "OpenEMR"
+    },
+    "definitions": {}
+}

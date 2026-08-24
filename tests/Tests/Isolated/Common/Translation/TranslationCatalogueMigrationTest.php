@@ -196,6 +196,148 @@ final class TranslationCatalogueMigrationTest extends TestCase
         $this->migration()->rollback($this->contract(), $store);
     }
 
+    // ------------------------------------------------- schema v2: derive-from carry-forward
+
+    /**
+     * The whole point of the derivation. `About` has 24 translations including a live Arabic one;
+     * moving the call site to the key `About %s` without carrying them forward would drop every
+     * one of them to English — the RB-01 failure mode. Each locale's pattern is its own existing
+     * translation with the placeholder where the template put the product name, so rendering is
+     * byte-identical to before and only the join point becomes translator-editable.
+     */
+    public function testSuffixDerivationCarriesEveryLanguageForwardUnchanged(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('About', [22 => 'حول', 7 => 'אודות', 5 => 'Uber']);
+
+        $result = $this->migration()->forward($this->derivedContract('About %s', 'About', 'suffix'), $store);
+
+        self::assertSame('applied', $result->action);
+        self::assertSame(3, $result->definitionsChanged);
+        self::assertSame(
+            [5 => 'Uber %s', 7 => 'אודות %s', 22 => 'حول %s'],
+            $store->definitionsOf('About %s'),
+        );
+        // The source constant is never touched; other call sites keep using it.
+        self::assertSame([5 => 'Uber', 7 => 'אודות', 22 => 'حول'], $store->definitionsOf('About'));
+    }
+
+    public function testPrefixDerivationPutsThePlaceholderFirst(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('Login', [22 => 'تسجيل الدخول', 3 => 'Acceso']);
+
+        $this->migration()->forward($this->derivedContract('%s Login', 'Login', 'prefix'), $store);
+
+        self::assertSame(
+            [3 => '%s Acceso', 22 => '%s تسجيل الدخول'],
+            $store->definitionsOf('%s Login'),
+        );
+    }
+
+    /**
+     * A source translation containing `%` cannot be derived: percent is meaningful to
+     * ProductContextTranslation, so the result would be a pattern that composes wrongly in exactly
+     * one locale — the quietest possible defect.
+     */
+    public function testASourceDefinitionContainingPercentIsRefused(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('Insurance Companies', [5 => '100% Versicherung']);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('containing "%"');
+        $this->migration()->forward(
+            $this->derivedContract('Insurance Companies %s', 'Insurance Companies', 'suffix'),
+            $store,
+        );
+    }
+
+    /**
+     * `Product Registration` has no catalogue row at all. Deriving nothing from it is correct:
+     * the neutral key then falls back to its own English text, which is what that call site
+     * already renders.
+     */
+    public function testAnAbsentSourceLeavesTheTargetEmptyRatherThanFailing(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+
+        $result = $this->migration()->forward(
+            $this->derivedContract('%s Product Registration', 'Product Registration', 'prefix'),
+            $store,
+        );
+
+        self::assertSame('applied', $result->action);
+        self::assertSame(0, $result->definitionsChanged);
+        self::assertSame([], $store->definitionsOf('%s Product Registration'));
+    }
+
+    /** An explicit definition in the contract beats the mechanical derivation for that language. */
+    public function testAnExplicitDefinitionOverridesTheDerivationForThatLanguage(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('About', [22 => 'حول', 5 => 'Uber']);
+
+        $contract = TranslationCatalogueContract::fromJson(<<<'JSON'
+            {
+                "schema": "openemr-translation-contract/2",
+                "id": "about-test",
+                "target_key": "About %s",
+                "legacy_keys": {},
+                "derive_from": {"source_key": "About", "placement": "suffix"},
+                "definitions": {"5": "Uber das %s Produkt"}
+            }
+            JSON);
+
+        $this->migration()->forward($contract, $store);
+
+        self::assertSame(
+            [5 => 'Uber das %s Produkt', 22 => 'حول %s'],
+            $store->definitionsOf('About %s'),
+        );
+    }
+
+    /** Re-running a derived contract is a journalled no-op, exactly as for an explicit one. */
+    public function testASecondForwardRunOfADerivedContractIsANoOp(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('About', [22 => 'حول']);
+        $contract = $this->derivedContract('About %s', 'About', 'suffix');
+
+        $this->migration()->forward($contract, $store);
+        $second = $this->migration()->forward($contract, $store);
+
+        self::assertSame('already_applied', $second->action);
+        self::assertSame([22 => 'حول %s'], $store->definitionsOf('About %s'));
+    }
+
+    /** Rollback removes only what the derivation added, and restores the recorded counts. */
+    public function testRollbackOfADerivedContractRemovesOnlyItsOwnRows(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('About', [22 => 'حول', 5 => 'Uber']);
+        $contract = $this->derivedContract('About %s', 'About', 'suffix');
+
+        $this->migration()->forward($contract, $store);
+        $result = $this->migration()->rollback($contract, $store);
+
+        self::assertSame('rolled_back', $result->action);
+        self::assertSame([], $store->definitionsOf('About %s'));
+        self::assertSame([5 => 'Uber', 22 => 'حول'], $store->definitionsOf('About'));
+    }
+
+    private function derivedContract(string $target, string $source, string $placement): TranslationCatalogueContract
+    {
+        return TranslationCatalogueContract::fromJson(json_encode([
+            'schema' => 'openemr-translation-contract/2',
+            'id' => 'derived-' . $source,
+            'target_key' => $target,
+            'legacy_keys' => (object) [],
+            'derive_from' => ['source_key' => $source, 'placement' => $placement],
+            'definitions' => (object) [],
+        ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+    }
+
     private function migration(): TranslationCatalogueMigration
     {
         return new TranslationCatalogueMigration();
@@ -327,7 +469,13 @@ final class MemoryTranslationCatalogueStore implements TranslationCatalogueStore
     /** @return array<int, string> */
     public function targetDefinitions(): array
     {
-        $ids = $this->constantIds('%s Database Upgrade');
+        return $this->definitionsOf('%s Database Upgrade');
+    }
+
+    /** @return array<int, string> */
+    public function definitionsOf(string $name): array
+    {
+        $ids = $this->constantIds($name);
         return $ids === [] ? [] : $this->definitions($ids[0]);
     }
 

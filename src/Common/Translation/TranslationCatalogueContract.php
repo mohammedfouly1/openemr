@@ -14,7 +14,18 @@ namespace OpenEMR\Common\Translation;
 
 final readonly class TranslationCatalogueContract
 {
+    /** Original schema: explicit per-language definitions, optional brand-literal neutralisation. */
     public const SCHEMA = 'openemr-translation-contract/1';
+
+    /**
+     * Adds `derive_from`, and allows `definitions` to be empty because they are then derived.
+     *
+     * Version 1 is still accepted and still behaves exactly as before. It is not re-issued: the
+     * migration journal records the contract hash and refuses to run against a contract that has
+     * changed since, so silently rewriting a shipped contract would strand any database that had
+     * already applied it.
+     */
+    public const SCHEMA_V2 = 'openemr-translation-contract/2';
 
     /**
      * @param array<string, string> $legacyKeys Exact legacy key => identity literal to neutralise.
@@ -26,6 +37,8 @@ final readonly class TranslationCatalogueContract
         public array $legacyKeys,
         public array $definitions,
         public string $hash,
+        public ?TranslationDerivation $derivation = null,
+        public string $schema = self::SCHEMA,
     ) {
     }
 
@@ -47,8 +60,21 @@ final readonly class TranslationCatalogueContract
             throw new \InvalidArgumentException('Invalid translation contract JSON.', 0, $exception);
         }
 
-        if (!is_array($data) || ($data['schema'] ?? null) !== self::SCHEMA) {
+        $schema = is_array($data) ? ($data['schema'] ?? null) : null;
+        if ($schema !== self::SCHEMA && $schema !== self::SCHEMA_V2) {
             throw new \InvalidArgumentException('Unsupported translation contract schema.');
+        }
+        /** @var array<string, mixed> $data */
+
+        $derivation = null;
+        if (array_key_exists('derive_from', $data)) {
+            if ($schema !== self::SCHEMA_V2) {
+                throw new \InvalidArgumentException('derive_from requires schema ' . self::SCHEMA_V2 . '.');
+            }
+            if (!is_array($data['derive_from'])) {
+                throw new \InvalidArgumentException('derive_from must be an object.');
+            }
+            $derivation = TranslationDerivation::fromArray($data['derive_from']);
         }
 
         $id = self::requiredString($data, 'id');
@@ -68,7 +94,16 @@ final readonly class TranslationCatalogueContract
         }
 
         $definitions = $data['definitions'] ?? null;
-        if (!is_array($definitions) || $definitions === []) {
+        if (!is_array($definitions)) {
+            throw new \InvalidArgumentException('definitions must be an object of language ID => pattern.');
+        }
+
+        // A carry-forward contract legitimately ships no explicit definitions: every language comes
+        // from the source constant at migration time, either by derivation or by neutralising a
+        // brand literal. With neither, there is nothing else to supply them, so an empty set would
+        // mean a constant with no translations at all.
+        $carriesForward = $derivation !== null || ($legacyKeys !== null && $legacyKeys !== []);
+        if ($definitions === [] && !$carriesForward) {
             throw new \InvalidArgumentException('definitions must contain at least one translated pattern.');
         }
         $validatedDefinitions = [];
@@ -87,7 +122,15 @@ final readonly class TranslationCatalogueContract
             $validatedLegacyKeys,
             $validatedDefinitions,
             hash('sha256', $json),
+            $derivation,
+            $schema,
         );
+    }
+
+    /** True when this contract carries translations forward from an existing constant. */
+    public function isDerived(): bool
+    {
+        return $this->derivation instanceof TranslationDerivation;
     }
 
     /**

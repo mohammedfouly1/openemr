@@ -3,7 +3,14 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate()->xl('OpenEMR'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php
+        // Finding S2-P1-22. The bare product name is not a phrase to translate — it is the
+        // product name, and the tenant already configures it. Reading it directly removes the
+        // last consumer of the `OpenEMR` catalogue constant, whose English-only override left
+        // every other locale rendering the upstream literal.
+        echo $this->headTitle('ZF2 ' . \OpenEMR\Core\OEGlobalsBag::getInstance()->getString('openemr_name'))
+            ->setSeparator(' - ')->setAutoEscape(false)
+        ?>
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 

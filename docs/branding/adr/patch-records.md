@@ -1854,3 +1854,65 @@ entries and never the module directory, so there is nothing for it to agree with
 
 PR-38 adds **0** distinct non-module production files. The authoritative inventory remains **51 distinct
 files**, covered by PR-01…PR-38.
+
+---
+
+# PR-39 — compose product identity inside one translatable unit (2026-08-24)
+
+**Files:** `src/Common/Twig/TwigExtension.php`; `sql_upgrade.php`;
+`templates/oauth2/{oauth2-login,patient-select,scope-authorize}.html.twig`;
+`templates/core/about.html.twig`; `templates/insurance_companies/general_list.html.twig`;
+`templates/product_registration/product_reg.js.twig`;
+`interface/modules/zend_modules/module/Application/view/layout/{layout,sendto}.phtml`;
+`interface/modules/zend_modules/module/Documents/view/layout/layout.phtml`;
+`tools/branding/brand-strings.json`. Plus new `src/Common/Translation/` classes
+(`TranslationPlacement`, `TranslationDerivation`, `TranslationCatalogueContractSet`), the extended
+contract/renderer/migration, and seven new contract JSON files.
+**Rebase risk:** MEDIUM for `sql_upgrade.php` and the shared templates; LOW elsewhere.
+
+Findings **S2-P1-22**, **S2-P1-23** and **S2-P1-24** are one defect class in three costumes. Ten call
+sites — seven Twig, three Zend — put product identity next to a separately translated phrase, so word
+order was fixed in PHP where no translator could reach it. On a right-to-left locale that renders the
+phrase translated with the name still trailing it: `حول Thiqa`. The three Zend sites were worse, using a
+brand-bearing catalogue key (`OpenEMR Application`) whose only override was English, so every other locale
+fell through to the unbranded upstream literal — Arabic users saw OpenEMR branding.
+
+**The naive fix is a regression, and this is the part the findings did not see.** Changing a call site's
+key changes what `xl()` looks up, and the new placeholder key has no translations at all. Live counts:
+`About` 24 definitions (one Arabic), `Login` 34 (one Arabic), `Insurance Companies` 33, `Authorization` 10.
+Moving those call sites without carrying translations forward would drop 10–34 locales to English —
+including the Arabic rows the change exists to fix. That is the RB-01 failure mode.
+
+So PR-39 pairs the composition with a **carry-forward**. Contract schema v2 adds `derive_from`
+(`source_key` + `placement: prefix|suffix`): each locale's new pattern is its own existing translation with
+`%s` where the template put the name, so rendering is byte-identical to before in every language and only
+the join point becomes translator-editable. Nothing is authored and no grammar is invented. For the three
+brand-bearing keys the carry-forward is the already-proven `neutraliseLegacyDefinition()` transform,
+now also expressible in SQL.
+
+**Deriving in SQL rather than at generation time** keeps the neutral keys tracking upstream: a generated
+literal would freeze whatever upstream's translations said the day the file was regenerated. The supplement
+runs after `currentLanguage_utf8.sql`, so the source rows exist when it executes.
+
+The contracts directory is now the unit rather than one named file. `TranslationCatalogueContractSet`
+loads every `*.json` in sorted order, rejects duplicate ids and duplicate targets, and refuses a derivation
+chain (a contract deriving from a key another contract creates) because the installer runs one ordered SQL
+file while the upgrade path runs independent transactions — a chain would diverge between them, which is
+exactly what S2-P0-21 was raised about. `sql_upgrade.php`, the migration command and the release-prep
+mutator all iterate the set, so a contract can no longer ship to fresh installs while never running on
+upgrade.
+
+`brand-strings.json`'s `english_overrides` is now **empty**, and all five historical keys sit under
+`retired_english_overrides` with exact-value retirement metadata. An English override only ever reached
+`lang_id=1`; the composed architecture covers every locale at once, so the mechanism has no remaining use.
+
+**Upstream-first path (Q1):** the `xlp` filter, `ProductContextTranslation` and the contract subsystem are
+generic i18n infrastructure with no branding coupling, and would be reasonable upstream contributions. The
+contract *contents* are fork-specific only in that upstream has no product-rename problem to solve.
+
+### Reconciliation after PR-39
+
+PR-39 adds **8** newly edited non-module production/delivery files (`TwigExtension.php`, the four
+previously uncounted templates, and the three Zend layouts); `sql_upgrade.php` and `brand-strings.json`
+were already counted. The authoritative inventory is therefore **59 distinct files**, covered by
+PR-01…PR-39.

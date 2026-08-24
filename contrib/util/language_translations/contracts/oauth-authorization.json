@@ -1,0 +1,11 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "oauth-authorization-neutral-v1",
+    "target_key": "%s Authorization",
+    "legacy_keys": {},
+    "derive_from": {
+        "source_key": "Authorization",
+        "placement": "prefix"
+    },
+    "definitions": {}
+}

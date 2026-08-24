@@ -35,54 +35,107 @@ final class BrandStringCatalogueIsolatedTest extends TestCase
         $this->catalogue = $decoded;
     }
 
-    public function testOnlyLiveZendKeysRemainActive(): void
+    /**
+     * S2-P1-22 removed the last three. An English override is a `lang_id=1` row, and English is
+     * the only locale it reaches — every other locale fell through to the unbranded upstream
+     * literal, which is why Arabic users saw OpenEMR branding on those surfaces. The composed
+     * `%s`-key architecture covers all locales at once, so the mechanism has no remaining use.
+     */
+    public function testNoEnglishCatalogueOverridesRemainActive(): void
     {
-        $active = array_column($this->catalogue['english_overrides'], 'english', 'constant');
-
-        self::assertSame([
-            'OpenEMR Application' => 'Thiqa Application',
-            'Welcome to OpenEMR' => 'Welcome to Thiqa',
-            'OpenEMR' => 'Thiqa',
-        ], $active);
-
-        foreach ($this->catalogue['english_overrides'] as $entry) {
-            self::assertNotEmpty($entry['consumers']);
-            foreach ($entry['consumers'] as $consumer) {
-                $contents = $this->readProjectFile($consumer);
-                self::assertStringContainsString($entry['constant'], $contents);
-            }
-        }
+        self::assertSame([], $this->catalogue['english_overrides']);
     }
 
-    public function testDeadOAuthKeysHaveExactValueRetirementMetadata(): void
+    public function testEveryRetiredKeyCarriesExactValueRetirementMetadata(): void
     {
         $retired = array_column($this->catalogue['retired_english_overrides'], null, 'constant');
 
         self::assertSame(
-            ['OpenEMR Authorization', 'OpenEMR Login'],
+            [
+                'OpenEMR Application',
+                'Welcome to OpenEMR',
+                'OpenEMR',
+                'OpenEMR Authorization',
+                'OpenEMR Login',
+            ],
             array_keys($retired)
         );
         self::assertSame('Thiqa Authorization', $retired['OpenEMR Authorization']['managed_english']);
         self::assertSame('Thiqa Login', $retired['OpenEMR Login']['managed_english']);
+        self::assertSame('Thiqa Application', $retired['OpenEMR Application']['managed_english']);
+        self::assertSame('Welcome to Thiqa', $retired['Welcome to OpenEMR']['managed_english']);
+        self::assertSame('Thiqa', $retired['OpenEMR']['managed_english']);
 
-        foreach ($retired as $constant => $entry) {
+        foreach ($retired as $entry) {
+            // A retired entry must not name consumers: that field is what made the dead OAuth
+            // overrides look live for months.
             self::assertArrayNotHasKey('consumers', $entry);
             self::assertNotSame('', $entry['reason']);
-            foreach ($this->oauthTemplatePaths() as $template) {
-                self::assertStringNotContainsString($constant, $this->readProjectFile($template));
+        }
+    }
+
+    /**
+     * No former consumer may still reference a retired constant, in either family: the OAuth
+     * templates or the Zend layouts. A lingering reference would mean the key is still live and
+     * the retirement metadata is lying.
+     */
+    public function testNoRetiredConstantIsStillReferencedByItsFormerConsumer(): void
+    {
+        $consumers = array_merge($this->oauthTemplatePaths(), [
+            'interface/modules/zend_modules/module/Application/view/layout/layout.phtml',
+            'interface/modules/zend_modules/module/Documents/view/layout/layout.phtml',
+            'interface/modules/zend_modules/module/Application/view/layout/sendto.phtml',
+        ]);
+
+        foreach ($this->catalogue['retired_english_overrides'] as $entry) {
+            foreach ($consumers as $consumer) {
+                self::assertStringNotContainsString(
+                    "xl('" . $entry['constant'] . "')",
+                    $this->readProjectFile($consumer),
+                    $consumer . ' still translates the retired constant ' . $entry['constant'] . '.',
+                );
             }
         }
     }
 
-    public function testOAuthUsesTenantTitleAndTranslatedActionPhrases(): void
+    /**
+     * S2-P1-23: the OAuth surfaces compose a single translatable unit rather than juxtaposing the
+     * product name with a separately translated word, so word order is translator-controlled.
+     */
+    public function testOAuthComposesASingleTranslatableUnit(): void
     {
         foreach ($this->oauthTemplatePaths() as $template) {
             $contents = $this->readProjectFile($template);
-            self::assertStringContainsString('{{ applicationTitle }} {{ "Authorization"|xlt }}', $contents);
+            self::assertStringContainsString('{{ "%s Authorization"|xlp|text }}', $contents);
+            self::assertStringNotContainsString('{{ applicationTitle }}', $contents);
         }
 
         $login = $this->readProjectFile('templates/oauth2/oauth2-login.html.twig');
-        self::assertStringContainsString('{{ applicationTitle }} {{ "Login"|xlt }}', $login);
+        self::assertStringContainsString('{{ "%s Login"|xlp|text }}', $login);
+    }
+
+    /**
+     * S2-P1-22: the Zend layouts compose the product name in rather than translating a
+     * brand-bearing key, and the bare-name surface reads the global directly.
+     */
+    public function testZendLayoutsComposeTheProductName(): void
+    {
+        $application = $this->readProjectFile(
+            'interface/modules/zend_modules/module/Application/view/layout/layout.phtml',
+        );
+        self::assertStringContainsString("xl('%s Application')", $application);
+        self::assertStringContainsString('ProductContextTranslation::compose', $application);
+
+        $documents = $this->readProjectFile(
+            'interface/modules/zend_modules/module/Documents/view/layout/layout.phtml',
+        );
+        self::assertStringContainsString("xl('Welcome to %s')", $documents);
+
+        $sendto = $this->readProjectFile(
+            'interface/modules/zend_modules/module/Application/view/layout/sendto.phtml',
+        );
+        self::assertStringContainsString("getString('openemr_name')", $sendto);
+        self::assertStringNotContainsString('translate()->xl', $sendto);
     }
 
     public function testNeutralDatabaseUpgradeContractIsNotReintroducedAsCarryForward(): void

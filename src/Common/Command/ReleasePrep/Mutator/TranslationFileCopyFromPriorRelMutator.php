@@ -31,14 +31,13 @@ namespace OpenEMR\Common\Command\ReleasePrep\Mutator;
 use OpenEMR\Common\Command\ReleasePrep\MutatorContext;
 use OpenEMR\Common\Command\ReleasePrep\MutatorInterface;
 use OpenEMR\Common\Command\ReleasePrep\MutatorResult;
-use OpenEMR\Common\Translation\TranslationCatalogueContract;
+use OpenEMR\Common\Translation\TranslationCatalogueContractSet;
 use OpenEMR\Common\Translation\TranslationContractSqlRenderer;
 use Symfony\Component\Process\Process;
 
 final readonly class TranslationFileCopyFromPriorRelMutator implements MutatorInterface
 {
     private const RELATIVE_PATH = 'contrib/util/language_translations/currentLanguage_utf8.sql';
-    private const CONTRACT_PATH = 'contrib/util/language_translations/contracts/database-upgrade.json';
     private const SUPPLEMENT_PATH = 'contrib/util/language_translations/durableTranslationContracts_utf8.sql';
     private const DEFAULT_REMOTE_URL = 'https://github.com/openemr/openemr.git';
 
@@ -113,8 +112,11 @@ final readonly class TranslationFileCopyFromPriorRelMutator implements MutatorIn
             $changed[] = self::RELATIVE_PATH;
         }
 
-        $contract = TranslationCatalogueContract::fromFile($context->projectDir . '/' . self::CONTRACT_PATH);
-        $supplement = ($this->renderer ?? new TranslationContractSqlRenderer())->render($contract);
+        // Every contract in the directory, not one named file: a contract that regenerated into
+        // the installer supplement but was missed here would silently stop shipping to fresh
+        // installs the next time a rel branch is cut.
+        $contracts = TranslationCatalogueContractSet::fromProjectDirectory($context->projectDir);
+        $supplement = ($this->renderer ?? new TranslationContractSqlRenderer())->renderSet($contracts);
         $supplementPath = $context->projectDir . '/' . self::SUPPLEMENT_PATH;
         $currentSupplement = is_file($supplementPath) ? file_get_contents($supplementPath) : false;
         if ($currentSupplement !== $supplement) {

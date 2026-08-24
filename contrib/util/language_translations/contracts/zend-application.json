@@ -1,0 +1,9 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "zend-application-neutral-v1",
+    "target_key": "%s Application",
+    "legacy_keys": {
+        "OpenEMR Application": "OpenEMR"
+    },
+    "definitions": {}
+}

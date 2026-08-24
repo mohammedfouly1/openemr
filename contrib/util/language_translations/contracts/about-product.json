@@ -1,0 +1,11 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "about-product-neutral-v1",
+    "target_key": "About %s",
+    "legacy_keys": {},
+    "derive_from": {
+        "source_key": "About",
+        "placement": "suffix"
+    },
+    "definitions": {}
+}

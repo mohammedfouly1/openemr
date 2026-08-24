@@ -1,0 +1,201 @@
+<?php
+
+/**
+ * Regression contract: product identity is composed inside a translatable unit, never juxtaposed.
+ *
+ * @package OpenEMR
+ * @license https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
+ */
+
+declare(strict_types=1);
+
+namespace OpenEMR\Tests\Isolated\BrandingCi;
+
+use OpenEMR\Common\Translation\TranslationCatalogueContractSet;
+use OpenEMR\Common\Translation\TranslationDerivation;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Findings S2-P1-23 and S2-P1-24. A template writing
+ * `{{ "About"|xlt }} {{ applicationTitle|text }}` has made a word-order decision in PHP that no
+ * translator can reach, so a right-to-left locale renders the phrase translated with the product
+ * name still trailing it — `حول Thiqa` on the live Arabic shell. Seven call sites across five
+ * templates did this.
+ *
+ * The repair is a placeholder-bearing key composed through the `xlp` filter. What makes it safe
+ * rather than a different regression is the **carry-forward**: each new key derives its
+ * translations from the constant the call site used before, so a locale that had a translation
+ * keeps it. Without that, moving `About` to `About %s` would silently drop 24 languages.
+ *
+ * This contract pins both halves. The juxtaposition must not come back, and every neutral key a
+ * template asks for must have a contract that populates it — a key with no contract renders its
+ * own English text in every locale, which is the leak these findings describe, just relocated.
+ */
+#[Group('isolated')]
+final class ProductNameCompositionContractTest extends TestCase
+{
+    /**
+     * The call sites converted away from juxtaposition, and the key each now uses.
+     *
+     * Listed explicitly so that deleting a call site is a deliberate edit here rather than a
+     * silently shrinking scan.
+     */
+    private const CONVERTED_SITES = [
+        'templates/oauth2/oauth2-login.html.twig' => ['%s Authorization', '%s Login'],
+        'templates/oauth2/patient-select.html.twig' => ['%s Authorization'],
+        'templates/oauth2/scope-authorize.html.twig' => ['%s Authorization'],
+        'templates/core/about.html.twig' => ['About %s'],
+        'templates/insurance_companies/general_list.html.twig' => ['Insurance Companies %s'],
+        'templates/product_registration/product_reg.js.twig' => ['%s Product Registration'],
+    ];
+
+    /** Templates are scanned for this shape; matching it means the defect is back. */
+    private const JUXTAPOSITION = '~\{\{\s*applicationTitle[^}]*\}\}\s*\{\{|\}\}\s*\{\{\s*applicationTitle~';
+
+    public function testNoTemplateJuxtaposesTheProductNameWithATranslatedPhrase(): void
+    {
+        $offenders = [];
+
+        foreach ($this->templateFiles() as $file) {
+            $contents = $this->read($file);
+            if (preg_match(self::JUXTAPOSITION, $contents) === 1) {
+                $offenders[] = substr($file, strlen($this->root()) + 1);
+            }
+
+            // The Twig concatenation form the product-registration template used:
+            // `applicationTitle ~ " " ~ ("..."|xla)`. Delimited with `#` because the pattern
+            // itself has to contain a literal `~`.
+            if (preg_match('#applicationTitle\s*~#', $contents) === 1) {
+                $offenders[] = substr($file, strlen($this->root()) + 1);
+            }
+        }
+
+        self::assertSame(
+            [],
+            $offenders,
+            'These templates place the product name beside a translated phrase, so the word order '
+            . 'is hardcoded English and no translator can move it. Use a "<phrase> %s"|xlp key.',
+        );
+    }
+
+    public function testEveryConvertedSiteUsesTheCompositionFilterWithExactlyOneEscaper(): void
+    {
+        foreach (self::CONVERTED_SITES as $relativePath => $keys) {
+            $contents = $this->read($this->root() . '/' . $relativePath);
+
+            foreach ($keys as $key) {
+                self::assertMatchesRegularExpression(
+                    '~"' . preg_quote($key, '~') . '"\|xlp\|(text|attr)~',
+                    $contents,
+                    $relativePath . ' must compose ' . $key . ' through xlp and escape it exactly once.',
+                );
+            }
+        }
+    }
+
+    /**
+     * `TwigContainer` builds its environment with `autoescape => false`, so an unescaped `{{ }}`
+     * emits raw output. The composed value carries a tenant-supplied product name, so every call
+     * site has to name its own escaper.
+     */
+    public function testTheCompositionFilterIsNeverEmittedUnescaped(): void
+    {
+        foreach ($this->templateFiles() as $file) {
+            $matches = [];
+            preg_match_all('~\|xlp(\|[a-z_]+)?~', $this->read($file), $matches);
+
+            foreach ($matches[1] as $following) {
+                self::assertContains(
+                    $following,
+                    ['|text', '|attr'],
+                    substr($file, strlen($this->root()) + 1) . ' emits |xlp without an escaper.',
+                );
+            }
+        }
+    }
+
+    /**
+     * The half that makes the repair safe rather than a relocation of the leak: every key a
+     * template composes must be created and populated by a checked-in contract.
+     */
+    public function testEveryComposedKeyIsBackedByATranslationContract(): void
+    {
+        $set = TranslationCatalogueContractSet::fromProjectDirectory($this->root());
+
+        $targets = [];
+        foreach ($set->all() as $contract) {
+            $targets[$contract->targetKey] = $contract;
+        }
+
+        foreach (self::CONVERTED_SITES as $relativePath => $keys) {
+            foreach ($keys as $key) {
+                self::assertArrayHasKey(
+                    $key,
+                    $targets,
+                    $relativePath . ' composes "' . $key . '", which no translation contract creates. '
+                    . 'Without one the key renders its own English text in every locale.',
+                );
+            }
+        }
+    }
+
+    /**
+     * A derived contract must not point at a key that no longer exists to derive from — that would
+     * carry nothing forward and leave the neutral key English-only, which is the failure this whole
+     * mechanism exists to avoid. `Product Registration` is the one deliberate exception: it has no
+     * catalogue row anywhere, so there is nothing to lose.
+     */
+    public function testEveryDerivationNamesAPlausibleSourceKey(): void
+    {
+        $set = TranslationCatalogueContractSet::fromProjectDirectory($this->root());
+
+        foreach ($set->all() as $contract) {
+            $derivation = $contract->derivation;
+            if (!$derivation instanceof TranslationDerivation) {
+                continue;
+            }
+
+            self::assertNotSame('', trim($derivation->sourceKey));
+            self::assertStringNotContainsString(
+                '%',
+                $derivation->sourceKey,
+                $contract->id . ' derives from a key that is itself a placeholder pattern.',
+            );
+        }
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function templateFiles(): array
+    {
+        $found = [];
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($this->root() . '/templates', \FilesystemIterator::SKIP_DOTS),
+        );
+
+        foreach ($iterator as $entry) {
+            if ($entry instanceof \SplFileInfo && $entry->isFile() && str_ends_with($entry->getFilename(), '.twig')) {
+                $found[] = $entry->getPathname();
+            }
+        }
+
+        sort($found);
+
+        return $found;
+    }
+
+    private function read(string $path): string
+    {
+        $contents = file_get_contents($path);
+        self::assertIsString($contents);
+
+        return str_replace("\r\n", "\n", $contents);
+    }
+
+    private function root(): string
+    {
+        return dirname(__DIR__, 4);
+    }
+}

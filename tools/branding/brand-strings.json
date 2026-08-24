@@ -5,29 +5,27 @@
     "product_name": "Thiqa",
     "upstream_name": "OpenEMR",
 
-    "english_overrides": [
+    "english_overrides": [],
+
+    "retired_english_overrides": [
         {
             "constant": "OpenEMR Application",
-            "english": "Thiqa Application",
+            "managed_english": "Thiqa Application",
             "brand_ids": ["BRAND-129"],
-            "consumers": ["interface/modules/zend_modules/module/Application/view/layout/layout.phtml"]
+            "reason": "S2-P1-22: an English-only override left every other locale falling through to the unbranded upstream literal, so Arabic users saw OpenEMR branding. The Zend Application layout now composes the openemr_name global into the neutral '%s Application' key, whose translations are carried forward from this constant by the zend-application-neutral-v1 contract. Delete only the exact managed lang_id=1 row; preserve custom and non-English definitions."
         },
         {
             "constant": "Welcome to OpenEMR",
-            "english": "Welcome to Thiqa",
+            "managed_english": "Welcome to Thiqa",
             "brand_ids": ["BRAND-129"],
-            "consumers": ["interface/modules/zend_modules/module/Documents/view/layout/layout.phtml"]
+            "reason": "S2-P1-22, same mechanism as OpenEMR Application. The Zend Documents layout now composes into 'Welcome to %s', carried forward by zend-welcome-neutral-v1. Delete only the exact managed lang_id=1 row; preserve custom and non-English definitions."
         },
         {
             "constant": "OpenEMR",
-            "english": "Thiqa",
+            "managed_english": "Thiqa",
             "brand_ids": ["BRAND-129"],
-            "consumers": ["interface/modules/zend_modules/module/Application/view/layout/sendto.phtml"],
-            "note": "The bare product name as a translation constant. Distinct from the SessionUtil session-cookie name 'OpenEMR', which is a frozen machine identifier under locked Q17/C6 and is NOT a translation constant -- nothing here touches it."
-        }
-    ],
-
-    "retired_english_overrides": [
+            "reason": "S2-P1-22. The bare product name is not a phrase to translate, so sendto.phtml now reads the openemr_name global directly and no catalogue key is involved at all. Distinct from the SessionUtil session-cookie name 'OpenEMR', which is a frozen machine identifier under locked Q17/C6 and is NOT a translation constant -- nothing here touches it. Delete only the exact managed lang_id=1 row; preserve custom and non-English definitions."
+        },
         {
             "constant": "OpenEMR Authorization",
             "managed_english": "Thiqa Authorization",

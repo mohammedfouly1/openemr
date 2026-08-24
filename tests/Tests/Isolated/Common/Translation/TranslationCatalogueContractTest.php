@@ -12,6 +12,7 @@ namespace OpenEMR\Tests\Isolated\Common\Translation;
 
 use OpenEMR\Common\Translation\ProductContextTranslation;
 use OpenEMR\Common\Translation\TranslationCatalogueContract;
+use OpenEMR\Common\Translation\TranslationCatalogueContractSet;
 use OpenEMR\Common\Translation\TranslationContractSqlRenderer;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -60,16 +61,46 @@ final class TranslationCatalogueContractTest extends TestCase
         );
     }
 
+    /**
+     * The deployed supplement must be exactly what the whole contract directory renders — not
+     * what one contract renders. A contract that generated into the file but was dropped from the
+     * set, or added to the set without regenerating, both fail here rather than reaching an
+     * installer.
+     */
     public function testGeneratedSqlIsDeterministicAndCurrent(): void
     {
-        $rendered = (new TranslationContractSqlRenderer())->render($this->contract());
+        $set = TranslationCatalogueContractSet::fromProjectDirectory($this->repoRoot());
+        $renderer = new TranslationContractSqlRenderer();
+        $rendered = $renderer->renderSet($set);
         $deployed = file_get_contents($this->repoRoot() . '/contrib/util/language_translations/durableTranslationContracts_utf8.sql');
 
         self::assertNotFalse($deployed);
         self::assertSame($rendered, $deployed);
+        self::assertSame($rendered, $renderer->renderSet($set), 'Rendering must be deterministic.');
+        self::assertStringNotContainsString('SkyEagle', $rendered);
+
+        // Every contract's target key reaches the supplement.
+        foreach ($set->all() as $contract) {
+            self::assertStringContainsString(
+                "BINARY `constant_name` = '" . $contract->targetKey . "'",
+                $rendered,
+            );
+        }
+    }
+
+    /**
+     * The v1 contract's statements are frozen. Re-rendering it differently would change SQL that
+     * installed databases have already executed, and its journal row records the contract hash.
+     */
+    public function testTheVersionOneContractStillRendersItsTwentyEightExplicitInserts(): void
+    {
+        $rendered = (new TranslationContractSqlRenderer())->render($this->contract());
+
         self::assertSame(28, substr_count($rendered, 'INSERT INTO `lang_definitions`'));
         self::assertStringContainsString("BINARY `constant_name` = '%s Database Upgrade'", $rendered);
-        self::assertStringNotContainsString('SkyEagle', $rendered);
+
+        // v1 never emits carry-forward SQL, even though it declares legacy keys.
+        self::assertStringNotContainsString('-- Carry forward:', $rendered);
     }
 
     public function testRejectsMissingOrUnsafePlaceholders(): void

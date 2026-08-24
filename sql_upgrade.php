@@ -76,7 +76,7 @@ use OpenEMR\Common\Session\SessionUtil;
 use OpenEMR\Common\Session\SessionWrapperFactory;
 use OpenEMR\Common\Translation\ProductContextTranslation;
 use OpenEMR\Common\Translation\QueryUtilsTranslationCatalogueStore;
-use OpenEMR\Common\Translation\TranslationCatalogueContract;
+use OpenEMR\Common\Translation\TranslationCatalogueContractSet;
 use OpenEMR\Common\Translation\TranslationCatalogueMigration;
 use OpenEMR\Common\Uuid\UuidRegistry;
 use OpenEMR\Core\Header;
@@ -515,17 +515,24 @@ header('Content-type: text/html; charset=utf-8');
                         echo "<script>serverStatus('Patch', 0, 1);</script>";
                         $sqlUpgradeService->upgradeFromSqlFile('patch.sql');
                     }
-                    $translationContract = TranslationCatalogueContract::fromFile(
-                        __DIR__ . '/contrib/util/language_translations/contracts/database-upgrade.json',
-                    );
-                    $translationMigration = (new TranslationCatalogueMigration())->forward(
-                        $translationContract,
-                        new QueryUtilsTranslationCatalogueStore(),
-                    );
-                    echo '<p class="text-success">' . text(
-                        'Translation catalogue: ' . $translationMigration->action
-                        . '; definitions changed: ' . $translationMigration->definitionsChanged,
-                    ) . "</p><br />\n";
+                    // Every checked-in contract, each in its own transaction and its own journal
+                    // row. Iterating the directory rather than naming one file is what keeps a
+                    // newly added contract from reaching fresh installs (through the generated
+                    // supplement) while never running on an upgrade.
+                    $translationContracts = TranslationCatalogueContractSet::fromProjectDirectory(__DIR__);
+                    $translationStore = new QueryUtilsTranslationCatalogueStore();
+                    $translationEngine = new TranslationCatalogueMigration();
+                    foreach ($translationContracts->all() as $translationContract) {
+                        $translationMigration = $translationEngine->forward(
+                            $translationContract,
+                            $translationStore,
+                        );
+                        echo '<p class="text-success">' . text(
+                            'Translation catalogue [' . $translationContract->id . ']: '
+                            . $translationMigration->action
+                            . '; definitions changed: ' . $translationMigration->definitionsChanged,
+                        ) . "</p><br />\n";
+                    }
                     flush();
 
                     echo "<br /><p class='text-success'>Updating UUIDs (this could take some time)<br />\n";

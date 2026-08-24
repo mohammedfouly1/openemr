@@ -15,7 +15,15 @@
 <html lang="en" ng-app="documentsApp">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle($this->translate()->xl('Welcome to OpenEMR'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php
+// Finding S2-P1-22: see the Application layout. `Welcome to %s` carries the existing
+// translations of `Welcome to OpenEMR` forward with the brand literal replaced by the
+// placeholder, per the zend-welcome-neutral-v1 contract.
+echo $this->headTitle(\OpenEMR\Common\Translation\ProductContextTranslation::compose(
+    $this->translate()->xl('Welcome to %s'),
+    \OpenEMR\Core\OEGlobalsBag::getInstance()->getString('openemr_name'),
+))->setSeparator(' - ')->setAutoEscape(false)
+?>
 
         <!-- TODO: Remove all of this and replace it !-->
 

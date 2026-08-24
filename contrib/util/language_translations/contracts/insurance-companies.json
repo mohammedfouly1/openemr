@@ -1,0 +1,11 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "insurance-companies-neutral-v1",
+    "target_key": "Insurance Companies %s",
+    "legacy_keys": {},
+    "derive_from": {
+        "source_key": "Insurance Companies",
+        "placement": "suffix"
+    },
+    "definitions": {}
+}

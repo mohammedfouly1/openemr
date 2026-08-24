@@ -22,6 +22,7 @@ use OpenEMR\Common\Csrf\CsrfUtils;
 use OpenEMR\Common\Forms\Types\EncounterListOptionType;
 use OpenEMR\Common\Layouts\LayoutsUtils;
 use OpenEMR\Common\Session\SessionWrapperFactory;
+use OpenEMR\Common\Translation\ProductContextTranslation;
 use OpenEMR\Common\Utils\CacheUtils;
 use OpenEMR\Core\Header;
 use OpenEMR\Core\Kernel;
@@ -307,6 +308,7 @@ class TwigExtension extends AbstractExtension implements GlobalsInterface
             new TwigFilter('xlt', xlt(...)),
             new TwigFilter('xla', xla(...)),
             new TwigFilter('xlj', xlj(...)),
+            new TwigFilter('xlp', $this->translateWithProductName(...)),
             new TwigFilter('money', oeFormatMoney(...)),
             new TwigFilter('shortDate', oeFormatShortDate(...)),
             new TwigFilter(
@@ -328,5 +330,33 @@ class TwigExtension extends AbstractExtension implements GlobalsInterface
                 CacheUtils::addAssetCacheParamToPath(...)
             )
         ];
+    }
+
+    /**
+     * Translate a pattern carrying one product-name placeholder, then compose the name into it.
+     *
+     * `{{ "About"|xlt }} {{ applicationTitle|text }}` looks harmless and is not: it hardcodes
+     * English word order around a value no translator can move. A right-to-left locale renders the
+     * phrase translated with the product name still trailing it, which is how `About Thiqa` became
+     * `حول Thiqa` on the live Arabic shell (findings S2-P1-23 and S2-P1-24). One translatable unit
+     * — `About %s` — lets each locale put the name where its own grammar needs it.
+     *
+     * Returns the composed string **unescaped**, so the caller applies exactly one escaper for its
+     * own context: `|text` in HTML, `|attr` in an attribute. That matters more than usual here,
+     * because TwigContainer builds its environment with `autoescape => false`; the bare
+     * `{{ applicationTitle }}` these call sites used before was emitted with no escaping at all.
+     * Choosing the escaper at the call site is also the same compose-then-escape-once contract
+     * `sql_upgrade.php` follows for `%s Database Upgrade`.
+     *
+     * ProductContextTranslation accepts only `%s`, `%1$s` and literal `%%`, so a catalogue entry
+     * cannot become an arbitrary format string, and a pattern whose placeholder is lost in
+     * translation throws rather than silently dropping the product name.
+     */
+    public function translateWithProductName(string $pattern): string
+    {
+        return ProductContextTranslation::compose(
+            xl($pattern),
+            $this->globals->getString('openemr_name'),
+        );
     }
 }

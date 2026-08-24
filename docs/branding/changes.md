@@ -355,12 +355,20 @@ strikethrough and their evidence, rather than deleted, so the record shows what 
 | 110 | BLOCKED | Facility name is tenant data, correctly deferred to provisioning, blocked on D-6/D-7 (mechanism). **Corrected 2026-08-19:** the live DB value is no longer "Your Clinic Name Here" — set to `Thiqa Demo Eye Clinic` via out-of-band demo seeding (PB-016), not this mechanism |
 | 111 | PARTIAL | PDF CSS build exists; Amiri Arabic fonts still not wired into mpdf/dompdf — blocked on D-9 (`docs/RebrandingBugs.md` RB-14) |
 | 119 | **NOT DONE — reclassified** | Duplicate favicon `<link>`. §16.2 says PATCH, the plan defers it. Resolved 2026-08-10 in favour of **DEFER**, recorded rather than left contradictory — see `docs/RebrandingBugs.md` RB-23 |
-| ~~127~~ | **DONE** | OAuth2 authorization titles (×3) compose tenant-provided `applicationTitle` with the translated `Authorization` phrase. The dead `OpenEMR Authorization` English override is retired only when its value exactly matches the former managed value; custom and non-English definitions are preserved |
-| ~~128~~ | **DONE** | OAuth2 login button uses the same identity-neutral composition with translated `Login`; the dead compound English override has the same exact-value retirement policy |
-| ~~129~~ | **DONE** | Zend module titles → "Thiqa Application" / "Welcome to Thiqa" / "Thiqa", same mechanism |
+| ~~127~~ | **DONE** | OAuth2 authorization titles (×3) compose the product name into the single translatable key `%s Authorization` via the `xlp` filter. *(Revised 2026-08-24, S2-P1-23: the earlier form juxtaposed `applicationTitle` with a separately translated `Authorization`, which hardcoded English word order — RTL rendered `Thiqa الولوج`. The neutral key carries `Authorization`'s 10 existing definitions forward by prefix derivation, so no locale loses a translation.)* The dead `OpenEMR Authorization` English override is retired only when its value exactly matches the former managed value |
+| ~~128~~ | **DONE** | OAuth2 login button uses the same composition against `%s Login`, carrying `Login`'s 34 definitions forward. Same exact-value retirement policy for the dead compound override |
+| ~~129~~ | **DONE — mechanism replaced 2026-08-24 (S2-P1-22)** | The three Zend titles no longer translate brand-bearing keys. An English override only ever reached `lang_id=1`, so every other locale fell through to the unbranded upstream literal and **Arabic users saw OpenEMR branding**. `Application/layout.phtml` now composes `%s Application` and `Documents/layout.phtml` composes `Welcome to %s` — both carrying the old keys' definitions forward with the brand literal replaced by the placeholder — and `sendto.phtml` reads the `openemr_name` global directly, since a bare product name is not a phrase to translate. All three English overrides are retired; `english_overrides` is now empty |
 
 **Why these remain identity-neutral.** An earlier attempt edited the literal inside `xl()`/`xlt()`, which
 renamed the catalogue key and orphaned **59** existing translations across the shipped locales including
-Arabic. That was reverted. BRAND-127/128 now compose tenant application identity with translated action
-phrases; BRAND-129 retains three live `lang_id = 1` catalogue overrides. The two obsolete compound English
-rows are exact-value retirements, never broad deletion. Full history and measurements: `docs/RebrandingBugs.md` RB-01.
+Arabic. That was reverted. All five English overrides are now exact-value retirements, never broad
+deletion. Full history and measurements: `docs/RebrandingBugs.md` RB-01.
+
+**And why the 2026-08-24 revision needed a carry-forward.** Moving a call site to a placeholder key is the
+*same* orphaning hazard in a new costume: the new key starts with no translations, so `About` (24
+definitions, one Arabic), `Login` (34, one Arabic), `Insurance Companies` (33) and `Authorization` (10)
+would all have dropped to English at those call sites — including the Arabic rows the change exists to
+fix. Contract schema v2's `derive_from` rule carries each locale's existing translation onto the neutral
+key with `%s` in the position the template already used, so rendered output is byte-identical in every
+language and only the join point becomes translator-editable. Nothing is authored and no grammar is
+invented. See `docs/branding/adr/patch-records.md` PR-39.

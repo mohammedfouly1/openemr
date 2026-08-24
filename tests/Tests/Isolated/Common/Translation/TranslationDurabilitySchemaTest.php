@@ -45,9 +45,25 @@ final class TranslationDurabilitySchemaTest extends TestCase
 
         self::assertNotFalse($source);
         $patchPosition = strpos($source, "upgradeFromSqlFile('patch.sql')");
-        $migrationPosition = strpos($source, 'TranslationCatalogueMigration())->forward');
+        $migrationPosition = strpos($source, '->forward(');
         self::assertIsInt($patchPosition);
         self::assertIsInt($migrationPosition);
         self::assertGreaterThan($patchPosition, $migrationPosition);
+    }
+
+    /**
+     * The upgrade path must run **every** contract, not one named file. A contract that ships into
+     * the installer supplement but never runs on upgrade leaves upgraded sites rendering an
+     * untranslated key while fresh installs look correct — the exact fresh-install-versus-upgrade
+     * divergence S2-P0-21 was raised about.
+     */
+    public function testUpgradeConsumerIteratesTheWholeContractSet(): void
+    {
+        $source = file_get_contents(dirname(__DIR__, 5) . '/sql_upgrade.php');
+
+        self::assertNotFalse($source);
+        self::assertStringContainsString('TranslationCatalogueContractSet::fromProjectDirectory', $source);
+        self::assertStringContainsString('->all() as $translationContract', $source);
+        self::assertStringNotContainsString('contracts/database-upgrade.json', $source);
     }
 }

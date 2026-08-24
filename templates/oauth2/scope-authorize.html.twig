@@ -16,7 +16,7 @@
    ============================================================================ #}
 
 {% extends "oauth2/oauth2-base.html.twig" %}
-{% block title %}{{ applicationTitle }} {{ "Authorization"|xlt }}{% endblock %}
+{% block title %}{{ "%s Authorization"|xlp|text }}{% endblock %}
 {% block content %}
     <form method="post" name="userLogin" id="userLogin" action="{{ redirect|attr }}">
         {% block form_header %}{% endblock %}

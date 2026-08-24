@@ -117,6 +117,26 @@ final class TranslationCatalogueMigration
     private function desiredDefinitions(TranslationCatalogueContract $contract, TranslationCatalogueStore $store): array
     {
         $desired = $contract->definitions;
+
+        // Carry-forward from a still-current constant (schema v2). Explicit definitions in the
+        // contract win, so a locale whose mechanical derivation reads badly can be corrected by
+        // hand without abandoning the rule for every other language.
+        //
+        // A missing or empty source is not an error. `Product Registration`, for instance, has no
+        // catalogue row at all; deriving nothing from it leaves the neutral key falling back to
+        // its own English text, which is exactly what that call site renders today.
+        $derivation = $contract->derivation;
+        if ($derivation instanceof TranslationDerivation) {
+            $sourceId = $this->singleExactId($store, $derivation->sourceKey);
+            if ($sourceId !== null) {
+                foreach ($store->definitions($sourceId) as $languageId => $definition) {
+                    if (!isset($desired[$languageId])) {
+                        $desired[$languageId] = $derivation->derive($definition);
+                    }
+                }
+            }
+        }
+
         $sourceCandidates = [];
         foreach ($contract->legacyKeys as $legacyKey => $identity) {
             $sourceId = $this->singleExactId($store, $legacyKey);

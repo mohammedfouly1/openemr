@@ -3,7 +3,17 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate()->xl('OpenEMR Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php
+        // Finding S2-P1-22: `OpenEMR Application` is a brand-bearing catalogue key with an
+        // English-only override, so a locale with no row for it fell through to the unbranded
+        // English literal — Arabic users saw upstream branding here. `%s Application` carries the
+        // same translations forward with the product name composed in, per the
+        // zend-application-neutral-v1 contract.
+        echo $this->headTitle('ZF2 ' . \OpenEMR\Common\Translation\ProductContextTranslation::compose(
+            $this->translate()->xl('%s Application'),
+            \OpenEMR\Core\OEGlobalsBag::getInstance()->getString('openemr_name'),
+        ))->setSeparator(' - ')->setAutoEscape(false)
+        ?>
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 

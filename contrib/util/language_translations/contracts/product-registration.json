@@ -1,0 +1,11 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "product-registration-neutral-v1",
+    "target_key": "%s Product Registration",
+    "legacy_keys": {},
+    "derive_from": {
+        "source_key": "Product Registration",
+        "placement": "prefix"
+    },
+    "definitions": {}
+}

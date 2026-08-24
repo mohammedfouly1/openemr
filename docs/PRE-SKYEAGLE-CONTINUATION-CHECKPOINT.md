@@ -32,6 +32,8 @@
 | 20 | **PRE-09 / S1-P1-04 FIXED — VERIFIED. S2-P1-20 PARTLY REFUTED (Correction K), remainder FIXED — VERIFIED.** `2df9b5eb1`. S1-P1-04: `ThiqaBrandingGuardrailScopeTest` locates the module by a brand-neutral anchor (`src/Config/BrandingGlobalKey.php` / the Q58 `saas_branding_` prefix), derives the production namespace from its PSR-4 autoload prefix, cross-checks that against all 92 shipped source files, and asserts each rule's `MODULE_NAMESPACE` equals it — failing in both directions. Negative control renamed production to a SkyEagle prefix with the constants left alone: 7 failures / exit 1, naming all four rules as "would go inert". S2-P1-20: the four identical Inter hashes reproduced exactly, but a WOFF2 table-directory decode found `fvar`/`gvar`/`HVAR` in every Inter file and none in any IBM Plex file — Inter is one **variable** face, the shipped CSS declares it at `font-weight: 400 700`, and RB-22's "FIXED" is accurate. The rendering claim is withdrawn as Correction K. The real gap — nothing verified that a *static* family's declared weights map to distinct faces — is closed by `BrandingFontFaceDistinctnessContractTest`; the three unreferenced duplicate binaries are pinned rather than deleted, since retiring them is an Owner asset-governance decision. Targeted 9/240 and 5/218; full guardrail suite 63/320; canonical gate 12/12 artefacts, 123/123 manifest, 233 tests / 2,871 assertions; all exit 0. Next incomplete task: S2-P1-23 RTL word-order regression. |
 | 21 | **All four P2 findings FIXED — VERIFIED. S2-P1-22/23/24 investigated to a specified, evidence-backed stop.** `97f6952cf`. S1-P2-07: counts re-derived on disk (18 top-level CSS, 19 entries, 28 files) and corrected to 18/4 in the runbook and changes.md row 076. S1-P2-12: `Config\ModulePaths` becomes the single owner of the module directory name; `Bootstrap`, `BrandingService` and the Twig namespace now derive every path, and `ModulePathContractTest` guards the three consumers that cannot share a PHP constant (`install-assets.php`, `.gitignore`, the Twig rule tip). One inherited claim corrected: `webpack.themes.js` does **not** reference the module directory. S1-P2-14: `RebrandingBugs.md` §10 now records four worktrees, explains why no gitignore mechanism can reach the sibling, and adds it as a path exclusion plus a standing `git worktree list` check. S1-P2-16: command count corrected 3 → 6 in all three places, with the blast-radius consequence stated. **S2-P1-23/22/24: a repair was implemented across all seven juxtaposition sites and then deliberately reverted** — live catalogue counts showed the finding's own recommended fix orphans 10–34 translations per call site (the RB-01 failure mode). The tree was restored exactly and nothing was committed; the safe design, the blocking single-key limitation of the contract subsystem, and the unescaped-`applicationTitle` trap are now specified in full under S2-P1-23. Targeted 93 tests / 830 assertions; canonical gate 12/12 artefacts, 123/123 manifest, 238 tests / 2,886 assertions; all exit 0. |
 
+| 22 | **PRE-09 / S2-P1-23 + S2-P1-22 + the `About` half of S2-P1-24 FIXED — VERIFIED.** The design specified at Rev 21 was built. Contract schema **v2** adds `derive_from` (`source_key` + `placement: prefix\|suffix`), and the contracts *directory* replaced the single named file: `TranslationCatalogueContractSet` loads every `*.json` sorted, rejects duplicate ids/targets and refuses derivation chains, and `sql_upgrade.php`, the migration command and the release-prep mutator all iterate it. Ten call sites (7 Twig via the new `xlp` filter, 3 Zend layouts) now compose one translatable unit. **The carry-forward is what makes it safe:** each locale's new pattern is its own existing translation with `%s` where the template put the name, so rendering is byte-identical in every language. Proven on disposable database `openemr_prebrand_xlate_multi_20260824_174721`: `%s Login` → `%s تسجيل الدخول`, `About %s` → `حول %s` / `אודות %s`, `%s Application` → `Aplicacion %s` / `%s Anwendung`; the `%`-bearing source, the case-only near-duplicate and the unbranded legacy row were all correctly skipped; applied twice with identical counts (15 constants, 53 definitions, 0 orphans, 0 duplicate pairs); dropped and confirmed absent. v1 `database-upgrade.json` is unmodified and still renders its 28 explicit inserts. `english_overrides` is now empty, all five keys retired by exact value, dry-run planned exactly 5 deletions with no writes. Targeted: translation 42/145, core-strings 46/290, composition contract 5/437, mutator 6/13; all exit 0. Live database mutated: NO. Next: S2-P1-26, then the second half of S2-P1-24. |
+
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
 
@@ -213,28 +215,30 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 6 open · P2 0 open (4 fixed)
-                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-04; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-25.
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 4 open · P2 0 open (4 fixed)
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-04; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-22; S2-P1-23; S2-P1-25.
+                    PARTLY FIXED: S2-P1-24 (juxtaposition half closed; variant-selection half open).
                     REFUTED IN PART, REMAINDER FIXED: S2-P1-20 (see Correction K).
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
                     P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix)
                     -> 15 (S1-P1-15 fix) -> 14 (S1-P1-17 fix) -> 13 (S1-P1-02 fix)
                     -> 12 (S1-P1-05 fix) -> 11 (S1-P1-06 fix) -> 10 (S1-P1-10 fix)
                     -> 9 (S1-P1-11 fix) -> 8 (S2-P1-18 fix) -> 7 (S1-P1-04 fix)
-                    -> 6 (S2-P1-20 refuted-in-part + remainder fixed).
+                    -> 6 (S2-P1-20 refuted-in-part + remainder fixed)
+                    -> 5 (S2-P1-23 fix) -> 4 (S2-P1-22 fix).
                     P2 all fixed: S1-P2-07; S1-P2-12; S1-P2-14; S1-P2-16.
-                    STILL OPEN (P1): S2-P1-22; S2-P1-23; S2-P1-24; S2-P1-26, plus one
-                    unlabelled slot.
-                    S2-P1-22/23/24 are ONE workstream, not three: all three reduce to the
-                    same bare-juxtaposition class across seven template sites, and all
-                    three are blocked on generalising the single-key translation-contract
-                    subsystem so existing definitions can be carried forward. The design
-                    and the evidence are under S2-P1-23. Do not attempt them separately,
-                    and do not apply the recommended fix without the carry-forward.
-                    S2-P1-24 has a second, unblocked half (session-language product-name
-                    selection) that has not been diagnosed yet.
-                    NOTE ON THE COUNT: only 4 of those 6 have a written section in this
-                    checkpoint (§6 documents S2-P1-22, S2-P1-23, S2-P1-24, S2-P1-26). The
+                    STILL OPEN (P1): S2-P1-24 (second half only); S2-P1-26; plus two
+                    unlabelled slots.
+                    S2-P1-22/23/24 were ONE workstream and were fixed together at Rev 22:
+                    ten call sites now compose a single translatable unit, and schema-v2
+                    derive_from carries every existing translation forward, so no locale
+                    lost one. S2-P1-24 stays PARTLY open: its second half (session-language
+                    product-name selection for the shell <title>, WindowTitleBase and the
+                    Arabic logo variant) is a different mechanism — those surfaces pick the
+                    wrong *variant* of the product name rather than mistranslating a phrase
+                    — and is scoped but not built.
+                    NOTE ON THE COUNT: only 2 of those 4 have a written section in this
+                    checkpoint (§6 documents S2-P1-24 and S2-P1-26). The
                     arithmetic carries two unlabelled P1 slots inherited from Scan-2's
                     register that were never transcribed here (the numbering gap at
                     S2-P1-19 and S2-P1-21 is where they sit). Treat the four documented
@@ -921,6 +925,20 @@ reproduces exactly.
 already-proven `neutraliseLegacyDefinition()` transform, but the contract subsystem must be generalised to
 more than one key first. Do not fix this one in isolation.
 
+**Status: FIXED — VERIFIED (continuation Rev 22).** Fixed as part of the single S2-P1-22/23/24 workstream;
+the evidence block lives under S2-P1-23. Specifically: `Application/layout.phtml` composes `%s Application`
+and `Documents/layout.phtml` composes `Welcome to %s`, both carrying the old keys' definitions forward with
+the brand literal replaced by `%s` (`zend-application-neutral-v1`, `zend-welcome-neutral-v1`, both proven on
+a disposable database — `Aplicacion %s`, `%s Anwendung`, `Bienvenido a %s`). `sendto.phtml` reads
+`openemr_name` directly, because a bare product name is not a phrase to translate; that removes the last
+consumer of the `OpenEMR` catalogue constant entirely.
+
+All three English overrides are retired by exact value, so `brand-strings.json`'s `english_overrides` is now
+**empty** — an English override only ever reached `lang_id=1`, which is precisely why the other locales
+leaked, and the composed architecture covers every locale at once. A live read-only
+`apply-brand-strings.php --dry-run` planned exactly five deletions (these three plus the two from S1-P1-02)
+and wrote nothing.
+
 ### S2-P1-23 — Commit `39d3f056b` introduced an RTL regression
 It replaced `{{ "OpenEMR Authorization"|xlt }}` with `{{ applicationTitle }} {{ "Authorization"|xlt }}`.
 `Authorization` (cons_id 992) has 10 definitions and **no Arabic row**, where the retired constant had 5.
@@ -993,6 +1011,37 @@ holds, the second was incomplete. Recommended fix is a placeholder-bearing trans
 > site keeps choosing its own escaper. That was built and reverted with the rest; it is a ~15-line addition
 > to `TwigExtension` and is not the hard part.
 
+**Status: FIXED — VERIFIED (continuation Rev 22), together with S2-P1-22 and the `About` half of
+S2-P1-24.** The design specified above was built. Contract schema v2 adds `derive_from`
+(`source_key` + `placement`), the contracts *directory* replaced the single named file, and all ten call
+sites now compose one translatable unit. Rendering is byte-identical to before in every locale — the
+carry-forward is what makes that true — while word order is now catalogue data a translator can reorder.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S2-P1-23 (+ S2-P1-22, + the About half of S2-P1-24)
+Previous status: CONFIRMED; naive fix proven to regress and reverted at Rev 21
+Current status: FIXED — VERIFIED
+Call sites converted: 10 — oauth2-login (title + API login button), patient-select, scope-authorize, core/about (title + h1), insurance_companies/general_list, product_registration/product_reg.js, Zend Application layout, Zend Documents layout, Zend sendto
+Neutral keys introduced: %s Authorization; %s Login; About %s; Insurance Companies %s; %s Product Registration; %s Application; Welcome to %s
+Carry-forward mechanism: schema v2 derive_from for the five non-brand keys (prefix/suffix insertion of %s into each locale's existing translation); the existing neutraliseLegacyDefinition transform for the two brand-bearing keys, now also rendered as SQL
+Why derivation and not literals: ~110 hand-copied strings across four source constants would freeze a snapshot of upstream translations and stop tracking them; the SQL derives from whatever currentLanguage_utf8.sql actually installed
+Subsystem generalised: TranslationCatalogueContractSet loads every *.json sorted, rejects duplicate ids/targets and refuses derivation chains; sql_upgrade.php, TranslationCatalogueMigrationCommand and TranslationFileCopyFromPriorRelMutator all iterate the set
+Schema v1 frozen: database-upgrade.json is unmodified and still renders its 28 explicit inserts with no carry-forward SQL, so no installed database's journal hash is invalidated
+Disposable-database proof: schema openemr_prebrand_xlate_multi_20260824_174721; supplement applied twice, exit 0 both times; identical counts after the second run (15 constants, 53 definitions, 0 duplicate pairs, 0 orphans)
+Derivation results observed live in that database: "%s Login" -> "%s تسجيل الدخول"; "About %s" -> "حول %s", "אודות %s", "Uber %s"; "%s Authorization" -> "%s Autorizacion", "%s Genehmigung"; "%s Application" -> "Aplicacion %s", "%s Anwendung"; "Welcome to %s" -> "Bienvenido a %s"
+Guards proven in the same run: a source definition containing "%" was skipped (0 leaked); a case-only near-duplicate source constant was not matched (BINARY, 0 leaked); a legacy row without the brand literal was skipped (0 leaked)
+Disposable database dropped: YES — confirmed absent; live openemr DB verified still holding its 7 saas_branding_* globals
+Live database mutated: NO
+Targeted results: translation suites 42 tests / 145 assertions / exit 0; brand-strings catalogue 46 / 290 / exit 0; composition contract 5 / 437 / exit 0; release-prep mutator 6 / 13 / exit 0
+Lint/style: PHP lint 17/17 exit 0 (incl. the three .phtml layouts); PHPCS 19/19 exit 0; brand-strings.json parses
+Live read-only tool proof: apply-brand-strings.php --site=default --dry-run planned exactly 5 deletions (the 3 newly retired plus the 2 from S1-P1-02), 0 already correct, no writes
+brand-strings.json: english_overrides is now EMPTY; all five keys carry exact-value retirement metadata
+Escaping: TwigContainer builds with autoescape => false, so the previous bare {{ applicationTitle }} was emitted unescaped. Every converted site now names exactly one escaper (|text in HTML, |attr in an attribute); a contract test fails on any |xlp without one.
+Known behaviour, unchanged from S1-P0-13: a translator who removes the %s from a pattern makes compose() throw. The contract validates every checked-in definition and the derivation guarantees exactly one placeholder, but a hand-edited lang_definitions row is not protected.
+Not-passes retained: two of my own assertions failed on key ORDER (the store returns sorted) and were corrected; a first version of the composition contract used '~' as both regex delimiter and literal, raising a PHP warning, and was re-delimited.
+Next incomplete PRE-* task: PRE-09 / S2-P1-26, plus the second half of S2-P1-24 (session-language product-name selection for the shell title, WindowTitleBase and the Arabic logo variant)
+```
+
 ### S2-P1-24 — The Arabic wordmark is stored but never rendered
 `globals.saas_branding_product_name_ar = ثقة` is populated and module code to consume it exists
 (`BrandingService.php:107-108`, `BrandAssetResolver.php:74,164-166`). The Arabic authenticated shell
@@ -1006,11 +1055,21 @@ bare-juxtaposition class as S2-P1-23, and two of the seven sites that scan found
 behind the same carry-forward work; `About` carries 24 definitions including a live Arabic one, so changing
 its key naively would *remove* Arabic rather than fix it. See the blocking-constraint block under S2-P1-23.
 
-The remaining half of this finding — `<title>Thiqa</title>`, `WindowTitleBase`, and the absent Arabic logo
-variant — is a **different** mechanism and is still undiagnosed: those surfaces read `openemr_name`
-unconditionally rather than selecting `saas_branding_product_name_ar` by session language. That part needs
-its own investigation of how core resolves the session language, and it is not blocked by the translation
-contract work.
+**The `حول Thiqa` half is FIXED — VERIFIED (continuation Rev 22)**, as part of the S2-P1-22/23/24
+workstream: `templates/core/about.html.twig` now composes `About %s`, and the `about-product-neutral-v1`
+contract carries `About`'s existing translations forward by suffix derivation — proven on a disposable
+database to produce `حول %s` (Arabic), `אודות %s` (Hebrew) and `Uber %s`. Arabic therefore still renders
+`حول` and now places the product name where the Arabic pattern says, rather than where PHP said.
+
+**The remaining half stays OPEN and is now scoped.** `<title>Thiqa</title>`,
+`var WindowTitleBase = "Thiqa"` and the absent Arabic logo variant are a **different** mechanism: those
+surfaces read `openemr_name` unconditionally instead of selecting `saas_branding_product_name_ar` when the
+session language is Arabic. Nothing in the composition work touches them, because they are not translated
+phrases at all — they are the product name itself, and the defect is which *variant* of it is chosen.
+Closing it needs a decision the composition layer cannot make for them: how core resolves the session
+language on each of those surfaces, and whether the Arabic wordmark applies to a `<title>` (a plain-text
+browser affordance) as well as to rendered chrome. Not blocked by the translation-contract work; it simply
+was not part of it.
 
 ### S2-P1-26 — English brand-leak surface the rename does NOT cover, and a class SET-TRANSLATION cannot reach
 **Origin** Agent 2E addendum 3 · **Method:** 69 brand-bearing keys dumped, one `git grep -F -f` pass over
