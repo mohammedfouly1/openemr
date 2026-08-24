@@ -1662,3 +1662,26 @@ fork-specific gate deliberately rather than losing it in conflict resolution.
 
 PR-33 adds **2** newly edited non-module production/delivery files. The authoritative inventory is therefore
 **51 distinct files**, all covered by PR-01…PR-33. Earlier inventory figures remain historical snapshots.
+
+---
+
+# PR-34 — backup-retention regression gate (2026-08-24)
+
+**File:** `composer.json`. **Commit:** `8eb4ea7f8dbaf92f023f2a745a17f767f6a15f07`.
+**Rebase risk:** LOW — this extends the existing PR-33 `branding-ci` PHPUnit path list with one deterministic
+isolated test file. The test and CI-contract assertion are evidence rather than production patch-footprint
+entries.
+
+S1-P1-15 changes executable backup behavior inside the branding module, but the release gate would not have run
+its new retention matrix because PR-33 deliberately targets only selected isolated paths. PR-34 adds
+`BackupRetentionTest.php` to that same fail-closed command and updates `BrandingCiContractTest` so removal is a
+deterministic failure. It introduces no new workflow, dependency, secret, service or network requirement.
+
+**Upstream-first path (Q1):** retain the targeted path while the module owns this backup command. If the generic
+managed-backup parser is later moved into upstream OpenEMR, move its tests into the corresponding upstream suite
+and update this one canonical list rather than adding a parallel workflow.
+
+### Reconciliation after PR-34
+
+`composer.json` was already counted by PR-33, so PR-34 adds **0** distinct files. The authoritative inventory
+remains **51 distinct files**, covered by PR-01…PR-34.

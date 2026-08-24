@@ -452,3 +452,29 @@ reported (`BrandingHealthCheck.php:110-146` enumerates the four possible cases:
 `StylesheetWithoutRevision`/`StampWithoutRevision`) before deciding whether a targeted `globals` correction
 or a fresh materialisation (§2) is the right fix. No live example of this state has been observed on this
 system; nothing in this codebase automates its resolution.
+
+---
+
+## 8. Create and retain verified database backups
+
+The existing module command remains:
+
+```powershell
+C:\openemr-stack\php\php.exe bin\console thiqa-branding:backup --site=default `
+  --target=C:\configured\backup-directory --label=scheduled --keep=7
+```
+
+Supply the deployment's real configured target explicitly. The historical
+`C:/openemr-stack/backups` default is retained only so existing schedules do not silently change destination;
+it is not the portable target recommendation.
+
+New verified dumps use `managed-db-backup-v1-<label>-<YYYYMMDD-HHMMSS>.sql`. Retention recognizes both this
+neutral format and verified legacy `thiqa-<label>-<YYYYMMDD-HHMMSS>.sql` files as one chronological set. It
+does not rename existing files. `--keep` must be a positive whole number; zero and malformed values fail rather
+than being silently clamped. The command reports the resolved target, new backup path, neutral/legacy counts,
+selection count and each deletion result. Any scan or deletion failure returns nonzero.
+
+Before changing a schedule or planning rollback, read the full format, safety, mixed-archive and rollback
+contract in [`docs/branding/backup-retention.md`](backup-retention.md). Unrelated SQL, partial files, compressed
+files, malformed names, directories and files without a valid command-written `.sha256` sidecar are never
+retention candidates.
