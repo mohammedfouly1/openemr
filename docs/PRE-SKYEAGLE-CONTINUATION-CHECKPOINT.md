@@ -13,6 +13,7 @@
 | 1 | Initial write. PRE-10 (guardrail inert-rule behaviour) recorded as **the one unproven Scan-1 claim**, after Agent 2A failed and two direct PHPUnit runs timed out. |
 | 2 | **PRE-10 CLOSED — proven by execution.** Orchestrator read the real `MODULE_NAMESPACE` constants from all four shipped rule files and evaluated the shipped comparison against both namespaces; all four go inert under a SkyEagle namespace. Ledger row and §16 rewritten; §4 scan states and §1 git status refreshed. See §16 PRE-10 for the evidence and the one residual gap. |
 | 3 | **PRE-09 remediation BEGUN — first item complete. S2-P1-25 FIXED.** Brand-manifest gate restored from RED (119/123, exit 1) to GREEN (123/123, exit 0) by re-issuing five hashes; reason recorded in `12-release-verification.md` Revision 5. Committed `45e9eb4f3`. **HEAD is no longer the scan baseline** — see §1. |
+| 4 | **HEAD literal removed from §1** — a checkpoint cannot hold its own commit hash, and every later commit would stale a pinned value; the remediation-commit table is now the durable record. **New finding S2-P1-26** added from Agent 2E addendum 3 (20 reachable unbranded keys; a leak class with no catalogue row that SET-TRANSLATION structurally cannot fix; `applicationTitle` already 7 call sites deep). P1 count 16 → 17 open. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -28,8 +29,12 @@ Resume the three-scan PRE-SKYEAGLE audit/remediation programme after Claude Code
 PROJECT:                        G:\My Drive\OpenEMR
 BRANCH:                         feat/thiqa-branding-foundation
 BASELINE HEAD AT SCAN START:    65616d4b28d34e8ba077d6397b9e916aab030d11
-CURRENT HEAD:                   45e9eb4f3944fed783ac0ef48673cedb32b26ca2
-                                *** NO LONGER THE SCAN BASELINE — remediation has begun ***
+CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
+                                Deliberately NOT pinned here: a checkpoint cannot contain the hash of its
+                                own commit, and every later remediation commit would make a pinned value
+                                stale. The durable record is the remediation-commit table below — trust
+                                that, not a HEAD literal.
+                                *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
 CURRENT GIT STATUS:             ?? .claude/
                                 (this checkpoint is committed as of Rev 3)
                                 tree otherwise clean — no tracked file modified outside the commit below
@@ -152,8 +157,10 @@ SCAN 2:  IN PROGRESS — 6 of 8 agent workstreams landed (2C, 2D, 2E, 2F, 2G, 2H
 SCAN 3:  NOT STARTED
 
 KNOWN P0 FINDINGS:  S1-P0-01, S1-P0-09, S1-P0-13, S2-P0-21   (all still open)
-REGISTERS:          P0 4 · P1 16 · P2 4   (OPEN findings)
-                    FIXED so far: S2-P1-25 (manifest gate, commit 45e9eb4f3) — P1 was 17.
+REGISTERS:          P0 4 · P1 17 · P2 4   (OPEN findings)
+                    FIXED so far: S2-P1-25 (manifest gate, commit 45e9eb4f3).
+                    NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
+                    So P1 went 17 -> 16 (fix) -> 17 (new finding). Net movement, not drift.
                     Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
                     repairing it. It stays open until the guardrail constants gain a real
                     cross-check against the production namespace.
@@ -406,6 +413,31 @@ holds, the second was incomplete. Recommended fix is a placeholder-bearing trans
 (77,733 B, RTL stylesheets applied, UI chrome genuinely translated) still shows `<title>Thiqa</title>`,
 `var WindowTitleBase = "Thiqa"`, `حول Thiqa` (verb translated, product name Latin), and a byte-identical
 navbar with no Arabic logo variant.
+
+### S2-P1-26 — English brand-leak surface the rename does NOT cover, and a class SET-TRANSLATION cannot reach
+**Origin** Agent 2E addendum 3 · **Method:** 69 brand-bearing keys dumped, one `git grep -F -f` pass over
+`interface/ library/ src/ templates/ portal/ modules/ ccdaservice/`, filtered to lines containing an actual
+translation call → **55 live call-site lines**.
+
+- **23 of 69 brand-bearing keys are reachable; 46 are dead catalogue entries.** Of the 23, only **3** carry an
+  English override — so **20 keys are reachable and unbranded**, rendering `OpenEMR…` verbatim in an English
+  session. Most exposed: `interface/login_screen.php:29` — *the login page*.
+- **Structural finding — a class of leak SET-TRANSLATION cannot fix.** Several literals passed to `xl()`/`xlt()`
+  have **no `lang_constants` row at all** (verified `COUNT(*) = 0`): `OpenEMR Website`
+  (`interface/main/tabs/main.php:490`) · `OpenEMR Patient Portal` (`portal/index.php:118`) · `Restart OpenEMR`
+  (weno module) · two theme-globals labels (`library/globals.inc.php:4437,4439`) ·
+  `Permission to use the OpenEMR standard api.` (×2) · the product-registration consent text.
+  `brand-strings.json`'s entire premise is that a leak can be fixed as catalogue data instead of a source
+  edit. **For this class there is no row to override, in any locale.**
+- **This is a positive argument for the composed `applicationTitle` architecture** — it is the only mechanism
+  that covers both classes uniformly. And it is already the established convention here: **7 call sites deep**
+  (`AuthorizationController.php:836` **and `:1111`**, `SMARTAuthorizationController.php:290,319`,
+  `about_page.php:48`, `main.php:573`, `about.html.twig:4,10`, `general_list.html.twig:4`,
+  `product_reg.js.twig:6`). Adopt it **with the S2-P1-23 correction**: a placeholder-bearing translatable key
+  (`xlt('%s Database Upgrade')` + `sprintf`), never bare juxtaposition, so word order stays translator-controlled.
+- **Lower bound, not a total:** the pathspec excluded repo-root files (so `sql_upgrade.php` does not appear),
+  plus `contrib/`, `sites/`, `Documentation/`, `tests/`; fixed-string matching also misses literals split
+  across lines.
 
 ### S2-P1-25 — Brand manifest release gate was RED (4 files) — ✅ **FIXED, commit `45e9eb4f3`**
 
