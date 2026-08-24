@@ -34,6 +34,8 @@
 
 | 22 | **PRE-09 / S2-P1-23 + S2-P1-22 + the `About` half of S2-P1-24 FIXED — VERIFIED.** The design specified at Rev 21 was built. Contract schema **v2** adds `derive_from` (`source_key` + `placement: prefix\|suffix`), and the contracts *directory* replaced the single named file: `TranslationCatalogueContractSet` loads every `*.json` sorted, rejects duplicate ids/targets and refuses derivation chains, and `sql_upgrade.php`, the migration command and the release-prep mutator all iterate it. Ten call sites (7 Twig via the new `xlp` filter, 3 Zend layouts) now compose one translatable unit. **The carry-forward is what makes it safe:** each locale's new pattern is its own existing translation with `%s` where the template put the name, so rendering is byte-identical in every language. Proven on disposable database `openemr_prebrand_xlate_multi_20260824_174721`: `%s Login` → `%s تسجيل الدخول`, `About %s` → `حول %s` / `אודות %s`, `%s Application` → `Aplicacion %s` / `%s Anwendung`; the `%`-bearing source, the case-only near-duplicate and the unbranded legacy row were all correctly skipped; applied twice with identical counts (15 constants, 53 definitions, 0 orphans, 0 duplicate pairs); dropped and confirmed absent. v1 `database-upgrade.json` is unmodified and still renders its 28 explicit inserts. `english_overrides` is now empty, all five keys retired by exact value, dry-run planned exactly 5 deletions with no writes. Targeted: translation 42/145, core-strings 46/290, composition contract 5/437, mutator 6/13; all exit 0. Live database mutated: NO. Next: S2-P1-26, then the second half of S2-P1-24. |
 
+| 23 | **PRE-09 / S2-P1-26 SUBSTANTIALLY FIXED — VERIFIED. Class B complete; Class A specified.** The finding's counts were re-derived by exact quoted-literal extraction rather than the substring matching it used — which had inflated the bare `OpenEMR` key to "52 call sites". True figures over 4,105 files: **Class A** (has a catalogue row, a contract can neutralise) 20 literals / 22 sites; **Class B** (no row at all, no override can ever reach it) 22 literals / 25 sites; 49 dead entries. The structural half is therefore *larger* than recorded, not smaller. Class B is fully converted (15 literals / 18 sites) via a new PHP `xlp()` helper mirroring the Twig filter — safe by construction, since with no catalogue row nothing can be orphaned. **Six strings naming the OpenEMR Foundation, the upstream community or ONC certification are deliberately preserved and now locked by test**: neutralising them would make the software assert something untrue about who holds a certification or who should receive a report. Two more are excluded for mechanical reasons (one JS-side `xl()`, one carrying two `OpenEMR` occurrences against a one-placeholder contract). Class A remains open with its mechanism already built and its recipe written down. Targeted 13 tests / 474 assertions; canonical gate 12/12 artefacts, 123/123 manifest, 253 tests / 3,224 assertions, exit 0. The gate also gained an explicit 1800 s `config.process-timeout` budget after a **passing** suite was killed by Composer's 300 s default — the per-script `@putenv` form was tried first and does not work, because Composer reads the timeout at startup. |
+
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
 
@@ -1098,6 +1100,70 @@ translation call → **55 live call-site lines**.
 - **Lower bound, not a total:** the pathspec excluded repo-root files (so `sql_upgrade.php` does not appear),
   plus `contrib/`, `sites/`, `Documentation/`, `tests/`; fixed-string matching also misses literals split
   across lines.
+
+**Status: SUBSTANTIALLY FIXED — VERIFIED (continuation Rev 23). Class B fully converted; Class A specified
+and not yet built. The finding's own counts are corrected below.**
+
+**Measurement corrected.** The original figures came from `git grep -F -f`, which matches a key as a
+*substring* of a line — so every long key's line also counted as a hit for the bare key `OpenEMR`, inflating
+it to "52 call sites". Re-derived by extracting the actual quoted literal handed to each translation call
+and comparing it exactly (4,105 files scanned; `vendor/`, `node_modules/`, `.claude/`,
+`oe-module-claimrev-connect/` and `tests/` excluded per the §10 hygiene rule):
+
+```text
+CLASS A  has a lang_constants row (a carry-forward contract can neutralise it)
+         20 distinct literals / 22 call sites
+CLASS B  NO lang_constants row (no override can ever reach it; source edit only)
+         22 distinct literals / 25 call sites
+DEAD     row exists, never reached                                    49
+```
+
+So the structural half of the finding is **larger** than recorded — 22 uncatalogued literals, not the ~7 it
+listed — and the reachable-and-branded half is 20, not 23.
+
+**Class B is fully converted (15 literals / 18 call sites).** These are the safe ones by construction: with
+no catalogue row there is nothing to orphan, so they need no contract at all. A new PHP helper `xlp()`
+(`library/translation.inc.php`) mirrors the Twig filter — translate the pattern, compose `openemr_name`,
+return unescaped so the call site escapes once. Converted: the six `globals.inc.php` labels (theme
+selection, FHIR system scopes, the OAuth/FHIR hostname, the logo tooltip), `portal/index.php` title,
+`main.php`'s website link, both `AuthUtils` block notifications, the weno restart button, and all six OAuth
+scope descriptions across `ScopeRepository` and `ServerScopeListEntity`.
+
+**Deliberately NOT converted, and now locked by a test so a later sweep cannot "finish the job":**
+
+| Literal / site | Why it is preserved |
+|---|---|
+| `rwt_2026_report.php` ONC + Foundation text (×2) | Names the **OpenEMR Foundation** and an ONC certification programme. Renaming would assert something untrue — that a differently-named foundation should receive the report, or that this fork holds that certification. |
+| `product_registration_modal.html.twig` Foundation text (×3) | Same: the telemetry consent names the real upstream Foundation, and the endpoint really is theirs. |
+| `register-app.php` "OpenEMR community form" | Points at the upstream community, not this product. |
+| `questionnaire_assessments.php:337` copyright disclaimer | **JavaScript** `xl()`, not PHP — a different mechanism needing a JS-side composition helper. |
+| `globals.inc.php:4443` theme-select description | Contains **two** `OpenEMR` occurrences; `ProductContextTranslation` accepts exactly one placeholder by design. Needs either a two-placeholder contract or a rewrite. |
+
+**Class A (20 literals / 22 sites) remains OPEN, and the mechanism for it already exists.** Each needs a
+schema-v2 contract with `legacy_keys: {"<old key>": "OpenEMR"}` and `target_key` = the same sentence with
+`OpenEMR` replaced by `%s`; the SQL and PHP carry-forward paths built for S2-P1-22 then neutralise every
+locale's translation automatically. It is 20 formulaic contract files plus 22 call-site edits. It was not
+attempted here rather than half-attempted: converting a call site *without* its contract is exactly the
+orphaning regression that was caught and reverted at Rev 21. The highest-exposure member is
+`interface/login_screen.php:29` — the login page.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S2-P1-26
+Previous status: CONFIRMED — leak surface + uncatalogued class, counts unverified
+Current status: SUBSTANTIALLY FIXED — VERIFIED (Class B complete; Class A specified, not built)
+Measurement method: exact quoted-literal extraction from xl/xlt/xla/xlj calls and "..."|xl* Twig filters over 4,105 files; documented exclusions applied
+Counts re-derived: Class A 20 literals / 22 sites; Class B 22 literals / 25 sites; dead catalogue entries 49
+Original counts corrected: 23 reachable -> 20 Class A; 46 dead -> 49; "52 sites for the bare OpenEMR key" was a substring artefact and is withdrawn
+Class B converted: 15 literals / 18 call sites across 8 files
+Class B preserved with reasons: 6 literals (Foundation / ONC / upstream community), 1 JS-side, 1 two-placeholder
+New helper: xlp() in library/translation.inc.php, composing through ProductContextTranslation and returning unescaped
+Targeted: ProductNameCompositionContractTest 13 tests / 474 assertions / exit 0
+Lint/style: PHP lint 8/8 exit 0; PHPCS 8/8 exit 0
+Live database touched: NO (read-only SELECT to dump the 69 brand-bearing keys)
+Remaining work, specified: 20 Class-A contracts + 22 call-site edits; a JS composition helper; a decision on the two-placeholder string
+Gate budget change: composer.json config.process-timeout raised to 1800. The 253-test gate measured 457-607 s here once the src/ edits invalidated the PHPStan cache, and CI always pays that cold-cache cost; Composer's 300 s default killed a PASSING suite and produced a red indistinguishable from a real failure. Asserted by BrandingCiContractTest. The per-script "@putenv COMPOSER_PROCESS_TIMEOUT" form was tried first and does NOT work - Composer reads the timeout at startup, before script steps run.
+Next incomplete PRE-* task: S2-P1-26 Class A, then the variant-selection half of S2-P1-24
+```
 
 ### S2-P1-25 — Brand manifest release gate was RED (4 files) — ✅ **FIXED, commit `45e9eb4f3`**
 

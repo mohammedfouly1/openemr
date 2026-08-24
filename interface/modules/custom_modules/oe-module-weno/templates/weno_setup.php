@@ -282,7 +282,7 @@ $vendors = $boot->getVendorGlobals();
                         <div class="col-12 m-0 m-0 form-group">
                             <button type="button" class="btn btn-sm btn-outline-danger btn-refresh float-left" id="app_refresh_top" onclick="top.location.reload()"
                                 title="<?php echo xla("Same as a browser refresh. Click to implement any new menus and Configuration items."); ?>">
-                                <?php echo xlt("Restart OpenEMR"); ?>
+                                <?php echo text(xlp('Restart %s')); ?>
                             </button>
                             <button type="submit" id="form_save" name="form_save" class="btn btn-success btn-sm btn-save float-right" value="Save">
                                 <?php echo xlt("Validate Primary Admin"); ?>

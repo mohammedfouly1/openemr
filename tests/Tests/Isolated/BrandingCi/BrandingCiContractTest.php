@@ -58,6 +58,14 @@ final class BrandingCiContractTest extends TestCase
         );
 
         self::assertStringNotContainsString('|| true', implode("\n", $gate));
+
+        // Composer kills a child process after 300 seconds by default. This gate runs a 253-test
+        // suite including PHPStan RuleTestCase analysis, which CI always pays with a cold cache;
+        // measured here at 457-607 s once `src/` edits invalidated that cache. A passing suite
+        // killed by the default reads exactly like a failing gate, and a gate that can go red
+        // with nothing wrong is a gate people learn to ignore. This is a ceiling, not a removal:
+        // a genuinely hung process still dies.
+        self::assertSame(1800, $composer['config']['process-timeout'] ?? null);
     }
 
     public function testWorkflowRunsCanonicalGateWithoutSecretsOrFailureMasking(): void

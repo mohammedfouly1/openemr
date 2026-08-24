@@ -96,12 +96,46 @@ if (!(function_exists('xl'))) {
     }
 }
 
+/**
+ * Translate a phrase that carries the product name, with the name composed in afterwards.
+ *
+ * The problem this solves: a message such as "OpenEMR requires Javascript to perform user
+ * authentication." bakes the product name into the translatable key. Every locale's translation
+ * then carries it too, so the name cannot be changed without either editing every translation or
+ * orphaning the key. Writing `xlp('%s requires Javascript to perform user authentication.')`
+ * instead keeps one translatable unit per locale while the name stays configuration.
+ *
+ * It also reaches a class of leak that catalogue overrides cannot. Many of these literals have no
+ * `lang_constants` row at all, so there is nothing for a translation override to override; the
+ * only ways to fix them are a source edit or this composition, and this composition is the one
+ * that also keeps working after the next rename.
+ *
+ * Returns the composed string **unescaped**, exactly like `xl()`, so the caller applies the
+ * escaper its context needs (`text()`, `attr()`, …). That mirrors the `xlp` Twig filter and the
+ * compose-then-escape-once rule `sql_upgrade.php` follows.
+ *
+ * `ProductContextTranslation` accepts only `%s`, `%1$s` and a literal `%%`, so a catalogue entry
+ * can never turn into an arbitrary format string, and a translation that has lost its placeholder
+ * raises rather than silently dropping the product name.
+ *
+ * @param string $pattern translatable text containing exactly one product-name placeholder
+ * @return string the translated pattern with the configured product name composed in
+ */
+function xlp($pattern)
+{
+    return \OpenEMR\Common\Translation\ProductContextTranslation::compose(
+        xl($pattern),
+        \OpenEMR\Core\OEGlobalsBag::getInstance()->getString('openemr_name'),
+    );
+}
+
 // ----------- xl() function wrappers ------------------------------
 //
 // Use above xl() function the majority of time for translations. The
 //  below wrappers are only for specific situations in order to support
 //  granular control of translations in certain parts of OpenEMR.
 //  Wrappers:
+//    xlp()
 //    xl_list_label()
 //    xl_layout_label()
 //    xl_gacl_group()

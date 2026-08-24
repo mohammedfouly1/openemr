@@ -202,6 +202,7 @@
         }
     },
     "config": {
+        "process-timeout": 1800,
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": false,
             "ergebnis/composer-normalize": true,

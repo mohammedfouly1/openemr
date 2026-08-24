@@ -487,7 +487,7 @@ $twig = (new TwigContainer(null, OEGlobalsBag::getInstance()->getKernel()))->get
             <?php if (OEGlobalsBag::getInstance()->getBoolean('display_main_menu_logo')) {
                 $bag = OEGlobalsBag::getInstance();
                 $logoLinkDefault = 'https://www.open-emr.org/';
-                $logoTitleDefault = xl('OpenEMR Website');
+                $logoTitleDefault = xlp('%s Website');
                 $logoLink = trim($bag->getString('main_menu_logo_link', $logoLinkDefault));
                 $logoTitle = trim($bag->getString('main_menu_logo_title', $logoTitleDefault));
                 $logoImg = '<img src="' . attr($menuLogo) . '" class="d-inline-block align-middle" height="16" alt="' . xla('Main Menu Logo') . '">';

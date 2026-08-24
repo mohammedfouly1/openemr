@@ -115,7 +115,7 @@ if (!empty($_REQUEST['service_auth'] ?? null)) {
             'action' => $globalsBag->getString('web_root') . '/portal/index.php',
             'service_auth' => text($_GET['service_auth']),
             'csrf_token' => CsrfUtils::collectCsrfToken($session, 'autologin'),
-            'pagetitle' => xl("OpenEMR Patient Portal"),
+            'pagetitle' => xlp('%s Patient Portal'),
             'images_static_relative' => $globalsBag->get('images_static_relative') ?? '',
             'pin_required' => $pin_required,
         ]);

@@ -13,6 +13,7 @@ namespace OpenEMR\Tests\Isolated\BrandingCi;
 
 use OpenEMR\Common\Translation\TranslationCatalogueContractSet;
 use OpenEMR\Common\Translation\TranslationDerivation;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
@@ -57,8 +58,7 @@ final class ProductNameCompositionContractTest extends TestCase
     {
         $offenders = [];
 
-        foreach ($this->templateFiles() as $file) {
-            $contents = $this->read($file);
+        foreach ($this->templates() as $file => $contents) {
             if (preg_match(self::JUXTAPOSITION, $contents) === 1) {
                 $offenders[] = substr($file, strlen($this->root()) + 1);
             }
@@ -101,9 +101,9 @@ final class ProductNameCompositionContractTest extends TestCase
      */
     public function testTheCompositionFilterIsNeverEmittedUnescaped(): void
     {
-        foreach ($this->templateFiles() as $file) {
+        foreach ($this->templates() as $file => $contents) {
             $matches = [];
-            preg_match_all('~\|xlp(\|[a-z_]+)?~', $this->read($file), $matches);
+            preg_match_all('~\|xlp(\|[a-z_]+)?~', $contents, $matches);
 
             foreach ($matches[1] as $following) {
                 self::assertContains(
@@ -165,25 +165,158 @@ final class ProductNameCompositionContractTest extends TestCase
         }
     }
 
+    // ------------------------------------------------- S2-P1-26: the PHP-side leak surface
+
     /**
-     * @return list<string>
+     * The PHP composition helper exists and delegates to the same parser as everything else.
      */
-    private function templateFiles(): array
+    public function testThePhpCompositionHelperUsesTheSharedParser(): void
     {
-        $found = [];
+        $source = $this->read($this->root() . '/library/translation.inc.php');
+
+        self::assertStringContainsString('function xlp(', $source);
+        self::assertStringContainsString('ProductContextTranslation::compose', $source);
+        self::assertStringContainsString("getString('openemr_name')", $source);
+    }
+
+    /**
+     * The converted call sites, each with the literal that must no longer appear there.
+     *
+     * These are all **class B** in the S2-P1-26 re-derivation: the literal had no `lang_constants`
+     * row at all, so no translation override could ever have reached it and changing the key
+     * orphans nothing. That is why they need no carry-forward contract, unlike the class-A set.
+     *
+     * @return array<string, list<string>>
+     *
+     * @codeCoverageIgnore Data providers run before coverage instrumentation starts.
+     */
+    public static function convertedPhpSiteProvider(): array
+    {
+        return [
+            'globals: theme + api + hostname labels' => ['library/globals.inc.php', [
+                'OpenEMR Auto Select Dark/Light Themed Version',
+                'OpenEMR Light Theme Version Always',
+                'OpenEMR Dark Theme Version Always',
+                'this OpenEMR instance',
+                'default (OpenEMR Website)',
+            ]],
+            'portal title' => ['portal/index.php', ['OpenEMR Patient Portal']],
+            'main menu website link' => ['interface/main/tabs/main.php', ["xl('OpenEMR Website')"]],
+            'auth block notifications' => ['src/Common/Auth/AuthUtils.php', [
+                'For OpenEMR Admin',
+            ]],
+            'oauth scope descriptions' => [
+                'src/Common/Auth/OpenIDConnect/Repositories/ScopeRepository.php',
+                ['the OpenEMR standard api', 'the OpenEMR FHIR api', 'the OpenEMR apis from inside'],
+            ],
+            'oauth scope list entity' => [
+                'src/Common/Auth/OpenIDConnect/Entities/ServerScopeListEntity.php',
+                ['the OpenEMR standard api', 'the OpenEMR FHIR api', 'the OpenEMR apis from inside'],
+            ],
+        ];
+    }
+
+    /**
+     * @param list<string> $retiredLiterals
+     */
+    #[DataProvider('convertedPhpSiteProvider')]
+    public function testConvertedPhpSitesNoLongerBakeTheProductNameIn(
+        string $relativePath,
+        array $retiredLiterals,
+    ): void {
+        $source = $this->read($this->root() . '/' . $relativePath);
+
+        self::assertStringContainsString('xlp(', $source, $relativePath . ' should compose via xlp().');
+
+        foreach ($retiredLiterals as $literal) {
+            self::assertStringNotContainsString(
+                $literal,
+                $source,
+                $relativePath . ' still bakes "' . $literal . '" into a translatable key.',
+            );
+        }
+    }
+
+    /**
+     * The other half of the classification, and the half that is easy to get wrong later.
+     *
+     * These strings name the **OpenEMR Foundation**, the upstream community, or ONC certification
+     * reporting. They are not this product's identity, and neutralising them would make the
+     * software assert something untrue — that a differently-named foundation should receive a
+     * certification report, or that this fork holds an ONC certification it does not. They stay
+     * exactly as upstream wrote them, and this test exists so a later sweep cannot quietly
+     * "finish the job" by renaming them.
+     */
+    public function testUpstreamFoundationAndCertificationStringsArePreservedVerbatim(): void
+    {
+        $preserved = [
+            'interface/reports/rwt_2026_report.php' => [
+                'OpenEMR Foundation',
+                'ONC certification',
+            ],
+            'templates/product_registration/product_registration_modal.html.twig' => [
+                'OpenEMR Foundation',
+            ],
+            'interface/smart/register-app.php' => [
+                'OpenEMR community form',
+            ],
+        ];
+
+        foreach ($preserved as $relativePath => $literals) {
+            $source = $this->read($this->root() . '/' . $relativePath);
+            foreach ($literals as $literal) {
+                self::assertStringContainsString(
+                    $literal,
+                    $source,
+                    $relativePath . ' must keep "' . $literal . '" verbatim: it names the upstream '
+                    . 'foundation or a certification programme, not this product.',
+                );
+            }
+        }
+    }
+
+    /**
+     * Every template, read once for the whole class.
+     *
+     * Walking and reading `templates/` costs real time on a network-backed filesystem, and three
+     * tests here need the same corpus. Reading it per test made this class alone take 108 seconds
+     * and pushed the canonical gate past Composer's 300-second process timeout — a green suite
+     * that cannot finish is not a gate.
+     *
+     * @var array<string, string>|null path => contents
+     */
+    private static ?array $templateCorpus = null;
+
+    /**
+     * @return array<string, string>
+     */
+    private function templates(): array
+    {
+        if (self::$templateCorpus !== null) {
+            return self::$templateCorpus;
+        }
+
+        $corpus = [];
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($this->root() . '/templates', \FilesystemIterator::SKIP_DOTS),
         );
 
         foreach ($iterator as $entry) {
-            if ($entry instanceof \SplFileInfo && $entry->isFile() && str_ends_with($entry->getFilename(), '.twig')) {
-                $found[] = $entry->getPathname();
+            if (!$entry instanceof \SplFileInfo || !$entry->isFile()) {
+                continue;
             }
+            if (!str_ends_with($entry->getFilename(), '.twig')) {
+                continue;
+            }
+
+            $contents = file_get_contents($entry->getPathname());
+            self::assertIsString($contents);
+            $corpus[$entry->getPathname()] = str_replace("\r\n", "\n", $contents);
         }
 
-        sort($found);
+        ksort($corpus);
 
-        return $found;
+        return self::$templateCorpus = $corpus;
     }
 
     private function read(string $path): string

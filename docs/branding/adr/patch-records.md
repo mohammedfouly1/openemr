@@ -1916,3 +1916,54 @@ PR-39 adds **8** newly edited non-module production/delivery files (`TwigExtensi
 previously uncounted templates, and the three Zend layouts); `sql_upgrade.php` and `brand-strings.json`
 were already counted. The authoritative inventory is therefore **59 distinct files**, covered by
 PR-01…PR-39.
+
+---
+
+# PR-40 — reach the uncatalogued brand-leak class (2026-08-24)
+
+**Files:** `library/translation.inc.php` (new `xlp()` helper); `library/globals.inc.php`;
+`portal/index.php`; `interface/main/tabs/main.php`; `src/Common/Auth/AuthUtils.php`;
+`src/Common/Auth/OpenIDConnect/Repositories/ScopeRepository.php`;
+`src/Common/Auth/OpenIDConnect/Entities/ServerScopeListEntity.php`;
+`interface/modules/custom_modules/oe-module-weno/templates/weno_setup.php`.
+**Rebase risk:** MEDIUM — `globals.inc.php` is the highest-churn file in the fork (6 upstream commits per
+Correction J) and the OAuth scope files track upstream closely.
+
+Finding **S2-P1-26** identified a class of brand leak that `brand-strings.json` structurally cannot fix:
+literals passed to `xl()` that have **no `lang_constants` row at all**, so there is nothing for a
+translation override to override. Re-deriving the surface by exact quoted-literal extraction (rather than
+the substring matching the finding used) puts that class at **22 distinct literals across 25 call sites** —
+larger than the ~7 originally listed — against **20 literals / 22 sites** in the catalogued class.
+
+PR-40 closes the uncatalogued class. `xlp()` is the PHP twin of the `xlp` Twig filter added in PR-39:
+translate a pattern carrying one `%s`, compose `openemr_name` into it, return unescaped so the call site
+applies exactly one escaper. Because these literals have no catalogue row, changing the key orphans
+nothing — no carry-forward contract is needed, which is what makes this class safe to convert on its own.
+
+**What is deliberately preserved**, and now asserted by test: every string naming the **OpenEMR
+Foundation**, the upstream community, or ONC certification reporting. Neutralising those would make the
+software assert something untrue — that a differently-named foundation should receive a certification
+report, or that this fork holds a certification it does not. Two further sites are excluded for mechanical
+reasons: one is JavaScript-side `xl()` (needs a JS helper), and one carries two `OpenEMR` occurrences while
+`ProductContextTranslation` accepts exactly one placeholder by design.
+
+**Upstream-first path (Q1):** `xlp()` is generic i18n infrastructure — composing configuration into a
+translated pattern is not a branding concern — and is a reasonable upstream contribution alongside the
+Twig filter from PR-39.
+
+### Reconciliation after PR-40
+
+PR-40 adds **8** newly edited non-module production files. The authoritative inventory is therefore
+**67 distinct files**, covered by PR-01…PR-40.
+
+**One gate change came with it.** `composer.json` now sets `config.process-timeout` to 1800. Composer kills
+a child process after 300 seconds by default, and the gate — a 253-test suite including PHPStan
+RuleTestCase analysis, which CI always pays with a **cold** cache — measured 457–607 seconds here once the
+`src/` edits above invalidated that cache. The suite passed and Composer killed it anyway, producing a red
+indistinguishable from a real failure. A gate that can go red with nothing wrong is one people learn to
+ignore, so the budget is stated explicitly and asserted by `BrandingCiContractTest`.
+
+The per-script form (`@putenv COMPOSER_PROCESS_TIMEOUT=1800` as the first script line) was tried first and
+**does not work**: Composer reads the process timeout from config when it starts, before script steps run,
+so the gate still died at 300 seconds. Recorded because it is the obvious thing to reach for. The setting is
+a ceiling, not a removal — a genuinely hung process still dies — and raising it cannot mask a test failure.

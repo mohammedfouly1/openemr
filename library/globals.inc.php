@@ -459,7 +459,7 @@ $GLOBALS_METADATA = [
             xl('Main menu logo link title'),
             'text',
             '',
-            xl('Tooltip shown when hovering over the main menu logo. Leave blank to use the default (OpenEMR Website).'),
+            xlp('Tooltip shown when hovering over the main menu logo. Leave blank to use the default (%s Website).'),
         ],
 
         'online_support_link' => [
@@ -3257,7 +3257,7 @@ $GLOBALS_METADATA = [
             xl('Site Address Override (if needed for OAuth2, FHIR, CCDA, or Payment Processing)'),
             'text',
             '',
-            xl('The hostname for OAuth2, FHIR, CCDA, and Payment Processing, pointing back back to this OpenEMR instance. e.g. https://localhost:9300.')
+            xlp('The hostname for OAuth2, FHIR, CCDA, and Payment Processing, pointing back back to this %s instance. e.g. https://localhost:9300.')
         ],
 
         GlobalConnectorsEnum::REST_FHIR_API->value => [
@@ -3268,7 +3268,7 @@ $GLOBALS_METADATA = [
         ],
 
         GlobalConnectorsEnum::REST_SYSTEM_SCOPES_API->value => [
-            xl('Enable OpenEMR FHIR System Scopes (Turn on only if you know what you are doing)'),
+            xlp('Enable %s FHIR System Scopes (Turn on only if you know what you are doing)'),
             'bool',
             '0',
             xl('Enable OpenEMR FHIR System Scopes.')
@@ -4434,10 +4434,10 @@ $GLOBALS_METADATA = [
         'questionnaire_display_style' => [
             xl('Questionnaire Form Display Style'),
             [
-                '0' => xl('OpenEMR Auto Select Dark/Light Themed Version'),
+                '0' => xlp('%s Auto Select Dark/Light Themed Version'),
                 '1' => xl('LForms Project Maintained Light Version(Original)'),
-                '3' => xl('OpenEMR Light Theme Version Always'),
-                '4' => xl('OpenEMR Dark Theme Version Always'),
+                '3' => xlp('%s Light Theme Version Always'),
+                '4' => xlp('%s Dark Theme Version Always'),
             ],
             '0' ,                          // default = display at top of form
             xl('Choose OpenEMR auto select based on core theme styles(OpenEMR dark theme turns on Questionnaire dark, LForms project maintained light styles(Original) or default to always dark or light regardless of core themes.')
