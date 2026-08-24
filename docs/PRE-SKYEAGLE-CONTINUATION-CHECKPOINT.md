@@ -16,6 +16,7 @@
 | 4 | **HEAD literal removed from §1** — a checkpoint cannot hold its own commit hash, and every later commit would stale a pinned value; the remediation-commit table is now the durable record. **New finding S2-P1-26** added from Agent 2E addendum 3 (20 reachable unbranded keys; a leak class with no catalogue row that SET-TRANSLATION structurally cannot fix; `applicationTitle` already 7 call sites deep). P1 count 16 → 17 open. |
 | 5 | **Phase 1 continuation reconstruction complete (2026-08-24).** Re-derived branch `feat/thiqa-branding-foundation`, HEAD `26c32fcb3c027702d9b6fe167017487469a19e5d`, status `?? .claude/`, five registered worktrees, and the five commits after the scan baseline. MariaDB and Apache were both unavailable during the bounded probes. Toolchain paths/versions were inventoried without running tests or analysis. Active task is verification of already-landed commits: `45e9eb4f3`, then `aebcfdfc5` + `26c32fcb3`; no duplicate repair has been started. |
 | 6 | **Landed-work verification complete.** S2-P1-25 independently verified at 123/123, exit 0. S1-P0-01 verified all eight formerly unrecorded files are covered by PR-23…PR-28; the residual V-09 six-file scope was corrected to the authoritative 33-file inventory and reverified against current `upstream/master` (47 conflict records; only PR-14 inside the recorded set; none of the eight new files). Next: S1-P0-09 / PRE-16 runtime proof. |
+| 7 | **PRE-16 runtime proof executed and exactly restored.** A valid revision-1 overlay reached DB, generated CSS, live endpoint, page link, and browser custom properties, while `.btn-primary` remained on the static `--thiqa-*` value. Preflight DB values, CSS hashes/timestamps, verify state, page links, and browser styles all matched after restoration. PRE-16 is DONE — VERIFIED; S1-P0-09 remains confirmed and open for repair. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -147,7 +148,7 @@ implemented yet.
 | PRE-13 | Scan-2D Manifest/asset pipeline | Agent 2D | R | **DONE** | §15 SCAN2D |
 | PRE-14 | Scan-2E Translation runtime forensics | Agent 2E | R | **DONE** + addendum | §15 SCAN2E |
 | PRE-15 | Scan-2F Runtime surfaces | Agent 2F | R | **DONE** (two runs) | §15 SCAN2F |
-| PRE-16 | Scan-2G Materialisation / tenant safety | Agent 2G | R | **DONE** — runtime test DESIGNED, NOT EXECUTED | §15 SCAN2G |
+| PRE-16 | Scan-2G Materialisation / tenant safety | orchestrator continuation | R/W (reversible runtime proof) | **DONE — VERIFIED; LIVE STATE RESTORED** | §15 SCAN2G and §16 continuation evidence |
 | PRE-17 | Scan-2H Telemetry / network egress | Agent 2H | R | **DONE** | §15 SCAN2H |
 | PRE-18…24 | Scan-3A…3G adversarial red-team | fresh agents | R | **NOT STARTED** | Gated behind Scan-1 exit |
 | PRE-25 | Final reconciliation / certification | orchestrator | R | **NOT STARTED** | — |
@@ -922,7 +923,7 @@ Still needed, especially the deliberate **zero-match-filter experiment**: run
 what exit code it returns. If a zero-match filter exits 0, the documented local runbook command would
 silently pass after a rename — a critical finding.
 
-**PRE-16 / Scan-2G runtime proof — DESIGNED, NOT EXECUTED, Owner-authorised to proceed.**
+**PRE-16 / Scan-2G runtime proof — EXECUTED AND RESTORED (continuation Rev 7).**
 Pre-flight: capture `SELECT gl_name, gl_value FROM globals WHERE gl_name LIKE 'saas_branding_%'`, sha256 +
 timestamps of both files in `.../public/branding/default/`, and `verify --site=default` output.
 Payload (`tmp/tier2-test.json`, tenant-overridable keys only):
@@ -935,6 +936,25 @@ links still `#2c5f94`**, because no rule reads those properties. That non-change
 there is no console command to decrement; revision is forward-only, so raw SQL is the only path back),
 restore both CSS files from the pre-test backup, re-run `verify` and confirm it again reports
 `inconsistent / Revision 0 / never`, and diff the globals snapshot against pre-flight.
+
+**Continuation execution (2026-08-24): DONE — VERIFIED; exact state restored.**
+
+```yaml
+TASK/FINDING ID: PRE-16 / S1-P0-09 runtime proof
+Previous status: DESIGNED, NOT EXECUTED
+Current status: PRE-16 DONE — VERIFIED; S1-P0-09 CONFIRMED, REPAIR PENDING
+What changed: Temporary revision-1 tenant overlay only; all DB/file state restored after observation.
+Files changed persistently: none
+Commit hash: none (runtime experiment)
+Tests/commands executed: DB snapshot; CSS SHA256/timestamps; verify; materialise twice (one invalid negative control, one valid payload); HTTP endpoint/page inspection; real browser computed-style checks; full restoration comparisons
+Exact exit codes: preflight verify 1 (expected inherited inconsistency); invalid payload 2 (REJECTED — NOT PASS); valid payload 0; applied-state verify 0; restoration SQL/file copy 0; restored verify 1 (expected preflight state)
+Tests and assertions executed: 7 branding DB rows; 2 CSS files; 3 light + 3 dark token overrides; live endpoint; live page link; real .btn-primary consumer; browser custom properties before/applied/restored
+Runtime evidence: valid apply 2026-08-24T06:46:45.4660056Z–06:46:52.9530799Z (7.487 s); revision 1 healthy; endpoint delivered --interactive-primary-default:#0B376E; browser resolved it to #0B376E but .btn-primary stayed rgb(196,63,46) via --thiqa-interactive-primary-default:#c43f2e
+Independent verification: DB returned exactly to all preflight HEX values; light CSS SHA256 43015D055A6359698608B8FF99030C5D9E79CED2A4CDB16B1906C2C521EA78E8 and timestamp 2026-08-10T18:50:40.081Z; dark CSS SHA256 F096670815C7C76D7F9C47674970299B950984AEDC09EFBBC36A8110D480F4B4 and timestamp 2026-08-10T18:50:40.120Z; overlay links absent again; browser bare variable empty and button rgb(196,63,46).
+Rollback method: Completed by exact DB-value restoration plus byte-identical CSS backup restore; no repository rollback needed.
+Remaining risks: CLI emitted local session-file permission warnings; they did not alter command outcomes but must not be hidden. S1-P0-09 remains release-blocking until real consumers use the tenant variables and repaired browser styles change in light and dark modes.
+Next incomplete task: S1-P0-09 brand-neutral token consumer repair with automated regression tests.
+```
 
 **Also outstanding:** Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
