@@ -1533,6 +1533,33 @@ Attempting to verify this finding is what uncovered **RB-25** — the gate was n
 *failing*. See that finding for the script and the negative-control evidence.
 
 ### RB-22 — All four `Inter-*.woff2` files are byte-identical (F-08, **CLOSED 2026-08-16**)
+
+> **Re-tested and re-confirmed 2026-08-24 (PRE-SKYEAGLE finding S2-P1-20).** A scan re-observed the
+> four identical hashes and concluded that RB-22's `FIXED` was false — that `font-weight: 500/600/700`
+> must therefore all render the same and "the Latin surface has no real weight axis." **That conclusion
+> is wrong, and the closure below stands.** The observation was re-derived independently, and so was the
+> part the scan skipped: decoding the WOFF2 table directory of each shipped face found `fvar`, `gvar` and
+> `HVAR` in all four Inter files (21 tables) and **no** `fvar` in any IBM Plex Sans Arabic file (17
+> tables). Inter is one variable face; a variable face declared with a `font-weight: <min> <max>` range
+> renders every weight in that range. `interface/themes/thiqa/_typography.scss:22-26` declares exactly
+> one Inter `@font-face` at `font-weight: 400 700`, and all 8 compiled theme files reference
+> `Inter-Regular.woff2` once each with zero references to `-Medium`/`-SemiBold`/`-Bold`.
+>
+> **What the scan was right about, stated exactly:** the three redundant binaries are still shipped —
+> present under `brand/typography/fonts/`, installed into `public/assets/fonts/thiqa/`, 48,256 bytes
+> each, and referenced by nothing. Browsers never fetch them (no stylesheet names them), so the cost is
+> ~145 KB of deployed disk, not bandwidth. They are **not** deleted here: they carry approved-asset IDs
+> inside the 107-entry brand inventory, so removing them changes `SHA256SUMS`, `asset-manifest.csv`,
+> `asset-manifest.json`, the `THIQA-###` ID set and every document quoting 107. That is an
+> asset-governance decision, not cleanup, and it is recorded as open rather than taken unilaterally.
+>
+> **The real gap the scan exposed, now closed:** nothing verified the conditional at all. `SHA256SUMS`
+> checks each file against its own recorded hash, so it passes four identical files under four names —
+> which for a *static* family would be precisely the defect S2-P1-20 described, shipped silently.
+> `BrandingFontFaceDistinctnessContractTest` (inside `composer branding-ci`) now requires a family that
+> backs several declared weights with one file to prove that file carries `fvar`, requires a static
+> family to have byte-distinct faces, keeps a positive control so the detector cannot degrade to
+> "everything is variable", and pins the three duplicates as unreferenced.
 Confirmed independently: `Inter-Bold`, `Inter-Medium`, `Inter-Regular`, `Inter-SemiBold` all hash to
 `f11d729bb0a4d8350d2ea3d0fc062cf6ef2d5298`. One variable font, four filenames, four separate
 `@font-face` rules with single-value `font-weight` descriptors. Rendering is correct (a variable font

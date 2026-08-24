@@ -458,6 +458,25 @@ tested: 54/54 tests, 80 assertions, OK." This is the concrete backing for the pl
 diagram note ("enforced by a PHPStan rule, §4.3 WP-2.7") — four separate rules, not one, each targeting
 a distinct seam.
 
+### 7.5a All four rules are scoped by a constant, and that constant is now cross-checked
+
+Every one of the four decides whether it applies by comparing PHPStan's `Scope::getNamespace()` against a
+private `MODULE_NAMESPACE` constant. That makes the rules' reach a piece of **duplicated configuration**:
+rename the namespace the module ships under and miss the constants, and all four keep loading, keep
+running, match nothing, and report `0 errors` — indistinguishable from compliance.
+
+Finding **S1-P1-04** recorded that nothing checked the two against each other, and that
+`ThiqaBrandingRuleRegistrationTest` cannot: its own docblock says it proves wiring, not matching. The
+fixtures could not close it either, because they declare the same literal, so rule, fixture and
+expectation agreed with each other by construction.
+
+`ThiqaBrandingGuardrailScopeTest` closes it. It locates the module by a brand-neutral anchor
+(`src/Config/BrandingGlobalKey.php`, whose `saas_branding_` prefix locked decision Q58 forbids renaming),
+derives the production namespace from that module's own PSR-4 autoload prefix, checks all 92 shipped
+source files declare it, and asserts each rule constant equals it. A rename in either direction — module
+without constants, or constants without module — fails deterministically and names the rules that would
+have gone inert. It runs inside `composer branding-ci`.
+
 ### 7.6 Tenant-supplied logo binaries: the last gate before same-origin bytes
 
 The plan's threat table names this control abstractly ("content-type + magic-byte + dimension

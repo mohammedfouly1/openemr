@@ -1733,9 +1733,87 @@ nothing gated on this exit code; it is gated now.
 with no upstream OpenEMR equivalent; there is nothing to contribute upstream and nothing upstream to
 inherit from.
 
-### Reconciliation after PR-35
+### Reconciliation after PR-35 (see also PR-36 below)
 
 `composer.json` was already counted by PR-33. The five module source files are new patch-inventory entries
 in the module tree, which the authoritative production/delivery inventory has always counted separately
 from module-owned code, so PR-35 adds **0** distinct non-module production files. The authoritative
 inventory remains **51 distinct files**, covered by PR-01…PR-35.
+
+---
+
+# PR-36 — guardrail scope cross-check (2026-08-24)
+
+**Files:** none in the production inventory. The change is one new isolated test,
+`tests/Tests/Isolated/PHPStan/ThiqaBranding/ThiqaBrandingGuardrailScopeTest.php`, plus the §7.5a
+documentation section. **Rebase risk:** NONE — no production or delivery file is touched.
+
+Finding **S1-P1-04**: all four `ForbiddenBranding*Rule` guardrails scope themselves by comparing
+`Scope::getNamespace()` against a private `MODULE_NAMESPACE` constant, and nothing compared that constant
+to the namespace the module actually ships under. Rename production and miss the constants and every rule
+loads, runs, matches nothing, and reports `0 errors`. The existing suites could not catch it: the
+registration test proves wiring rather than matching (its own docblock says so), and the violating
+fixtures declare the same literal, so rule, fixture and expectation were consistent with each other by
+construction rather than with production.
+
+PR-36 derives the production namespace independently and asserts the constants follow it. The module is
+located by a brand-neutral anchor — the unique custom module carrying `src/Config/BrandingGlobalKey.php`,
+whose `saas_branding_` prefix locked decision Q58 forbids renaming — so a future SkyEagle migration that
+renames the namespace and the directory still resolves to the right module. The namespace itself comes
+from that module's PSR-4 autoload prefix, which a real rename cannot skip because it is what makes the
+classes loadable at all, and is cross-checked against the `namespace` declaration of every shipped source
+file. The suite also pins the `Materialisation` exemption to a directory that exists, requires the
+in-scope fixtures to track production, and requires the Twig rule's `addPath()` tip to name the real
+module directory.
+
+**Why this is a test and not a code change.** The alternative — deriving `MODULE_NAMESPACE` at analysis
+time from composer.json — would put file I/O and JSON parsing inside a PHPStan rule that runs on every
+analysed node, and would make the guardrails fail open if the manifest were unreadable. A constant that is
+verified by a deterministic test keeps the rules trivial and fails closed, in CI, before a rename can
+land.
+
+**Upstream-first path (Q1):** none applies. Both the rules and the module are fork-specific.
+
+### Reconciliation after PR-36
+
+PR-36 adds **0** distinct production files. The authoritative inventory remains **51 distinct files**,
+covered by PR-01…PR-36.
+
+---
+
+# PR-37 — font-face distinctness contract (2026-08-24)
+
+**Files:** none in the production inventory. One new isolated test,
+`tests/Tests/Isolated/BrandingCi/BrandingFontFaceDistinctnessContractTest.php`, plus a dated
+re-verification note on RB-22. **Rebase risk:** NONE — no production, delivery or asset file is touched,
+and no font binary is added, removed or modified.
+
+Finding **S2-P1-20** re-observed that the four `Inter-*.woff2` files are byte-identical and concluded that
+RB-22's `FIXED` was false. The observation reproduced exactly; the conclusion did not survive testing.
+Decoding each shipped face's table directory found `fvar`/`gvar`/`HVAR` in all four Inter files and none in
+any IBM Plex Sans Arabic file: Inter is one **variable** face, and a variable face declared with a
+`font-weight: <min> <max>` range renders every weight in that range. The shipped artefacts already do
+exactly that — one Inter `@font-face` at `400 700`, referenced once per theme file — so RB-22 stands and
+the claim is withdrawn as Correction K.
+
+What the finding was right about is that **nothing verified the conditional**. `SHA256SUMS` checks each
+file against its own recorded hash, so four identical files under four names pass — and for a *static*
+family that is the real rendering defect the finding described. PR-37 adds the missing contract: a family
+backing several declared weights with one file must prove that file carries `fvar`; a static family must
+have byte-distinct faces; a positive control keeps the detector from degrading into "everything is
+variable"; and the three unreferenced Inter duplicates are pinned so re-pointing a weight at one fails.
+
+**What PR-37 deliberately does not do.** The three redundant binaries are still shipped and installed
+(48,256 bytes each, referenced by no stylesheet). Retiring them would change `SHA256SUMS`,
+`asset-manifest.csv`, `asset-manifest.json`, the `THIQA-###` ID set and every document quoting the
+107-asset inventory. That is an asset-governance decision for the Owner, not a cleanup to fold into a
+regression gate, so it is recorded as open.
+
+**Upstream-first path (Q1):** the variable-vs-static conditional is a generic typography-pipeline check and
+would be reusable upstream if OpenEMR ever ships a font contract of its own. Nothing upstream exists to
+inherit from today.
+
+### Reconciliation after PR-37
+
+PR-37 adds **0** distinct production files. The authoritative inventory remains **51 distinct files**,
+covered by PR-01…PR-37.
