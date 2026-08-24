@@ -1568,7 +1568,7 @@ enforcing locked decision `Q77`, and it was carrying that duty with no `Q1` reco
 | `RebrandingPlan.md` §5.4 corrected table | "7 files" | **Stale** — mandatory WS-C subset only |
 | This document, pre-audit | 17 | **Stale** — predated PR-14…PR-22 |
 | This document, PR-01…PR-22 | 25 files | Correct for that set |
-| **This document, current (PR-01…PR-30)** | **33 files** | **Current** |
+| **This document, current (PR-01…PR-28)** | **33 files** | **Current** |
 
 **V-09 must now be re-run against all 33.** Live `git merge-tree HEAD <upstream>` on 2026-08-24 reported
 **47 conflicting paths**; of the recorded set only `src/Services/EncounterService.php` (PR-14, a non-branding
