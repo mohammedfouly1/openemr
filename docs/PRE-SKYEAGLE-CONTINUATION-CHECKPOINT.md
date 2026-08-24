@@ -21,6 +21,7 @@
 | 9 | **S1-P0-13 + S2-P0-21 implementation begun after bounded reconciliation.** Selected design: `%s Database Upgrade` as the identity-neutral literal key; product name supplied from `openemr_name` before one context-specific escape; a checked-in JSON contract generates a separate SQL supplement loaded after either installer translation source; branch-cut regeneration reasserts that supplement after replacing `currentLanguage_utf8.sql`; upgrades use a transaction-journalled migrator that resolves exact names once, asserts uniqueness, then mutates only stable IDs. Live DB inspection was read-only: both legacy keys still have the same 28-language set; total counts 13,235 constants / 237,542 definitions; 0 orphans; 0 duplicate pairs. Status remains **IN PROGRESS** pending implementation and the full matrix. |
 | 10 | **S1-P0-13 + S2-P0-21 FIXED — VERIFIED.** Commits `948e4a6d1`, `02671f0c9`, and `2baf7322a` implement the neutral renderer, authoritative 28-language contract, generated installer supplement, release-prep regeneration, journal schema, automatic upgrade migration, deterministic rollback command, and full regression matrix. Final targeted PHPUnit: 41 tests / 134 assertions / exit 0. PHPCS: 18 files / exit 0. The final supplement was applied twice to a disposable MariaDB database: 1 target constant, 28 definitions, 3 RTL definitions, 0 orphans, 0 duplicate pairs; the exact database was dropped and confirmed absent. The live `openemr` DB was never mutated. PR-29…PR-32 expand the patch inventory from 33 to 49 distinct production files. Next incomplete task: S1-P1-03 CI wiring. |
 | 11 | **PRE-09 / S1-P1-03 FIXED — VERIFIED; PRE-11 completed.** `597276b09d507cc0e61a2c8784bd49c670c1d020` adds the canonical `composer branding-ci` gate to the existing `Isolated Tests` workflow; `ff6e35b4f4ddca0b16eb7a52c4489e7390664157` adds the runbook and PR-33 governance record. Final aggregate: 12/12 generated artefacts, 123/123 manifest entries, 91 tests / 264 assertions, exit 0. Reversible negative controls proved generated drift exit 3, manifest mismatch exit 1, 12 guardrail violations across all four required identifiers exit 1, and zero tests exit 1 after the repair (versus exit 0 before). All temporary mutations were exactly restored. Workflow YAML, Composer config, PHP syntax and PHPCS passed locally. GitHub-hosted execution: NO. Next incomplete task: S1-P1-15 backup retention. |
+| 12 | **PRE-09 / S1-P1-15 FIXED — VERIFIED.** `77d2b3e12914cd172d72d47b6fe4543750b70735` introduces the neutral `managed-db-backup-v1-<label>-<timestamp>.sql` contract, strict verified legacy recognition, deterministic mixed-family retention and defensive deletion. `8eb4ea7f8dbaf92f023f2a745a17f767f6a15f07` adds the full temporary-directory matrix to `composer branding-ci`; `64d2ba23c46336ee567cfcac944f08668be466a5` documents migration/rollback and PR-34. Final targeted result: 56 tests / 1,422 assertions / exit 0, no skips. Canonical gate: 12/12 artefacts, 123/123 manifest, 147 tests / 1,687 assertions / exit 0. Negative control proved a neutral-prefix-only selector ignored three legacy files while the repaired selector retained one ordered archive and left unrelated SQL untouched. All fixture directories removed. Real backup directory touched: NO. Live database touched: NO. Next incomplete task: S1-P1-17 disabled-token contract decision. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -42,13 +43,14 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          ff6e35b4f4ddca0b16eb7a52c4489e7390664157 (before Rev 11 checkpoint commit)
-CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 11 checkpoint edit;
+CURRENT OBSERVED HEAD:          64d2ba23c46336ee567cfcac944f08668be466a5 (before Rev 12 checkpoint commit)
+CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 12 checkpoint edit;
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
 SKYEAGLE MIGRATION STARTED:     NO
 SKYEAGLE BRANDING CHANGES:      NONE
-REPOSITORY WRITES THIS SESSION: S1-P1-03 deterministic CI gate, tests, runbook, PR-33 patch record;
+REPOSITORY WRITES THIS SESSION: S1-P1-15 neutral managed-backup retention, isolated tests, CI wiring,
+                                runbook, canonical contract, PR-34 patch record;
                                 this checkpoint
 CURRENT PROGRAMME:              PRE-SKYEAGLE three-scan audit/remediation/certification
 FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
@@ -69,6 +71,9 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `2baf7322a` | PRE-09 / S1-P0-13 + S2-P0-21 | Added the transaction-journalled stable-ID migration/rollback engine, operator command, fresh/upgrade journal schema, automatic upgrade invocation, and migration/schema matrix tests. |
 | `597276b09` | PRE-09 / S1-P1-03 + PRE-11 | Added the canonical fail-closed `composer branding-ci` aggregate, wired it into the existing `Isolated Tests` workflow's PHP 8.2 leg, added CI-contract regression tests, and aligned the stale database-upgrade core-string assertion with the already-verified neutral title contract. |
 | `ff6e35b4f` | PRE-09 / S1-P1-03 | Added the canonical local/CI runbook and PR-33 patch record; the authoritative production/delivery patch inventory is now 51 files. |
+| `77d2b3e12` | PRE-09 / S1-P1-15 | Added neutral versioned backup names, verified legacy compatibility, parsed-timestamp mixed retention, fail-closed scan/selection/deletion logic, and explicit command reporting. |
+| `8eb4ea7f8` | PRE-09 / S1-P1-15 | Added the destructive-safety/migration matrix using only validated unique temporary directories and wired it into the canonical branding CI gate. |
+| `64d2ba23c` | PRE-09 / S1-P1-15 | Added the canonical backup naming/retention/migration/rollback contract, operator runbook section and PR-34 governance record. |
 
 Add a row for every further remediation commit.
 
@@ -88,8 +93,8 @@ recent PRE-SKYEAGLE commit were re-derived with bounded read-only commands. Tool
 under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
-Those landed-work verification steps and the next four PRE-09 repairs are now complete; see revisions 6…11.
-**Exact next incomplete item:** PRE-09 / S1-P1-15 brand-neutral migration-safe backup retention.
+Those landed-work verification steps and the next five PRE-09 repairs are now complete; see revisions 6…12.
+**Exact next incomplete item:** PRE-09 / S1-P1-17 disabled-token validation contract decision.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -152,7 +157,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 6 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). **Remaining:** S1-P1-15 brand-neutral backup retention · S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 7 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). **Remaining:** S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -186,10 +191,11 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 16 open · P2 4 open
-                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-03; S2-P0-21; S2-P1-25.
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 15 open · P2 4 open
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-03; S1-P1-15; S2-P0-21; S2-P1-25.
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
-                    P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix).
+                    P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix)
+                    -> 15 (S1-P1-15 fix).
                     Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
                     repairing it. It stays open until the guardrail constants gain a real
                     cross-check against the production namespace.
@@ -405,8 +411,8 @@ Repair commits: `948e4a6d145e5d76ce8f8aa7434fc289ea4d73b5`,
 `ba0078c621f183b07049e0daa03b73acfa724271`. PR-29…PR-32 record the 16 new production files and supersede
 the 33-file patch inventory with 49; PR-33 later expands the current inventory to 51. Remaining risk: none
 specific to these two P0 acceptance criteria; broader PRE-SKYEAGLE certification remains blocked by the
-recorded P1/P2 work, Scan 3 and PRE-25. Exact next incomplete task: **PRE-09 / S1-P1-15 — implement
-brand-neutral migration-safe backup retention**. No SkyEagle rebranding began.
+recorded P1/P2 work, Scan 3 and PRE-25. Exact next incomplete task: **PRE-09 / S1-P1-17 — decide and
+enforce the disabled-token validation contract**. No SkyEagle rebranding began.
 
 ---
 
@@ -493,6 +499,52 @@ in a shippable module); `:95` writes `thiqa-<label>-<Ymd-His>.sql`; `:153` prune
 never pruned, and `glob()` returning fewer files than `--keep` is indistinguishable from a healthy young
 archive. **No error.** Owner directive: build brand-neutral migration-safe retention now. Test matrix:
 old prefix only / new prefix only / mixed archive / keep=N / zero matches / unexpected files / rollback.
+
+**Status: FIXED — VERIFIED (continuation Rev 12).** New verified dumps use the identity-neutral, versioned
+format `managed-db-backup-v1-<label>-<YYYYMMDD-HHMMSS>.sql`. The closed parser also recognizes exact legacy
+`thiqa-<label>-<timestamp>.sql` names indefinitely for compatibility, but only when the dump is a direct regular
+non-link child of the resolved target and has the exact valid command-written `.sha256` marker. Existing archives
+are not renamed, copied or automatically migrated. Mixed families form one retention set ordered by the parsed
+filename timestamp; descending basename is the deterministic equal-timestamp tie-breaker, so filesystem mtime and
+scan order are irrelevant.
+
+Labels are 1–63 ASCII letters/digits/underscores/hyphens, beginning alphanumeric; invalid, empty, punctuated,
+absolute or traversal-shaped values fail instead of being sanitized. `--keep` accepts positive whole numbers
+only: zero, negative, decimal, overflow and non-numeric inputs fail. `keep=1`, equal/greater counts, zero managed
+files and one managed file are explicit and tested. Missing/non-directory/unreadable targets and scan failure are
+errors, never healthy zero-match results. A validated missing target may be created by the backup command.
+
+Deletion re-resolves the target and candidate, rejects links/reparse probes, requires a direct regular file,
+reparses the strict name and revalidates the exact sidecar immediately before deleting only that dump and sidecar.
+Unrelated SQL, unexpected extensions, partial/unverified dumps, malformed dates, case variants and matching-looking
+directories remain untouched. Any scan or deletion failure exits nonzero and is not reported as success.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S1-P1-15
+Current status: FIXED — VERIFIED
+Implementation commit: 77d2b3e12914cd172d72d47b6fe4543750b70735
+Test/CI commit: 8eb4ea7f8dbaf92f023f2a745a17f767f6a15f07
+Documentation/PR-34 commit: 64d2ba23c46336ee567cfcac944f08668be466a5
+Files changed: BackupCommand.php; ManagedBackupArtifact.php; ManagedBackupInventory.php; ManagedBackupRetention.php; BackupRetentionTest.php; BrandingCiContractTest.php; composer.json; docs/branding/backup-retention.md; docs/branding/runbook.md; docs/branding/adr/patch-records.md; this checkpoint
+Default-path decision: Preserve C:/openemr-stack/backups as a deployment-compatibility default so existing schedules do not silently change destination; require explicit --target on other hosts; retention logic has no path coupling
+Migration: passive dual recognition; old files stay byte/name-identical; no duplicate copy and no automatic rename
+Rollback: neutral dumps remain ordinary recoverable SQL+hash artifacts, but an older command ignores them for retention; planned rollback requires capacity monitoring and must not rename neutral files to legacy names; re-deploying the repair resumes the union
+Targeted final: 56 tests / 1,422 assertions / 0 failures / 0 errors / 0 skipped; true exit 0; 2026-08-24T08:52:26.6120828Z–08:52:32.6311081Z; 6.019 s
+Named negative control: 1 test / 108 assertions / exit 0; 2026-08-24T08:53:01.6605465Z–08:53:07.6779985Z; 6.017 s; a neutral-prefix-only selector saw 2 neutral and missed 3 legacy files, while repaired discovery saw all 5, selected the 3 correct oldest for keep=2, and preserved unrelated.sql
+Canonical branding-ci: 12/12 generated artefacts; 123/123 manifest; 147 tests / 1,687 assertions; true exit 0; 2026-08-24T08:53:13.3397400Z–08:54:04.1112666Z; 50.772 s
+CI contract: 3 tests / 31 assertions / exit 0; Composer validate --strict exit 0
+PHP syntax: 6/6 changed PHP files exit 0; PHPCS: 6/6 files exit 0 (1.27 s)
+Not-passes retained: first matrix run executed 53 tests / 1,323 assertions and exited 1 on a Windows 8.3-vs-long-path assertion; corrected and rerun. A later 55-test run passed but had one link-permission skip, so it was not accepted as the full matrix; link probing was made injectable and the final 56-test run had no skips.
+Warnings: PHPUnit could not write its optional .phpunit.result.cache on the mounted tree; complete test results and true exits were still captured and green
+Manifest-covered files changed: NONE; manifest nevertheless verified 123/123 inside branding-ci
+Real backup directory touched: NO
+Backup command/mysqldump executed: NO
+Live database / Apache / browser touched: NO / NO / NO
+Temporary directories: one unique prebrand-backup-retention-* directory per test; every deletion path validated inside it; final residue count 0
+Current Git status after commits: expected only preserved untracked .claude/ before this checkpoint edit
+Remaining limitations: default target is intentionally retained for schedule compatibility; real deployment execution was not authorized or required; older-version rollback cannot prune neutral files and therefore requires temporary capacity monitoring
+Exact next task: PRE-09 / S1-P1-17 disabled-token validation contract decision
+```
 
 ### S1-P1-17 — One token is tenant-overridable with no contrast gate, and the doc says the opposite
 `TokenKey::InteractivePrimaryDisabled` is in the `=> true` arm of `isTenantOverridable()` **and** the `null`
@@ -1082,7 +1134,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S1-P1-15; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 continues at S1-P1-17; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 
