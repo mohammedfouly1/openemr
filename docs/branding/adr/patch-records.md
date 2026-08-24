@@ -1636,3 +1636,29 @@ The prior authoritative inventory was **33** distinct production files. These fo
 new distinct files; `sql_upgrade.php` remains one previously counted file. The authoritative current inventory
 is therefore **49 distinct production files**, all covered by PR-01…PR-32. This supersedes the 33-file figure
 for later V-09 and certification checks; earlier figures remain as historical snapshots only.
+
+---
+
+# PR-33 — deterministic branding CI release gate (2026-08-24)
+
+**Files:** `.github/workflows/isolated-tests.yml`; `composer.json`.
+**Commit:** `597276b09d507cc0e61a2c8784bd49c670c1d020`. **Rebase risk:** MEDIUM because both files are shared
+delivery surfaces with regular upstream churn. Tests and runbook documentation are evidence rather than
+production patch-footprint entries.
+
+This brand-neutral PRE-SKYEAGLE repair makes `composer branding-ci` the single deterministic gate for
+check-only generated artefacts, all 123 manifest entries, the registered ThiqaBranding PHPStan guardrail
+RuleTestCase suites, core-string contracts, and the CI-wiring contract itself. The existing `Isolated Tests`
+workflow runs it once on the PHP 8.2 matrix leg with read-only repository permission, no secrets, and no
+failure masking. PHPUnit's supported `--fail-on-empty-test-suite` boundary prevents stale or missing suites
+from returning a false green.
+
+**Upstream-first path (Q1):** the generic fail-closed Composer/workflow structure is suitable for upstream
+reuse, while the targeted branding suite is fork-specific until the branding programme is retired. Keep the
+change isolated in one named step so a future upstream rebase can retain the generic boundary or remove the
+fork-specific gate deliberately rather than losing it in conflict resolution.
+
+### Reconciliation after PR-33
+
+PR-33 adds **2** newly edited non-module production/delivery files. The authoritative inventory is therefore
+**51 distinct files**, all covered by PR-01…PR-33. Earlier inventory figures remain historical snapshots.
