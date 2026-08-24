@@ -287,10 +287,19 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
                     'font-size:1.8em;">OpenEMR \',xlt(\'Version\')',
                 ],
             ],
-            'sql_upgrade.php title and heading (BRAND-011)' => [
+            'sql_upgrade.php neutral translated title and heading (BRAND-011)' => [
                 'sql_upgrade.php',
-                ['<title>Thiqa Database Upgrade</title>', 'xlt("Thiqa Database Upgrade")'],
-                ['<title>OpenEMR Database Upgrade</title>', 'xlt("OpenEMR Database Upgrade")'],
+                [
+                    'ProductContextTranslation::compose(',
+                    "xl('%s Database Upgrade')",
+                    "getString('openemr_name')",
+                    '<title><?php echo text($databaseUpgradeTitle); ?></title>',
+                    '<h2><?php echo text($databaseUpgradeTitle); ?></h2>',
+                ],
+                [
+                    'Thiqa Database Upgrade',
+                    'OpenEMR Database Upgrade',
+                ],
             ],
             'ippf_upgrade.php title and heading (BRAND-012)' => [
                 'ippf_upgrade.php',

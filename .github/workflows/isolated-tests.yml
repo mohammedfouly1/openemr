@@ -6,6 +6,9 @@
 
 name: Isolated Tests
 
+permissions:
+  contents: read
+
 
 on:
   push:
@@ -44,6 +47,10 @@ jobs:
       with:
         php-version: ${{ matrix.php-version }}
         coverage: xdebug
+
+    - name: Run deterministic branding gates
+      if: matrix.php-version == '8.2'
+      run: composer branding-ci
 
     - name: Run isolated tests with coverage
       run: |

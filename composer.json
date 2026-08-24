@@ -309,6 +309,11 @@
             "@phpstan-baseline"
         ],
         "branding-tokens-check": "php tools/branding/bin/generate-tokens.php --check",
+        "branding-ci": [
+            "@branding-tokens-check",
+            "@php tools/branding/verify-brand-manifest.php",
+            "@php vendor/bin/phpunit -c phpunit-isolated.xml --no-coverage --fail-on-empty-test-suite --fail-on-incomplete --fail-on-risky tests/Tests/Isolated/BrandingCi tests/Tests/Isolated/BrandingCoreStrings tests/Tests/Isolated/PHPStan/ThiqaBranding"
+        ],
         "phpunit-isolated": "phpunit -c phpunit-isolated.xml",
         "rector-check": "php -d memory_limit=4g ./vendor/bin/rector process --dry-run",
         "rector-fix": "php -d memory_limit=4g ./vendor/bin/rector process",
