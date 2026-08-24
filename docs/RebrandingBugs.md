@@ -2050,33 +2050,51 @@ last 80 lines. Corrected inside RB-24, and it had hidden two real errors in this
 not reproducible from the text that quoted it. The corrected figure is **46 occurrences across 20 files**,
 with the scan scope, regex and exclusions written down alongside it in `docs/branding/changes.md`.
 
-**3. The trap: three agent worktrees live inside the repository.**
+**3. The trap: four agent worktrees, and only three of them are inside the repository.**
+
+*(Count corrected 2026-08-24 — finding **S1-P2-14**. This section said "three"; there are four, and the
+fourth is the dangerous one.)*
 
 ```
 $ git worktree list
-G:/My Drive/OpenEMR                                             c6c3f9e6e [feat/thiqa-branding-foundation]
+G:/My Drive/OpenEMR                                             b6261063f [feat/thiqa-branding-foundation]
 G:/My Drive/OpenEMR/.claude/worktrees/agent-a0be56487a171bfdd   631f2b38c
 G:/My Drive/OpenEMR/.claude/worktrees/agent-a2d5c8fbfdf82dc79   631f2b38c
 G:/My Drive/OpenEMR/.claude/worktrees/agent-a987c6bd7f63e0e19   631f2b38c
+G:/My Drive/OpenEMR.worktrees/sds                               631f2b38c [agents/sds]   <-- SIBLING
 ```
 
-Each is a **full checkout of the codebase at `631f2b38c`** — the pre-branding baseline. They are excluded
-from git by `.git/info/exclude:11` (`**/.claude/worktrees/`), so `git status` stays clean, and ripgrep
-honours that file, so the Grep tool skips them.
+Each is a **full checkout of the codebase at `631f2b38c`** — the pre-branding baseline. The first three are
+excluded from git by `.git/info/exclude:11` (`**/.claude/worktrees/`), so `git status` stays clean, and
+ripgrep honours that file, so the Grep tool skips them.
 
-**But a plain `grep -r … .` does not.** Any repository-wide scan run with bare `grep`, `find`, or a PHP
-directory iterator will walk those three trees and report pre-branding code as if it were current —
-inflating "remaining OpenEMR string" counts by up to 4×, and resurrecting literals that were fixed months
-ago. That is a live way to produce a wrong audit finding, and it nearly did here.
+**The fourth cannot be excluded that way, and this is the part that was missing.**
+`G:/My Drive/OpenEMR.worktrees/sds` is a **sibling directory outside the repository root**. No entry in
+`.git/info/exclude` can reach it — an exclude file only governs paths inside its own working tree — and
+neither `git status` nor a repo-rooted ripgrep will ever mention it. It is invisible to exactly the tools
+that make the other three safe. Any scan rooted at `G:\My Drive\` rather than at the repository ingests a
+complete pre-branding copy of the codebase with nothing to warn you.
+
+**And a plain `grep -r … .` does not respect the exclude file either.** Any repository-wide scan run with
+bare `grep`, `find`, or a PHP directory iterator will walk the three internal trees and report pre-branding
+code as if it were current — inflating "remaining OpenEMR string" counts by up to 4×, and resurrecting
+literals that were fixed months ago. That is a live way to produce a wrong audit finding, and it nearly did
+here.
 
 **Rule for anyone measuring this repository:** scope the scan to named directories, and exclude
-`.claude/worktrees/`, `vendor/`, `node_modules/` and `oe-module-claimrev-connect` (a third-party Composer
-dependency relocated into `interface/modules/custom_modules/`, not fork code). State the exclusions next to
-the number. A count whose method is not written down cannot be re-derived, and a count that cannot be
-re-derived is not evidence.
+`.claude/worktrees/`, **`G:/My Drive/OpenEMR.worktrees/` (the sibling — must be excluded by path, since no
+gitignore mechanism covers it)**, `vendor/`, `node_modules/` and `oe-module-claimrev-connect` (a third-party
+Composer dependency relocated into `interface/modules/custom_modules/`, not fork code). State the exclusions
+next to the number. A count whose method is not written down cannot be re-derived, and a count that cannot
+be re-derived is not evidence.
+
+**Before trusting any repository-wide figure, run `git worktree list` first.** It is the only command that
+reveals the sibling, and the set can change between sessions.
 
 **The worktrees were left untouched.** They are not this session's, they may belong to another agent's
-work in progress, and removing a worktree is not an audit's call to make.
+work in progress, and removing a worktree is not an audit's call to make. That applies to the sibling as
+well: `G:/My Drive/OpenEMR.worktrees/sds` is registered to branch `agents/sds` and is left in place. It
+belongs in the Scan-3 rollback register as state this programme is aware of but does not own.
 
 ---
 

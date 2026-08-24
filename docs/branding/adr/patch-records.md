@@ -1817,3 +1817,40 @@ inherit from today.
 
 PR-37 adds **0** distinct production files. The authoritative inventory remains **51 distinct files**,
 covered by PR-01…PR-37.
+
+---
+
+# PR-38 — one source of truth for the module directory (2026-08-24)
+
+**Files:** module-owned only — `src/Config/ModulePaths.php` (new), `src/Bootstrap.php`,
+`src/Service/BrandingService.php` — plus one new isolated test,
+`tests/Tests/Isolated/BrandingCi/ModulePathContractTest.php`. **Rebase risk:** NONE outside the module;
+no core, delivery or workflow file is touched.
+
+Finding **S1-P2-12**: the module's own directory name was hand-typed in five places, and every duplicate
+fails **silently**. A stale logo web path is a 404 on one image; a stale token-stylesheet path is a `<link>`
+pointing at nothing. Neither raises an error, so a rename that misses one leaves a surface quietly broken
+instead of a build red — which is the worst possible failure mode for the SkyEagle migration this
+programme is gating.
+
+`ModulePaths` now derives every PHP-side path from a single `DIRECTORY_NAME`, following the pattern the
+finding itself nominated as the counter-example worth copying (`CliOptions::DEFAULT_FONT_URL_BASE`).
+`Bootstrap::TWIG_NAMESPACE`, the dark-logo filesystem and web paths, the tenant-branding root, the profile
+path, the template root, and both `BrandingService` path constants are now derived rather than retyped.
+The two public `BrandingService` constants keep their names, because `public/branding-tokens.php` and the
+module documentation reference them.
+
+Three consumers cannot share a PHP constant, so they are guarded instead of wired:
+`tools/branding/install-assets.php` (a build-time tool under a different autoload prefix), `.gitignore`
+(not PHP at all — and the most expensive one to get wrong quietly, since after a rename it simply stops
+matching and the next commit sweeps in every tenant's materialised output as source), and the Twig rule's
+operator tip, already pinned by PR-36. `webpack.themes.js` was on the inherited rename-surface list but is
+**not** guarded here: reading it shows it references the SCSS source tree via `oe-styles/style_thiqa_*.scss`
+entries and never the module directory, so there is nothing for it to agree with.
+
+**Upstream-first path (Q1):** none applies; the module directory is fork-specific by definition.
+
+### Reconciliation after PR-38
+
+PR-38 adds **0** distinct non-module production files. The authoritative inventory remains **51 distinct
+files**, covered by PR-01…PR-38.

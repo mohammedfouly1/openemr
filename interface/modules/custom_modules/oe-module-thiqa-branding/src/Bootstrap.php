@@ -39,6 +39,7 @@ use OpenEMR\Modules\ThiqaBranding\AssetIntake\SvgInspector;
 use OpenEMR\Modules\ThiqaBranding\Config\BrandingConfigFactory;
 use OpenEMR\Modules\ThiqaBranding\Config\BrandingProfileLoader;
 use OpenEMR\Modules\ThiqaBranding\Config\GlobalsRegistrationListener;
+use OpenEMR\Modules\ThiqaBranding\Config\ModulePaths;
 use OpenEMR\Modules\ThiqaBranding\Console\ApplyProfileCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\BackupCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\MaterialiseCommand;
@@ -70,8 +71,13 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class Bootstrap
 {
-    /** Twig namespace for this module's templates (locked Q38). */
-    public const TWIG_NAMESPACE = 'oe-module-thiqa-branding';
+    /**
+     * Twig namespace for this module's templates (locked Q38).
+     *
+     * Derived rather than retyped: the namespace and the directory name are deliberately the
+     * same string, so a rename must not be able to move one without the other (S1-P2-12).
+     */
+    public const TWIG_NAMESPACE = ModulePaths::DIRECTORY_NAME;
 
     public function __construct(
         private readonly EventDispatcherInterface $dispatcher,
@@ -113,8 +119,8 @@ final class Bootstrap
             LogoFilterEvent::EVENT_NAME,
             (new LogoOverrideListener(
                 $branding,
-                $this->moduleDirectory . '/public/logos/dark',
-                '/interface/modules/custom_modules/oe-module-thiqa-branding/public/logos/dark',
+                $this->moduleDirectory . '/' . ModulePaths::DARK_LOGO_SUBPATH,
+                ModulePaths::DARK_LOGO_WEB_PATH,
                 $logger,
             ))->onLogoFilter(...)
         );
@@ -188,7 +194,7 @@ final class Bootstrap
         }
 
         $paths = new TenantBrandingPaths(
-            $this->moduleDirectory . '/public/branding',
+            $this->moduleDirectory . '/' . ModulePaths::TENANT_BRANDING_SUBPATH,
             $projectDir . '/sites',
         );
 
@@ -219,7 +225,7 @@ final class Bootstrap
         foreach ([
             new ApplyProfileCommand(
                 new BrandingProfileLoader(),
-                $this->moduleDirectory . '/config/branding-profile.json',
+                $this->moduleDirectory . '/' . ModulePaths::PROFILE_SUBPATH,
                 $site,
             ),
             new VerifyCommand($health),
@@ -241,15 +247,14 @@ final class Bootstrap
             new BrandAssetResolver(new LogoService()),
             new ThemeResolver(),
             new TokenSetParser(),
-            $globals->getProjectDir() . '/brand/tokens/thiqa-tokens.json',
-            $globals->getWebRoot()
-                . '/interface/modules/custom_modules/oe-module-thiqa-branding/public/branding-tokens.php',
+            $globals->getProjectDir() . '/' . BrandingService::TOKEN_DOCUMENT_RELATIVE_PATH,
+            $globals->getWebRoot() . '/' . BrandingService::TOKEN_STYLESHEET_RELATIVE_PATH,
         );
     }
 
     public function templateDirectory(): string
     {
-        return $this->moduleDirectory . DIRECTORY_SEPARATOR . 'templates';
+        return $this->moduleDirectory . DIRECTORY_SEPARATOR . ModulePaths::TEMPLATE_SUBPATH;
     }
 
     public function moduleDirectory(): string

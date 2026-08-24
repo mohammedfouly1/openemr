@@ -52,7 +52,9 @@ plane, what actually exists in the working tree versus what is still design inte
 │   BrandingMaterialiser · QueryUtilsBrandingGlobalsWriter · TokenCssWriter ·   │
 │   AtomicFileWriter · JsonFileTier1PaletteProvider · MaterialisationLogger ·   │
 │   BrandingHealthCheck                                                        │
-│   Commands: ApplyProfileCommand, VerifyCommand, MaterialiseCommand           │
+│   Commands (6): ApplyProfileCommand, VerifyCommand, MaterialiseCommand,      │
+│   ProvisionReportAclCommand, BackupCommand, SeedDemoCommand — the last       │
+│   three own gacl ACOs, ~19 demo tables and backup artefacts (see §8.4)       │
 │   (Bootstrap::registerConsoleCommands(), on CommandRunnerFilterEvent)        │
 │                                                                                │
 │   STATUS: BUILT, isolated-tested, RUN LIVE then ROLLED BACK. Corrected       │
@@ -109,7 +111,7 @@ any HTTP client construction, `curl_*` call, or `file_get_contents()`/`fopen()` 
 literal anywhere under `OpenEMR\Modules\ThiqaBranding\*` **except** the `\Materialisation` sub-namespace
 (`tests/PHPStan/Rules/ForbiddenBrandingHttpClientRule.php:53-148`) — this is the Plane-3-cannot-reach-
 Plane-1/2 rule expressed as a static-analysis gate, not a comment. Plane 2's own unreachability from a
-web entry point is structural rather than rule-enforced: the three console commands are registered only
+web entry point is structural rather than rule-enforced: the six console commands are registered only
 on `CommandRunnerFilterEvent`, which fires exclusively from `bin/console`
 (`Bootstrap.php:132-135,147-195`); no controller or route constructs `BrandingMaterialiser`.
 
@@ -582,7 +584,7 @@ Individually noted above; collected here for a reader who wants the full list in
 | 8.1 | `ContrastCalculator` lives under `Token/` (§3.5.1) | Lives in `src/Accessibility/ContrastCalculator.php`, a namespace the plan's folder tree never mentions | §3, §5.1 |
 | 8.2 | The SMART style mapper class is named `SmartStyleMapper` (§3.3.1 component inventory) | The shipped class is `src/Theme/SmartStyleContract.php` | §1.1, §5.1 |
 | 8.3 | `GlobalsRegistrationListener` lives under `Listener/` alongside the other four listeners (§3.5.1) | Lives in `src/Config/GlobalsRegistrationListener.php` | §2 (E7), §5.1 |
-| 8.4 | Console commands are `materialise, verify, export-tokens, diff` (§3.3.1); folder tree names `MaterialiseCommand · VerifyCommand · ExportTokensCommand` (§3.5.1) | Three commands exist: `ApplyProfileCommand`, `VerifyCommand`, `MaterialiseCommand`. No `export-tokens`, no `diff`, and `ApplyProfileCommand` (which applies the Tier-1 product identity profile) doesn't appear in the plan's list at all | §5.1 |
+| 8.4 | Console commands are `materialise, verify, export-tokens, diff` (§3.3.1); folder tree names `MaterialiseCommand · VerifyCommand · ExportTokensCommand` (§3.5.1) | **Six** commands exist, not three and not the plan's four: `ApplyProfileCommand`, `VerifyCommand`, `MaterialiseCommand`, `ProvisionReportAclCommand`, `BackupCommand`, `SeedDemoCommand` (`Bootstrap.php` registers all six on `CommandRunnerFilterEvent`). No `export-tokens`, no `diff`. *(Corrected 2026-08-24, S1-P2-07/S1-P2-16: this row previously said "Three commands exist".)* **The three unlisted ones own the most persisted state in the module** — gacl ACL objects, ~19 clinical/demo tables and backup artefacts — and none of it is branding state. The module has accreted a deployment/ops toolkit under a branding namespace, so "rename the branding module" has a materially wider blast radius than either the plan or the earlier version of this row implied | §5.1 |
 | 8.5 | Font/asset overlay delivered by the `scripts/sync-css.js` "sibling step" (E10, §3.6) | Fonts are delivered by `tools/branding/install-assets.php` with SHA-256 manifest verification; `sync-css.js` only copies compiled CSS and contains no font-handling code | §1 (Plane 5), §2 (E10) |
 | 8.6 | The plan's own folder-tree diagram (§3.5.1) still shows `primary_logo.html.twig` as a module-namespace override, matching CR-8's *original* §1.0.1 ruling | **Not a code divergence — the plan's decision text superseded its own diagram.** §1.0.2 ("External audit...") withdrew the module-override mechanism for CR-8 that same day, and the plan's detailed CR-8 entry (line 124) explicitly recommends the core edit that shipped. The folder-tree diagram in §3.5.1 was simply never updated to match the later revision. See the correction in §5.2 above for the full citation chain | §5.2 |
 | 8.7 | `BrandingServiceInterface::smartStyleTokens()`/`SmartStyleContract` is presented as *the* mechanism the SMART contract flows through (§3.3.1) | It exists and is logically sound but has no test beyond a stub and no production caller; the actual live SMART delivery is the separate Twig-template-rewrite mechanism (E4/E6) | §1.1 |

@@ -272,11 +272,15 @@ npm run build:sync
   `testDeployedThemeDirectoryContainsNoForbiddenStylesheet` fails if any `solar` / `manila` /
   `cobalt_blue` / `forest_green` stylesheet survived the copy. It skips (rather than fails) when
   `public/themes/` has not been built, so it is safe to run on a fresh checkout.
-- File listing: `public/themes/` should contain exactly the Q77-approved set (17 CSS files per
-  `docs/branding/changes.md` row 076 — `style_{light,dark}`, `compact_style_{light,dark}`,
-  `rtl_style_{light,dark}`, `rtl_compact_style_{light,dark}`, `style_pdf`, `rtl_style_pdf`,
-  `tabs_style_{full,compact}`, `rtl_tabs_style_{full,compact}` + non-theme shells) — zero
+- File listing: `public/themes/` should contain exactly the Q77-approved set — **18 top-level CSS files**
+  per `docs/branding/changes.md` row 076: the 14 theme outputs (`style_{light,dark}`,
+  `compact_style_{light,dark}`, `rtl_style_{light,dark}`, `rtl_compact_style_{light,dark}`, `style_pdf`,
+  `rtl_style_pdf`, `tabs_style_{full,compact}`, `rtl_tabs_style_{full,compact}`) plus **4 non-theme
+  shells** (`style.css`, `directional.css`, `ajax_calendar_ie.css`, `jquery.autocomplete.css`), and one
+  `misc/` directory holding 10 further files — so 19 directory entries, 28 files in total. Zero
   `solar`/`manila`/`cobalt_blue`/`forest_green` outputs.
+  *(Corrected 2026-08-24, S1-P2-07: this read "17 CSS files … + non-theme shells" while row 076
+  enumerated four shells. 14 + 4 = 18.)*
 - `tools\branding\bin\generate-tokens.php --check` (§6) should report the deployed SCSS/CSS artefacts as
   up to date against `brand/tokens/*.json` — a rebuild that used stale token source would show up here as
   drift.

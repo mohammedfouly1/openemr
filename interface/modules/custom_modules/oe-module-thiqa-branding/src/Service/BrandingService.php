@@ -20,6 +20,7 @@ use OpenEMR\Modules\ThiqaBranding\Asset\BrandingRevision;
 use OpenEMR\Modules\ThiqaBranding\Asset\LogoSlot;
 use OpenEMR\Modules\ThiqaBranding\Config\BrandingConfig;
 use OpenEMR\Modules\ThiqaBranding\Config\BrandingConfigFactory;
+use OpenEMR\Modules\ThiqaBranding\Config\ModulePaths;
 use OpenEMR\Modules\ThiqaBranding\Config\TokenOverlay;
 use OpenEMR\Modules\ThiqaBranding\Theme\SmartStyleContract;
 use OpenEMR\Modules\ThiqaBranding\Theme\ThemeResolver;
@@ -53,12 +54,17 @@ use OpenEMR\Modules\ThiqaBranding\Token\TokenSetParser;
  */
 final class BrandingService implements BrandingServiceInterface
 {
-    /** Location of the Tier 1 token document, relative to the application root. */
-    public const TOKEN_DOCUMENT_RELATIVE_PATH = 'brand/tokens/thiqa-tokens.json';
+    /**
+     * Location of the Tier 1 token document, relative to the application root.
+     *
+     * Kept as a constant on this class because `public/branding-tokens.php` and the module
+     * documentation already reference it by this name, but the value is now derived from
+     * ModulePaths so the module directory appears once in the codebase (S1-P2-12).
+     */
+    public const TOKEN_DOCUMENT_RELATIVE_PATH = ModulePaths::TOKEN_DOCUMENT;
 
     /** Location of the Tier 2 stylesheet endpoint, relative to the web root (plan §3.8.1). */
-    public const TOKEN_STYLESHEET_RELATIVE_PATH =
-        'interface/modules/custom_modules/oe-module-thiqa-branding/public/branding-tokens.php';
+    public const TOKEN_STYLESHEET_RELATIVE_PATH = ModulePaths::TOKEN_STYLESHEET;
 
     /** The branding layer's cache identifier on the Tier 2 stylesheet URL. */
     private const REVISION_PARAMETER = 'rev';
