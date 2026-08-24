@@ -20,6 +20,7 @@
 | 8 | **S1-P0-09 FIXED — VERIFIED; repaired PRE-16 chain passed and was exactly restored.** Commit `566b14ea68dd106fe0e38d5d77f2df46b5da25a8` made the bare, identity-neutral properties canonical, retained `--thiqa-*`/`--oe-*` compatibility aliases, and connected real component consumers with safe Tier-1 fallbacks. Automated light/dark coverage passed (239 tests, 987 assertions); the live Login button changed to the materialised light and dark tenant values, then DB, files, theme selector, page links, browser styles and temporary cache state were restored. No SkyEagle identity work began. |
 | 9 | **S1-P0-13 + S2-P0-21 implementation begun after bounded reconciliation.** Selected design: `%s Database Upgrade` as the identity-neutral literal key; product name supplied from `openemr_name` before one context-specific escape; a checked-in JSON contract generates a separate SQL supplement loaded after either installer translation source; branch-cut regeneration reasserts that supplement after replacing `currentLanguage_utf8.sql`; upgrades use a transaction-journalled migrator that resolves exact names once, asserts uniqueness, then mutates only stable IDs. Live DB inspection was read-only: both legacy keys still have the same 28-language set; total counts 13,235 constants / 237,542 definitions; 0 orphans; 0 duplicate pairs. Status remains **IN PROGRESS** pending implementation and the full matrix. |
 | 10 | **S1-P0-13 + S2-P0-21 FIXED — VERIFIED.** Commits `948e4a6d1`, `02671f0c9`, and `2baf7322a` implement the neutral renderer, authoritative 28-language contract, generated installer supplement, release-prep regeneration, journal schema, automatic upgrade migration, deterministic rollback command, and full regression matrix. Final targeted PHPUnit: 41 tests / 134 assertions / exit 0. PHPCS: 18 files / exit 0. The final supplement was applied twice to a disposable MariaDB database: 1 target constant, 28 definitions, 3 RTL definitions, 0 orphans, 0 duplicate pairs; the exact database was dropped and confirmed absent. The live `openemr` DB was never mutated. PR-29…PR-32 expand the patch inventory from 33 to 49 distinct production files. Next incomplete task: S1-P1-03 CI wiring. |
+| 11 | **PRE-09 / S1-P1-03 FIXED — VERIFIED; PRE-11 completed.** `597276b09d507cc0e61a2c8784bd49c670c1d020` adds the canonical `composer branding-ci` gate to the existing `Isolated Tests` workflow; `ff6e35b4f4ddca0b16eb7a52c4489e7390664157` adds the runbook and PR-33 governance record. Final aggregate: 12/12 generated artefacts, 123/123 manifest entries, 91 tests / 264 assertions, exit 0. Reversible negative controls proved generated drift exit 3, manifest mismatch exit 1, 12 guardrail violations across all four required identifiers exit 1, and zero tests exit 1 after the repair (versus exit 0 before). All temporary mutations were exactly restored. Workflow YAML, Composer config, PHP syntax and PHPCS passed locally. GitHub-hosted execution: NO. Next incomplete task: S1-P1-15 backup retention. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -41,13 +42,13 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          2baf7322a10f19fd6ed85407016db86514fa864c (before Rev 10 checkpoint commit)
-CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 10 checkpoint edit;
+CURRENT OBSERVED HEAD:          ff6e35b4f4ddca0b16eb7a52c4489e7390664157 (before Rev 11 checkpoint commit)
+CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 11 checkpoint edit;
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
 SKYEAGLE MIGRATION STARTED:     NO
 SKYEAGLE BRANDING CHANGES:      NONE
-REPOSITORY WRITES THIS SESSION: S1-P0-13/S2-P0-21 neutral translation durability repair, tests, patch records;
+REPOSITORY WRITES THIS SESSION: S1-P1-03 deterministic CI gate, tests, runbook, PR-33 patch record;
                                 this checkpoint
 CURRENT PROGRAMME:              PRE-SKYEAGLE three-scan audit/remediation/certification
 FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
@@ -66,6 +67,8 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `948e4a6d1` | PRE-09 / S1-P0-13 | Introduced the strict one-placeholder product-context renderer and changed both database-upgrade title consumers to compose `openemr_name` before exactly one HTML escape. |
 | `02671f0c9` | PRE-09 / S2-P0-21 | Added the checked-in 28-language contract, deterministic SQL supplement, installer ordering, and release-prep regeneration. |
 | `2baf7322a` | PRE-09 / S1-P0-13 + S2-P0-21 | Added the transaction-journalled stable-ID migration/rollback engine, operator command, fresh/upgrade journal schema, automatic upgrade invocation, and migration/schema matrix tests. |
+| `597276b09` | PRE-09 / S1-P1-03 + PRE-11 | Added the canonical fail-closed `composer branding-ci` aggregate, wired it into the existing `Isolated Tests` workflow's PHP 8.2 leg, added CI-contract regression tests, and aligned the stale database-upgrade core-string assertion with the already-verified neutral title contract. |
+| `ff6e35b4f` | PRE-09 / S1-P1-03 | Added the canonical local/CI runbook and PR-33 patch record; the authoritative production/delivery patch inventory is now 51 files. |
 
 Add a row for every further remediation commit.
 
@@ -85,8 +88,8 @@ recent PRE-SKYEAGLE commit were re-derived with bounded read-only commands. Tool
 under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
-Those landed-work verification steps and the next three PRE-09 repairs are now complete; see revisions 6…10.
-**Exact next incomplete item:** PRE-09 / S1-P1-03 deterministic branding-gate CI wiring.
+Those landed-work verification steps and the next four PRE-09 repairs are now complete; see revisions 6…11.
+**Exact next incomplete item:** PRE-09 / S1-P1-15 brand-neutral migration-safe backup retention.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -149,9 +152,9 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 5 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). **Remaining:** S1-P1-03 CI wiring · S1-P1-15 brand-neutral backup retention · S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 6 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). **Remaining:** S1-P1-15 brand-neutral backup retention · S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
-| PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B | R | **INTERRUPTED / NO RESULT RECEIVED** | Dispatched; never returned findings. |
+| PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
 | PRE-13 | Scan-2D Manifest/asset pipeline | Agent 2D | R | **DONE** | §15 SCAN2D |
 | PRE-14 | Scan-2E Translation runtime forensics | Agent 2E | R | **DONE** + addendum | §15 SCAN2E |
@@ -177,16 +180,16 @@ SKYEAGLE MIGRATION:          NOT AUTHORIZED
 SCAN 1:  COMPLETE as an investigation — every P0 and high-severity P1 independently reproduced by the
          orchestrator, and the last outstanding claim (guardrail inert-rule behaviour) is now PROVEN
          BY EXECUTION (§16 PRE-10). Reconciliation done. REMEDIATION NOT DONE — that is PRE-09.
-SCAN 2:  IN PROGRESS — 6 of 8 agent workstreams landed (2C, 2D, 2E, 2F, 2G, 2H).
+SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F, 2G, 2H).
          2A failed (6 empty returns) but its target claim was proven directly by the orchestrator.
-         2B never returned — the zero-match-filter experiment is the only genuinely missing piece.
+         2B's missing zero-match-filter experiment was completed during the S1-P1-03 repair.
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 17 open · P2 4 open
-                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S2-P0-21; S2-P1-25.
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 16 open · P2 4 open
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-03; S2-P0-21; S2-P1-25.
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
-                    So P1 went 17 -> 16 (fix) -> 17 (new finding). Net movement, not drift.
+                    P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix).
                     Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
                     repairing it. It stays open until the guardrail constants gain a real
                     cross-check against the production namespace.
@@ -400,9 +403,10 @@ Repair commits: `948e4a6d145e5d76ce8f8aa7434fc289ea4d73b5`,
 `02671f0c939f89197ab283296e4be31cae5065d2`, and
 `2baf7322a10f19fd6ed85407016db86514fa864c`; design record
 `ba0078c621f183b07049e0daa03b73acfa724271`. PR-29…PR-32 record the 16 new production files and supersede
-the 33-file patch inventory with 49. Remaining risk: none specific to these two P0 acceptance criteria; broader
-PRE-SKYEAGLE certification remains blocked by the recorded P1/P2 work, Scan 3 and PRE-25. Exact next incomplete
-task: **PRE-09 / S1-P1-03 — wire deterministic branding gates into CI**. No SkyEagle rebranding began.
+the 33-file patch inventory with 49; PR-33 later expands the current inventory to 51. Remaining risk: none
+specific to these two P0 acceptance criteria; broader PRE-SKYEAGLE certification remains blocked by the
+recorded P1/P2 work, Scan 3 and PRE-25. Exact next incomplete task: **PRE-09 / S1-P1-15 — implement
+brand-neutral migration-safe backup retention**. No SkyEagle rebranding began.
 
 ---
 
@@ -421,6 +425,36 @@ still consumed by Zend `.phtml` layouts. So cleanup is exactly **two** entries, 
 **64 workflows**. CI does run the isolated suite (`isolated-tests.yml:50`) and PHPStan. Token-drift and
 manifest verification fire only if a human remembers.
 **Owner directive: wire deterministic required CI checks before certification.**
+
+**Status: FIXED — VERIFIED (continuation Rev 11).** The existing `.github/workflows/isolated-tests.yml`
+now invokes the canonical `composer branding-ci` command once on its PHP 8.2 matrix leg, after dependency
+setup and before the full isolated suite. Workflow permission is `contents: read`; the step needs no secret,
+database, Apache, browser, network call, developer-specific path, path filter, `continue-on-error`, pipe, or
+success mask. Composer runs the check-only token generator, the manifest verifier, and a targeted isolated
+suite containing CI-contract, core-string, PHPStan guardrail and rule-registration tests. The PHPUnit command
+uses `--fail-on-empty-test-suite`, `--fail-on-incomplete`, and `--fail-on-risky`.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S1-P1-03; PRE-11 completed as part of the repair
+Current status: FIXED — VERIFIED (local implementation and commands); GitHub-hosted confirmation not executed
+Implementation commit: 597276b09d507cc0e61a2c8784bd49c670c1d020
+Runbook/governance commit: ff6e35b4f4ddca0b16eb7a52c4489e7390664157
+Workflow/job: .github/workflows/isolated-tests.yml / Isolated Tests / isolated-tests
+Canonical command: composer branding-ci
+Files changed: .github/workflows/isolated-tests.yml; composer.json; tests/Tests/Isolated/BrandingCi/BrandingCiContractTest.php; tests/Tests/Isolated/BrandingCoreStrings/MandatoryCoreStringPatchesIsolatedTest.php; docs/branding/ci-gates.md; docs/branding/adr/patch-records.md; this checkpoint
+Positive control: 12/12 generated artefacts; 123/123 manifest; PHPUnit 91 tests / 264 assertions / 0 failures / 0 errors; true exit 0; 2026-08-24T08:27:36.1217930Z–08:28:15.6162167Z; 39.494 s; no timeout or incomplete result
+Generated-drift negative: one-byte _css-variables.scss mutation; true exit 3; 2026-08-24T08:30:48.7406534Z–08:30:49.2317755Z; 0.491 s; restored SHA256 91328E9F9E972CE2D4C266436A799DD50D52237AA083B8F0FBBC79CC48405BFF; clean 12/12 exit 0 in 0.465 s
+Manifest-mismatch negative: one-byte typography-weight-contract.md mutation; 122/123 and true exit 1; 2026-08-24T08:20:02.4114892Z–08:20:05.5436587Z; 3.132 s; restored SHA256 C7987BD0B4B1F6F1ED6911FD3AFD117A0F7B5448CA10AD1447BED6A371C1E5AA; clean 123/123 exit 0 in 3.063 s; no hashes re-issued
+Guardrail negative: existing all_violations_branding_namespace.php fixture copied temporarily into the module; rule-only PHPStan reported 12 file errors and all four identifiers (thiqaBranding.noRuntimeHttpClient, thiqaBranding.noSiteConfigSeam, thiqaBranding.twigNamespaceDiscipline, thiqaBranding.noPlaceholderEndpoint); true exit 1; 2026-08-24T08:25:28.9395696Z–08:26:11.5740653Z; 42.634 s; temporary file removed
+Zero-test unguarded control: php vendor/bin/phpunit -c phpunit-isolated.xml --filter SkyEagleBranding --no-coverage; 0 tests / 0 assertions; "No tests executed!"; true exit 0; final timed confirmation 2026-08-24T08:33:06.4232339Z–08:33:27.1167938Z; 20.694 s (the initial observation was 17.319 s)
+Zero-test after repair: same deliberately nonexistent filter plus --fail-on-empty-test-suite; 0 tests / 0 assertions; "No tests executed!"; true exit 1; 2026-08-24T08:28:26.0217108Z–08:28:41.2621650Z; 15.240 s
+Workflow validation: Symfony YAML parse exit 0; Composer validate --strict exit 0; PHP lint exit 0; PHPCS using phpcs.xml.dist 2/2 files exit 0; dependency and shell ordering reviewed; no absolute local path or secrets in committed workflow
+PHPStan completeness handling: CI executes repository-owned RuleTestCase suites directly under PHPUnit; analyzer exceptions/errors fail PHPUnit, and incomplete/risky/empty PHPUnit outcomes are nonzero. The separate full PHPStan workflow still invokes vendor/bin/phpstan directly with no downstream pipe.
+GitHub-hosted execution performed: NO (no push was authorized); local workflow syntax and command behavior only
+Limitations/not-passes: an initial aggregate exposed a stale core-string assertion and exited 1 before correction; one direct PHPStan attempt failed on a cache lock, one excluded-fixture attempt returned no files, and one full-config module attempt was terminated after exceeding 90 s. None was called PASS. The successful rule-only PHPStan negative control above is the recorded guardrail proof. PHPUnit emitted an optional result-cache permission warning after its successful test result; true aggregate exit remained 0.
+Restoration/current status: every disposable file mutation restored or removed; generated and manifest checks green; tracked tree clean after commits; preserved untracked .claude/ only
+Exact next task: PRE-09 / S1-P1-15 brand-neutral migration-safe backup retention
+```
 
 ### S1-P1-04 — Nothing cross-checks guardrail namespace constants against the real module
 All four rules hardcode `MODULE_NAMESPACE = 'OpenEMR\Modules\ThiqaBranding'`
@@ -560,9 +594,8 @@ translation call → **55 live call-site lines**.
 
 > **STATUS: FIXED_AND_REVERIFIED (Rev 3).** Gate restored to `123/123 verified`, **exit 0**, manifest line
 > count preserved at 123. Reason recorded in `docs/branding-production/12-release-verification.md` Revision 5.
-> The *process* gap it exposed is NOT fixed and remains open as **S1-P1-03** — the verifier is still invoked
-> by zero of the 64 workflows, which is why a red gate survived five days undetected. Original finding retained
-> below as the record.
+> The *process* gap it exposed was subsequently fixed as **S1-P1-03** in continuation Rev 11: the verifier now
+> runs inside the canonical `composer branding-ci` workflow gate. Original finding retained below as the record.
 
 **Continuation verification (2026-08-24):**
 
@@ -579,7 +612,7 @@ Tests and assertions executed: Manifest entries 123; verified 123; problems 0
 Runtime evidence: START 2026-08-24T06:38:07.1424797Z; END 2026-08-24T06:38:14.7066533Z; duration 7.564 s; no timeout
 Independent verification: Five hashes were re-issued (four drifted documents plus the explanation document); no entries deleted; Revision 5 durably records why.
 Rollback method: Branch at the parent commit and cherry-pick subsequent accepted changes; do not use destructive reset/revert.
-Remaining risks: S1-P1-03 remains open because CI still does not run the otherwise-correct verifier.
+Remaining risks at this verification point: S1-P1-03 was still open; it was fixed and locally verified in Rev 11.
 Next task at that verification point: E2 / S1-P0-01 invariant verification for aebcfdfc5 and 26c32fcb3.
 ```
 
@@ -995,11 +1028,18 @@ to a **file** (not a pipe — `$?` after `| tail` reports tail's status). Use
 `--configuration=C:\openemr-stack\phpstan-localtmp.neon` for any PHPStan run and grep for `Internal error` /
 `Result is incomplete` independently of the exit code (RB-24).
 
-**PRE-11 / Scan-2B — Test-harness truthfulness — NO RESULT RECEIVED.**
-Still needed, especially the deliberate **zero-match-filter experiment**: run
-`--filter 'SkyEagleBranding'` (a namespace that does not exist) and record exactly what PHPUnit prints and
-what exit code it returns. If a zero-match filter exits 0, the documented local runbook command would
-silently pass after a rename — a critical finding.
+**PRE-11 / Scan-2B — Test-harness truthfulness — DONE — VERIFIED (continuation Rev 11).**
+
+The deliberately nonexistent `--filter SkyEagleBranding` control ran **0 tests / 0 assertions** and printed
+`No tests executed!`. Without an empty-suite guard, PHPUnit returned **true exit 0** (final timed confirmation
+2026-08-24T08:33:06.4232339Z–08:33:27.1167938Z, 20.694 s), confirming
+the false-green defect. Adding PHPUnit 11.5.55's supported `--fail-on-empty-test-suite` option changed the
+same zero-test result to **true exit 1** (2026-08-24T08:28:26.0217108Z–08:28:41.2621650Z, 15.240 s).
+The canonical `composer branding-ci` command includes that flag, plus `--fail-on-incomplete` and
+`--fail-on-risky`; `BrandingCiContractTest` fails deterministically if those boundaries or any expected suite
+path disappear. The final real suite executed 91 tests / 264 assertions and exited 0, so the protection is not
+itself an empty green. The nonexistent SkyEagle-shaped name was used only as a negative filter; no SkyEagle
+code, namespace or branding was introduced.
 
 **PRE-16 / Scan-2G runtime proof — EXECUTED, RESTORED, AND REPEATED AFTER REPAIR (continuation Revs 7–8).**
 Pre-flight: capture `SELECT gl_name, gl_value FROM globals WHERE gl_name LIKE 'saas_branding_%'`, sha256 +
@@ -1042,7 +1082,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S1-P1-03; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 continues at S1-P1-15; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 
