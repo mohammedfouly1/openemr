@@ -17,6 +17,7 @@
 | 5 | **Phase 1 continuation reconstruction complete (2026-08-24).** Re-derived branch `feat/thiqa-branding-foundation`, HEAD `26c32fcb3c027702d9b6fe167017487469a19e5d`, status `?? .claude/`, five registered worktrees, and the five commits after the scan baseline. MariaDB and Apache were both unavailable during the bounded probes. Toolchain paths/versions were inventoried without running tests or analysis. Active task is verification of already-landed commits: `45e9eb4f3`, then `aebcfdfc5` + `26c32fcb3`; no duplicate repair has been started. |
 | 6 | **Landed-work verification complete.** S2-P1-25 independently verified at 123/123, exit 0. S1-P0-01 verified all eight formerly unrecorded files are covered by PR-23…PR-28; the residual V-09 six-file scope was corrected to the authoritative 33-file inventory and reverified against current `upstream/master` (47 conflict records; only PR-14 inside the recorded set; none of the eight new files). Next: S1-P0-09 / PRE-16 runtime proof. |
 | 7 | **PRE-16 runtime proof executed and exactly restored.** A valid revision-1 overlay reached DB, generated CSS, live endpoint, page link, and browser custom properties, while `.btn-primary` remained on the static `--thiqa-*` value. Preflight DB values, CSS hashes/timestamps, verify state, page links, and browser styles all matched after restoration. PRE-16 is DONE — VERIFIED; S1-P0-09 remains confirmed and open for repair. |
+| 8 | **S1-P0-09 FIXED — VERIFIED; repaired PRE-16 chain passed and was exactly restored.** Commit `566b14ea68dd106fe0e38d5d77f2df46b5da25a8` made the bare, identity-neutral properties canonical, retained `--thiqa-*`/`--oe-*` compatibility aliases, and connected real component consumers with safe Tier-1 fallbacks. Automated light/dark coverage passed (239 tests, 987 assertions); the live Login button changed to the materialised light and dark tenant values, then DB, files, theme selector, page links, browser styles and temporary cache state were restored. No SkyEagle identity work began. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -38,14 +39,13 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          26c32fcb3c027702d9b6fe167017487469a19e5d (Phase 1, 2026-08-24)
-CURRENT GIT STATUS:             ?? .claude/
-                                (this checkpoint is committed as of Rev 3)
-                                tree otherwise clean — no tracked file modified outside the commit below
+CURRENT OBSERVED HEAD:          566b14ea68dd106fe0e38d5d77f2df46b5da25a8 (before Rev 8 checkpoint commit)
+CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 8 checkpoint edit;
+                                after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
 SKYEAGLE MIGRATION STARTED:     NO
 SKYEAGLE BRANDING CHANGES:      NONE
-REPOSITORY WRITES THIS SESSION: NONE except this checkpoint file
+REPOSITORY WRITES THIS SESSION: S1-P0-09 brand-neutral repair + generated contract + tests; this checkpoint
 CURRENT PROGRAMME:              PRE-SKYEAGLE three-scan audit/remediation/certification
 FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
                                 SAFE TO START SKYEAGLE MIGRATION: YES
@@ -58,14 +58,15 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `45e9eb4f3` | PRE-09 (1st item) | `prebrand: re-issue four stale brand-manifest hashes and record why` — restored the release gate from RED (119/123, exit 1) to GREEN (123/123, exit 0). Five entries re-issued (the four drifted documents plus `12-release-verification.md`, which was edited to record the reason and is itself manifest-covered). Entries **re-issued, never deleted**, per RB-25. No SkyEagle change. |
 | `aebcfdfc5` | PRE-09 / S1-P0-01 | Added PR-23…PR-28 coverage for the eight previously unrecorded core branding edits. Independently verified during continuation; grouped records are intentional. |
 | `26c32fcb3` | PRE-09 / S1-P0-01 | Corrected the stale PR-30 reference in the patch-record reconciliation table. Independently verified during continuation. |
+| `566b14ea6` | PRE-09 / S1-P0-09 | `prebrand(S1-P0-09): connect tenant tokens to live consumers` — canonical identity-neutral custom properties, legacy aliases, safe live consumers, and automated light/dark regression coverage. Live proof and exact restoration recorded in §5 and §16. |
 
 Add a row for every further remediation commit.
 
 **Live stack state at checkpoint time (re-derived, not inherited):**
 
 ```text
-MariaDB 127.0.0.1:3306   NOT RESPONDING   (Phase 1: SELECT probe exit 1, connection refused)
-Apache  localhost:8300   NOT RESPONDING   (Phase 1: curl HTTP 000, exit 1, 2 s connection timeout)
+MariaDB 127.0.0.1:3306   RESPONDING       (Rev 8 preflight query exit 0)
+Apache  localhost:8300   RESPONDING       (Rev 8 login HTTP 200, 9165 bytes)
 ```
 
 **Phase 1 continuation state (2026-08-24): COMPLETE.** Governing checkpoint, `CLAUDE.md`,
@@ -141,7 +142,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 2 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`) and independently reverified. ✅ S1-P0-01 patch-record/V-09 inventory invariant fixed and verified (`aebcfdfc5`, `26c32fcb3`, continuation scope correction pending commit). **Remaining:** S1-P0-09 token-namespace bridge (runtime-prove first) · S1-P0-13 + S2-P0-21 migration/rollback tooling · S1-P1-03 CI wiring · S1-P1-15 brand-neutral backup retention · S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 3 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`) and independently reverified. ✅ S1-P0-01 patch-record/V-09 inventory invariant fixed and verified (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 identity-neutral token-consumer contract fixed and live-verified (`566b14ea6`). **Remaining:** S1-P0-13 + S2-P0-21 migration/rollback tooling · S1-P1-03 CI wiring · S1-P1-15 brand-neutral backup retention · S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B | R | **INTERRUPTED / NO RESULT RECEIVED** | Dispatched; never returned findings. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -174,9 +175,9 @@ SCAN 2:  IN PROGRESS — 6 of 8 agent workstreams landed (2C, 2D, 2E, 2F, 2G, 2H
          2B never returned — the zero-match-filter experiment is the only genuinely missing piece.
 SCAN 3:  NOT STARTED
 
-KNOWN OPEN P0 FINDINGS:  S1-P0-09, S1-P0-13, S2-P0-21
-REGISTERS:          P0 4 · P1 17 · P2 4   (OPEN findings)
-                    FIXED so far: S2-P1-25 (manifest gate, commit 45e9eb4f3).
+KNOWN OPEN P0 FINDINGS:  S1-P0-13, S2-P0-21
+REGISTERS:          P0 4 total (2 open, 2 fixed) · P1 17 open · P2 4 open
+                    FIXED so far: S1-P0-01; S1-P0-09; S2-P1-25.
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
                     So P1 went 17 -> 16 (fix) -> 17 (new finding). Net movement, not drift.
                     Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
@@ -237,7 +238,7 @@ Runtime evidence: upstream/master 6cb9c0b91728190f30e09c03c026c827e9430579; merg
 Independent verification: actual eight-file delta == PR-23…PR-28 substance; V-09 now explicitly scopes the full authoritative 33-file inventory.
 Rollback method: Branch at the parent commit and cherry-pick accepted changes; do not use destructive reset/revert.
 Remaining risks: Current upstream integration has 47 conflict records, including EncounterService.php inside the recorded set; this is classified release-integration work, not missing patch-record coverage.
-Next incomplete task: PRE-09 / S1-P0-09 and PRE-16 Tier-2 runtime proof before token-overlay repair.
+Next task at Rev 6: PRE-09 / S1-P0-09 and PRE-16 Tier-2 runtime proof before token-overlay repair.
 ```
 
 ### S1-P0-09 — Tier-2 token overlay is structurally inert
@@ -278,8 +279,31 @@ outside the module: ZERO consumers.
 - **Required acceptance chain:**
   `allowed token change → materialised CSS → page link → actual CSS consumer → browser computed-style difference`.
   A visible `<link>` alone is NOT sufficient.
-- **Runtime proof required?** YES — designed, not executed. See §15 SCAN2G and §16.
-- **Blocks SkyEagle?** YES.
+- **Runtime proof required?** YES — initial failure and repaired light/dark chain both executed; see §15 SCAN2G and §16.
+- **Blocks SkyEagle?** NO — **FIXED — VERIFIED** in continuation Rev 8. Other PRE-SKYEAGLE blockers remain.
+
+**Status: FIXED — VERIFIED (continuation Rev 8).** The historical failure evidence above is retained.
+
+```yaml
+TASK/FINDING ID: S1-P0-09
+Previous status: CONFIRMED, REPAIR PENDING
+Current status: FIXED — VERIFIED; LIVE STATE RESTORED
+What changed: Made bare CSS custom properties the identity-neutral Tier-1/Tier-2 contract; retained --thiqa-* and --oe-* aliases; moved real links, buttons, focus rings, tabs and document links onto canonical vars with Sass fallbacks.
+Files changed: tools/branding/src/ColorToken.php; tools/branding/src/CssVariablesRenderer.php; generated _css-variables.scss preview/deployed copies; interface/themes/thiqa/_overrides.scss; TokenGeneratorIsolatedTest.php; this checkpoint
+Repair commit: 566b14ea68dd106fe0e38d5d77f2df46b5da25a8
+Automated evidence: targeted TokenGeneratorIsolatedTest OK (34 tests, 152 assertions); expanded branding regression OK (239 tests, 987 assertions); PHPCS 3/3 files exit 0; generator check 12/12 artefacts exit 0; webpack built all 8 Thiqa outputs exit 0 with 187 warnings and no errors.
+Live light evidence: revision-1 overlay link present; --interactive-primary-default #0B376E; --link-default #5A2CA0; real .btn-primary background/border changed rgb(196, 63, 46) -> rgb(11, 55, 110).
+Live dark evidence: style_dark.css loaded; same isolated revision-1 endpoint; --interactive-primary-default #64D8CB; --link-default #FFD166; real .btn-primary background/border changed to rgb(100, 216, 203).
+Acceptance chain: allowed validated token change -> materialised CSS -> page link -> canonical var() consumer -> real browser computed-style difference: PASS in light and dark.
+Safety evidence: Tenant scoping and the no-site-parameter endpoint contract were not changed; TokenValidator/WCAG code was not changed and its regression set passed; an empty overlay falls back to compiled canonical defaults.
+Exact exit codes: generator pre-regeneration drift control 3; generator post-regeneration check 0; targeted PHPUnit 0; expanded PHPUnit 0; PHPCS 0; webpack build 0; materialise 0; applied verify 0; DB/file restore 0; restored verify 1 (expected inherited preflight state).
+Non-pass attempts: one expanded PHPUnit invocation exceeded its 30-second capture window and one mistyped generator path exited 1; neither was called a pass, and both were rerun to complete exit-0 results.
+Independent restoration: all 7 saas_branding_* globals and css_header match preflight HEX values; light overlay SHA256 43015D055A6359698608B8FF99030C5D9E79CED2A4CDB16B1906C2C521EA78E8; dark F096670815C7C76D7F9C47674970299B950984AEDC09EFBBC36A8110D480F4B4; both timestamps restored to 2026-08-10T18:50:40Z; overlay links absent; style_light.css loaded; canonical/legacy primary #c43f2e; button rgb(196, 63, 46); browser cache override disabled and temporary tab closed.
+Warnings disclosed: CLI session-file permission warnings persisted but did not change true exit codes; webpack emitted 187 existing/deprecation/performance warnings; PHPUnit could not write its optional result cache in the sandbox.
+Rollback method: Branch at the parent of 566b14ea6 and cherry-pick only accepted later commits; no destructive reset/revert. Runtime rollback already completed by exact DB/file/theme restoration.
+Remaining risks: None specific to S1-P0-09 acceptance; certification remains blocked by the other open PRE tasks.
+Next incomplete task: PRE-09 / S1-P0-13 + S2-P0-21 durable translation migration and rollback tooling.
+```
 
 ### S1-P0-13 — Brand name embedded in a translation catalogue key, with no migration tooling
 
@@ -502,7 +526,7 @@ Runtime evidence: START 2026-08-24T06:38:07.1424797Z; END 2026-08-24T06:38:14.70
 Independent verification: Five hashes were re-issued (four drifted documents plus the explanation document); no entries deleted; Revision 5 durably records why.
 Rollback method: Branch at the parent commit and cherry-pick subsequent accepted changes; do not use destructive reset/revert.
 Remaining risks: S1-P1-03 remains open because CI still does not run the otherwise-correct verifier.
-Next incomplete task: E2 / S1-P0-01 invariant verification for aebcfdfc5 and 26c32fcb3.
+Next task at that verification point: E2 / S1-P0-01 invariant verification for aebcfdfc5 and 26c32fcb3.
 ```
 
 `php tools/branding/verify-brand-manifest.php` → **TRUE exit code 1**, `119/123 verified, 4 problem(s)`:
@@ -838,8 +862,8 @@ regex. Corrected BRAND-102 figure: **49 occurrences / 21 files**, not 46/20.
 - Residual `OpenEMR` in the shell: `var oemr_session_name = "OpenEMR"` + 3 JS comments — all BRAND-089/131
   PRESERVE (Q17/C6), not leaks.
 
-### SCAN2G — Tier-2 effectiveness (independently CONFIRMED S1-P0-09)
-See §5 S1-P0-09. Additional:
+### SCAN2G — Tier-2 effectiveness (initially confirmed; S1-P0-09 now FIXED — VERIFIED)
+See §5 S1-P0-09. Additional historical findings:
 - **Static token CSS is directly fetchable over HTTP:** `GET .../public/branding/default/tokens-light.css`
   → 200, `text/css`, 1522 B. **No `.htaccess` protects the path.**
 - RB-04/D-8: route (a) PHP endpoint is the only route ever linked; route (b) files are written
@@ -847,7 +871,7 @@ See §5 S1-P0-09. Additional:
   and only via `is_file()` (never opens). `.gitignore:73` confirmed matching via `git check-ignore -v`.
 - `verify` inconsistency root: `BrandingHealthCheck` cross-references the revision (route a) against
   file-existence on the unserved route (b) — "measuring the wrong thing".
-- **Runtime test DESIGNED, NOT EXECUTED** — see §16.
+- Initial failure proof and the repaired light/dark acceptance chain were both executed and exactly restored — see §16.
 
 ### SCAN2H — Telemetry / network egress: **OFF, triple-gated, live-proven**
 - **External hosts contacted on a real page load: NONE.** Egress scan of login + authenticated shell found
@@ -923,7 +947,7 @@ Still needed, especially the deliberate **zero-match-filter experiment**: run
 what exit code it returns. If a zero-match filter exits 0, the documented local runbook command would
 silently pass after a rename — a critical finding.
 
-**PRE-16 / Scan-2G runtime proof — EXECUTED AND RESTORED (continuation Rev 7).**
+**PRE-16 / Scan-2G runtime proof — EXECUTED, RESTORED, AND REPEATED AFTER REPAIR (continuation Revs 7–8).**
 Pre-flight: capture `SELECT gl_name, gl_value FROM globals WHERE gl_name LIKE 'saas_branding_%'`, sha256 +
 timestamps of both files in `.../public/branding/default/`, and `verify --site=default` output.
 Payload (`tmp/tier2-test.json`, tenant-overridable keys only):
@@ -937,12 +961,12 @@ there is no console command to decrement; revision is forward-only, so raw SQL i
 restore both CSS files from the pre-test backup, re-run `verify` and confirm it again reports
 `inconsistent / Revision 0 / never`, and diff the globals snapshot against pre-flight.
 
-**Continuation execution (2026-08-24): DONE — VERIFIED; exact state restored.**
+**Initial confirmation execution (2026-08-24): DONE — VERIFIED; exact state restored.**
 
 ```yaml
 TASK/FINDING ID: PRE-16 / S1-P0-09 runtime proof
 Previous status: DESIGNED, NOT EXECUTED
-Current status: PRE-16 DONE — VERIFIED; S1-P0-09 CONFIRMED, REPAIR PENDING
+Status at Rev 7: PRE-16 DONE — VERIFIED; S1-P0-09 CONFIRMED, REPAIR PENDING
 What changed: Temporary revision-1 tenant overlay only; all DB/file state restored after observation.
 Files changed persistently: none
 Commit hash: none (runtime experiment)
@@ -952,11 +976,19 @@ Tests and assertions executed: 7 branding DB rows; 2 CSS files; 3 light + 3 dark
 Runtime evidence: valid apply 2026-08-24T06:46:45.4660056Z–06:46:52.9530799Z (7.487 s); revision 1 healthy; endpoint delivered --interactive-primary-default:#0B376E; browser resolved it to #0B376E but .btn-primary stayed rgb(196,63,46) via --thiqa-interactive-primary-default:#c43f2e
 Independent verification: DB returned exactly to all preflight HEX values; light CSS SHA256 43015D055A6359698608B8FF99030C5D9E79CED2A4CDB16B1906C2C521EA78E8 and timestamp 2026-08-10T18:50:40.081Z; dark CSS SHA256 F096670815C7C76D7F9C47674970299B950984AEDC09EFBBC36A8110D480F4B4 and timestamp 2026-08-10T18:50:40.120Z; overlay links absent again; browser bare variable empty and button rgb(196,63,46).
 Rollback method: Completed by exact DB-value restoration plus byte-identical CSS backup restore; no repository rollback needed.
-Remaining risks: CLI emitted local session-file permission warnings; they did not alter command outcomes but must not be hidden. S1-P0-09 remains release-blocking until real consumers use the tenant variables and repaired browser styles change in light and dark modes.
-Next incomplete task: S1-P0-09 brand-neutral token consumer repair with automated regression tests.
+Remaining risks at Rev 7: CLI emitted local session-file permission warnings; they did not alter command outcomes but must not be hidden. The consumer gap was resolved in Rev 8.
+Next task at Rev 7: S1-P0-09 brand-neutral token consumer repair with automated regression tests.
 ```
 
-**Also outstanding:** Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Post-repair repetition (2026-08-24): PASS; exact state restored.** Commit
+`566b14ea68dd106fe0e38d5d77f2df46b5da25a8` passed the full acceptance chain in both variants. The light
+button resolved `#0B376E` as `rgb(11, 55, 110)`; after the reversible `css_header` switch, the dark button
+resolved `#64D8CB` as `rgb(100, 216, 203)`. Applied-state verification exited 0. Restoration returned all
+globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links, and the baseline
+`rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
+inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
+
+**Also outstanding:** PRE-09 continues at S1-P0-13 + S2-P0-21; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 
