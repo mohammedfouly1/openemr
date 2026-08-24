@@ -19,6 +19,7 @@
 | 7 | **PRE-16 runtime proof executed and exactly restored.** A valid revision-1 overlay reached DB, generated CSS, live endpoint, page link, and browser custom properties, while `.btn-primary` remained on the static `--thiqa-*` value. Preflight DB values, CSS hashes/timestamps, verify state, page links, and browser styles all matched after restoration. PRE-16 is DONE — VERIFIED; S1-P0-09 remains confirmed and open for repair. |
 | 8 | **S1-P0-09 FIXED — VERIFIED; repaired PRE-16 chain passed and was exactly restored.** Commit `566b14ea68dd106fe0e38d5d77f2df46b5da25a8` made the bare, identity-neutral properties canonical, retained `--thiqa-*`/`--oe-*` compatibility aliases, and connected real component consumers with safe Tier-1 fallbacks. Automated light/dark coverage passed (239 tests, 987 assertions); the live Login button changed to the materialised light and dark tenant values, then DB, files, theme selector, page links, browser styles and temporary cache state were restored. No SkyEagle identity work began. |
 | 9 | **S1-P0-13 + S2-P0-21 implementation begun after bounded reconciliation.** Selected design: `%s Database Upgrade` as the identity-neutral literal key; product name supplied from `openemr_name` before one context-specific escape; a checked-in JSON contract generates a separate SQL supplement loaded after either installer translation source; branch-cut regeneration reasserts that supplement after replacing `currentLanguage_utf8.sql`; upgrades use a transaction-journalled migrator that resolves exact names once, asserts uniqueness, then mutates only stable IDs. Live DB inspection was read-only: both legacy keys still have the same 28-language set; total counts 13,235 constants / 237,542 definitions; 0 orphans; 0 duplicate pairs. Status remains **IN PROGRESS** pending implementation and the full matrix. |
+| 10 | **S1-P0-13 + S2-P0-21 FIXED — VERIFIED.** Commits `948e4a6d1`, `02671f0c9`, and `2baf7322a` implement the neutral renderer, authoritative 28-language contract, generated installer supplement, release-prep regeneration, journal schema, automatic upgrade migration, deterministic rollback command, and full regression matrix. Final targeted PHPUnit: 41 tests / 134 assertions / exit 0. PHPCS: 18 files / exit 0. The final supplement was applied twice to a disposable MariaDB database: 1 target constant, 28 definitions, 3 RTL definitions, 0 orphans, 0 duplicate pairs; the exact database was dropped and confirmed absent. The live `openemr` DB was never mutated. PR-29…PR-32 expand the patch inventory from 33 to 49 distinct production files. Next incomplete task: S1-P1-03 CI wiring. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -40,13 +41,14 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          566b14ea68dd106fe0e38d5d77f2df46b5da25a8 (before Rev 8 checkpoint commit)
-CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 8 checkpoint edit;
+CURRENT OBSERVED HEAD:          2baf7322a10f19fd6ed85407016db86514fa864c (before Rev 10 checkpoint commit)
+CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 10 checkpoint edit;
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
 SKYEAGLE MIGRATION STARTED:     NO
 SKYEAGLE BRANDING CHANGES:      NONE
-REPOSITORY WRITES THIS SESSION: S1-P0-09 brand-neutral repair + generated contract + tests; this checkpoint
+REPOSITORY WRITES THIS SESSION: S1-P0-13/S2-P0-21 neutral translation durability repair, tests, patch records;
+                                this checkpoint
 CURRENT PROGRAMME:              PRE-SKYEAGLE three-scan audit/remediation/certification
 FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
                                 SAFE TO START SKYEAGLE MIGRATION: YES
@@ -60,6 +62,10 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `aebcfdfc5` | PRE-09 / S1-P0-01 | Added PR-23…PR-28 coverage for the eight previously unrecorded core branding edits. Independently verified during continuation; grouped records are intentional. |
 | `26c32fcb3` | PRE-09 / S1-P0-01 | Corrected the stale PR-30 reference in the patch-record reconciliation table. Independently verified during continuation. |
 | `566b14ea6` | PRE-09 / S1-P0-09 | `prebrand(S1-P0-09): connect tenant tokens to live consumers` — canonical identity-neutral custom properties, legacy aliases, safe live consumers, and automated light/dark regression coverage. Live proof and exact restoration recorded in §5 and §16. |
+| `ba0078c62` | PRE-09 / S1-P0-13 + S2-P0-21 | Recorded the selected neutral translation architecture and rejected unsafe alternatives before implementation. |
+| `948e4a6d1` | PRE-09 / S1-P0-13 | Introduced the strict one-placeholder product-context renderer and changed both database-upgrade title consumers to compose `openemr_name` before exactly one HTML escape. |
+| `02671f0c9` | PRE-09 / S2-P0-21 | Added the checked-in 28-language contract, deterministic SQL supplement, installer ordering, and release-prep regeneration. |
+| `2baf7322a` | PRE-09 / S1-P0-13 + S2-P0-21 | Added the transaction-journalled stable-ID migration/rollback engine, operator command, fresh/upgrade journal schema, automatic upgrade invocation, and migration/schema matrix tests. |
 
 Add a row for every further remediation commit.
 
@@ -79,8 +85,8 @@ recent PRE-SKYEAGLE commit were re-derived with bounded read-only commands. Tool
 under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
-**Exact next incomplete item:** E1 / S2-P1-25 verification of `45e9eb4f3`, followed by E2 / S1-P0-01
-substantive invariant verification of `aebcfdfc5` and `26c32fcb3`, before any duplicate repair.
+Those landed-work verification steps and the next three PRE-09 repairs are now complete; see revisions 6…10.
+**Exact next incomplete item:** PRE-09 / S1-P1-03 deterministic branding-gate CI wiring.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -143,7 +149,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 3 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`) and independently reverified. ✅ S1-P0-01 patch-record/V-09 inventory invariant fixed and verified (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 identity-neutral token-consumer contract fixed and live-verified (`566b14ea6`). **Remaining:** S1-P0-13 + S2-P0-21 migration/rollback tooling · S1-P1-03 CI wiring · S1-P1-15 brand-neutral backup retention · S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 5 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). **Remaining:** S1-P1-03 CI wiring · S1-P1-15 brand-neutral backup retention · S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B | R | **INTERRUPTED / NO RESULT RECEIVED** | Dispatched; never returned findings. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -176,9 +182,9 @@ SCAN 2:  IN PROGRESS — 6 of 8 agent workstreams landed (2C, 2D, 2E, 2F, 2G, 2H
          2B never returned — the zero-match-filter experiment is the only genuinely missing piece.
 SCAN 3:  NOT STARTED
 
-KNOWN OPEN P0 FINDINGS:  S1-P0-13, S2-P0-21
-REGISTERS:          P0 4 total (2 open, 2 fixed) · P1 17 open · P2 4 open
-                    FIXED so far: S1-P0-01; S1-P0-09; S2-P1-25.
+KNOWN OPEN P0 FINDINGS:  NONE
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 17 open · P2 4 open
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S2-P0-21; S2-P1-25.
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
                     So P1 went 17 -> 16 (fix) -> 17 (new finding). Net movement, not drift.
                     Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
@@ -303,7 +309,7 @@ Independent restoration: all 7 saas_branding_* globals and css_header match pref
 Warnings disclosed: CLI session-file permission warnings persisted but did not change true exit codes; webpack emitted 187 existing/deprecation/performance warnings; PHPUnit could not write its optional result cache in the sandbox.
 Rollback method: Branch at the parent of 566b14ea6 and cherry-pick only accepted later commits; no destructive reset/revert. Runtime rollback already completed by exact DB/file/theme restoration.
 Remaining risks: None specific to S1-P0-09 acceptance; certification remains blocked by the other open PRE tasks.
-Next incomplete task: PRE-09 / S1-P0-13 + S2-P0-21 durable translation migration and rollback tooling.
+Next incomplete task: PRE-09 / S1-P1-03 deterministic branding-gate CI wiring.
 ```
 
 ### S1-P0-13 — Brand name embedded in a translation catalogue key, with no migration tooling
@@ -331,12 +337,29 @@ brand-strings.json carry_forward:  "OpenEMR Database Upgrade" -> "Thiqa Database
   alternative: remove product identity from catalogue keys and compose the brand outside the constant.
 - **Blocks SkyEagle?** YES.
 
-**Status: IN PROGRESS (continuation Rev 9).** Selected neutral contract is `%s Database Upgrade`, with the
-existing application-title source composed before final HTML escaping. Rejected: bare juxtaposition
-(`applicationTitle` + translated suffix), because it freezes English word order; identity inside any new key,
-because it repeats the defect; and destructive name-only SQL, because exact duplicate names already exist.
-Upgrade tooling will resolve candidate names with binary equality, require uniqueness, and use the resulting
-stable `cons_id`/`def_id` values for every write. No live database mutation has occurred.
+**Status: FIXED — VERIFIED (continuation Rev 10).** The durable key is `%s Database Upgrade`; the product
+identity comes only from `openemr_name`. `ProductContextTranslation` accepts exactly one `%s` or `%1$s`,
+supports literal `%%`, rejects unsafe/multiple/missing placeholders, and returns an unescaped composed value.
+Both `<title>` and `<h2>` then apply `text()` exactly once. English fallback, Spanish, Arabic, Hebrew,
+special/HTML-sensitive names, repeated rendering, literal percent, injection rejection and double-escape
+prevention are automated.
+
+Forward migration is transactional and handles old-only, target-only, both, neither, partial/different language
+sets, identical state, explicit source/target conflicts and repeated runs. Exact binary names are resolved once;
+duplicates block the operation, and all writes use the resolved stable `cons_id` plus `lang_id`. Source rows are
+never deleted. The InnoDB journal records exact before/after target state and the contract hash. Rollback refuses
+drift, removes only rows introduced by the migration, restores an absent or partial target exactly, is idempotent,
+and supports forward -> rollback -> forward. Orphans, duplicate pairs and unexplained count changes are hard
+failures inside the transaction. Operator rollback is available through
+`openemr:translation-catalogue-migrate --rollback`; normal SQL upgrade invokes forward automatically.
+
+Evidence: migration matrix 15 tests / 39 assertions / exit 0; renderer/contract/install/release/migration/schema
+combined suite 41 tests / 134 assertions / exit 0 (command wall 19.433 s; PHPUnit 3.983 s); PHPCS 18 files /
+exit 0 (command wall 5.877 s; PHPCS 2.89 s). One earlier combined run was **NOT PASS** (41 tests / 131
+assertions / exit 1) because it caught a stale generated supplement; regeneration was corrected and the full
+suite was rerun green. An earlier broad combined capture was truncated and remains **UNKNOWN — NOT PASS**.
+The first Windows mutator run was also **NOT PASS** (6 tests: 3 errors, 1 failure) because the stub used Unix
+`true`; the harness now uses `PHP_BINARY` and reran at 6 tests / 13 assertions / exit 0.
 
 ### S2-P0-21 — The RB-01 remediation does not survive a database rebuild
 
@@ -358,12 +381,28 @@ git grep "Thiqa Database Upgrade" -- sql/ src/ contrib/                        �
   of which exists in `sql/`, in the seed, or in any migration.
 - **Blocks SkyEagle?** YES — arguably the most urgent item, since a rename would be built on ephemeral state.
 
-**Status: IN PROGRESS (continuation Rev 9).** Durability will not be implemented by appending fragile rows to
-`currentLanguage_utf8.sql`. A separate generated SQL supplement, sourced from a checked-in neutral JSON
-contract, will load after either the local or optional online installer translation dump. The branch-cut
-translation mutator will regenerate/reassert the supplement after copying the prior-release blob, so release
-preparation cannot erase it. Fresh-install, rebuild, release-copy and stale-regeneration tests are required
-before closure.
+**Status: FIXED — VERIFIED (continuation Rev 10).** The authoritative source is
+`contrib/util/language_translations/contracts/database-upgrade.json`, with all 28 observed language IDs including
+RTL 7/22/37. Its deterministic generated supplement is separate from `currentLanguage_utf8.sql`, loads
+immediately after either the local or online installer translation source, and is regenerated by
+`TranslationFileCopyFromPriorRelMutator` after every prior-release copy. Fresh install, upgrade and patch SQL
+paths all create the migration journal; schema marker and `version.php` are synchronized at 542.
+
+Final disposable MariaDB proof used only `openemr_prebrand_translation_20260824_final`. The final supplement
+was applied twice (exit 0, 8.980 s): target constants 1; target definitions 28; RTL definitions 3; orphans 0;
+duplicate pairs 0. The exact schema name was verified before deletion; drop exited 0 and a follow-up count was
+0. Installer ordering tests: 2 tests / 6 assertions / exit 0. Contract/generator tests: 4 tests / 42 assertions /
+exit 0. Release-copy/stale-regeneration tests: 6 tests / 13 assertions / exit 0. Schema/rebuild tests: 3 tests /
+17 assertions / exit 0. Live database touched: **NO (read-only SELECTs only)**. Live database restored:
+**NOT APPLICABLE**. Disposable database restored: **YES — dropped and confirmed absent**.
+
+Repair commits: `948e4a6d145e5d76ce8f8aa7434fc289ea4d73b5`,
+`02671f0c939f89197ab283296e4be31cae5065d2`, and
+`2baf7322a10f19fd6ed85407016db86514fa864c`; design record
+`ba0078c621f183b07049e0daa03b73acfa724271`. PR-29…PR-32 record the 16 new production files and supersede
+the 33-file patch inventory with 49. Remaining risk: none specific to these two P0 acceptance criteria; broader
+PRE-SKYEAGLE certification remains blocked by the recorded P1/P2 work, Scan 3 and PRE-25. Exact next incomplete
+task: **PRE-09 / S1-P1-03 — wire deterministic branding gates into CI**. No SkyEagle rebranding began.
 
 ---
 
@@ -1003,7 +1042,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S1-P0-13 + S2-P0-21; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 continues at S1-P1-03; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 

@@ -1581,3 +1581,58 @@ None of these eight conflict today — but `AuthorizationController.php` (PR-26)
 long-standing assumption: `setup.php` has **zero** upstream commits, contradicting PR-10's "high upstream
 churn" rating. The genuinely highest-churn recorded file is `interface/globals.php` (**6**), rated only
 "Medium" and conflict-free today.
+
+---
+
+# PR-29 … PR-32 — brand-neutral translation durability repair (2026-08-24)
+
+These records cover the 16 newly edited non-module production files introduced by S1-P0-13 / S2-P0-21.
+`sql_upgrade.php` was already counted by PR-12, so its new neutral-title and migration wiring does not add a
+second distinct file to the inventory. Tests are evidence, not production patch-footprint entries.
+
+## PR-29 — neutral database-upgrade title consumer
+
+**Files:** `src/Common/Translation/ProductContextTranslation.php`; `sql_upgrade.php` (already PR-12).
+**Commit:** `948e4a6d145e5d76ce8f8aa7434fc289ea4d73b5`. **Rebase risk:** LOW for the helper, MEDIUM for the
+already-recorded bootstrap consumer. The catalogue key is `%s Database Upgrade`; the application title comes
+from `openemr_name`, composition occurs before one context-specific HTML escape, and the parser accepts exactly
+one safe placeholder while preserving literal percent signs. No product identity is introduced.
+
+## PR-30 — authoritative durable translation seed and installer/release path
+
+**Files:** `library/classes/Installer.class.php`;
+`src/Common/Command/ReleasePrep/Mutator/TranslationFileCopyFromPriorRelMutator.php`;
+`contrib/util/language_translations/contracts/database-upgrade.json`;
+`contrib/util/language_translations/durableTranslationContracts_utf8.sql`;
+`src/Common/Translation/TranslationCatalogueContract.php`;
+`src/Common/Translation/TranslationContractSqlRenderer.php`.
+**Commit:** `02671f0c939f89197ab283296e4be31cae5065d2` (the two Portuguese preservation corrections were finalized
+in `2baf7322a10f19fd6ed85407016db86514fa864c`). **Rebase risk:** MEDIUM for installer/release automation,
+LOW for the separate contract files. The generated supplement loads after either installer translation source,
+and release preparation deterministically regenerates it after replacing the upstream snapshot.
+
+## PR-31 — reversible stable-ID migration engine and operator command
+
+**Files:** `src/Common/Command/TranslationCatalogueMigrationCommand.php`;
+`src/Common/Translation/QueryUtilsTranslationCatalogueStore.php`;
+`src/Common/Translation/TranslationCatalogueMigration.php`;
+`src/Common/Translation/TranslationCatalogueMigrationResult.php`;
+`src/Common/Translation/TranslationCatalogueStore.php`.
+**Commit:** `2baf7322a10f19fd6ed85407016db86514fa864c`. **Rebase risk:** LOW. Exact binary names are used only to
+resolve and assert a unique candidate; every mutation thereafter uses stable IDs. A transaction journal stores
+the exact before/after target state, blocks drift and conflicts, and makes forward and rollback idempotent.
+
+## PR-32 — migration journal schema and upgrade integration
+
+**Files:** `sql/database.sql`; `sql/8_1_1-to-8_2_0_upgrade.sql`; `sql/patch.sql`; `version.php`.
+**Commit:** `2baf7322a10f19fd6ed85407016db86514fa864c`. **Rebase risk:** MEDIUM because these are release schema
+surfaces. Fresh installs and both current upgrade paths create the InnoDB journal; the database schema marker
+and `version.php` move together from 541 to 542. `sql_upgrade.php` invokes the journalled migration only after
+the SQL files have created the journal.
+
+### Reconciliation after PR-29 … PR-32
+
+The prior authoritative inventory was **33** distinct production files. These four grouped records add **16**
+new distinct files; `sql_upgrade.php` remains one previously counted file. The authoritative current inventory
+is therefore **49 distinct production files**, all covered by PR-01…PR-32. This supersedes the 33-file figure
+for later V-09 and certification checks; earlier figures remain as historical snapshots only.
