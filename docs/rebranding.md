@@ -1778,16 +1778,17 @@ gaps larger than the rest combined:
 > analysis: `docs/RebrandingBugs.md` RB-01 and RB-02.
 
 1. ~~**The SET-TRANSLATION gap.**~~ **CLOSED.** BRAND-127/128/129 (the OAuth2 authorization screens and the
-   Zend module admin screens) now render "Thiqa Authorization" / "Thiqa Login" / "Thiqa Application" /
-   "Welcome to Thiqa" — delivered through the **translation catalogue**, which is the action §16.2 assigns
-   them (`Trk = NO`). The source literals are deliberately unchanged.
+   Zend module admin screens) now render tenant identity without product-name literals. OAuth composes the
+   tenant `applicationTitle` with translated `Authorization` / `Login` phrases; the Zend views retain their
+   unchanged source keys and three active English catalogue overrides.
 
    **The route matters more than the outcome here.** An interim attempt rebranded them by editing the
    literal inside `xl()`/`xlt()`. In OpenEMR the English source string *is* the catalogue key
    (`library/translation.inc.php:39-77` matches `lang_constants.constant_name` exactly), so that renamed
    the key and orphaned **59** existing translations across the shipped locales, Arabic included. It was
-   reverted and re-done as `lang_id = 1` rows via `tools/branding/brand-strings.json`. Zero translations
-   lost; a zero-occurrence test guard now prevents the regression recurring.
+   reverted. The two later-dead compound OAuth overrides are retired only when their `lang_id = 1` values
+   exactly match the formerly managed values, while custom and non-English definitions are preserved. Zero
+   translations lost; zero-occurrence and catalogue-lifecycle guards prevent the regression recurring.
 
 2. ~~**The installer/upgrade PATCH gap.**~~ **CLOSED.** `setup.php`, `sql_patch.php`, `sql_upgrade.php` and
    `ippf_upgrade.php` (BRAND-007…012) are patched, each with a numbered patch record (PR-10…PR-13) as `Q1`

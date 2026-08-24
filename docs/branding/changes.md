@@ -310,8 +310,8 @@ accidentally broken), and traceable to a backlog reference.
 > about numbers it never tested.
 >
 > The figures below are recomputed, and they also reflect the RB-01 remediation, which moved
-> BRAND-127/128/129 from NOT DONE to DONE (delivered as catalogue data, the mechanism §16.2 actually
-> assigns) and BRAND-007…012 from NOT DONE to DONE (delivered as PATCH, with records PR-10…PR-13).
+> BRAND-127/128/129 from NOT DONE to DONE (127/128 now use tenant-title composition; 129 remains catalogue
+> data) and BRAND-007…012 from NOT DONE to DONE (delivered as PATCH, with records PR-10…PR-13).
 
 | Status | Count | % of 136 |
 |---|---:|---:|
@@ -345,22 +345,22 @@ strikethrough and their evidence, rather than deleted, so the record shows what 
 | ~~008~~ | **DONE** | `setup.php` navbar-brand now "Thiqa Setup". PR-10 |
 | ~~009~~ | **DONE** | `setup.php` legend/body copy (6 strings) patched. PR-10 |
 | ~~010~~ | **DONE** | `sql_patch.php` title/banner now "Thiqa". PR-11. Note this file already kept the product name *outside* `xlt()`, so no translation was affected |
-| ~~011~~ | **DONE** | `sql_upgrade.php` title/`<h2>` now "Thiqa". PR-12. The `<h2>` was `xlt()`-wrapped and carried **28 translations**; all 28 were carried forward onto the new constant by `tools/branding/apply-brand-strings.php` rather than orphaned |
+| ~~011~~ | **DONE** | `sql_upgrade.php` title/`<h2>` use the neutral `%s Database Upgrade` catalogue contract with the tenant `openemr_name` supplied at runtime. PR-12 is the historical product-literal patch; PR-29…PR-32 supersede its translation mechanism with a durable fresh-install/upgrade contract |
 | ~~012~~ | **DONE** | `ippf_upgrade.php` title/heading/body now "Thiqa". PR-13 |
 | 030 | **NOT DONE** | Eye-Magic form still hardcodes `sites/default/images/login_logo.gif`. Unchanged: the plan records the Eye Magic form as not enabled in the Saudi product, so the hardcode is unreachable — but §16.2 still classifies it PATCH |
 | 070 | BLOCKED | Tenant-specific portal address; correctly deferred to provisioning, blocked on D-6 |
 | 102 | **NOT DONE** | `xl()`/`xlt()`-wrapped "OpenEMR" strings remain: **46 occurrences across 20 files** in fork-owned application code. Largest clusters: `library/globals.inc.php` (16), then `ScopeRepository.php` / `ServerScopeListEntity.php` / `interface/main/backup.php` (3 each). The mechanism to close these now exists (`tools/branding/brand-strings.json` + `apply-brand-strings.php`); the remaining work is enumerating them and agreeing the English replacements. **Method, so the number is reproducible:** recursive scan of `src/ interface/ library/ templates/ portal/` for `/xlt?\(\s*['"][^'"]*OpenEMR/`, **excluding** `oe-module-claimrev-connect` (a third-party Composer dependency relocated into the tree, not fork code), `vendor/`, `node_modules/` and `.claude/worktrees/`. Occurrences and matching lines both equal 46 — no line carries two matches. *(This supersedes a "43" figure quoted earlier the same day: that was a bare `grep \| wc -l` whose scope and metric were not stated, and it is not reproducible. See `docs/RebrandingBugs.md` §10.)* |
 | 103 | **NOT DONE** | 924 catalogue lines containing "OpenEMR" — no bulk catalogue edit yet |
-| 104 | PARTIAL | Arabic round-trip tooling built but not executed against the DB. *(Distinct from the English rebrand rows, which **were** applied — 33 changes, see BRAND-127…129 below)* |
+| 104 | PARTIAL | Arabic round-trip tooling built but not executed against the DB. *(Distinct from the three still-active English Zend overrides under BRAND-129; the obsolete BRAND-127/128 compound overrides are retired by exact managed value.)* |
 | 110 | BLOCKED | Facility name is tenant data, correctly deferred to provisioning, blocked on D-6/D-7 (mechanism). **Corrected 2026-08-19:** the live DB value is no longer "Your Clinic Name Here" — set to `Thiqa Demo Eye Clinic` via out-of-band demo seeding (PB-016), not this mechanism |
 | 111 | PARTIAL | PDF CSS build exists; Amiri Arabic fonts still not wired into mpdf/dompdf — blocked on D-9 (`docs/RebrandingBugs.md` RB-14) |
 | 119 | **NOT DONE — reclassified** | Duplicate favicon `<link>`. §16.2 says PATCH, the plan defers it. Resolved 2026-08-10 in favour of **DEFER**, recorded rather than left contradictory — see `docs/RebrandingBugs.md` RB-23 |
-| ~~127~~ | **DONE** | OAuth2 authorization titles (×3) now render "Thiqa Authorization" — via the **catalogue**, which is the action §16.2 assigns (SET-TRANSLATION, `Trk = NO`). Source literals are deliberately unchanged and now guarded at zero occurrences. Verified: `xl('OpenEMR Authorization')` → `Thiqa Authorization` |
-| ~~128~~ | **DONE** | OAuth2 login button → "Thiqa Login", same mechanism |
+| ~~127~~ | **DONE** | OAuth2 authorization titles (×3) compose tenant-provided `applicationTitle` with the translated `Authorization` phrase. The dead `OpenEMR Authorization` English override is retired only when its value exactly matches the former managed value; custom and non-English definitions are preserved |
+| ~~128~~ | **DONE** | OAuth2 login button uses the same identity-neutral composition with translated `Login`; the dead compound English override has the same exact-value retirement policy |
 | ~~129~~ | **DONE** | Zend module titles → "Thiqa Application" / "Welcome to Thiqa" / "Thiqa", same mechanism |
 
-**Why 127–129 are DONE without a source diff.** Their action is SET-TRANSLATION. An earlier attempt edited
-the literal inside `xl()`/`xlt()`, which renamed the catalogue key and orphaned **59** existing translations
-across the shipped locales including Arabic. That was reverted and replaced with `lang_id = 1` catalogue
-rows. All 59 translations are intact and the English UI is rebranded. Full analysis and measurements:
-`docs/RebrandingBugs.md` RB-01.
+**Why these remain identity-neutral.** An earlier attempt edited the literal inside `xl()`/`xlt()`, which
+renamed the catalogue key and orphaned **59** existing translations across the shipped locales including
+Arabic. That was reverted. BRAND-127/128 now compose tenant application identity with translated action
+phrases; BRAND-129 retains three live `lang_id = 1` catalogue overrides. The two obsolete compound English
+rows are exact-value retirements, never broad deletion. Full history and measurements: `docs/RebrandingBugs.md` RB-01.

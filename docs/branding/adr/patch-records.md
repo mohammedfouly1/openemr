@@ -589,11 +589,11 @@ PR-09 = 5 files, PR-10…PR-13 = 4 files).
 
 **The count reached 23 briefly and was brought back down to 17.** An earlier working tree also edited
 `templates/oauth2/*.twig` (3 files) and the three Zend `*.phtml` layouts for BRAND-127/128/129. Those six
-edits were **reverted**: those BRAND IDs carry the action **SET-TRANSLATION**, not PATCH, and editing the
-literal inside `xl()`/`xlt()` orphaned 59 existing translations because the English source string is the
-catalogue key. They are now delivered as catalogue data via `tools/branding/brand-strings.json`, so they
-are correctly **absent** from this document — a SET-TRANSLATION item that needs a patch record is a
-SET-TRANSLATION item done wrong. Full analysis: `docs/RebrandingBugs.md` RB-01.
+literal-renaming edits were **reverted** because editing inside `xl()`/`xlt()` orphaned 59 translations.
+The Zend views retain unchanged keys and three active catalogue overrides. OAuth later gained the
+identity-neutral `applicationTitle` + translated-action composition recorded by PR-25…PR-27; the obsolete
+compound English overrides are now retired only by exact managed value. Full history:
+`docs/RebrandingBugs.md` RB-01.
 
 ---
 
@@ -1527,6 +1527,9 @@ therefore **doubled**; Arabic was absent both before and after. An earlier audit
 loss in the product's primary target locale" is **incorrect** and is withdrawn here.
 The residual concern is real but narrower: **bare juxtaposition hardcodes English word order**, so an RTL
 locale renders `Thiqa الولوج`. Prefer a placeholder-bearing key on any future change.
+The former English overrides for `OpenEMR Authorization` and `OpenEMR Login` have no remaining consumers;
+S1-P1-02 retires only rows that still exactly equal this project's managed values, preserving custom and
+non-English definitions.
 These three files carry a **zero-count guard** in
 `tests/Tests/Isolated/BrandingCoreStrings/MandatoryCoreStringPatchesIsolatedTest.php` — they must never
 contain a product-name literal.

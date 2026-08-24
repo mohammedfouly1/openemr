@@ -10,7 +10,12 @@
  * string -- see `docs/RebrandingBugs.md` RB-01, which measured 59 translations destroyed
  * that way.
  *
- * Two operations, both idempotent:
+ * Three operations, all idempotent:
+ *
+ *  - `retired_english_overrides` -- remove only an exact lang_id=1 value previously
+ *    managed by this catalogue. A missing row is already clean; a different value is
+ *    operator/tenant data and is preserved. Constants and non-English definitions are
+ *    never deleted.
  *
  *  - `english_overrides` -- write a lang_id=1 ("English (Standard)") definition for an
  *    existing constant. `xl()` consults lang_id=1 exactly like any other language
@@ -33,6 +38,8 @@
 declare(strict_types=1);
 
 namespace OpenEMR\Branding;
+
+require_once __DIR__ . '/src/RetiredEnglishOverrideDecision.php';
 
 /** English (Standard). OpenEMR seeds this language id in every install. */
 const ENGLISH_LANG_ID = 1;
@@ -61,7 +68,13 @@ if ($raw === false) {
     exit(1);
 }
 
-/** @var array{english_overrides: list<array<string, mixed>>, carry_forward: list<array<string, mixed>>} $document */
+/**
+ * @var array{
+ *     english_overrides: list<array<string, mixed>>,
+ *     retired_english_overrides?: list<array<string, mixed>>,
+ *     carry_forward: list<array<string, mixed>>
+ * } $document
+ */
 $document = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
 
 // Bootstrap OpenEMR far enough to get a tenant-scoped database handle. $ignoreAuth is
@@ -101,7 +114,67 @@ echo 'Site:     ', $site, PHP_EOL;
 echo 'Mode:     ', $dryRun ? 'DRY RUN (no writes)' : 'APPLY', PHP_EOL, PHP_EOL;
 
 // ---------------------------------------------------------------------------
-// 1. English overrides
+// 1. Retire obsolete managed English overrides
+// ---------------------------------------------------------------------------
+foreach ($document['retired_english_overrides'] ?? [] as $entry) {
+    $constant = (string) $entry['constant'];
+    $managedEnglish = (string) $entry['managed_english'];
+
+    $constantRow = sqlQuery(
+        'SELECT cons_id FROM lang_constants WHERE BINARY constant_name = ? LIMIT 1',
+        [$constant]
+    );
+    if (empty($constantRow['cons_id'])) {
+        echo "  OK    retired constant absent: {$constant}", PHP_EOL;
+        $skipped++;
+        continue;
+    }
+
+    $consId = (int) $constantRow['cons_id'];
+    $existing = sqlQuery(
+        'SELECT def_id, definition FROM lang_definitions WHERE cons_id = ? AND lang_id = ? LIMIT 1',
+        [$consId, ENGLISH_LANG_ID]
+    );
+    $existingDefinition = empty($existing['def_id'])
+        ? null
+        : (string) ($existing['definition'] ?? '');
+
+    $decision = RetiredEnglishOverrideDecision::forDefinition($existingDefinition, $managedEnglish);
+    if ($decision === RetiredEnglishOverrideDecision::AlreadyAbsent) {
+        echo "  OK    retired override already absent: {$constant}", PHP_EOL;
+        $skipped++;
+        continue;
+    }
+
+    if ($decision === RetiredEnglishOverrideDecision::PreserveDifferent) {
+        echo "  KEEP  retired override differs from managed value: {$constant}", PHP_EOL;
+        $skipped++;
+        continue;
+    }
+
+    echo "  DELETE retired managed override: {$constant} -> {$managedEnglish}", PHP_EOL;
+    $planned[] = "DELETE retired en: {$constant}";
+    if ($dryRun) {
+        continue;
+    }
+
+    sqlStatement(
+        'DELETE FROM lang_definitions'
+        . ' WHERE def_id = ? AND cons_id = ? AND lang_id = ? AND BINARY definition = ?',
+        [(int) $existing['def_id'], $consId, ENGLISH_LANG_ID, $managedEnglish]
+    );
+    $remaining = sqlQuery(
+        'SELECT def_id FROM lang_definitions WHERE def_id = ? LIMIT 1',
+        [(int) $existing['def_id']]
+    );
+    if (!empty($remaining['def_id'])) {
+        throw new \RuntimeException("Retired managed override was not deleted: {$constant}");
+    }
+    $applied++;
+}
+
+// ---------------------------------------------------------------------------
+// 2. Active English overrides
 // ---------------------------------------------------------------------------
 foreach ($document['english_overrides'] as $entry) {
     $constant = (string) $entry['constant'];
@@ -149,7 +222,7 @@ foreach ($document['english_overrides'] as $entry) {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Carry-forward of translations onto a renamed constant
+// 3. Carry-forward of translations onto a renamed constant
 // ---------------------------------------------------------------------------
 foreach ($document['carry_forward'] as $entry) {
     $from = (string) $entry['from_constant'];

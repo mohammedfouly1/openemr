@@ -141,7 +141,7 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
             'error page 400 JSON location' => ['templates/error/400.json.twig', 1],
             'error page 404 JSON location' => ['templates/error/404.json.twig', 1],
             'general HTTP error page title' => ['templates/error/general_http_error.html.twig', 1],
-            // The six SET-TRANSLATION consumers below are asserted at ZERO deliberately.
+            // The six former compound-string consumers below are asserted at ZERO deliberately.
             //
             // BRAND-127/128/129 carry the action SET-TRANSLATION in docs/rebranding.md §16.2
             // (Trk = NO), which means the rebrand is catalogue data, not a source edit. An
@@ -152,15 +152,16 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
             // — measured and recorded as docs/RebrandingBugs.md RB-01.
             //
             // These rows are therefore a regression guard, not an omission: a "Thiqa"
-            // literal reappearing in any of these files means someone has re-broken the
-            // catalogue. The rebrand for these six files lives in
-            // tools/branding/brand-strings.json and is applied by
-            // tools/branding/apply-brand-strings.php.
-            'oauth2 login (SET-TRANSLATION: must stay clean)' => ['templates/oauth2/oauth2-login.html.twig', 0],
-            'oauth2 patient-select (SET-TRANSLATION: must stay clean)' => [
+            // literal reappearing in any of these files would hardcode tenant identity.
+            // OAuth now composes tenant applicationTitle with independently translated
+            // action phrases; the three Zend views retain active catalogue overrides.
+            'oauth2 login (tenant title composition: must stay clean)' => [
+                'templates/oauth2/oauth2-login.html.twig', 0,
+            ],
+            'oauth2 patient-select (tenant title composition: must stay clean)' => [
                 'templates/oauth2/patient-select.html.twig', 0,
             ],
-            'oauth2 scope-authorize (SET-TRANSLATION: must stay clean)' => [
+            'oauth2 scope-authorize (tenant title composition: must stay clean)' => [
                 'templates/oauth2/scope-authorize.html.twig', 0,
             ],
             'zend Application layout (SET-TRANSLATION: must stay clean)' => [
@@ -241,12 +242,11 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
                 ['"Thiqa Error"|xlt'],
                 ['"OpenEMR Error"'],
             ],
-            // BRAND-127/128/129 are NOT listed here. Their action is SET-TRANSLATION, so the
-            // source literal must remain the upstream English string — it is the catalogue
-            // key. Asserting a "Thiqa" literal in those files would enshrine the RB-01
-            // regression. Their guard is the zero-count row in
-            // hardcodedProductNameInventoryProvider(), and their rebrand is verified against
-            // the catalogue, not the source.
+            // BRAND-127/128/129 are NOT listed here. The OAuth views use tenant-provided
+            // applicationTitle plus translated action phrases, while the Zend views use
+            // unchanged upstream catalogue keys. Asserting a "Thiqa" literal in any of
+            // those files would enshrine a tenant-isolation regression. Their guard is the
+            // zero-count inventory above; the detailed mechanism is covered separately.
             'setup.php titles and navbar (BRAND-007, BRAND-008)' => [
                 'setup.php',
                 [

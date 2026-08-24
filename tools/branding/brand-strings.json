@@ -1,27 +1,11 @@
 {
     "schema": "thiqa-brand-strings/1",
-    "description": "Source of truth for BRAND items whose action is SET-TRANSLATION (docs/rebranding.md §16.2), plus catalogue carry-forward for PATCH items whose literal happened to be xl()/xlt()-wrapped. Consumed by tools/branding/apply-brand-strings.php.",
+    "description": "Source of truth for active SET-TRANSLATION items and exact-value retirement of obsolete managed English overrides. Consumed by tools/branding/apply-brand-strings.php.",
     "why_this_file_exists": "In OpenEMR the English source string IS the catalogue key (library/translation.inc.php:39-77 looks the literal up in lang_constants by exact match). Editing the literal inside xlt() therefore ORPHANS every existing translation of that string. RebrandingBugs.md RB-01 measured 59 translations destroyed that way. SET-TRANSLATION items must be delivered as catalogue data, never as a source edit. xl() consults lang_id=1 (English (Standard)) exactly like any other language -- there is no English short-circuit -- so an English row rebrands the UI while leaving every other locale intact.",
     "product_name": "Thiqa",
     "upstream_name": "OpenEMR",
 
     "english_overrides": [
-        {
-            "constant": "OpenEMR Authorization",
-            "english": "Thiqa Authorization",
-            "brand_ids": ["BRAND-127"],
-            "consumers": [
-                "templates/oauth2/oauth2-login.html.twig",
-                "templates/oauth2/patient-select.html.twig",
-                "templates/oauth2/scope-authorize.html.twig"
-            ]
-        },
-        {
-            "constant": "OpenEMR Login",
-            "english": "Thiqa Login",
-            "brand_ids": ["BRAND-128"],
-            "consumers": ["templates/oauth2/oauth2-login.html.twig"]
-        },
         {
             "constant": "OpenEMR Application",
             "english": "Thiqa Application",
@@ -43,16 +27,22 @@
         }
     ],
 
-    "carry_forward": [
+    "retired_english_overrides": [
         {
-            "from_constant": "OpenEMR Database Upgrade",
-            "to_constant": "Thiqa Database Upgrade",
-            "substitute": { "OpenEMR": "Thiqa" },
-            "brand_ids": ["BRAND-011"],
-            "consumers": ["sql_upgrade.php"],
-            "note": "BRAND-011's action is PATCH, so the source literal is legitimately edited. But the literal was xlt()-wrapped and carried 28 translations, which the rename orphaned. This copies each existing translation onto the new constant with the product proper noun substituted, so no locale loses the string."
+            "constant": "OpenEMR Authorization",
+            "managed_english": "Thiqa Authorization",
+            "brand_ids": ["BRAND-127"],
+            "reason": "All former OAuth consumers now compose applicationTitle with the translatable Authorization phrase. Delete only the exact managed lang_id=1 row; preserve custom and non-English definitions."
+        },
+        {
+            "constant": "OpenEMR Login",
+            "managed_english": "Thiqa Login",
+            "brand_ids": ["BRAND-128"],
+            "reason": "The former OAuth login consumer now composes applicationTitle with the translatable Login phrase. Delete only the exact managed lang_id=1 row; preserve custom and non-English definitions."
         }
     ],
+
+    "carry_forward": [],
 
     "deliberately_not_changed": [
         {
