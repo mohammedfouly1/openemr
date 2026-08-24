@@ -29,6 +29,7 @@
 | 17 | **PRE-09 / S1-P1-10 FIXED — VERIFIED; Arabic PDF capability remains unavailable by recorded Owner decision.** `723170df701ddb948a95b8177d100411fc71b0d9` removes the false installer claim that Amiri is registered with mPDF, distinguishes asset delivery from engine support, corrects the stale IBM-Plex PDF recommendation, and installs a canonical truthfulness guard. Current runtime evidence is mPDF 8.3.1, dompdf 3.1.5, DejaVu Sans default, and no Amiri/Noto registration; EV-RB14 records the shaping failure and Owner-adopted Option C through pilot. Targeted 2 tests / 20 assertions and canonical 164 / 2,167 passed; manifest returned from the expected 121/123 pre-reissue failure to 123/123 after exactly two documented hash reissues. The old claim caused the named test to fail exit 1 and exact installer restoration was verified. Next incomplete task: S1-P1-11 operational Thiqa identity classification/neutralization. |
 | 18 | **PRE-09 / S1-P1-11 FIXED — VERIFIED; live infrastructure and compatibility history preserved.** `29be1fcd5b14001ce2a1a0d1aa390ef10aa617a0` classifies the ten relevant operational occurrences, neutralizes only the reusable date-rebase labels and stale hypothetical bucket example, and explicitly preserves the historical deployment branch, production module directory, pre-existing external bucket and historical records. No remote host, installed unit, branch, module, bucket or backup was changed. The contract passed 2 tests / 14 assertions; both edited shells passed `bash -n`; canonical gate passed 12/12 artefacts, 123/123 manifest and 166 / 2,181. A reintroduced Thiqa service label failed the named test exit 1, followed by exact script restoration and final passes. Next incomplete task: S2-P1-18 branding-health truthfulness. |
 | 19 | **PRE-09 / S2-P1-18 FIXED — VERIFIED; the live tenant now reports the truth and exits 0.** `1474263b4` introduces `BrandingObservationPlane`, which names the served route (overlay globals → revision-keyed `<link>` → `branding-tokens.php`) and the unserved static-artefact route (`public/branding/<site>/tokens-*.css`, D-8) and owns the single severity rule. Every finding declares its plane; the report keeps served-plane inconsistencies and static-artefact advisories in separate lists and refuses a finding placed on the wrong plane; only served-plane findings reach `statusFor()`. Two new served-plane cases (`overlay_without_revision`, `unrenderable_token_overlay`) close the under-measured half, and the overlay is read through the runtime's own `TokenOverlay::fromJson()`. The gate gap is closed: the Observability suite and `VerifyCommandTest` now run inside `composer branding-ci`, pinned by a new truthfulness contract. Live `verify` moved from `inconsistent` / exit 1 to `never materialised` / exit 0 with one advisory, with the database and both generated files unchanged. Targeted 65 tests / 684 assertions; canonical gate 12/12 artefacts, 123/123 manifest, 219 tests / 2,413 assertions; all exit 0. Next incomplete task: S1-P1-04 guardrail namespace cross-check. |
+| 20 | **PRE-09 / S1-P1-04 FIXED — VERIFIED. S2-P1-20 PARTLY REFUTED (Correction K), remainder FIXED — VERIFIED.** `2df9b5eb1`. S1-P1-04: `ThiqaBrandingGuardrailScopeTest` locates the module by a brand-neutral anchor (`src/Config/BrandingGlobalKey.php` / the Q58 `saas_branding_` prefix), derives the production namespace from its PSR-4 autoload prefix, cross-checks that against all 92 shipped source files, and asserts each rule's `MODULE_NAMESPACE` equals it — failing in both directions. Negative control renamed production to a SkyEagle prefix with the constants left alone: 7 failures / exit 1, naming all four rules as "would go inert". S2-P1-20: the four identical Inter hashes reproduced exactly, but a WOFF2 table-directory decode found `fvar`/`gvar`/`HVAR` in every Inter file and none in any IBM Plex file — Inter is one **variable** face, the shipped CSS declares it at `font-weight: 400 700`, and RB-22's "FIXED" is accurate. The rendering claim is withdrawn as Correction K. The real gap — nothing verified that a *static* family's declared weights map to distinct faces — is closed by `BrandingFontFaceDistinctnessContractTest`; the three unreferenced duplicate binaries are pinned rather than deleted, since retiring them is an Owner asset-governance decision. Targeted 9/240 and 5/218; full guardrail suite 63/320; canonical gate 12/12 artefacts, 123/123 manifest, 233 tests / 2,871 assertions; all exit 0. Next incomplete task: S2-P1-23 RTL word-order regression. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -50,7 +51,7 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          1474263b4 (S2-P1-18 repair; observed before the Rev 19 checkpoint commit)
+CURRENT OBSERVED HEAD:          2df9b5eb1 (S1-P1-04 + S2-P1-20 repair; before the Rev 20 checkpoint commit)
 CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 19 checkpoint edit;
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
@@ -87,6 +88,7 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `88ff34289` | PRE-09 / S1-P1-06 | Reconciled all three authoritative D-8 records with shipped materialisation behavior, retained D-8 as OPEN, corrected the associated risk/closure counts, and added a canonical regression guard against false closure. |
 | `723170df7` | PRE-09 / S1-P1-10 | Removed the false Amiri/mPDF registration claim, kept D-9 and the accepted pilot limitation explicit, corrected stale PDF evidence, added a truthfulness guard, and re-issued exactly two covered-document hashes. |
 | `29be1fcd5` | PRE-09 / S1-P1-11 | Classified operational identity, neutralized only safe reusable labels/stale examples, preserved live/historical/compatibility identifiers, and added a canonical regression guard. |
+| `2df9b5eb1` | PRE-09 / S1-P1-04 + S2-P1-20 | Added the independent guardrail-scope cross-check (module PSR-4 prefix vs all four rule constants, both directions), and the font-face distinctness contract (a shared face must be variable; a static family must be byte-distinct). Refuted S2-P1-20's rendering claim with a WOFF2 table-directory decode and recorded it as Correction K. No production source, font binary or asset manifest changed. |
 | `1474263b4` | PRE-09 / S2-P1-18 | Separated the served branding plane from the unserved static-artefact plane, made only served-plane findings fail a health probe, added two served-plane cases the old model could not see, read the overlay through the runtime parser, gated the health suite in `composer branding-ci`, and corrected the three records that had drifted on the RB-11 reading. |
 
 Add a row for every further remediation commit.
@@ -108,7 +110,7 @@ under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
 Those landed-work verification steps and the next eleven PRE-09 repairs are now complete; see revisions 6…18.
-**Exact next incomplete item:** PRE-09 / S1-P1-04 guardrail namespace cross-check.
+**Exact next incomplete item:** PRE-09 / S2-P1-23 RTL word-order regression.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -171,7 +173,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 13 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). **Next:** S1-P1-04 guardrail namespace cross-check, then the remaining finding register in dependency order. |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 13 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). **Next:** S2-P1-23 RTL word order, then S2-P1-22 / S2-P1-24 / S2-P1-26 in the same Arabic-leak family. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -205,25 +207,24 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 8 open · P2 4 open
-                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-25.
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 6 open · P2 4 open
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-04; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-25.
+                    REFUTED IN PART, REMAINDER FIXED: S2-P1-20 (see Correction K).
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
                     P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix)
                     -> 15 (S1-P1-15 fix) -> 14 (S1-P1-17 fix) -> 13 (S1-P1-02 fix)
                     -> 12 (S1-P1-05 fix) -> 11 (S1-P1-06 fix) -> 10 (S1-P1-10 fix)
-                    -> 9 (S1-P1-11 fix) -> 8 (S2-P1-18 fix).
-                    STILL OPEN (P1): S1-P1-04; S2-P1-19; S2-P1-20; S2-P1-21(P1 slot);
-                    S2-P1-22; S2-P1-23; S2-P1-24; S2-P1-26.
-                    NOTE ON THE COUNT: only 7 of those 8 have a written section in this
-                    checkpoint (§6 documents S1-P1-04, S2-P1-20, S2-P1-22, S2-P1-23,
-                    S2-P1-24, S2-P1-26). The arithmetic above therefore carries one
-                    unlabelled P1 slot inherited from Scan-2's register that was never
-                    transcribed here. Treat the seven documented findings as the
-                    actionable set and resolve the discrepancy at PRE-25 rather than
-                    inventing a finding to fill the slot.
-                    Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
-                    repairing it. It stays open until the guardrail constants gain a real
-                    cross-check against the production namespace.
+                    -> 9 (S1-P1-11 fix) -> 8 (S2-P1-18 fix) -> 7 (S1-P1-04 fix)
+                    -> 6 (S2-P1-20 refuted-in-part + remainder fixed).
+                    STILL OPEN (P1): S2-P1-22; S2-P1-23; S2-P1-24; S2-P1-26, plus one
+                    unlabelled slot.
+                    NOTE ON THE COUNT: only 4 of those 6 have a written section in this
+                    checkpoint (§6 documents S2-P1-22, S2-P1-23, S2-P1-24, S2-P1-26). The
+                    arithmetic carries two unlabelled P1 slots inherited from Scan-2's
+                    register that were never transcribed here (the numbering gap at
+                    S2-P1-19 and S2-P1-21 is where they sit). Treat the four documented
+                    findings as the actionable set and resolve the discrepancy at PRE-25
+                    rather than inventing findings to fill the slots.
 
 SAFE TO START SKYEAGLE:  NO
 ```
@@ -528,6 +529,37 @@ docblock says so. Fixtures and rule constants are mutually consistent *by constr
 misses production stays green.
 **Required remediation:** `production namespace changes + rule constant does not → deterministic test failure.`
 
+**Status: FIXED — VERIFIED (continuation Rev 20).** `ThiqaBrandingGuardrailScopeTest` derives the
+production namespace from the module itself and asserts the four constants follow it, failing in both
+directions. The module is located by a brand-neutral anchor — the unique custom module carrying
+`src/Config/BrandingGlobalKey.php`, whose `saas_branding_` prefix locked decision Q58 forbids renaming —
+so a future SkyEagle migration that renames both the namespace and the directory still resolves to the
+right module and still demands the constants move with it. The namespace comes from that module's own
+PSR-4 autoload prefix, which a real rename cannot skip because it is what makes the classes loadable, and
+is cross-checked against the `namespace` declaration of all 92 shipped source files.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S1-P1-04
+Previous status: EXECUTION-PROVEN DEFECT, NOT REPAIRED (proving a defect is not repairing it)
+Current status: FIXED — VERIFIED
+Implementation commit: see the remediation-commit table row for S1-P1-04
+Files changed: tests/Tests/Isolated/PHPStan/ThiqaBranding/ThiqaBrandingGuardrailScopeTest.php (new); docs/branding/architecture.md §7.5a; docs/branding/adr/patch-records.md (PR-36)
+Production source changed: NONE — the guardrail rules themselves are untouched
+Derivation chain: brand-neutral anchor file -> unique module directory -> module composer.json PSR-4 prefix -> compared against every shipped src/**/*.php namespace declaration -> compared against each rule's MODULE_NAMESPACE read by reflection
+Constants covered: MODULE_NAMESPACE on all four rules; MATERIALISATION_NAMESPACE on the HTTP-client rule, additionally required to name a directory that exists
+Fixture coupling closed: the in-scope violating fixtures must declare the production namespace, so a rename touching only fixtures no longer leaves the rule suites green against a namespace nothing ships under
+Twig tip coupling: the rule's addPath() advice must name the real module directory basename
+Targeted positive: 9 tests / 240 assertions / exit 0
+Full guardrail suite after restoration: 63 tests / 320 assertions / exit 0
+Canonical positive: 12/12 generated artefacts; 123/123 manifest; 228 tests / 2,653 assertions; true exit 0; 2026-08-24T17:12:06.6088840Z–17:13:01.2632943Z; 54.654 s
+Lint/style: PHP lint exit 0; PHPCS 1/1 exit 0
+Negative control (the finding's exact scenario): the module's PSR-4 prefix was renamed to OpenEMR\Modules\SkyEagleBranding with the rule constants deliberately left alone; 7 failures / true exit 1, naming all four rules with "would go inert: it matches a namespace the module does not ship under"
+Restoration: module composer.json restored exactly to SHA256 ED6A928EA4B64923DE140699B013295F9C68BC27650C31D323A39AA4FD6FA229; temporary backup removed; full guardrail suite then passed
+Why a test rather than a code change: deriving the namespace inside a PHPStan rule would put file I/O and JSON parsing on every analysed node and would fail OPEN if the manifest were unreadable. A constant verified by a deterministic gate keeps the rules trivial and fails CLOSED, before a rename can land.
+Residual gap (unchanged, and honest): this proves constant-vs-production alignment, not a full end-to-end PHPStan run. The unexercised link remains PHPStan's Scope::getNamespace() returning the string these constants are compared against — the same residual PRE-10 recorded. It is mechanical, and the finding no longer depends on it.
+Database / Apache / browser touched: NO / NO / NO
+```
+
 ### S1-P1-05 — WCAG evidence-of-record understates itself
 `brand/qa/wcag-contrast-results.json` = **38 pairs / 35 PASS / 3 ADVISORY / 0 FAIL** (verified by orchestrator).
 `docs/branding-production/08-wcag-contrast.md` still says 34 / 31 / 3.
@@ -806,6 +838,48 @@ face under four names, so `font-weight: 500/600/700` all resolve identically —
 weight axis. The manifest *records* the duplication and passes it, because it only checks self-consistency,
 never that four declared weights are four distinct faces.
 
+**Status: PARTLY REFUTED, REMAINDER FIXED — VERIFIED (continuation Rev 20). See Correction K.**
+
+- **The rendering claim is FALSE and is withdrawn.** Inter ships as a **variable** face. Decoding the WOFF2
+  table directory of every shipped face found `fvar`, `gvar`, `HVAR` in all four Inter files (21 tables) and
+  **no `fvar`** in any IBM Plex Sans Arabic file (17 tables). A variable face declared with a
+  `font-weight: <min> <max>` range renders every weight in that range.
+  `interface/themes/thiqa/_typography.scss:22-26` declares exactly one Inter `@font-face` at
+  `font-weight: 400 700`; all 8 compiled theme files reference `Inter-Regular.woff2` once each, with **zero**
+  references to `-Medium`/`-SemiBold`/`-Bold`. `typography-tokens.json` already points all four Inter weights
+  at the one variable file. **RB-22's "FIXED" is accurate**, and the scan's inference — not its observation —
+  was the error. The hash observation itself reproduced exactly.
+- **The manifest-gap half is TRUE and is now closed.** `SHA256SUMS` verifies each file against its own
+  recorded hash, so it would pass four identical files under four names — which for a *static* family is a
+  genuine rendering defect. `BrandingFontFaceDistinctnessContractTest` (inside `composer branding-ci`) now
+  requires that a family backing several declared weights with one file prove that file carries `fvar`;
+  requires a static family's faces to be byte-distinct; keeps a positive control so the detector cannot
+  degrade into "everything is variable"; and pins the three duplicates as unreferenced.
+- **The redundant binaries are real and are recorded, not deleted.** `Inter-Medium/-SemiBold/-Bold.woff2` are
+  still present under `brand/typography/fonts/` and installed into `public/assets/fonts/thiqa/`, 48,256 bytes
+  each, referenced by nothing. Browsers never fetch them, so the cost is ~145 KB of deployed disk, not
+  bandwidth. **Deleting them is an asset-governance decision, not cleanup:** they carry approved-asset IDs
+  inside the 107-entry brand inventory, so removal changes `SHA256SUMS`, `asset-manifest.csv`,
+  `asset-manifest.json`, the `THIQA-###` ID set and every document quoting 107. Left for an Owner decision;
+  the contract test makes re-referencing one a deterministic failure in the meantime.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S2-P1-20
+Previous status: CONFIRMED — LEDGER ITEM MARKED FIXED IS NOT FIXED
+Current status: REFUTED IN PART (rendering claim withdrawn); REMAINING GAP FIXED — VERIFIED
+Implementation commit: see the remediation-commit table row for S2-P1-20
+Method, so it is re-runnable: WOFF2 table-directory decode (flag byte + UIntBase128 walk, known-tag index table) over every file in brand/typography/fonts; SHA-256 over the same set; reference counts over public/themes/*.css
+Font evidence: Inter-{Regular,Medium,SemiBold,Bold}.woff2 all 48,256 bytes, SHA-256 3100E775E8616CD2..., 21 tables, fvar+gvar+HVAR present; IBMPlexSansArabic-{Regular,Medium,SemiBold,Bold}.woff2 42,848/45,296/45,688/44,280 bytes, four distinct hashes, 17 tables, no fvar
+Stylesheet evidence: Inter-Regular referenced 8 times across public/themes/*.css (once per theme file); Inter-Medium, Inter-SemiBold, Inter-Bold referenced 0 times
+Contract evidence: typography-tokens.json maps all four Inter weights to fonts/Inter-Regular.woff2 and each IBM Plex weight to its own file; on-disk SHA-256 AAF223C70690613AEE22E9269FFCFBB11F98AE46016AFF7EE82EE4057D52EBFF matches the SHA256SUMS entry
+Targeted positive: 5 tests / 218 assertions / exit 0
+Negative control: one IBM Plex weight re-pointed at IBMPlexSansArabic-Regular.woff2, making a static family share a face; 1 failure / true exit 1 naming the family, the file and the missing fvar table
+Restoration: typography-tokens.json restored exactly to SHA256 AAF223C70690613AEE22E9269FFCFBB11F98AE46016AFF7EE82EE4057D52EBFF; temporary backup removed
+Fonts, assets or manifest mutated: NO
+Deferred decision: whether to retire the three unreferenced duplicate binaries and renumber the 107-asset inventory. Owner call; not taken here.
+Database / Apache / browser touched: NO / NO / NO
+```
+
 ### S2-P1-22 — Live Arabic brand leak on five surfaces
 No `lang_id=22` (Arabic) row exists for any of the five override constants:
 
@@ -971,6 +1045,15 @@ was a measurement artefact of piping through `tail`. WITHDRAWN.
 inventory (`rebranding.md` §5.7, §9.8), action **PRESERVE**, frozen under locked decision **Q17** /
 constraint **C6**, together with the `OpenEMR=<sid>` session-cookie name (BRAND-131). Deliberate and
 out of scope for the rename. Do not re-litigate as a leak.
+
+**Correction K — "the Latin surface has no real weight axis" (S2-P1-20) is WITHDRAWN.** Inter ships as a
+**variable** face: `fvar`, `gvar` and `HVAR` are present in all four Inter WOFF2 files (21 tables); IBM Plex
+Sans Arabic carries none of them (17 tables) and is genuinely four static faces. One variable file declared
+at `font-weight: 400 700` renders 500 and 600 correctly, which is exactly what the shipped
+`_typography.scss` and all 8 compiled themes do. **RB-22's "FIXED — rebuilt and verified" is accurate.** The
+four-identical-hashes *observation* is true and reproduced exactly; the inference drawn from it was not.
+Do not reassert it. What remains true: three unreferenced duplicate binaries still ship (~145 KB of deployed
+disk), and until Rev 20 nothing verified that a *static* family's declared weights map to distinct faces.
 
 **Correction J — `setup.php` has ZERO upstream commits** since the fork base, contradicting PR-10's
 "high upstream churn" rating. Actual highest-churn recorded file is `interface/globals.php` (6 commits),
@@ -1352,7 +1435,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S1-P1-04; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 continues at S2-P1-23; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 
