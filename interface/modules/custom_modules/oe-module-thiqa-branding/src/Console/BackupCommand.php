@@ -14,7 +14,10 @@ declare(strict_types=1);
 
 namespace OpenEMR\Modules\ThiqaBranding\Console;
 
+use DateTimeImmutable;
+use InvalidArgumentException;
 use OpenEMR\Common\Database\QueryUtils;
+use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -43,22 +46,44 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 final class BackupCommand extends Command
 {
+    // Deployment-compatibility default only. Portable/provisioned hosts must pass --target.
     private const DEFAULT_TARGET = 'C:/openemr-stack/backups';
     private const DEFAULT_KEEP = 7;
 
     protected function configure(): void
     {
         $this->addOption('target', null, InputOption::VALUE_REQUIRED, 'Backup directory', self::DEFAULT_TARGET);
-        $this->addOption('keep', null, InputOption::VALUE_REQUIRED, 'Backups to retain', (string) self::DEFAULT_KEEP);
-        $this->addOption('label', null, InputOption::VALUE_REQUIRED, 'Label for this run', 'scheduled');
+        $this->addOption(
+            'keep',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Positive number of managed backups to retain across neutral and legacy formats',
+            (string) self::DEFAULT_KEEP
+        );
+        $this->addOption(
+            'label',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Run label: 1-63 ASCII letters, digits, underscores or hyphens',
+            'scheduled'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $target = rtrim((string) $input->getOption('target'), '/\\');
-        $keep = max(1, (int) $input->getOption('keep'));
-        $label = preg_replace('/[^a-z0-9_-]/i', '', (string) $input->getOption('label')) ?: 'run';
+        $target = (string) $input->getOption('target');
+        $retention = new ManagedBackupRetention();
+        try {
+            ManagedBackupRetention::assertTargetInput($target);
+            $keep = ManagedBackupRetention::parseKeep($input->getOption('keep'));
+            $label = (string) $input->getOption('label');
+            ManagedBackupArtifact::assertValidLabel($label);
+        } catch (InvalidArgumentException $error) {
+            $io->error($error->getMessage());
+
+            return self::FAILURE;
+        }
 
         $siteDir = $GLOBALS['OE_SITE_DIR'] ?? '';
         $conf = $siteDir . '/sqlconf.php';
@@ -86,15 +111,31 @@ final class BackupCommand extends Command
             return self::FAILURE;
         }
 
-        if (!is_dir($target) && !mkdir($target, 0700, true) && !is_dir($target)) {
-            $io->error("Cannot create backup target: {$target}");
+        try {
+            $target = $retention->prepareDirectory($target);
+            $file = $retention->newBackupPath($target, $label, new DateTimeImmutable());
+        } catch (RuntimeException $error) {
+            $io->error($error->getMessage());
 
             return self::FAILURE;
         }
 
-        $file = sprintf('%s/thiqa-%s-%s.sql', $target, $label, date('Ymd-His'));
+        $io->writeln('Backup target: ' . $target);
+        $io->writeln('New backup: ' . $file);
+
         $defaults = tempnam(sys_get_temp_dir(), 'oemrbk');
-        file_put_contents($defaults, "[client]\nuser={$login}\npassword={$pass}\nhost={$host}\nport={$port}\n");
+        if ($defaults === false) {
+            $io->error('Could not create the private database-client defaults file.');
+
+            return self::FAILURE;
+        }
+        $defaultsContents = "[client]\nuser={$login}\npassword={$pass}\nhost={$host}\nport={$port}\n";
+        if (file_put_contents($defaults, $defaultsContents) !== strlen($defaultsContents)) {
+            @unlink($defaults);
+            $io->error('Could not write the private database-client defaults file.');
+
+            return self::FAILURE;
+        }
         @chmod($defaults, 0600);
 
         $cmd = escapeshellarg($resolved . DIRECTORY_SEPARATOR . 'mysqldump')
@@ -106,7 +147,7 @@ final class BackupCommand extends Command
         $started = microtime(true);
         exec($cmd, $ignored, $rc);
         $elapsed = round(microtime(true) - $started, 2);
-        unlink($defaults);
+        @unlink($defaults);
 
         if ($rc !== 0 || !is_file($file)) {
             $io->error("Backup FAILED (rc={$rc}).");
@@ -147,16 +188,51 @@ final class BackupCommand extends Command
         }
 
         $hash = hash_file('sha256', $file);
-        file_put_contents($file . '.sha256', $hash . "  " . basename($file) . "\n");
+        if (!is_string($hash)) {
+            $io->error('Backup verification hash could not be calculated. Artefact retained for inspection.');
 
-        // Retention: newest $keep verified artefacts survive.
-        $existing = glob($target . '/thiqa-*.sql') ?: [];
-        usort($existing, static fn(string $a, string $b): int => filemtime($b) <=> filemtime($a));
-        $pruned = 0;
-        foreach (array_slice($existing, $keep) as $old) {
-            @unlink($old);
-            @unlink($old . '.sha256');
-            $pruned++;
+            return self::FAILURE;
+        }
+        $sidecar = $hash . '  ' . basename($file) . "\n";
+        if (file_put_contents($file . '.sha256', $sidecar) !== strlen($sidecar)) {
+            $io->error('Backup hash sidecar could not be written. Artefact retained for inspection.');
+
+            return self::FAILURE;
+        }
+
+        try {
+            $inventory = $retention->discover($target);
+            $selected = $retention->selectForDeletion($inventory, $keep);
+        } catch (RuntimeException $error) {
+            $io->error('Backup verified, but retention scan FAILED: ' . $error->getMessage());
+
+            return self::FAILURE;
+        }
+
+        $io->writeln(sprintf(
+            'Retention scan: managed %d (neutral %d, legacy %d), keep %d, selected %d.',
+            count($inventory->managed),
+            $inventory->neutralCount(),
+            $inventory->legacyCount(),
+            $keep,
+            count($selected),
+        ));
+        if ($inventory->malformed !== []) {
+            $io->warning(sprintf(
+                '%d managed-looking file(s) were malformed or unverified and were left untouched.',
+                count($inventory->malformed),
+            ));
+        }
+
+        foreach ($selected as $old) {
+            try {
+                $retention->delete($target, $old);
+                $io->writeln('Deleted managed backup: ' . $old->filename);
+            } catch (RuntimeException $error) {
+                $io->error('Backup verified, but retention deletion FAILED: ' . $error->getMessage());
+
+                return self::FAILURE;
+            }
         }
 
         $io->success(sprintf(
@@ -165,8 +241,8 @@ final class BackupCommand extends Command
             $tables,
             $elapsed,
             substr($hash, 0, 16),
-            min(count($existing), $keep),
-            $pruned
+            count($inventory->managed) - count($selected),
+            count($selected)
         ));
 
         return self::SUCCESS;
