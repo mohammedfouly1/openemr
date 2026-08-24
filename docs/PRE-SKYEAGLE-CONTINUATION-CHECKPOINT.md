@@ -25,6 +25,7 @@
 | 13 | **PRE-09 / S1-P1-17 FIXED — VERIFIED.** `0af1ce1740f1e1caf6d8536a18cee4c2c50917a5` preserves the deliberate 11-key tenant allowlist, keeps inactive controls outside WCAG SC 1.4.3/1.4.11, and adds a separate 1.5:1 product distinguishability floor between the disabled primary fill and both the enabled fill and page background. Exact source counts are 11 overridable / 10 WCAG-gated / 1 product-gated. Light/dark, malformed value, empty-overlay/downstream, canonical/legacy CSS names, fixed disabled opacity and live consumer tests passed. Final targeted: 261 tests / 773 assertions; downstream: 153 / 577; canonical gate: 12/12 artefacts, 123/123 manifest, 147 / 1,687; all exit 0. A reversible threshold mutation made the named negative test fail (exit 1) and exact source hash restoration was verified before the same test passed. Eight compiled theme files were updated by hash; all 28 runtime theme files match the complete local build. Next incomplete task: S1-P1-02 dead translation overrides. |
 | 14 | **PRE-09 / S1-P1-02 FIXED — VERIFIED.** `2b801e668097599ac3e870448d340567929b4767` removes exactly the two dead OAuth overrides from the active catalogue and records exact-value English retirement metadata; the three Zend overrides remain active and verified against live consumers. Fresh/upgrade/customized-tenant policy, tenant-title English rendering, no stale consumers and the neutral database-upgrade contract are automated. Targeted result: 44 tests / 227 assertions / exit 0. Canonical gate: 12/12 artefacts, 123/123 manifest, 157 tests / 1,760 assertions / exit 0. Live dry-run planned exactly two deletes; before/after hashes for all five definitions of each constant were identical. A reversible decision mutation produced two failures / exit 1, then exact source hash restoration and the full targeted pass were verified. Next incomplete task: S1-P1-05 WCAG evidence counts. |
 | 15 | **PRE-09 / S1-P1-05 FIXED — VERIFIED.** `b400546a2ffa1f1a6edb6b802315124bcef2bd67` re-derived the machine evidence as 38 pairs / 35 PASS / 3 ADVISORY / 0 FAIL, added the four missing passing `borderStrong` rows to the human record, and installed a row-level drift guard in the canonical gate. Source/calculator proof: 110 tests / 264 assertions; combined targeted: 113 / 632; canonical gate: 12/12 artefacts, 123/123 manifest, 160 / 2,128; all exit 0. Two covered-document hashes were re-issued, never removed, with the reason recorded in release verification Rev 6. A reversible 35→34 summary mutation failed exit 1; exact document hash restoration and final passes were verified. Next incomplete task: S1-P1-06 D-8 status reconciliation. |
+| 16 | **PRE-09 / S1-P1-06 FIXED — VERIFIED; D-8 correctly remains OPEN.** `88ff342894c9543fe30b8e6b6a046ca2f56fd1b7` reconciles `RebrandingPlan.md`, `remaining-dependencies.md` and ADR-BRAND-001 with current execution: the endpoint is the browser-serving route, but `BrandingMaterialiser` still invokes `TokenCssWriter` and commits both static variants, including for an empty overlay. The new contract guard passed 2 tests / 19 assertions; materialiser/writer plus contract passed 34 / 165; canonical gate passed 12/12 artefacts, 123/123 manifest and 162 / 2,147; all exit 0. A reversible false-closure mutation failed 1/1, exit 1, and the plan was restored exactly to SHA-256 `796AC7096B052EE984E327A7DF2411351AA73AA3860D8675886422335820F828`. No runtime state was changed. Next incomplete task: S1-P1-10 false PDF-font capability claim. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -46,14 +47,13 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          b400546a2ffa1f1a6edb6b802315124bcef2bd67 (before Rev 15 checkpoint commit)
-CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 15 checkpoint edit;
+CURRENT OBSERVED HEAD:          88ff342894c9543fe30b8e6b6a046ca2f56fd1b7 (before Rev 16 checkpoint commit)
+CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 16 checkpoint edit;
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
 SKYEAGLE MIGRATION STARTED:     NO
 SKYEAGLE BRANDING CHANGES:      NONE
-REPOSITORY WRITES THIS SESSION: S1-P1-05 WCAG evidence synchronization, row-level regression guard,
-                                release-verification record and two manifest hash re-issues;
+REPOSITORY WRITES THIS SESSION: S1-P1-06 D-8 documentation reconciliation and deterministic contract guard;
                                 this checkpoint
 CURRENT PROGRAMME:              PRE-SKYEAGLE three-scan audit/remediation/certification
 FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
@@ -80,6 +80,7 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `0af1ce174` | PRE-09 / S1-P1-17 | Preserved all 11 intended tenant overrides, added the separate 1.5:1 disabled-state product rule, locked light/dark component opacity, and reconciled source, tests and documentation. |
 | `2b801e668` | PRE-09 / S1-P1-02 | Retired exactly two dead OAuth English overrides by exact managed value, preserved customized/non-English definitions and the three live Zend overrides, removed stale consumer metadata, and added fresh/upgrade/existing-tenant regression coverage without disturbing the neutral database-upgrade contract. |
 | `b400546a2` | PRE-09 / S1-P1-05 | Re-derived 38 WCAG pairs from machine evidence, synchronized the 35 PASS / 3 ADVISORY / 0 FAIL prose and all four missing `borderStrong` rows, added a canonical drift guard, and re-issued the two affected manifest hashes with an explicit Rev 6 reason. |
+| `88ff34289` | PRE-09 / S1-P1-06 | Reconciled all three authoritative D-8 records with shipped materialisation behavior, retained D-8 as OPEN, corrected the associated risk/closure counts, and added a canonical regression guard against false closure. |
 
 Add a row for every further remediation commit.
 
@@ -99,8 +100,8 @@ recent PRE-SKYEAGLE commit were re-derived with bounded read-only commands. Tool
 under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
-Those landed-work verification steps and the next eight PRE-09 repairs are now complete; see revisions 6…15.
-**Exact next incomplete item:** PRE-09 / S1-P1-06 D-8 status reconciliation.
+Those landed-work verification steps and the next nine PRE-09 repairs are now complete; see revisions 6…16.
+**Exact next incomplete item:** PRE-09 / S1-P1-10 false PDF-font capability claim.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -163,7 +164,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 10 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). **Next:** S1-P1-06 D-8 reconciliation, then the remaining finding register in dependency order. |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 11 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). **Next:** S1-P1-10 false PDF-font capability claim, then the remaining finding register in dependency order. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -197,12 +198,12 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 12 open · P2 4 open
-                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-05; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-25.
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 11 open · P2 4 open
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-05; S1-P1-06; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-25.
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
                     P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix)
                     -> 15 (S1-P1-15 fix) -> 14 (S1-P1-17 fix) -> 13 (S1-P1-02 fix)
-                    -> 12 (S1-P1-05 fix).
+                    -> 12 (S1-P1-05 fix) -> 11 (S1-P1-06 fix).
                     Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
                     repairing it. It stays open until the guardrail constants gain a real
                     cross-check against the production namespace.
@@ -544,6 +545,29 @@ Next incomplete PRE-* task: PRE-09 / S1-P1-06 — reconcile D-8 across Rebrandin
 `RebrandingPlan.md` §6.5 strikes D-8 as "ELIMINATED / RESOLVED by design change" and counts it in
 "4 of 13 closed". RB-04 re-opened it. `remaining-dependencies.md` and `ADR-BRAND-001` carry the correction;
 `RebrandingPlan.md` — the release-blocking-dependency register — never got it.
+
+**Status: FIXED — VERIFIED (continuation Rev 16).** The three authoritative records now agree that D-8
+remains OPEN: the repaired PHP endpoint is the linked browser route, while the shipped materialiser still
+stages and commits both static token stylesheets through `TokenCssWriter`. S1-P0-09 fixed the consumer chain;
+it did not make the module tree read-only. The register now says 3 of 13 closed, and the associated design,
+risk and summary prose no longer claim the writer is absent.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S1-P1-06
+Previous status: CONFIRMED — DOCUMENTATION CONTRADICTION
+Current status: FIXED — VERIFIED; underlying dependency D-8 remains OPEN
+Implementation commit: 88ff342894c9543fe30b8e6b6a046ca2f56fd1b7
+Runtime/source proof: pre-change BrandingMaterialiserTest + TokenCssWriterTest 32 tests / 146 assertions / exit 0; source and execution both prove two static variants are committed
+Documentation contract: D8DependencyStatusContractTest 2 tests / 19 assertions / exit 0
+Combined targeted: 34 tests / 165 assertions / exit 0
+Canonical positive: 12/12 generated artefacts; 123/123 manifest; 162 tests / 2,147 assertions / exit 0
+Lint/style/diff: PHP lint exit 0; PHPCS 1/1 exit 0; git diff --check exit 0
+Negative control: authoritative D-8 row changed to struck/RESOLVED; named test 1 failure / exit 1
+Restoration: plan restored exactly to SHA256 796AC7096B052EE984E327A7DF2411351AA73AA3860D8675886422335820F828; temporary backup removed; targeted and canonical gates subsequently passed
+Not-pass retained: an invocation using the full PHPUnit config failed bootstrap exit 70; an isolated invocation with two incorrect paths also failed exit 70; neither executed the intended suite and neither is counted as PASS
+Database / Apache / browser touched: NO / NO / NO
+Next incomplete PRE-* task: PRE-09 / S1-P1-10 — correct the false Amiri/mPDF capability claim after verifying current code and evidence
+```
 
 ### S1-P1-10 — False capability claim in live tooling
 `tools/branding/install-assets.php` ~line 458 states the Amiri PDF face is *"registered with mPDF in
@@ -1230,7 +1254,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S1-P1-06; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 continues at S1-P1-10; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 
