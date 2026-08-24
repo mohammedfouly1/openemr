@@ -2001,6 +2001,43 @@ PR-41 adds **9** newly edited non-module production files (`login_screen.php`, `
 `formdata.inc.php`); `globals.inc.php` was already counted by PR-40. The authoritative inventory is
 therefore **76 distinct files**, covered by PR-01…PR-41.
 
+---
+
+# PR-42 — the shell shows the session's product name (2026-08-24)
+
+**Files:** `library/translation.inc.php` (new `xl_product_name()`, `xl_session_language_id()`,
+`getLanguageCode()`); `interface/main/tabs/main.php`.
+**Rebase risk:** LOW — three additive functions and two one-line call-site changes.
+
+Finding **S2-P1-24**'s remaining half. `saas_branding_product_name_ar` is populated and the branding layer
+has code to consume it, yet the authenticated Arabic shell still rendered `<title>Thiqa</title>` and
+`WindowTitleBase = "Thiqa"` with genuinely translated chrome around them. Those two surfaces read
+`openemr_name` unconditionally, so they never had the chance to pick the Arabic variant.
+
+**The predicate is the language, not the direction.** `lang_languages` marks four locales RTL — Hebrew,
+Arabic, Persian, Urdu — and an Arabic wordmark is correct for exactly one. Keying on `lang_is_rtl` is the
+obvious shortcut and would put Arabic script in front of Hebrew and Persian users, so a contract test
+asserts the `'ar'` comparison and forbids `lang_is_rtl` inside the new function's body.
+
+The helper degrades in both directions: no Arabic name configured, or the branding layer not installed at
+all, yields `openemr_name` unchanged. It is memoised per request, and `getLanguageCode()` follows
+`getLanguageDir()`'s existing shape in the same file.
+
+**Not included:** the Arabic *logo* variant. That is blocked on an asset rather than on code — no dedicated
+Arabic wordmark exists, `Entity.md` forbids deriving one from the Latin artwork, and KG-05 requires an
+approved asset over a fabrication. `main.php:404` and `:573` also read `openemr_name` but feed other
+template contexts that were not analysed here; changing them on that basis would be guesswork.
+
+**Upstream-first path (Q1):** `xl_product_name()` is a locale-aware product-name accessor, useful to any
+deployment shipping a non-Latin product name; `getLanguageCode()` is a plain gap in the existing
+`getLanguageDir()` neighbourhood. Both are reasonable upstream contributions.
+
+### Reconciliation after PR-42
+
+`main.php` was already counted by PR-40 and `translation.inc.php` by PR-40 as well, so PR-42 adds **0**
+distinct production files. The authoritative inventory remains **76 distinct files**, covered by
+PR-01…PR-42.
+
 **One gate change came with it.** `composer.json` now sets `config.process-timeout` to 1800. Composer kills
 a child process after 300 seconds by default, and the gate — a 253-test suite including PHPStan
 RuleTestCase analysis, which CI always pays with a **cold** cache — measured 457–607 seconds here once the

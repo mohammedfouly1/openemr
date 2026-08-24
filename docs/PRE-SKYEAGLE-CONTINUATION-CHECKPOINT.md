@@ -38,6 +38,8 @@
 
 | 24 | **PRE-09 / S2-P1-26 Class A CLOSED — VERIFIED. S2-P1-26 is now fully fixed.** All 20 catalogued brand-bearing literals have a schema-v2 `legacy_keys` contract and all 22 call sites are converted, including `interface/login_screen.php:29` — the login page, the finding's most-exposed surface. **A latent defect shipped at Rev 22 was found and fixed first:** the generated installer SQL skipped a translation that never named the product, while the PHP upgrade migration **threw** on it — the same contract producing different catalogues on fresh install versus upgrade, which is the divergence S2-P0-21 exists to prevent. Measured, not hypothetical: every brand-bearing key has 1–4 such rows, and the two contracts shipped at Rev 22 (`OpenEMR Application`, `Welcome to OpenEMR`) have two each, so they **would have aborted a real upgrade**. My own new contract test caught it, not inspection. `MissingIdentityPolicy` now makes the choice explicit per contract — `fail` stays the default because silently losing a locale is worse than a loud stop; `skip` is the declared opt-in on all 22 legacy contracts, with its cost stated (those locales fall back to the neutral English pattern at that one call site). Disposable-database proof on `openemr_prebrand_classa_20260824_202517`: applied twice, identical counts (31 constants, 46 definitions, 0 orphans, 0 duplicate pairs), Arabic carried forward as `يتطلب %s جافاسكريبت…` with the placeholder in the *translator's* word order, and the rows lacking the literal correctly skipped; dropped and confirmed absent, live DB intact at 13,235 constants. Targeted 61 tests / 495 assertions; canonical gate 12/12 artefacts, 123/123 manifest, 255 tests / 3,271 assertions; PHPCS 27/27; all exit 0. |
 
+| 25 | **PRE-09 / S2-P1-24 text half FIXED — VERIFIED; logo half blocked on a non-existent asset. Every documented P0, P1 and P2 finding is now closed or explicitly blocked.** `xl_product_name()` makes the authenticated shell's `<title>` and `WindowTitleBase` return `saas_branding_product_name_ar` when the session language is Arabic. **The predicate is the language, not the direction** — `lang_languages` marks four locales RTL (Hebrew, Arabic, Persian, Urdu) and an Arabic wordmark is right for exactly one; keying on `lang_is_rtl` would put Arabic script in front of Hebrew and Persian users, a worse error than the one being fixed. A contract test asserts the `'ar'` comparison and forbids `lang_is_rtl` inside that function's body (the file's own `getLanguageDir()` uses it correctly). The helper degrades to `openemr_name` when no Arabic name is set or the branding layer is absent. `translation.inc.php` loads on every request, so the login page was re-fetched after the change: HTTP 200, 9,165 bytes, byte-identical to the recorded baseline. The **Arabic logo variant remains open and is not a code problem** — §13 records that no dedicated Arabic wordmark exists, `Entity.md` forbids deriving one from the Latin artwork, and KG-05 requires an approved asset over a fabrication. Targeted 16 tests / 330 assertions; canonical gate 12/12 artefacts, 123/123 manifest, 256 tests / 3,280 assertions; all exit 0. **Remaining programme work is now Scan 3 (PRE-18…24) and PRE-25 certification**, plus two unlabelled P1 slots inherited from Scan-2's register that were never transcribed here. |
+
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
 
@@ -58,7 +60,7 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          6da352e9a (S2-P1-26 Class B; before the Rev 23 reconciliation commit)
+CURRENT OBSERVED HEAD:          177d5dc97 (S2-P1-26 Class A; the Rev 24/25 work follows in this commit)
 CURRENT GIT STATUS:             ?? .claude/ (observed after the Rev 22 commit; .claude/ stays untracked
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
@@ -101,6 +103,7 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `88ff34289` | PRE-09 / S1-P1-06 | Reconciled all three authoritative D-8 records with shipped materialisation behavior, retained D-8 as OPEN, corrected the associated risk/closure counts, and added a canonical regression guard against false closure. |
 | `723170df7` | PRE-09 / S1-P1-10 | Removed the false Amiri/mPDF registration claim, kept D-9 and the accepted pilot limitation explicit, corrected stale PDF evidence, added a truthfulness guard, and re-issued exactly two covered-document hashes. |
 | `29be1fcd5` | PRE-09 / S1-P1-11 | Classified operational identity, neutralized only safe reusable labels/stale examples, preserved live/historical/compatibility identifiers, and added a canonical regression guard. |
+| `177d5dc97` | PRE-09 / S2-P1-26 (Class A) | 20 schema-v2 `legacy_keys` contracts and all 22 call sites, including the login page. Added `MissingIdentityPolicy` after discovering that the installer SQL skipped a translation lacking the brand literal while the PHP upgrade migration threw — a fresh-install-vs-upgrade divergence that would have aborted real upgrades on the two contracts shipped at Rev 22. |
 | `6da352e9a` | PRE-09 / S2-P1-26 (Class B) | Re-derived the leak surface exactly (20/22 Class A, 22/25 Class B, 49 dead), added the PHP `xlp()` helper, converted all 15 safely-convertible uncatalogued literals across 18 sites, locked the Foundation/ONC/community preserve list by test, and raised the gate's process-timeout budget after a passing suite was killed by Composer's 300 s default. |
 | `6edc03b8b` | PRE-09 / S2-P1-22 + S2-P1-23 + S2-P1-24 (juxtaposition half) | Added contract schema v2 (`derive_from` + placement), the contract-**set** loader, SQL carry-forward for both derivation kinds, and multi-contract iteration in `sql_upgrade.php` / the migration command / the release-prep mutator. Converted ten call sites to compose one translatable unit via the new `xlp` filter, retired the last three English overrides, and proved the whole supplement twice on a disposable database. v1 contract untouched; live database never written to. |
 | `97f6952cf` | PRE-09 / S1-P2-07 + S1-P2-12 + S1-P2-14 + S1-P2-16 | Made `Config\ModulePaths` the single owner of the module directory name and guarded the three consumers that cannot share a PHP constant; corrected the CSS release counts to 18/4, the worktree hygiene rule to four (naming the un-excludable sibling), and the console-command count to six with its blast-radius consequence. Also corrected the inherited claim that `webpack.themes.js` references the module directory — it does not. |
@@ -126,7 +129,7 @@ under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
 Those landed-work verification steps and the next eleven PRE-09 repairs are now complete; see revisions 6…18.
-**Exact next incomplete item:** PRE-09 / S2-P1-26 **Class A** — 20 schema-v2 `legacy_keys` contracts plus their 22 call sites, highest-exposure being `interface/login_screen.php:29`. Then the variant-selection half of S2-P1-24.
+**Exact next incomplete item:** **PRE-18…24 (Scan 3, adversarial red-team with fresh agents)**, then PRE-25 final reconciliation and certification. Every documented P0/P1/P2 finding is closed, except S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -189,7 +192,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 13 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). ✅ All four P2 findings closed (`97f6952cf`). ✅ S2-P1-22 + S2-P1-23 + the juxtaposition half of S2-P1-24 closed together by the multi-key contract subsystem and the `xlp` composition filter (`6edc03b8b`). ✅ S2-P1-26 Class B — the uncatalogued leak class no override could reach — converted, with the Foundation/ONC preserve list locked by test (`6da352e9a`). **Next:** S2-P1-26 Class A (20 contracts + 22 sites), then the variant-selection half of S2-P1-24. |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 13 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). ✅ All four P2 findings closed (`97f6952cf`). ✅ S2-P1-22 + S2-P1-23 + the juxtaposition half of S2-P1-24 closed together by the multi-key contract subsystem and the `xlp` composition filter (`6edc03b8b`). ✅ S2-P1-26 Class B — the uncatalogued leak class no override could reach — converted, with the Foundation/ONC preserve list locked by test (`6da352e9a`). ✅ S2-P1-26 Class A: 20 legacy contracts + 22 call sites, after fixing a latent install-vs-upgrade divergence that would have aborted real upgrades (`177d5dc97`). ✅ S2-P1-24 text half: the shell selects the Arabic product name by language. **PRE-09 IS COMPLETE** apart from S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist. **Next:** Scan 3 (PRE-18…24), then PRE-25. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -223,9 +226,11 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 3 open · P2 0 open (4 fixed)
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 2 unlabelled slots only · P2 0 open (4 fixed)
                     FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-04; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-22; S2-P1-23; S2-P1-25; S2-P1-26.
-                    PARTLY FIXED: S2-P1-24 (juxtaposition half closed; variant-selection half open).
+                    PARTLY FIXED: S2-P1-24 — juxtaposition and text-variant halves closed;
+                    only the Arabic LOGO variant remains, blocked on an approved asset
+                    that does not exist (§13, Entity.md, KG-05).
                     REFUTED IN PART, REMAINDER FIXED: S2-P1-20 (see Correction K).
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class) - now itself FIXED at Rev 23/24.
                     P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix)
@@ -233,19 +238,19 @@ REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 3 open · P2 0 open (4 fi
                     -> 12 (S1-P1-05 fix) -> 11 (S1-P1-06 fix) -> 10 (S1-P1-10 fix)
                     -> 9 (S1-P1-11 fix) -> 8 (S2-P1-18 fix) -> 7 (S1-P1-04 fix)
                     -> 6 (S2-P1-20 refuted-in-part + remainder fixed)
-                    -> 5 (S2-P1-23 fix) -> 4 (S2-P1-22 fix) -> 3 (S2-P1-26 fix).
+                    -> 5 (S2-P1-23 fix) -> 4 (S2-P1-22 fix) -> 3 (S2-P1-26 fix)
+                    -> 2 (S2-P1-24 text half; only its logo sub-item remains, asset-blocked).
                     P2 all fixed: S1-P2-07; S1-P2-12; S1-P2-14; S1-P2-16.
-                    STILL OPEN (P1): S2-P1-24 (second half only); plus two unlabelled
-                    slots.
-                    S2-P1-22/23/24 were ONE workstream and were fixed together at Rev 22:
-                    ten call sites now compose a single translatable unit, and schema-v2
-                    derive_from carries every existing translation forward, so no locale
-                    lost one. S2-P1-24 stays PARTLY open: its second half (session-language
-                    product-name selection for the shell <title>, WindowTitleBase and the
-                    Arabic logo variant) is a different mechanism — those surfaces pick the
-                    wrong *variant* of the product name rather than mistranslating a phrase
-                    — and is scoped but not built.
-                    NOTE ON THE COUNT: only 1 of those 3 has a written section in this\n                    checkpoint (§6 documents S2-P1-24). The
+                    STILL OPEN (P1): two unlabelled slots only. Every documented P1 is
+                    closed except S2-P1-24's Arabic LOGO variant, which is asset-blocked.
+                    S2-P1-22/23/24 were ONE workstream, fixed across Revs 22-25: ten call
+                    sites compose a single translatable unit, schema-v2 derive_from and
+                    legacy neutralisation carry every existing translation forward so no
+                    locale lost one, and the shell now selects the Arabic product name by
+                    language (not by direction — four locales are RTL and only one is
+                    Arabic).
+                    NOTE ON THE COUNT: the two remaining slots have no written section in
+                    this checkpoint. The
                     arithmetic carries two unlabelled P1 slots inherited from Scan-2's
                     register that were never transcribed here (the numbering gap at
                     S2-P1-19 and S2-P1-21 is where they sit). Treat the four documented
@@ -1068,15 +1073,42 @@ contract carries `About`'s existing translations forward by suffix derivation �
 database to produce `حول %s` (Arabic), `אודות %s` (Hebrew) and `Uber %s`. Arabic therefore still renders
 `حول` and now places the product name where the Arabic pattern says, rather than where PHP said.
 
-**The remaining half stays OPEN and is now scoped.** `<title>Thiqa</title>`,
-`var WindowTitleBase = "Thiqa"` and the absent Arabic logo variant are a **different** mechanism: those
-surfaces read `openemr_name` unconditionally instead of selecting `saas_branding_product_name_ar` when the
-session language is Arabic. Nothing in the composition work touches them, because they are not translated
-phrases at all — they are the product name itself, and the defect is which *variant* of it is chosen.
-Closing it needs a decision the composition layer cannot make for them: how core resolves the session
-language on each of those surfaces, and whether the Arabic wordmark applies to a `<title>` (a plain-text
-browser affordance) as well as to rendered chrome. Not blocked by the translation-contract work; it simply
-was not part of it.
+**The text half of the remainder is FIXED — VERIFIED (continuation Rev 25); the logo half stays OPEN and
+is blocked on an asset that does not exist.**
+
+`<title>` and `var WindowTitleBase` in `interface/main/tabs/main.php` now call a new core helper,
+`xl_product_name()`, instead of reading `openemr_name` unconditionally. It returns
+`saas_branding_product_name_ar` when the session language is Arabic and `openemr_name` otherwise,
+degrading to `openemr_name` when no Arabic name is configured or the branding layer is not installed at
+all.
+
+**The predicate is the language, not the direction, and that distinction is the whole design.**
+`lang_languages` marks **four** locales RTL — Hebrew (7), Arabic (22), Persian (37), Urdu (51) — and an
+Arabic wordmark is correct for exactly one of them. Keying on `lang_is_rtl`, the obvious shortcut, would
+put Arabic script in front of Hebrew and Persian users: a worse error than the one being fixed. A contract
+test asserts the `'ar'` comparison and forbids `lang_is_rtl` **inside this function's body** (the file's
+own `getLanguageDir()` uses it correctly for its own purpose).
+
+**Still open: the Arabic logo variant**, and it is not a code problem. §13 records that **no dedicated
+Arabic wordmark exists**, that `Entity.md` forbids deriving one from the Latin artwork, and that KG-05
+requires an approved asset rather than a fabrication. There is nothing to select between until that asset
+is commissioned, so this sub-item is blocked on an Owner/asset decision, not on implementation.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S2-P1-24 (variant-selection half)
+Previous status: OPEN — scoped, not built
+Current status: TEXT SURFACES FIXED — VERIFIED; logo variant BLOCKED on a non-existent approved asset
+New helper: xl_product_name() in library/translation.inc.php, with xl_session_language_id() and getLanguageCode()
+Surfaces converted: interface/main/tabs/main.php <title> and var WindowTitleBase
+Predicate: lang_languages.lang_code === 'ar'; NOT lang_is_rtl (4 RTL locales, only 1 Arabic)
+Degradation: no Arabic name configured, branding layer absent, or any non-Arabic session -> openemr_name unchanged
+Live smoke test: translation.inc.php loads on every request, so the login page was re-fetched after the change - HTTP 200, 9,165 bytes, byte-identical to the recorded baseline
+Targeted: ProductNameCompositionContractTest 16 tests / 330 assertions / exit 0
+Lint/style: PHP lint 2/2 exit 0; PHPCS 3/3 exit 0
+Not-pass retained: the first version of the contract asserted `lang_is_rtl` was absent from the whole file, which failed because getLanguageDir() legitimately uses it; the assertion was scoped to the function body
+Deliberately not changed: main.php:404 and :573 also read openemr_name, but they feed other template contexts that were not analysed here; converting them without that analysis would be guesswork
+Database / browser touched: NO / NO (read-only lang_languages query to confirm the four RTL locales)
+```
 
 ### S2-P1-26 — English brand-leak surface the rename does NOT cover, and a class SET-TRANSLATION cannot reach
 **Origin** Agent 2E addendum 3 · **Method:** 69 brand-bearing keys dumped, one `git grep -F -f` pass over
@@ -1724,7 +1756,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S2-P1-26 Class A and the second half of S2-P1-24; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 is complete apart from the asset-blocked Arabic logo variant; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 

@@ -129,6 +129,84 @@ function xlp($pattern)
     );
 }
 
+/**
+ * The product name to display for the session's own language.
+ *
+ * Finding S2-P1-24: `saas_branding_product_name_ar` is populated and the branding layer has code to
+ * consume it, yet the authenticated Arabic shell still rendered `<title>Thiqa</title>` and
+ * `WindowTitleBase = "Thiqa"` — the UI chrome around them genuinely translated, the product name
+ * alone still Latin. Those surfaces read `openemr_name` unconditionally, so they never had a chance
+ * to pick the Arabic variant.
+ *
+ * **The predicate is the language, not the direction.** `lang_languages` marks four locales RTL —
+ * Hebrew, Arabic, Persian and Urdu — and an Arabic wordmark is correct for exactly one of them.
+ * Keying on `lang_is_rtl` would put Arabic script in front of Hebrew and Persian users, which is a
+ * worse error than the one being fixed.
+ *
+ * Degrades in both directions rather than failing: no Arabic name configured, or any session that
+ * is not Arabic, yields `openemr_name` unchanged. That also keeps this usable when the branding
+ * layer is not installed at all, since `saas_branding_product_name_ar` is then simply absent.
+ *
+ * @return string the configured product name, in Arabic when the session language is Arabic
+ */
+function xl_product_name()
+{
+    static $resolved = null;
+    if ($resolved !== null) {
+        return $resolved;
+    }
+
+    $globals = OEGlobalsBag::getInstance();
+    $name = $globals->getString('openemr_name');
+
+    if (!$globals->has('saas_branding_product_name_ar')) {
+        return $resolved = $name;
+    }
+
+    $arabic = trim($globals->getString('saas_branding_product_name_ar'));
+    if ($arabic === '') {
+        return $resolved = $name;
+    }
+
+    return $resolved = (getLanguageCode(xl_session_language_id()) === 'ar') ? $arabic : $name;
+}
+
+/**
+ * The lang_id this session is reading in, defaulting to English exactly as xl() does.
+ *
+ * @return int
+ */
+function xl_session_language_id()
+{
+    $session = SessionWrapperFactory::getInstance()->getActiveSession();
+    $choice = $session->get('language_choice');
+
+    return !empty($choice) ? (int) $choice : 1;
+}
+
+/**
+ * The ISO code of a language, or '' when it cannot be resolved.
+ *
+ * Mirrors getLanguageDir()'s shape: one small lookup, memoised per language so a page rendering
+ * the product name more than once does not repeat the query.
+ *
+ * @param int $lang_id language code
+ * @return string
+ */
+function getLanguageCode($lang_id)
+{
+    static $codes = [];
+
+    $lang_id = empty($lang_id) ? 1 : (int) $lang_id;
+    if (array_key_exists($lang_id, $codes)) {
+        return $codes[$lang_id];
+    }
+
+    $row = sqlQuery('SELECT lang_code FROM lang_languages WHERE lang_id = ?', [$lang_id]);
+
+    return $codes[$lang_id] = (string) ($row['lang_code'] ?? '');
+}
+
 // ----------- xl() function wrappers ------------------------------
 //
 // Use above xl() function the majority of time for translations. The

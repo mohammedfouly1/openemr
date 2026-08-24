@@ -311,6 +311,40 @@ final class ProductNameCompositionContractTest extends TestCase
     }
 
     /**
+     * S2-P1-24's variant-selection half: the shell must ask for the session's product name rather
+     * than the configured Latin one, and it must key on the **language**, not the direction.
+     * `lang_languages` marks four locales RTL — Hebrew, Arabic, Persian, Urdu — and an Arabic
+     * wordmark is right for exactly one of them, so a `lang_is_rtl` test would put Arabic script
+     * in front of Hebrew and Persian users.
+     */
+    public function testTheAuthenticatedShellAsksForTheSessionProductName(): void
+    {
+        $shell = $this->read($this->root() . '/interface/main/tabs/main.php');
+
+        self::assertStringContainsString('<title><?php echo text(xl_product_name()); ?></title>', $shell);
+        self::assertStringContainsString('js_escape(xl_product_name())', $shell);
+
+        $helper = $this->read($this->root() . '/library/translation.inc.php');
+        self::assertStringContainsString('function xl_product_name(', $helper);
+
+        // Scoped to this function's own body: `getLanguageDir()` lives in the same file and uses
+        // `lang_is_rtl` entirely correctly for its own purpose.
+        $start = strpos($helper, 'function xl_product_name(');
+        self::assertIsInt($start);
+        $end = strpos($helper, "\nfunction ", $start + 1);
+        $body = substr($helper, $start, $end === false ? null : $end - $start);
+
+        self::assertStringContainsString('saas_branding_product_name_ar', $body);
+        self::assertStringContainsString("=== 'ar'", $body);
+        self::assertStringNotContainsString(
+            'lang_is_rtl',
+            $body,
+            'Direction is the wrong predicate: Hebrew, Persian and Urdu are RTL too, and an Arabic '
+            . 'wordmark is correct for none of them.',
+        );
+    }
+
+    /**
      * The other half of the classification, and the half that is easy to get wrong later.
      *
      * These strings name the **OpenEMR Foundation**, the upstream community, or ONC certification
