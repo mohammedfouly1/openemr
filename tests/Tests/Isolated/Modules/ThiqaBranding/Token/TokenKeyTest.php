@@ -81,6 +81,15 @@ final class TokenKeyTest extends TestCase
         );
 
         self::assertSame(self::EXPECTED_OVERRIDABLE, $actual);
+        self::assertCount(11, $actual);
+        self::assertCount(
+            10,
+            array_filter(
+                TokenKey::tenantOverridableKeys(),
+                static fn (TokenKey $key): bool => $key->contrastRule() instanceof ContrastRule,
+            ),
+            'The disabled primary fill is the sole tenant override without a WCAG contrast rule.',
+        );
     }
 
     /**
@@ -168,7 +177,7 @@ final class TokenKeyTest extends TestCase
         );
     }
 
-    public function testDisabledControlHasNoGateBecauseWcagExemptsIt(): void
+    public function testDisabledControlUsesASeparateProductRuleBecauseWcagExemptsIt(): void
     {
         self::assertNull(TokenKey::InteractivePrimaryDisabled->contrastRule());
         self::assertTrue(TokenKey::InteractivePrimaryDisabled->isTenantOverridable());

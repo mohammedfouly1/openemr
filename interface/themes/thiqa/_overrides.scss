@@ -140,6 +140,7 @@ a:focus {
     background-color: var(--interactive-primary-disabled, #{$thiqa-interactive-primary-disabled});
     border-color: var(--interactive-primary-disabled, #{$thiqa-interactive-primary-disabled});
     color: var(--interactive-primary-text-on, #{$thiqa-interactive-primary-text-on});
+    opacity: $btn-disabled-opacity;
   }
 }
 

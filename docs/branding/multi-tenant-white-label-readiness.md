@@ -130,8 +130,11 @@ colour groups (`success`, `warning`, `critical`, `info`) return `false` and cann
 tenant overlay. The docblock states the reasoning explicitly and ties it to patient safety: "A tenant
 that could recolour 'critical' toward its brand palette... would be changing the meaning of an alert,
 not its styling. This one is a patient-safety boundary and is not negotiable per tenant." (lines
-154-159). Every override that is possible is still gated through `TokenValidator` +
-`ContrastCalculator` (WCAG) before it can be materialised.
+154-159). Every override that is possible is still gated through `TokenValidator` before it can be
+materialised. Ten interactive/link pairs use the applicable WCAG 2.2 thresholds. The eleventh,
+`interactive.primary.disabled`, is exempt from SC 1.4.3/1.4.11 but must retain the separate 1.5:1 product
+distinguishability floor against both the enabled primary fill and the page background. It also retains
+the component layer's fixed disabled opacity. The 1.5:1 floor is deliberately not claimed as WCAG.
 
 ### 1.7 The shared bundle vs. tenant overlay split matches Q34/Q59, and is running
 
@@ -338,7 +341,7 @@ plan-level statement (`docs/RebrandingPlan.md:754`), not something re-derived or
 | Is the CLI site-agnostic (no hardcoded `default`)? | Yes — derives from `OE_SITE_DIR`/`--site` | Source-verified (§1.4); **not run against a second site** |
 | Is a second tenant provisioned on this system today? | No — only `sites/default` exists | Verified (`ls sites/`) |
 | Has A1/A2 (cross-tenant isolation) executed? | No | Confirmed still open (`docs/RebrandingPlan.md:1111`, `:1137-1138`) |
-| Is the token model open to arbitrary tenant CSS? | No — closed 11-key enum allowlist, WCAG-gated | Source-verified (§1.6, §3.1) |
+| Is the token model open to arbitrary tenant CSS? | No — closed 11-key enum allowlist; 10 WCAG-gated and 1 product-separation-gated | Source-verified (§1.6, §3.1) |
 | Has the Tier-2 overlay ever been materialised, even for the one existing tenant? | No — `verify --site=default` still reports revision 0 | Confirmed (§1.5) |
 | Can a tenant get a wholly different theme/fonts? | No, by locked decision (Q34/Q77); fonts explicitly need a new ADR | Source-verified (§3.3), plan-stated (§4) |
 | Does full arbitrary white-label (self-service, reseller) exist? | No — depends on Control Plane (`MVP-014`), which is not built (D-5) | Confirmed (§3.2, §3.5) |

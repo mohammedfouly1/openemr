@@ -190,7 +190,7 @@ deciding its CSS name, and PHPStan enforces exhaustiveness on every future edit.
 | Borders/dividers (`border`, `borderStrong`, `divider`) | 3 | No | No |
 | Text (`text.primary/secondary/disabled/inverse`) | 4 | No | No |
 | Semantic/clinical (`semantic.{success,warning,critical,info}.{bg,text,border}`) | 12 | **No — clinical safety, not negotiable per tenant** (docblock, `TokenKey.php:154-159`) | No (Tier 1 only) |
-| Interactive (`interactive.primary.{default,hover,active,disabled,textOn}`, `interactive.secondary.{default,hover,textOn}`, `interactive.focusRing`) | 9 | **Yes**, except `interactive.primary.disabled` | 8 of 9 (all but `disabled` — WCAG 2.2 exempts inactive controls, `TokenKey.php:219-220`) |
+| Interactive (`interactive.primary.{default,hover,active,disabled,textOn}`, `interactive.secondary.{default,hover,textOn}`, `interactive.focusRing`) | 9 | **Yes — all 9** | 8 of 9 use WCAG gates; `disabled` instead uses the product distinguishability rule below |
 | Links (`link.default`, `link.hover`) | 2 | **Yes** | Yes |
 
 **Exactly 11 keys are `isTenantOverridable() === true`** (`TokenKey.php:161-209`) — the interactive and
@@ -199,10 +199,19 @@ already established. The clinical-safety non-overridability of the 12 semantic k
 way as everything else in this enum: `isTenantOverridable()` returns `false` for all 12 via an exhaustive
 match, so there is no code path — not a validation rule, a structural absence — that could move them.
 
+Exactly **10 of those 11** carry WCAG contrast rules. `interactive.primary.disabled` is intentionally the
+sole exception because WCAG 2.2 exempts inactive controls from SC 1.4.3 and SC 1.4.11. It remains
+tenant-overridable, but it is not unconstrained: `TokenValidator` requires at least **1.5:1 luminance
+separation** from both `interactive.primary.default` and `background`. This is a product
+distinguishability floor, not a WCAG threshold. Either a disabled-fill change or an enabled-primary change
+re-runs it. The component layer also retains Bootstrap's fixed `$btn-disabled-opacity`; native disabled
+semantics, the non-interactive pointer behaviour, and the fixed opacity do not depend on tenant colour.
+
 **Validation gate.** `TokenValidator` (constructed with `ContrastCalculator`, `Bootstrap.php:171-172`)
 is the boundary parser referenced throughout the plan; every overridable key that carries a
 `contrastRule()` is checked against its paired background/foreground token via `ContrastCalculator`
-before a Tier-2 overlay can be materialised. **Divergence from the plan's folder map**:
+before a Tier-2 overlay can be materialised. The same calculator supplies the separate disabled-state
+product rule described above, without labelling its 1.5:1 floor as WCAG. **Divergence from the plan's folder map**:
 `ContrastCalculator` lives in `src/Accessibility/`, not under `src/Token/` as §3.5.1 lists it — see §8.1.
 
 **Rendering.** `CssVariableRenderer` (constructed in `Bootstrap.php:174` and again in

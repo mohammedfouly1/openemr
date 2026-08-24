@@ -378,6 +378,15 @@ class TokenGeneratorIsolatedTest extends TestCase
             'background-color: var(--interactive-primary-default,',
             $overrides,
         );
+        $this->assertStringContainsString(
+            'background-color: var(--interactive-primary-disabled,',
+            $overrides,
+        );
+        $this->assertStringContainsString(
+            'opacity: $btn-disabled-opacity;',
+            $overrides,
+            'Tenant colour may change the fill, but the fixed disabled-state presentation must remain.',
+        );
         $this->assertStringContainsString('color: var(--link-default,', $overrides);
     }
 

@@ -121,6 +121,13 @@ colour groups — success/warning/critical/info) is closed to tenant overlay by 
 rejected by `TokenValidator`, re-run tenant-side inside the materialiser itself regardless of what the
 Control Plane already validated (plan §3.9, "the tenant does not trust the Control Plane blindly").
 
+Ten of the 11 keys use the applicable WCAG contrast gate. `interactive.primary.disabled` remains
+overridable, but inactive controls are exempt from SC 1.4.3/1.4.11, so it uses a separate product rule:
+the disabled fill must be at least 1.5:1 apart from both `interactive.primary.default` and `background`.
+Changing either primary fill re-runs that rule, and the stylesheet retains Bootstrap's fixed disabled
+opacity. A rejection with `insufficient_state_separation` is therefore a product distinguishability
+failure, not a WCAG failure.
+
 **Native:**
 ```powershell
 C:\openemr-stack\php\php.exe bin\console thiqa-branding:materialise --site=default --payload=C:\path\to\overlay.json

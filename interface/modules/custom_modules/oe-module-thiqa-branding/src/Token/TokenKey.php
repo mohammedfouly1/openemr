@@ -146,7 +146,10 @@ enum TokenKey: string
     /**
      * Whether a tenant may override this key through the Tier 2 overlay (plan §2.4, §3.4.1).
      *
-     * True for exactly the interactive and link surfaces. Everything else is false:
+     * True for exactly the interactive and link surfaces. The disabled primary fill is
+     * deliberately included: tenants may align it with their palette, while
+     * TokenValidator applies a non-WCAG distinguishability floor against both the
+     * enabled primary fill and the page background. Everything else is false:
      *
      *  - brand.* is identity; a tenant recolouring the Thiqa mark is a trademark problem;
      *  - surfaces, borders, dividers and text are structural, and the certified design
@@ -216,8 +219,9 @@ enum TokenKey: string
      * brand/qa/wcag-contrast-results.json, and re-gating it here would let a recorded
      * Tier 1 exception block an unrelated tenant override.
      *
-     * `interactive.primary.disabled` has no rule: WCAG 2.2 exempts inactive controls
-     * from both SC 1.4.3 and SC 1.4.11.
+     * `interactive.primary.disabled` has no WCAG rule: WCAG 2.2 exempts inactive
+     * controls from both SC 1.4.3 and SC 1.4.11. TokenValidator applies its separate
+     * product distinguishability rule; it must not be represented as a WCAG gate.
      */
     public function contrastRule(): ?ContrastRule
     {

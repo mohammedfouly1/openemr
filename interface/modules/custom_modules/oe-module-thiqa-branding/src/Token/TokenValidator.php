@@ -44,6 +44,9 @@ final readonly class TokenValidator
      */
     public const MAX_KEY_LENGTH = 64;
 
+    /** Product rule, not a WCAG threshold: inactive controls are exempt from 1.4.3/1.4.11. */
+    public const DISABLED_STATE_SEPARATION_MINIMUM = 1.5;
+
     public function __construct(
         private ContrastCalculatorInterface $contrast,
     ) {
@@ -111,7 +114,10 @@ final readonly class TokenValidator
         }
 
         $merged = $base->with(...$accepted);
-        $rejections = $this->checkContrast($merged, $touched);
+        $rejections = [
+            ...$this->checkContrast($merged, $touched),
+            ...$this->checkDisabledStateSeparation($merged, $touched),
+        ];
 
         return $rejections === []
             ? TokenValidationResult::accepted($merged)
@@ -180,6 +186,82 @@ final readonly class TokenValidator
                         $rule->background->value,
                         $ratio,
                         $rule->gate->minimumRatio(),
+                    ),
+                );
+            }
+        }
+
+        return $rejections;
+    }
+
+    /**
+     * Keep an overridable disabled fill visibly separate without inventing a WCAG gate.
+     *
+     * A tenant may move both the disabled and enabled primary fills, so either change
+     * re-opens this product rule. The fixed page background is included because a
+     * disabled control that disappears into the canvas is not a useful state cue.
+     *
+     * @param list<TokenKey> $touched
+     *
+     * @return list<TokenRejection>
+     */
+    private function checkDisabledStateSeparation(TokenSet $merged, array $touched): array
+    {
+        $affected = array_values(array_filter(
+            $touched,
+            static fn (TokenKey $key): bool => in_array(
+                $key,
+                [TokenKey::InteractivePrimaryDisabled, TokenKey::InteractivePrimaryDefault],
+                true,
+            ),
+        ));
+        if ($affected === []) {
+            return [];
+        }
+
+        $disabled = $merged->valueOf(TokenKey::InteractivePrimaryDisabled);
+        if (!$disabled instanceof ColorValue) {
+            return array_map(
+                static fn (TokenKey $key): TokenRejection => TokenRejection::forKey(
+                    $key,
+                    RejectionReason::MissingReferenceToken,
+                    'Cannot evaluate disabled-state separation: the palette has no disabled primary fill.',
+                ),
+                $affected,
+            );
+        }
+
+        $rejections = [];
+        foreach ([TokenKey::InteractivePrimaryDefault, TokenKey::Background] as $referenceKey) {
+            $reference = $merged->valueOf($referenceKey);
+            if (!$reference instanceof ColorValue) {
+                foreach ($affected as $key) {
+                    $rejections[] = TokenRejection::forKey(
+                        $key,
+                        RejectionReason::MissingReferenceToken,
+                        sprintf(
+                            'Cannot evaluate disabled-state separation: the palette has no "%s" token.',
+                            $referenceKey->value,
+                        ),
+                    );
+                }
+                continue;
+            }
+
+            $ratio = $this->contrast->ratio($disabled->value, $reference->value);
+            if ($ratio >= self::DISABLED_STATE_SEPARATION_MINIMUM) {
+                continue;
+            }
+
+            foreach ($affected as $key) {
+                $rejections[] = TokenRejection::forKey(
+                    $key,
+                    RejectionReason::InsufficientStateSeparation,
+                    sprintf(
+                        'Disabled fill against "%s" is %.2f:1, below the product distinguishability floor of %.1f:1 (not a WCAG contrast gate).',
+                        $referenceKey->value,
+                        $ratio,
+                        self::DISABLED_STATE_SEPARATION_MINIMUM,
                     ),
                 );
             }

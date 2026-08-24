@@ -32,6 +32,9 @@ enum RejectionReason: string
     /** The resulting pair misses its WCAG 2.2 threshold. */
     case InsufficientContrast = 'insufficient_contrast';
 
+    /** A disabled fill is too close to the enabled fill or page background. */
+    case InsufficientStateSeparation = 'insufficient_state_separation';
+
     /** The pair cannot be evaluated because the base palette lacks the other side. */
     case MissingReferenceToken = 'missing_reference_token';
 
@@ -42,6 +45,8 @@ enum RejectionReason: string
             self::NotOverridable => 'Key is fixed by the product and cannot be set per tenant.',
             self::MalformedValue => 'Value is not a six-digit hexadecimal colour.',
             self::InsufficientContrast => 'Resulting colour pair fails its WCAG 2.2 contrast gate.',
+            self::InsufficientStateSeparation =>
+                'Disabled control is not distinguishable from its enabled state and background.',
             self::MissingReferenceToken => 'Base palette does not define the token this pair is measured against.',
         };
     }

@@ -364,15 +364,73 @@ final class TokenValidatorTest extends TestCase
         self::assertTrue($legible->isValid(), implode(' | ', $legible->messages()));
     }
 
-    public function testDisabledStateHasNoContrastGate(): void
+    /**
+     * @return array<string, array{string, string}>
+     *
+     * @codeCoverageIgnore Data providers run before coverage instrumentation starts.
+     */
+    public static function validDisabledStateProvider(): array
     {
-        // WCAG 2.2 exempts inactive controls; a pale disabled fill must still be allowed.
+        return [
+            'light' => ['light', '#E5B0A5'],
+            'dark' => ['dark', '#6B3D36'],
+        ];
+    }
+
+    #[DataProvider('validDisabledStateProvider')]
+    public function testDisabledStateUsesProductSeparationInsteadOfAWcagGate(string $variant, string $value): void
+    {
+        $base = (new TokenSetParser())->parseDocument(TokenDocumentFixture::json())[$variant];
         $result = $this->validator->validateOverlay(
-            ['interactive.primary.disabled' => '#FBFBFA'],
-            $this->lightBase,
+            ['interactive.primary.disabled' => $value],
+            $base,
         );
 
         self::assertTrue($result->isValid(), implode(' | ', $result->messages()));
+        self::assertSame($value, $result->resolved()?->valueOf(TokenKey::InteractivePrimaryDisabled)?->value);
+    }
+
+    public function testDisabledStateCannotDisappearIntoTheBackground(): void
+    {
+        $result = $this->validator->validateOverlay(
+            ['interactive.primary.disabled' => '#FAFAF8'],
+            $this->lightBase,
+        );
+
+        self::assertFalse($result->isValid());
+        self::assertSame(
+            [RejectionReason::InsufficientStateSeparation->value],
+            self::reasons(...$result->rejections()),
+        );
+        self::assertStringContainsString('not a WCAG contrast gate', $result->rejections()[0]->detail);
+    }
+
+    public function testEnabledPrimaryChangeCannotCollapseOntoTheDisabledFill(): void
+    {
+        $result = $this->validator->validateOverlay(
+            ['interactive.primary.default' => '#EAC1BA'],
+            $this->lightBase,
+        );
+
+        self::assertFalse($result->isValid());
+        self::assertContains(
+            RejectionReason::InsufficientStateSeparation->value,
+            self::reasons(...$result->rejections()),
+        );
+    }
+
+    public function testDisabledStateStillRejectsMalformedValues(): void
+    {
+        $result = $this->validator->validateOverlay(
+            ['interactive.primary.disabled' => 'rgba(0,0,0,0)'],
+            $this->lightBase,
+        );
+
+        self::assertFalse($result->isValid());
+        self::assertSame(
+            [RejectionReason::MalformedValue->value],
+            self::reasons(...$result->rejections()),
+        );
     }
 
     public function testMissingReferenceTokenIsReportedRatherThanAssumed(): void
@@ -441,7 +499,7 @@ final class TokenValidatorTest extends TestCase
             'interactive.primary.default' => '#000000',
             'interactive.primary.hover' => '#111111',
             'interactive.primary.active' => '#222222',
-            'interactive.primary.disabled' => '#DDDDDD',
+            'interactive.primary.disabled' => '#C0C0C0',
             'interactive.primary.textOn' => '#FFFFFF',
             'interactive.secondary.default' => '#0B1B4D',
             'interactive.secondary.hover' => '#0E2461',

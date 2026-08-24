@@ -30,6 +30,14 @@ structural surfaces (6), borders/dividers (3), text colours (4), and all four se
 colour groups times three roles each (12) — returns `false` and cannot be moved by a tenant overlay under
 any payload.
 
+Exactly **10 of the 11** tenant-overridable keys carry WCAG 2.2 contrast rules.
+`interactive.primary.disabled` deliberately remains overridable but has no SC 1.4.3/1.4.11 gate because
+inactive controls are exempt. It is governed by a separate product rule in `TokenValidator`: the disabled
+fill must retain at least **1.5:1 luminance separation** from both the enabled primary fill and the page
+background. The distinction is intentional — this floor prevents a disabled control collapsing into an
+enabled control or the canvas, but it is not represented as a WCAG requirement. The component rule retains
+the fixed Bootstrap disabled opacity independently of the tenant colour.
+
 The enum's own docblock states the reasoning for the semantic exclusion explicitly, in terms a future
 maintainer changing this file needs to see before touching it (`TokenKey.php:154-159`):
 
@@ -39,14 +47,14 @@ maintainer changing this file needs to see before touching it (`TokenKey.php:154
 > is a patient-safety boundary and is not negotiable per tenant."
 
 Even within the 11 overridable keys, a value only reaches CSS after passing `TokenValidator` (format:
-`#RRGGBB` only) and `ContrastCalculator` (WCAG contrast against the pair it participates in) — both
+`#RRGGBB` only), then either its applicable WCAG contrast pair or the disabled-state product rule — both
 re-run **tenant-side**, inside `BrandingMaterialiser`, regardless of what the Control Plane already
 validated, because "the tenant does not trust the Control Plane blindly" (`docs/RebrandingPlan.md` §3.9).
 
 ## Consequences
 
 - **A "different theme entirely" for one tenant is not representable in this model**, by construction —
-  a tenant can move 11 named colours within their WCAG-gated bounds and nothing else
+  a tenant can move 11 named colours within their validated bounds and nothing else
   (`docs/branding/multi-tenant-white-label-readiness.md` §3.1).
 - **Per-tenant custom fonts are explicitly out of scope** and the plan itself flags this as needing a *new*
   ADR before attempting (`docs/RebrandingPlan.md` §3.10, "Per-tenant custom fonts | No — deliberately |
