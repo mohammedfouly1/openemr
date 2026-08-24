@@ -1,8 +1,18 @@
-# 12 — Release Verification (CORRECTED — REVISION 6)
+# 12 — Release Verification (CORRECTED — REVISION 7)
 
-**Status:** **PASS** (current — see Revision 6)
+**Status:** **PASS** (current — see Revision 7)
 
-**Revision 6 (2026-08-24) — current. Manifest re-issued for the S1-P1-05 evidence correction.**
+**Revision 7 (2026-08-24) — current. False Arabic-PDF capability wording removed.**
+
+S1-P1-10 re-verified the shipped runtime against RB-14/EV-RB14. The Amiri TTFs are valid, licensed asset-kit
+inputs and the asset installer copies them into the release tree, but neither mPDF nor dompdf registers them.
+The current mPDF 8.3.1 configuration defaults to DejaVu Sans; the preserved shaping probe rejects the
+delivered Amiri with `GPOS Lookup Type 5, Format 3 not supported`, while disabling OTL produces unshaped
+Arabic. The installer's false "registered with mPDF" note, Revision 4's ambiguous "installed and registered"
+wording, and `09-rtl-bilingual-evidence.md`'s stale IBM-Plex PDF recommendation were corrected. Per RB-25,
+the entries for `09-rtl-bilingual-evidence.md` and this self-referential document are re-issued, never removed.
+
+**Revision 6 (2026-08-24). Manifest re-issued for the S1-P1-05 evidence correction.**
 
 Current `brand/qa/wcag-contrast-results.json` was independently re-derived as **38 pairs / 35 PASS /
 3 ADVISORY / 0 FAIL**. `08-wcag-contrast.md` still reported revision 2's 34 / 31 / 3 counts and omitted
@@ -39,12 +49,16 @@ content. This document was updated first and its own entry re-issued in the same
 necessarily invalidates the manifest again*. The correct order is always: edit the document, then recompute,
 then verify.
 
-**Structural note for whoever wires the CI gate (S1-P1-03).** `verify-brand-manifest.php` is invoked by
-**zero** of the repository's 64 GitHub workflows. It is a correct tool that nothing runs automatically —
-which is why a red gate survived five days. It also only detects manifest→disk drift, never disk→manifest:
-a new unmanifested file under `brand/` passes silently.
+**Historical structural note at Revision 5.** `verify-brand-manifest.php` was then invoked by **zero** of the
+repository's 64 GitHub workflows, which is why a red gate survived five days. S1-P1-03 has since corrected
+that gap through the fail-closed `composer branding-ci` workflow step. The verifier still checks the declared
+manifest entries; separate governance prevents unreviewed kit additions.
 
-**Revision 4 (2026-08-09).** Re-verified after the `Q25` Arabic PDF fonts were installed and registered (`brand/typography/fonts/pdf/`, asset IDs THIQA-100–103): **107 assets + 16 docs = 123 SHA256SUMS entries**, verified 123/123 by two independent hashers. Both Amiri TTFs carry a valid `0x00010000` TrueType signature and ship with their OFL-1.1 licence text.
+**Revision 4 (2026-08-09).** Re-verified after the `Q25` Arabic PDF font files were added to the source kit
+and catalogued as asset IDs THIQA-100–103: **107 assets + 16 docs = 123 SHA256SUMS entries**, verified
+123/123 by two independent hashers. Both Amiri TTFs carry a valid `0x00010000` TrueType signature and ship
+with their OFL-1.1 licence text. This was asset registration only; the fonts were not registered with either
+PDF engine, and Revision 7 makes that limitation explicit.
 
 **Revision 3 (2026-08-09).** Re-issued after the nine-item conflict resolution
 ([16-conflict-resolutions.md](16-conflict-resolutions.md)): **103 assets + 16 docs = 119 SHA256SUMS

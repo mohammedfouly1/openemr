@@ -455,7 +455,7 @@ final class InstallAssetsCommand
                 'BRAND-111',
                 'brand/typography/fonts/pdf/Amiri-Regular.ttf',
                 $pdfFonts . '/Amiri-Regular.ttf',
-                'Q25 Arabic PDF face; registered with mPDF in src/Pdf/Config_Mpdf.php',
+                'Q25 Arabic PDF candidate asset; not registered with a PDF engine (D-9 open)',
             ),
             new AssetMapping(
                 'BRAND-111',

@@ -173,7 +173,7 @@ scope exclusions.
 | 083 | BUILD-SHARED-THEME | DONE | Unchanged filesystem-scan mechanism | `edit_globals.php:714-731` | Not independently re-run against the admin UI this pass, but the underlying gate (`file_exists()` over `public/themes/`) is unchanged code and the file set now only contains the 2 Saudi variants, so the scan can only surface those |
 | 085 | BUILD-SHARED-THEME | DONE | Fonts installed via asset installer (F-03 fix, 26-row installer) | `brand/typography/fonts/*.woff2` installed to `public/assets/fonts/thiqa/` | 8 `.woff2` files present in `brand/typography/fonts/`; `interface/themes/thiqa/_typography.scss:22-89` `@font-face` rules reference `../assets/fonts/thiqa/...` |
 | 086 | BUILD-SHARED-THEME | DONE | Arabic-capable web font added | `IBM Plex Sans Arabic` (4 weights) | `_typography.scss:58-89`; `$thiqa-font-family: 'Inter','IBM Plex Sans Arabic',...` |
-| 111 | BUILD-SHARED-THEME | **PARTIAL** | PDF stylesheet build present; Arabic PDF font not wired into the PDF engines | `interface/themes/style_pdf.scss`, `public/themes/style_pdf.css`, `rtl_style_pdf.css` all present | PDF CSS exists, but `grep -rl Amiri` across `*.php`/mpdf/dompdf config returns **zero** matches — the Amiri TTFs in `brand/typography/fonts/pdf/` are not referenced by any PDF-generation code path. Blocked on **D-9** (Q25-compliant Arabic PDF fonts, both mpdf and dompdf configured) |
+| 111 | BUILD-SHARED-THEME | **PARTIAL** | PDF stylesheet build present; Arabic PDF font not wired into the PDF engines | `interface/themes/style_pdf.scss`, `public/themes/style_pdf.css`, `rtl_style_pdf.css` all present | PDF CSS exists and the asset installer copies the Amiri TTFs into the release tree, but no runtime PDF configuration registers them. The preserved mPDF 8.3.1 probe shows the delivered face cannot be used with required Arabic shaping; dompdf is also unwired. Blocked on **D-9** — see RB-14/EV-RB14 |
 | 125 | BUILD-SHARED-THEME | DONE | Gap closed: Lato replaced by a font that is actually shipped | `interface/themes/thiqa/_typography.scss:97` | `$thiqa-font-family: 'Inter','IBM Plex Sans Arabic',...` — Inter is shipped as real `.woff2` files (row 085), unlike the old declared-but-absent Lato |
 
 ## SET-TRANSLATION (8 items)
@@ -279,8 +279,8 @@ accidentally broken), and traceable to a backlog reference.
 4. **BRAND-119 (duplicate favicon `<link>`) is not patched, and the plan itself contradicts its own
    classification** — `RebrandingPlan.md:936` explicitly defers it ("Cosmetic... Defer unless the
    duplicate breaks a client") while §16.2 classifies it as a mandatory PATCH action.
-5. **BRAND-111 (PDF stylesheets) is only partially done** — the SCSS/CSS build exists, but the Amiri
-   Arabic PDF fonts shipped in `brand/typography/fonts/pdf/` are not referenced anywhere in PHP,
+5. **BRAND-111 (PDF stylesheets) is only partially done** — the SCSS/CSS build exists, and the asset
+   installer copies the Amiri files, but no runtime PDF-generation configuration registers the fonts,
    confirming they are not wired into either `mpdf` or `dompdf`. D-9 remains fully open, not
    partially mitigated.
 6. **Two SET-CONFIG items are correctly left as tenant-provisioning placeholders, not defects**:

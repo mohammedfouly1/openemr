@@ -1,6 +1,6 @@
 # 09 — RTL / Bilingual Evidence (CORRECTED)
 
-**Status:** **PASS**
+**Status:** **PASS for the recorded RTL/bilingual UI evidence; Arabic PDF remains unavailable**
 
 Supersedes Codex's `BLOCKED — MISSING AUTHORITATIVE INPUT`. Arabic mockup evidence was in fact present in the handoff root zips (see [00-baseline-addendum.md](00-baseline-addendum.md)), and the operator has since supplied 4 finalised Arabic surface mockups plus 1 dark-theme English login parity mockup at [docs/Thiqa_Group_1_5B_Handoff/inputs/design_evidence/](../Thiqa_Group_1_5B_Handoff/inputs/design_evidence/). These have been copied into [brand/rtl/](../../brand/rtl/) for the production package.
 
@@ -47,5 +47,8 @@ Verified in the Arabic Data Table mockup:
 ## Outstanding recommendations (not blocking)
 
 1. Native-Arabic linguistic proofreading pass on all rendered Arabic strings (per `docs/Thiqa_Group_1_5B_Handoff/table (1).md`).
-2. Arabic PDF rendering test using the vendored `IBM Plex Sans Arabic` font from [brand/typography/fonts/](../../brand/typography/fonts/) — verify shaping/kashida in mPDF or DomPDF (Group 2 responsibility).
+2. Arabic PDF remains an explicitly accepted pilot limitation, not a passing capability. IBM Plex Sans
+   Arabic is the web face and does not satisfy locked `Q25`; the delivered Amiri TTFs are candidate assets,
+   not registered engine support. The preserved mPDF 8.3.1 probe failed required shaping, and dompdf remains
+   unwired (D-9; RB-14; `docs/evidence/EV-RB14-mpdf-gpos.md`).
 3. RTL keyboard-navigation tab order verification at implementation stage.
