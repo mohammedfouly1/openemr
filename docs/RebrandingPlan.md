@@ -1004,10 +1004,11 @@ the "minimise core modifications" objective.
 > **Count correction (2026-08-10, `docs/RebrandingBugs.md` RB-02). The "6 files" / "7 files" figures in
 > this section are the *mandatory WS-C* subset only, and were being read as the whole footprint.**
 >
-> The complete set of core files this project edits outside the branding module is **17**, enumerated as
-> PR-01…PR-13 in [`docs/branding/adr/patch-records.md`](branding/adr/patch-records.md), which is the
-> authoritative reconciliation. The difference is not scope creep — it is three groups this table was never
-> written to cover:
+> The 2026-08-10 correction established 17 files at PR-01…PR-13. The current complete set is **33 files**,
+> enumerated as PR-01…PR-28 in
+> [`docs/branding/adr/patch-records.md`](branding/adr/patch-records.md), which is the authoritative
+> reconciliation. The additional records include later core correctness work plus eight branding edits that
+> the PRE-SKYEAGLE audit found unrecorded; several records intentionally group multiple files.
 >
 > | Group | Files | Why it is outside this table |
 > |---|---:|---|
@@ -1016,11 +1017,11 @@ the "minimise core modifications" objective.
 > | `templates/error/*.twig` | 5 | Filed under SET-TRANSLATION (WS-D), not PATCH — but still a tracked-file diff |
 > | Conditional installer/upgrade set (BRAND-007…012) | 4 | §15.2 "conditional"; this table recommends patching them but never counted them |
 >
-> **Two consequences that matter more than the number.** First, **V-09 must be re-run against all 17
-> files**: its existing dry-run examined six and cannot speak for the other eleven, two of which
-> (`setup.php`, `sql_upgrade.php`) are among the most upstream-churned files in the tree. Second, risk
-> **R-1** ("upstream rebase conflicts in the 6 patched core files") understates the exposure by the same
-> margin and should be re-scoped.
+> **Two consequences that matter more than the number.** First, **V-09 applies to all 33 files**, not the
+> original six-file subset. The 2026-08-24 PRE-SKYEAGLE rerun covered the authoritative inventory: only
+> `src/Services/EncounterService.php` (PR-14, a non-branding defect fix) conflicts with current
+> `upstream/master`; none of the eight newly recorded branding files conflicts. Second, risk **R-1** is scoped
+> to the authoritative patch-record inventory rather than a frozen count.
 >
 > §5.9's exit criterion *"the residual core-edit set is exactly the 6 recorded files"* is therefore
 > **superseded**: read it as *"the residual core-edit set is exactly the files recorded in
@@ -1074,8 +1075,9 @@ independently revertible branch.
 
 ## 5.9 Phase 3 exit criteria
 
-Every one of the 136 IDs has a completed status and a verifiable artefact; the residual core-edit set is
-exactly the 6 recorded files; no guardrail is suppressed; the isolated test suite and PHPStan are green.
+Every one of the 136 IDs has a completed status and a verifiable artefact; the residual core-edit set exactly
+matches the authoritative inventory in `docs/branding/adr/patch-records.md` (currently 33 files, PR-01…PR-28);
+no guardrail is suppressed; the isolated test suite and PHPStan are green.
 
 ---
 
@@ -1133,7 +1135,7 @@ Group 1 used as certification gate 6.
 | V-06 | `brand/manifests/SHA256SUMS` verifies **fully** at release time — run `php tools/branding/verify-brand-manifest.php` (exit 0 = every entry verifies). *Corrected 2026-08-10 (RB-21/RB-25): the manifest holds **123** entries, not the 117 this row previously hardcoded; it was re-issued and expanded by `d9757fc55`. The check is now "every entry verifies", not a fixed count, so a legitimate kit re-issue cannot make the gate stale again.* | R5 `12-…md`; `tools/branding/verify-brand-manifest.php` |
 | V-07 | Arabic session serves `rtl_style_light.css` **and** `rtl_compact_style_light.css` (the CR-3 regression test) | CR-3 |
 | V-08 | `SessionUtil` identity constants unchanged; `sites/*/config.php` unreferenced by branding code | C6, C1 |
-| V-09 | Rebase dry-run against upstream `master` reports conflicts only in the 6 recorded core files | `Q1`, `Q2` |
+| V-09 | Rebase dry-run against upstream `master` covers every file in the authoritative patch-record inventory and classifies conflicts inside and outside that set | `Q1`, `Q2` |
 | V-10 | No new PHPStan baseline entries; module patch coverage ≥80% | R7, `MVP-009` |
 
 ## 6.5 Blocking dependency register
@@ -1284,7 +1286,7 @@ set of values (the product name and one endpoint URL) rather than the architectu
 
 | # | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|---|
-| R-1 | Upstream rebase conflicts in the 6 patched core files | Medium | Medium | Minimal diffs; upstream-first PRs; V-09 rebase dry-run each cycle (`Q2` monthly review) |
+| R-1 | Upstream rebase conflicts in the authoritative patch-record inventory | Medium | Medium | Minimal diffs; upstream-first PRs; V-09 rebase dry-run against every recorded file each cycle (`Q2` monthly review) |
 | R-2 | Upstream adds a new theme, silently entering the product | Low | Medium | Entry-map assertion (WP-2.7d), re-verified each rebase per `Q77` |
 | R-3 | ~~Tier 2 token CSS requires a writable module tree, conflicting with a read-only image~~ | **Closed** | — | **Retired 2026-08-09 (CR-19).** The recommended route emits CSS from a module endpoint and writes nothing, so the image stays immutable. Risk returns only on fallback route (b) |
 | R-4 | Arabic PDF shaping fails in mPDF | Medium | High for AR print | D-9 tested early, in Phase 2, not at acceptance |

@@ -1564,16 +1564,18 @@ enforcing locked decision `Q77`, and it was carrying that duty with no `Q1` reco
 
 | Source | Figure | Assessment |
 |---|---|---|
-| `RebrandingPlan.md` §5.9 exit criterion | "exactly the 6 recorded files" | **Stale** |
+| `RebrandingPlan.md` §5.9 exit criterion | authoritative patch-record inventory (currently 33 files) | **Current after PRE-SKYEAGLE reconciliation** |
 | `RebrandingPlan.md` §5.4 corrected table | "7 files" | **Stale** — mandatory WS-C subset only |
 | This document, pre-audit | 17 | **Stale** — predated PR-14…PR-22 |
 | This document, PR-01…PR-22 | 25 files | Correct for that set |
 | **This document, current (PR-01…PR-28)** | **33 files** | **Current** |
 
-**V-09 must now be re-run against all 33.** Live `git merge-tree HEAD <upstream>` on 2026-08-24 reported
-**47 conflicting paths**; of the recorded set only `src/Services/EncounterService.php` (PR-14, a non-branding
-defect fix) conflicts. None of these eight conflict today — but `AuthorizationController.php` (PR-26) and
-`webpack.themes.js` (PR-28) carry real upstream churn and are the watch items.
+**V-09 was re-run against the authoritative 33-file inventory.** Live
+`git merge-tree --write-tree HEAD upstream/master` on 2026-08-24, against `upstream/master`
+`6cb9c0b91728190f30e09c03c026c827e9430579`, reported **47 conflict records** (true exit code 1, 3.398 s);
+of the recorded set only `src/Services/EncounterService.php` (PR-14, a non-branding defect fix) conflicts.
+None of these eight conflict today — but `AuthorizationController.php` (PR-26) and `webpack.themes.js`
+(PR-28) carry real upstream churn and are the watch items.
 
 **Measured churn since the fork base** (`git rev-list --count b91c12aee..<upstream> -- <path>`), correcting a
 long-standing assumption: `setup.php` has **zero** upstream commits, contradicting PR-10's "high upstream

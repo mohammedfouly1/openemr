@@ -15,6 +15,7 @@
 | 3 | **PRE-09 remediation BEGUN — first item complete. S2-P1-25 FIXED.** Brand-manifest gate restored from RED (119/123, exit 1) to GREEN (123/123, exit 0) by re-issuing five hashes; reason recorded in `12-release-verification.md` Revision 5. Committed `45e9eb4f3`. **HEAD is no longer the scan baseline** — see §1. |
 | 4 | **HEAD literal removed from §1** — a checkpoint cannot hold its own commit hash, and every later commit would stale a pinned value; the remediation-commit table is now the durable record. **New finding S2-P1-26** added from Agent 2E addendum 3 (20 reachable unbranded keys; a leak class with no catalogue row that SET-TRANSLATION structurally cannot fix; `applicationTitle` already 7 call sites deep). P1 count 16 → 17 open. |
 | 5 | **Phase 1 continuation reconstruction complete (2026-08-24).** Re-derived branch `feat/thiqa-branding-foundation`, HEAD `26c32fcb3c027702d9b6fe167017487469a19e5d`, status `?? .claude/`, five registered worktrees, and the five commits after the scan baseline. MariaDB and Apache were both unavailable during the bounded probes. Toolchain paths/versions were inventoried without running tests or analysis. Active task is verification of already-landed commits: `45e9eb4f3`, then `aebcfdfc5` + `26c32fcb3`; no duplicate repair has been started. |
+| 6 | **Landed-work verification complete.** S2-P1-25 independently verified at 123/123, exit 0. S1-P0-01 verified all eight formerly unrecorded files are covered by PR-23…PR-28; the residual V-09 six-file scope was corrected to the authoritative 33-file inventory and reverified against current `upstream/master` (47 conflict records; only PR-14 inside the recorded set; none of the eight new files). Next: S1-P0-09 / PRE-16 runtime proof. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -54,8 +55,8 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | Commit | Task | What it did |
 |---|---|---|
 | `45e9eb4f3` | PRE-09 (1st item) | `prebrand: re-issue four stale brand-manifest hashes and record why` — restored the release gate from RED (119/123, exit 1) to GREEN (123/123, exit 0). Five entries re-issued (the four drifted documents plus `12-release-verification.md`, which was edited to record the reason and is itself manifest-covered). Entries **re-issued, never deleted**, per RB-25. No SkyEagle change. |
-| `aebcfdfc5` | PRE-09 / S1-P0-01 (verification pending) | Added PR-23…PR-28 coverage for the eight previously unrecorded core branding edits. Phase 1 confirmed this commit is landed; substantive invariant verification has not yet run. |
-| `26c32fcb3` | PRE-09 / S1-P0-01 (verification pending) | Corrected the stale PR-30 reference in the patch-record reconciliation table. Phase 1 confirmed this commit is landed; substantive invariant verification has not yet run. |
+| `aebcfdfc5` | PRE-09 / S1-P0-01 | Added PR-23…PR-28 coverage for the eight previously unrecorded core branding edits. Independently verified during continuation; grouped records are intentional. |
+| `26c32fcb3` | PRE-09 / S1-P0-01 | Corrected the stale PR-30 reference in the patch-record reconciliation table. Independently verified during continuation. |
 
 Add a row for every further remediation commit.
 
@@ -139,7 +140,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 1 of ~6 items done** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). **Remaining:** S1-P0-01 patch records PR-23…PR-30 · S1-P0-09 token-namespace bridge (runtime-prove first) · S1-P0-13 + S2-P0-21 migration/rollback tooling · S1-P1-03 CI wiring · S1-P1-15 brand-neutral backup retention · S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 2 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`) and independently reverified. ✅ S1-P0-01 patch-record/V-09 inventory invariant fixed and verified (`aebcfdfc5`, `26c32fcb3`, continuation scope correction pending commit). **Remaining:** S1-P0-09 token-namespace bridge (runtime-prove first) · S1-P0-13 + S2-P0-21 migration/rollback tooling · S1-P1-03 CI wiring · S1-P1-15 brand-neutral backup retention · S1-P1-17 disabled-token contract decision · doc corrections (S1-P1-05, S1-P1-06, S1-P1-10, S1-P2-07). |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B | R | **INTERRUPTED / NO RESULT RECEIVED** | Dispatched; never returned findings. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -172,7 +173,7 @@ SCAN 2:  IN PROGRESS — 6 of 8 agent workstreams landed (2C, 2D, 2E, 2F, 2G, 2H
          2B never returned — the zero-match-filter experiment is the only genuinely missing piece.
 SCAN 3:  NOT STARTED
 
-KNOWN P0 FINDINGS:  S1-P0-01, S1-P0-09, S1-P0-13, S2-P0-21   (all still open)
+KNOWN OPEN P0 FINDINGS:  S1-P0-09, S1-P0-13, S2-P0-21
 REGISTERS:          P0 4 · P1 17 · P2 4   (OPEN findings)
                     FIXED so far: S2-P1-25 (manifest gate, commit 45e9eb4f3).
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
@@ -216,6 +217,27 @@ M webpack.themes.js
 - **Owner ruling:** FIX NOW (Category A). Write `PR-23…PR-30`.
 - **Required final invariant:** `actual core modifications == patch-record inventory == V-09 scope`.
 - **Runtime proof required?** No. **Blocks SkyEagle?** YES.
+
+**Status: FIXED — VERIFIED (continuation Rev 6).** The historical finding below is retained as evidence.
+
+**Continuation verification and residual repair (2026-08-24):**
+
+```yaml
+TASK/FINDING ID: S1-P0-01
+Previous status: OPEN; landed documentation commits were verification pending
+Current status: FIXED — VERIFIED
+What changed: Verified all eight files are changed from the fork baseline and represented by PR-23…PR-28; corrected only the residual six-file V-09 scope in the active plan/evidence documents.
+Files changed: docs/RebrandingPlan.md; docs/branding/remaining-dependencies.md; docs/branding/adr/patch-records.md; this checkpoint
+Repair commits verified: aebcfdfc5da63686901c1cf403b851afb01e0e40; 26c32fcb3c027702d9b6fe167017487469a19e5d
+Tests/commands executed: per-file baseline diffs and patch-record filename checks for all eight; targeted V-09 text inspection; git merge-tree --write-tree HEAD upstream/master
+Exact exit codes: eight git diff checks each 1 meaning changed; documentation searches 0; merge-tree 1 meaning conflicts present
+Tests and assertions executed: 8/8 formerly undocumented files changed; 8/8 represented; authoritative inventory 33 files; 47 merge conflict records; 1 recorded-file conflict; 0/8 newly recorded files conflict
+Runtime evidence: upstream/master 6cb9c0b91728190f30e09c03c026c827e9430579; merge preview 2026-08-24T06:41:14.5090816Z–06:41:17.9069063Z; 3.398 s; no timeout; working tree not mutated
+Independent verification: actual eight-file delta == PR-23…PR-28 substance; V-09 now explicitly scopes the full authoritative 33-file inventory.
+Rollback method: Branch at the parent commit and cherry-pick accepted changes; do not use destructive reset/revert.
+Remaining risks: Current upstream integration has 47 conflict records, including EncounterService.php inside the recorded set; this is classified release-integration work, not missing patch-record coverage.
+Next incomplete task: PRE-09 / S1-P0-09 and PRE-16 Tier-2 runtime proof before token-overlay repair.
+```
 
 ### S1-P0-09 — Tier-2 token overlay is structurally inert
 
