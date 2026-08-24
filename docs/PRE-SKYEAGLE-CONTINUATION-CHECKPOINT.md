@@ -18,6 +18,7 @@
 | 6 | **Landed-work verification complete.** S2-P1-25 independently verified at 123/123, exit 0. S1-P0-01 verified all eight formerly unrecorded files are covered by PR-23…PR-28; the residual V-09 six-file scope was corrected to the authoritative 33-file inventory and reverified against current `upstream/master` (47 conflict records; only PR-14 inside the recorded set; none of the eight new files). Next: S1-P0-09 / PRE-16 runtime proof. |
 | 7 | **PRE-16 runtime proof executed and exactly restored.** A valid revision-1 overlay reached DB, generated CSS, live endpoint, page link, and browser custom properties, while `.btn-primary` remained on the static `--thiqa-*` value. Preflight DB values, CSS hashes/timestamps, verify state, page links, and browser styles all matched after restoration. PRE-16 is DONE — VERIFIED; S1-P0-09 remains confirmed and open for repair. |
 | 8 | **S1-P0-09 FIXED — VERIFIED; repaired PRE-16 chain passed and was exactly restored.** Commit `566b14ea68dd106fe0e38d5d77f2df46b5da25a8` made the bare, identity-neutral properties canonical, retained `--thiqa-*`/`--oe-*` compatibility aliases, and connected real component consumers with safe Tier-1 fallbacks. Automated light/dark coverage passed (239 tests, 987 assertions); the live Login button changed to the materialised light and dark tenant values, then DB, files, theme selector, page links, browser styles and temporary cache state were restored. No SkyEagle identity work began. |
+| 9 | **S1-P0-13 + S2-P0-21 implementation begun after bounded reconciliation.** Selected design: `%s Database Upgrade` as the identity-neutral literal key; product name supplied from `openemr_name` before one context-specific escape; a checked-in JSON contract generates a separate SQL supplement loaded after either installer translation source; branch-cut regeneration reasserts that supplement after replacing `currentLanguage_utf8.sql`; upgrades use a transaction-journalled migrator that resolves exact names once, asserts uniqueness, then mutates only stable IDs. Live DB inspection was read-only: both legacy keys still have the same 28-language set; total counts 13,235 constants / 237,542 definitions; 0 orphans; 0 duplicate pairs. Status remains **IN PROGRESS** pending implementation and the full matrix. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -330,6 +331,13 @@ brand-strings.json carry_forward:  "OpenEMR Database Upgrade" -> "Thiqa Database
   alternative: remove product identity from catalogue keys and compose the brand outside the constant.
 - **Blocks SkyEagle?** YES.
 
+**Status: IN PROGRESS (continuation Rev 9).** Selected neutral contract is `%s Database Upgrade`, with the
+existing application-title source composed before final HTML escaping. Rejected: bare juxtaposition
+(`applicationTitle` + translated suffix), because it freezes English word order; identity inside any new key,
+because it repeats the defect; and destructive name-only SQL, because exact duplicate names already exist.
+Upgrade tooling will resolve candidate names with binary equality, require uniqueness, and use the resulting
+stable `cons_id`/`def_id` values for every write. No live database mutation has occurred.
+
 ### S2-P0-21 — The RB-01 remediation does not survive a database rebuild
 
 - **Severity** P0 · **Origin** Agent 2E · **Reproduced by orchestrator: YES**
@@ -349,6 +357,13 @@ git grep "Thiqa Database Upgrade" -- sql/ src/ contrib/                        �
 - **Total branding DB footprint: 33 rows across 2 cons_ids** (28 carry-forward + 5 English overrides), none
   of which exists in `sql/`, in the seed, or in any migration.
 - **Blocks SkyEagle?** YES — arguably the most urgent item, since a rename would be built on ephemeral state.
+
+**Status: IN PROGRESS (continuation Rev 9).** Durability will not be implemented by appending fragile rows to
+`currentLanguage_utf8.sql`. A separate generated SQL supplement, sourced from a checked-in neutral JSON
+contract, will load after either the local or optional online installer translation dump. The branch-cut
+translation mutator will regenerate/reassert the supplement after copying the prior-release blob, so release
+preparation cannot erase it. Fresh-install, rebuild, release-copy and stale-regeneration tests are required
+before closure.
 
 ---
 
