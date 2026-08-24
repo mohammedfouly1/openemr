@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace OpenEMR\Tests\Isolated\BrandingCi;
 
 use OpenEMR\Common\Translation\MissingIdentityPolicy;
+use OpenEMR\Common\Translation\ProductContextTranslation;
 use OpenEMR\Common\Translation\TranslationCatalogueContractSet;
 use OpenEMR\Common\Translation\TranslationDerivation;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -308,6 +309,37 @@ final class ProductNameCompositionContractTest extends TestCase
                 . 'must state how a translation lacking the brand literal is handled.',
             );
         }
+    }
+
+    /**
+     * Every pattern any contract can put into the catalogue must actually compose.
+     *
+     * `ProductContextTranslation` accepts exactly one `%s`/`%1$s` plus a literal `%%` and throws on
+     * anything else — so a target key or definition carrying a stray `%` would not fail a build, it
+     * would fatal whichever page renders it, in whichever locale reached it. That is a runtime
+     * crash reachable only through translated content, which is close to the worst place to
+     * discover one.
+     */
+    public function testEveryContractPatternComposes(): void
+    {
+        $set = TranslationCatalogueContractSet::fromProjectDirectory($this->root());
+        $checked = 0;
+
+        foreach ($set->all() as $contract) {
+            $patterns = array_merge([$contract->targetKey], array_values($contract->definitions));
+
+            foreach ($patterns as $pattern) {
+                self::assertNotSame(
+                    '',
+                    ProductContextTranslation::compose($pattern, 'Thiqa'),
+                    $contract->id . ' ships a pattern that does not compose: ' . $pattern,
+                );
+                $checked++;
+            }
+        }
+
+        // A floor, so a broken loader silently yielding nothing cannot pass this vacuously.
+        self::assertGreaterThanOrEqual(28, $checked);
     }
 
     /**
