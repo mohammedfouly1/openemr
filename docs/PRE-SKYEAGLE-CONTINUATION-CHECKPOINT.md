@@ -26,6 +26,7 @@
 | 14 | **PRE-09 / S1-P1-02 FIXED — VERIFIED.** `2b801e668097599ac3e870448d340567929b4767` removes exactly the two dead OAuth overrides from the active catalogue and records exact-value English retirement metadata; the three Zend overrides remain active and verified against live consumers. Fresh/upgrade/customized-tenant policy, tenant-title English rendering, no stale consumers and the neutral database-upgrade contract are automated. Targeted result: 44 tests / 227 assertions / exit 0. Canonical gate: 12/12 artefacts, 123/123 manifest, 157 tests / 1,760 assertions / exit 0. Live dry-run planned exactly two deletes; before/after hashes for all five definitions of each constant were identical. A reversible decision mutation produced two failures / exit 1, then exact source hash restoration and the full targeted pass were verified. Next incomplete task: S1-P1-05 WCAG evidence counts. |
 | 15 | **PRE-09 / S1-P1-05 FIXED — VERIFIED.** `b400546a2ffa1f1a6edb6b802315124bcef2bd67` re-derived the machine evidence as 38 pairs / 35 PASS / 3 ADVISORY / 0 FAIL, added the four missing passing `borderStrong` rows to the human record, and installed a row-level drift guard in the canonical gate. Source/calculator proof: 110 tests / 264 assertions; combined targeted: 113 / 632; canonical gate: 12/12 artefacts, 123/123 manifest, 160 / 2,128; all exit 0. Two covered-document hashes were re-issued, never removed, with the reason recorded in release verification Rev 6. A reversible 35→34 summary mutation failed exit 1; exact document hash restoration and final passes were verified. Next incomplete task: S1-P1-06 D-8 status reconciliation. |
 | 16 | **PRE-09 / S1-P1-06 FIXED — VERIFIED; D-8 correctly remains OPEN.** `88ff342894c9543fe30b8e6b6a046ca2f56fd1b7` reconciles `RebrandingPlan.md`, `remaining-dependencies.md` and ADR-BRAND-001 with current execution: the endpoint is the browser-serving route, but `BrandingMaterialiser` still invokes `TokenCssWriter` and commits both static variants, including for an empty overlay. The new contract guard passed 2 tests / 19 assertions; materialiser/writer plus contract passed 34 / 165; canonical gate passed 12/12 artefacts, 123/123 manifest and 162 / 2,147; all exit 0. A reversible false-closure mutation failed 1/1, exit 1, and the plan was restored exactly to SHA-256 `796AC7096B052EE984E327A7DF2411351AA73AA3860D8675886422335820F828`. No runtime state was changed. Next incomplete task: S1-P1-10 false PDF-font capability claim. |
+| 17 | **PRE-09 / S1-P1-10 FIXED — VERIFIED; Arabic PDF capability remains unavailable by recorded Owner decision.** `723170df701ddb948a95b8177d100411fc71b0d9` removes the false installer claim that Amiri is registered with mPDF, distinguishes asset delivery from engine support, corrects the stale IBM-Plex PDF recommendation, and installs a canonical truthfulness guard. Current runtime evidence is mPDF 8.3.1, dompdf 3.1.5, DejaVu Sans default, and no Amiri/Noto registration; EV-RB14 records the shaping failure and Owner-adopted Option C through pilot. Targeted 2 tests / 20 assertions and canonical 164 / 2,167 passed; manifest returned from the expected 121/123 pre-reissue failure to 123/123 after exactly two documented hash reissues. The old claim caused the named test to fail exit 1 and exact installer restoration was verified. Next incomplete task: S1-P1-11 operational Thiqa identity classification/neutralization. |
 
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
@@ -47,13 +48,14 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          88ff342894c9543fe30b8e6b6a046ca2f56fd1b7 (before Rev 16 checkpoint commit)
-CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 16 checkpoint edit;
+CURRENT OBSERVED HEAD:          723170df701ddb948a95b8177d100411fc71b0d9 (before Rev 17 checkpoint commit)
+CURRENT GIT STATUS:             ?? .claude/ (observed immediately before the Rev 17 checkpoint edit;
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
 SKYEAGLE MIGRATION STARTED:     NO
 SKYEAGLE BRANDING CHANGES:      NONE
-REPOSITORY WRITES THIS SESSION: S1-P1-06 D-8 documentation reconciliation and deterministic contract guard;
+REPOSITORY WRITES THIS SESSION: S1-P1-10 truthful PDF-font asset/runtime wording, regression guard,
+                                two production-document corrections and two manifest hash reissues;
                                 this checkpoint
 CURRENT PROGRAMME:              PRE-SKYEAGLE three-scan audit/remediation/certification
 FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
@@ -81,6 +83,7 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `2b801e668` | PRE-09 / S1-P1-02 | Retired exactly two dead OAuth English overrides by exact managed value, preserved customized/non-English definitions and the three live Zend overrides, removed stale consumer metadata, and added fresh/upgrade/existing-tenant regression coverage without disturbing the neutral database-upgrade contract. |
 | `b400546a2` | PRE-09 / S1-P1-05 | Re-derived 38 WCAG pairs from machine evidence, synchronized the 35 PASS / 3 ADVISORY / 0 FAIL prose and all four missing `borderStrong` rows, added a canonical drift guard, and re-issued the two affected manifest hashes with an explicit Rev 6 reason. |
 | `88ff34289` | PRE-09 / S1-P1-06 | Reconciled all three authoritative D-8 records with shipped materialisation behavior, retained D-8 as OPEN, corrected the associated risk/closure counts, and added a canonical regression guard against false closure. |
+| `723170df7` | PRE-09 / S1-P1-10 | Removed the false Amiri/mPDF registration claim, kept D-9 and the accepted pilot limitation explicit, corrected stale PDF evidence, added a truthfulness guard, and re-issued exactly two covered-document hashes. |
 
 Add a row for every further remediation commit.
 
@@ -100,8 +103,8 @@ recent PRE-SKYEAGLE commit were re-derived with bounded read-only commands. Tool
 under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
-Those landed-work verification steps and the next nine PRE-09 repairs are now complete; see revisions 6…16.
-**Exact next incomplete item:** PRE-09 / S1-P1-10 false PDF-font capability claim.
+Those landed-work verification steps and the next ten PRE-09 repairs are now complete; see revisions 6…17.
+**Exact next incomplete item:** PRE-09 / S1-P1-11 operational Thiqa identity classification/neutralization.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -164,7 +167,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 11 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). **Next:** S1-P1-10 false PDF-font capability claim, then the remaining finding register in dependency order. |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **IN PROGRESS — 12 items verified** | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). **Next:** S1-P1-11 operational identity classification/neutralization, then the remaining finding register in dependency order. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -198,12 +201,12 @@ SCAN 2:  IN PROGRESS — 7 of 8 workstreams are now complete (2B, 2C, 2D, 2E, 2F
 SCAN 3:  NOT STARTED
 
 KNOWN OPEN P0 FINDINGS:  NONE
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 11 open · P2 4 open
-                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-05; S1-P1-06; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-25.
+REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 10 open · P2 4 open
+                    FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-25.
                     NEW since: S2-P1-26 (English leak surface + uncatalogued leak class).
                     P1 moved 17 -> 16 (S2-P1-25 fix) -> 17 (S2-P1-26 new) -> 16 (S1-P1-03 fix)
                     -> 15 (S1-P1-15 fix) -> 14 (S1-P1-17 fix) -> 13 (S1-P1-02 fix)
-                    -> 12 (S1-P1-05 fix) -> 11 (S1-P1-06 fix).
+                    -> 12 (S1-P1-05 fix) -> 11 (S1-P1-06 fix) -> 10 (S1-P1-10 fix).
                     Note: S1-P1-04 is execution-proven but NOT fixed; proving a defect is not
                     repairing it. It stays open until the guardrail constants gain a real
                     cross-check against the production namespace.
@@ -573,6 +576,30 @@ Next incomplete PRE-* task: PRE-09 / S1-P1-10 — correct the false Amiri/mPDF c
 `tools/branding/install-assets.php` ~line 458 states the Amiri PDF face is *"registered with mPDF in
 `src/Pdf/Config_Mpdf.php`"*. That file has **zero** Amiri references (`grep -c` → 0). Per RB-14/EV-RB14 the
 registration cannot work anyway (mPDF cannot parse the font). Correct the claim after Scan-2 confirmation.
+
+**Status: FIXED — VERIFIED (continuation Rev 17).** The installer now calls Amiri a candidate asset and
+states that D-9 is open. Current source, dependency lock and preserved runtime evidence agree: files are
+delivered, but mPDF and dompdf do not provide the claimed Arabic PDF capability. The Owner's adopted EV-RB14
+Option C accepts this known limitation through pilot; revisit is triggered only by a customer contract.
+
+```yaml
+TASK/FINDING ID: PRE-09 / S1-P1-10
+Previous status: CONFIRMED — FALSE CAPABILITY CLAIM
+Current status: FIXED — VERIFIED; D-9 remains OPEN as an Owner-accepted pilot limitation
+Implementation commit: 723170df701ddb948a95b8177d100411fc71b0d9
+Current package/runtime evidence: mpdf/mpdf v8.3.1; dompdf/dompdf v3.1.5; Config_Mpdf default dejavusans; no Amiri/Noto registration
+Approved assets verified: Amiri-Regular.ttf 437,780 bytes SHA256 CD2550C0F4C05EB341BF97958211AAA39382BCA96577BA3A67D4A3B4912C43C0; Amiri-Bold.ttf 414,560 bytes SHA256 8CFED49B66DE57E360AC61631D882DDDFA23095D3DDB39FC2133EAF93892E79A
+Decision evidence: EV-RB14 reproduces GPOS Lookup Type 5 Format 3 failure across four Arabic faces and records Owner-adopted Option C through pilot; OTL-off output is unshaped and not accepted
+Targeted contract: PdfFontCapabilityClaimContractTest 2 tests / 20 assertions / exit 0
+Canonical positive: 12/12 generated artefacts; 123/123 manifest; 164 tests / 2,167 assertions / exit 0
+Lint/style/diff: two PHP files lint exit 0; PHPCS 2/2 exit 0; git diff --check exit 0
+Manifest governance: pre-edit 123/123 exit 0; intentional pre-reissue 121/123 with exactly 09 and 12 mismatching, exit 1; exactly those two entries re-issued, none removed; final 123/123 exit 0; reason recorded in release verification Rev 7
+Negative control: installer note restored to the exact false "registered with mPDF" claim; named test 1 failure / exit 1
+Restoration: installer restored exactly to SHA256 0A2D93693F33448939DF5233C8DC9E176ECED78B6464C2EB36FEBE9EE3D4348E; temporary backup removed; targeted, manifest and canonical gates subsequently passed
+Database / Apache / browser touched: NO / NO / NO
+Remaining limitation: Arabic PDF output is unavailable; this repair makes that true state explicit and does not fabricate a font or risky engine registration
+Next incomplete PRE-* task: PRE-09 / S1-P1-11 — classify operational Thiqa occurrences and neutralize only safe reusable tooling
+```
 
 ### S1-P1-11 — Live production artefacts carry Thiqa operational identity
 `docs/evidence/ubuntu-infra-scripts/07-deploy-code-update.sh:3,26,87` pins
@@ -1254,7 +1281,7 @@ globals, both overlay bytes/timestamps, `style_light.css`, absent overlay links,
 `rgb(196, 63, 46)` button; restored verification exited 1 because the inherited revision-0/file-present
 inconsistency was intentionally restored. The detailed test, build, warning and hash evidence is in §5.
 
-**Also outstanding:** PRE-09 continues at S1-P1-10; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
+**Also outstanding:** PRE-09 continues at S1-P1-11; Scan-3 (PRE-18…24) entirely; PRE-25 final reconciliation.
 
 ---
 
