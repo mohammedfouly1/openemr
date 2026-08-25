@@ -33,10 +33,14 @@ use Throwable;
  * `svg`, `metadata` and `path` elements, so an allowlist wide enough for
  * gradient-and-shape artwork already has generous headroom. Anything else is refused.
  *
- * Three independent layers, in order:
+ * Four independent layers, in order:
  *   1. Byte-level pre-checks, before any parser touches the input.
  *   2. A libxml parse with network access and external entity resolution disabled.
  *   3. A full DOM walk over elements, attributes and node kinds.
+ *   4. A root-geometry check, {@see SvgGeometry}. Layers 1-3 answer "can this file hurt
+ *      the tenant"; layer 4 answers "can this file hurt the mark". A logo that a renderer
+ *      is free to stretch is a trademark-integrity defect even though it is perfectly
+ *      safe, so it is refused at the same gate rather than at a parallel one.
  */
 final class SvgInspector
 {
@@ -143,7 +147,16 @@ final class SvgInspector
             $this->walk($child, false, 0);
         }
 
-        return $this->readDimensions($root);
+        $dimensions = $this->readDimensions($root);
+
+        // Deliberately last. An SVG that declares no size at all must keep reporting
+        // SvgNoDimensions, which is the more specific failure; only a file that already
+        // has a usable size can meaningfully be asked whether that size is renderable
+        // without deformation. Parsing *is* the check: SvgGeometry cannot be constructed
+        // from a root element whose geometry lets a renderer stretch the mark.
+        SvgGeometry::fromRootElement($root);
+
+        return $dimensions;
     }
 
     /**
@@ -268,6 +281,15 @@ final class SvgInspector
                     AssetRejectionReason::SvgDisallowedElement,
                     'SVG element "' . $this->safeName($localName) . '" is not on the drawing allowlist.',
                 );
+            }
+
+            // `svg` is the only allowlisted element on which preserveAspectRatio has a
+            // defined effect, and the allowlist admits nested ones: a nested svg opens a
+            // viewport of its own, so `none` deforms the artwork inside it exactly as it
+            // would on the root. Checking here rather than only in readDimensions() is
+            // what makes the clause document-wide instead of root-only.
+            if ($localName === 'svg') {
+                SvgGeometry::assertUniformScalingPermitted($element);
             }
         } elseif (!$insideMetadata) {
             // Foreign-namespace markup outside <metadata> is either an XHTML injection

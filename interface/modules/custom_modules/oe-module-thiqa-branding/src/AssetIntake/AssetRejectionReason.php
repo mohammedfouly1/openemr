@@ -86,6 +86,15 @@ enum AssetRejectionReason: string
     /** The SVG declares no usable width/height or viewBox. */
     case SvgNoDimensions = 'svg_no_dimensions';
 
+    /** The SVG root permits non-uniform scaling, so a renderer may deform the mark. */
+    case SvgAspectRatioNotPreserved = 'svg_aspect_ratio_not_preserved';
+
+    /** The SVG root carries no usable viewBox, so it cannot be scaled into a slot. */
+    case SvgViewBoxMissing = 'svg_view_box_missing';
+
+    /** The SVG root's declared width/height contradict its viewBox aspect ratio. */
+    case SvgAspectRatioConflict = 'svg_aspect_ratio_conflict';
+
     public function summary(): string
     {
         return match ($this) {
@@ -110,6 +119,11 @@ enum AssetRejectionReason: string
             self::SvgDisallowedElement => 'SVG uses an element outside the permitted drawing allowlist.',
             self::SvgProcessingInstruction => 'SVG contains an XML processing instruction.',
             self::SvgNoDimensions => 'SVG declares neither usable width/height nor a viewBox.',
+            self::SvgAspectRatioNotPreserved
+                => 'SVG root permits non-uniform scaling, which would deform the logo.',
+            self::SvgViewBoxMissing => 'SVG root declares no usable viewBox to scale from.',
+            self::SvgAspectRatioConflict
+                => 'SVG root declares a width and height that contradict its viewBox aspect ratio.',
         };
     }
 
@@ -142,7 +156,12 @@ enum AssetRejectionReason: string
             self::SlotFormatNotPermitted,
             self::SvgNotWellFormed,
             self::SvgDisallowedElement,
-            self::SvgNoDimensions => false,
+            self::SvgNoDimensions,
+            // Geometry defects are production mistakes, not attacks: an SVG exported with
+            // preserveAspectRatio="none" is a tool's default, not an operator's intent.
+            self::SvgAspectRatioNotPreserved,
+            self::SvgViewBoxMissing,
+            self::SvgAspectRatioConflict => false,
         };
     }
 }
