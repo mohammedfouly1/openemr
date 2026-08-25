@@ -155,33 +155,79 @@ final class ProductIdentityContractTest extends TestCase
     /**
      * The drift gate fails on a hand-edited artefact.
      *
-     * The negative control for the whole mechanism: the artefact is edited in place, `--check`
-     * is required to report drift with its documented exit code, and the file is then restored
-     * byte-for-byte and re-verified. Without this, "CI re-runs the generator" is a claim rather
-     * than a guarantee.
+     * S4B-12 / S4E-04. This test used to tamper with the REAL tracked artefact in place and
+     * restore it in a `finally`. That was a genuine hazard, not a theoretical one, and two
+     * independent auditors flagged it — one refused to run this suite at all because of it.
+     * `finally` does not survive a signal, a fatal, an OOM kill or a closed terminal, and this
+     * runs inside `composer branding-ci`, on developer machines and release boxes. The residue
+     * it would leave is the quiet kind: a tampered `'XThiqa'` is a non-empty string, so
+     * `ProductIdentity::resolve()` accepts it and every consumer serves it with no runtime
+     * signal whatsoever.
+     *
+     * The generator already takes `--out-file`, so the whole exercise runs against a COPY in the
+     * scratch directory and the tracked file is never opened for writing. The real artefact's
+     * hash is asserted unchanged at the end — the safety property is now itself a tested
+     * invariant rather than a promise in a docblock.
      */
     public function testTheDriftGateRejectsAHandEditedArtefact(): void
     {
         $repoRoot = dirname(__DIR__, 4);
-        $artefact = $repoRoot . '/' . ProductIdentity::ARTEFACT_RELATIVE_PATH;
+        $tracked = $repoRoot . '/' . ProductIdentity::ARTEFACT_RELATIVE_PATH;
 
-        $original = file_get_contents($artefact);
+        $original = file_get_contents($tracked);
         self::assertIsString($original);
-        $originalHash = hash('sha256', $original);
+        $trackedHashBefore = hash('sha256', $original);
+
+        $copy = $this->scratch . '/product_identity.generated.php';
+        self::assertNotFalse(file_put_contents($copy, $original));
+
+        // The untouched copy must verify, or the tamper below would prove nothing.
+        self::assertSame(
+            0,
+            $this->runGenerator($repoRoot, ['--check', '--out-file=' . $copy]),
+            'A faithful copy of the artefact must verify clean.',
+        );
 
         $tampered = str_replace("'product_name' => '", "'product_name' => 'X", $original);
         self::assertNotSame($original, $tampered, 'The tamper did not change the artefact.');
+        self::assertNotFalse(file_put_contents($copy, $tampered));
 
-        try {
-            file_put_contents($artefact, $tampered);
-            $exitCode = $this->runGenerator($repoRoot, ['--check']);
-            self::assertSame(3, $exitCode, '--check must exit 3 on drift.');
-        } finally {
-            file_put_contents($artefact, $original);
-        }
+        self::assertSame(
+            3,
+            $this->runGenerator($repoRoot, ['--check', '--out-file=' . $copy]),
+            '--check must exit 3 on drift.',
+        );
 
-        self::assertSame($originalHash, hash('sha256', (string) file_get_contents($artefact)), 'Artefact not restored.');
-        self::assertSame(0, $this->runGenerator($repoRoot, ['--check']), 'Restored artefact must verify again.');
+        self::assertSame(
+            $trackedHashBefore,
+            hash('sha256', (string) file_get_contents($tracked)),
+            'This test must never write to the tracked artefact.',
+        );
+    }
+
+    /**
+     * The tracked artefact is not the compiled-in fallback.
+     *
+     * S4B-12's second half. `ProductIdentity::FALLBACK` names the upstream product, `resolve()`
+     * degrades to it on any unusable key with nothing but an `error_log()`, and
+     * `library/globals.inc.php` writes that value straight into the `globals` table at install
+     * time. So a silently-degraded artefact would install an upstream-branded product and every
+     * other test here would still pass, because they all assert only non-emptiness.
+     */
+    public function testTheShippedArtefactIsNotSilentlyTheFallback(): void
+    {
+        $identity = ProductIdentity::load(ProductIdentity::defaultArtefactPath());
+
+        $reflection = new \ReflectionClass(ProductIdentity::class);
+        /** @var array<string, string> $fallback */
+        $fallback = $reflection->getConstant('FALLBACK');
+
+        self::assertNotSame(
+            $fallback['product_name'],
+            $identity['product_name'],
+            'The shipped artefact resolves to the compiled-in fallback, which means it is missing, '
+                . 'unreadable or malformed and nothing else in this suite would have noticed.',
+        );
     }
 
     /** @param array<string, mixed> $values */
