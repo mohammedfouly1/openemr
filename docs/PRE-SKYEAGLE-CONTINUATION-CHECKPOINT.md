@@ -48,6 +48,8 @@
 
 | 29 | **PRE-09 / S3-P1-32 + S3-P1-34 + S3-P1-31 FIXED — VERIFIED. Three of the six open Scan-3 findings closed; three remain.** `f18f75080`, `59d5c14df`. **S3-P1-32** was Scan-3C's critique of this programme's own architecture and it was right: `xlp()` and the `\|xlp` filter now resolve through `xl_product_name()`, so every composed surface gets the session's product name rather than only the shell's browser tab. **The guard that should have caught it was itself the Scan-3B false-green shape** — `assertStringContainsString("getString('openemr_name')")` was *file-wide*, so it kept passing after the read moved to the neighbouring function in the same file. It is now scoped to each function's own body, with comments stripped through `token_get_all()` so a comment recording the fix can neither satisfy nor break the assertion. **It is also proven by execution with no database:** `xl_product_name()` memoises per request, so resolving once under one configured name, changing the name, then composing discriminates a routed `xlp()` (returns the first value) from a bypassing one (returns the second). PHPUnit's `RunInSeparateProcess` was tried first and **hangs on this host**; the probe therefore runs in-process, restores the bag in a `finally`, and its memo residue is documented rather than hidden. Negative control reverted both entry points: 3 failures / exit 1 including the executable one; sources restored to SHA-256 `61C40FC3…` / `C2305A40…` and the suite passed again. **One inherited claim corrected:** the resolver's new `catch (\RuntimeException)` was documented as protecting the *installer*. It does not — `Installer::insert_globals()` never reaches it because `saas_branding_product_name_ar` does not exist yet and the `has()` check returns first (verified cold: an unpopulated bag returns `''` without touching session or database). What it *does* protect is `sql_upgrade.php:551` / `sql_patch.php:74`, which require `globals.inc.php` **after** echoing and flushing — reproduced directly in a cold CLI process as `RuntimeException: Failed to start the session because headers have already been sent`. Uncaught, that aborts an upgrade mid-run: the S3-P0-28 shape. A database failure is explicitly **not** guarded, because `sqlQuery()` ends in `HelpfulDie()`'s `exit(1)` and no catch can reach it. **S3-P1-34** converts the questionnaire copyright disclaimer — Rev 23's one *mechanical* exclusion, since its literal was an argument to the browser-side `xl()`. Composed in PHP, emitted through `js_escape()`; round-tripped for Latin, Arabic and quote-bearing names. It has no `lang_constants` row, so nothing is orphaned. **S3-P1-31** guards both editor write paths, and its interesting half is the *classification*: `compose()` itself decides what is a pattern, measured against real data as 0 false positives across all 16 `%`-bearing catalogue constants and 0 false negatives across all 28 shipped contract targets. Negative control removing the update-path guard failed the named test, exit 1, then restored. Also initialises `$go`, which the surrounding block reads unconditionally and nothing ever set. Canonical gate: 12/12 artefacts, 123/123 manifest, **289 tests / 3,460 assertions**, exit 0; PHPCS 6/6; live login page HTTP 200 / 9,165 bytes, matching the recorded baseline. Live database mutated: NO. **Certification remains NOT PASSED** — S3-P1-33, S3-P2-35 and S3-P2-36 are open. |
 
+| 30 | **A-01/A-02/A-03 reconciled into the record; SKY-F01 found, narrowed and FIXED; three open findings re-verified by execution.** `5202b0253` had landed before this session began and was ahead of the checkpoint - it is now recorded (Section 15C). **SKY-F01 is new**, and its correction history is preserved rather than rewritten: the original claim was that RTL non-Arabic sessions could receive an Arabic product name, tagline and logo alt text; `tagline()` ignoring its argument is deliberate and documented (REFUTED), `brandProductName`/`brandTagline` reach no template (LATENT), and the live half is the two logo accessible names, which render on every login. `02bcae75c` replaces the direction predicate with a language predicate. **The three open Scan-3 findings were re-verified rather than inherited** - S3-P1-33, S3-P2-35 and S3-P2-36 are all genuinely still open, each reproduced by execution (Section 15C). **S3-P1-27, S3-OBS-01 and S3-P1-30 were verified read-only by an independent agent**; all recorded numbers confirmed exactly, S3-OBS-01 confirmed reachable live, and S3-P1-27 confirmed an unapplied migration rather than a code defect. Live database mutated: NO. |
+
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
 
@@ -139,8 +141,11 @@ under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
 Those landed-work verification steps and the next eleven PRE-09 repairs are now complete; see revisions 6…18.
-**Exact next incomplete item (updated at Rev 29):** S3-P1-32, S3-P1-34 and S3-P1-31 are FIXED — VERIFIED
-(`f18f75080`, `59d5c14df`). **Three Scan-3 findings remain open**, in this order:
+**Exact next incomplete item (updated at Rev 30):** SKY-F01 is FIXED — VERIFIED (`02bcae75c`), and
+A-01/A-02/A-03 (`5202b0253`) are now reconciled into the record — see §15C for both, and for the
+independent read-only verification of S3-P1-27, S3-OBS-01 and S3-P1-30. **The same three Scan-3
+findings remain open, and all three were re-verified by execution on 2026-08-25 rather than
+inherited** (§15C), in this order:
 
 1. **S3-P1-33 — `setup.php` is a mixed-brand installer.** Not a mechanical conversion, and the reason
    matters: `setup.php` runs *before the database exists*, so `xl()`, `xlp()` and every branding global
@@ -286,7 +291,22 @@ SCAN-3 REGISTER:    S3-P0-28  translation precedence divergence      FIXED — V
                     S3-P2-36  Q77 theme check skips in CI            OPEN (CI infra)
                     S3-OBS-01 admin.php renders its site table with
                               no authentication — OUTSIDE branding,
-                              recorded so it is not dropped          NEEDS OWN REVIEW
+                              recorded so it is not dropped          CONFIRMED LIVE 2026-08-25;
+                                                                     NOT FIXED by Owner decision;
+                                                                     STILL NEEDS OWN REVIEW
+
+POST-SCAN-3 REGISTER (2026-08-25, see §15C):
+                    A-01      shell user menu juxtaposed `حول Thiqa`  FIXED — VERIFIED (5202b0253)
+                    A-02      questionnaire theme help-text leak      FIXED — VERIFIED (5202b0253)
+                    A-03      leak surface was a hand-written list    FIXED — VERIFIED (5202b0253)
+                    SKY-F01   Arabic branding selected by DIRECTION
+                              not LANGUAGE; live on the login logos'
+                              accessible names, latent elsewhere,
+                              and REFUTED for the tagline             FIXED — VERIFIED (02bcae75c)
+                    S3-P1-27  neutral keys absent from THIS database  OPERATIONAL — verified an
+                                                                     unapplied migration, not a
+                                                                     code defect; deliberately
+                                                                     not run (Owner, 2026-08-25)
 REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 2 unlabelled slots only · P2 0 open (4 fixed)
                     FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-04; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-22; S2-P1-23; S2-P1-25; S2-P1-26.
                     PARTLY FIXED: S2-P1-24 — juxtaposition and text-variant halves closed;
@@ -1978,6 +1998,154 @@ window?"), and **zero** rows contain the brand itself. The Arabic product name l
 names are referenced by operator runbooks, cron entries and systemd units that live outside this
 repository. 3E checked `docs/evidence/ubuntu-infra-scripts/` and found none of the eight scripts
 currently invoke one, so live infrastructure is unaffected today; the exposure is operator procedure.
+
+---
+
+## 15C. POST-SCAN-3 FINDINGS AND RE-VERIFICATION (2026-08-25)
+
+> Everything in this section was established **by execution on 2026-08-25**, not inherited from an
+> earlier revision. Where it contradicts an earlier claim, both readings are kept — the corrections
+> register in §8 exists because a checkpoint that quietly improves its own past is not an audit trail.
+
+### A-01 / A-02 / A-03 — landed at `5202b0253`, recorded here
+
+Found by an independent audit that drove a real Arabic session against the running stack instead of
+reading the corpus. All three had survived four scans **because every guard checked strings that were
+already on a list**, which is the structural point and the reason A-03 exists.
+
+- **A-01** — the authenticated shell's user menu rendered `حول Thiqa`: phrase translated, wordmark
+  Latin, word order decided in PHP where no translator can reach it. Exactly what S2-P1-23 exists to
+  prevent, on the most-visited surface in the product. It survived because the juxtaposition guard's
+  regex named only `applicationTitle`, and `interface/main/tabs/main.php` passed the same value in as
+  `openemr_name` — one value, two spellings. The alternation now covers both, and a second guard
+  asserts that **no renderer passes a raw product name into template scope at all**, closing the door
+  one step earlier than a shape check can.
+- **A-02** — the last unconverted leak, in the questionnaire theme setting's help text. It had a
+  stated mechanical reason to survive: it named the product twice, and `ProductContextTranslation`
+  accepts exactly one placeholder. Rewritten to name it once rather than relaxing that invariant.
+  No `lang_constants` row, so nothing is orphaned.
+- **A-03** — the structural gap behind both. `BrandLeakSurfaceContractTest` now re-derives the leak
+  surface with PHP's tokenizer on every run and asserts it equals exactly the six preserved
+  references (OpenEMR Foundation, upstream community, ONC certification). **It fails in both
+  directions**: an unlisted leak fails, and a preserved entry that matches nothing fails as stale.
+
+Evidence at the commit: negative control reintroducing the juxtaposition failed 2 tests, exit 1, then
+restored; 23 tests / 422 assertions and 3 tests / 4 assertions, exit 0; the live Arabic menu moved from
+`حول Thiqa` to `About ثقة`; English shell byte-identical at 69,732 bytes. Live database mutated: no.
+
+### SKY-F01 — Arabic branding selected by DIRECTION instead of LANGUAGE — **FIXED — VERIFIED** (`02bcae75c`)
+
+**Original claim (preserved, and it was too broad).** That an RTL non-Arabic session could receive an
+Arabic product name, an Arabic tagline and Arabic logo alt text on the rendered login page.
+
+**Narrowing, then the verified truth.** The full runtime trace was reconstructed rather than either
+version being accepted:
+
+| Surface | Selector honoured? | Rendered? | Verdict |
+|---|---|---|---|
+| `tagline($arabic)` | **No** — argument ignored | n/a | **REFUTED.** Deliberate and documented: one tagline global, no Arabic variant to choose between. Inventing a transliteration would be worse. |
+| `brandProductName` | Yes | **No** — no template reads it | **LATENT**, not live |
+| `brandTagline` | n/a | **No** — no template reads it | **LATENT**, not live |
+| `primaryLogoAlt` / `secondaryLogoAlt` | Yes | **Yes** — `templates/login/partials/html/primary_logo.html.twig:15,20` | **LIVE DEFECT** |
+
+**The defect.** `LoginTemplateListener:150` read `BrandingServiceInterface::isRtl()` — which resolves
+from the `rtl_` stylesheet prefix (`ThemeResolver::isRtlStylesheet()`) that `interface/globals.php:566-586`
+sets from `getLanguageDir()`. `lang_languages` marks **four** locales right-to-left — Hebrew, Arabic,
+Persian, Urdu — so a Hebrew login page was served `alt="شعار ثقة"`: Arabic script announced to a Hebrew
+screen-reader user. `library/translation.inc.php:149-152` already names this exact substitution as
+"a worse error than the one being fixed"; the login page was the surface still making it.
+
+**The fix.** `SessionLanguageInterface` asks the question the listener meant; `CoreSessionLanguage`
+answers it through core's own `getLanguageCode()` / `xl_session_language_id()` — the same pair
+`xl_product_name()` uses — so the product has **one** rule for "is this session Arabic?" instead of two
+that drifted. Injected rather than called statically, because locked constraint C5 keeps the branding
+runtime plane free of global state.
+
+**Two docblock claims falsified by the change were corrected, not left standing:** the accessible name
+is resolved in the page's reading *language*, and the listener's blanket "no network call, no database
+query" is narrowed to the branding values it was ever true of, with the one added query named,
+measured and justified in place.
+
+**The test that should have caught this was the false green.** It set `$branding->rtl = true` and
+asserted Arabic came back — which the defect *and* the fix both satisfy. Replaced by three cases that
+separate the conflated variables: English, Arabic, and a right-to-left session that is **not** Arabic.
+The third deliberately leaves direction true; on a left-to-right fixture it would test nothing.
+
+**Negative control:** reverting the single line to `isRtl()` failed the Hebrew case with `'شعار ثقة'`
+where `'Thiqa logo'` belongs — 1 failure, 69 tests / 179 assertions. Source restored to SHA-256
+`ce38c032d8fa99ac…`; suite returned **69 tests / 183 assertions, exit 0**. PHPCS 6/6, exit 0.
+
+**Recorded, not fixed:** `BrandingTwigExtension::productName()` and `brandLogoAlt()` take `$arabic` as
+a template argument defaulting to `false`, and no shipped template calls either. Latent, and it errs
+*Latin*, not Arabic-for-Hebrew — so it is not this defect. Noted so it is not later mistaken for one.
+
+### The three open Scan-3 findings — RE-VERIFIED BY EXECUTION, all genuinely still open
+
+Re-checked directly rather than inherited from Rev 29, because a finding recorded as open and quietly
+fixed elsewhere would corrupt PRE-25 as surely as the reverse:
+
+| ID | Verdict | Evidence re-derived 2026-08-25 |
+|---|---|---|
+| S3-P1-33 | **OPEN — confirmed** | `setup.php` still has exactly **10** `Thiqa` literals at the recorded lines `145,160,356,452,522,524,526,976,1530,1747`, alongside **32** `OpenEMR` occurrences |
+| S3-P2-35 | **OPEN — confirmed** | `brand/manifests/SHA256SUMS` = **123** entries, every one under `brand/**` or `docs/branding-production/**`; **zero** under `public/`. Uncovered: **17 tracked** `public/images/**` branding assets, plus **8** deployed fonts at `public/assets/fonts/thiqa/*.woff2` |
+| S3-P2-36 | **OPEN — confirmed, and slightly worse than recorded** | `markTestSkipped` still at `BrandingGovernanceGuardTest.php:237`; `.github/workflows/isolated-tests.yml` has **no Node/webpack step at all**, and neither `phpunit` invocation passes `--fail-on-skipped`. `/public/themes/*` is gitignored (`.gitignore:17`), so the directory is absent in every CI checkout and the Q77 check skips in **every** CI run |
+
+### Independent read-only verification of S3-P1-27, S3-OBS-01 and S3-P1-30
+
+Performed by a dedicated agent bound to `SELECT`-only, which started and then stopped the stack via the
+documented scripts. **Live database mutated: NO.**
+
+**S3-P1-27 — all four recorded numbers CONFIRMED exactly**, with no drift: 27 `lang_definitions` rows
+containing `Thiqa`; 5 English (`lang_id = 1`) override rows; `Thiqa Database Upgrade` present at
+`cons_id 13235`; **0** of the 28 contract target keys present. The parenthetical "all five marked
+retired", which nobody had checked, is also confirmed — `tools/branding/brand-strings.json`'s
+`retired_english_overrides` array holds exactly those five constants.
+
+**Disposition upheld and strengthened: this is an unapplied migration, not a shipped-code defect.**
+Both execution paths were verified correct — `library/classes/Installer.class.php:1764` enqueues the
+supplement unconditionally for any non-clone install, the generated
+`contrib/util/language_translations/durableTranslationContracts_utf8.sql` carries **28 of 28** target
+keys, and `sql_upgrade.php:521-527` iterates every checked-in contract and runs `forward()`.
+**New corroboration not previously recorded:** the live `version` row is `v_database = 541` while
+`version.php` declares `542`, so this instance is one schema version behind and `sql_upgrade.php`
+demonstrably has not run since the contracts landed. Per Owner decision of 2026-08-25 the migration
+was **deliberately not run** — it remains an operator step, carried to PRE-25 as OPERATIONAL.
+
+**S3-OBS-01 — CONFIRMED, reproduced live, and it is real.** `admin.php` (repo root, 231 lines) performs
+**no** authentication: no `session_start()`, no `AclMain`, no `$_SESSION['authUser']` test, no CSRF
+token, no multisite gate. A cookie-less `Invoke-WebRequest` returned **HTTP 200, 4,676 bytes**, body
+containing the fully-populated site table. Nothing else gates it — `admin.php` appears nowhere in
+`httpd.conf`, and no root `.htaccess` exists. The contrast with its own sibling is stark: `setup.php`
+defends itself with `$allow_multisite_setup = false` (`:52`), `$allow_cloning_setup = false` (`:57`)
+and explicit CSRF/state `die()`s (`:320-343`).
+
+Disclosed: site directory names (`default`, `rdy0082restore`), database names (`openemr`,
+`openemr_rdy0082_restore`), the site display name, application version `8.3.0-dev`, schema/ACL/patch
+currency — and **two unauthenticated links to the state-mutating `sql_upgrade.php?site=…`**.
+**Not** disclosed: no credentials. `admin.php:115` does pull `$host/$login/$pass/$port` into scope and
+`:118` connects with them, but only `$sfname` and `$dbase` are echoed; confirmed empirically that the
+response body contains no `root`, no password, no `127.0.0.1` and no `3306`.
+
+**Not fixed, by Owner decision of 2026-08-25 (verify and record only).** It is **outside branding** and
+must not be absorbed into the branding ledger as though PRE certified it. **One gap could not be closed
+read-only:** whether `sql_upgrade.php` has its own guard was deliberately not tested, because fetching
+it risks mutating the database. That is the sharpest edge here and needs its own review.
+
+**S3-P1-30 — both numbers CONFIRMED (22 and 8), by a stronger method than the record used.** Rather
+than counting contracts carrying `on_missing_identity: "skip"`, the carry-forward rule was read out of
+`TranslationContractSqlRenderer::legacyStatement()` and replayed read-only against the live catalogue,
+so the claim proved is the stronger one: all **22** `skip` contracts genuinely **drop at least one
+locale**, and Arabic loses exactly **8**. The two cited call sites verify precisely —
+`interface/main/backup.php:505` is `xlp('Dumping %s database')` and `:538` is
+`xlp('Dumping %s web directory tree')`. Cause is exactly what `MissingIdentityPolicy`'s docblock
+predicts: all eight Arabic strings render the product as **البرنامج** ("the program") rather than the
+literal, so there is no literal to replace with `%s`. This corroborates the recorded disposition that
+it is an **authoring** decision, not a code defect.
+
+**Observation not previously recorded:** `lang_id 1` (English (Standard)) also drops 2, and the `dummy`
+locale (59) drops all 22. Neither is part of the claim and neither changes the verdict — but if PRE-25
+characterises the loss as affecting only non-English locales, those two English rows falsify that
+phrasing and must not be glossed.
 
 ---
 
