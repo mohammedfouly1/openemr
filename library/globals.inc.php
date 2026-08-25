@@ -440,7 +440,7 @@ $GLOBALS_METADATA = [
         // here straight into the `globals` table, so these literals decide what a freshly
         // installed product calls itself and where it points its logo, support and manual
         // links -- for the whole window between "database created" and "someone remembered
-        // to run thiqa-branding:apply-profile". Leaving them as upstream literals is what
+        // to run skyeagle-branding:apply-profile". Leaving them as upstream literals is what
         // made a fresh install come up self-describing as OpenEMR.
         //
         // They are resolved from the pre-database identity artefact rather than from

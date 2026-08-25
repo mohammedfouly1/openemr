@@ -18,7 +18,7 @@ declare(strict_types=1);
 // Pre-database product identity. Read through OpenEMR\Common\Branding\ProductIdentity, never required directly.
 //
 // Produced by tools/branding/bin/generate-product-identity.php from:
-//   interface/modules/custom_modules/oe-module-thiqa-branding/config/branding-profile.json
+//   interface/modules/custom_modules/oe-module-skyeagle-branding/config/branding-profile.json
 //
 // Change the branding profile and re-run the generator. CI re-runs it and fails on
 // any diff, so an edit made here cannot survive.

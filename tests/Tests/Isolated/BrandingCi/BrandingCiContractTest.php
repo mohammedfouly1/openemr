@@ -18,10 +18,10 @@ use PHPUnit\Framework\TestCase;
 final class BrandingCiContractTest extends TestCase
 {
     private const EXPECTED_RULE_IDENTIFIERS = [
-        'thiqaBranding.noRuntimeHttpClient',
-        'thiqaBranding.noSiteConfigSeam',
-        'thiqaBranding.twigNamespaceDiscipline',
-        'thiqaBranding.noPlaceholderEndpoint',
+        'skyeagleBranding.noRuntimeHttpClient',
+        'skyeagleBranding.noSiteConfigSeam',
+        'skyeagleBranding.twigNamespaceDiscipline',
+        'skyeagleBranding.noPlaceholderEndpoint',
     ];
 
     /**
@@ -70,21 +70,21 @@ final class BrandingCiContractTest extends TestCase
         self::assertStringContainsString('--fail-on-incomplete', $tests);
         self::assertStringContainsString('--fail-on-risky', $tests);
         self::assertStringContainsString('tests/Tests/Isolated/BrandingCi', $tests);
-        self::assertStringContainsString('tests/Tests/Isolated/PHPStan/ThiqaBranding', $tests);
+        self::assertStringContainsString('tests/Tests/Isolated/PHPStan/SkyEagleBranding', $tests);
         self::assertStringContainsString('tests/Tests/Isolated/BrandingCoreStrings', $tests);
         self::assertStringContainsString(
-            'tests/Tests/Isolated/Modules/ThiqaBranding/Console/BackupRetentionTest.php',
+            'tests/Tests/Isolated/Modules/SkyEagleBranding/Console/BackupRetentionTest.php',
             $tests,
         );
 
         // S2-P1-18: the health check's own behaviour, and the command that reports it, are
         // gated rather than left to a human remembering to run `verify` by hand.
         self::assertStringContainsString(
-            'tests/Tests/Isolated/Modules/ThiqaBranding/Observability',
+            'tests/Tests/Isolated/Modules/SkyEagleBranding/Observability',
             $tests,
         );
         self::assertStringContainsString(
-            'tests/Tests/Isolated/Modules/ThiqaBranding/Console/VerifyCommandTest.php',
+            'tests/Tests/Isolated/Modules/SkyEagleBranding/Console/VerifyCommandTest.php',
             $tests,
         );
 
@@ -401,7 +401,7 @@ final class BrandingCiContractTest extends TestCase
 
     public function testEveryExpectedGuardrailIdentifierRemainsAssertedByTests(): void
     {
-        $testDirectory = $this->root() . '/tests/Tests/Isolated/PHPStan/ThiqaBranding';
+        $testDirectory = $this->root() . '/tests/Tests/Isolated/PHPStan/SkyEagleBranding';
         $contents = '';
         foreach (glob($testDirectory . '/*RuleTest.php') ?: [] as $path) {
             $file = file_get_contents($path);

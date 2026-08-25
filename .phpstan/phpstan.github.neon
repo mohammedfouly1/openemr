@@ -16,8 +16,8 @@ parameters:
     # patterns the rule should flag; excluding them keeps full-codebase
     # PHPStan runs from reporting those intentional bugs.
     - ../tests/Tests/Isolated/PHPStan/Sql/data
-    # Fixture files for the ThiqaBranding guardrail rule tests deliberately
-    # declare the OpenEMR\Modules\ThiqaBranding\ namespace and violate
+    # Fixture files for the SkyEagleBranding guardrail rule tests deliberately
+    # declare the OpenEMR\Modules\SkyEagleBranding\ namespace and violate
     # WP-2.7's constraints; excluding them keeps full-codebase PHPStan runs
     # from reporting those intentional violations.
-    - ../tests/Tests/Isolated/PHPStan/ThiqaBranding/data
+    - ../tests/Tests/Isolated/PHPStan/SkyEagleBranding/data

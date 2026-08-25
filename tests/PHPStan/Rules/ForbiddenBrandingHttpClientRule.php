@@ -39,7 +39,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  * Guardrail for RebrandingPlan WP-2.7(a), constraint C5, locked Q76.
  *
  * OpenEMR must perform no Control Plane network request while rendering an
- * ordinary page. Every class under `OpenEMR\Modules\ThiqaBranding\` therefore
+ * ordinary page. Every class under `OpenEMR\Modules\SkyEagleBranding\` therefore
  * belongs to the runtime plane and may not touch an HTTP client, with the
  * single exception of the out-of-request `\Materialisation` sub-namespace.
  *
@@ -261,14 +261,14 @@ final class ForbiddenBrandingHttpClientRule implements Rule
     private function buildError(string $subject): IdentifierRuleError
     {
         return RuleErrorBuilder::message(sprintf(
-            '%s is forbidden in the ThiqaBranding runtime plane: OpenEMR must make no Control Plane '
+            '%s is forbidden in the SkyEagleBranding runtime plane: OpenEMR must make no Control Plane '
             . 'network request during ordinary page rendering (prohibited by locked Q76 / constraint C5).',
             $subject,
         ))
-            ->identifier('thiqaBranding.noRuntimeHttpClient')
+            ->identifier('skyeagleBranding.noRuntimeHttpClient')
             ->tip(
                 'Move the network call into the out-of-request materialisation plane '
-                . '(OpenEMR\Modules\ThiqaBranding\Materialisation); the runtime plane may read only '
+                . '(OpenEMR\Modules\SkyEagleBranding\Materialisation); the runtime plane may read only '
                 . 'the globals table and the filesystem.',
             )
             ->build();

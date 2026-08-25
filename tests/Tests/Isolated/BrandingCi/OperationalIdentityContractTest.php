@@ -36,10 +36,21 @@ final class OperationalIdentityContractTest extends TestCase
 
         self::assertStringContainsString('Operational identity classification (S1-P1-11', $readme);
         self::assertStringContainsString('`feat/thiqa-branding-foundation`', $readme);
+        // DELIBERATELY the old directory name, and it must stay that way. These scripts
+        // describe the live `demo-openemr` host, where the deployed directory really is
+        // `oe-module-thiqa-branding` until that host is redeployed. Rewriting the reference
+        // would make the runbook lie about the machine it operates. S1-P1-11 classified this
+        // as historical operational identity; the SkyEagle rename changes the repository, not
+        // the record of what is currently deployed elsewhere.
+        //
+        // The SkyEagle bulk rename DID rewrite these two assertions, and this test caught it —
+        // which is precisely the job it was written for.
         self::assertStringContainsString('`oe-module-thiqa-branding`', $readme);
         self::assertStringContainsString('Pre-existing external bucket identifier', $readme);
         self::assertStringNotContainsString('r2:thiqa-demo-backups/', $readme);
         self::assertStringContainsString('BRANCH=feat/thiqa-branding-foundation', $deployment);
+        // Same reason as the README assertion above: the deployment script's path is the one
+        // that exists on the live host today.
         self::assertStringContainsString('oe-module-thiqa-branding/', $deployment);
         self::assertStringContainsString('IDENTITY CLASSIFICATION (S1-P1-11)', $deployment);
     }

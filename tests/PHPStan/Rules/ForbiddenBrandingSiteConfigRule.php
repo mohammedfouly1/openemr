@@ -26,7 +26,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  *
  * `sites/<site>/config.php` is a PROHIBITED branding mechanism: it is
  * free-form tenant PHP, which is exactly what constraint C1 exists to
- * prevent. Any string literal inside `OpenEMR\Modules\ThiqaBranding\` that
+ * prevent. Any string literal inside `OpenEMR\Modules\SkyEagleBranding\` that
  * names that file — whether written whole or assembled by concatenating a
  * site directory with `/config.php` — is rejected.
  *
@@ -68,12 +68,12 @@ final class ForbiddenBrandingSiteConfigRule implements Rule
 
         return [
             RuleErrorBuilder::message(sprintf(
-                'Reference to the per-site config.php seam ("%s") is forbidden in ThiqaBranding code: '
+                'Reference to the per-site config.php seam ("%s") is forbidden in SkyEagleBranding code: '
                 . 'sites/<site>/config.php is a PROHIBITED branding mechanism '
                 . '(constraint C1 / BRAND-120).',
                 $value,
             ))
-                ->identifier('thiqaBranding.noSiteConfigSeam')
+                ->identifier('skyeagleBranding.noSiteConfigSeam')
                 ->tip(
                     'Brand values are materialised into the globals table and read through '
                     . 'BrandingConfig; no free-text tenant CSS/JS/PHP seam is permitted.',

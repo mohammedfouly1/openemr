@@ -79,11 +79,11 @@ final class ForbiddenBrandingTwigPathRule implements Rule
         if ($methodName === 'prependpath') {
             return [
                 $this->buildError(
-                    'FilesystemLoader::prependPath() is forbidden in ThiqaBranding code: it registers an '
+                    'FilesystemLoader::prependPath() is forbidden in SkyEagleBranding code: it registers an '
                     . 'unnamespaced, resolution-order dependent template path.',
                     'Register the module template directory with '
-                    . 'addPath($dir, \'oe-module-thiqa-branding\') and rewrite the template name to '
-                    . '@oe-module-thiqa-branding/… from a TemplatePageEvent listener.',
+                    . 'addPath($dir, \'oe-module-skyeagle-branding\') and rewrite the template name to '
+                    . '@oe-module-skyeagle-branding/… from a TemplatePageEvent listener.',
                 ),
             ];
         }
@@ -99,10 +99,10 @@ final class ForbiddenBrandingTwigPathRule implements Rule
         return [
             $this->buildError(
                 'FilesystemLoader::addPath() called without an explicit Twig namespace is forbidden in '
-                . 'ThiqaBranding code: an unnamespaced path shadows core templates in a '
+                . 'SkyEagleBranding code: an unnamespaced path shadows core templates in a '
                 . 'resolution-order dependent way.',
                 'Pass the module slug as the second argument: '
-                . 'addPath($dir, \'oe-module-thiqa-branding\').',
+                . 'addPath($dir, \'oe-module-skyeagle-branding\').',
             ),
         ];
     }
@@ -112,7 +112,7 @@ final class ForbiddenBrandingTwigPathRule implements Rule
         return RuleErrorBuilder::message(
             $message . ' Prohibited by locked Q38 / resolution CR-17.',
         )
-            ->identifier('thiqaBranding.twigNamespaceDiscipline')
+            ->identifier('skyeagleBranding.twigNamespaceDiscipline')
             ->tip($tip)
             ->build();
     }

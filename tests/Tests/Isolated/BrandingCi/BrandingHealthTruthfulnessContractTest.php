@@ -11,23 +11,23 @@ declare(strict_types=1);
 
 namespace OpenEMR\Tests\Isolated\BrandingCi;
 
-use OpenEMR\Modules\ThiqaBranding\Config\BrandingGlobalKey;
-use OpenEMR\Modules\ThiqaBranding\Observability\BrandingHealthCheck;
-use OpenEMR\Modules\ThiqaBranding\Observability\BrandingHealthStatus;
-use OpenEMR\Modules\ThiqaBranding\Observability\BrandingInconsistency;
-use OpenEMR\Modules\ThiqaBranding\Observability\BrandingObservationPlane;
-use OpenEMR\Modules\ThiqaBranding\Tenant\SiteId;
-use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Materialisation\FrozenClock;
-use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Materialisation\RecordingGlobalsWriter;
-use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Observability\InMemoryStylesheetProbe;
-use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Observability\RecordingLogger;
+use OpenEMR\Modules\SkyEagleBranding\Config\BrandingGlobalKey;
+use OpenEMR\Modules\SkyEagleBranding\Observability\BrandingHealthCheck;
+use OpenEMR\Modules\SkyEagleBranding\Observability\BrandingHealthStatus;
+use OpenEMR\Modules\SkyEagleBranding\Observability\BrandingInconsistency;
+use OpenEMR\Modules\SkyEagleBranding\Observability\BrandingObservationPlane;
+use OpenEMR\Modules\SkyEagleBranding\Tenant\SiteId;
+use OpenEMR\Tests\Isolated\Modules\SkyEagleBranding\Materialisation\FrozenClock;
+use OpenEMR\Tests\Isolated\Modules\SkyEagleBranding\Materialisation\RecordingGlobalsWriter;
+use OpenEMR\Tests\Isolated\Modules\SkyEagleBranding\Observability\InMemoryStylesheetProbe;
+use OpenEMR\Tests\Isolated\Modules\SkyEagleBranding\Observability\RecordingLogger;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../Modules/ThiqaBranding/Materialisation/materialisation_autoloader.php';
+require_once __DIR__ . '/../Modules/SkyEagleBranding/Materialisation/materialisation_autoloader.php';
 
 /**
- * Finding S2-P1-18: `thiqa-branding:verify` reported the live tenant as `inconsistent`,
+ * Finding S2-P1-18: `skyeagle-branding:verify` reported the live tenant as `inconsistent`,
  * exit 1, because the check cross-referenced a served fact (the revision) against an
  * unserved one (whether `public/branding/<site>/tokens-*.css` existed on disk). No page
  * links those files, so the tenant was rendering exactly what it should. The documentation
@@ -120,7 +120,7 @@ final class BrandingHealthTruthfulnessContractTest extends TestCase
     public function testTheOverlayIsReadThroughTheRuntimeParser(): void
     {
         $source = $this->read(
-            'interface/modules/custom_modules/oe-module-thiqa-branding/src/Observability/BrandingHealthCheck.php',
+            'interface/modules/custom_modules/oe-module-skyeagle-branding/src/Observability/BrandingHealthCheck.php',
         );
 
         self::assertStringContainsString('TokenOverlay::fromJson(', $source);

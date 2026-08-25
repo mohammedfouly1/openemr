@@ -41,9 +41,9 @@ final readonly class DeployedArtefacts
         '_css-variables.scss' => 'interface/themes/thiqa/_css-variables.scss',
         '_typography.scss' => 'interface/themes/thiqa/_typography.scss',
         'smart-style_light.json.twig' =>
-            'interface/modules/custom_modules/oe-module-thiqa-branding/templates/api/smart/smart-style_light.json.twig',
+            'interface/modules/custom_modules/oe-module-skyeagle-branding/templates/api/smart/smart-style_light.json.twig',
         'smart-style_dark.json.twig' =>
-            'interface/modules/custom_modules/oe-module-thiqa-branding/templates/api/smart/smart-style_dark.json.twig',
+            'interface/modules/custom_modules/oe-module-skyeagle-branding/templates/api/smart/smart-style_dark.json.twig',
     ];
 
     public function __construct(private string $repoRoot)

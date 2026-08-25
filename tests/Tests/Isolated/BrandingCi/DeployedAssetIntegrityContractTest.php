@@ -347,7 +347,7 @@ final class DeployedAssetIntegrityContractTest extends TestCase
         return [
             'core and portal logo slots' => ['public/images/logos'],
             'dark-variant module marks' => [
-                'interface/modules/custom_modules/oe-module-thiqa-branding/public/logos',
+                'interface/modules/custom_modules/oe-module-skyeagle-branding/public/logos',
             ],
         ];
     }

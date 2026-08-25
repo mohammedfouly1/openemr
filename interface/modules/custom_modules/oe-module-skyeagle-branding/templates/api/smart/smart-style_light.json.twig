@@ -1,0 +1,44 @@
+{#-
+Thiqa SMART style contract - light variant.
+
+Substitutes templates/api/smart/smart-style_light.json.twig on the SMART style
+route. Locked Q38 / resolution CR-17: this file is reached by rewriting the
+template NAME to @oe-module-skyeagle-branding/api/smart/smart-style_light.json.twig
+from a TemplatePageEvent listener. It is NOT a path prepended into the main Twig
+namespace, so it can never shadow a core template by resolution order, and the
+core file is neither modified nor removed.
+
+The twelve keys and their values are the SMART Style contract, copied verbatim
+from the generator output (tools/branding/bin/generate-tokens.php over
+brand/tokens/thiqa-tokens.json, light). Regenerate rather than hand-edit: the
+generator is the authority for the JSON body below, and CI fails on a body diff
+(tools/branding/src/DeployedArtefacts.php compares payloads with this leading
+comment stripped, so this prose may differ from the generator banner but the JSON
+may not).
+
+Wire format is the core one, unchanged: `logo_primary` is interpolated from the
+`logo.primary` variable supplied by SMARTAuthorizationController::smartAppStyles(),
+and the controller wraps this rendered document in a JsonResponse, so the payload
+third-party SMART apps receive stays double-JSON-encoded exactly as today. The
+whitespace-control markers on this comment keep the first emitted byte at `{`.
+
+@package OpenEMR
+@subpackage SkyEagleBranding
+@author mohammedfouly1 <mselfouly2008@yahoo.com>
+@copyright Copyright (c) 2026 mohammedfouly1
+@license https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
+-#}
+{
+    "color_background": "#FAFAF8",
+    "color_error": "#8E271D",
+    "color_highlight": "#3E7FBD",
+    "color_modal_backdrop": "rgba(11, 27, 77, 0.6)",
+    "color_success": "#2F6B45",
+    "color_text": "#0B1B4D",
+    "dim_border_radius": "6px",
+    "dim_font_size": "14px",
+    "dim_spacing_size": "20px",
+    "font_family_body": "'Inter','IBM Plex Sans Arabic',sans-serif",
+    "font_family_heading": "'Inter','IBM Plex Sans Arabic',sans-serif",
+    "logo_primary": "{{ logo.primary }}"
+}

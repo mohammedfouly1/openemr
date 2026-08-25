@@ -23,13 +23,13 @@ final class D8DependencyStatusContractTest extends TestCase
     public function testCurrentMaterialiserStillActivatesTheStaticWriter(): void
     {
         $materialiser = $this->read(
-            'interface/modules/custom_modules/oe-module-thiqa-branding/src/Materialisation/BrandingMaterialiser.php'
+            'interface/modules/custom_modules/oe-module-skyeagle-branding/src/Materialisation/BrandingMaterialiser.php'
         );
         $writer = $this->read(
-            'interface/modules/custom_modules/oe-module-thiqa-branding/src/Materialisation/TokenCssWriter.php'
+            'interface/modules/custom_modules/oe-module-skyeagle-branding/src/Materialisation/TokenCssWriter.php'
         );
         $paths = $this->read(
-            'interface/modules/custom_modules/oe-module-thiqa-branding/src/Materialisation/TenantBrandingPaths.php'
+            'interface/modules/custom_modules/oe-module-skyeagle-branding/src/Materialisation/TenantBrandingPaths.php'
         );
 
         self::assertStringContainsString('$this->cssWriter->stage(', $materialiser);

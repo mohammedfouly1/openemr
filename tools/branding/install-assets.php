@@ -494,7 +494,7 @@ final class InstallAssetsCommand
      */
     private static function darkVariantLogoMappings(): array
     {
-        $darkRoot = 'interface/modules/custom_modules/oe-module-thiqa-branding/public/logos/dark';
+        $darkRoot = 'interface/modules/custom_modules/oe-module-skyeagle-branding/public/logos/dark';
 
         return [
             new AssetMapping(

@@ -30,7 +30,7 @@ namespace OpenEMR\Branding;
  *
  * **Derived, not duplicated.** Every value is read out of
  * `config/branding-profile.json`, which is already the single authority the
- * `thiqa-branding:apply-profile` command writes into `globals` once the database exists.
+ * `skyeagle-branding:apply-profile` command writes into `globals` once the database exists.
  * The artefact is therefore the same identity the running product will hold, made
  * readable one bootstrap phase earlier -- not a second copy that can disagree with it.
  */
@@ -38,7 +38,7 @@ final readonly class ProductIdentityGenerator
 {
     /** Repo-relative source, and the label used in error messages and the banner. */
     public const PROFILE_PATH =
-        'interface/modules/custom_modules/oe-module-thiqa-branding/config/branding-profile.json';
+        'interface/modules/custom_modules/oe-module-skyeagle-branding/config/branding-profile.json';
 
     /** The artefact's file name, both in the preview directory and at its deployed path. */
     public const ARTEFACT_NAME = 'product_identity.generated.php';

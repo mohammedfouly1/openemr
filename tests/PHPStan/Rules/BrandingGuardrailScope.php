@@ -28,7 +28,7 @@ use PHPStan\Analyser\Scope;
  * of which any rule could see. Those namespaces were outside every guardrail while the rules
  * went on reporting `0 errors`, which reads exactly like compliance.
  *
- * **Why the module constant could not simply be widened.** `ThiqaBrandingGuardrailScopeTest`
+ * **Why the module constant could not simply be widened.** `SkyEagleBrandingGuardrailScopeTest`
  * asserts that constant *equals* the namespace the module actually ships under, in both
  * directions, so that a production rename cannot silently orphan the rules. That invariant is
  * correct and worth keeping. Scope is therefore a separate axis: the module namespace remains
@@ -44,10 +44,10 @@ final class BrandingGuardrailScope
     /**
      * The branding module's own namespace.
      *
-     * Kept as its own constant because `ThiqaBrandingGuardrailScopeTest` pins it to the
+     * Kept as its own constant because `SkyEagleBrandingGuardrailScopeTest` pins it to the
      * module's real namespace in both directions; it is not merely the first entry of a list.
      */
-    public const MODULE_NAMESPACE = 'OpenEMR\\Modules\\ThiqaBranding';
+    public const MODULE_NAMESPACE = 'OpenEMR\\Modules\\SkyEagleBranding';
 
     /**
      * Shipped branding code that runs before the module can boot.

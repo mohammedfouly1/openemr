@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace OpenEMR\Tests\Isolated\BrandingCi;
 
-use OpenEMR\Modules\ThiqaBranding\Bootstrap;
-use OpenEMR\Modules\ThiqaBranding\Config\ModulePaths;
-use OpenEMR\Modules\ThiqaBranding\Service\BrandingService;
+use OpenEMR\Modules\SkyEagleBranding\Bootstrap;
+use OpenEMR\Modules\SkyEagleBranding\Config\ModulePaths;
+use OpenEMR\Modules\SkyEagleBranding\Service\BrandingService;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../Modules/ThiqaBranding/Materialisation/materialisation_autoloader.php';
+require_once __DIR__ . '/../Modules/SkyEagleBranding/Materialisation/materialisation_autoloader.php';
 
 /**
  * Finding S1-P2-12: the module directory name was hand-typed in five places, and each

@@ -316,7 +316,7 @@
             "@branding-tokens-check",
             "@branding-identity-check",
             "@php tools/branding/verify-brand-manifest.php",
-            "@php vendor/bin/phpunit -c phpunit-isolated.xml --no-coverage --fail-on-empty-test-suite --fail-on-incomplete --fail-on-risky tests/Tests/Isolated/BrandingCi tests/Tests/Isolated/BrandingCoreStrings tests/Tests/Isolated/PHPStan/ThiqaBranding tests/Tests/Isolated/Modules/ThiqaBranding/Console/BackupRetentionTest.php tests/Tests/Isolated/Modules/ThiqaBranding/Observability tests/Tests/Isolated/Modules/ThiqaBranding/Console/VerifyCommandTest.php tests/Tests/Isolated/Modules/ThiqaBranding/Guardrail tests/Tests/Isolated/Modules/ThiqaBranding/AssetIntake"
+            "@php vendor/bin/phpunit -c phpunit-isolated.xml --no-coverage --fail-on-empty-test-suite --fail-on-incomplete --fail-on-risky tests/Tests/Isolated/BrandingCi tests/Tests/Isolated/BrandingCoreStrings tests/Tests/Isolated/PHPStan/SkyEagleBranding tests/Tests/Isolated/Modules/SkyEagleBranding/Console/BackupRetentionTest.php tests/Tests/Isolated/Modules/SkyEagleBranding/Observability tests/Tests/Isolated/Modules/SkyEagleBranding/Console/VerifyCommandTest.php tests/Tests/Isolated/Modules/SkyEagleBranding/Guardrail tests/Tests/Isolated/Modules/SkyEagleBranding/AssetIntake"
         ],
         "phpunit-isolated": "phpunit -c phpunit-isolated.xml",
         "rector-check": "php -d memory_limit=4g ./vendor/bin/rector process --dry-run",

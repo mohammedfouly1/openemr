@@ -86,11 +86,11 @@ final class ForbiddenBrandingPlaceholderDomainRule implements Rule
     private function buildError(string $host): IdentifierRuleError
     {
         return RuleErrorBuilder::message(sprintf(
-            'Placeholder or upstream-brand endpoint "%s" must not appear in shipped ThiqaBranding '
+            'Placeholder or upstream-brand endpoint "%s" must not appear in shipped SkyEagleBranding '
             . 'configuration (RebrandingPlan WP-2.7g).',
             $host,
         ))
-            ->identifier('thiqaBranding.noPlaceholderEndpoint')
+            ->identifier('skyeagleBranding.noPlaceholderEndpoint')
             ->tip(
                 'Read the endpoint from tenant configuration instead of hard-coding a '
                 . '.example placeholder or an upstream open-emr.org host.',
