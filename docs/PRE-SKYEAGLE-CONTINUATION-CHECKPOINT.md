@@ -50,6 +50,8 @@
 
 | 30 | **A-01/A-02/A-03 reconciled into the record; SKY-F01 found, narrowed and FIXED; three open findings re-verified by execution.** `5202b0253` had landed before this session began and was ahead of the checkpoint - it is now recorded (Section 15C). **SKY-F01 is new**, and its correction history is preserved rather than rewritten: the original claim was that RTL non-Arabic sessions could receive an Arabic product name, tagline and logo alt text; `tagline()` ignoring its argument is deliberate and documented (REFUTED), `brandProductName`/`brandTagline` reach no template (LATENT), and the live half is the two logo accessible names, which render on every login. `02bcae75c` replaces the direction predicate with a language predicate. **The three open Scan-3 findings were re-verified rather than inherited** - S3-P1-33, S3-P2-35 and S3-P2-36 are all genuinely still open, each reproduced by execution (Section 15C). **S3-P1-27, S3-OBS-01 and S3-P1-30 were verified read-only by an independent agent**; all recorded numbers confirmed exactly, S3-OBS-01 confirmed reachable live, and S3-P1-27 confirmed an unapplied migration rather than a code defect. Live database mutated: NO. |
 
+| 31 | **S3-P2-36 and the bulk of S3-P2-35 FIXED — VERIFIED; PRE-ORCH-02 fixed; S3-P1-33 and the SVG safeguard left as UNCOMMITTED work-in-progress after a quota stop.** `e203d5bdd` makes the locked Q77 deployed-theme check actually execute in CI - the environment now declares its obligation via `OPENEMR_DEPLOYED_THEMES_REQUIRED` instead of the guard inferring it from whether the directory happened to exist, CI builds the themes on one leg, and the negative controls are encoded as permanent tests rather than run once. `57e51286c` assigns manifest coverage by **ownership class** - 123 source + 21 deployed-immutable by recorded hash, 11 deployed font copies by equality-with-source, generated themes deferred to S3-P2-36, tenant/runtime output excluded by design. **S3-P2-35 is NOT fully closed**: `11-asset-manifest.md` and `12-release-verification.md` still describe the old re-issue discipline, and both are themselves manifest-covered so updating them requires re-issuing their entries in the same change. `d42a7d6d4` fixes **PRE-ORCH-02**, a sixth worktree at a path the S1-P2-14 exclusion rule did not match. **Four remediation agents were cut off mid-task by a session usage limit**; two finished and are the commits above, two did not - see §15D for exactly where each stopped and what a resuming session must do. Live database mutated: NO. |
+
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
 
@@ -2146,6 +2148,113 @@ it is an **authoring** decision, not a code defect.
 locale (59) drops all 22. Neither is part of the claim and neither changes the verdict — but if PRE-25
 characterises the loss as affecting only non-English locales, those two English rows falsify that
 phrasing and must not be glossed.
+
+---
+
+## 15D. SESSION OF 2026-08-25 — WHAT LANDED, AND EXACTLY WHERE THE QUOTA STOP LEFT THINGS
+
+Five agents were dispatched in parallel against the open findings, partitioned by file ownership so
+they could share one working tree. One was read-only verification (§15C). **Four were remediation
+agents, and all four were terminated mid-task by a session usage limit** — an API quota stop, not a
+task failure. Two had reached a complete, verified state and were committed. Two had not.
+
+**All partial work was backed up before assessment** to the session scratchpad at
+`agent-wip-backup/`, including a full `ALL-TRACKED-CHANGES.patch`. Nothing was discarded, reverted or
+stashed. The incomplete work is **left in the working tree uncommitted**, which is where a resuming
+session will find it.
+
+### LANDED — verified and committed
+
+| Finding | Commit | State |
+|---|---|---|
+| S3-P2-36 | `e203d5bdd` | **FIXED — VERIFIED** |
+| S3-P2-35 | `57e51286c` | **SUBSTANTIALLY FIXED — VERIFIED**; documentation half outstanding |
+| PRE-ORCH-02 | `d42a7d6d4` | **FIXED — VERIFIED** |
+| SKY-F01 | `02bcae75c` | **FIXED — VERIFIED** (§15C) |
+
+**S3-P2-35's remaining work, stated plainly so it is not mistaken for done.** The mechanism is
+complete and proven, but closing this finding *changes the documented re-issue discipline*, and
+`docs/branding-production/11-asset-manifest.md` and `12-release-verification.md` still describe the
+old one. Both files are themselves manifest-covered, so updating them requires re-issuing their own
+entries in the same change. **S3-P2-35 stays OPEN in the register until that is done.**
+
+### NOT LANDED — uncommitted work-in-progress in the working tree
+
+#### S3-P1-33 — pre-database product identity: mechanism built, target not converted
+
+Present and uncommitted:
+
+```text
+src/Common/Branding/ProductIdentity.php                      (new)
+tools/branding/src/ProductIdentityGenerator.php              (new)
+tools/branding/src/ProductIdentityKey.php                    (new)
+tools/branding/src/ProductIdentitySourceKind.php             (new)
+tools/branding/src/ProductIdentityCliOptions.php             (new)
+tools/branding/bin/generate-product-identity.php             (new)
+library/product_identity.generated.php                       (new, generated artefact)
+tools/branding/src/GeneratedHeader.php                       (modified — adds a PHP banner form)
+interface/globals.php                                        (modified — consumes the artefact)
+library/globals.inc.php                                      (modified — consumes the artefact)
+```
+
+**Two things are missing, and the second is a process deviation worth recording.**
+
+1. **`setup.php` is untouched.** It still carries all **10** `Thiqa` literals at the recorded lines,
+   alongside 32 `OpenEMR` occurrences. `setup.php` *is* the finding — the generator is only the means
+   — so despite the volume of new code, **S3-P1-33 has not been materially advanced against its own
+   target** and remains OPEN.
+2. **No ADR was written.** Owner decision SKY-Q11 requires a recorded design step *before*
+   implementation, following the discipline `ba0078c62` used for the translation architecture. The
+   agent built first. A resuming session should write the ADR against the code that now exists and be
+   willing to change the code where writing the rationale down exposes a weakness — not
+   back-rationalise the implementation it happens to have inherited.
+
+**None of this has been reviewed or tested by the orchestrator**, beyond confirming the files parse.
+Treat it as an unreviewed draft, not as progress banked.
+
+#### The SVG geometry safeguard — implemented, and its own tests fail 29 times
+
+Present and uncommitted:
+
+```text
+interface/modules/custom_modules/oe-module-thiqa-branding/src/AssetIntake/SvgGeometry.php   (new)
+interface/modules/custom_modules/oe-module-thiqa-branding/src/AssetIntake/SvgInspector.php  (modified)
+interface/modules/custom_modules/oe-module-thiqa-branding/src/AssetIntake/AssetRejectionReason.php (modified)
+tests/Tests/Isolated/Modules/ThiqaBranding/AssetIntake/SvgGeometryInvariantTest.php         (new)
+```
+
+Measured: **259 tests across Asset, AssetIntake, Guardrail and Listener → 29 failures, exit 1, and
+every one of the 29 belongs to `SvgGeometryInvariantTest`.** No other suite regressed, which is why
+the two landed commits above could be verified around it.
+
+**Diagnosis, from the agent's own failing cases: the rule is over-broad.** The failures cluster in
+`testPreserveAspectRatioIsIgnoredOnInertDrawingElements` for the `path`, `g` and `rect` data sets —
+the test asserts that `preserveAspectRatio` on an inert child element is *ignored*, and the rule flags
+it as a root-`svg` violation anyway. A second failure shows an enum mismatch between
+`SvgDisallowedElement` and `SvgAspectRatioNotPreserved`, i.e. the rejection reasons are not yet
+resolving in the right precedence. The agent had explicitly reached its **second** negative control
+when it was cut off, so this is unfinished work rather than a wrong design.
+
+**One check that matters and came back clean:** no real shipped asset was modified. `git status`
+reports nothing under `public/images/`, and the real
+`public/images/logos/core/menu/primary/logo.svg` carries `width="2048" height="2048"
+viewBox="0 0 2048 2048"` and **no `preserveAspectRatio` attribute at all** — it is compliant. The slot
+name appearing in the failure messages comes from the test's own fixtures, not from a mutated
+production file. The instruction never to corrupt a real asset to test failure was honoured.
+
+### Resumption order for the next session
+
+1. Finish the SVG safeguard (narrow the rule to the root element / geometry-bearing elements, fix the
+   rejection-reason precedence, complete the second negative control) **or** revert those four files
+   from the backup if a cleaner design is preferred. Do not commit it while red.
+2. Write the S3-P1-33 ADR, then reconcile the existing draft against it, then convert `setup.php`.
+3. Close S3-P2-35's documentation half and re-issue the two manifest entries it touches.
+4. Then, and only then, the remaining programme steps: push, local-disk certification copy, full gate,
+   re-run Scans 1–3 against the current worktree inventory (**six** worktrees — see PRE-ORCH-02), and
+   PRE-25.
+
+**Certification remains NOT PASSED.** S3-P1-33 is open, S3-P2-35 is partly open, the SVG safeguard is
+red, and PRE-25 has not started.
 
 ---
 
