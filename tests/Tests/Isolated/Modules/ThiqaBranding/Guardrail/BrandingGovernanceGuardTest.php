@@ -15,8 +15,12 @@ declare(strict_types=1);
 namespace OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Guardrail;
 
 use OpenEMR\Common\Session\SessionUtil;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\SkippedTest;
+use PHPUnit\Framework\SkippedWithMessageException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Yaml\Yaml;
 
 final class BrandingGovernanceGuardTest extends TestCase
 {
@@ -68,6 +72,40 @@ final class BrandingGovernanceGuardTest extends TestCase
         'rtl_compact_style_cobalt_blue',
         'rtl_compact_style_forest_green',
     ];
+
+    /**
+     * Explicit signal that this environment is REQUIRED to have built public/themes/.
+     *
+     * S3-P2-36: the deployed-theme guard used to decide between "check" and "skip" purely on
+     * whether the directory happened to exist. `/public/themes/*` is gitignored, CI never ran
+     * a theme build, so the answer in every CI leg was "absent" and the locked Q77 check
+     * skipped itself while the job reported green. The environment must therefore *declare*
+     * its obligation rather than have it inferred: with this set to '1' an absent directory
+     * is a hard failure; without it, the skip survives for developer hosts that legitimately
+     * build off-tree (see CLAUDE.local.md section 6 — on the Windows host the build runs in
+     * C:\openemr-stack\build and only the artefacts are copied back).
+     */
+    private const DEPLOYED_THEMES_REQUIRED_ENV = 'OPENEMR_DEPLOYED_THEMES_REQUIRED';
+
+    private const ISOLATED_TESTS_WORKFLOW = '.github/workflows/isolated-tests.yml';
+
+    /**
+     * Temporary fixture directories created by the negative-control tests.
+     *
+     * @var list<string>
+     */
+    private array $fixtureDirectories = [];
+
+    protected function tearDown(): void
+    {
+        foreach ($this->fixtureDirectories as $directory) {
+            self::removeDirectory($directory);
+        }
+
+        $this->fixtureDirectories = [];
+
+        parent::tearDown();
+    }
 
     /**
      * Locked Q12: "Public `?site=` tenant selection is prohibited."
@@ -131,7 +169,7 @@ final class BrandingGovernanceGuardTest extends TestCase
 
     private static function tokenEndpointSource(): string
     {
-        $path = dirname(__DIR__, 6)
+        $path = self::repositoryRoot()
             . '/interface/modules/custom_modules/oe-module-thiqa-branding/public/branding-tokens.php';
 
         $contents = file_get_contents($path);
@@ -158,7 +196,7 @@ final class BrandingGovernanceGuardTest extends TestCase
     #[DataProvider('darkVariantSlotProvider')]
     public function testDarkVariantMarksAreInstalled(string $slot): void
     {
-        $path = dirname(__DIR__, 6)
+        $path = self::repositoryRoot()
             . '/interface/modules/custom_modules/oe-module-thiqa-branding/public/logos/dark/'
             . $slot . '/logo.svg';
 
@@ -211,6 +249,66 @@ final class BrandingGovernanceGuardTest extends TestCase
         );
     }
 
+    // -----------------------------------------------------------------------------------
+    // Layer 1 — projection. Runs in EVERY environment, built or not.
+    //
+    // Exactly two things deposit a stylesheet in public/themes/:
+    //   1. webpack.themes.js's `entry:` map      → public/themes/<entry-name>.css
+    //      (output.filename is "[name].css"; MiniCssExtractPlugin filename "[name].css";
+    //      a "misc/x" entry name therefore lands at public/themes/misc/x.css)
+    //   2. scripts/sync-css.js                   → copies interface/themes/*.css verbatim
+    //      (and webpack's output.clean.keep whitelist is exactly those three filenames)
+    //
+    // Projecting that set and constraining it gives real Q77 coverage with no build at all.
+    // It cannot replace the on-disk check below, because a stale artefact from an older
+    // entry map is by definition invisible to the current entry map.
+    // -----------------------------------------------------------------------------------
+
+    /**
+     * No configuration the build reads can produce one of Q77's four excluded themes.
+     */
+    public function testTheProjectedDeployedThemeSetCanContainNoForbiddenStylesheet(): void
+    {
+        $projected = self::projectedDeployedStylesheets();
+
+        self::assertGreaterThanOrEqual(
+            20,
+            count($projected),
+            'Implausibly few projected stylesheets. An empty projection would satisfy the forbidden '
+            . 'check vacuously, so the parse itself has to be non-vacuous before the check means '
+            . 'anything.',
+        );
+
+        self::assertSame(
+            [],
+            self::forbiddenAmong($projected),
+            'Locked Q77: the build configuration itself would deposit an excluded theme in '
+            . 'public/themes/. Prune it from webpack.themes.js (entry map) or from '
+            . 'interface/themes/*.css (copied verbatim by scripts/sync-css.js).',
+        );
+    }
+
+    /**
+     * The projection is only meaningful if it still contains the themes the product needs.
+     */
+    public function testTheProjectedDeployedThemeSetContainsEveryRequiredTheme(): void
+    {
+        $projected = self::projectedDeployedStylesheets();
+
+        foreach (self::REQUIRED_THEME_ENTRIES as $entry) {
+            self::assertContains(
+                $entry . '.css',
+                $projected,
+                'The build no longer produces ' . $entry . '.css, which interface/globals.php resolves '
+                . 'via file_exists(). Losing it degrades the product silently rather than loudly.',
+            );
+        }
+    }
+
+    // -----------------------------------------------------------------------------------
+    // Layer 2 — the real deployed directory. Mandatory wherever the CI signal says so.
+    // -----------------------------------------------------------------------------------
+
     /**
      * Locked Q77 constrains the DEPLOYED directory, not the entry map.
      *
@@ -223,44 +321,283 @@ final class BrandingGovernanceGuardTest extends TestCase
      * `globals`/`user_settings` value would then resolve it. See docs/RebrandingBugs.md
      * RB-07 and RB-08.
      *
-     * This asserts the thing Q77 actually says. It is check **V-04**'s first half, which
-     * was previously only ever hand-run.
-     *
-     * `public/themes/` is gitignored build output, so its absence is not a failure — a
-     * fresh checkout that has not run the theme build has nothing to constrain.
+     * This asserts the thing Q77 actually says. It is check **V-04**'s first half.
      */
     public function testDeployedThemeDirectoryContainsNoForbiddenStylesheet(): void
     {
-        $themeDirectory = dirname(__DIR__, 6) . '/public/themes';
-
-        if (!is_dir($themeDirectory)) {
-            self::markTestSkipped('public/themes/ is build output and has not been generated here.');
-        }
-
-        $files = scandir($themeDirectory);
-        self::assertNotFalse($files, 'public/themes/ must be readable.');
-
-        $forbidden = [];
-        foreach ($files as $file) {
-            if (!str_ends_with($file, '.css')) {
-                continue;
-            }
-
-            foreach (self::FORBIDDEN_THEME_NAMES as $name) {
-                if (str_contains($file, $name)) {
-                    $forbidden[] = $file;
-                    break;
-                }
-            }
-        }
+        $audit = self::auditThemeDirectory(self::deployedThemeDirectory(), self::projectedDeployedStylesheets());
 
         self::assertSame(
             [],
-            $forbidden,
+            $audit['forbidden'],
             'Locked Q77: these stylesheets must not exist in the deployed public/themes/ directory. '
             . 'Webpack no longer builds them, so their presence means a stale artefact survived a deploy '
             . 'that copied without purging — see docs/branding/runbook.md section 4.',
         );
+    }
+
+    /**
+     * The stale-artefact failure mode is not limited to Q77's four names.
+     *
+     * `robocopy /E` deletes nothing at the destination and webpack's `output.clean` only
+     * tidies the build workspace, so ANY stylesheet the current configuration cannot produce
+     * is a survivor of an older build — and `interface/globals.php:476` will resolve any of
+     * them from a stale `globals`/`user_settings` value, not merely the four named ones.
+     */
+    public function testDeployedThemeDirectoryContainsNoStaleOrSurplusStylesheet(): void
+    {
+        $audit = self::auditThemeDirectory(self::deployedThemeDirectory(), self::projectedDeployedStylesheets());
+
+        self::assertSame(
+            [],
+            $audit['surplus'],
+            'These stylesheets exist in public/themes/ but nothing in webpack.themes.js or '
+            . 'interface/themes/*.css can produce them, so they are stale artefacts of an older '
+            . 'build. Purge public/themes/ before re-copying — see CLAUDE.local.md section 6.',
+        );
+    }
+
+    /**
+     * The mirror direction: a deploy that dropped a required stylesheet is equally broken.
+     */
+    public function testDeployedThemeDirectoryContainsEveryStylesheetTheBuildProduces(): void
+    {
+        $audit = self::auditThemeDirectory(self::deployedThemeDirectory(), self::projectedDeployedStylesheets());
+
+        self::assertSame(
+            [],
+            $audit['missing'],
+            'The build configuration produces these stylesheets but they are absent from '
+            . 'public/themes/, so the deploy is incomplete and interface/globals.php will fall '
+            . 'back for every user whose stored theme is one of them.',
+        );
+    }
+
+    // -----------------------------------------------------------------------------------
+    // Layer 3 — the CI wiring itself.
+    //
+    // The signal only helps if CI actually raises it, on the same leg that actually built
+    // the directory, before the tests run. Nothing else in the repo asserts that, and the
+    // original defect was precisely "the check runs in no job while reporting green".
+    // -----------------------------------------------------------------------------------
+
+    public function testCiBuildsTheDeployedThemesAndDeclaresThemMandatory(): void
+    {
+        $parsed = Yaml::parseFile(self::repositoryRoot() . '/' . self::ISOLATED_TESTS_WORKFLOW);
+        self::assertIsArray($parsed);
+
+        $jobs = $parsed['jobs'] ?? null;
+        self::assertIsArray($jobs);
+
+        $job = $jobs['isolated-tests'] ?? null;
+        self::assertIsArray($job, 'The isolated-tests job must still exist.');
+
+        $strategy = $job['strategy'] ?? null;
+        self::assertIsArray($strategy);
+
+        $matrix = $strategy['matrix'] ?? null;
+        self::assertIsArray($matrix);
+
+        $rawLegs = $matrix['php-version'] ?? null;
+        self::assertIsArray($rawLegs);
+
+        $legs = [];
+        foreach ($rawLegs as $leg) {
+            self::assertIsString($leg, 'Matrix php-version legs must be quoted strings.');
+            $legs[] = $leg;
+        }
+
+        $steps = $job['steps'] ?? null;
+        self::assertIsArray($steps);
+
+        $buildIndex = null;
+        $buildLeg = null;
+        $testIndex = null;
+        $testEnv = null;
+
+        foreach (array_values($steps) as $index => $step) {
+            if (!is_array($step)) {
+                continue;
+            }
+
+            $run = $step['run'] ?? null;
+            if (!is_string($run)) {
+                continue;
+            }
+
+            if (str_contains($run, 'npm run build')) {
+                $buildIndex = $index;
+                $condition = $step['if'] ?? null;
+                self::assertIsString(
+                    $condition,
+                    'The theme build must be pinned to a single matrix leg with `if:`, or it costs '
+                    . 'one npm install per leg.',
+                );
+                $buildLeg = self::pinnedLeg($condition);
+            }
+
+            if (str_contains($run, 'phpunit -c phpunit-isolated.xml')) {
+                $testIndex = $index;
+                $testEnv = $step['env'] ?? null;
+            }
+        }
+
+        self::assertIsInt(
+            $buildIndex,
+            'No step in the isolated-tests job builds public/themes/. Without it the deployed-theme '
+            . 'guard has nothing to inspect and locked Q77 is enforced by nothing in CI.',
+        );
+        self::assertIsString($buildLeg);
+        self::assertIsInt($testIndex, 'The isolated-tests job must still run the isolated suite.');
+        self::assertLessThan(
+            $testIndex,
+            $buildIndex,
+            'The theme build must run BEFORE the isolated suite, or the guard inspects a directory '
+            . 'that does not exist yet.',
+        );
+        self::assertContains(
+            $buildLeg,
+            $legs,
+            sprintf(
+                'The theme build is pinned to PHP %s, which is not in the matrix (%s), so it never '
+                . 'runs and every leg reports green.',
+                $buildLeg,
+                implode(', ', $legs),
+            ),
+        );
+
+        self::assertIsArray(
+            $testEnv,
+            'The isolated-test step must declare an `env:` block raising '
+            . self::DEPLOYED_THEMES_REQUIRED_ENV . '.',
+        );
+
+        $signal = $testEnv[self::DEPLOYED_THEMES_REQUIRED_ENV] ?? null;
+        self::assertIsString(
+            $signal,
+            'Without ' . self::DEPLOYED_THEMES_REQUIRED_ENV . ' the deployed-theme guard falls back '
+            . 'to skipping itself, which is exactly the false green this wiring exists to close.',
+        );
+
+        $matches = [];
+        self::assertSame(
+            1,
+            preg_match("~matrix\.php-version == '([^']+)'\s*&&\s*'1'~", $signal, $matches),
+            'The signal must be raised by an explicit matrix-leg comparison yielding \'1\'.',
+        );
+        self::assertSame(
+            $buildLeg,
+            $matches[1],
+            'The leg told public/themes/ is mandatory must be the same leg that built it; otherwise '
+            . 'one leg fails on an absent directory while the leg that has one never checks it.',
+        );
+    }
+
+    // -----------------------------------------------------------------------------------
+    // Negative controls. These drive the SAME helpers the live checks above use, against
+    // synthetic directories under sys_get_temp_dir(), so a gate that stopped discriminating
+    // fails here rather than sailing through on an empty input set.
+    // -----------------------------------------------------------------------------------
+
+    public function testTheAuditFlagsAForbiddenStylesheet(): void
+    {
+        $directory = $this->fixtureThemeDirectory(['style_light.css', 'misc/rules.css', 'style_solar.css']);
+
+        $audit = self::auditThemeDirectory($directory, ['misc/rules.css', 'style_light.css']);
+
+        self::assertSame(['style_solar.css'], $audit['forbidden']);
+        self::assertSame(['style_solar.css'], $audit['surplus']);
+        self::assertSame([], $audit['missing']);
+    }
+
+    public function testTheAuditFlagsAStaleStylesheetThatIsNotOneOfQ77sFourNames(): void
+    {
+        $directory = $this->fixtureThemeDirectory(['style_light.css', 'style_gilded_lily.css']);
+
+        $audit = self::auditThemeDirectory($directory, ['style_light.css']);
+
+        self::assertSame([], $audit['forbidden'], 'It is not one of the four names, by construction.');
+        self::assertSame(
+            ['style_gilded_lily.css'],
+            $audit['surplus'],
+            'Any artefact the current configuration cannot produce is stale, and file_exists() '
+            . 'resolves it just as happily as one of the four named themes.',
+        );
+    }
+
+    public function testTheAuditFlagsAMissingRequiredStylesheet(): void
+    {
+        $directory = $this->fixtureThemeDirectory(['style_light.css']);
+
+        $audit = self::auditThemeDirectory($directory, ['style_dark.css', 'style_light.css']);
+
+        self::assertSame(['style_dark.css'], $audit['missing']);
+        self::assertSame([], $audit['surplus']);
+        self::assertSame([], $audit['forbidden']);
+    }
+
+    public function testTheAuditAcceptsAFaithfullyDeployedDirectory(): void
+    {
+        $directory = $this->fixtureThemeDirectory(['style_light.css', 'style_dark.css', 'misc/rules.css']);
+
+        $audit = self::auditThemeDirectory($directory, ['misc/rules.css', 'style_dark.css', 'style_light.css']);
+
+        self::assertSame(['forbidden' => [], 'surplus' => [], 'missing' => []], $audit);
+    }
+
+    /**
+     * The whole point of S3-P2-36: "required but absent" must be red, not green-with-a-skip.
+     */
+    public function testAnAbsentThemeDirectoryFailsRatherThanSkipsWhenDeclaredMandatory(): void
+    {
+        $absent = $this->fixtureThemeDirectory([]) . '/never-created';
+        self::assertDirectoryDoesNotExist($absent);
+
+        try {
+            self::resolveDeployedThemeDirectory($absent, '1');
+        } catch (AssertionFailedError $error) {
+            self::assertNotInstanceOf(
+                SkippedTest::class,
+                $error,
+                'A mandatory-but-absent public/themes/ must FAIL. Skipping is how this check reported '
+                . 'green in every CI leg while enforcing nothing.',
+            );
+            self::assertStringContainsString(self::DEPLOYED_THEMES_REQUIRED_ENV, $error->getMessage());
+
+            return;
+        }
+
+        self::fail('An absent public/themes/ was tolerated even though the environment declared it mandatory.');
+    }
+
+    /**
+     * ...and the developer-host skip has to survive, or nobody can run the suite locally.
+     */
+    public function testAnAbsentThemeDirectoryStillSkipsWithoutTheSignal(): void
+    {
+        $absent = $this->fixtureThemeDirectory([]) . '/never-created';
+        self::assertDirectoryDoesNotExist($absent);
+
+        try {
+            self::resolveDeployedThemeDirectory($absent, null);
+        } catch (SkippedWithMessageException $skipped) {
+            self::assertStringContainsString(self::DEPLOYED_THEMES_REQUIRED_ENV, $skipped->getMessage());
+
+            return;
+        }
+
+        self::fail(
+            'Without the signal an absent public/themes/ must skip: CLAUDE.local.md section 6 builds '
+            . 'the themes off-tree on the Windows host, so the directory is legitimately unbuilt there.',
+        );
+    }
+
+    public function testAPresentDirectoryIsUsedRegardlessOfTheSignal(): void
+    {
+        $directory = $this->fixtureThemeDirectory(['style_light.css']);
+
+        self::assertSame($directory, self::resolveDeployedThemeDirectory($directory, null));
+        self::assertSame($directory, self::resolveDeployedThemeDirectory($directory, '1'));
     }
 
     /**
@@ -297,11 +634,370 @@ final class BrandingGovernanceGuardTest extends TestCase
         return $cases;
     }
 
+    private static function repositoryRoot(): string
+    {
+        return dirname(__DIR__, 6);
+    }
+
+    /**
+     * The matrix leg a GitHub Actions `if:` expression pins a step to.
+     */
+    private static function pinnedLeg(string $condition): string
+    {
+        $matches = [];
+        self::assertSame(
+            1,
+            preg_match("~matrix\.php-version == '([^']+)'~", $condition, $matches),
+            'Expected the step to be pinned with `matrix.php-version == \'<leg>\'`, got: ' . $condition,
+        );
+
+        return $matches[1];
+    }
+
     private static function webpackThemeMap(): string
     {
-        $contents = file_get_contents(dirname(__DIR__, 6) . '/webpack.themes.js');
+        $contents = file_get_contents(self::repositoryRoot() . '/webpack.themes.js');
         self::assertNotFalse($contents, 'webpack.themes.js must be readable.');
 
         return $contents;
+    }
+
+    /**
+     * Resolve the deployed theme directory, or decide loudly why there is none.
+     *
+     * Split from {@see self::deployedThemeDirectory()} so the negative controls can exercise
+     * the actual decision with a directory and a signal of their choosing.
+     */
+    private static function resolveDeployedThemeDirectory(string $directory, ?string $signal): string
+    {
+        if (is_dir($directory)) {
+            return $directory;
+        }
+
+        if ($signal === '1') {
+            self::fail(sprintf(
+                '%s=1 declares this environment builds the deployed themes, so an absent %s is a '
+                . 'build failure rather than a reason to skip. Locked Q77 constrains what exists in '
+                . 'that directory, and a skipped check constrains nothing while reporting green.',
+                self::DEPLOYED_THEMES_REQUIRED_ENV,
+                $directory,
+            ));
+        }
+
+        self::markTestSkipped(sprintf(
+            'public/themes/ is gitignored build output and has not been generated here. Any '
+            . 'environment required to have built it must set %s=1, which turns this skip into a '
+            . 'failure.',
+            self::DEPLOYED_THEMES_REQUIRED_ENV,
+        ));
+    }
+
+    private static function deployedThemeDirectory(): string
+    {
+        $signal = getenv(self::DEPLOYED_THEMES_REQUIRED_ENV);
+
+        return self::resolveDeployedThemeDirectory(
+            self::repositoryRoot() . '/public/themes',
+            $signal === false ? null : $signal,
+        );
+    }
+
+    /**
+     * @param list<string> $projected
+     * @return array{forbidden: list<string>, surplus: list<string>, missing: list<string>}
+     */
+    private static function auditThemeDirectory(string $directory, array $projected): array
+    {
+        $deployed = self::deployedStylesheets($directory);
+
+        return [
+            'forbidden' => self::forbiddenAmong($deployed),
+            'surplus' => array_values(array_diff($deployed, $projected)),
+            'missing' => array_values(array_diff($projected, $deployed)),
+        ];
+    }
+
+    /**
+     * Every .css actually present under a deployed theme directory, as posix relative paths.
+     *
+     * @return list<string>
+     */
+    private static function deployedStylesheets(string $directory): array
+    {
+        $prefixLength = strlen($directory) + 1;
+        $found = [];
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS),
+        );
+
+        foreach ($iterator as $entry) {
+            if (!$entry instanceof \SplFileInfo || !$entry->isFile()) {
+                continue;
+            }
+
+            if (!str_ends_with($entry->getFilename(), '.css')) {
+                continue;
+            }
+
+            $found[] = str_replace('\\', '/', substr($entry->getPathname(), $prefixLength));
+        }
+
+        sort($found);
+
+        return array_values($found);
+    }
+
+    /**
+     * @param list<string> $files
+     * @return list<string>
+     */
+    private static function forbiddenAmong(array $files): array
+    {
+        $hits = [];
+
+        foreach ($files as $file) {
+            foreach (self::FORBIDDEN_THEME_NAMES as $name) {
+                if (str_contains($file, $name)) {
+                    $hits[] = $file;
+                    break;
+                }
+            }
+        }
+
+        return $hits;
+    }
+
+    /**
+     * Every stylesheet the build is CAPABLE of depositing in public/themes/.
+     *
+     * @return list<string>
+     */
+    private static function projectedDeployedStylesheets(): array
+    {
+        $projected = [];
+
+        foreach (self::webpackEntryNames() as $entry) {
+            $projected[] = $entry . '.css';
+        }
+
+        foreach (self::staticallySyncedStylesheets() as $file) {
+            $projected[] = $file;
+        }
+
+        $projected = array_values(array_unique($projected));
+        sort($projected);
+
+        return array_values($projected);
+    }
+
+    /**
+     * scripts/sync-css.js copies interface/themes/*.css into public/themes/ verbatim.
+     *
+     * @return list<string>
+     */
+    private static function staticallySyncedStylesheets(): array
+    {
+        $paths = glob(self::repositoryRoot() . '/interface/themes/*.css');
+        self::assertNotFalse($paths, 'interface/themes/ must be readable.');
+        self::assertNotSame(
+            [],
+            $paths,
+            'scripts/sync-css.js has no sources at all, which almost certainly means this projection '
+            . 'is reading the wrong directory.',
+        );
+
+        return array_values(array_map(basename(...), $paths));
+    }
+
+    /**
+     * The entry names in webpack.themes.js — the thing that actually decides what gets built.
+     *
+     * Comments are stripped first so a commented-out entry is correctly read as "not built".
+     *
+     * @return list<string>
+     */
+    private static function webpackEntryNames(): array
+    {
+        $source = self::stripJsComments(self::webpackThemeMap());
+
+        self::assertSame(
+            1,
+            substr_count($source, 'entry: {'),
+            'webpack.themes.js must declare exactly one `entry: {` map; the parser cannot tell which '
+            . 'of several is the theme build.',
+        );
+
+        $openAt = strpos($source, 'entry: {') + strlen('entry: ');
+        $block = self::balancedBraceBlock($source, $openAt);
+
+        $matches = [];
+        preg_match_all(
+            '/^[ \t]*(?:"([^"]+)"|\'([^\']+)\'|([A-Za-z_$][A-Za-z0-9_$]*))[ \t]*:/m',
+            $block,
+            $matches,
+            PREG_SET_ORDER,
+        );
+
+        $names = [];
+        foreach ($matches as $set) {
+            foreach ([1, 2, 3] as $group) {
+                if (isset($set[$group]) && $set[$group] !== '') {
+                    $names[] = $set[$group];
+                }
+            }
+        }
+
+        self::assertGreaterThanOrEqual(
+            20,
+            count($names),
+            'Parsed implausibly few webpack entries. The parser has drifted from webpack.themes.js, '
+            . 'and an empty entry list would satisfy every forbidden-theme assertion vacuously.',
+        );
+
+        return $names;
+    }
+
+    /**
+     * Contents between the brace at $openAt and its match, ignoring braces inside strings.
+     */
+    private static function balancedBraceBlock(string $source, int $openAt): string
+    {
+        $depth = 0;
+        $quote = null;
+        $length = strlen($source);
+
+        for ($i = $openAt; $i < $length; $i++) {
+            $character = $source[$i];
+
+            if ($quote !== null) {
+                if ($character === '\\') {
+                    $i++;
+                    continue;
+                }
+                if ($character === $quote) {
+                    $quote = null;
+                }
+                continue;
+            }
+
+            if ($character === '"' || $character === "'" || $character === '`') {
+                $quote = $character;
+                continue;
+            }
+
+            if ($character === '{') {
+                $depth++;
+                continue;
+            }
+
+            if ($character === '}') {
+                $depth--;
+                if ($depth === 0) {
+                    return substr($source, $openAt + 1, $i - $openAt - 1);
+                }
+            }
+        }
+
+        self::fail('Unbalanced braces in webpack.themes.js `entry:` map.');
+    }
+
+    private static function stripJsComments(string $source): string
+    {
+        $out = '';
+        $length = strlen($source);
+        $quote = null;
+
+        for ($i = 0; $i < $length; $i++) {
+            $character = $source[$i];
+
+            if ($quote !== null) {
+                $out .= $character;
+                if ($character === '\\' && $i + 1 < $length) {
+                    $out .= $source[++$i];
+                    continue;
+                }
+                if ($character === $quote) {
+                    $quote = null;
+                }
+                continue;
+            }
+
+            if ($character === '"' || $character === "'" || $character === '`') {
+                $quote = $character;
+                $out .= $character;
+                continue;
+            }
+
+            if ($character === '/' && $i + 1 < $length && $source[$i + 1] === '/') {
+                while ($i < $length && $source[$i] !== "\n") {
+                    $i++;
+                }
+                $out .= "\n";
+                continue;
+            }
+
+            if ($character === '/' && $i + 1 < $length && $source[$i + 1] === '*') {
+                $end = strpos($source, '*/', $i + 2);
+                $i = $end === false ? $length : $end + 1;
+                continue;
+            }
+
+            $out .= $character;
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param list<string> $relativePaths posix-relative stylesheet paths to materialise
+     */
+    private function fixtureThemeDirectory(array $relativePaths): string
+    {
+        $directory = sys_get_temp_dir() . '/openemr-themes-fixture-' . bin2hex(random_bytes(8));
+        self::assertTrue(mkdir($directory, 0o777, true), 'Could not create fixture directory.');
+        $this->fixtureDirectories[] = $directory;
+
+        foreach ($relativePaths as $relativePath) {
+            $target = $directory . '/' . $relativePath;
+            $parent = dirname($target);
+            if (!is_dir($parent)) {
+                self::assertTrue(mkdir($parent, 0o777, true), 'Could not create fixture subdirectory.');
+            }
+
+            self::assertNotFalse(
+                file_put_contents($target, "/* fixture */\n"),
+                'Could not write fixture stylesheet ' . $relativePath . '.',
+            );
+        }
+
+        return $directory;
+    }
+
+    private static function removeDirectory(string $directory): void
+    {
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST,
+        );
+
+        foreach ($iterator as $entry) {
+            if (!$entry instanceof \SplFileInfo) {
+                continue;
+            }
+
+            if ($entry->isDir()) {
+                rmdir($entry->getPathname());
+                continue;
+            }
+
+            unlink($entry->getPathname());
+        }
+
+        rmdir($directory);
     }
 }

@@ -52,7 +52,56 @@ jobs:
       if: matrix.php-version == '8.2'
       run: composer branding-ci
 
+    # Locked Q77 constrains the DEPLOYED public/themes/ directory, not the webpack
+    # entry map (BrandingGovernanceGuardTest). `/public/themes/*` is gitignored, so a
+    # fresh checkout has nothing to constrain and the guard skipped itself in every
+    # leg while the job still reported green. Build the themes on one leg and tell the
+    # guard, below, that the directory is mandatory there.
+    #
+    # Pinned to a single leg: this costs one npm install, not five, and the deployed
+    # theme set does not vary by PHP version.
+    - name: Set up Node for the theme build
+      if: matrix.php-version == '8.2'
+      uses: actions/setup-node@v7
+      with:
+        # Matches styling.yml, js-test.yml and acceptance-package.yml.
+        node-version: '24'
+
+    - name: Get NPM Cache Directory
+      if: matrix.php-version == '8.2'
+      id: npm-cache-dir
+      run: |
+        {
+          printf 'dir='
+          npm config get cache
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Cache node modules
+      if: matrix.php-version == '8.2'
+      uses: actions/cache@v6
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-24-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-24-
+          ${{ runner.os }}-node-
+
+    - name: Build deployed themes into public/themes/
+      if: matrix.php-version == '8.2'
+      # Same pair the canonical tarball builder uses (build-patch.yml), so what the
+      # guard inspects is what a release would actually ship.
+      run: |
+        npm ci
+        npm run build
+
     - name: Run isolated tests with coverage
+      env:
+        # Explicit obligation, never an inference from the environment: on the one leg
+        # that built public/themes/ above, an absent directory is a build failure the
+        # deployed-theme guard must report, not a reason for it to skip itself into a
+        # false green. Every other leg leaves this empty and the guard skips, exactly
+        # as a developer host that builds off-tree does.
+        OPENEMR_DEPLOYED_THEMES_REQUIRED: ${{ matrix.php-version == '8.2' && '1' || '' }}
       run: |
         vendor/bin/phpunit -c phpunit-isolated.xml \
                            --coverage-clover=clover.xml \
