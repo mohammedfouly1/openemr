@@ -254,7 +254,7 @@ implemented yet.
 | PRE-16 | Scan-2G Materialisation / tenant safety | orchestrator continuation | R/W (reversible runtime proof) | **DONE — VERIFIED; LIVE STATE RESTORED** | §15 SCAN2G and §16 continuation evidence |
 | PRE-17 | Scan-2H Telemetry / network egress | Agent 2H | R | **DONE** | §15 SCAN2H |
 | PRE-18…24 | Scan-3A…3E adversarial red-team | fresh agents | R | **COMPLETE (2026-08-24) — 5 of 5 returned; 1 P0 found and fixed** | All five reported. Scan-3A found **S3-P0-28**, a fresh-install-versus-upgrade precedence divergence that would have wedged every upgrade uncatchably; fixed and regression-pinned. 3B hardened six gate assertions; 3C found the composition architecture's real reach gap; 3D found three documentation defects including a stale headline status; 3E found one live-state gap and corrected an orchestrator docblock. **Rev 29 closed S3-P1-31, S3-P1-32 and S3-P1-34; 4 remain unclosed** — 1 accepted trade, 1 P1 needing a design step, 2 governance/CI P2s. See §15B. Originally: | Five independent read-only agents, launched only after the Owner explicitly authorised spawning them. Scoped to five attack surfaces rather than the original seven letters: **3A** translation-contract subsystem (orphaning, page-fatal patterns, install-vs-upgrade divergence, rollback); **3B** CI gate and guardrail false-greens; **3C** brand leaks on live and source surfaces incl. Arabic/RTL; **3D** documentation truthfulness (falsify the corpus's own claims, including this file's); **3E** rename blast radius and silent breakage. Each was told to falsify rather than inherit, given the host constraints (no Docker, Twig render tests hang, scoped searches, sibling-worktree exclusion), and bound to read-only with no live-DB mutation. |
-| PRE-25 | Final reconciliation / certification | orchestrator | R | **NOT STARTED — but now unblocked** | Every documented code blocker closed at Rev 32 (§15E). Three inputs still outstanding before it can begin: Scan-4A…4E (dispatched at `e16913d5b`), the full PHPStan run (exit code alone is not proof on this host — grep for `Internal error` / `Result is incomplete`), and the two unlabelled P1 slots at the S2-P1-19 / S2-P1-21 numbering gap, which must be resolved from Scan-2's register rather than filled with invented findings. |
+| PRE-25 | Final reconciliation / certification | orchestrator | R | **RECONCILIATION COMPLETE (§21); VERDICT PENDING** | Every documented code blocker closed at Rev 32 (§15E). Three inputs still outstanding before it can begin: Scan-4A…4E (dispatched at `e16913d5b`), the full PHPStan run (exit code alone is not proof on this host — grep for `Internal error` / `Result is incomplete`), and the two unlabelled P1 slots at the S2-P1-19 / S2-P1-21 numbering gap, which must be resolved from Scan-2's register rather than filled with invented findings. |
 
 **Orchestrator's own guardrail proof:** two direct PHPUnit runs exceeded timeout on the Drive mount without
 capturing output. The claim was then **proven by a faster route** — reading the real `MODULE_NAMESPACE`
@@ -350,19 +350,42 @@ REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 2 unlabelled slots only �
                     locale lost one, and the shell now selects the Arabic product name by
                     language (not by direction — four locales are RTL and only one is
                     Arabic).
-                    NOTE ON THE COUNT: the two remaining slots have no written section in
-                    this checkpoint. The
-                    arithmetic carries two unlabelled P1 slots inherited from Scan-2's
-                    register that were never transcribed here (the numbering gap at
-                    S2-P1-19 and S2-P1-21 is where they sit). Treat the four documented
-                    findings as the actionable set and resolve the discrepancy at PRE-25
-                    rather than inventing findings to fill the slots.
+                    NOTE ON THE COUNT — **RESOLVED AT PRE-25, 2026-08-25. The two
+                    "unlabelled P1 slots" DO NOT EXIST.** They were a bookkeeping
+                    artefact, not lost findings, and the note that created them was
+                    itself wrong about where they sat.
+
+                    Method: every finding ID in this checkpoint was enumerated and the
+                    sequence reconstructed. The counter is **global and sequential across
+                    scans AND severities**, not per-severity — which is the assumption
+                    that produced the phantom slots. 34 IDs are assigned across the range
+                    01..36. The only numbers never issued are **08 and 19**.
+
+                    **S2-P1-21 was never a gap.** Number 21 is `S2-P0-21` (the RB-01
+                    remediation not surviving a database rebuild) — a P0, FIXED —
+                    VERIFIED at Rev 10. Reading the sequence as P1-only turned an
+                    existing P0 into an imaginary missing P1.
+
+                    Findings 08 and 19 were never issued at all: no section, no commit,
+                    no mention in `RebrandingBugs.md`, `rebranding.md` or
+                    `RebrandingPlan.md`, and nothing in `git log --all -S` beyond this
+                    checkpoint's own notes about the gap. Concurrent agents assigning IDs
+                    from a shared counter skipped two numbers. Nothing is missing.
+
+                    Re-derived P1 totals: **22 documented P1 findings**
+                    (S1: 02,03,04,05,06,10,11,15,17 · S2: 18,20,22,23,24,25,26 ·
+                    S3: 27,30,31,32,33,34). Of these, 19 are FIXED — VERIFIED, and the
+                    three that are not closed are each closed *as a disposition*:
+                    S2-P1-24's Arabic LOGO variant (asset-blocked, KG-05/SKY-Q07),
+                    S3-P1-27 (OPERATIONAL — an unapplied migration, not a code defect),
+                    and S3-P1-30 (ACCEPTED, quantified at 22 contracts / 8 Arabic
+                    strings). **No P1 is open as unaddressed work.**
 
 STATE AT REV 32 (2026-08-25): every documented CODE blocker is closed and verified.
                     What remains is verification and reconciliation, not construction:
                       · Scan-4A…4E — five independent adversarial agents dispatched at e16913d5b
                       · PHPStan full run — exit code alone is NOT proof on this host
-                      · Two unlabelled P1 slots — the S2-P1-19 / S2-P1-21 numbering gap
+                      · Two unlabelled P1 slots — RESOLVED at PRE-25: they do not exist
                       · PRE-25 — NOT STARTED
                       · Push and the local-disk certification copy — deferred by Owner
                         decision until PRE-25 passes
@@ -2710,3 +2733,125 @@ START SKYEAGLE REBRANDING
 
 *Checkpoint written during the PRE-SKYEAGLE audit. No SkyEagle branding change has been made. The only
 repository write in this session is this file.*
+
+
+## 21. PRE-25 — FINAL RECONCILIATION
+
+**Executed 2026-08-25 at HEAD `d9f6fa6c7`+ (working tree carries this section).**
+
+> Every finding this programme ever issued is reconciled below to **one** final state. Nothing is
+> omitted, nothing is merged away, and no finding is closed by the fact that a test passes. Every
+> commit hash cited was verified to exist with `git cat-file -e` before being written here.
+
+### 21.1 The numbering, re-derived
+
+The finding counter is **global and sequential across scans and severities** — not per-severity, which
+is the misreading that produced the phantom "two unlabelled P1 slots". **34 IDs are assigned across the
+range 01..36.** The only numbers never issued are **08** and **19**; neither has a section, a commit, or
+a mention anywhere in the corpus or in `git log --all -S`. **S2-P1-21 was never a gap** — number 21 is
+`S2-P0-21`, a P0, fixed and verified at Rev 10.
+
+**Correction to an earlier count.** The register block long read `P0 4 total`. There are **five** P0
+findings; the four counted excluded `S3-P0-28`, which was tracked separately in the Scan-3 register.
+Both numbers were defensible in their own context and neither was wrong on the facts; a single ledger
+needs a single total, and it is 5.
+
+Totals: **5 P0 · 22 P1 · 7 P2 = 34 numbered findings**, plus 6 post-scan findings and 1 observation.
+
+### 21.2 P0 — five findings, five closed
+
+| ID | Finding | Final state | Evidence |
+|---|---|---|---|
+| S1-P0-01 | Eight undocumented core branding edits (Q1 governance breach) | **FIXED — VERIFIED** | `aebcfdfc5`, `26c32fcb3` |
+| S1-P0-09 | Tier-2 token overlay structurally inert | **FIXED — VERIFIED** | `566b14ea6`; live-verified and exactly restored |
+| S1-P0-13 | Brand name embedded in a translation catalogue key | **FIXED — VERIFIED** | `948e4a6d1`, `2baf7322a` |
+| S2-P0-21 | RB-01 remediation did not survive a database rebuild | **FIXED — VERIFIED** | `02671f0c9`, `2baf7322a` |
+| S3-P0-28 | Install-vs-upgrade translation precedence divergence | **FIXED — VERIFIED** | `5d519342d` |
+
+**Zero P0 findings open.** S3-P0-28 is worth naming again: it would have wedged every upgrade of every
+site installed from this branch, uncatchably, mid-run, and it does not reproduce on this dev database.
+It was found only because Scan 3 was run adversarially by an agent that had not done the remediation.
+
+### 21.3 P1 — twenty-two findings
+
+Nineteen are FIXED — VERIFIED. The remaining three are each closed *as a disposition*, not left hanging:
+
+| ID | Final state | Evidence / justification |
+|---|---|---|
+| S1-P1-02 | **FIXED — VERIFIED** | `2b801e668` |
+| S1-P1-03 | **FIXED — VERIFIED** | `597276b09`, `ff6e35b4f` |
+| S1-P1-04 | **FIXED — VERIFIED** | `2df9b5eb1` |
+| S1-P1-05 | **FIXED — VERIFIED** | `b400546a2` |
+| S1-P1-06 | **FIXED — VERIFIED** | `88ff34289`; D-8 correctly remains an open dependency, recorded not hidden |
+| S1-P1-10 | **FIXED — VERIFIED** | `723170df7` |
+| S1-P1-11 | **FIXED — VERIFIED** | `29be1fcd5` |
+| S1-P1-15 | **FIXED — VERIFIED** | `77d2b3e12`, `8eb4ea7f8`, `64d2ba23c` |
+| S1-P1-17 | **FIXED — VERIFIED** | `0af1ce174` |
+| S2-P1-18 | **FIXED — VERIFIED** | `1474263b4` |
+| S2-P1-20 | **REFUTED IN PART; REMAINDER FIXED — VERIFIED** | `2df9b5eb1`; see Correction K |
+| S2-P1-22 | **FIXED — VERIFIED** | `6edc03b8b` |
+| S2-P1-23 | **FIXED — VERIFIED** | `6edc03b8b` |
+| S2-P1-24 | **PARTLY FIXED; logo variant DEFERRED WITH EXPLICIT JUSTIFICATION** | Juxtaposition and text halves closed (`6edc03b8b`, `02bcae75c`). The Arabic **logo** variant is blocked on an approved asset that does not exist, and Owner decision **SKY-Q07** forbids fabricating one. Permanent documented limitation, carried into Phase B. |
+| S2-P1-25 | **FIXED — VERIFIED** | `45e9eb4f3` |
+| S2-P1-26 | **FIXED — VERIFIED** | `6da352e9a` (Class B), `177d5dc97` (Class A) |
+| S3-P1-27 | **OPERATIONAL — NOT A CODE DEFECT** | Independently verified 2026-08-25: all four counts exact; both execution paths correct (`Installer.class.php:1764`, `sql_upgrade.php:521-527`, supplement carries 28/28 targets). This host is one schema version behind (`v_database` 541 vs 542). Owner ruled the migration **deliberately not run**. Operator step, not a blocker. |
+| S3-P1-30 | **ACCEPTED WITH OWNER DECISION, QUANTIFIED** | 22 contracts drop ≥1 locale; Arabic loses exactly 8 strings — re-derived by replaying the carry-forward rule against the live catalogue, which proves the *stronger* claim than the setting count. Cause: the eight Arabic strings render the product as **البرنامج**, so there is no literal to replace. An authoring decision; this programme will not fabricate translations. |
+| S3-P1-31 | **FIXED — VERIFIED** | `59d5c14df` |
+| S3-P1-32 | **FIXED — VERIFIED** | `f18f75080` |
+| S3-P1-33 | **FIXED — VERIFIED** | `e16913d5b`, ADR-BRAND-005 recorded first per SKY-Q11 |
+| S3-P1-34 | **FIXED — VERIFIED** | `f18f75080` |
+
+**No P1 is open as unaddressed work.**
+
+### 21.4 P2 — seven findings, seven closed
+
+| ID | Final state | Evidence |
+|---|---|---|
+| S1-P2-07 | **FIXED — VERIFIED** | `97f6952cf` |
+| S1-P2-12 | **FIXED — VERIFIED** | `97f6952cf` |
+| S1-P2-14 | **FIXED — VERIFIED** | `97f6952cf`; superseded in scope by PRE-ORCH-02 |
+| S1-P2-16 | **FIXED — VERIFIED** | `97f6952cf` |
+| S3-P2-29 | **FIXED — VERIFIED** | `5d519342d` |
+| S3-P2-35 | **FIXED — VERIFIED** | `57e51286c` mechanism + `c154215d9` governance |
+| S3-P2-36 | **FIXED — VERIFIED** | `e203d5bdd` + `cb685e1f9` |
+
+### 21.5 Post-scan findings and observations
+
+| ID | Final state | Evidence |
+|---|---|---|
+| A-01 | **FIXED — VERIFIED** | `5202b0253` — shell user menu rendered `حول Thiqa` |
+| A-02 | **FIXED — VERIFIED** | `5202b0253` — questionnaire theme help text |
+| A-03 | **FIXED — VERIFIED** | `5202b0253` — leak surface now tokenizer-derived, fails in both directions |
+| SKY-F01 | **FIXED — VERIFIED; PARTLY REFUTED** | `02bcae75c`. Tagline leg REFUTED (documented single-global design); product-name legs LATENT (no template consumes them); the live defect was the two login logo accessible names, selected by direction instead of language. |
+| SKY-Q08 | **FIXED — VERIFIED** | `55738dc82` — production logo geometry safeguard; 27/27 shipped SVGs pass |
+| PRE-ORCH-02 | **FIXED — VERIFIED** | `d42a7d6d4` — a sixth worktree escaped the S1-P2-14 literal path rule |
+| S3-OBS-01 | **OUT OF SCOPE — UPSTREAM, NOT A FORK REGRESSION** | Confirmed live (HTTP 200, 4,676 bytes, cookie-less) and confirmed inherited: `master:sql_upgrade.php:59` carries the identical `$ignoreAuth = true`, `verifyCsrfToken` is never called, and master's `admin.php` has zero auth constructs. Owner ruled **verify and record, do not fix**. Real, and it needs its own review before any public exposure — but it is **not** a PRE-SKYEAGLE blocker and PRE certification does not cover it. |
+
+### 21.6 Compatibility items preserved (Owner decision SKY-Q12)
+
+Confirmed intact and deliberately **not** migrated: the `saas_branding_*` globals prefix (Q58); the
+`--thiqa-*` CSS custom-property aliases; `contracts/database-upgrade.json` legacy keys and the
+`legacy_keys` translation contracts; historical documentation, ADRs, patch records, evidence and
+checkpoint history; preserved OpenEMR Foundation / ONC / community strings (locked constraint C7); and
+the operational identifiers pinned by `OperationalIdentityContractTest`.
+
+The target was never "zero occurrences of the old name everywhere" — it is **active user-facing residue
+= 0**, with documented historical and compatibility exceptions. That distinction is what makes the
+PRESERVE class in `setup.php` correct rather than an oversight.
+
+### 21.7 Certification inputs still outstanding
+
+PRE-25's reconciliation above is complete. The **verdict** is not, because three inputs had not returned
+when this section was written:
+
+```text
+Scan-4A … 4E   five independent adversarial agents, dispatched at e16913d5b   PENDING
+PHPStan        full level-10 run; exit code alone is NOT proof on this host   PENDING
+Local-disk     certification copy; deferred behind the Owner's push decision  PENDING
+```
+
+**A verdict written before these return would be exactly the false green this programme exists to
+prevent.** The reconciliation stands on its own and does not change if the scans come back clean; if
+they do not, the new findings enter the ledger above and are dispositioned like every other.
+
+---
