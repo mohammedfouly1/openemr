@@ -2140,9 +2140,39 @@ currency — and **two unauthenticated links to the state-mutating `sql_upgrade.
 response body contains no `root`, no password, no `127.0.0.1` and no `3306`.
 
 **Not fixed, by Owner decision of 2026-08-25 (verify and record only).** It is **outside branding** and
-must not be absorbed into the branding ledger as though PRE certified it. **One gap could not be closed
-read-only:** whether `sql_upgrade.php` has its own guard was deliberately not tested, because fetching
-it risks mutating the database. That is the sharpest edge here and needs its own review.
+must not be absorbed into the branding ledger as though PRE certified it.
+
+**Correction, same day — the gap this section originally recorded as unclosable HAS been closed, and
+the answer is the adverse one.** The paragraph here first said that whether `sql_upgrade.php` has its
+own guard "was deliberately not tested, because fetching it risks mutating the database". That
+reasoning confused *executing* the endpoint with *reading* it. Reading it settles the question with no
+database access at all, and it was subsequently read at current HEAD:
+
+```text
+sql_upgrade.php:65    $ignoreAuth = true;   // no login required
+sql_upgrade.php:493   if (!empty($_POST['form_submit']) || $cliFromVersion !== null) {
+grep -c verifyCsrfToken sql_upgrade.php  ->  0
+```
+
+`CsrfUtils` appears four times in the file (`:73`, `:153`, `:213`, `:292`) but `verifyCsrfToken` is
+never called; the two tokens that are generated belong to the polling endpoints
+`library/ajax/sql_server_status.php` and `library/ajax/sql_upgrade_version_check.php`, not to the
+upgrade POST. `acl_upgrade.php` and `sql_patch.php` show the same posture.
+
+So the full chain is: an unauthenticated `admin.php` renders live links to `sql_upgrade.php?site=…`,
+and that target requires **neither a login nor a CSRF token** to execute a schema migration. **The
+disclosure is the lesser half of S3-OBS-01; the reachable state-mutating endpoint is the greater
+half.** No POST was attempted and no working exploit is asserted — there may be gating inside
+`interface/globals.php` under `$ignoreAuth`, or environmental constraints not evaluated. What can be
+stated from source is that no guard exists in these files.
+
+**Ownership — and this is the part that changes who is accountable.** `git show master:sql_upgrade.php`
+carries the identical `$ignoreAuth = true`, and master's `admin.php` contains zero auth constructs.
+This branch's only commits to either file are branding-string changes. **S3-OBS-01 is inherited
+upstream OpenEMR posture, not a branding-fork regression** — these are installer-class scripts upstream
+expects a deployment to remove or protect. It stays a real, reproduced finding that this product should
+fix before any public exposure, but it must be booked as **pre-existing upstream behaviour**, and it is
+**not** a PRE-SKYEAGLE blocker.
 
 **S3-P1-30 — both numbers CONFIRMED (22 and 8), by a stronger method than the record used.** Rather
 than counting contracts carrying `on_missing_identity: "skip"`, the carry-forward rule was read out of
