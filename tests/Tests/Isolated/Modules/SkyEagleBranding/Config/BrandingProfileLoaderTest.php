@@ -48,8 +48,8 @@ final class BrandingProfileLoaderTest extends TestCase
     {
         $profile = $this->shippedProfile();
 
-        self::assertSame('thiqa-product-default', $profile->name);
-        self::assertSame('Thiqa', $profile->productName);
+        self::assertSame('skyeagle-product-default', $profile->name);
+        self::assertSame('SkyEagle', $profile->productName);
         self::assertGreaterThan(0, count($profile));
     }
 
@@ -105,19 +105,19 @@ final class BrandingProfileLoaderTest extends TestCase
     public static function lockedValueProvider(): array
     {
         return [
-            'product name' => ['openemr_name', 'Thiqa'],
+            'product name' => ['openemr_name', 'SkyEagle'],
             'tagline' => ['login_tagline_text', 'Clinical confidence, connected care.'],
             'product root url' => ['main_menu_logo_link', 'https://skyeagle.uk/'],
             'support url over https' => ['online_support_link', 'https://skyeagle.uk/support'],
             'documentation url' => ['user_manual_link', 'https://skyeagle.uk/docs'],
-            'logo tooltip is never blank' => ['main_menu_logo_title', 'Thiqa Health Information System'],
+            'logo tooltip is never blank' => ['main_menu_logo_title', 'SkyEagle Health Information System'],
             'theme stylesheet, never rtl-prefixed' => ['css_header', 'style_light.css'],
             'portal stylesheet, never rtl-prefixed' => ['portal_css_header', 'style_light.css'],
             'login layout is stored as a twig path' => [
                 'login_page_layout',
                 'login/layouts/vertical_band.html.twig',
             ],
-            'arabic product name' => ['saas_branding_product_name_ar', 'ثقة'],
+            'arabic product name' => ['saas_branding_product_name_ar', 'سكاي إيجل'],
         ];
     }
 
@@ -230,7 +230,7 @@ final class BrandingProfileLoaderTest extends TestCase
             'no globals array' => ['{"profile":"p","product_name":"Thiqa","source_document":"d"}', 'globals'],
             'empty globals array' => [self::document([]), 'non-empty "globals" array'],
             'unknown key' => [
-                $row('openemr_nane', 'Thiqa'),
+                $row('openemr_nane', 'SkyEagle'),
                 'is not a case of BrandingGlobalKey or SuppressionGlobalKey',
             ],
             'materialiser-owned revision' => [
@@ -270,7 +270,7 @@ final class BrandingProfileLoaderTest extends TestCase
                 'must give "value" as a string',
             ],
             'row without an inventory id' => [
-                self::document([['inventory_id' => '', 'key' => 'openemr_name', 'value' => 'Thiqa']]),
+                self::document([['inventory_id' => '', 'key' => 'openemr_name', 'value' => 'SkyEagle']]),
                 'needs an "inventory_id"',
             ],
             'row missing a value' => [
@@ -279,7 +279,7 @@ final class BrandingProfileLoaderTest extends TestCase
             ],
             'duplicate key' => [
                 self::document([
-                    ['inventory_id' => 'BRAND-001', 'key' => 'openemr_name', 'value' => 'Thiqa'],
+                    ['inventory_id' => 'BRAND-001', 'key' => 'openemr_name', 'value' => 'SkyEagle'],
                     ['inventory_id' => 'BRAND-001', 'key' => 'openemr_name', 'value' => 'Thiqah'],
                 ]),
                 'more than once',
@@ -289,7 +289,7 @@ final class BrandingProfileLoaderTest extends TestCase
                     [
                         'inventory_id' => 'BRAND-001',
                         'key' => 'openemr_name',
-                        'value' => 'Thiqa',
+                        'value' => 'SkyEagle',
                         'map_row' => 0,
                     ],
                 ]),
@@ -342,9 +342,9 @@ final class BrandingProfileLoaderTest extends TestCase
                 [
                     'inventory_id' => 'BRAND-001',
                     'key' => 'openemr_name',
-                    'value' => 'Thiqa',
+                    'value' => 'SkyEagle',
                     'map_row' => 1,
-                    'value_ar' => 'ثقة',
+                    'value_ar' => 'سكاي إيجل',
                     'note' => 'flows to 20 consumers',
                 ],
             ]),
@@ -356,7 +356,7 @@ final class BrandingProfileLoaderTest extends TestCase
         self::assertNotNull($entry);
         self::assertSame('openemr_name', $entry->globalName());
         self::assertSame('BRAND-001 (map row 1)', $entry->provenance());
-        self::assertSame('ثقة', $entry->arabicValue);
+        self::assertSame('سكاي إيجل', $entry->arabicValue);
         self::assertSame('flows to 20 consumers', $entry->note);
         self::assertTrue($entry->isBrandingGlobal());
     }
@@ -416,7 +416,7 @@ final class BrandingProfileLoaderTest extends TestCase
         return json_encode(
             [
                 'profile' => 'test',
-                'product_name' => 'Thiqa',
+                'product_name' => 'SkyEagle',
                 'source_document' => 'test',
                 'globals' => $rows,
             ],

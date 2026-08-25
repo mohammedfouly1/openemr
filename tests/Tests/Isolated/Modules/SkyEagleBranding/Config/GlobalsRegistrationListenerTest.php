@@ -144,7 +144,7 @@ final class GlobalsRegistrationListenerTest extends TestCase
 
         $arabicName = $section[BrandingGlobalKey::ProductNameArabic->value];
         $this->assertIsArray($arabicName);
-        $this->assertSame('ثقة', $arabicName[2]);
+        $this->assertSame('سكاي إيجل', $arabicName[2]);
 
         $revision = $section[BrandingGlobalKey::Revision->value];
         $this->assertIsArray($revision);

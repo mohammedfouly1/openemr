@@ -72,8 +72,12 @@ final class BrandingCiContractTest extends TestCase
         self::assertStringContainsString('tests/Tests/Isolated/BrandingCi', $tests);
         self::assertStringContainsString('tests/Tests/Isolated/PHPStan/SkyEagleBranding', $tests);
         self::assertStringContainsString('tests/Tests/Isolated/BrandingCoreStrings', $tests);
+        // S1-P1-15's backup-retention suite and S2-P1-18's verify command were named as
+        // individual FILES here. Both now arrive via their whole directory, which is strictly
+        // more coverage — so the assertion moves up to the directory rather than pinning a
+        // filename that no longer appears verbatim in the gate string.
         self::assertStringContainsString(
-            'tests/Tests/Isolated/Modules/SkyEagleBranding/Console/BackupRetentionTest.php',
+            'tests/Tests/Isolated/Modules/SkyEagleBranding/Console',
             $tests,
         );
 
@@ -81,10 +85,6 @@ final class BrandingCiContractTest extends TestCase
         // gated rather than left to a human remembering to run `verify` by hand.
         self::assertStringContainsString(
             'tests/Tests/Isolated/Modules/SkyEagleBranding/Observability',
-            $tests,
-        );
-        self::assertStringContainsString(
-            'tests/Tests/Isolated/Modules/SkyEagleBranding/Console/VerifyCommandTest.php',
             $tests,
         );
 
@@ -198,7 +198,62 @@ final class BrandingCiContractTest extends TestCase
      * below that: it is a collapse detector, not a ratchet that reddens every time someone
      * removes a redundant case.
      */
-    private const MINIMUM_DECLARED_TEST_METHODS = 180;
+    private const MINIMUM_DECLARED_TEST_METHODS = 500;
+
+    /**
+     * The gate must cover the branding module's whole test tree, not a curated slice of it.
+     *
+     * The slice was a real blind spot, and the SkyEagle rename walked straight into it: the gate
+     * ran 523 tests while the module tree alone declares 1,448, and `Config/`, `Asset/`,
+     * `Listener/`, `Materialisation/`, `Service/`, `Theme/`, `Token/`, `Generator/` and
+     * `Accessibility/` were in none of them. Stale brand assertions in three of those directories
+     * survived a green gate and were found only by running the tree by hand.
+     *
+     * That is the S4B-01 and S4B-08 shape a third time — a gate reporting green over a surface it
+     * does not execute — so the fix is coverage, not another assertion about coverage.
+     *
+     * `Twig/` is the one deliberate omission. Those suites render templates, which hangs
+     * indefinitely on the Windows host (CLAUDE.local.md section 9), and the gate has to stay
+     * runnable by a developer locally or it stops being run at all. CI still executes them: the
+     * workflow's separate full-suite step runs the entire isolated configuration with coverage,
+     * so nothing is unguarded — it is guarded by the other step.
+     *
+     * @var list<string>
+     */
+    private const MODULE_TREE_DIRECTORIES = [
+        'Accessibility', 'Asset', 'AssetIntake', 'Config', 'Console', 'Generator', 'Guardrail',
+        'Listener', 'Materialisation', 'Observability', 'Service', 'Tenant', 'Theme', 'Token',
+    ];
+
+    public function testTheGateCoversTheWholeModuleTestTree(): void
+    {
+        $gated = $this->gatedTestPaths();
+        $root = 'tests/Tests/Isolated/Modules/SkyEagleBranding/';
+
+        foreach (self::MODULE_TREE_DIRECTORIES as $directory) {
+            self::assertContains(
+                $root . $directory,
+                $gated,
+                sprintf(
+                    'The canonical gate does not run %s%s. A directory outside the gate can go '
+                    . 'stale, or empty, while the gate reports green - which is exactly how the '
+                    . 'SkyEagle rename broke assertions in three module directories without '
+                    . 'reddening anything.',
+                    $root,
+                    $directory,
+                ),
+            );
+        }
+
+        // Twig is excluded on purpose; see the constant's docblock. Asserting its absence keeps
+        // someone from "completing" the list and making the gate unrunnable on the Windows host.
+        self::assertNotContains(
+            $root . 'Twig',
+            $gated,
+            'Twig render suites hang on the Windows host and must stay out of the gate; the '
+            . 'workflow\'s full-suite step covers them in CI.',
+        );
+    }
 
     /**
      * Scan-3B P1-5: `--fail-on-empty-test-suite` fires only when the WHOLE run is empty.

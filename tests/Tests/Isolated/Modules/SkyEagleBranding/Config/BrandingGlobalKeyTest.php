@@ -174,7 +174,7 @@ final class BrandingGlobalKeyTest extends TestCase
     {
         // Upstream auto-generates open-emr.org content for both of these when blank.
         $this->assertSame(
-            'Thiqa Health Information System',
+            'SkyEagle Health Information System',
             BrandingGlobalKey::MainMenuLogoTitle->defaultValue()
         );
         $this->assertSame('https://skyeagle.uk/docs', BrandingGlobalKey::UserManualLink->defaultValue());
@@ -229,7 +229,7 @@ final class BrandingGlobalKeyTest extends TestCase
         $this->assertSame('1', BrandingGlobalKey::ShowPrimaryLogo->definition()->defaultAsGlobalsValue());
         $this->assertSame('0', BrandingGlobalKey::TinyLogo1->definition()->defaultAsGlobalsValue());
         $this->assertSame('30', BrandingGlobalKey::PortalPrimaryMenuLogoHeight->definition()->defaultAsGlobalsValue());
-        $this->assertSame('Thiqa', BrandingGlobalKey::OpenemrName->definition()->defaultAsGlobalsValue());
+        $this->assertSame('SkyEagle', BrandingGlobalKey::OpenemrName->definition()->defaultAsGlobalsValue());
     }
 
     public function testTypedDefaultAccessorsRejectMismatchedKeys(): void

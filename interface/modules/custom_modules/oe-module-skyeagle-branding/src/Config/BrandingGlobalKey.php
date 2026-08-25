@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The closed set of globals the Thiqa branding layer owns.
+ * The closed set of globals the SkyEagle branding layer owns.
  *
  * Two groups, distinguished by isLayerOwned():
  *
@@ -20,10 +20,10 @@
  * deliberately absent: they are portal-enablement settings, not branding, and the layer
  * has no authority over them.
  *
- * Every default declared here is a Thiqa value or a safe blank. No default is ever an
+ * Every default declared here is a SkyEagle value or a safe blank. No default is ever an
  * upstream OpenEMR identity value, and two defaults exist purely to prevent one:
  * a blank main_menu_logo_title and a blank user_manual_link both make upstream
- * auto-generate open-emr.org content, so both carry an explicit Thiqa default.
+ * auto-generate open-emr.org content, so both carry an explicit SkyEagle default.
  *
  * @package   OpenEMR
  * @link      https://www.open-emr.org
@@ -179,7 +179,7 @@ enum BrandingGlobalKey: string
                 'Product name',
                 'The product name shown throughout the interface.',
                 BrandingValueType::Text,
-                'Thiqa',
+                'SkyEagle',
             ),
             self::LoginTaglineText => new BrandingGlobalDefinition(
                 'Login tagline',
@@ -204,7 +204,7 @@ enum BrandingGlobalKey: string
                 'Tooltip on the main menu logo. Must never be blank: upstream generates an '
                     . 'open-emr.org title when it is.',
                 BrandingValueType::Text,
-                'Thiqa Health Information System',
+                'SkyEagle Health Information System',
             ),
             self::DisplayMainMenuLogo => new BrandingGlobalDefinition(
                 'Display main menu logo',
@@ -403,7 +403,7 @@ enum BrandingGlobalKey: string
                 'Product name (Arabic)',
                 'Arabic product name used on right-to-left surfaces.',
                 BrandingValueType::Text,
-                'ثقة',
+                'سكاي إيجل',
                 true,
             ),
             self::TenantDisplayName => new BrandingGlobalDefinition(

@@ -45,12 +45,12 @@ final class BrandingConfigFactoryTest extends TestCase
     {
         $config = $this->configFrom([]);
 
-        $this->assertSame('Thiqa', $config->productName);
-        $this->assertSame('ثقة', $config->productNameArabic);
+        $this->assertSame('SkyEagle', $config->productName);
+        $this->assertSame('سكاي إيجل', $config->productNameArabic);
         $this->assertSame('Clinical confidence, connected care.', $config->loginTagline);
         $this->assertTrue($config->showTaglineOnLogin);
         $this->assertSame('https://skyeagle.uk/', $config->mainMenuLogoLink);
-        $this->assertSame('Thiqa Health Information System', $config->mainMenuLogoTitle);
+        $this->assertSame('SkyEagle Health Information System', $config->mainMenuLogoTitle);
         $this->assertSame('https://skyeagle.uk/support', $config->onlineSupportLink);
         $this->assertSame('https://skyeagle.uk/docs', $config->userManualLink);
         $this->assertSame('', $config->supportPhoneNumber);
@@ -104,9 +104,9 @@ final class BrandingConfigFactoryTest extends TestCase
             BrandingGlobalKey::CssHeader->value => '',
         ]);
 
-        $this->assertSame('Thiqa Health Information System', $config->mainMenuLogoTitle);
+        $this->assertSame('SkyEagle Health Information System', $config->mainMenuLogoTitle);
         $this->assertSame('https://skyeagle.uk/docs', $config->userManualLink);
-        $this->assertSame('Thiqa', $config->productName);
+        $this->assertSame('SkyEagle', $config->productName);
         $this->assertSame('style_light.css', $config->cssHeader);
     }
 
@@ -187,7 +187,7 @@ final class BrandingConfigFactoryTest extends TestCase
 
     public function testGlobalsAreReadExactlyOncePerRequest(): void
     {
-        $bag = new OEGlobalsBag([BrandingGlobalKey::OpenemrName->value => 'Thiqa']);
+        $bag = new OEGlobalsBag([BrandingGlobalKey::OpenemrName->value => 'SkyEagle']);
         $factory = new BrandingConfigFactory($bag);
 
         $first = $factory->create();
@@ -198,7 +198,7 @@ final class BrandingConfigFactoryTest extends TestCase
 
         $this->assertSame('Changed After Parsing', $bag->getString(BrandingGlobalKey::OpenemrName->value));
         $this->assertSame($first, $second);
-        $this->assertSame('Thiqa', $second->productName);
+        $this->assertSame('SkyEagle', $second->productName);
     }
 
     public function testMaterialisationRequiresBothARevisionAndATimestamp(): void

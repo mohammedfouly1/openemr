@@ -149,18 +149,18 @@ final class BrandAssetResolverTest extends TestCase
         $logoService = new FakeLogoService([], self::CORE_PATH);
         $resolver = $this->resolverWith($logoService);
         $config = $this->config([
-            BrandingGlobalKey::OpenemrName->value => 'Thiqa',
-            BrandingGlobalKey::ProductNameArabic->value => 'ثقة',
+            BrandingGlobalKey::OpenemrName->value => 'SkyEagle',
+            BrandingGlobalKey::ProductNameArabic->value => 'سكاي إيجل',
         ]);
 
         $primary = $resolver->resolve(LogoSlot::CoreLoginPrimary, $config);
         $secondary = $resolver->resolve(LogoSlot::CoreLoginSecondary, $config);
         $menu = $resolver->resolve(LogoSlot::CoreMenuPrimary, $config);
 
-        $this->assertSame('Thiqa logo', $primary->alt());
-        $this->assertSame('شعار ثقة', $primary->alt(true));
-        $this->assertSame('Thiqa secondary logo', $secondary->alt());
-        $this->assertSame('Thiqa home', $menu->alt());
+        $this->assertSame('SkyEagle logo', $primary->alt());
+        $this->assertSame('شعار سكاي إيجل', $primary->alt(true));
+        $this->assertSame('SkyEagle secondary logo', $secondary->alt());
+        $this->assertSame('SkyEagle home', $menu->alt());
         $this->assertFalse($primary->isDecorative());
     }
 
@@ -179,7 +179,7 @@ final class BrandAssetResolverTest extends TestCase
 
         $asset = $this->resolverWith($logoService)->resolve(LogoSlot::PortalLoginPrimary, $config);
 
-        $this->assertSame('شعار ثقة', $asset->alt(true));
+        $this->assertSame('شعار سكاي إيجل', $asset->alt(true));
     }
 
     /** The favicon is decorative: assistive technology never announces it. */
