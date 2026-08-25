@@ -2050,19 +2050,42 @@ last 80 lines. Corrected inside RB-24, and it had hidden two real errors in this
 not reproducible from the text that quoted it. The corrected figure is **46 occurrences across 20 files**,
 with the scan scope, regex and exclusions written down alongside it in `docs/branding/changes.md`.
 
-**3. The trap: four agent worktrees, and only three of them are inside the repository.**
+**3. The trap: five agent worktrees, and only three of them are inside the repository.**
 
-*(Count corrected 2026-08-24 — finding **S1-P2-14**. This section said "three"; there are four, and the
-fourth is the dangerous one.)*
+*(Count corrected 2026-08-24 — finding **S1-P2-14**. This section said "three"; there were four, and the
+fourth was the dangerous one. **Corrected again 2026-08-25 — finding PRE-ORCH-02: there are now five,
+and the fifth is dangerous in a way the S1-P2-14 remediation did not cover.** The number is deliberately
+left in the heading rather than generalised away, because watching it move is the point: it changed twice
+in two days, and each time only `git worktree list` revealed it.)*
 
 ```
-$ git worktree list
-G:/My Drive/OpenEMR                                             b6261063f [feat/thiqa-branding-foundation]
+$ git worktree list                                      # re-derived 2026-08-25
+G:/My Drive/OpenEMR                                             beb3b34fd [feat/thiqa-branding-foundation]
 G:/My Drive/OpenEMR/.claude/worktrees/agent-a0be56487a171bfdd   631f2b38c
 G:/My Drive/OpenEMR/.claude/worktrees/agent-a2d5c8fbfdf82dc79   631f2b38c
 G:/My Drive/OpenEMR/.claude/worktrees/agent-a987c6bd7f63e0e19   631f2b38c
-G:/My Drive/OpenEMR.worktrees/sds                               631f2b38c [agents/sds]   <-- SIBLING
+G:/My Drive/OpenEMR.worktrees/sds                               631f2b38c [agents/sds]   <-- SIBLING 1
+G:/My Drive/worktrees/OpenEMR/jade-ibis/OpenEMR                 5ea20d4dd (detached)     <-- SIBLING 2
 ```
+
+**PRE-ORCH-02 — the second sibling, and why the recorded fix does not reach it.** The S1-P2-14
+remediation named `G:/My Drive/OpenEMR.worktrees/` as the path to exclude. That is a literal prefix, and
+`G:/My Drive/worktrees/OpenEMR/jade-ibis/OpenEMR` does not match it — different parent, different shape.
+So a scan applying the documented exclusion verbatim would still ingest this one.
+
+It is also the more misleading of the two. The first sibling sits at `631f2b38c`, the **pre-branding**
+baseline: code that obviously predates this work, and a stray hit there looks wrong immediately. The
+second sits at `5ea20d4dd`, which is **one commit behind current `HEAD` on this very branch** — a
+near-identical copy of the branding codebase carrying findings that were closed at `5202b0253` and
+`02bcae75c`. A scan that ingests it does not produce obviously-stale noise; it produces *plausible*
+phantom findings that read as genuine unfixed defects on current code, and a reviewer reconciling them
+would waste the effort proving a fix that already landed.
+
+**Generalise the rule rather than adding a third literal path.** The correct exclusion is not any
+particular directory name but *every path `git worktree list` reports other than the repository root* —
+because the set changes between sessions, the names are chosen by whatever tool created them, and two of
+the five are already outside anything an exclude file can govern. Enumerate them at scan time; do not
+carry a hard-coded list forward.
 
 Each is a **full checkout of the codebase at `631f2b38c`** — the pre-branding baseline. The first three are
 excluded from git by `.git/info/exclude:11` (`**/.claude/worktrees/`), so `git status` stays clean, and
@@ -2082,8 +2105,10 @@ literals that were fixed months ago. That is a live way to produce a wrong audit
 here.
 
 **Rule for anyone measuring this repository:** scope the scan to named directories, and exclude
-`.claude/worktrees/`, **`G:/My Drive/OpenEMR.worktrees/` (the sibling — must be excluded by path, since no
-gitignore mechanism covers it)**, `vendor/`, `node_modules/` and `oe-module-claimrev-connect` (a third-party
+`.claude/worktrees/`, **every sibling path `git worktree list` reports (they must be excluded by path,
+since no gitignore mechanism reaches outside the repository root — as of 2026-08-25 that means both
+`G:/My Drive/OpenEMR.worktrees/` and `G:/My Drive/worktrees/`, but derive the set, do not copy this
+list)**, `vendor/`, `node_modules/` and `oe-module-claimrev-connect` (a third-party
 Composer dependency relocated into `interface/modules/custom_modules/`, not fork code). State the exclusions
 next to the number. A count whose method is not written down cannot be re-derived, and a count that cannot
 be re-derived is not evidence.
@@ -2092,9 +2117,14 @@ be re-derived is not evidence.
 reveals the sibling, and the set can change between sessions.
 
 **The worktrees were left untouched.** They are not this session's, they may belong to another agent's
-work in progress, and removing a worktree is not an audit's call to make. That applies to the sibling as
-well: `G:/My Drive/OpenEMR.worktrees/sds` is registered to branch `agents/sds` and is left in place. It
-belongs in the Scan-3 rollback register as state this programme is aware of but does not own.
+work in progress, and removing a worktree is not an audit's call to make. That applies to both siblings:
+`G:/My Drive/OpenEMR.worktrees/sds` is registered to branch `agents/sds`, and
+`G:/My Drive/worktrees/OpenEMR/jade-ibis/OpenEMR` is a detached checkout at `5ea20d4dd`. Both are left in
+place. They belong in the Scan-3 rollback register as state this programme is aware of but does not own.
+
+**Note for whoever does own them.** The detached sibling holds no branch, so nothing there is reachable
+by name; if it carries uncommitted work, that work is recoverable only from that directory. This
+programme did not inspect its working tree and makes no claim about whether it is clean.
 
 ---
 
