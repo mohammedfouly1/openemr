@@ -317,9 +317,9 @@ final class BrandingGovernanceGuardTest extends TestCase
      * is achieved, but the two are not the same claim — webpack's output cleaning applies
      * to the build workspace, and the documented deploy step copies without deleting, so a
      * stylesheet built before the entry map was pruned can survive at the destination
-     * indefinitely. `interface/globals.php:476` gates only on `file_exists()`, so a stale
-     * `globals`/`user_settings` value would then resolve it. See docs/RebrandingBugs.md
-     * RB-07 and RB-08.
+     * indefinitely. `interface/globals.php` gates theme selection only on `file_exists()`
+     * (line 483 at the time of writing), so a stale `globals`/`user_settings` value would
+     * then resolve it. See docs/RebrandingBugs.md RB-07 and RB-08.
      *
      * This asserts the thing Q77 actually says. It is check **V-04**'s first half.
      */
@@ -341,8 +341,9 @@ final class BrandingGovernanceGuardTest extends TestCase
      *
      * `robocopy /E` deletes nothing at the destination and webpack's `output.clean` only
      * tidies the build workspace, so ANY stylesheet the current configuration cannot produce
-     * is a survivor of an older build — and `interface/globals.php:476` will resolve any of
-     * them from a stale `globals`/`user_settings` value, not merely the four named ones.
+     * is a survivor of an older build — and `interface/globals.php`'s `file_exists()` gate
+     * will resolve any of them from a stale `globals`/`user_settings` value, not merely the
+     * four named ones.
      */
     public function testDeployedThemeDirectoryContainsNoStaleOrSurplusStylesheet(): void
     {
@@ -745,7 +746,7 @@ final class BrandingGovernanceGuardTest extends TestCase
 
         sort($found);
 
-        return array_values($found);
+        return $found;
     }
 
     /**
@@ -788,7 +789,7 @@ final class BrandingGovernanceGuardTest extends TestCase
         $projected = array_values(array_unique($projected));
         sort($projected);
 
-        return array_values($projected);
+        return $projected;
     }
 
     /**
@@ -807,7 +808,7 @@ final class BrandingGovernanceGuardTest extends TestCase
             . 'is reading the wrong directory.',
         );
 
-        return array_values(array_map(basename(...), $paths));
+        return array_map(basename(...), $paths);
     }
 
     /**
@@ -836,14 +837,17 @@ final class BrandingGovernanceGuardTest extends TestCase
             '/^[ \t]*(?:"([^"]+)"|\'([^\']+)\'|([A-Za-z_$][A-Za-z0-9_$]*))[ \t]*:/m',
             $block,
             $matches,
-            PREG_SET_ORDER,
+            // UNMATCHED_AS_NULL so the two alternatives that did not fire come back as null
+            // rather than as an empty string that has to be told apart from a real capture.
+            PREG_SET_ORDER | PREG_UNMATCHED_AS_NULL,
         );
 
         $names = [];
         foreach ($matches as $set) {
             foreach ([1, 2, 3] as $group) {
-                if (isset($set[$group]) && $set[$group] !== '') {
-                    $names[] = $set[$group];
+                $candidate = $set[$group] ?? null;
+                if (is_string($candidate)) {
+                    $names[] = $candidate;
                 }
             }
         }
