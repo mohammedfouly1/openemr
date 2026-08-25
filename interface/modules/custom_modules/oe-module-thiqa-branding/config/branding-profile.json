@@ -1,7 +1,7 @@
 {
-    "profile": "thiqa-product-default",
-    "product_name": "Thiqa",
-    "product_name_ar": "ثقة",
+    "profile": "skyeagle-product-default",
+    "product_name": "SkyEagle",
+    "product_name_ar": "سكاي إيجل",
     "product_domain": "skyeagle.uk",
     "source_document": "docs/branding-production/14-string-replacement-map.md revision 2, Part 1",
     "description": [
@@ -22,8 +22,8 @@
             "map_row": 1,
             "inventory_id": "BRAND-001",
             "key": "openemr_name",
-            "value": "Thiqa",
-            "value_ar": "ثقة",
+            "value": "SkyEagle",
+            "value_ar": "سكاي إيجل",
             "note": "Flows to 20 consumers, including HL7 MSH-3 (BRAND-096) and QRDA Cat III organisation name (BRAND-097). Dependency D-3 (legal registration and integration-owner clearance) is deferred by owner decision for demo scope; re-open before any live interface is connected."
         },
         {
@@ -54,7 +54,7 @@
             "map_row": 5,
             "inventory_id": "BRAND-056",
             "key": "main_menu_logo_title",
-            "value": "Thiqa Health Information System",
+            "value": "SkyEagle Health Information System",
             "value_ar": "نظام ثقة للمعلومات الصحية",
             "note": "MUST NOT be blank. Upstream auto-generates an open-emr.org title from an empty value, which leaks the inherited brand."
         },
@@ -278,8 +278,8 @@
             "map_row": null,
             "inventory_id": "BRAND-001",
             "key": "saas_branding_product_name_ar",
-            "value": "ثقة",
-            "value_ar": "ثقة",
+            "value": "سكاي إيجل",
+            "value_ar": "سكاي إيجل",
             "note": "Layer-owned key that exists specifically to carry the Arabic product name from Part 1 row 1, which has no home in the inherited openemr_name row."
         },
         {
