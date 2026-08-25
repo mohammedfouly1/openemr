@@ -1,6 +1,33 @@
-# 12 — Release Verification (CORRECTED — REVISION 7)
+# 12 — Release Verification (CORRECTED — REVISION 8)
 
-**Status:** **PASS** (current — see Revision 7)
+**Status:** **PASS** (current — see Revision 8)
+
+**Revision 8 (2026-08-25) — current. Deployed artefacts brought under coverage; the re-issue
+discipline widens. Finding S3-P2-35.**
+
+The gate verified 123 entries and every one was a **source** artefact. Nothing the product actually
+serves was covered, so a deployed logo, favicon or font could be replaced while this document's own
+headline number, `123/123 verified`, still printed and the gate still exited 0. That is a false green of
+the worst kind: not a check that failed, but a check whose scope nobody had written down.
+
+Coverage is now assigned by **ownership class**, and only like is compared with like — the full model,
+with the reasoning for every inclusion and every exclusion, is in
+[11-asset-manifest.md](11-asset-manifest.md#integrity-coverage-model-added-2026-08-25-finding-s3-p2-35).
+In summary: **123** source artefacts and **21** newly-added deployed-immutable artefacts by recorded
+hash; **11** mirrored font deployments by *equality with their recorded source* rather than a second
+hash, because `public/assets/` is gitignored build output and a recorded hash there would go stale on
+every legitimate rebuild; and generated themes, tenant-materialised output and runtime overlay rows
+excluded by recorded decision rather than by omission.
+
+**What changes for anyone editing a brand asset.** RB-25's rule is unchanged — re-issue, never delete —
+but a single edit can now oblige more than one entry. Editing a source artefact re-issues its own entry
+**and every deployed entry fed from it**; editing a mirrored font requires re-running the asset install
+rather than re-issuing anything, since nothing is recorded for the deployed side. Verifying only the
+source is exactly how a deployed asset drifts unnoticed.
+
+Per RB-25 the entries for `11-asset-manifest.md` and for this self-referential document are re-issued in
+this same change, never removed. Current verifier output: **123/123 source, 21/21 deployed, 11/11
+mirrored, exit 0**, with each class reported on its own line so the aggregate can no longer be misread.
 
 **Revision 7 (2026-08-24) — current. False Arabic-PDF capability wording removed.**
 

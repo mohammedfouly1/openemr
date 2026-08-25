@@ -4,6 +4,58 @@
 
 Regenerated from actual physical files after Codex's original run, with tokens/fonts/rtl/smart/email/colors/guidelines evidence included.
 
+## Integrity coverage model (added 2026-08-25, finding S3-P2-35)
+
+`brand/manifests/SHA256SUMS` used to hold 123 entries and every one was a **source** artefact under
+`brand/` or `docs/branding-production/`. Not one covered anything the product actually serves, so every
+deployed logo, favicon and font could be replaced while `verify-brand-manifest.php` printed
+`123/123 verified` and exited 0. The gate was not lying about what it checked; it was silent about what
+it did not, which is the more dangerous shape and is why this section exists.
+
+Coverage is assigned **by ownership class**, because a single hashing sweep would have been wrong in
+three different ways. Only like is ever compared with like:
+
+| Class | What | How it is verified | Count |
+|---|---|---|---:|
+| 1. Source artefact | `brand/**`, `docs/branding-production/*.md` | Recorded SHA-256 | 123 |
+| 2. Deployed immutable | `public/images/logos/**`, legacy `public/images/*`, `sites/default/images/*`, the module's dark marks | Recorded SHA-256 | 21 |
+| 3. Mirrored deployment | `public/assets/fonts/thiqa/**` | **Equality with the recorded source**, not a second hash | 11 |
+| 4. Generated deterministic | `public/themes/*.css` | Out of scope here — see below | — |
+| 5. Tenant materialised | `public/branding/<site>/**` | Excluded by design — see below | — |
+| 6. Runtime data | `globals` overlay rows | Excluded by design — see below | — |
+
+**Why class 3 is not simply hashed.** `public/assets/` is gitignored build output copied byte-for-byte
+from `brand/typography/fonts/`. A recorded hash there would go stale on every legitimate rebuild and
+train maintainers to re-issue entries without reading them — the precise habit that let the gate sit RED
+for five days undetected (Revision 5 of [12-release-verification.md](12-release-verification.md)).
+Equality-with-source stays true across rebuilds and fails the moment a deployed font stops matching what
+it was built from. The check runs in **both** directions: a source file with no deployed counterpart is
+reported as unshipped, not ignored. One deliberate exception is declared in the verifier,
+`brand/typography/fonts/pdf/README-amiri.md`, which is maintainer provenance and is not shipped;
+`OFL.txt` **is** shipped, because SIL OFL 1.1 requires the licence to travel with the fonts.
+
+**Why classes 4-6 are excluded, and why that is not a gap.** Class 4 is webpack output whose correct
+check is a build-output contract, not a static hash; that is finding S3-P2-36, enforced by
+`BrandingGovernanceGuardTest` against locked decision Q77. Classes 5 and 6 are per-tenant and revisioned
+by construction — asserting a shared fixed hash over them would encode an invariant that is false by
+design. Each exclusion is a decision recorded here, not an oversight.
+
+### What this changes about the re-issue discipline
+
+The RB-25 rule is unchanged in spirit and wider in scope: **re-issue, never delete.** What is new is
+that a single edit can now oblige **more than one** entry.
+
+- Editing a **source** artefact re-issues its own entry **and every class-2 deployed entry fed from it**.
+  A brand logo and its deployed copy are two manifest rows describing one decision; updating only the
+  source is how a deployed asset silently drifts.
+- Editing a class-3 **source** font requires re-running the asset install so the mirrored deployment
+  matches, since nothing is recorded for the deployed side to re-issue.
+- Editing any `docs/branding-production/*.md` — **including this file and the release-verification
+  document itself** — re-issues that document's own entry in the same change.
+
+`php tools/branding/verify-brand-manifest.php` now reports each class and its count separately, so
+`123/123` can never again be read as "everything deployed is intact".
+
 ## Counts
 
 **FLAGGED FOR HUMAN REVIEW (2026-08-19):** the table below was never updated after the Revision 4 note
