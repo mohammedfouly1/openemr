@@ -287,10 +287,21 @@ SCAN-3 REGISTER:    S3-P0-28  translation precedence divergence      FIXED — V
                     S3-P1-30  `skip` costs Arabic 8 strings          ACCEPTED, quantified
                     S3-P1-31  language editor has no `%s` guard      FIXED — VERIFIED (59d5c14df)
                     S3-P1-32  xlp()/|xlp bypass the Arabic resolver  FIXED — VERIFIED (f18f75080)
-                    S3-P1-33  setup.php is a mixed-brand installer   OPEN — needs a design step
+                    S3-P1-33  setup.php is a mixed-brand installer   OPEN — ADR still unwritten;
+                                                                     a draft mechanism exists
+                                                                     UNCOMMITTED and unreviewed,
+                                                                     and setup.php's 10 literals
+                                                                     are all still present (§15D)
                     S3-P1-34  questionnaire disclaimer names OpenEMR FIXED — VERIFIED (f18f75080)
-                    S3-P2-35  deployed assets outside the manifest   OPEN (governance)
-                    S3-P2-36  Q77 theme check skips in CI            OPEN (CI infra)
+                    S3-P2-35  deployed assets outside the manifest   SUBSTANTIALLY FIXED —
+                                                                     VERIFIED (57e51286c);
+                                                                     STILL OPEN for its
+                                                                     documentation half (§15D)
+                    S3-P2-36  Q77 theme check skips in CI            FIXED — VERIFIED (e203d5bdd)
+                    SKY-Q08   production SVG geometry safeguard      OPEN — implemented but RED,
+                              (Owner-directed PRE deliverable)       29 failures, UNCOMMITTED (§15D)
+                    PRE-ORCH-02 a 6th worktree escaped the S1-P2-14
+                              path exclusion                         FIXED — VERIFIED (d42a7d6d4)
                     S3-OBS-01 admin.php renders its site table with
                               no authentication — OUTSIDE branding,
                               recorded so it is not dropped          CONFIRMED LIVE 2026-08-25;
