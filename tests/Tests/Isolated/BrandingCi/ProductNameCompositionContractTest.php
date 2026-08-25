@@ -51,12 +51,35 @@ final class ProductNameCompositionContractTest extends TestCase
         'templates/oauth2/patient-select.html.twig' => ['%s Authorization'],
         'templates/oauth2/scope-authorize.html.twig' => ['%s Authorization'],
         'templates/core/about.html.twig' => ['About %s'],
+        // Audit finding A-01. The authenticated shell's own user menu, and the last surviving
+        // juxtaposition in the tree — invisible to the old guard because it spelled the variable
+        // `openemr_name` rather than `applicationTitle`.
+        'templates/interface/main/tabs/user_data_template.html.twig' => ['About %s'],
         'templates/insurance_companies/general_list.html.twig' => ['Insurance Companies %s'],
         'templates/product_registration/product_reg.js.twig' => ['%s Product Registration'],
     ];
 
-    /** Templates are scanned for this shape; matching it means the defect is back. */
-    private const JUXTAPOSITION = '~\{\{\s*applicationTitle[^}]*\}\}\s*\{\{|\}\}\s*\{\{\s*applicationTitle~';
+    /**
+     * Templates are scanned for this shape; matching it means the defect is back.
+     *
+     * **Audit finding A-01: this used to name only `applicationTitle`, and the product name has
+     * two spellings in template context.** `interface/main/tabs/main.php` passed the raw
+     * configured name into `user_data_template.html.twig` as `openemr_name`, which the guard could
+     * not see, so `{{ "About"|xlt }} {{ openemr_name|text }}` survived every scan and rendered
+     * `حول Thiqa` on a live Arabic session — an Arabic phrase with a Latin wordmark, which is
+     * precisely the defect S2-P1-23 exists to prevent. The alternation now covers both names.
+     */
+    private const JUXTAPOSITION = '~\{\{\s*(applicationTitle|openemr_name)[^}]*\}\}\s*\{\{'
+        . '|\}\}\s*\{\{\s*(applicationTitle|openemr_name)~';
+
+    /**
+     * The variables a template must not be handed in the first place.
+     *
+     * Blocking the juxtaposition *shape* is necessary but not sufficient: as long as a raw product
+     * name is in scope, the next call site can reintroduce the defect in a form the regex above
+     * does not match. Nothing should pass one in — the `xlp` filter resolves it.
+     */
+    private const RAW_NAME_VARIABLES = ['applicationTitle', 'openemr_name'];
 
     public function testNoTemplateJuxtaposesTheProductNameWithATranslatedPhrase(): void
     {
@@ -70,7 +93,7 @@ final class ProductNameCompositionContractTest extends TestCase
             // The Twig concatenation form the product-registration template used:
             // `applicationTitle ~ " " ~ ("..."|xla)`. Delimited with `#` because the pattern
             // itself has to contain a literal `~`.
-            if (preg_match('#applicationTitle\s*~#', $contents) === 1) {
+            if (preg_match('#(applicationTitle|openemr_name)\s*~#', $contents) === 1) {
                 $offenders[] = substr($file, strlen($this->root()) + 1);
             }
         }
@@ -80,6 +103,50 @@ final class ProductNameCompositionContractTest extends TestCase
             $offenders,
             'These templates place the product name beside a translated phrase, so the word order '
             . 'is hardcoded English and no translator can move it. Use a "<phrase> %s"|xlp key.',
+        );
+    }
+
+    /**
+     * Audit finding A-01, the structural half: no template may be *handed* a raw product name.
+     *
+     * The juxtaposition scan above checks a shape, and a shape check is only as good as its
+     * alternation — which is exactly how `openemr_name` slipped past a guard written for
+     * `applicationTitle`. This closes the door one step earlier: if no renderer passes a raw
+     * product name into template scope, no template can juxtapose one however it is spelled.
+     * The `xlp` filter is the supported route, and it resolves the session's variant.
+     *
+     * Scoped to the PHP that renders Twig, since that is where the variable is introduced.
+     */
+    public function testNoRendererPassesARawProductNameIntoTemplateScope(): void
+    {
+        $renderers = [
+            'interface/main/tabs/main.php',
+            'interface/main/about_page.php',
+            'interface/login/login.php',
+        ];
+        $offenders = [];
+
+        foreach ($renderers as $relativePath) {
+            $path = $this->root() . '/' . $relativePath;
+            if (!is_file($path)) {
+                continue;
+            }
+            $contents = $this->read($path);
+
+            foreach (self::RAW_NAME_VARIABLES as $variable) {
+                // The render-context form: `'openemr_name' => ...` inside a render() array.
+                if (preg_match('~[\'"]' . preg_quote($variable, '~') . '[\'"]\s*=>~', $contents) === 1) {
+                    $offenders[] = $relativePath . ' passes ' . $variable . ' into template scope';
+                }
+            }
+        }
+
+        self::assertSame(
+            [],
+            $offenders,
+            'A raw product name in template scope is a juxtaposition waiting to happen, and a '
+            . 'shape-matching guard cannot see the ones it was not told to look for. Compose with '
+            . 'the xlp filter instead.',
         );
     }
 

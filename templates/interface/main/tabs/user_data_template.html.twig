@@ -44,7 +44,7 @@
             <li class="dropdown-divider"></li>
             <li><a class="dropdown-item"
                    data-bind="click: function() {navigateTab('./../about_page.php', 'About', function() {activateTabByName('About',true);});}">
-                <i class="fa fa-fw pr-2 text-muted fa-info"></i>&nbsp;{{ "About"|xlt }} {{ openemr_name|text }}
+                <i class="fa fa-fw pr-2 text-muted fa-info"></i>&nbsp;{{ "About %s"|xlp|text }}
             </a></li>
             <li class="dropdown-divider"></li>
             <li><a class="dropdown-item" data-bind="click: logout">

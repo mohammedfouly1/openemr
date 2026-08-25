@@ -400,9 +400,10 @@ $twig = (new TwigContainer(null, OEGlobalsBag::getInstance()->getKernel()))->get
     <?php require_once("templates/patient_data_template.php"); ?>
     <?php
     echo $twig->render("interface/main/tabs/therapy_group_template.html.twig", []);
-    echo $twig->render("interface/main/tabs/user_data_template.html.twig", [
-        'openemr_name' => OEGlobalsBag::getInstance()->getString('openemr_name')
-    ]);
+    // No product name is passed in any more. The template composes it through the `xlp`
+    // filter, which resolves the session's variant; handing it the raw configured Latin
+    // name here is what made the Arabic shell render `حول Thiqa` (audit finding A-01).
+    echo $twig->render("interface/main/tabs/user_data_template.html.twig", []);
     // Collect the menu then build it
     $menuMain = new MainMenuRole(OEGlobalsBag::getInstance()->getKernel()->getEventDispatcher());
     $menu_restrictions = $menuMain->getMenu();
@@ -568,9 +569,12 @@ $twig = (new TwigContainer(null, OEGlobalsBag::getInstance()->getKernel()))->get
 
     if ($allowRegisterDialog !== false) { // disable if running unit tests.
         // Include the product registration js, telemetry and usage data reporting dialog
+        // `applicationTitle` used to be passed here and is not any more: the template composes
+        // `%s Product Registration` through the `xlp` filter, so no consumer reads it. Left in
+        // place it was a raw Latin product name sitting in template scope with nothing to stop
+        // the next edit juxtaposing it again (audit finding A-01).
         echo $twig->render("product_registration/product_reg.js.twig", [
             'webroot' => OEGlobalsBag::getInstance()->getWebRoot(),
-            'applicationTitle' => OEGlobalsBag::getInstance()->getString('openemr_name'),
         ]);
     }
 

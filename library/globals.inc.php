@@ -4440,7 +4440,19 @@ $GLOBALS_METADATA = [
                 '4' => xlp('%s Dark Theme Version Always'),
             ],
             '0' ,                          // default = display at top of form
-            xl('Choose OpenEMR auto select based on core theme styles(OpenEMR dark theme turns on Questionnaire dark, LForms project maintained light styles(Original) or default to always dark or light regardless of core themes.')
+            // Audit finding A-02. This was the last unconverted product-name leak in the tree, and
+            // the reason it survived is worth keeping: it named the product **twice**, and
+            // `ProductContextTranslation` accepts exactly one placeholder, so the mechanical
+            // conversion the three option labels above got could not be applied to it.
+            //
+            // Rewritten to name the product once rather than relaxing that invariant. The second
+            // mention was "OpenEMR dark theme", meaning this product's own dark core theme, so
+            // "the dark core theme" says the same thing without a second placeholder — and the
+            // one-placeholder rule stays intact, which is what S3-P2-29 depends on.
+            //
+            // Safe to change the key outright: this literal has no `lang_constants` row and zero
+            // translations, so nothing is orphaned and no carry-forward contract is needed.
+            xlp('Choose %s auto select based on core theme styles(the dark core theme turns on Questionnaire dark, LForms project maintained light styles(Original) or default to always dark or light regardless of core themes.')
         ],
 
         'questionnaire_display_fullscreen' => [

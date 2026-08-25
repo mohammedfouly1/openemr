@@ -45,7 +45,9 @@ $emailRegistered = (new ProductRegistrationService())->getRegistrationEmail() ??
 $viewArgs = [
     'onlineSupportHref' => OEGlobalsBag::getInstance()->getString("online_support_link"),
     'ackHref' => "../../acknowledge_license_cert.html",
-    'applicationTitle' => OEGlobalsBag::getInstance()->getString('openemr_name'),
+    // `applicationTitle` was removed here: `about.html.twig` composes `About %s` through the
+    // `xlp` filter, so nothing read it, and a raw Latin product name left in template scope is
+    // a juxtaposition waiting to be reintroduced (audit finding A-01).
     'versionNumber' => (string) $versionService->getSoftwareVersion(),
     'supportPhoneNumber' => OEGlobalsBag::getInstance()->getString('support_phone_number') ?? false,
     'theUUID' => UniqueInstallationUuid::getUniqueInstallationUuid(),
