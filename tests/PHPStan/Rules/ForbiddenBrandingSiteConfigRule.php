@@ -37,8 +37,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final class ForbiddenBrandingSiteConfigRule implements Rule
 {
-    private const MODULE_NAMESPACE = 'OpenEMR\\Modules\\ThiqaBranding';
-
     /**
      * Matches the whole literal `sites/<something>/config.php`, a bare
      * `config.php`, and the `/config.php` tail of a constructed path.
@@ -90,12 +88,6 @@ final class ForbiddenBrandingSiteConfigRule implements Rule
      */
     private function isBrandingNamespace(Scope $scope): bool
     {
-        $namespace = $scope->getNamespace();
-        if ($namespace === null) {
-            return false;
-        }
-
-        return $namespace === self::MODULE_NAMESPACE
-            || str_starts_with($namespace, self::MODULE_NAMESPACE . '\\');
+        return BrandingGuardrailScope::covers($scope->getNamespace());
     }
 }

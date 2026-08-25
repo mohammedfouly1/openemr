@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace OpenEMR\Tests\Isolated\PHPStan\ThiqaBranding;
 
+use OpenEMR\PHPStan\Rules\BrandingGuardrailScope;
 use OpenEMR\PHPStan\Rules\ForbiddenBrandingHttpClientRule;
 use OpenEMR\PHPStan\Rules\ForbiddenBrandingPlaceholderDomainRule;
 use OpenEMR\PHPStan\Rules\ForbiddenBrandingSiteConfigRule;
@@ -45,6 +46,14 @@ use ReflectionClassConstant;
  * locked decision Q58 forbids renaming. A future SkyEagle migration renames the namespace and
  * may rename the directory; it does not rename that file or that prefix, so this test keeps
  * finding the right module and keeps demanding the constants follow.
+ *
+ * ## Findings S4B-10 / S4E-06 — the second question this suite now answers
+ *
+ * The above asks "does the guarded namespace still exist". It cannot ask "is every namespace
+ * that holds branding code guarded", and those turned out to be different questions: shipped
+ * branding code had grown into `OpenEMR\Common\Branding` and `OpenEMR\Branding`, and no rule
+ * could see either. Both cross-checks now run, and the scope itself has a single owner in
+ * `BrandingGuardrailScope` rather than a copy inside each of the four rules.
  */
 final class ThiqaBrandingGuardrailScopeTest extends TestCase
 {
@@ -124,19 +133,102 @@ final class ThiqaBrandingGuardrailScopeTest extends TestCase
     /**
      * The assertion the finding asked for, in both directions.
      *
-     * @param class-string $ruleClass
+     * The constant now has **one** owner. It used to be copied into each of the four rules, and
+     * this test checked all four copies against reality — sound, but the S1-P2-12 lesson applies
+     * here as much as it did to the module-directory literal: a value with four definitions is a
+     * value with four chances to drift. `BrandingGuardrailScope` owns it, the rules read it, and
+     * {@see self::testNoRuleReintroducesItsOwnNamespaceLiteral()} keeps a copy from creeping back.
      */
-    #[DataProvider('brandingRuleProvider')]
-    public function testTheRuleScopeConstantMatchesTheProductionNamespace(string $ruleClass): void
+    public function testTheGuardrailScopeConstantMatchesTheProductionNamespace(): void
     {
         self::assertSame(
             $this->productionNamespace(),
-            $this->constantValue($ruleClass, 'MODULE_NAMESPACE'),
+            BrandingGuardrailScope::MODULE_NAMESPACE,
+            'Every branding guardrail would go inert: they match a namespace the module does not '
+            . 'ship under, so they report 0 errors whatever the module does.',
+        );
+    }
+
+    /**
+     * A rule that hardcodes its own namespace has quietly opted out of the single owner, and
+     * with it out of both cross-checks above and below.
+     *
+     * @param class-string $ruleClass
+     */
+    #[DataProvider('brandingRuleProvider')]
+    public function testNoRuleReintroducesItsOwnNamespaceLiteral(string $ruleClass): void
+    {
+        $reflection = new \ReflectionClass($ruleClass);
+        $file = $reflection->getFileName();
+        self::assertIsString($file);
+
+        $source = file_get_contents($file);
+        self::assertIsString($source);
+
+        self::assertDoesNotMatchRegularExpression(
+            "~const\s+\w*NAMESPACE\s*=\s*'~",
+            $source,
             sprintf(
-                '%s would go inert: it matches a namespace the module does not ship under, so it '
-                . 'reports 0 errors whatever the module does.',
+                '%s declares a namespace as a string literal. Scope belongs to '
+                . 'BrandingGuardrailScope; a private copy drifts silently and takes the rule out '
+                . 'of guardrail coverage without changing a single test.',
                 $ruleClass,
             ),
+        );
+    }
+
+    /**
+     * S4B-10 / S4E-06: the guardrails must cover every namespace branding code actually lives in.
+     *
+     * The rules governed only the module. Shipped branding code had since grown into
+     * `OpenEMR\Common\Branding` (the pre-database identity layer, ADR-BRAND-005) and
+     * `OpenEMR\Branding` (the generator toolchain), and neither was inside any rule's scope —
+     * so the newest and least supervised branding code in the repository was unguarded while
+     * all four rules went on reporting 0 errors.
+     *
+     * The roots are named as **paths**, and the namespaces are read out of the files found
+     * there, for the same reason the module is located by a brand-neutral anchor: a rename that
+     * changes a namespace must fail this test rather than quietly satisfy it. Adding a fourth
+     * branding source root and forgetting the scope list fails here too.
+     */
+    public function testEveryBrandingOwnedNamespaceIsWithinGuardrailScope(): void
+    {
+        $roots = [
+            $this->moduleDirectory() . '/src',
+            self::REPOSITORY_ROOT . '/src/Common/Branding',
+            self::REPOSITORY_ROOT . '/tools/branding/src',
+        ];
+
+        $found = [];
+        foreach ($roots as $root) {
+            self::assertDirectoryExists($root, 'A declared branding source root has moved: ' . $root);
+
+            foreach ($this->phpFilesUnder($root) as $file) {
+                $namespace = $this->declaredNamespace($file);
+                if ($namespace !== null) {
+                    $found[$namespace] = $file;
+                }
+            }
+        }
+
+        self::assertGreaterThanOrEqual(
+            3,
+            count($found),
+            'Implausibly few namespaces across the branding source roots; the walk found nothing.',
+        );
+
+        $unguarded = [];
+        foreach ($found as $namespace => $file) {
+            if (!BrandingGuardrailScope::covers($namespace)) {
+                $unguarded[] = $namespace . ' (' . basename($file) . ')';
+            }
+        }
+
+        self::assertSame(
+            [],
+            $unguarded,
+            'These namespaces hold branding code that no guardrail rule can see, so every rule '
+            . 'reports 0 errors for them whatever they contain.',
         );
     }
 

@@ -52,13 +52,11 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final class ForbiddenBrandingHttpClientRule implements Rule
 {
-    private const MODULE_NAMESPACE = 'OpenEMR\\Modules\\ThiqaBranding';
-
     /**
      * The materialisation plane runs out-of-request (console command), so it
      * is the one place a Control Plane call is legitimate.
      */
-    private const MATERIALISATION_NAMESPACE = 'OpenEMR\\Modules\\ThiqaBranding\\Materialisation';
+    private const MATERIALISATION_NAMESPACE = BrandingGuardrailScope::MODULE_NAMESPACE . '\\Materialisation';
 
     /**
      * Class-name prefixes that identify an HTTP client (or its interface).
@@ -132,14 +130,7 @@ final class ForbiddenBrandingHttpClientRule implements Rule
     private function isRuntimePlane(Scope $scope): bool
     {
         $namespace = $scope->getNamespace();
-        if ($namespace === null) {
-            return false;
-        }
-
-        if (
-            $namespace !== self::MODULE_NAMESPACE
-            && !str_starts_with($namespace, self::MODULE_NAMESPACE . '\\')
-        ) {
+        if (!BrandingGuardrailScope::covers($namespace)) {
             return false;
         }
 

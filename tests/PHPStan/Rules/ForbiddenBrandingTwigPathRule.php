@@ -51,8 +51,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final class ForbiddenBrandingTwigPathRule implements Rule
 {
-    private const MODULE_NAMESPACE = 'OpenEMR\\Modules\\ThiqaBranding';
-
     public function getNodeType(): string
     {
         return CallLike::class;
@@ -125,12 +123,6 @@ final class ForbiddenBrandingTwigPathRule implements Rule
      */
     private function isBrandingNamespace(Scope $scope): bool
     {
-        $namespace = $scope->getNamespace();
-        if ($namespace === null) {
-            return false;
-        }
-
-        return $namespace === self::MODULE_NAMESPACE
-            || str_starts_with($namespace, self::MODULE_NAMESPACE . '\\');
+        return BrandingGuardrailScope::covers($scope->getNamespace());
     }
 }

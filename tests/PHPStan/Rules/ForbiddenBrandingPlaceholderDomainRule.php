@@ -37,8 +37,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final class ForbiddenBrandingPlaceholderDomainRule implements Rule
 {
-    private const MODULE_NAMESPACE = 'OpenEMR\\Modules\\ThiqaBranding';
-
     /**
      * Literal hosts that are always wrong in shipped code.
      */
@@ -106,17 +104,10 @@ final class ForbiddenBrandingPlaceholderDomainRule implements Rule
     private function isShippedBrandingCode(Scope $scope): bool
     {
         $namespace = $scope->getNamespace();
-        if ($namespace === null) {
+        if (!BrandingGuardrailScope::covers($namespace)) {
             return false;
         }
 
-        if (
-            $namespace !== self::MODULE_NAMESPACE
-            && !str_starts_with($namespace, self::MODULE_NAMESPACE . '\\')
-        ) {
-            return false;
-        }
-
-        return !in_array('Tests', explode('\\', $namespace), true);
+        return !BrandingGuardrailScope::isTestNamespace((string) $namespace);
     }
 }

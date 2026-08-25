@@ -17,6 +17,7 @@ namespace OpenEMR\Tests\Isolated\PHPStan\ThiqaBranding;
 use OpenEMR\PHPStan\Rules\ForbiddenBrandingPlaceholderDomainRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @extends RuleTestCase<ForbiddenBrandingPlaceholderDomainRule>
@@ -115,6 +116,47 @@ final class ForbiddenBrandingPlaceholderDomainRuleTest extends RuleTestCase
                 [$this->expectedMessage('reg.open-emr.org'), 27, self::TIP],
             ],
         );
+    }
+
+    /**
+     * S4B-10 / S4E-06: branding code outside the module was outside every guardrail.
+     *
+     * Both fixtures carry the identical violating body, byte for byte from line 10 down, and
+     * differ from the in-module fixture only in the namespace on line 9 — so a hit here is
+     * attributable to the widened scope and to nothing else. Before `BrandingGuardrailScope`
+     * existed, both files produced zero errors, which is indistinguishable from compliance.
+     *
+     * `OpenEMR\Common\Branding` is the pre-database identity layer that `setup.php`,
+     * `interface/globals.php` and `library/globals.inc.php` reach without an OpenEMR
+     * bootstrap; `OpenEMR\Branding` is the generator toolchain that writes what production
+     * reads. Neither was guarded.
+     *
+     * @param non-empty-string $fixture
+     */
+    #[DataProvider('brandingNamespaceOutsideTheModuleProvider')]
+    public function testFiresInBrandingNamespacesOutsideTheModule(string $fixture): void
+    {
+        $this->analyse(
+            [__DIR__ . '/data/' . $fixture],
+            [
+                [$this->expectedMessage('reg.open-emr.org'), 17, self::TIP],
+                [$this->expectedMessage('thiqa.example'), 26, self::TIP],
+                [$this->expectedMessage('reg.open-emr.org'), 27, self::TIP],
+            ],
+        );
+    }
+
+    /**
+     * @return array<string, array{non-empty-string}>
+     *
+     * @codeCoverageIgnore Data providers run before coverage instrumentation starts.
+     */
+    public static function brandingNamespaceOutsideTheModuleProvider(): array
+    {
+        return [
+            'pre-database identity layer' => ['all_violations_pre_database_namespace.php'],
+            'generator toolchain' => ['all_violations_toolchain_namespace.php'],
+        ];
     }
 
     public function testFlagsViolationsInTheModuleRootNamespace(): void
