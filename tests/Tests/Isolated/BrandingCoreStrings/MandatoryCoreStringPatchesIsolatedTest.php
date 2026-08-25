@@ -131,7 +131,11 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
     {
         return [
             'admin.php' => ['admin.php', 2],
-            'interface/globals.php' => ['interface/globals.php', 4],
+            // ADR-BRAND-005 / S3-P1-33: was 4. The two pre-bootstrap fatal messages now
+            // resolve through ProductIdentity, so the literal is gone from this file entirely.
+            // Zero is the STRONGER assertion -- it fails if anyone reintroduces a hardcoded
+            // name here, which is exactly the drift the artefact exists to prevent.
+            'interface/globals.php' => ['interface/globals.php', 0],
             'zend installer view' => [self::ZEND_INSTALLER_VIEW, 1],
             'FHIR capability statement' => ['src/RestControllers/FHIR/FhirMetaDataRestController.php', 1],
             'OAuth2 API disabled message' => ['src/RestControllers/Subscriber/OAuth2AuthorizationListener.php', 1],
@@ -207,8 +211,14 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
             'pre-bootstrap fatal messages (BRAND-135, BRAND-136)' => [
                 'interface/globals.php',
                 [
-                    'echo "Thiqa Error: Thiqa is not working since the php openssl module is not installed.";',
-                    'echo "Thiqa Error: Thiqa is not working since the openssl aes-256-cbc cipher is not available.";',
+                    // ADR-BRAND-005: the product name is no longer a literal here. What must
+                    // survive a rebase is that these two pre-bootstrap messages are branded AT
+                    // ALL and resolve from the pre-database artefact -- both branches end in
+                    // exit(1), so there is no later point at which a configured value is readable.
+                    'use OpenEMR\\Common\\Branding\\ProductIdentity;',
+                    '$productNameEscaped = text(ProductIdentity::name());',
+                    '{$productNameEscaped} Error: {$productNameEscaped} is not working since the php openssl module is not installed.',
+                    '{$productNameEscaped} Error: {$productNameEscaped} is not working since the openssl aes-256-cbc cipher is not available.',
                 ],
                 ['echo "OpenEMR Error :'],
             ],
@@ -250,20 +260,33 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
             'setup.php titles and navbar (BRAND-007, BRAND-008)' => [
                 'setup.php',
                 [
-                    '<title>Thiqa Setup Tool</title>',
-                    '<a class="navbar-brand" href="#">Thiqa Setup</a>',
+                    // Two of each: setup.php emits this chrome twice, once from inside a
+                    // heredoc (interpolated) and once from raw HTML (an echo tag). Both forms
+                    // are pinned so a rebase cannot silently drop one of them.
+                    'use OpenEMR\\Common\\Branding\\ProductIdentity;',
+                    '$productNameEsc = text(ProductIdentity::name());',
+                    '<title>{$productNameEsc} Setup Tool</title>',
+                    '<title><?php echo $productNameEsc; ?> Setup Tool</title>',
+                    '<a class="navbar-brand" href="#">{$productNameEsc} Setup</a>',
+                    '<a class="navbar-brand" href="#"><?php echo $productNameEsc; ?> Setup</a>',
                 ],
                 ['OpenEMR Setup Tool', '>OpenEMR Setup<'],
             ],
             'setup.php body copy and legend (BRAND-009)' => [
                 'setup.php',
                 [
-                    'The initial Thiqa user is',
-                    'The initial Thiqa user name and password is the same',
-                    'before following below Thiqa link',
-                    '>Thiqa Initial User Details<',
-                    'To ensure proper functioning of Thiqa you must make sure',
-                    'Select a theme for Thiqa...',
+                    'The initial {$productNameEsc} user is',
+                    'The initial {$productNameEsc} user name and password is the same',
+                    'before following below {$productNameEsc} link',
+                    '>{$productNameEsc} Initial User Details<',
+                    'To ensure proper functioning of {$productNameEsc} you must make sure',
+                    'Select a theme for {$productNameEsc}...',
+                    // S3-P1-33 additions: the installer copy that still named the upstream
+                    // product on the same page as the branded chrome. The mustNotContain list
+                    // below is unchanged and remains the actual rebase protection.
+                    'Congratulations! {$productNameEsc} is now installed.',
+                    '<p>Click to start using {$productNameEsc}.</p>',
+                    'Welcome to {$productNameEsc}. This utility will step you through',
                 ],
                 [
                     'The initial OpenEMR user is',

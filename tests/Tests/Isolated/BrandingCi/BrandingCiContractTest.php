@@ -24,17 +24,48 @@ final class BrandingCiContractTest extends TestCase
         'thiqaBranding.noPlaceholderEndpoint',
     ];
 
+    /**
+     * Steps the canonical gate must run, in any order.
+     *
+     * Order is deliberately not asserted: each step is independently fatal, so what matters
+     * is that none was dropped. `@branding-identity-check` is the ADR-BRAND-005 pre-database
+     * identity drift gate -- without it a hand-edited `library/product_identity.generated.php`
+     * would survive CI, which is the whole guarantee that architecture rests on.
+     *
+     * @var list<string>
+     */
+    private const REQUIRED_GATE_STEPS = [
+        '@branding-tokens-check',
+        '@branding-identity-check',
+        '@php tools/branding/verify-brand-manifest.php',
+    ];
+
     public function testCanonicalComposerGateContainsEveryRequiredFailureBoundary(): void
     {
         $composer = json_decode($this->read('composer.json'), true, 512, JSON_THROW_ON_ERROR);
         $gate = $composer['scripts']['branding-ci'] ?? null;
 
         self::assertIsArray($gate);
-        self::assertSame('@branding-tokens-check', $gate[0] ?? null);
-        self::assertSame('@php tools/branding/verify-brand-manifest.php', $gate[1] ?? null);
 
-        $tests = $gate[2] ?? null;
-        self::assertIsString($tests);
+        // Located by CONTENT, never by index. Indexing this array positionally made the
+        // contract brittle in the one way it must not be: adding a legitimate new step --
+        // `@branding-identity-check`, the ADR-BRAND-005 drift gate -- shifted every later
+        // element and turned this test red while the gate itself was perfectly correct. A
+        // guard that fails when the thing it guards is strengthened trains people to edit
+        // the guard, which is how a real regression eventually gets waved through.
+        foreach (self::REQUIRED_GATE_STEPS as $step) {
+            self::assertContains($step, $gate, 'The canonical gate lost the step ' . $step . '.');
+        }
+
+        $tests = null;
+        foreach ($gate as $step) {
+            if (is_string($step) && str_contains($step, 'vendor/bin/phpunit')) {
+                $tests = $step;
+                break;
+            }
+        }
+
+        self::assertIsString($tests, 'The canonical gate no longer runs phpunit at all.');
         self::assertStringContainsString('--fail-on-empty-test-suite', $tests);
         self::assertStringContainsString('--fail-on-incomplete', $tests);
         self::assertStringContainsString('--fail-on-risky', $tests);
@@ -169,7 +200,13 @@ final class BrandingCiContractTest extends TestCase
 
         // Each gated path must still resolve to something that exists; a deleted path already
         // fails loudly (PHPUnit exits 70), but a path that silently became empty does not.
-        $tests = (string) ($gate[2] ?? '');
+        $tests = '';
+        foreach ($gate as $step) {
+            if (is_string($step) && str_contains($step, 'vendor/bin/phpunit')) {
+                $tests = $step;
+                break;
+            }
+        }
         $paths = [];
         foreach (explode(' ', $tests) as $token) {
             if (str_starts_with($token, 'tests/')) {

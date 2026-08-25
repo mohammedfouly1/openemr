@@ -60,10 +60,22 @@ $allow_cloning_setup = false;
 require_once __DIR__ . "/vendor/autoload.php";
 
 use OpenEMR\BC\ServiceContainer;
+use OpenEMR\Common\Branding\ProductIdentity;
 use OpenEMR\Common\Csrf\CsrfUtils;
 use OpenEMR\Common\Session\SessionUtil;
 use OpenEMR\Common\Session\SessionWrapperFactory;
 use OpenEMR\Common\Utils\RandomGenUtils;
+
+// Finding S3-P1-33. This script runs BEFORE the database exists, so xl(), xlp(),
+// xl_product_name() and every saas_branding_* global are unavailable here -- which is
+// why the product name was hardcoded ten times and left disagreeing with ~17 surviving
+// upstream mentions on the same page. It now comes from the generated pre-database
+// identity artefact (ADR-BRAND-005), so the next rename is one JSON edit.
+//
+// Escaped once, here, because every use below is HTML: heredocs and double-quoted
+// strings interpolate but cannot call a function, and text() is a composer
+// autoload.files entry so it is available from the require above.
+$productNameEsc = text(ProductIdentity::name());
 
 if (!$allow_cloning_setup && !empty($_REQUEST['clone_database'])) {
     SessionUtil::setupScriptSessionStart();
@@ -142,7 +154,7 @@ if (empty($_REQUEST['site']) && $allow_multisite_setup && empty($state)) {
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Thiqa Setup Tool</title>
+        <title>{$productNameEsc} Setup Tool</title>
         <link rel="stylesheet" href="public/assets/bootstrap/dist/css/bootstrap.min.css">
         <script src="public/assets/jquery/dist/jquery.min.js"></script>
         <script src="public/assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -157,7 +169,7 @@ if (empty($_REQUEST['site']) && $allow_multisite_setup && empty($state)) {
     <body>
         <nav class="navbar navbar-expand navbar-light bg-light">
            <div class="container">
-           <a class="navbar-brand" href="#">Thiqa Setup</a>
+           <a class="navbar-brand" href="#">{$productNameEsc} Setup</a>
            <div class="collapse navbar-collapse justify-content-end">
                <ul class="navbar-nav">
                    <li class="nav-item active">
@@ -174,7 +186,7 @@ if (empty($_REQUEST['site']) && $allow_multisite_setup && empty($state)) {
                     <h3 class="mb-3 border-bottom">Optional Site ID Selection</h3>
                     <div class="jumbotron p-5">
                         <p>
-                            Most OpenEMR installations support only one site.  If that is
+                            Most {$productNameEsc} installations support only one site.  If that is
                             true for you then ignore the rest of this text and just click Continue.
                         </p>
                         <p class='p-2 bg-warning'>
@@ -285,7 +297,7 @@ if (!empty($config) && (($state ?? 0) < 4)) {
     SessionUtil::setupScriptSessionStart();
     SessionUtil::setupScriptSessionCookieDestroy();
     error_log("OpenEMR has already been installed. If you wish to force re-installation, then edit " . errorLogEscape($installer->conffile) . " (change the 'config' variable to 0), and re-run the setup.php script.");
-    die("OpenEMR has already been installed. If you wish to force re-installation, see log for details.<br />\n");
+    die("{$productNameEsc} has already been installed. If you wish to force re-installation, see log for details.<br />\n");
 }
 
 // This will effectively only allow entry into the setup.php script at the first step and will bar entry to the
@@ -299,7 +311,7 @@ if (empty($state)) {
         SessionUtil::setupScriptSessionStart();
         SessionUtil::setupScriptSessionCookieDestroy();
         error_log("OpenEMR has already been installed. If you wish to force re-installation, then edit " . errorLogEscape($installer->conffile) . " (change the 'config' variable to 0), and re-run the setup.php script.");
-        die("OpenEMR has already been installed. If you wish to force re-installation, see log for details.<br />\n");
+        die("{$productNameEsc} has already been installed. If you wish to force re-installation, see log for details.<br />\n");
     }
     // set up new blank session and csrf mechanism
     SessionUtil::setupScriptSessionStart();
@@ -353,7 +365,7 @@ if (empty($state)) {
 ?>
 <html>
 <head>
-<title>Thiqa Setup Tool</title>
+<title><?php echo $productNameEsc; ?> Setup Tool</title>
 <!--<link rel=stylesheet href="interface/themes/style_blue.css">-->
 <link rel="stylesheet" href="public/assets/bootstrap/dist/css/bootstrap.min.css">
 <script src="public/assets/jquery/dist/jquery.min.js"></script>
@@ -449,7 +461,7 @@ function cloneClicked() {
 <body>
     <nav class="navbar navbar-expand navbar-light bg-light">
        <div class="container">
-        <a class="navbar-brand" href="#">Thiqa Setup</a>
+        <a class="navbar-brand" href="#"><?php echo $productNameEsc; ?> Setup</a>
             <div class="collapse navbar-collapse justify-content-end">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
@@ -501,13 +513,13 @@ function cloneClicked() {
                 ?>
             <h3 class="mb-3 border-bottom">Final step - Success</h3>
             <div class="jumbotron p-5">
-            <p>Congratulations! OpenEMR is now installed.</p>
+            <p>Congratulations! {$productNameEsc} is now installed.</p>
             <ul>
                 <li>Access controls (php-GACL) are installed for fine-grained security, and can be administered in
-                    OpenEMR's admin->acl menu.</li>
+                    {$productNameEsc}'s admin->acl menu.</li>
                 <li>Reviewing <code> <?php echo text($OE_SITE_DIR); ?>/config.php </code> is a good idea. This file
                     contains some settings that you may want to change.</li>
-                <li>There's much information and many extra tools bundled within the OpenEMR installation directory.
+                <li>There's much information and many extra tools bundled within the {$productNameEsc} installation directory.
                     Please refer to openemr/Documentation. Many forms and other useful scripts can be found at openemr/contrib.</li>
                 <li>To ensure a consistent look and feel throughout the application,
                     <a href='http://www.mozilla.org/products/firefox/'>Firefox</a> and <a href="https://www.google.com/chrome/browser/desktop/index.html">Chrome</a> are recommended. The OpenEMR development team exclusively tests with modern versions of these browsers.</li>
@@ -519,16 +531,16 @@ function cloneClicked() {
                 echo "<p> The selected theme is :</p>";
                 $installer->displayNewThemeDiv();
                 if (empty($installer->clone_database)) {
-                    echo "<p><b>The initial Thiqa user is <span class='text-primary'>'" . text($installer->iuser) . "'</span> and the password is <span class='text-primary'>'" . text($installer->iuserpass) . "'</span></b></p>";
+                    echo "<p><b>The initial {$productNameEsc} user is <span class='text-primary'>'" . text($installer->iuser) . "'</span> and the password is <span class='text-primary'>'" . text($installer->iuserpass) . "'</span></b></p>";
                 } else {
-                    echo "<p>The initial Thiqa user name and password is the same as that of source site <b>'" . text($installer->source_site_id) . "'</span></b></p>";
+                    echo "<p>The initial {$productNameEsc} user name and password is the same as that of source site <b>'" . text($installer->source_site_id) . "'</span></b></p>";
                 }
-                echo "<p>If you edited the PHP or Apache configuration files during this installation process, then we recommend you restart your Apache server before following below Thiqa link.</p>";
+                echo "<p>If you edited the PHP or Apache configuration files during this installation process, then we recommend you restart your Apache server before following below {$productNameEsc} link.</p>";
                 echo "<p>In Linux use the following command:</p>";
                 echo "<p><code>sudo apachectl -k restart</code></p>";
 
                 ?>
-            <p>Click to start using OpenEMR.</p>
+            <p>Click to start using {$productNameEsc}.</p>
             <div class="row">
                 <div class="col-12">
                     <a href='./?site=<?php echo attr_url($site_id); ?>' class='btn btn-primary'>
@@ -610,7 +622,7 @@ STP1;
                     $inst_esc = attr($inst);
                     $csrf_id = CsrfUtils::collectCsrfToken($session, 'state3');
                     $step2top = <<<STP2TOP
-                    <h3 class="mb-3 border-bottom">Step $state_esc - Database and OpenEMR Initial User Setup Details</h3>
+                    <h3 class="mb-3 border-bottom">Step $state_esc - Database and {$productNameEsc} Initial User Setup Details</h3>
                     <div class="jumbotron p-5">
                         <p>Now you need to supply the MySQL server information and path information. Detailed instructions on each item can be found in the
                             <a href='Documentation/INSTALL' rel='noopener' target='_blank'><u>'INSTALL'</u>
@@ -672,9 +684,9 @@ STP2TOP;
                             </div>
                             <div id="dbname_info" class="collapse">
                                 <a href="#dbname_info" data-toggle="collapse" class="oe-pull-away"><i class="fa fa-times oe-help-x" aria-hidden="true"></i></a>
-                                <p>This will be the name of the OpenEMR database in MySQL.</p>
+                                <p>This will be the name of the {$productNameEsc} database in MySQL.</p>
                                 <p>'openemr' is the recommended name.</p>
-                                <p>This database will contain patient data as well as data pertaining to the OpenEMR installation.</p>
+                                <p>This database will contain patient data as well as data pertaining to the {$productNameEsc} installation.</p>
                             </div>
                         </div>
                     </div>
@@ -690,7 +702,7 @@ STP2TOP;
                             </div>
                             <div id="login_info" class="collapse">
                                 <a href="#login_info" data-toggle="collapse" class="oe-pull-away"><i class="fa fa-times oe-help-x" aria-hidden="true"></i></a>
-                                <p>This is the name that OpenEMR will use to login to the MySQL database.</p>
+                                <p>This is the name that {$productNameEsc} will use to login to the MySQL database.</p>
                                 <p>'openemr' is the recommended name.</p>
                             </div>
                         </div>
@@ -706,7 +718,7 @@ STP2TOP;
                             </div>
                             <div id="pass_info" class="collapse">
                                 <a href="#pass_info" data-toggle="collapse" class="oe-pull-away"><i class="fa fa-times oe-help-x" aria-hidden="true"></i></a>
-                                <p>This is the Login Password that OpenEMR will use to accesses the MySQL database.</p>
+                                <p>This is the Login Password that {$productNameEsc} will use to accesses the MySQL database.</p>
                                 <p>It should be at least 12 characters long and composed of both numbers and letters.</p>
                                 <p>It cannot contain any of these characters: \ ; ( ) < > / ' "</p>
                             </div>
@@ -851,7 +863,7 @@ STP2TBLTOP1;
                                 <p>This is the collation setting for MySQL.</p>
                                 <p>Collation refers to a set of rules that determine how data is sorted and compared in a database.</p>
                                 <p>Leave as 'General' if you are not sure.</p>
-                                <p>If the language you are planning to use in OpenEMR is in the menu, then you can select it.</p>
+                                <p>If the language you are planning to use in {$productNameEsc} is in the menu, then you can select it.</p>
                                 <p>Otherwise, just select 'General'.</p>
                             </div>
                         </div>
@@ -973,7 +985,7 @@ SOURCESITEBOT;
                 </fieldset>
                 <br />
                 <fieldset class='noclone'>
-                    <legend name="form_legend" id="form_legend" class='oe-setup-legend'>Thiqa Initial User Details<i id="enter-details-tooltip" class="fa fa-info-circle oe-text-black oe-superscript enter-details-tooltip" aria-hidden="true"></i></legend>
+                    <legend name="form_legend" id="form_legend" class='oe-setup-legend'>{$productNameEsc} Initial User Details<i id="enter-details-tooltip" class="fa fa-info-circle oe-text-black oe-superscript enter-details-tooltip" aria-hidden="true"></i></legend>
                     <div class="ml-2 row">
                         <div class="col-sm-4">
                             <div class="clearfix form-group">
@@ -1527,7 +1539,7 @@ STP4TOP;
                     $mysqli_allow_local_infile = ini_get('mysqli.allow_local_infile') ? 'On' : 'Off';
                     $mysqli_allow_local_infile_style = (strcmp($mysqli_allow_local_infile, 'On')  === 0) ? '' : 'text-danger';
 
-                    echo   "<li>To ensure proper functioning of Thiqa you must make sure that PHP settings include:
+                    echo   "<li>To ensure proper functioning of {$productNameEsc} you must make sure that PHP settings include:
                             <table class='phpset'>
                                 <tr>
                                     <th>Setting</th>
@@ -1646,7 +1658,7 @@ STP4TOP;
                     echo "
                     <div id='instructions_apache'" . ($defaultWs === 'apache' ? '' : " style='display:none'") . ">
                         <p>The <code>\"" . $docsDirectoryGlob . "\"</code> directory contain patient information, and
-                        it is important to secure these directories. Additionally, some settings are required for the Zend Framework to work in OpenEMR. This can be done by pasting the below to end of your apache configuration file:</p>
+                        it is important to secure these directories. Additionally, some settings are required for the Zend Framework to work in {$productNameEsc}. This can be done by pasting the below to end of your apache configuration file:</p>
                         &nbsp;&nbsp;<code>&lt;Directory \"" . $openemrDirectory . "\"&gt;<br />
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllowOverride FileInfo<br />
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Require all granted<br />
@@ -1744,7 +1756,7 @@ STP4TOP;
                     $session->set('bootstrapStateInSetup', 7);
                     echo "<h3 class='mb-3 border-bottom'>Step " . text($state) . " - Select a Theme</h3>";
                     echo "<div class='jumbotron p-5'>";
-                    echo "<p>Select a theme for Thiqa...</p>\n";
+                    echo "<p>Select a theme for {$productNameEsc}...</p>\n";
                     $btn_text = "Proceed to Final Step";
                     $installer->displaySelectedThemeDiv();
                     echo "<div class='row'>
@@ -1793,7 +1805,7 @@ STP4TOP;
                         <h3 class="mb-3 border-bottom">Pre Install - Checking File and Directory Permissions</h3>
                             <div class="jumbotron p-5">
                                 <p>
-                                    Welcome to OpenEMR. This utility will step you through the installation and configuration of OpenEMR for your practice.
+                                    Welcome to {$productNameEsc}. This utility will step you through the installation and configuration of {$productNameEsc} for your practice.
                                 </p>
                                 <ul>
                                     <li>
@@ -1924,7 +1936,7 @@ BOT;
                 }
             });
             $('.enter-details-tooltip').prop( "title", "Additional help to fill out this form is available by hovering over labels of each box and clicking on the dark blue help ? icon that is revealed. On mobile devices tap once on the label to reveal the help icon and tap on the icon to show the help section").tooltip();
-            $('.2fa-section-tooltip').prop( "title", "Two factor authentication prevents unauthorized access to openEMR thus improves security. It is optional. More information is available in the help file under Step 2 Database and OpenEMR Initial User Setup Details.").tooltip();
+            $('.2fa-section-tooltip').prop( "title", "Two factor authentication prevents unauthorized access to " + <?php echo js_escape(ProductIdentity::name()); ?> + " thus improves security. It is optional. More information is available in the help file under Step 2 Database and OpenEMR Initial User Setup Details.").tooltip();
 
 
         });

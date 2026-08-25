@@ -76,6 +76,7 @@
 //   Uzbek                          // xl('Uzbek')
 //   Vietnamese                     // xl('Vietnamese')
 
+use OpenEMR\Common\Branding\ProductIdentity;
 use OpenEMR\Common\Calendar\DayOfWeek;
 use OpenEMR\Common\Forms\FormActionBarSettings;
 use OpenEMR\Core\OEGlobalsBag;
@@ -434,10 +435,23 @@ $GLOBALS_METADATA = [
     ],
 
     'Branding' => [
+        // Finding S3-P1-33. The four defaults in this group are not cosmetic: `Installer::
+        // insert_globals()` requires this file during installation and writes every default
+        // here straight into the `globals` table, so these literals decide what a freshly
+        // installed product calls itself and where it points its logo, support and manual
+        // links -- for the whole window between "database created" and "someone remembered
+        // to run thiqa-branding:apply-profile". Leaving them as upstream literals is what
+        // made a fresh install come up self-describing as OpenEMR.
+        //
+        // They are resolved from the pre-database identity artefact rather than from
+        // `openemr_name`, because at this point in the bootstrap `openemr_name` is precisely
+        // the row being defaulted. The artefact is derived from the same branding profile
+        // that apply-profile later writes, so the installed default and the applied value
+        // agree by construction instead of by coincidence.
         'openemr_name' => [
             xl('Application Title'),
             'text',
-            'OpenEMR',
+            ProductIdentity::name(),
             xl('Application name used throughout the user interface.')
         ],
 
@@ -451,7 +465,7 @@ $GLOBALS_METADATA = [
         'main_menu_logo_link' => [
             xl('Main menu logo link URL'),
             'text',
-            'https://www.open-emr.org/',
+            ProductIdentity::websiteUrl(),
             xl('URL the main menu logo links to. Leave blank to make the logo non-clickable.'),
         ],
 
@@ -465,14 +479,19 @@ $GLOBALS_METADATA = [
         'online_support_link' => [
             xl('Online Support Link'),
             'text',                           // data type
-            'http://open-emr.org/',
+            ProductIdentity::supportUrl(),
             xl('URL to a support page.')
         ],
 
         'user_manual_link' => [
             xl('User Manual Link Override'),
             'text',
-            '',
+            // Upstream defaults this to '', and a blank value makes the help link
+            // auto-generate an open-emr.org wiki URL for the running version -- a brand leak
+            // that no `globals` row exists to override, because the row is empty. Defaulting
+            // it to the product's own documentation root closes that without changing the
+            // "blank means auto-generate" behaviour for anyone who clears it deliberately.
+            ProductIdentity::documentationUrl(),
             xl("Point to a custom user manual. Leave blank for the default, auto-generated URL for specific version of application"),
         ],
 

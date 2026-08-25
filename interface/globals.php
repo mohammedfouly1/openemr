@@ -15,6 +15,7 @@
 
 use Dotenv\Dotenv;
 use OpenEMR\BC\ServiceContainer;
+use OpenEMR\Common\Branding\ProductIdentity;
 use OpenEMR\Common\Database\QueryUtils;
 use OpenEMR\Common\Http\HttpRestRequest;
 use OpenEMR\Common\Logging\EventAuditLogger;
@@ -86,18 +87,30 @@ $handler->installExceptionHandler();
 // a high-severity level and incrementally move it to cover more.
 
 
+// The product name in these two messages comes from the pre-database identity artefact,
+// not from `openemr_name`: this runs before the globals bag is populated, and both branches
+// end in exit(1), so there is no later point at which a configured value could be read.
+// It is resolved inside each branch rather than above them so the happy path -- every
+// request -- does not read the artefact at all.
+//
+// The `$logger->critical()` line in each branch deliberately keeps upstream's own wording:
+// a log line is read by whoever operates the box, against upstream documentation, and
+// BRAND-135/136 branded the user-visible half only.
+
 // Throw error if the php openssl module is not installed.
 if (!(extension_loaded('openssl'))) {
     http_response_code(500);
     $logger->critical('OpenEMR is not working since the php openssl module is not installed');
-    echo "Thiqa Error: Thiqa is not working since the php openssl module is not installed.";
+    $productNameEscaped = text(ProductIdentity::name());
+    echo "{$productNameEscaped} Error: {$productNameEscaped} is not working since the php openssl module is not installed.";
     exit(1);
 }
 // Throw error if the openssl aes-256-cbc cipher is not available.
 if (!(in_array('aes-256-cbc', openssl_get_cipher_methods()))) {
     http_response_code(500);
     $logger->critical('OpenEMR is not working since the openssl aes-256-cbc cipher is not available');
-    echo "Thiqa Error: Thiqa is not working since the openssl aes-256-cbc cipher is not available.";
+    $productNameEscaped = text(ProductIdentity::name());
+    echo "{$productNameEscaped} Error: {$productNameEscaped} is not working since the openssl aes-256-cbc cipher is not available.";
     exit(1);
 }
 

@@ -310,8 +310,10 @@
             "@phpstan-baseline"
         ],
         "branding-tokens-check": "php tools/branding/bin/generate-tokens.php --check",
+        "branding-identity-check": "php tools/branding/bin/generate-product-identity.php --check",
         "branding-ci": [
             "@branding-tokens-check",
+            "@branding-identity-check",
             "@php tools/branding/verify-brand-manifest.php",
             "@php vendor/bin/phpunit -c phpunit-isolated.xml --no-coverage --fail-on-empty-test-suite --fail-on-incomplete --fail-on-risky tests/Tests/Isolated/BrandingCi tests/Tests/Isolated/BrandingCoreStrings tests/Tests/Isolated/PHPStan/ThiqaBranding tests/Tests/Isolated/Modules/ThiqaBranding/Console/BackupRetentionTest.php tests/Tests/Isolated/Modules/ThiqaBranding/Observability tests/Tests/Isolated/Modules/ThiqaBranding/Console/VerifyCommandTest.php"
         ],

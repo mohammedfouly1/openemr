@@ -24,10 +24,32 @@ final readonly class GeneratedHeader
 
     public const GENERATOR = 'tools/branding/bin/generate-tokens.php';
 
+    public const PRODUCT_IDENTITY_GENERATOR = 'tools/branding/bin/generate-product-identity.php';
+
     /**
      * @param list<string> $sources repo-relative token sources for this artefact
      */
     public static function scss(string $summary, array $sources): string
+    {
+        return self::banner($summary, $sources, self::GENERATOR, 'token sources');
+    }
+
+    /**
+     * The same banner for a generated `.php` artefact. `//` comments are valid PHP, so
+     * the SCSS form needs no translation -- only a different generator name.
+     *
+     * @param list<string> $sources repo-relative sources for this artefact
+     */
+    public static function php(string $summary, array $sources, string $generator): string
+    {
+        return self::banner($summary, $sources, $generator, 'branding profile');
+    }
+
+    /**
+     * @param list<string> $sources
+     * @param string       $sourceNoun what a reader should change instead of this file
+     */
+    private static function banner(string $summary, array $sources, string $generator, string $sourceNoun): string
     {
         $lines = [
             self::RULE,
@@ -35,13 +57,13 @@ final readonly class GeneratedHeader
             '//',
             '// ' . $summary,
             '//',
-            '// Produced by ' . self::GENERATOR . ' from:',
+            '// Produced by ' . $generator . ' from:',
         ];
         foreach ($sources as $source) {
             $lines[] = '//   ' . $source;
         }
         $lines[] = '//';
-        $lines[] = '// Change the token sources and re-run the generator. CI re-runs it and fails on';
+        $lines[] = '// Change the ' . $sourceNoun . ' and re-run the generator. CI re-runs it and fails on';
         $lines[] = '// any diff, so an edit made here cannot survive.';
         $lines[] = self::RULE;
 
