@@ -10,6 +10,15 @@
  * @license   https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
  */
 
+// Finding B2-follow-up. `setup.php` composes its Step 2 heading through the product
+// identity, and its 2FA tooltip cites that heading by name. These three cross-references
+// still spelled it with the upstream literal, so the pointer disagreed with the heading it
+// points at. Only the cross-references are converted here: the rest of this file makes
+// factual statements ABOUT the upstream OpenEMR project, which locked constraint C7 keeps.
+require_once(__DIR__ . '/../../src/Common/Branding/ProductIdentity.php');
+
+$productNameEsc = htmlspecialchars(OpenEMR\Common\Branding\ProductIdentity::name(), ENT_QUOTES, 'UTF-8');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -110,7 +119,7 @@
                     <ul>
                         <li><a href="#section1"><?php echo ("Pre Install - Checking File and Directory Permissions");?></a></li>
                         <li><a href="#section2"><?php echo ("Step 1 Select Database Setup");?></a></li>
-                        <li><a href="#section3"><?php echo ("Step 2 Database and OpenEMR Initial User Setup Details");?></a></li>
+                        <li><a href="#section3"><?php echo ("Step 2 Database and ");?><?php echo $productNameEsc; ?><?php echo (" Initial User Setup Details");?></a></li>
                         <li><a href="#section4"><?php echo ("Step 3 Creating Database and First User");?></a></li>
                         <li><a href="#section5"><?php echo ("Step 4 Creating and Configuring Access Control List");?></a></li>
                         <li><a href="#section6"><?php echo ("Step 5 Configure PHP");?></a></li>
@@ -224,7 +233,7 @@
             </div>
             <div class= "row" id="section3">
                 <div class="col-sm-12">
-                    <h4 class="oe-help-heading"><?php echo ("Step 2 Database and OpenEMR Initial User Setup Details"); ?><a href="#main-list"><i class="fa fa-arrow-circle-up oe-pull-away oe-help-redirect" aria-hidden="true"></i></a></h4>
+                    <h4 class="oe-help-heading"><?php echo ("Step 2 Database and "); ?><?php echo $productNameEsc; ?><?php echo (" Initial User Setup Details"); ?><a href="#main-list"><i class="fa fa-arrow-circle-up oe-pull-away oe-help-redirect" aria-hidden="true"></i></a></h4>
                     <p><?php echo ("Lets you fill in the details needed for the setup script to start creating the database and the tables. It will also create the initial user for the OpenEMR application");?>.</p>
 
                     <p><?php echo ("It is divided into three sections"); ?>:</p>
@@ -684,7 +693,7 @@
 
                     <p><?php echo ("As with the single site installation you can either choose 'Have setup create the database' or 'I have already created the database' option and click on 'Proceed to Step 2'"); ?>.</p>
 
-                    <p><?php echo ("In the 'Step 2 - Database and OpenEMR Initial User Setup Details' you will have to fill in the required details for the MySQL server and the OpenEMR Initial User"); ?>.</p>
+                    <p><?php echo ("In the 'Step 2 - Database and "); ?><?php echo $productNameEsc; ?><?php echo (" Initial User Setup Details' you will have to fill in the required details for the MySQL server and the "); ?><?php echo $productNameEsc; ?><?php echo (" Initial User"); ?>.</p>
 
                     <p><?php echo ("You will notice two additional fields on this page, 'Source Site' and 'Clone Source Database'"); ?>.</p>
 

@@ -21,6 +21,16 @@ $verbose = 0;
 $debug = 0;
 $insert_count = 0;
 
+// Finding B2. `$ignoreAuth = true` above makes this page answer an *unauthenticated* request,
+// and it used to print a hardcoded product name three times -- so after a rename an anonymous
+// visitor was shown the previous brand indefinitely. It now reads the session-aware resolver.
+//
+// Resolved before any output, for the same reason sql_patch.php resolves it early:
+// xl_product_name() may have to start a session to decide the wordmark variant, and this page
+// echoes progress lines once the conversion starts. See the comment there for the full
+// rationale. Escaped once, here, because all three uses are HTML element content.
+$productNameEsc = text(xl_product_name());
+
 // Create a visit form from an abortion issue.  This may be called
 // multiple times for a given issue.
 //
@@ -101,14 +111,14 @@ function do_visit_form($irow, $encounter, $first)
 ?>
 <html>
 <head>
-    <title>Thiqa IPPF Upgrade</title>
+    <title><?php echo $productNameEsc; ?> IPPF Upgrade</title>
     <?php Header::setupHeader(); ?>
 </head>
 <body>
     <div class="container mt-3">
         <div class="row">
             <div class="col-12">
-                <h2>Thiqa IPPF Upgrade</h2>
+                <h2><?php echo $productNameEsc; ?> IPPF Upgrade</h2>
             </div>
         </div>
         <div class="jumbotron p-4">
@@ -174,7 +184,7 @@ function do_visit_form($irow, $encounter, $first)
             }
             ?>
             <p>
-                This converts your Thiqa database to UTF-8 encoding if it is not already,
+                This converts your <?php echo $productNameEsc; ?> database to UTF-8 encoding if it is not already,
                 and also converts GCAC issues to the corresponding visit forms.  Both of these
                 steps are needed for IPPF sites upgrading from releases prior to 2009-08-27.
             </p>

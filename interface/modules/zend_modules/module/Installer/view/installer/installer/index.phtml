@@ -14,6 +14,7 @@
 
 // Control access
 use OpenEMR\Core\ModulesApplication;
+use OpenEMR\Core\OEGlobalsBag;
 
 if (!OpenEMR\Common\Acl\AclMain::aclCheckCore('admin', 'manage_modules')) {
     echo xlt('Not Authorized');
@@ -32,8 +33,21 @@ $zendModDir = $GLOBALS['zendModDir'];
 $depObj = $this->dependencyObject;
 $coreModules = $this->coreModules ?? [];
 
+// Finding S4E-02 (extended). `df3cc18f2` replaced upstream's wiki URL and product name with
+// hardcoded tenant values here, which made this view a page the next rename has to edit by
+// hand -- and no branding global, guard or CI gate reaches it, so nothing would have said so.
+// The URL now follows the configured documentation link and the product name is composed, so
+// both track configuration instead of the file.
+$thirdPartyModulesHref = OEGlobalsBag::getInstance()->getString('user_manual_link');
+$thirdPartyModulesText = text(xlp('Visit additional modules for %s developed and listed by third party vendors.'));
+
 $help_items = [
-    xlt('') . '<a  class="text-dark" href="https://skyeagle.uk/docs/installer" target="_blank">' . xlt("Visit additional modules for Thiqa developed and listed by third party vendors.") . '</a>',
+    // No configured documentation link means no link: inventing a URL, or emitting an empty
+    // href, both send the operator somewhere that is not documentation.
+    $thirdPartyModulesHref === ''
+        ? $thirdPartyModulesText
+        : '<a class="text-dark" href="' . attr($thirdPartyModulesHref) . '" target="_blank" rel="noopener">'
+            . $thirdPartyModulesText . '</a>',
     xlt('Laminas Modules are the original modules framework.'),
     xlt('Custom Modules were added to allow developers more freedom by using other development frameworks.'),
     xlt('The "Nick Name" is used to identify the module in the menu and not required.'),
@@ -114,7 +128,9 @@ $help_items = [
 <div class="installer bg-light text-dark">
     <div class="bg-light text-dark text-center" id="helpPanel">
         <button class="btn btn-outline-primary btn-sm btn-show my-2" type="button" onclick="toggleHelp()"><?php echo xlt('Modules Help'); ?></button>
-        <a class="btn btn-outline-info btn-sm btn-show bg-light text-dark my-2" href="https://skyeagle.uk/docs/installer" target="_blank"><?php echo xlt('Visit Third Party Modules Wiki'); ?></a>
+        <?php if ($thirdPartyModulesHref !== '') { ?>
+            <a class="btn btn-outline-info btn-sm btn-show bg-light text-dark my-2" href="<?php echo attr($thirdPartyModulesHref); ?>" target="_blank" rel="noopener"><?php echo xlt('Visit Third Party Modules Wiki'); ?></a>
+        <?php } ?>
         <div class="help-content bg-light text-dark text-left d-none" id="helpContent">
             <ul style="font-size: 1.0rem;">
                 <?php

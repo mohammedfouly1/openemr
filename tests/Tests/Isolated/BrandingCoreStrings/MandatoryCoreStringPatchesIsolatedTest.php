@@ -130,13 +130,18 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
     public static function hardcodedProductNameInventoryProvider(): array
     {
         return [
-            'admin.php' => ['admin.php', 2],
+            // Was 2. Both title and heading now resolve through ProductIdentity, so no literal
+            // remains. Zero is the stronger assertion, as for interface/globals.php below.
+            'admin.php' => ['admin.php', 0],
             // ADR-BRAND-005 / S3-P1-33: was 4. The two pre-bootstrap fatal messages now
             // resolve through ProductIdentity, so the literal is gone from this file entirely.
             // Zero is the STRONGER assertion -- it fails if anyone reintroduces a hardcoded
             // name here, which is exactly the drift the artefact exists to prevent.
             'interface/globals.php' => ['interface/globals.php', 0],
-            'zend installer view' => [self::ZEND_INSTALLER_VIEW, 1],
+            // Was 1. The help-panel string now composes the product name through `xlp()` and the
+            // link follows the configured documentation URL, so no literal remains. Zero is the
+            // stronger assertion: it fails if anyone hardcodes a name here again.
+            'zend installer view' => [self::ZEND_INSTALLER_VIEW, 0],
             'FHIR capability statement' => ['src/RestControllers/FHIR/FhirMetaDataRestController.php', 1],
             'OAuth2 API disabled message' => ['src/RestControllers/Subscriber/OAuth2AuthorizationListener.php', 1],
             'product registration service (must stay clean)' => ['src/Services/ProductRegistrationService.php', 0],
@@ -188,10 +193,24 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
     public static function mandatoryPatchProvider(): array
     {
         return [
+            // BRAND-005 / BRAND-006 used to require the tenant literals themselves. `admin.php`
+            // is the hardest of the pre-database pages — it never loads `vendor/autoload.php`,
+            // so it requires the one identity class directly and hand-rolls its escaping, which
+            // is why the mechanism assertions below name `htmlspecialchars` rather than `text`.
             'admin.php title and heading (BRAND-005, BRAND-006)' => [
                 'admin.php',
-                ['<title>Thiqa Site Administration</title>', '<h2>Thiqa Multi-Site Administration</h2>'],
-                ['OpenEMR Site Administration', 'OpenEMR Multi Site Administration'],
+                [
+                    'require_once(__DIR__ . "/src/Common/Branding/ProductIdentity.php");',
+                    "\$productNameEsc = htmlspecialchars(OpenEMR\\Common\\Branding\\ProductIdentity::name(), ENT_QUOTES, 'UTF-8');",
+                    '<title><?php echo $productNameEsc; ?> Site Administration</title>',
+                    '<h2><?php echo $productNameEsc; ?> Multi-Site Administration</h2>',
+                ],
+                [
+                    '<title>OpenEMR Site Administration</title>',
+                    'OpenEMR Multi Site Administration',
+                    '<title>Thiqa Site Administration</title>',
+                    '<h2>Thiqa Multi-Site Administration</h2>',
+                ],
             ],
             'FHIR capability statement product name (BRAND-087, BRAND-126)' => [
                 'src/RestControllers/FHIR/FhirMetaDataRestController.php',
@@ -222,10 +241,27 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
                 ],
                 ['echo "OpenEMR Error :'],
             ],
+            // BRAND-130 used to require the literals `href="https://skyeagle.uk/docs/installer"`
+            // and `Visit additional modules for Thiqa developed`. That spelled "branded" as
+            // "contains this literal", which is how the surface came to be one the next rename
+            // must edit by hand — and it is the same shape as S4-P0-40, where a test asserted the
+            // defect and so kept it. Both the URL and the product name now resolve from
+            // configuration, so the mechanism is what must survive a rebase.
             'Zend module installer documentation links (BRAND-130)' => [
                 self::ZEND_INSTALLER_VIEW,
-                ['href="https://skyeagle.uk/docs/installer"', 'Visit additional modules for Thiqa developed'],
-                ['open-emr.org/wiki', 'modules for OpenEMR developed'],
+                [
+                    'use OpenEMR\\Core\\OEGlobalsBag;',
+                    "\$thirdPartyModulesHref = OEGlobalsBag::getInstance()->getString('user_manual_link');",
+                    "text(xlp('Visit additional modules for %s developed and listed by third party vendors.'))",
+                ],
+                [
+                    // Upstream, and the two tenant literals this conversion removed: after it,
+                    // reintroducing either is a regression, so both belong on the forbidden side.
+                    'open-emr.org/wiki',
+                    'modules for OpenEMR developed',
+                    'skyeagle.uk/docs/installer',
+                    'modules for Thiqa developed',
+                ],
             ],
             'error page 400 title (BRAND-101)' => [
                 'templates/error/400.html.twig',
@@ -297,17 +333,27 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
                     'Select a theme for OpenEMR...',
                 ],
             ],
+            // BRAND-010 used to require the tenant literal in all three places. The name now
+            // resolves once, BEFORE any output — deliberately, because `xl_product_name()` may
+            // start a session to select the Arabic wordmark, and this page echoes and flushes
+            // progress as it works. Resolving later would hit "headers already sent", degrade
+            // silently to the Latin name, and give this page a different wordmark from every
+            // other page in the same session.
             'sql_patch.php title and banner (BRAND-010)' => [
                 'sql_patch.php',
                 [
-                    "<title>Thiqa <?php echo attr(\$EMRversion)",
-                    'font-size:1.8em; text-align:center">Thiqa <?php echo text($EMRversion)',
-                    'font-size:1.8em;">Thiqa \',xlt(\'Version\')',
+                    '$productNameEsc = text(xl_product_name());',
+                    '<title><?php echo $productNameEsc ?> <?php echo attr($EMRversion) ?>',
+                    'text-align:center"><?php echo $productNameEsc,\' \',text($EMRversion)',
+                    'font-size:1.8em;">\',$productNameEsc,\' \',xlt(\'Version\')',
                 ],
                 [
                     "<title>OpenEMR <?php echo attr(\$EMRversion)",
                     'font-size:1.8em; text-align:center">OpenEMR <?php echo text($EMRversion)',
                     'font-size:1.8em;">OpenEMR \',xlt(\'Version\')',
+                    "<title>Thiqa <?php echo attr(\$EMRversion)",
+                    'font-size:1.8em; text-align:center">Thiqa <?php echo text($EMRversion)',
+                    'font-size:1.8em;">Thiqa \',xlt(\'Version\')',
                 ],
             ],
             'sql_upgrade.php neutral translated title and heading (BRAND-011)' => [
@@ -324,10 +370,23 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
                     'OpenEMR Database Upgrade',
                 ],
             ],
+            // BRAND-012, same conversion and same pre-output resolution as BRAND-010 above.
             'ippf_upgrade.php title and heading (BRAND-012)' => [
                 'ippf_upgrade.php',
-                ['<title>Thiqa IPPF Upgrade</title>', '<h2>Thiqa IPPF Upgrade</h2>', 'converts your Thiqa database'],
-                ['<title>OpenEMR IPPF Upgrade</title>', '<h2>OpenEMR IPPF Upgrade</h2>', 'converts your OpenEMR database'],
+                [
+                    '$productNameEsc = text(xl_product_name());',
+                    '<title><?php echo $productNameEsc; ?> IPPF Upgrade</title>',
+                    '<h2><?php echo $productNameEsc; ?> IPPF Upgrade</h2>',
+                    'This converts your <?php echo $productNameEsc; ?> database to UTF-8 encoding',
+                ],
+                [
+                    '<title>OpenEMR IPPF Upgrade</title>',
+                    '<h2>OpenEMR IPPF Upgrade</h2>',
+                    'converts your OpenEMR database',
+                    '<title>Thiqa IPPF Upgrade</title>',
+                    '<h2>Thiqa IPPF Upgrade</h2>',
+                    'converts your Thiqa database',
+                ],
             ],
         ];
     }

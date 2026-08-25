@@ -1936,7 +1936,13 @@ BOT;
                 }
             });
             $('.enter-details-tooltip').prop( "title", "Additional help to fill out this form is available by hovering over labels of each box and clicking on the dark blue help ? icon that is revealed. On mobile devices tap once on the label to reveal the help icon and tap on the icon to show the help section").tooltip();
-            $('.2fa-section-tooltip').prop( "title", "Two factor authentication prevents unauthorized access to " + <?php echo js_escape(ProductIdentity::name()); ?> + " thus improves security. It is optional. More information is available in the help file under Step 2 Database and OpenEMR Initial User Setup Details.").tooltip();
+            <?php // Finding B2. This tooltip names *this installer's own* step-2 heading, which the
+                  // S3-P1-33 conversion already rewrote at :625 to read "<name> Initial User Setup
+                  // Details". Leaving the reference behind made the page cite a heading it no longer
+                  // prints. It is not one of the four C7 PRESERVE categories -- it names neither the
+                  // upstream project, nor the Foundation, nor the community, nor ONC certification --
+                  // so it is converted with the same js_escape() idiom already used on this line. ?>
+            $('.2fa-section-tooltip').prop( "title", "Two factor authentication prevents unauthorized access to " + <?php echo js_escape(ProductIdentity::name()); ?> + " thus improves security. It is optional. More information is available in the help file under Step 2 Database and " + <?php echo js_escape(ProductIdentity::name()); ?> + " Initial User Setup Details.").tooltip();
 
 
         });

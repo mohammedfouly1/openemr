@@ -10,6 +10,27 @@
  * @license   https://github.com/openemr/openemr/blob/master/LICENSE GNU General Public License 3
  */
 
+// Finding B2-follow-up. `admin.php:215` loads this page into its help modal, and `admin.php`
+// answers an unauthenticated request — so every product name printed below was an anonymous
+// brand leak, on the same surface and for the same reason as the two literals `admin.php`
+// itself carried. `Documentation/` is scanned by no branding guard, which is why it survived.
+//
+// This page loads no bootstrap at all: no `vendor/autoload.php`, no `globals.php`, no database.
+// `ProductIdentity` is the seam built for exactly that (ADR-BRAND-005) — it depends on nothing
+// but PHP builtins and one generated artefact — so it is required directly, as `admin.php`
+// does. Escaping is hand-rolled for the same reason: `text()` is a composer `autoload.files`
+// entry this page never reaches.
+// Separately, and found while converting: this page called `xla()` in two <script> blocks and
+// loaded nothing that defines it, so **every** direct load ended in
+// `Call to undefined function xla()` and a 500 — verified in the PHP error log against the
+// unmodified file. Since the iframe above is the only way this page is ever opened, it has been
+// broken for as long as those calls have been there. The four affected strings are now plain
+// literals, matching the bare `echo ("...")` every other string on this page already uses; the
+// page has no bootstrap to translate through, so making it consistent is the honest repair.
+require_once(__DIR__ . '/../../src/Common/Branding/ProductIdentity.php');
+
+$productNameEsc = htmlspecialchars(OpenEMR\Common\Branding\ProductIdentity::name(), ENT_QUOTES, 'UTF-8');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -34,7 +55,7 @@
    <body>
         <div class="container oe-help-container">
             <div>
-                <h2 class="text-center"><a name='entire_doc'><?php echo ("OpenEMR Multi Site Administration");?></a></h2>
+                <h2 class="text-center"><a name='entire_doc'><?php echo $productNameEsc; ?><?php echo (" Multi Site Administration");?></a></h2>
             </div>
             <div class="row">
                 <div class="col-sm-12">
@@ -59,13 +80,13 @@
 
                     <p><?php echo ("<strong>DB Name</strong> - the name of the database containing site-specific data");?>.</p>
 
-                    <p><?php echo ("<strong>Site Name</strong> - by default it will be OpenEMR, once the site is setup this can be changed for that instance by going to Administration > Appearance > Application Title");?>.</p>
+                    <p><?php echo ("<strong>Site Name</strong> - by default it will be ");?><?php echo $productNameEsc; ?><?php echo (", once the site is setup this can be changed for that instance by going to Administration > Appearance > Application Title");?>.</p>
 
                     <p><?php echo ("<strong>Version</strong> - the version of the current installation");?>.</p>
 
                     <p><?php echo ("As the script files are common to all sites, it would be imperative that all sites have the same version number");?>.</p>
 
-                    <p><?php echo ("<strong>Is Current</strong> - Whether on not the the site's installed database, access control list version and patch status is current i.e. the OpenEMR scripts will work with the installed database, the latest access control lists are available and that the required patches have been applied and is up to date ");?>.</p>
+                    <p><?php echo ("<strong>Is Current</strong> - Whether on not the the site's installed database, access control list version and patch status is current i.e. the ");?><?php echo $productNameEsc; ?><?php echo (" scripts will work with the installed database, the latest access control lists are available and that the required patches have been applied and is up to date ");?>.</p>
 
                     <p><?php echo ("<strong>Log In</strong> - That will let you login to the particular site");?>.</p>
 
@@ -79,8 +100,8 @@
         <script>
            $('#show_hide').click(function() {
                 var elementTitle = $('#show_hide').prop('title');
-                var hideTitle = '<?php echo xla('Click to Hide'); ?>';
-                var showTitle = '<?php echo xla('Click to Show'); ?>';
+                var hideTitle = 'Click to Hide';
+                var showTitle = 'Click to Show';
                 $('.hideaway').toggle('1000');
                 $(this).toggleClass('fa-eye-slash fa-eye');
                 if (elementTitle == hideTitle) {
@@ -96,8 +117,8 @@
         // better script for tackling nested divs
            $('.show_hide').click(function() {
                 var elementTitle = $(this).prop('title');
-                var hideTitle = '<?php echo xla('Click to Hide'); ?>';
-                var showTitle = '<?php echo xla('Click to Show'); ?>';
+                var hideTitle = 'Click to Hide';
+                var showTitle = 'Click to Show';
                 //$('.hideaway').toggle('1000');
                 $(this).parent().parent().closest('div').children('.hideaway').toggle('1000');
                 if (elementTitle == hideTitle) {

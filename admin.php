@@ -22,6 +22,28 @@ if ($response !== true) {
 
 require_once "version.php";
 
+// Finding B2. This page answers an *unauthenticated* request -- it has to, because its whole
+// job is to list sites that may not be installed yet -- and it used to print a hardcoded
+// product name in its <title> and its heading. After a rename those two lines went on showing
+// the previous brand to anonymous visitors indefinitely.
+//
+// Nothing the normal branding layer offers is reachable from here. This script deliberately
+// loads almost nothing: no vendor/autoload.php, no interface/globals.php, no database
+// connection until it opens one per site further down. So xl(), xlt(), xlp() and
+// xl_product_name() are all unavailable by construction, exactly as they are in setup.php.
+//
+// ProductIdentity is the pre-database identity seam built for that case (ADR-BRAND-005). It is
+// required directly, as a single class, in the same style as the Checker above -- and it can be,
+// because it depends on nothing but PHP builtins and one generated `return [...]` artefact.
+// Requiring the whole autoloader here to reach one string would undo the property that makes
+// this page work on a checkout where composer has never run.
+require_once(__DIR__ . "/src/Common/Branding/ProductIdentity.php");
+
+// Escaped once, here, because both uses below are HTML element content. htmlspecialchars()
+// rather than text(): text() is a composer autoload.files entry and this script never loads
+// composer, which is the same reason the rest of this file escapes by hand.
+$productNameEsc = htmlspecialchars(OpenEMR\Common\Branding\ProductIdentity::name(), ENT_QUOTES, 'UTF-8');
+
 $webserver_root = __DIR__;
 if (stripos(PHP_OS, 'WIN') === 0) {
     $webserver_root = str_replace("\\", "/", $webserver_root);
@@ -37,7 +59,7 @@ function adminSqlQuery($statement, $link)
 ?>
 <html>
 <head>
-    <title>Thiqa Site Administration</title>
+    <title><?php echo $productNameEsc; ?> Site Administration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="public/assets/bootstrap/dist/css/bootstrap.min.css">
     <script src="public/assets/jquery/dist/jquery.min.js"></script>
@@ -50,7 +72,7 @@ function adminSqlQuery($statement, $link)
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h2>Thiqa Multi-Site Administration</h2>
+                    <h2><?php echo $productNameEsc; ?> Multi-Site Administration</h2>
                     <a class="text-secondary" data-target="#myModal" data-toggle="modal" href="#" id="help-href" name="help-href">
                         <i class="fa fa-question-circle fa-lg" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Click to view Help"></i>
                     </a>

@@ -1,0 +1,11 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "installer-third-party-modules-neutral-v1",
+    "target_key": "Visit additional modules for %s developed and listed by third party vendors.",
+    "legacy_keys": {
+        "Visit additional modules for OpenEMR developed and listed by third party vendors.": "OpenEMR",
+        "Visit additional modules for Thiqa developed and listed by third party vendors.": "Thiqa"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}

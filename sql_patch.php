@@ -39,19 +39,34 @@ OEGlobalsBag::getInstance()->set("enable_auditlog", 0);
 $EMRversion = (new VersionService())->getSoftwareVersion()->base;
 
 $sqlUpgradeService = new SQLUpgradeService();
+
+// Finding B2. `$ignoreAuth = true` above makes this page answer an *unauthenticated* request,
+// and it used to print a hardcoded product name three times -- so after a rename an anonymous
+// visitor was shown the previous brand indefinitely. It now reads the session-aware resolver,
+// the same source `xlp()` composes with, so the next rename is a configuration change.
+//
+// Resolved here, before a single byte of output, deliberately. xl_product_name() may have to
+// start a session to decide whether the Arabic wordmark applies, and this script echoes and
+// flushes progress output from the moment the body opens; resolving it after that would make
+// the resolver hit "headers already sent", degrade to the Latin name, and give this page a
+// different wordmark from every other page in the same session. The resolver memoises, so the
+// three uses below reuse this one resolution.
+//
+// Escaped once, here, because all three uses are HTML element content.
+$productNameEsc = text(xl_product_name());
 ?>
 
 
 <html>
 <head>
-<title>Thiqa <?php echo attr($EMRversion) ?> <?php echo xlt('Database Patch'); ?></title>
+<title><?php echo $productNameEsc ?> <?php echo attr($EMRversion) ?> <?php echo xlt('Database Patch'); ?></title>
 <link rel="shortcut icon" href="public/images/favicon.ico" />
 </head>
 <body style="color:green;">
 
 <div style="box-shadow: 3px 3px 5px 6px #ccc; border-radius: 20px; padding: 10px 40px;background-color:#EFEFEF; width:500px; margin:40px auto">
 
-  <p style="font-weight:bold; font-size:1.8em; text-align:center">Thiqa <?php echo text($EMRversion),' ',xlt('Database Patch'),' ',text($v_realpatch) ?></p>
+  <p style="font-weight:bold; font-size:1.8em; text-align:center"><?php echo $productNameEsc,' ',text($EMRversion),' ',xlt('Database Patch'),' ',text($v_realpatch) ?></p>
   <p style="font-weight:bold; text-align:center;"><?php echo xlt('Applying Patch to site'),' : ',text($session->get('site_id')) ?></p>
 
 
@@ -103,7 +118,7 @@ $sqlUpgradeService = new SQLUpgradeService();
 
     echo '<p style="text-align:center; font-size:1.8em;">',xlt('Database Patch'),' ',text($desiredVersion['v_realpatch']),' ',xlt('finished'),'.</p>';
 
-    echo '<p style="text-align:center; font-size:1.8em;">Thiqa ',xlt('Version'),' = ',text($EMRversion . '(' . $desiredVersion['v_realpatch'] . ')'),'.</p>';
+    echo '<p style="text-align:center; font-size:1.8em;">',$productNameEsc,' ',xlt('Version'),' = ',text($EMRversion . '(' . $desiredVersion['v_realpatch'] . ')'),'.</p>';
 
     echo '<p><a style="border-radius: 10px; padding:5px; width:200px; margin:0 auto; background-color:green; color:white; font-weight:bold; display:block; text-align:center;" href="index.php?site=',attr($session->get('site_id')) . '">',xlt('Log in'),'</a></p>';
 
