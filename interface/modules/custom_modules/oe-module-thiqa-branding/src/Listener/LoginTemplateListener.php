@@ -16,6 +16,7 @@ namespace OpenEMR\Modules\ThiqaBranding\Listener;
 
 use OpenEMR\Events\Core\TemplatePageEvent;
 use OpenEMR\Modules\ThiqaBranding\Asset\LogoSlot;
+use OpenEMR\Modules\ThiqaBranding\Language\SessionLanguageInterface;
 use OpenEMR\Modules\ThiqaBranding\Service\BrandingServiceInterface;
 use Psr\Log\LoggerInterface;
 
@@ -26,7 +27,7 @@ use Psr\Log\LoggerInterface;
  * The variable that justifies the class is `primaryLogoAlt` (**BRAND-053**). Core's
  * partial hardcodes `alt=""` on both login logos, which announces a hospital's identity
  * mark as decorative and leaves a screen-reader user with nothing where the wordmark is.
- * The accessible name is resolved service-side, in the page's own reading direction, and
+ * The accessible name is resolved service-side, in the page's own reading language, and
  * handed to the template through the event that already exists -- no core file is edited
  * (locked Invariant 4), and the template reads it as `{{ primaryLogoAlt|default('') }}`
  * so an install without this module renders byte-identically to core.
@@ -73,8 +74,22 @@ use Psr\Log\LoggerInterface;
  * Each key is rewritten only when the branding layer actually resolved that slot, so an
  * unresolved slot leaves core's own value untouched rather than blanking it.
  *
- * Plane 3 constraint (locked Q76 / C5): every value comes from data already in memory.
- * No network call, no database query.
+ * Plane 3 constraint (locked Q76 / C5): every BRANDING value comes from data already in
+ * memory. No network call.
+ *
+ * **One qualified exception, added with SKY-F01 and stated here rather than left to be
+ * discovered.** `SessionLanguageInterface::isArabic()` is not a branding value and does not
+ * come from `BrandingConfig`; the shipped adapter resolves it through core's
+ * `getLanguageCode()`, which is one indexed `lang_languages` lookup, memoised per language
+ * for the request. That is a database query, so the blanket "no database query" this docblock
+ * used to claim is no longer true and has been narrowed rather than quietly left standing.
+ *
+ * It is a deliberate trade, on these grounds: core already performs the identical lookup on
+ * every page load -- `interface/globals.php:566` calls `getLanguageDir()` to decide the `rtl_`
+ * stylesheet, which is the very value `isRtl()` reads back -- so the query is not new work on
+ * this page, and the login page reaches the database many times over through `xl()` regardless.
+ * The alternative, keeping the direction proxy, is what SKY-F01 is. The dependency is injected,
+ * so a caller that genuinely cannot query passes an implementation that does not.
  */
 final readonly class LoginTemplateListener
 {
@@ -99,6 +114,7 @@ final readonly class LoginTemplateListener
 
     public function __construct(
         private BrandingServiceInterface $branding,
+        private SessionLanguageInterface $language,
         private LoggerInterface $logger,
     ) {
     }
@@ -144,10 +160,14 @@ final readonly class LoginTemplateListener
      */
     private function brandingVariables(): array
     {
-        // One direction decision for the whole page: an RTL session gets the Arabic
-        // accessible names and the Arabic wordmark, rather than a Latin fallback sitting
-        // inside a right-to-left layout.
-        $arabic = $this->branding->isRtl();
+        // SKY-F01: the predicate is the LANGUAGE, not the direction. This read used to be
+        // `$this->branding->isRtl()`, which is true for all four right-to-left locales --
+        // Hebrew, Arabic, Persian and Urdu -- so a Hebrew login page was announcing its logo
+        // to a screen reader as `شعار ثقة`. `library/translation.inc.php:149-152` names that
+        // exact substitution as "a worse error than the one being fixed"; the login page was
+        // making it. isRtl() keeps its job -- deciding layout -- and answers nothing about
+        // which script the reader wants.
+        $arabic = $this->language->isArabic();
 
         $candidates = [
             // BRAND-053: the accessible name core hardcodes as "".

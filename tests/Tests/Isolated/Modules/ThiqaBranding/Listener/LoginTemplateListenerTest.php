@@ -171,18 +171,69 @@ final class LoginTemplateListenerTest extends TestCase
         );
     }
 
-    /** An RTL session gets the Arabic wordmark and Arabic accessible names. */
-    public function testARightToLeftSessionReceivesTheArabicNames(): void
+    /**
+     * SKY-F01. An Arabic session gets the Arabic wordmark and Arabic accessible names.
+     *
+     * This used to set `$branding->rtl = true` and assert the same thing, which passed for the
+     * wrong reason: it proved only that SOME right-to-left session got Arabic. The three cases
+     * below separate the two variables the old test conflated, and the Hebrew one is the case
+     * that actually failed before the fix.
+     */
+    public function testAnArabicSessionReceivesTheArabicNames(): void
     {
         $branding = $this->brandedTenant();
         $branding->rtl = true;
         $event = $this->loginEvent();
 
-        $this->listener($branding)->onTemplatePage($event);
+        $this->listener($branding, arabic: true)->onTemplatePage($event);
 
         $variables = $event->getTwigVariables();
         $this->assertSame('شعار ثقة', $variables['primaryLogoAlt']);
+        $this->assertSame('شعار ثقة الثانوي', $variables['secondaryLogoAlt']);
         $this->assertSame('ثقة', $variables['brandProductName']);
+    }
+
+    /** An English session gets the Latin names -- the baseline the other two are read against. */
+    public function testAnEnglishSessionReceivesTheLatinNames(): void
+    {
+        $branding = $this->brandedTenant();
+        $event = $this->loginEvent();
+
+        $this->listener($branding, arabic: false)->onTemplatePage($event);
+
+        $variables = $event->getTwigVariables();
+        $this->assertSame('Thiqa logo', $variables['primaryLogoAlt']);
+        $this->assertSame('Thiqa secondary logo', $variables['secondaryLogoAlt']);
+        $this->assertSame('Thiqa', $variables['brandProductName']);
+    }
+
+    /**
+     * SKY-F01, the regression this exists for: a right-to-left session that is NOT Arabic.
+     *
+     * `lang_languages` marks four locales right-to-left -- Hebrew, Arabic, Persian and Urdu --
+     * so `interface/globals.php:566-570` swaps in the `rtl_` stylesheet for a Hebrew session
+     * exactly as it does for an Arabic one, and `BrandingServiceInterface::isRtl()` reads that
+     * prefix back as true. Selecting branding content from it announced this product's logo to
+     * a Hebrew screen-reader user as `شعار ثقة`.
+     *
+     * The direction is deliberately left true here. If this test ever passes only because the
+     * layout is left-to-right, it is testing nothing: the whole defect was direction and
+     * language disagreeing, so they must disagree in the fixture.
+     */
+    public function testARightToLeftSessionThatIsNotArabicKeepsTheLatinNames(): void
+    {
+        $branding = $this->brandedTenant();
+        $branding->rtl = true;
+        $event = $this->loginEvent();
+
+        $this->listener($branding, arabic: false)->onTemplatePage($event);
+
+        $variables = $event->getTwigVariables();
+        $this->assertSame('Thiqa logo', $variables['primaryLogoAlt']);
+        $this->assertSame('Thiqa secondary logo', $variables['secondaryLogoAlt']);
+        $this->assertSame('Thiqa', $variables['brandProductName']);
+        $this->assertStringNotContainsString('شعار', $variables['primaryLogoAlt']);
+        $this->assertStringNotContainsString('ثقة', $variables['brandProductName']);
     }
 
     /** A suppressed tagline is absent, not present-and-empty. */
@@ -263,9 +314,9 @@ final class LoginTemplateListenerTest extends TestCase
         return $added;
     }
 
-    private function listener(StubBrandingService $branding): LoginTemplateListener
+    private function listener(StubBrandingService $branding, bool $arabic = false): LoginTemplateListener
     {
-        return new LoginTemplateListener($branding, new NullLogger());
+        return new LoginTemplateListener($branding, new StubSessionLanguage($arabic), new NullLogger());
     }
 
     private function loginEvent(): TemplatePageEvent

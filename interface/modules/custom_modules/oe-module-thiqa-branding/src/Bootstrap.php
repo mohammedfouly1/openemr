@@ -46,6 +46,7 @@ use OpenEMR\Modules\ThiqaBranding\Console\MaterialiseCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\ProvisionReportAclCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\SeedDemoCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\VerifyCommand;
+use OpenEMR\Modules\ThiqaBranding\Language\CoreSessionLanguage;
 use OpenEMR\Modules\ThiqaBranding\Listener\LoginTemplateListener;
 use OpenEMR\Modules\ThiqaBranding\Listener\LogoOverrideListener;
 use OpenEMR\Modules\ThiqaBranding\Listener\StyleInjectionListener;
@@ -135,7 +136,7 @@ final class Bootstrap
 
         $this->dispatcher->addListener(
             TemplatePageEvent::RENDER_EVENT,
-            (new LoginTemplateListener($branding, $logger))->onTemplatePage(...)
+            (new LoginTemplateListener($branding, new CoreSessionLanguage(), $logger))->onTemplatePage(...)
         );
 
         $this->dispatcher->addListener(
