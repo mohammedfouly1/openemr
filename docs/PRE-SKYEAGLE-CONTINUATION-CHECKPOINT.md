@@ -3173,3 +3173,70 @@ ownership tripwire held over the whole session.
 **Certification remains NOT PASSED.**
 
 ---
+
+## 24. SCAN-4C — THE UNAUDITED SURFACE, NOW AUDITED
+
+Scan-4C never reported during the Scan-4 session, and §22.2 recorded its area as **UNAUDITED**.
+It was re-dispatched and returned: `docs/evidence/EV-SCAN4C-live-leak-audit.md`. Read-only, no
+repository file edited, live database not mutated — verified by an identical before/after
+`globals`/`version` snapshot, and by deliberately **not** issuing a GET to any side-effect-bearing
+endpoint. That last point is the method correction §23.9 asked for, applied: the audit read
+`acl_upgrade.php` and confirmed it writes ACL rows on every load, then avoided executing it.
+
+### 24.1 S4C-01 — the session machinery ships the upstream name to every visitor — **CONFIRMED; PRESERVE by locked decision**
+
+Three surfaces, one root cause. `SessionUtil::CORE_SESSION_ID = "OpenEMR"`
+(`src/Common/Session/SessionUtil.php:81`) is the PHP session cookie's own name; the same literal
+is the *value* of the year-lived `App` cookie (`interface/login/login.php:49`); and it reaches
+authenticated page JavaScript as `var oemr_session_name = "OpenEMR"`
+(`library/restoreSession.php:32`).
+
+**The finding is real and the disposition was already taken.** §10 lists `SessionUtil` identity
+constants under *Must NOT be renamed* (locked Q17/C6), and the audit reached the same practical
+conclusion independently and for the right reasons: the cookie name is machine identity, not
+product identity, and renaming it breaks existing sessions, load-balancer sticky-cookie rules and
+anything keyed on it. It is plumbing that happens to spell the upstream name, not a brand leak in
+the sense the leak guard exists to catch.
+
+**What is genuinely new, and worth keeping:** the audit explains *why no guard can see this class*.
+`BrandLeakSurfaceContractTest` scans PHP and Twig source for rendered product-name strings. A
+`Set-Cookie` header is emitted by PHP's session machinery rather than printed as page content, and
+`CORE_SESSION_ID` is not an `xl()`/`xlt()` argument — so it is structurally outside every scanned
+surface, and would remain so however far the roots were widened. That is a real limit of the
+guard's model, and it is recorded rather than mistaken for coverage.
+
+### 24.2 S4C-02 — the second tenant served old branding to anonymous visitors — **CLOSED by the rename**
+
+Raised as a live escalation of S4E-01: the CLI-side fix made the second tenant *visible to an
+operator*, but nothing made the served page tell anyone, and `rdy0082restore` was answering
+anonymous requests fully branded to the previous identity.
+
+**Closed the same day, by acting on what the S4E-01 notice said.** `apply-profile` was run against
+both tenants; the notice fired on each run naming the other. Verified live, anonymous, after both:
+
+```text
+/interface/login/login.php?site=default          SkyEagle=2  Thiqa=0   title: SkyEagle Login
+/interface/login/login.php?site=rdy0082restore   SkyEagle=2  Thiqa=0   title: SkyEagle Login
+```
+
+The split-brain that finding described no longer exists. **Whether that tenant should exist at all
+is still an Owner decision and is still untaken** — it is now consistently branded rather than
+retired, which is a different thing and is recorded as such.
+
+### 24.3 S4C-03 — blast radius of the two dead URLs — **informational, feeds ADR-BRAND-006**
+
+Both 404-ing `skyeagle.uk` URLs are reachable from exactly one page, `about_page.php`, two clicks
+from any authenticated user. That is narrower than "shipped in the installer defaults" implied on
+its own, and it is the number the ADR-BRAND-006 ruling should be taken against: the exposure is
+real, bounded, and authenticated-only.
+
+### 24.4 What this changes about the register
+
+Scan 4 is now **five of five returned**. The blocker recorded at §22.2 and §23.10 item 2 is
+discharged. Two of the three findings are dispositioned above; the third is informational and
+attaches to an open Owner decision rather than standing alone.
+
+**No Scan-4C finding blocks certification.** S4C-01 is a locked PRESERVE, S4C-02 is closed, S4C-03
+is an input to a ruling that was already outstanding.
+
+---
