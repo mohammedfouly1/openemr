@@ -1,3 +1,18 @@
+# brand/manifests/SHA256SUMS -- recorded-hash coverage for the branding release gate.
+#
+# Verified by `php tools/branding/verify-brand-manifest.php`; also readable by GNU
+# `sha256sum -c` (blank lines and `#` comments are skipped by both).
+#
+# Two classes of artefact carry a recorded hash here. A third class -- the git-ignored
+# deployments under `public/assets/fonts/thiqa/` -- deliberately carries NO recorded hash
+# and is verified by equality with its class-1 source instead, because a recorded hash for
+# a path absent from a clean checkout would red the gate on every fresh clone. See the
+# verifier docblock and docs/branding-production/11-asset-manifest.md for the full model.
+#
+# Re-issue, never delete. A changed brand source re-issues its class-1 entry AND every
+# class-2 entry fed from it -- re-run `php tools/branding/install-assets.php` first.
+
+# Class 1 -- source artefacts: the immutable brand kit and its design documents.
 a2a39df08e880a0fab5b08c430f060d66bcf305aaeb9372a1f135f63d6cf5292  brand/colors/palette-swatch-sheet-dark.png
 71c740aeca1a0ee8011b2455b559f85a7ee5ea51ee7327806462f0e58ef50ca8  brand/colors/palette-swatch-sheet-light.png
 879ed90c3a11d0e42c8293623a29030ce6c05b4120770ebb0fd51614338b7d93  brand/email/transactional-bilingual.png
@@ -121,3 +136,36 @@ feb8bec1c91fa13621f802bf802d139de88ebb1d4df3304c3d54ba34bc1a738f  docs/branding-
 604a344c83dec02b36a6e615ab2afb55aea8972368069ebdfa1612983db09065  docs/branding-production/15-decision-record.md
 53d135e2d1d1ee6dc2309c9841171e8cad9b1820bd3a56bcfeadbe51f4b593a5  docs/branding-production/16-conflict-resolutions.md
 3f50e739dcf3914b1678fe83f8ade33015f030a24f3d661addfb71d8266bb9bb  docs/branding-production/FINAL-GROUP-1.5B-CERTIFICATION.md
+
+# Class 2 -- deployed artefacts: the files the running product actually serves, written by
+# `php tools/branding/install-assets.php` from the class-1 sources above. Tracked in git and
+# present in every checkout, so a recorded hash is enforceable unconditionally.
+#
+# `sites/default/images/*` are the shipped defaults for the default tenant. This manifest
+# asserts *as-shipped* bytes: an operator who replaces a practice logo on a live install will
+# legitimately mismatch here, which is correct for a release gate and out of scope for a
+# runtime check. Non-default `sites/<id>/images` are per-tenant and are not covered.
+#
+# Line endings: every path below is binary, or an SVG matched by `.gitattributes:78`
+# (`*.svg text eol=lf`), so the bytes are identical on every platform under core.autocrlf.
+2cbd5b38cddfbc158ed34f2ca7092e3c4e79989dc789cbe40740c8a6ab8dd4d3  public/images/logos/core/login/primary/logo.png
+ba6b4aa2e7a4353d259fa4d4d631eaafe3331c09a3acbf8f90843126dfaca5db  public/images/logos/core/login/secondary/logo.png
+ea146fbcc082b76bc7a7aa384f594964ca29e9e852b13701e47520b0102b893f  public/images/logos/core/login/small_logo_1/logo.png
+ea146fbcc082b76bc7a7aa384f594964ca29e9e852b13701e47520b0102b893f  public/images/logos/core/login/small_logo_2/logo.png
+5e78270147dde279c40c061da34f667883168a836bd1de5478dfffdb0f5aae71  public/images/logos/core/menu/primary/logo.svg
+4026d768524ae626c087713e71386e6ae3a5d3e3b457d1d36a5f6524e46d7e90  public/images/logos/core/favicon/favicon.ico
+2cbd5b38cddfbc158ed34f2ca7092e3c4e79989dc789cbe40740c8a6ab8dd4d3  public/images/logos/portal/login/primary/logo.png
+ba6b4aa2e7a4353d259fa4d4d631eaafe3331c09a3acbf8f90843126dfaca5db  public/images/logos/portal/login/secondary/logo.png
+49d4f090ee3480cc9262284882484527284e41ce20974055f9bbb360a05a391e  public/images/logos/portal/menu/primary/logo.png
+2cbd5b38cddfbc158ed34f2ca7092e3c4e79989dc789cbe40740c8a6ab8dd4d3  public/images/login-logo.png
+49d4f090ee3480cc9262284882484527284e41ce20974055f9bbb360a05a391e  public/images/logo-full-con.png
+cb9fa715d0f4ef7bfe6597c0fcb0de61f3567c975b6579573c0d17e994820b75  public/images/menu-logo.png
+296dd92dfc251f52d13fe5b0b82106278e49db15e22f002112909a6f29d35651  public/images/favicon-32x32.png
+4026d768524ae626c087713e71386e6ae3a5d3e3b457d1d36a5f6524e46d7e90  public/images/favicon.ico
+bab0f2d97de2fe8deee096efdedcb4ea42299c76e271b7641e057c9c757c91c6  sites/default/images/login_logo.gif
+7e31733588f77e51513a630a8833039b4a00a485af8e4a31922c9e75f23aeb70  sites/default/images/logo_1.png
+7e31733588f77e51513a630a8833039b4a00a485af8e4a31922c9e75f23aeb70  sites/default/images/logo_2.png
+d29b0130b44e1efa3fe19e8977a5921a774a7d082e2fb4b7dc6b2d9dca0d74ff  sites/default/images/practice_logo.gif
+43e5e5abf6cc594793cfd9616ff44d7198f7632ded02c8bbc342c747b4cdcf62  interface/modules/custom_modules/oe-module-thiqa-branding/public/logos/dark/core/menu/primary/logo.svg
+baa9628046e04fa8c7e54389e62952641dad7b597cffc8da7316efbef057a79b  interface/modules/custom_modules/oe-module-thiqa-branding/public/logos/dark/core/login/primary/logo.svg
+baa9628046e04fa8c7e54389e62952641dad7b597cffc8da7316efbef057a79b  interface/modules/custom_modules/oe-module-thiqa-branding/public/logos/dark/core/login/secondary/logo.svg
