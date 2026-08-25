@@ -46,6 +46,8 @@
 
 | 28 | **SCAN 3 COMPLETE — five independent agents, one P0 found and fixed, six findings open.** `5d519342d`. **Scan-3A found S3-P0-28 and proved it by execution:** the installer SQL and the PHP upgrade migration disagreed on whether an explicit contract definition or the neutralised legacy string wins. They differ on real shipped data (French: `de %s` vs `d'%s`), so every site installed from this branch would die on its first `sql_upgrade.php` with an uncaught `Conflicting target definition for lang_id 8` — after DDL, before the version bump, unrecoverable without hand-editing, and **not reproducible on this dev database**. Pre-existing since S1-P0-13; survived Scan 1, Scan 2, and the orchestrator's own self-review at Rev 26. Fixed with one precedence rule in both paths, three regression tests, and a negative control that reproduces the exact exception. Also fixed: S3-P2-29 (SQL could store an un-renderable two-placeholder value; now requires exactly one occurrence, proven on a disposable DB seeded with a deliberate double). **Scan-3B** hardened six gate assertions that checked a guard's *text* rather than its *effect* — including one where deleting `'8.2'` from the matrix switched the entire branding gate off with every leg green. **Scan-3D** found the PRE-09 ledger row still reading "IN PROGRESS — 13 items verified" beside its own evidence cell listing 18 and concluding complete, two stale `architecture.md` line refs, and an arithmetic error in this file's own Class-B accounting (corrected to 14 literals / 17 sites). **Scan-3C** found the sharpest critique of this session's architecture: `xl_product_name()` has two callers while `xlp()` and the `|xlp` filter — the very functions built to compose the product name — both bypass it, so Arabic sessions still get a Latin wordmark almost everywhere (S3-P1-32, open). **Scan-3E** corrected an orchestrator docblock that claimed test coverage it did not have, and contributed the Arabic substring trap (`ثقة` inside `منبثقة`). One 3E claim was **refuted** on verification. Gate: 12/12 artefacts, 123/123 manifest, 261 tests / 3,370 assertions, exit 0. **Certification remains NOT PASSED** — six findings open. |
 
+| 29 | **PRE-09 / S3-P1-32 + S3-P1-34 + S3-P1-31 FIXED — VERIFIED. Three of the six open Scan-3 findings closed; three remain.** `f18f75080`, `59d5c14df`. **S3-P1-32** was Scan-3C's critique of this programme's own architecture and it was right: `xlp()` and the `\|xlp` filter now resolve through `xl_product_name()`, so every composed surface gets the session's product name rather than only the shell's browser tab. **The guard that should have caught it was itself the Scan-3B false-green shape** — `assertStringContainsString("getString('openemr_name')")` was *file-wide*, so it kept passing after the read moved to the neighbouring function in the same file. It is now scoped to each function's own body, with comments stripped through `token_get_all()` so a comment recording the fix can neither satisfy nor break the assertion. **It is also proven by execution with no database:** `xl_product_name()` memoises per request, so resolving once under one configured name, changing the name, then composing discriminates a routed `xlp()` (returns the first value) from a bypassing one (returns the second). PHPUnit's `RunInSeparateProcess` was tried first and **hangs on this host**; the probe therefore runs in-process, restores the bag in a `finally`, and its memo residue is documented rather than hidden. Negative control reverted both entry points: 3 failures / exit 1 including the executable one; sources restored to SHA-256 `61C40FC3…` / `C2305A40…` and the suite passed again. **One inherited claim corrected:** the resolver's new `catch (\RuntimeException)` was documented as protecting the *installer*. It does not — `Installer::insert_globals()` never reaches it because `saas_branding_product_name_ar` does not exist yet and the `has()` check returns first (verified cold: an unpopulated bag returns `''` without touching session or database). What it *does* protect is `sql_upgrade.php:551` / `sql_patch.php:74`, which require `globals.inc.php` **after** echoing and flushing — reproduced directly in a cold CLI process as `RuntimeException: Failed to start the session because headers have already been sent`. Uncaught, that aborts an upgrade mid-run: the S3-P0-28 shape. A database failure is explicitly **not** guarded, because `sqlQuery()` ends in `HelpfulDie()`'s `exit(1)` and no catch can reach it. **S3-P1-34** converts the questionnaire copyright disclaimer — Rev 23's one *mechanical* exclusion, since its literal was an argument to the browser-side `xl()`. Composed in PHP, emitted through `js_escape()`; round-tripped for Latin, Arabic and quote-bearing names. It has no `lang_constants` row, so nothing is orphaned. **S3-P1-31** guards both editor write paths, and its interesting half is the *classification*: `compose()` itself decides what is a pattern, measured against real data as 0 false positives across all 16 `%`-bearing catalogue constants and 0 false negatives across all 28 shipped contract targets. Negative control removing the update-path guard failed the named test, exit 1, then restored. Also initialises `$go`, which the surrounding block reads unconditionally and nothing ever set. Canonical gate: 12/12 artefacts, 123/123 manifest, **289 tests / 3,460 assertions**, exit 0; PHPCS 6/6; live login page HTTP 200 / 9,165 bytes, matching the recorded baseline. Live database mutated: NO. **Certification remains NOT PASSED** — S3-P1-33, S3-P2-35 and S3-P2-36 are open. |
+
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
 
@@ -66,7 +68,7 @@ CURRENT HEAD:                   RE-DERIVE ON RESUME (`git rev-parse HEAD`).
                                 stale. The durable record is the remediation-commit table below — trust
                                 that, not a HEAD literal.
                                 *** HEAD IS NO LONGER THE SCAN BASELINE — remediation has begun ***
-CURRENT OBSERVED HEAD:          5d519342d (Scan-3 remediation; before the Rev 28 checkpoint commit)
+CURRENT OBSERVED HEAD:          59d5c14df (S3-P1-31; before the Rev 29 checkpoint commit)
 CURRENT GIT STATUS:             ?? .claude/ (observed after the Rev 22 commit; .claude/ stays untracked
                                 after its atomic commit the tracked tree is expected to be clean)
                                 sites/default/sqlconf.php is skip-worktree (flag S) — do not commit
@@ -115,6 +117,8 @@ FINAL TARGET:                   PRE-SKYEAGLE CERTIFICATION: PASS
 | `97f6952cf` | PRE-09 / S1-P2-07 + S1-P2-12 + S1-P2-14 + S1-P2-16 | Made `Config\ModulePaths` the single owner of the module directory name and guarded the three consumers that cannot share a PHP constant; corrected the CSS release counts to 18/4, the worktree hygiene rule to four (naming the un-excludable sibling), and the console-command count to six with its blast-radius consequence. Also corrected the inherited claim that `webpack.themes.js` references the module directory — it does not. |
 | `2df9b5eb1` | PRE-09 / S1-P1-04 + S2-P1-20 | Added the independent guardrail-scope cross-check (module PSR-4 prefix vs all four rule constants, both directions), and the font-face distinctness contract (a shared face must be variable; a static family must be byte-distinct). Refuted S2-P1-20's rendering claim with a WOFF2 table-directory decode and recorded it as Correction K. No production source, font binary or asset manifest changed. |
 | `1474263b4` | PRE-09 / S2-P1-18 | Separated the served branding plane from the unserved static-artefact plane, made only served-plane findings fail a health probe, added two served-plane cases the old model could not see, read the overlay through the runtime parser, gated the health suite in `composer branding-ci`, and corrected the three records that had drifted on the RB-11 reading. |
+| `f18f75080` | PRE-09 / S3-P1-32 + S3-P1-34 | Routed `xlp()` and the `\|xlp` Twig filter through `xl_product_name()`; rescoped the file-wide guard to each function's own body with comments stripped; added an executable, database-free discrimination between routing and bypass; converted the questionnaire copyright disclaimer across the PHP/JS boundary via `js_escape()`; and corrected the resolver's own docblock about which caller its `RuntimeException` guard actually protects. |
+| `59d5c14df` | PRE-09 / S3-P1-31 | Added the product-context placeholder guard to both write paths of `interface/language/lang_definition.php`, classifying with `compose()` itself rather than a substring test (0 false positives over the 16 `%`-bearing catalogue constants, 0 false negatives over the 28 contract targets), reported rejections by constant name, and initialised `$go`. |
 
 Add a row for every further remediation commit.
 
@@ -135,7 +139,33 @@ under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
 Those landed-work verification steps and the next eleven PRE-09 repairs are now complete; see revisions 6…18.
-**Exact next incomplete item:** the six OPEN Scan-3 findings (§15B register), in this order — **S3-P1-32** (route `xlp()` and the `|xlp` filter through `xl_product_name()`, the single change with the widest Arabic impact), **S3-P1-31** (placeholder guard in the language editor), then **S3-P1-33/34** and the two P2 governance items. **PRE-25 certification cannot be attempted while these are open.** Separately, `S3-OBS-01` (admin.php served without authentication) is outside branding and needs its own review.
+**Exact next incomplete item (updated at Rev 29):** S3-P1-32, S3-P1-34 and S3-P1-31 are FIXED — VERIFIED
+(`f18f75080`, `59d5c14df`). **Three Scan-3 findings remain open**, in this order:
+
+1. **S3-P1-33 — `setup.php` is a mixed-brand installer.** Not a mechanical conversion, and the reason
+   matters: `setup.php` runs *before the database exists*, so `xl()`, `xlp()` and every branding global
+   are unavailable there. It already carries **10 hardcoded `Thiqa` literals** (`:145`, `:160`, `:356`,
+   `:452`, `:522`, `:524`, `:526`, `:976`, `:1530`, `:1747`) alongside roughly 20 surviving `OpenEMR`
+   ones, so the same page currently says both `Thiqa Setup Tool` and
+   `Congratulations! OpenEMR is now installed.` Making it merely *consistent* by hardcoding the tenant
+   name into ~30 places is the wrong repair for a programme whose whole purpose is to make the next
+   rename a single edit. The real decision is where a pre-database product identity should live, and
+   that is an architecture choice deserving its own recorded design step before implementation —
+   the same discipline `ba0078c62` used for the translation architecture.
+2. **S3-P2-35** — deployed assets (logos, favicon, fonts under `public/`, compiled `public/themes/*.css`)
+   sit outside the 123-entry manifest, so they can be replaced while the gate prints `123/123 verified`.
+   Governance: closing it changes the documented re-issue discipline.
+3. **S3-P2-36** — the Q77 deployed-theme check calls `markTestSkipped` when `public/themes/` is absent,
+   CI has no webpack step, and the gate passes no `--fail-on-skipped`, so a locked decision's check runs
+   in no CI job while reporting green. CI infrastructure.
+
+**PRE-25 certification cannot be attempted while these are open.** Separately, `S3-OBS-01` (admin.php
+served without authentication) is outside branding and needs its own review.
+
+**Recorded, not fixed, from the Rev 29 work:** `js_escape()` is `json_encode()` with no `JSON_HEX_TAG`,
+so a product name containing `</script>` would break out of the surrounding block. This is pre-existing
+and identical at `interface/main/tabs/main.php`'s `js_escape(xl_product_name())`; the value is
+admin-configured, not user input. Noted so it is not discovered later and mistaken for new.
 
 Apache was started successfully earlier this session (`C:\openemr-stack\start-openemr.ps1`) and served many
 requests. It stopped responding after a `GET /apis/default/fhir/metadata` request hung — consistent with the
@@ -198,7 +228,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **COMPLETE — 18 items verified** (one sub-item, S2-P1-24's Arabic logo variant, is blocked on an approved asset that does not exist) | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). ✅ All four P2 findings closed (`97f6952cf`). ✅ S2-P1-22 + S2-P1-23 + the juxtaposition half of S2-P1-24 closed together by the multi-key contract subsystem and the `xlp` composition filter (`6edc03b8b`). ✅ S2-P1-26 Class B — the uncatalogued leak class no override could reach — converted, with the Foundation/ONC preserve list locked by test (`6da352e9a`). ✅ S2-P1-26 Class A: 20 legacy contracts + 22 call sites, after fixing a latent install-vs-upgrade divergence that would have aborted real upgrades (`177d5dc97`). ✅ S2-P1-24 text half: the shell selects the Arabic product name by language. **PRE-09 IS COMPLETE** apart from S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist. **Next:** Scan 3 (PRE-18…24), then PRE-25. |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **COMPLETE — 18 items verified** (one sub-item, S2-P1-24's Arabic logo variant, is blocked on an approved asset that does not exist) | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). ✅ All four P2 findings closed (`97f6952cf`). ✅ S2-P1-22 + S2-P1-23 + the juxtaposition half of S2-P1-24 closed together by the multi-key contract subsystem and the `xlp` composition filter (`6edc03b8b`). ✅ S2-P1-26 Class B — the uncatalogued leak class no override could reach — converted, with the Foundation/ONC preserve list locked by test (`6da352e9a`). ✅ S2-P1-26 Class A: 20 legacy contracts + 22 call sites, after fixing a latent install-vs-upgrade divergence that would have aborted real upgrades (`177d5dc97`). ✅ S2-P1-24 text half: the shell selects the Arabic product name by language. **PRE-09 IS COMPLETE** apart from S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist. ✅ Scan-3 remediation, Rev 29: S3-P1-32 + S3-P1-34 (`f18f75080`) and S3-P1-31 (`59d5c14df`). **Next:** S3-P1-33 (needs a recorded design step first — see §1), the two governance/CI P2s, then PRE-25. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -207,7 +237,7 @@ implemented yet.
 | PRE-15 | Scan-2F Runtime surfaces | Agent 2F | R | **DONE** (two runs) | §15 SCAN2F |
 | PRE-16 | Scan-2G Materialisation / tenant safety | orchestrator continuation | R/W (reversible runtime proof) | **DONE — VERIFIED; LIVE STATE RESTORED** | §15 SCAN2G and §16 continuation evidence |
 | PRE-17 | Scan-2H Telemetry / network egress | Agent 2H | R | **DONE** | §15 SCAN2H |
-| PRE-18…24 | Scan-3A…3E adversarial red-team | fresh agents | R | **COMPLETE (2026-08-24) — 5 of 5 returned; 1 P0 found and fixed** | All five reported. Scan-3A found **S3-P0-28**, a fresh-install-versus-upgrade precedence divergence that would have wedged every upgrade uncatchably; fixed and regression-pinned. 3B hardened six gate assertions; 3C found the composition architecture's real reach gap; 3D found three documentation defects including a stale headline status; 3E found one live-state gap and corrected an orchestrator docblock. **7 new findings remain open** — see §15B. Originally: | Five independent read-only agents, launched only after the Owner explicitly authorised spawning them. Scoped to five attack surfaces rather than the original seven letters: **3A** translation-contract subsystem (orphaning, page-fatal patterns, install-vs-upgrade divergence, rollback); **3B** CI gate and guardrail false-greens; **3C** brand leaks on live and source surfaces incl. Arabic/RTL; **3D** documentation truthfulness (falsify the corpus's own claims, including this file's); **3E** rename blast radius and silent breakage. Each was told to falsify rather than inherit, given the host constraints (no Docker, Twig render tests hang, scoped searches, sibling-worktree exclusion), and bound to read-only with no live-DB mutation. |
+| PRE-18…24 | Scan-3A…3E adversarial red-team | fresh agents | R | **COMPLETE (2026-08-24) — 5 of 5 returned; 1 P0 found and fixed** | All five reported. Scan-3A found **S3-P0-28**, a fresh-install-versus-upgrade precedence divergence that would have wedged every upgrade uncatchably; fixed and regression-pinned. 3B hardened six gate assertions; 3C found the composition architecture's real reach gap; 3D found three documentation defects including a stale headline status; 3E found one live-state gap and corrected an orchestrator docblock. **Rev 29 closed S3-P1-31, S3-P1-32 and S3-P1-34; 4 remain unclosed** — 1 accepted trade, 1 P1 needing a design step, 2 governance/CI P2s. See §15B. Originally: | Five independent read-only agents, launched only after the Owner explicitly authorised spawning them. Scoped to five attack surfaces rather than the original seven letters: **3A** translation-contract subsystem (orphaning, page-fatal patterns, install-vs-upgrade divergence, rollback); **3B** CI gate and guardrail false-greens; **3C** brand leaks on live and source surfaces incl. Arabic/RTL; **3D** documentation truthfulness (falsify the corpus's own claims, including this file's); **3E** rename blast radius and silent breakage. Each was told to falsify rather than inherit, given the host constraints (no Docker, Twig render tests hang, scoped searches, sibling-worktree exclusion), and bound to read-only with no live-DB mutation. |
 | PRE-25 | Final reconciliation / certification | orchestrator | R | **NOT STARTED** | — |
 
 **Orchestrator's own guardrail proof:** two direct PHPUnit runs exceeded timeout on the Drive mount without
@@ -237,7 +267,10 @@ SCAN 3:  COMPLETE 2026-08-24 — five independent fresh agents, all returned, re
          upgrade of every site installed from this branch, uncatchably, mid-run — a defect
          that had survived the entire Scan-1/Scan-2 programme and the orchestrator's own
          self-review, and that does not reproduce on this dev database.
-         7 new findings remain OPEN (1 accepted trade, 6 unfixed).
+         REMEDIATION AT REV 29: S3-P1-31, S3-P1-32 and S3-P1-34 are FIXED — VERIFIED.
+         4 findings remain unclosed: 1 accepted trade (S3-P1-30, quantified),
+         1 P1 needing a design step (S3-P1-33), and 2 governance/CI-infrastructure
+         P2s (S3-P2-35, S3-P2-36).
 
 KNOWN OPEN P0 FINDINGS:  NONE. (S3-P0-28 was found by Scan-3A on 2026-08-24 and FIXED the
                          same day — see §15B. It is the only P0 raised after Scan 1.)
@@ -245,10 +278,10 @@ KNOWN OPEN P0 FINDINGS:  NONE. (S3-P0-28 was found by Scan-3A on 2026-08-24 and 
 SCAN-3 REGISTER:    S3-P0-28  translation precedence divergence      FIXED — VERIFIED
                     S3-P2-29  SQL could store a 2-placeholder value  FIXED — VERIFIED
                     S3-P1-30  `skip` costs Arabic 8 strings          ACCEPTED, quantified
-                    S3-P1-31  language editor has no `%s` guard      OPEN
-                    S3-P1-32  xlp()/|xlp bypass the Arabic resolver  OPEN
-                    S3-P1-33  setup.php entirely unbranded           OPEN (known: §14)
-                    S3-P1-34  questionnaire disclaimer names OpenEMR OPEN (JS-side)
+                    S3-P1-31  language editor has no `%s` guard      FIXED — VERIFIED (59d5c14df)
+                    S3-P1-32  xlp()/|xlp bypass the Arabic resolver  FIXED — VERIFIED (f18f75080)
+                    S3-P1-33  setup.php is a mixed-brand installer   OPEN — needs a design step
+                    S3-P1-34  questionnaire disclaimer names OpenEMR FIXED — VERIFIED (f18f75080)
                     S3-P2-35  deployed assets outside the manifest   OPEN (governance)
                     S3-P2-36  Q77 theme check skips in CI            OPEN (CI infra)
                     S3-OBS-01 admin.php renders its site table with
@@ -1736,11 +1769,31 @@ number belongs on the record. The only alternative remains authoring per-languag
 this programme will not fabricate. `database-upgrade.json` shows the pattern for whoever supplies
 them: explicit definitions for exactly the affected locales.
 
-**S3-P1-31 (NEW, P1) — OPEN.** `interface/language/lang_definition.php:123,150` inserts and updates
-translations with no placeholder validation, so an admin editing `%s Login` and dropping the `%s`
-makes `compose()` throw and takes the OAuth2 login page to a 500 for that locale. The language editor
-needs the same guard the contract loader applies. Not fixed here: it is a separate surface from the
-branding work and deserves its own change.
+**S3-P1-31 (NEW, P1) — FIXED, VERIFIED at Rev 29 (`59d5c14df`).** `interface/language/lang_definition.php`
+inserted and updated translations with no placeholder validation, so an admin editing `%s Login` and
+dropping the `%s` made `compose()` throw and took the OAuth2 login page to a 500 for that locale. 3A was
+right that it deserved its own change, and it got one.
+
+**The classification is the part that needed care, not the rejection.** A guard that refused too much
+would be its own defect: `Atropine 1%`, `Pct (%) of rows` and `Use % alone in a field to just sort on
+that column` are real catalogue constants, and demanding a placeholder in their translations would be
+worse than the bug it replaced. So the classifier is `compose()` itself rather than any substring test —
+the same code that will later render the constant decides whether it is a pattern. A bare `%`, a `%)`
+and a trailing `%` all raise, so they fall through as "not a pattern".
+
+Measured rather than assumed, against the live 13,235-constant catalogue and the shipped contract set:
+
+```text
+catalogue constants containing '%'                16   -> 0 classified as patterns  (0 false positives)
+shipped contract target keys                      28   -> 28 classified as patterns (0 false negatives)
+```
+
+Both write paths are guarded — covering only the insert loop would have left the more common operation,
+correcting an existing translation, wide open — and rejections are reported by constant name rather than
+dropped, because a guard that silently discards an edit is worse than the error it prevents. Negative
+control removed the update-path guard: the named test failed, exit 1; source restored and 23 tests / 64
+assertions passed. Also fixed in passing: `$go` was never initialised, and the guard turns "posted a
+change, wrote nothing" from an edge case into a routine outcome.
 
 **Verified sound by 3A** (independent confirmation): no code path deletes a pre-existing translation;
 forward→rollback→forward→rollback replay is byte-identical; drift is detected rather than overwritten;
@@ -1792,16 +1845,40 @@ not reach.**
 are ~30 raw `openemr_name` reads — *including `xlp()` itself and the `|xlp` Twig filter*. So the two
 functions built to compose the product name into translated prose both bypass the Arabic resolver. An
 Arabic session gets Arabic chrome with a Latin wordmark embedded in it everywhere except the main
-shell's browser tab. That is a real, coherent gap and it is **OPEN** (recorded as **S3-P1-32**); the
-fix is to route `xlp()` and the Twig filter through `xl_product_name()`, which is small but changes
-every composed surface at once and deserves its own verified change rather than a rushed one here.
+shell's browser tab. That is a real, coherent gap, recorded as **S3-P1-32** and now
+**FIXED, VERIFIED at Rev 29 (`f18f75080`)**. Both entry points resolve through `xl_product_name()`.
 
-Also open, from 3C: `setup.php` is entirely unbranded and live-reachable (**S3-P1-33**, ~20
-user-visible strings including an `open-emr.org` link — note §14 already classified these as safe raw
-literals, so this is a known-but-undone item rather than a new discovery); the questionnaire liability
-disclaimer names the wrong legal entity (**S3-P1-34**, already recorded at Rev 23 as the JS-side
-exclusion); and a P2 tail of eye-exam titles, orders help text, portal metadata, a SMART JSON
-`publisher`, and an inactive `*OpenEMR` apps row.
+Three things about that repair are worth keeping:
+
+- **The guard that should have caught it was the same false-green shape Scan-3B catalogued.**
+  `assertStringContainsString("getString('openemr_name')", $source)` was *file-wide*, so it kept
+  passing after the read moved to the neighbouring function in the same file. It now reads one
+  function's own body, with comments stripped through `token_get_all()` so a comment recording the fix
+  can neither satisfy nor break it.
+- **The claim is proven by execution, without a database.** `xl_product_name()` memoises per request,
+  so resolving once under one configured name, changing the name, then composing tells a routed
+  `xlp()` (returns the first value) from a bypassing one (returns the second). PHPUnit's
+  `RunInSeparateProcess` was tried first and **hangs on this host**, so the probe runs in-process and
+  restores the bag in a `finally`; its memo residue is documented in the test rather than hidden.
+  Negative control reverting both entry points: 3 failures / exit 1, including the executable one.
+- **An inherited claim was corrected.** The resolver's `catch (\RuntimeException)` was documented as
+  protecting the *installer*. It does not: `Installer::insert_globals()` never reaches it, because
+  `saas_branding_product_name_ar` does not exist yet and the `has()` check returns first — verified
+  cold, an unpopulated bag returns `''` without touching session or database. What it *does* protect is
+  `sql_upgrade.php:551` and `sql_patch.php:74`, which require `globals.inc.php` **after** echoing and
+  flushing; starting a session there raises `RuntimeException: Failed to start the session because
+  headers have already been sent`, reproduced directly. Uncaught, that aborts an upgrade mid-run — the
+  S3-P0-28 shape. A database failure is explicitly not guarded, because `sqlQuery()` ends in
+  `HelpfulDie()`'s `exit(1)` and no catch can reach it.
+
+Also from 3C: the questionnaire liability disclaimer named the wrong legal entity (**S3-P1-34**,
+Rev 23's one *mechanical* exclusion because its literal was an argument to the browser-side `xl()`) —
+**FIXED, VERIFIED at Rev 29** by composing in PHP and emitting through `js_escape()`; the literal has no
+`lang_constants` row, so nothing is orphaned. Still open: `setup.php` (**S3-P1-33** — see the corrected
+scoping in §1, which supersedes the "entirely unbranded" reading: it is a *mixed-brand* installer with
+10 hardcoded `Thiqa` literals beside ~20 `OpenEMR` ones, and it runs before the database exists) and a
+P2 tail of eye-exam titles, orders help text, portal metadata, a SMART JSON `publisher`, and an inactive
+`*OpenEMR` apps row.
 
 3C independently confirmed clean: the login page (1 match, the session cookie), FHIR metadata (0),
 OIDC discovery (0), `admin.php`, `templates/login/**`, and `library/js/*.js`.
