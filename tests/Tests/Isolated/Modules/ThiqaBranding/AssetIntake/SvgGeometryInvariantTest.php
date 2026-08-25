@@ -526,8 +526,39 @@ final class SvgGeometryInvariantTest extends TestCase
         self::assertGreaterThanOrEqual(
             20,
             count(self::shippedSvgPaths()),
-            'The brand asset sweep found almost no SVG files, so it is no longer guarding anything.',
+            'The shipped SVG sweep found almost no files, so it is no longer guarding anything.',
         );
+    }
+
+    /**
+     * Every declared root actually contributed, which a total count cannot tell you.
+     *
+     * S4D-02 again, in its general form. `public/images` contributes 4 SVGs and the module's
+     * deployed logos 3, against 21 under `brand/` — so either could vanish entirely and a
+     * count floor of 20 would still pass while the sweep silently stopped covering a
+     * production logo. The floor answers "is this sweeping anything"; this answers "is this
+     * sweeping everything it says it does", and only the second would have caught the defect.
+     */
+    public function testEveryDeclaredShippedRootContributesAtLeastOneSvg(): void
+    {
+        $paths = self::shippedSvgPaths();
+
+        foreach (self::SHIPPED_SVG_ROOTS as $relativeRoot) {
+            $found = array_filter(
+                $paths,
+                static fn (string $path): bool => str_starts_with($path, $relativeRoot . '/'),
+            );
+
+            self::assertNotSame(
+                [],
+                $found,
+                sprintf(
+                    'The shipped SVG sweep found nothing under "%s". Either the tree moved and this '
+                        . 'list is stale, or a production logo tree has stopped being guarded.',
+                    $relativeRoot,
+                ),
+            );
+        }
     }
 
     /** The derivation behind the tolerance, asserted so a future edit has to justify itself. */
@@ -549,36 +580,77 @@ final class SvgGeometryInvariantTest extends TestCase
     }
 
     /**
-     * Every SVG in the brand asset tree, as repository-relative forward-slash paths.
+     * The three trees this product ships SVGs from.
+     *
+     * S4D-02: this sweep used to walk `brand/` alone while the closure it evidenced claimed
+     * "all 27 shipped SVGs under brand/, public/images/ and the module's dark marks were
+     * checked". Twenty-one were. The six that were not included
+     * `public/images/logos/core/menu/primary/logo.svg` — the production menu logo the claim
+     * itself named. No asset was actually deformable, so nothing shipped broken; what was
+     * wrong was a closure resting on a corpus larger than any standing test swept, which is
+     * the false-green shape this whole programme exists to catch.
+     *
+     * The source tree alone is not sufficient coverage, because the source and the deployed
+     * copy are separate files. The manifest guarantees byte-equality for FONTS only
+     * (a MirroredTree rule); for images it records hashes independently and its own re-issue
+     * discipline explicitly contemplates a deployed hash diverging from its source. A
+     * deployed logo can therefore differ from the brand original, and only sweeping the
+     * deployed path catches that.
+     *
+     * @var list<string>
+     */
+    private const SHIPPED_SVG_ROOTS = [
+        'brand',
+        'public/images/logos',
+        'interface/modules/custom_modules/oe-module-thiqa-branding/public/logos',
+    ];
+
+    /**
+     * Every SVG this product ships, as repository-relative forward-slash paths.
+     *
+     * The roots are whole trees this product OWNS, swept wholesale with no per-file exclusion
+     * list — a curated list is one more thing that has to stay correct, and the way a real logo
+     * eventually gets missed.
+     *
+     * `public/images` is deliberately narrowed to its `logos/` subtree rather than swept entire.
+     * The three SVGs directly under `public/images` are upstream core assets, not this product's
+     * branding: `login-logo.svg` opens with the comment "OpenEMR Logo Vectorized",
+     * `review-logo.svg` is its sibling, and `ub04.svg` is a UB-04 claim form. Judging a claim
+     * form against a logo slot's size cap would be a category error, and it is the validator's
+     * *whole* contract that runs here, not the geometry clause alone. Their upstream-brand
+     * content is a separate concern tracked as its own finding; it is not this sweep's business.
      *
      * @return list<string>
      */
     private static function shippedSvgPaths(): array
     {
-        $root = self::repositoryRoot() . '/brand';
-        if (!is_dir($root)) {
-            return [];
-        }
-
         $paths = [];
-        $walker = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS),
-        );
+        $prefix = str_replace('\\', '/', self::repositoryRoot()) . '/';
 
-        foreach ($walker as $entry) {
-            if (!$entry instanceof SplFileInfo || !$entry->isFile()) {
+        foreach (self::SHIPPED_SVG_ROOTS as $relativeRoot) {
+            $root = self::repositoryRoot() . '/' . $relativeRoot;
+            if (!is_dir($root)) {
                 continue;
             }
 
-            if (strtolower($entry->getExtension()) !== 'svg') {
-                continue;
-            }
+            $walker = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS),
+            );
 
-            $absolute = str_replace('\\', '/', $entry->getPathname());
-            $prefix = str_replace('\\', '/', self::repositoryRoot()) . '/';
-            $paths[] = str_starts_with($absolute, $prefix)
-                ? substr($absolute, strlen($prefix))
-                : $absolute;
+            foreach ($walker as $entry) {
+                if (!$entry instanceof SplFileInfo || !$entry->isFile()) {
+                    continue;
+                }
+
+                if (strtolower($entry->getExtension()) !== 'svg') {
+                    continue;
+                }
+
+                $absolute = str_replace('\\', '/', $entry->getPathname());
+                $paths[] = str_starts_with($absolute, $prefix)
+                    ? substr($absolute, strlen($prefix))
+                    : $absolute;
+            }
         }
 
         sort($paths);
