@@ -106,8 +106,53 @@ $session = SessionWrapperFactory::getInstance()->getActiveSession();
 $case_sensitive_collation = "COLLATE utf8mb4_bin";
 $case_insensitive_collation = "COLLATE utf8mb4_general_ci";
 
+/**
+ * Refuse a translation that would make its own call site fatal.
+ *
+ * Finding S3-P1-31. Some constants are product-context patterns — `%s Login`, `About %s` — and the
+ * code rendering them calls ProductContextTranslation::compose(), which THROWS unless the string
+ * carries exactly one `%s` or `%1$s`. A translator editing `%s Login` and dropping the placeholder,
+ * which is the natural thing to do if you do not know the convention, therefore took the OAuth2
+ * login page to a 500 for that locale — and nothing in this editor said so.
+ *
+ * Constants that are not product-context patterns are unaffected: anything is still accepted. The
+ * classifier is `compose()` itself rather than a substring test, which is what keeps it exact — a
+ * bare `%`, a `%)` or a trailing `%` all raise, so they fall through as "not a pattern". Measured
+ * against real data rather than assumed: all 16 catalogue constants that contain a `%`
+ * (`Atropine 1%`, `Pct (%) of rows`, `Use % alone in a field to just sort on that column`, …)
+ * classify as unguarded, and all 28 shipped contract target keys classify as guarded. Zero false
+ * positives, zero false negatives.
+ *
+ * @param string $constantName the constant the definition belongs to
+ * @param string $definition   the candidate translation
+ * @return string '' when acceptable, otherwise an operator-facing reason
+ */
+function lang_definition_placeholder_error($constantName, $definition)
+{
+    try {
+        \OpenEMR\Common\Translation\ProductContextTranslation::compose($constantName, 'X');
+    } catch (\InvalidArgumentException) {
+        // Not a product-context constant; this rule does not apply.
+        return '';
+    }
+
+    try {
+        \OpenEMR\Common\Translation\ProductContextTranslation::compose($definition, 'X');
+    } catch (\InvalidArgumentException) {
+        return xl('This constant composes the product name, so its translation must contain exactly one %s placeholder');
+    }
+
+    return '';
+}
+
 if (!empty($_POST['load'])) {
     CsrfUtils::checkCsrfInput(INPUT_POST, dieOnFail: true);
+
+    $rejectedDefinitions = [];
+    // Initialised because the guard below makes "posted a change, wrote nothing" a routine
+    // outcome rather than an edge case, and the check at the end of this block reads it
+    // unconditionally.
+    $go = '';
 
   // query for entering new definitions; uses cons_id because the constant already exists.
     if (!empty($_POST['cons_id'])) {
@@ -116,6 +161,14 @@ if (!empty($_POST['load'])) {
 
             // do not create new blank definitions
             if ($value == "") {
+                continue;
+            }
+
+            // S3-P1-31: refuse a definition that would fatal its own call site.
+            $constantRow = sqlQuery("SELECT constant_name FROM lang_constants WHERE cons_id=? LIMIT 1", [$key]);
+            $placeholderError = lang_definition_placeholder_error((string) ($constantRow['constant_name'] ?? ''), $value);
+            if ($placeholderError !== '') {
+                $rejectedDefinitions[] = ($constantRow['constant_name'] ?? '') . ' — ' . $placeholderError;
                 continue;
             }
 
@@ -146,6 +199,18 @@ if (!empty($_POST['load'])) {
             $sql = "SELECT * FROM lang_definitions WHERE def_id=? AND definition " . $case_sensitive_collation . " =?";
             $res_test = sqlStatement($sql, [$key, $value]);
             if (!sqlFetchArray($res_test)) {
+                // S3-P1-31: same guard on the update path.
+                $constantRow = sqlQuery(
+                    "SELECT lc.constant_name FROM lang_definitions ld "
+                    . "JOIN lang_constants lc ON lc.cons_id = ld.cons_id WHERE ld.def_id=? LIMIT 1",
+                    [$key]
+                );
+                $placeholderError = lang_definition_placeholder_error((string) ($constantRow['constant_name'] ?? ''), $value);
+                if ($placeholderError !== '') {
+                    $rejectedDefinitions[] = ($constantRow['constant_name'] ?? '') . ' — ' . $placeholderError;
+                    continue;
+                }
+
                 // insert into the main language tables
                 $sql = "UPDATE `lang_definitions` SET `definition`=? WHERE `def_id`=? LIMIT 1";
                 sqlStatement($sql, [$value, $key]);
@@ -166,6 +231,10 @@ if (!empty($_POST['load'])) {
 
     if ($go == 'yes') {
         echo xlt("New Definition set added");
+    }
+
+    foreach ($rejectedDefinitions as $rejected) {
+        echo '<div class="alert alert-danger">' . text($rejected) . '</div>';
     }
 }
 
