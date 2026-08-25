@@ -97,14 +97,49 @@ final readonly class ProductIdentityGenerator
      * The `value` of the `globals` entry whose `key` matches, searched by scanning rather
      * than by index: the profile's row order is editorial (it tracks the string replacement
      * map's row numbers) and must not become load-bearing here.
+     *
+     * **S4E-15: the scan reads every row rather than stopping at the first hit, and a duplicated
+     * key is refused.** It used to `return` on the first match, which meant the generator and the
+     * runtime loader enforced *different* invariants on the same document:
+     * `BrandingProfile::fromEntries()` throws `InvalidArgumentException` when two rows name the
+     * same global, while this silently took row one and emitted a clean, committable artefact that
+     * `--check` verified and CI accepted.
+     *
+     * The two failures therefore landed on opposite sides of the CI boundary — green here, fatal
+     * at runtime — and the artefact became exactly the "second copy that can disagree with the
+     * profile" its own docblock promises it is not. One document, one set of rules; the stricter
+     * of the two is the correct one, because the value written here outlives the generator run.
      */
     private function globalsRowValue(JsonDocument $profile, string $wantedKey): string
     {
         $count = $profile->requireListCount('globals');
+
+        $value = null;
+        $matchedAt = null;
         for ($index = 0; $index < $count; $index++) {
-            if ($profile->requireString('globals.' . $index . '.key') === $wantedKey) {
-                return $profile->requireString('globals.' . $index . '.value');
+            if ($profile->requireString('globals.' . $index . '.key') !== $wantedKey) {
+                continue;
             }
+
+            if ($matchedAt !== null) {
+                throw new GeneratorException(sprintf(
+                    'The branding profile %s names the global "%s" more than once (rows %d and %d). '
+                        . 'The runtime profile loader refuses a duplicate outright, so generating '
+                        . 'from row %d would ship an artefact the application itself will not load.',
+                    $profile->origin(),
+                    $wantedKey,
+                    $matchedAt,
+                    $index,
+                    $matchedAt,
+                ));
+            }
+
+            $value = $profile->requireString('globals.' . $index . '.value');
+            $matchedAt = $index;
+        }
+
+        if ($value !== null) {
+            return $value;
         }
 
         throw new GeneratorException(sprintf(
