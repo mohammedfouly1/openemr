@@ -130,9 +130,17 @@ final class TranslationCatalogueMigration
             $sourceId = $this->singleExactId($store, $derivation->sourceKey);
             if ($sourceId !== null) {
                 foreach ($store->definitions($sourceId) as $languageId => $definition) {
-                    if (!isset($desired[$languageId])) {
-                        $desired[$languageId] = $derivation->derive($definition);
+                    if (isset($desired[$languageId])) {
+                        continue;
                     }
+                    // S4-P0-40. `derive()` THROWS on a source containing '%', while the generated
+                    // installer SQL FILTERS the same row out with NO_PERCENT_IN_SOURCE. Letting the
+                    // throw escape here is what wedged the upgrade; skipping is what the installer
+                    // has always done, so skipping is what makes the two paths agree.
+                    if (!self::isCarryForwardable($definition)) {
+                        continue;
+                    }
+                    $desired[$languageId] = $derivation->derive($definition);
                 }
             }
         }
@@ -158,7 +166,25 @@ final class TranslationCatalogueMigration
                     }
                     continue;
                 }
+                // S4-P0-40. The generated installer SQL takes this row only when it contains
+                // no '%' AND names the product EXACTLY once; anything else it filters out. The PHP
+                // path had neither filter -- it neutralised unconditionally and then called
+                // compose(), which throws. So on real upstream data (French
+                // `Sauvegarde de la base OpenEMR (100% des tables)`) a fresh install skipped the
+                // row silently and an upgrade died on it, after the DDL had applied and before the
+                // version row was bumped, leaving the site permanently unable to re-run.
+                //
+                // The filters are mirrored here rather than the SQL being taught to throw, because
+                // between "one locale silently keeps its old string" and "every upgrade of every
+                // site wedges mid-run", only the first is recoverable. That is the S3-P0-28 lesson.
+                if (!self::isNeutralisable($definition, $identity)) {
+                    continue;
+                }
+
                 $candidate = $contract->neutraliseLegacyDefinition($legacyKey, $definition);
+                // Retained as a belt-and-braces assertion: the two guards above should already
+                // guarantee this composes. If it ever throws again, the filters and the SQL have
+                // drifted apart and that is worth failing loudly in a test, not in production.
                 ProductContextTranslation::compose($candidate, 'Product');
                 if (isset($sourceCandidates[$languageId]) && $sourceCandidates[$languageId] !== $candidate) {
                     throw new \RuntimeException("Conflicting legacy definitions for lang_id {$languageId}.");
@@ -188,6 +214,41 @@ final class TranslationCatalogueMigration
         }
         ksort($desired);
         return $desired;
+    }
+
+    /**
+     * The PHP mirror of the SQL's `NO_PERCENT_IN_SOURCE` filter.
+     *
+     * `TranslationContractSqlRenderer::NO_PERCENT_IN_SOURCE` is `LOCATE('%', d.definition) = 0`,
+     * applied to both the derivation and the legacy carry-forward statements. A source definition
+     * containing a per-cent sign cannot yield a safe pattern: the sign may be a literal (`100%`),
+     * and there is no way to tell that from a placeholder without understanding the sentence.
+     *
+     * Keep this and the SQL constant in lockstep. They are two spellings of one rule, and the whole
+     * of S4-P0-40 was that they had drifted into filtering versus throwing.
+     */
+    private static function isCarryForwardable(string $definition): bool
+    {
+        return !str_contains($definition, '%');
+    }
+
+    /**
+     * The PHP mirror of the SQL's legacy-row filters: no per-cent sign, and the identity present
+     * EXACTLY once.
+     *
+     * The exactly-once half matters as much as the other. A definition naming the product twice
+     * neutralises to a two-placeholder pattern, which `ProductContextTranslation` refuses -- so
+     * before this guard the row either installed cleanly and then fatalled the page that rendered
+     * it, or (on the upgrade path) fatalled the upgrade itself. The SQL expresses it as a
+     * CHAR_LENGTH difference; `substr_count()` is the same predicate.
+     */
+    private static function isNeutralisable(string $definition, string $identity): bool
+    {
+        if (!self::isCarryForwardable($definition)) {
+            return false;
+        }
+
+        return $identity !== '' && substr_count($definition, $identity) === 1;
     }
 
     private function singleExactId(TranslationCatalogueStore $store, string $name): ?int

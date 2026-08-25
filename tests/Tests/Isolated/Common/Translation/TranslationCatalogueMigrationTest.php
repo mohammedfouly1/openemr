@@ -412,20 +412,68 @@ final class TranslationCatalogueMigrationTest extends TestCase
     }
 
     /**
-     * A source translation containing `%` cannot be derived: percent is meaningful to
-     * ProductContextTranslation, so the result would be a pattern that composes wrongly in exactly
-     * one locale — the quietest possible defect.
+     * S4-P0-40. A source translation containing `%` is SKIPPED, exactly as the generated installer
+     * SQL skips it — not refused with an exception.
+     *
+     * This test previously asserted the throw, and in doing so encoded the defect as the contract.
+     * The reasoning it carried was sound as far as it went: a `%` in the source cannot be turned
+     * into a safe pattern, because the sign may be literal (`100%`) and nothing can tell that from
+     * a placeholder without reading the sentence. Refusing to WRITE the row is correct. Refusing by
+     * THROWING is not, because the generated installer SQL filters the identical row out with
+     * `NO_PERCENT_IN_SOURCE` — so a fresh install skipped it silently while an upgrade died on it,
+     * after the DDL had applied and before the version row was bumped, wedging the site.
+     *
+     * What is asserted now is the property that actually matters: the bad row does not reach the
+     * catalogue, the good rows in the same batch still do, and the migration completes.
      */
-    public function testASourceDefinitionContainingPercentIsRefused(): void
+    public function testASourceDefinitionContainingPercentIsSkippedNotRefused(): void
     {
         $store = new MemoryTranslationCatalogueStore();
-        $store->seedConstant('Insurance Companies', [5 => '100% Versicherung']);
+        $store->seedConstant('Insurance Companies', [
+            5 => '100% Versicherung',
+            3 => 'Companias de seguros',
+        ]);
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('containing "%"');
-        $this->migration()->forward(
+        $result = $this->migration()->forward(
             $this->derivedContract('Insurance Companies %s', 'Insurance Companies', 'suffix'),
             $store,
+        );
+
+        self::assertNotNull($result, 'The migration must complete rather than throw.');
+        self::assertSame(
+            [3 => 'Companias de seguros %s'],
+            $store->definitionsOf('Insurance Companies %s'),
+            'The percent-bearing locale must be skipped and every other locale still carried.',
+        );
+    }
+
+    /**
+     * S4-P0-40, the other half. A legacy definition naming the product TWICE is skipped.
+     *
+     * This case had no test at all, which is why it survived. Neutralising it yields a
+     * two-placeholder pattern that `ProductContextTranslation` refuses, so before the fix the row
+     * either installed and then fatalled the page that rendered it, or fatalled the upgrade itself.
+     * The installer SQL has always excluded it with a CHAR_LENGTH occurrence count; this asserts
+     * the PHP path agrees.
+     */
+    public function testALegacyDefinitionNamingTheProductTwiceIsSkipped(): void
+    {
+        $store = new MemoryTranslationCatalogueStore();
+        $store->seedConstant('OpenEMR Login', [
+            8 => 'OpenEMR: OpenEMR a besoin de Javascript.',
+            3 => 'Acceso a OpenEMR',
+        ]);
+
+        $result = $this->migration()->forward(
+            $this->legacyContract('%s Login', 'OpenEMR Login', 'skip'),
+            $store,
+        );
+
+        self::assertNotNull($result, 'The migration must complete rather than throw.');
+        self::assertSame(
+            [3 => 'Acceso a %s'],
+            $store->definitionsOf('%s Login'),
+            'The twice-naming locale must be skipped and the single-naming locale still carried.',
         );
     }
 
