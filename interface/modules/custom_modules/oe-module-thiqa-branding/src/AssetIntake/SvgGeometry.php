@@ -159,8 +159,10 @@ final readonly class SvgGeometry
             return;
         }
 
+        // $raw is trimmed and non-empty, so splitting it on whitespace with NO_EMPTY always
+        // yields at least one token; only the false return needs guarding.
         $tokens = preg_split('/\s+/', $raw, -1, PREG_SPLIT_NO_EMPTY);
-        if (!is_array($tokens) || $tokens === []) {
+        if (!is_array($tokens)) {
             return;
         }
 

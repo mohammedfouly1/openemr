@@ -104,9 +104,12 @@ final readonly class ManagedBackupArtifact
         return $this->path() . '.sha256';
     }
 
+    /**
+     * @param array<int|string, string> $matches a preg_match() capture set from {@see parse()}
+     */
     private static function fromMatch(string $directory, string $filename, string $family, array $matches): ?self
     {
-        $timestamp = (string) $matches['timestamp'];
+        $timestamp = $matches['timestamp'];
         $date = DateTimeImmutable::createFromFormat('!Ymd-His', $timestamp, new DateTimeZone('UTC'));
         $errors = DateTimeImmutable::getLastErrors();
         if (
@@ -117,7 +120,7 @@ final readonly class ManagedBackupArtifact
             return null;
         }
 
-        return new self($directory, $filename, $family, (string) $matches['label'], $timestamp);
+        return new self($directory, $filename, $family, $matches['label'], $timestamp);
     }
 
     private static function join(string $directory, string $filename): string

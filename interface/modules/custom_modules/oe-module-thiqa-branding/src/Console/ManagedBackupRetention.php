@@ -179,7 +179,8 @@ final class ManagedBackupRetention
     {
         self::parseKeep($keep);
 
-        return array_values(array_slice($inventory->managed, $keep));
+        // array_slice() on a list already returns a list; array_values() would be a no-op.
+        return array_slice($inventory->managed, $keep);
     }
 
     public function delete(string $target, ManagedBackupArtifact $artifact): void
@@ -187,18 +188,20 @@ final class ManagedBackupRetention
         $directory = $this->resolveDirectory($target, true);
         $expectedPath = $this->join($directory, $artifact->filename);
         $realPath = realpath($expectedPath);
+        // parse() is pure filename parsing, so one call answers both guards below; calling it
+        // twice with the same arguments never produced a different answer.
+        $fresh = ManagedBackupArtifact::parse($directory, $artifact->filename);
         if (
             $realPath === false
             || !$this->samePath(dirname($realPath), $directory)
             || ($this->linkProbe)($expectedPath)
             || !is_file($expectedPath)
-            || ManagedBackupArtifact::parse($directory, $artifact->filename) === null
+            || $fresh === null
         ) {
             throw new RuntimeException('Refused to delete a candidate outside the validated backup contract.');
         }
 
-        $fresh = ManagedBackupArtifact::parse($directory, $artifact->filename);
-        if ($fresh === null || !$this->hasValidSidecar($fresh)) {
+        if (!$this->hasValidSidecar($fresh)) {
             throw new RuntimeException('Refused to delete a candidate whose verification sidecar changed.');
         }
 

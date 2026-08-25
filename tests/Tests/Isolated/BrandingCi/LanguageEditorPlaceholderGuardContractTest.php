@@ -174,7 +174,13 @@ final class LanguageEditorPlaceholderGuardContractTest extends TestCase
     {
         $source = $this->read($this->root() . '/interface/language/lang_definition.php');
 
-        self::assertStringContainsString('function lang_definition_placeholder_error(', $source);
+        // The guard is a closure rather than a global function (openemr.noGlobalNsFunctions
+        // forbids adding new global-namespace functions); the contract is that it exists and is
+        // reached from both write paths, not how it is spelled.
+        self::assertStringContainsString(
+            '$lang_definition_placeholder_error = static function (',
+            $source,
+        );
         self::assertStringContainsString(
             'ProductContextTranslation::compose',
             $source,
@@ -185,7 +191,7 @@ final class LanguageEditorPlaceholderGuardContractTest extends TestCase
         // the insert would leave the more common operation wide open.
         self::assertSame(
             2,
-            substr_count($source, '= lang_definition_placeholder_error('),
+            substr_count($source, '($lang_definition_placeholder_error)('),
             'S3-P1-31: the insert path and the update path must both call the guard.',
         );
 

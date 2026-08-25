@@ -20,6 +20,7 @@
 
 use OpenEMR\Common\Acl\AclMain;
 use OpenEMR\Common\Csrf\CsrfUtils;
+use OpenEMR\Common\Database\QueryUtils;
 use OpenEMR\Common\Session\SessionWrapperFactory;
 
 // Ensure this script is not called separately
@@ -123,12 +124,14 @@ $case_insensitive_collation = "COLLATE utf8mb4_general_ci";
  * classify as unguarded, and all 28 shipped contract target keys classify as guarded. Zero false
  * positives, zero false negatives.
  *
+ * Declared as a closure rather than a global function: `openemr.noGlobalNsFunctions` forbids
+ * adding new functions to the global namespace, and every call site is in this same file.
+ *
  * @param string $constantName the constant the definition belongs to
  * @param string $definition   the candidate translation
  * @return string '' when acceptable, otherwise an operator-facing reason
  */
-function lang_definition_placeholder_error($constantName, $definition)
-{
+$lang_definition_placeholder_error = static function (string $constantName, string $definition): string {
     try {
         \OpenEMR\Common\Translation\ProductContextTranslation::compose($constantName, 'X');
     } catch (\InvalidArgumentException) {
@@ -143,7 +146,7 @@ function lang_definition_placeholder_error($constantName, $definition)
     }
 
     return '';
-}
+};
 
 if (!empty($_POST['load'])) {
     CsrfUtils::checkCsrfInput(INPUT_POST, dieOnFail: true);
@@ -165,10 +168,15 @@ if (!empty($_POST['load'])) {
             }
 
             // S3-P1-31: refuse a definition that would fatal its own call site.
-            $constantRow = sqlQuery("SELECT constant_name FROM lang_constants WHERE cons_id=? LIMIT 1", [$key]);
-            $placeholderError = lang_definition_placeholder_error((string) ($constantRow['constant_name'] ?? ''), $value);
+            $constantRow = QueryUtils::querySingleRow(
+                "SELECT constant_name FROM lang_constants WHERE cons_id=? LIMIT 1",
+                [$key]
+            );
+            $constantNameValue = is_array($constantRow) ? ($constantRow['constant_name'] ?? null) : null;
+            $constantName = is_string($constantNameValue) ? $constantNameValue : '';
+            $placeholderError = ($lang_definition_placeholder_error)($constantName, $value);
             if ($placeholderError !== '') {
-                $rejectedDefinitions[] = ($constantRow['constant_name'] ?? '') . ' — ' . $placeholderError;
+                $rejectedDefinitions[] = $constantName . ' — ' . $placeholderError;
                 continue;
             }
 
@@ -200,14 +208,16 @@ if (!empty($_POST['load'])) {
             $res_test = sqlStatement($sql, [$key, $value]);
             if (!sqlFetchArray($res_test)) {
                 // S3-P1-31: same guard on the update path.
-                $constantRow = sqlQuery(
+                $constantRow = QueryUtils::querySingleRow(
                     "SELECT lc.constant_name FROM lang_definitions ld "
                     . "JOIN lang_constants lc ON lc.cons_id = ld.cons_id WHERE ld.def_id=? LIMIT 1",
                     [$key]
                 );
-                $placeholderError = lang_definition_placeholder_error((string) ($constantRow['constant_name'] ?? ''), $value);
+                $constantNameValue = is_array($constantRow) ? ($constantRow['constant_name'] ?? null) : null;
+                $constantName = is_string($constantNameValue) ? $constantNameValue : '';
+                $placeholderError = ($lang_definition_placeholder_error)($constantName, $value);
                 if ($placeholderError !== '') {
-                    $rejectedDefinitions[] = ($constantRow['constant_name'] ?? '') . ' — ' . $placeholderError;
+                    $rejectedDefinitions[] = $constantName . ' — ' . $placeholderError;
                     continue;
                 }
 

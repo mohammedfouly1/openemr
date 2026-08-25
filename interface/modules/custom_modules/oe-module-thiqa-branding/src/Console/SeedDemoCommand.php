@@ -16,10 +16,12 @@ namespace OpenEMR\Modules\ThiqaBranding\Console;
 
 use OpenEMR\Billing\BillingUtilities;
 use OpenEMR\Common\Database\QueryUtils;
-use OpenEMR\Common\Session\SessionWrapperFactory;
+use OpenEMR\Common\Session\SessionUtil;
 use OpenEMR\Common\Uuid\UuidRegistry;
+use OpenEMR\Core\OEGlobalsBag;
 use OpenEMR\Services\AppointmentService;
 use OpenEMR\Services\EncounterService;
+use OpenEMR\Services\FormService;
 use OpenEMR\Services\InsuranceCompanyService;
 use OpenEMR\Services\PatientService;
 use OpenEMR\Services\PrescriptionService;
@@ -274,8 +276,8 @@ final class SeedDemoCommand extends Command
 
                 return self::FAILURE;
             }
-            $this->facilityId = (int) $facility[0]['id'];
-            $this->facilityName = (string) $facility[0]['name'];
+            $this->facilityId = self::asInt($facility[0]['id'] ?? null);
+            $this->facilityName = self::asString($facility[0]['name'] ?? null);
 
             $this->establishAuthorContext();
 
@@ -290,7 +292,9 @@ final class SeedDemoCommand extends Command
         $io->writeln(sprintf(
             '  Author context: user id <info>%d</info> (%s)',
             $this->authUserId,
-            (string) QueryUtils::fetchSingleValue('SELECT username FROM users WHERE id = ?', 'username', [$this->authUserId])
+            self::asString(
+                QueryUtils::fetchSingleValue('SELECT username FROM users WHERE id = ?', 'username', [$this->authUserId])
+            )
         ));
 
         mt_srand(self::RANDOM_SEED);
@@ -331,7 +335,7 @@ final class SeedDemoCommand extends Command
     {
         $problems = [];
 
-        $site = basename((string) ($GLOBALS['OE_SITE_DIR'] ?? ''));
+        $site = basename(OEGlobalsBag::getInstance()->getString('OE_SITE_DIR'));
         if ($site !== 'default') {
             $problems[] = "Active site is '{$site}', expected 'default'.";
         }
@@ -340,8 +344,8 @@ final class SeedDemoCommand extends Command
         if ($facility === []) {
             $problems[] = 'No facility exists.';
         } else {
-            $this->facilityId = (int) $facility[0]['id'];
-            $this->facilityName = (string) $facility[0]['name'];
+            $this->facilityId = self::asInt($facility[0]['id'] ?? null);
+            $this->facilityName = self::asString($facility[0]['name'] ?? null);
             if (str_contains($this->facilityName, 'Your Clinic Name Here')) {
                 $problems[] = 'Facility is still the installer default (RDY-0032 not closed).';
             }
@@ -349,7 +353,7 @@ final class SeedDemoCommand extends Command
 
         // Providers must exist, or every encounter would be attributed to nobody.
         $this->providerIds = array_map(
-            static fn(array $r): int => (int) $r['id'],
+            static fn(array $r): int => self::asInt($r['id'] ?? null),
             QueryUtils::fetchRecords(
                 "SELECT id FROM users WHERE username IN ('y.alharbi','s.almutairi') ORDER BY id",
                 []
@@ -376,11 +380,11 @@ final class SeedDemoCommand extends Command
         }
 
         // Refuse accidental duplicate re-seeding.
-        $existing = (int) QueryUtils::fetchSingleValue(
+        $existing = self::asInt(QueryUtils::fetchSingleValue(
             'SELECT COUNT(*) c FROM patient_data WHERE pubpid LIKE ?',
             'c',
             [self::MARKER . '%']
-        );
+        ));
         if ($existing > 0 && !$force) {
             $problems[] = sprintf(
                 '%d seeded patient(s) already present. Roll back to the RDY-0044-A baseline first, '
@@ -412,22 +416,24 @@ final class SeedDemoCommand extends Command
     /**
      * Set the author through the session wrapper the services actually read.
      *
-     * PB-034: writing `$_SESSION['authUserID']` directly does NOT reach
-     * `SessionWrapperFactory::getActiveSession()`, so every row landed with `created_by = 0`.
+     * PB-034: writing `$_SESSION['authUserID']` directly does NOT reach the session wrapper
+     * the services read, so every row landed with `created_by = 0`. `SessionUtil::setSession()`
+     * writes through that wrapper and reopens a read-and-close session lock first.
      */
     private function establishAuthorContext(): void
     {
-        $this->authUserId = (int) QueryUtils::fetchSingleValue(
+        $this->authUserId = self::asInt(QueryUtils::fetchSingleValue(
             "SELECT id FROM users WHERE username = 'admin'",
             'id',
             []
-        );
+        ));
 
-        $session = SessionWrapperFactory::getInstance()->getActiveSession();
-        $session->set('authUserID', $this->authUserId);
-        $session->set('authUser', 'admin');
-        $session->set('authGroup', 'Default');
-        $session->set('authProvider', 'Default');
+        SessionUtil::setSession([
+            'authUserID' => $this->authUserId,
+            'authUser' => 'admin',
+            'authGroup' => 'Default',
+            'authProvider' => 'Default',
+        ]);
     }
 
     /**
@@ -444,21 +450,21 @@ final class SeedDemoCommand extends Command
             return self::FAILURE;
         }
 
-        $createdBy = (int) QueryUtils::fetchSingleValue(
+        $createdBy = self::asInt(QueryUtils::fetchSingleValue(
             'SELECT created_by FROM patient_data WHERE pid = ?',
             'created_by',
             [$pid]
-        );
-        $zeroRows = (int) QueryUtils::fetchSingleValue(
+        ));
+        $zeroRows = self::asInt(QueryUtils::fetchSingleValue(
             'SELECT COUNT(*) c FROM patient_data WHERE created_by = 0 OR created_by IS NULL',
             'c',
             []
-        );
-        $resolves = (int) QueryUtils::fetchSingleValue(
+        ));
+        $resolves = self::asInt(QueryUtils::fetchSingleValue(
             'SELECT COUNT(*) c FROM users WHERE id = ?',
             'c',
             [$createdBy]
-        );
+        ));
 
         $io->table(
             ['Check', 'Result'],
@@ -538,11 +544,11 @@ final class SeedDemoCommand extends Command
             [$this->facilityName, $this->facilityId]
         );
 
-        $withString = (int) QueryUtils::fetchSingleValue(
+        $withString = self::asInt(QueryUtils::fetchSingleValue(
             'SELECT COUNT(*) c FROM users WHERE facility = ?',
             'c',
             [$this->facilityName]
-        );
+        ));
 
         $io->writeln(sprintf(
             '  facility address and phone completed; %d users now carry the facility name string',
@@ -649,7 +655,12 @@ final class SeedDemoCommand extends Command
             return null;
         }
 
-        return (int) $result->getData()[0]['pid'];
+        $data = $result->getData();
+        if (!is_array($data) || !isset($data[0]) || !is_array($data[0])) {
+            return null;
+        }
+
+        return self::asInt($data[0]['pid'] ?? null);
     }
 
     // ------------------------------------------------- allergies and problems
@@ -715,7 +726,7 @@ final class SeedDemoCommand extends Command
                 (new UuidRegistry(['table_name' => 'lists']))->createUuid(),
                 $type,
                 $title,
-                date('Y-m-d', strtotime('-' . (90 + $pid) . ' days')),
+                date('Y-m-d', self::timestamp('-' . (90 + $pid) . ' days')),
                 $pid,
                 'admin',
                 'Default',
@@ -755,7 +766,9 @@ final class SeedDemoCommand extends Command
         }
 
         $this->counts['payers'] = count($ids);
-        $io->writeln(sprintf('  %d fictional payers', count($ids)));
+        // Reporting the locked figure next to the actual is how every other stage would surface a
+        // drift between TARGET_* and what was seeded.
+        $io->writeln(sprintf('  %d fictional payers (locked target %d)', count($ids), self::TARGET_PAYERS));
 
         return $ids;
     }
@@ -813,7 +826,7 @@ final class SeedDemoCommand extends Command
             $provider = $this->providerIds[$i % count($this->providerIds)];
             // Spread across ~6 months so the ageing and trend reports have shape.
             $daysAgo = (int) round($i * (180 / self::TARGET_ENCOUNTERS));
-            $date = date('Y-m-d H:i:s', strtotime("-{$daysAgo} days"));
+            $date = date('Y-m-d H:i:s', self::timestamp("-{$daysAgo} days"));
 
             $eid = $this->insertEncounter($pid, $provider, $date);
             if ($eid !== null) {
@@ -859,11 +872,11 @@ final class SeedDemoCommand extends Command
             return null;
         }
 
-        return (int) QueryUtils::fetchSingleValue(
+        return self::asInt(QueryUtils::fetchSingleValue(
             'SELECT encounter FROM form_encounter WHERE pid = ? ORDER BY id DESC LIMIT 1',
             'encounter',
             [$pid]
-        );
+        ));
     }
 
     /** @param list<array{eid: int, pid: int, provider: int, date: string}> $encounters */
@@ -926,6 +939,8 @@ final class SeedDemoCommand extends Command
      * release (`// TODO: not sure we need this anymore.`), and `save()` expects a populated
      * `FormVitals` shaped by the form POST. The `form_vitals` row plus its `forms` registration
      * is written directly, mirroring exactly what the vitals form itself writes.
+     *
+     * @param array{eid: int, pid: int, provider: int, date: string} $enc
      */
     private function insertVitals(array $enc): void
     {
@@ -979,7 +994,17 @@ final class SeedDemoCommand extends Command
             [$enc['date'], $enc['pid'], 'admin', 'Default']
         );
 
-        addForm($enc['eid'], 'Eye Exam', $formId, 'eye_mag', $enc['pid'], 1, $enc['date'], 'admin', 'Default');
+        (new FormService())->addForm(
+            $enc['eid'],
+            'Eye Exam',
+            $formId,
+            'eye_mag',
+            $enc['pid'],
+            1,
+            $enc['date'],
+            'admin',
+            'Default'
+        );
 
         foreach (self::EYE_SATELLITE_TABLES as $table) {
             QueryUtils::sqlInsert("INSERT INTO `{$table}` SET `id` = ?, `pid` = ?", [$formId, $enc['pid']]);
@@ -1053,7 +1078,7 @@ final class SeedDemoCommand extends Command
             . 'OSVF1 = 0, OSVF2 = 0, OSVF3 = 0, OSVF4 = 0 WHERE id = ?',
             [
                 $profile['iopod'], $profile['iopos'],
-                date('H:i', strtotime($enc['date'])),
+                date('H:i', self::timestamp($enc['date'])),
                 $profile['ioptargetod'] ?? '21', $profile['ioptargetos'] ?? '21',
                 $formId,
             ]
@@ -1074,7 +1099,19 @@ final class SeedDemoCommand extends Command
      */
     private function registerForm(array $enc, string $name, string $directory, int $formId): void
     {
-        addForm($enc['eid'], $name, $formId, $directory, $enc['pid'], 1, $enc['date'], 'admin', 'Default');
+        // The global addForm() helper is deprecated and is a one-line delegation to this exact
+        // call, so going straight to the service is the same write.
+        (new FormService())->addForm(
+            $enc['eid'],
+            $name,
+            $formId,
+            $directory,
+            $enc['pid'],
+            1,
+            $enc['date'],
+            'admin',
+            'Default'
+        );
     }
 
     // ------------------------------------------------------------ appointments
@@ -1085,7 +1122,7 @@ final class SeedDemoCommand extends Command
         $io->section('Appointments');
 
         $service = new AppointmentService();
-        $monday = date('Y-m-d', strtotime('monday this week'));
+        $monday = date('Y-m-d', self::timestamp('monday this week'));
         $today = date('Y-m-d');
         $made = 0;
         $noShows = 0;
@@ -1099,17 +1136,17 @@ final class SeedDemoCommand extends Command
             if ($i < 2) {
                 $status = '?';                     // no show
                 $noShows++;
-                $date = date('Y-m-d', strtotime($monday . ' +1 day'));
+                $date = date('Y-m-d', self::timestamp($monday . ' +1 day'));
             } elseif ($i < 5) {
                 $status = 'x';                     // cancelled
                 $cancelled++;
-                $date = date('Y-m-d', strtotime($monday . ' +2 day'));
+                $date = date('Y-m-d', self::timestamp($monday . ' +2 day'));
             } elseif ($i < 17) {
                 $status = ['@', '>', '<', '-'][$i % 4];
                 $date = $today;                    // today's flow board
             } else {
                 $status = ['-', '@', '>'][$i % 3];
-                $date = date('Y-m-d', strtotime($monday . ' +' . ($i % 5) . ' day'));
+                $date = date('Y-m-d', self::timestamp($monday . ' +' . ($i % 5) . ' day'));
             }
 
             $hour = 8 + ($i % 9);
@@ -1158,7 +1195,7 @@ final class SeedDemoCommand extends Command
             return;
         }
 
-        $start = date('Y-m-d', strtotime('monday this week'));
+        $start = date('Y-m-d', self::timestamp('monday this week'));
         QueryUtils::sqlInsert(
             'INSERT INTO openemr_postcalendar_events SET uuid = ?, pc_pid = ?, pc_catid = 5, '
             . 'pc_title = ?, pc_time = NOW(), pc_duration = 1800, pc_hometext = ?, pc_eventDate = ?, '
@@ -1171,7 +1208,7 @@ final class SeedDemoCommand extends Command
                 'Weekly post-operative review (SYNTHETIC DEMO)',
                 'Recurring series, SYNTHETIC DEMO',
                 $start,
-                date('Y-m-d', strtotime($start . ' +8 weeks')),
+                date('Y-m-d', self::timestamp($start . ' +8 weeks')),
                 '-',
                 '09:00:00',
                 '09:30:00',
@@ -1234,7 +1271,7 @@ final class SeedDemoCommand extends Command
 
             $document = new \Document();
             $error = $document->createDocument(
-                $pid,
+                (string) $pid,
                 $this->documentCategoryId(),
                 sprintf('SYNTHETIC-DEMO-specimen-%02d.txt', $i + 1),
                 'text/plain',
@@ -1242,7 +1279,7 @@ final class SeedDemoCommand extends Command
                 eid: $eid
             );
 
-            if (empty($error)) {
+            if ($error === '') {
                 $made++;
             }
         }
@@ -1287,7 +1324,7 @@ final class SeedDemoCommand extends Command
             $result = (new PrescriptionService())->insert([
                 'patient_id'   => $pids[$i % count($pids)],
                 'provider_id'  => $this->providerIds[$i % count($this->providerIds)],
-                'date_added'   => date('Y-m-d', strtotime('-' . ($i * 5) . ' days')),
+                'date_added'   => date('Y-m-d', self::timestamp('-' . ($i * 5) . ' days')),
                 'drug'         => $d['drug'],
                 'quantity'     => '1',
                 'refills'      => (string) ($i % 3),
@@ -1335,7 +1372,11 @@ final class SeedDemoCommand extends Command
         // actually expose. A cohort that no report can isolate would not be demonstrable.
         $cohort = array_slice($encounters, 0, self::COHORT_SIZE);
         $plantedIndex = self::PLANTED_MISSING_CHARGE_INDEX;
-        $this->cohortFrom = end($cohort)['date'];
+        $oldest = end($cohort);
+        if ($oldest === false) {
+            throw new \RuntimeException('The billing cohort is empty; there is nothing to reconcile against.');
+        }
+        $this->cohortFrom = $oldest['date'];
         $this->cohortTo = $cohort[0]['date'];
 
         $charges = 0;
@@ -1347,11 +1388,11 @@ final class SeedDemoCommand extends Command
                 $this->plantedMissingCharge = sprintf(
                     'encounter %d / patient %s (%s)',
                     $enc['eid'],
-                    (string) QueryUtils::fetchSingleValue(
+                    self::asString(QueryUtils::fetchSingleValue(
                         'SELECT pubpid FROM patient_data WHERE pid = ?',
                         'pubpid',
                         [$enc['pid']]
-                    ),
+                    )),
                     substr($enc['date'], 0, 10)
                 );
                 continue;
@@ -1435,7 +1476,7 @@ final class SeedDemoCommand extends Command
 
         for ($i = 0; $i < self::TARGET_PAYMENTS; $i++) {
             $enc = $encounters[$i % count($encounters)];
-            $postDate = date('Y-m-d', strtotime('-' . $bands[$i % count($bands)] . ' days'));
+            $postDate = date('Y-m-d', self::timestamp('-' . $bands[$i % count($bands)] . ' days'));
 
             $sessionId = QueryUtils::sqlInsert(
                 'INSERT INTO ar_session SET payer_id = ?, user_id = ?, closed = 0, reference = ?, '
@@ -1473,7 +1514,7 @@ final class SeedDemoCommand extends Command
 
         for ($i = 0; $i < self::TARGET_ADJUSTMENTS; $i++) {
             $enc = $encounters[($i + 20) % count($encounters)];
-            $postDate = date('Y-m-d', strtotime('-' . $bands[$i % count($bands)] . ' days'));
+            $postDate = date('Y-m-d', self::timestamp('-' . $bands[$i % count($bands)] . ' days'));
 
             $sessionId = QueryUtils::sqlInsert(
                 'INSERT INTO ar_session SET payer_id = ?, user_id = ?, closed = 0, reference = ?, '
@@ -1543,7 +1584,9 @@ final class SeedDemoCommand extends Command
             . 'sensitivity flag, clinician-authored note, facility identity'
         );
 
-        $patientCount = (int) QueryUtils::fetchSingleValue('SELECT COUNT(*) c FROM patient_data', 'c', []);
+        $patientCount = self::asInt(
+            QueryUtils::fetchSingleValue('SELECT COUNT(*) c FROM patient_data', 'c', [])
+        );
         if ($patientCount !== self::TARGET_PATIENTS) {
             $io->error(sprintf(
                 'Expected exactly %d patients (the accepted RDY-0044-B dataset), found %d. '
@@ -1583,14 +1626,14 @@ final class SeedDemoCommand extends Command
             return self::FAILURE;
         }
 
-        $paediatricPid = (int) $paediatricPid;
+        $paediatricPid = self::asInt($paediatricPid);
 
         // 1. Paediatric patient — RDY-0023.
-        $currentDob = (string) QueryUtils::fetchSingleValue(
+        $currentDob = self::asString(QueryUtils::fetchSingleValue(
             'SELECT DOB FROM patient_data WHERE pid = ?',
             'DOB',
             [$paediatricPid]
-        );
+        ));
         // C_FormVitals.class.php:116 gates on patient_age <= 20. 2010-03-15 is comfortably under
         // that threshold for the foreseeable life of this demo dataset, not just today.
         $paediatricDob = '2010-03-15';
@@ -1615,44 +1658,50 @@ final class SeedDemoCommand extends Command
         } else {
             QueryUtils::sqlStatementThrowException(
                 'UPDATE form_encounter SET sensitivity = ? WHERE id = ?',
-                ['high', (int) $sensitiveRow[0]['id']]
+                ['high', self::asInt($sensitiveRow[0]['id'] ?? null)]
             );
             $io->writeln(sprintf(
                 '  Sensitivity flag: form_encounter.id %d (SYN-0014) sensitivity -> high',
-                (int) $sensitiveRow[0]['id']
+                self::asInt($sensitiveRow[0]['id'] ?? null)
             ));
         }
 
         // 3. Clinician-authored note — RDY-0044 change 2, part 2.
         $enc = $clinicianRow[0];
-        $alreadyAuthored = (int) QueryUtils::fetchSingleValue(
+        $encounterId = self::asInt($enc['encounter'] ?? null);
+        $providerId = self::asInt($enc['provider_id'] ?? null);
+        $username = self::asString($enc['username'] ?? null);
+        $alreadyAuthored = self::asInt(QueryUtils::fetchSingleValue(
             "SELECT COUNT(*) c FROM forms WHERE encounter = ? AND formdir = 'soap' AND user != 'admin'",
             'c',
-            [(int) $enc['encounter']]
-        );
+            [$encounterId]
+        ));
         if ($alreadyAuthored > 0) {
             $io->writeln('  Clinician-authored note already present — skipping (idempotent).');
         } else {
-            $session = SessionWrapperFactory::getInstance()->getActiveSession();
-            $session->set('authUserID', (int) $enc['provider_id']);
-            $session->set('authUser', (string) $enc['username']);
+            SessionUtil::setSession([
+                'authUserID' => $providerId,
+                'authUser' => $username,
+            ]);
 
             $this->insertSoap([
-                'eid'      => (int) $enc['encounter'],
-                'pid'      => (int) $enc['pid'],
-                'provider' => (int) $enc['provider_id'],
-                'date'     => (string) $enc['date'],
+                'eid'      => $encounterId,
+                'pid'      => self::asInt($enc['pid'] ?? null),
+                'provider' => $providerId,
+                'date'     => self::asString($enc['date'] ?? null),
             ]);
 
             // Restore the seeder's own admin context immediately — a one-row exception, not a
             // change to how the rest of a run (or a re-run of this method) attributes anything.
-            $session->set('authUserID', $this->authUserId);
-            $session->set('authUser', 'admin');
+            SessionUtil::setSession([
+                'authUserID' => $this->authUserId,
+                'authUser' => 'admin',
+            ]);
 
             $io->writeln(sprintf(
                 '  Clinician-authored note: encounter %d (SYN-0015), authored by %s',
-                (int) $enc['encounter'],
-                $enc['username']
+                $encounterId,
+                $username
             ));
         }
 
@@ -1688,5 +1737,58 @@ final class SeedDemoCommand extends Command
             $rows[] = [$k, (string) $v];
         }
         $io->table(['Category', 'Seeded'], $rows);
+    }
+
+    /**
+     * strtotime() for expressions this command builds itself.
+     *
+     * Every expression passed here is assembled from literals and integers in this file, so the
+     * false return is unreachable; without this guard date() would be handed `false`, which is a
+     * TypeError under strict types rather than a usable date.
+     */
+    private static function timestamp(string $expression): int
+    {
+        $timestamp = strtotime($expression);
+        if ($timestamp === false) {
+            throw new \RuntimeException('Unparseable relative date expression: ' . $expression);
+        }
+
+        return $timestamp;
+    }
+
+    /**
+     * Narrows an untyped database value to int.
+     *
+     * QueryUtils hands rows and single values back untyped, so they cannot be cast directly.
+     * Every scalar is converted exactly as the previous `(int)` cast converted it; an array or
+     * object - which `(int)` would have turned into a warning and a meaningless `1` - is refused
+     * instead, because it means the query no longer returns the shape this command expects.
+     */
+    private static function asInt(mixed $value): int
+    {
+        if (is_int($value)) {
+            return $value;
+        }
+        if ($value === null || is_bool($value) || is_float($value) || is_string($value)) {
+            return (int) $value;
+        }
+
+        throw new \RuntimeException('Expected a scalar database value, got ' . get_debug_type($value) . '.');
+    }
+
+    /**
+     * Narrows an untyped database value to string. See {@see asInt()} for why the scalar branches
+     * are exhaustive and why the remaining branch is an error rather than a cast.
+     */
+    private static function asString(mixed $value): string
+    {
+        if (is_string($value)) {
+            return $value;
+        }
+        if ($value === null || is_bool($value) || is_float($value) || is_int($value)) {
+            return (string) $value;
+        }
+
+        throw new \RuntimeException('Expected a scalar database value, got ' . get_debug_type($value) . '.');
     }
 }

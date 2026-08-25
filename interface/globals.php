@@ -675,7 +675,10 @@ if (empty($globalsBag->getString('qualified_site_addr'))) {
 // Only persist to session on writable requests; read-only requests use the
 // value already stored in the session from a previous writable request.
 if (!$read_only) {
-    $session->set("enable_database_connection_pooling", $globalsBag->getBoolean("enable_database_connection_pooling", false));
+    SessionUtil::setSession(
+        "enable_database_connection_pooling",
+        $globalsBag->getBoolean("enable_database_connection_pooling", false)
+    );
 }
 
 // If >0 this will enforce a separate PHP session for each top-level

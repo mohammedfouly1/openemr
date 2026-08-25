@@ -17,6 +17,7 @@ namespace OpenEMR\Modules\ThiqaBranding\Console;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use OpenEMR\Common\Database\QueryUtils;
+use OpenEMR\Core\OEGlobalsBag;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -24,6 +25,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Process\Process;
 
 /**
  * RDY-0080 proved the configured dump tool *runs*. That is not a backup policy.
@@ -72,12 +74,12 @@ final class BackupCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $target = (string) $input->getOption('target');
+        $target = self::stringOption($input, 'target');
         $retention = new ManagedBackupRetention();
         try {
             ManagedBackupRetention::assertTargetInput($target);
             $keep = ManagedBackupRetention::parseKeep($input->getOption('keep'));
-            $label = (string) $input->getOption('label');
+            $label = self::stringOption($input, 'label');
             ManagedBackupArtifact::assertValidLabel($label);
         } catch (InvalidArgumentException $error) {
             $io->error($error->getMessage());
@@ -85,25 +87,29 @@ final class BackupCommand extends Command
             return self::FAILURE;
         }
 
-        $siteDir = $GLOBALS['OE_SITE_DIR'] ?? '';
+        $siteDir = OEGlobalsBag::getInstance()->getString('OE_SITE_DIR');
         $conf = $siteDir . '/sqlconf.php';
         if (!is_file($conf)) {
             $io->error('sqlconf.php not found for the active site.');
 
             return self::FAILURE;
         }
-        /** @var string $host */
-        /** @var string $port */
-        /** @var string $login */
-        /** @var string $pass */
-        /** @var string $dbase */
-        require $conf;
 
-        $binDir = (string) QueryUtils::fetchSingleValue(
+        // Read back through readSqlConf() rather than requiring straight into this scope, so
+        // every credential has one place to be narrowed before it is used.
+        $sqlConf = self::readSqlConf($conf);
+
+        $host = self::confValue($sqlConf, 'host');
+        $port = self::confValue($sqlConf, 'port');
+        $login = self::confValue($sqlConf, 'login');
+        $pass = self::confValue($sqlConf, 'pass');
+        $dbase = self::confValue($sqlConf, 'dbase');
+
+        $binDir = self::scalarToString(QueryUtils::fetchSingleValue(
             "SELECT gl_value FROM globals WHERE gl_name = 'mysql_bin_dir'",
             'gl_value',
             []
-        );
+        ));
         $resolved = realpath($binDir);
         if ($resolved === false) {
             $io->error("mysql_bin_dir does not resolve: {$binDir} (see RDY-0080)");
@@ -138,15 +144,39 @@ final class BackupCommand extends Command
         }
         @chmod($defaults, 0600);
 
-        $cmd = escapeshellarg($resolved . DIRECTORY_SEPARATOR . 'mysqldump')
-            . ' --defaults-file=' . escapeshellarg($defaults)
-            . ' --single-transaction --routines --events '
-            . escapeshellarg($dbase)
-            . ' > ' . escapeshellarg($file) . ' 2>&1';
+        // mysqldump requires --defaults-file to be the FIRST option, so the order here is load
+        // bearing. Arguments are passed as an array so the child is spawned directly, with no
+        // shell in the middle and nothing to escape by hand.
+        $dump = new Process([
+            $resolved . DIRECTORY_SEPARATOR . 'mysqldump',
+            '--defaults-file=' . $defaults,
+            '--single-transaction',
+            '--routines',
+            '--events',
+            $dbase,
+        ]);
+        // A full-database dump has no meaningful upper bound; the scheduler that invokes this
+        // command decides how long a backup may take, not a library default of sixty seconds.
+        $dump->setTimeout(null);
+
+        $artefact = fopen($file, 'wb');
+        if ($artefact === false) {
+            @unlink($defaults);
+            $io->error('Could not open the backup artefact for writing.');
+
+            return self::FAILURE;
+        }
 
         $started = microtime(true);
-        exec($cmd, $ignored, $rc);
+        // The previous shell form redirected both streams into the artefact, and the
+        // "Dump completed" tail check below reads that trailer, so both streams still land in
+        // the same file in the order the child emits them.
+        $dump->run(static function (string $type, string $buffer) use ($artefact): void {
+            fwrite($artefact, $buffer);
+        });
         $elapsed = round(microtime(true) - $started, 2);
+        fclose($artefact);
+        $rc = $dump->getExitCode() ?? -1;
         @unlink($defaults);
 
         if ($rc !== 0 || !is_file($file)) {
@@ -170,11 +200,11 @@ final class BackupCommand extends Command
                 $tables++;
             }
         }
-        $expected = (int) QueryUtils::fetchSingleValue(
+        $expected = self::scalarToInt(QueryUtils::fetchSingleValue(
             'SELECT COUNT(*) AS c FROM information_schema.tables WHERE table_schema = DATABASE()',
             'c',
             []
-        );
+        ));
 
         if (!str_contains($tail, 'Dump completed') || $tables !== $expected) {
             $io->error(sprintf(
@@ -246,5 +276,82 @@ final class BackupCommand extends Command
         ));
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Reads a console option as a string.
+     *
+     * Both options read here are VALUE_REQUIRED with a string default, so the console component
+     * only ever hands back a string; the other branch exists so the value reaches the validators
+     * already typed rather than cast.
+     */
+    private static function stringOption(InputInterface $input, string $name): string
+    {
+        $value = $input->getOption($name);
+
+        return is_string($value) ? $value : '';
+    }
+
+    /**
+     * Includes sqlconf.php in a scope of its own and hands back the variables it defined.
+     *
+     * The file assigns its credentials as loose variables, which nothing can follow into a method
+     * scope. Its own `global $sqlconf` line still reaches global scope exactly as it did when the
+     * include sat directly in execute().
+     *
+     * @return array<string, mixed>
+     */
+    private static function readSqlConf(string $sqlconfPath): array
+    {
+        require $sqlconfPath;
+
+        return get_defined_vars();
+    }
+
+    /**
+     * Reads one credential out of the included sqlconf.php variable set.
+     *
+     * @param array<string, mixed> $conf the variables sqlconf.php defined
+     */
+    private static function confValue(array $conf, string $key): string
+    {
+        $value = $conf[$key] ?? null;
+
+        return is_scalar($value) ? (string) $value : '';
+    }
+
+    /**
+     * Narrows an untyped single-column query result to string.
+     *
+     * QueryUtils hands single values back untyped. Every scalar is converted exactly as the
+     * previous cast converted it; an array or object, which the cast would have turned into a
+     * warning and the literal text "Array", is refused instead, because it means the query no
+     * longer returns what this command was written against.
+     */
+    private static function scalarToString(mixed $value): string
+    {
+        if (is_string($value)) {
+            return $value;
+        }
+        if ($value === null || is_bool($value) || is_float($value) || is_int($value)) {
+            return (string) $value;
+        }
+
+        throw new RuntimeException('Expected a single scalar column value.');
+    }
+
+    /**
+     * Narrows an untyped single-column query result to int. See {@see scalarToString()}.
+     */
+    private static function scalarToInt(mixed $value): int
+    {
+        if (is_int($value)) {
+            return $value;
+        }
+        if ($value === null || is_bool($value) || is_float($value) || is_string($value)) {
+            return (int) $value;
+        }
+
+        throw new RuntimeException('Expected a single scalar column value.');
     }
 }

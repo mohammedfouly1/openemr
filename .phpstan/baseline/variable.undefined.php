@@ -922,11 +922,6 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../interface/language/csv/translation_utilities.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Variable \\$go might not be defined\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../interface/language/lang_definition.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Variable \\$srcdir might not be defined\\.$#',
     'count' => 1,
     'path' => __DIR__ . '/../../interface/language/language.php',
