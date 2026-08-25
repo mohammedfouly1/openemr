@@ -21,6 +21,7 @@ use OpenEMR\Modules\ThiqaBranding\AssetIntake\SvgInspector;
 use OpenEMR\Modules\ThiqaBranding\Config\BrandingGlobalKey;
 use OpenEMR\Modules\ThiqaBranding\Console\MaterialiseCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\SiteOption;
+use OpenEMR\Modules\ThiqaBranding\Console\SiteScopeNotice;
 use OpenEMR\Modules\ThiqaBranding\Materialisation\AtomicFileWriter;
 use OpenEMR\Modules\ThiqaBranding\Materialisation\BrandingMaterialiser;
 use OpenEMR\Modules\ThiqaBranding\Materialisation\JsonFileTier1PaletteProvider;
@@ -30,6 +31,7 @@ use OpenEMR\Modules\ThiqaBranding\Observability\BrandingHealthCheck;
 use OpenEMR\Modules\ThiqaBranding\Observability\FilesystemStylesheetProbe;
 use OpenEMR\Modules\ThiqaBranding\Observability\MaterialisationLogger;
 use OpenEMR\Modules\ThiqaBranding\Tenant\SiteId;
+use OpenEMR\Modules\ThiqaBranding\Tenant\SiteInventory;
 use OpenEMR\Modules\ThiqaBranding\Theme\ThemeVariant;
 use OpenEMR\Modules\ThiqaBranding\Token\CssVariableRenderer;
 use OpenEMR\Modules\ThiqaBranding\Token\TokenSetParser;
@@ -39,6 +41,7 @@ use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Materialisation\FrozenClock;
 use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Materialisation\RecordingGlobalsWriter;
 use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Materialisation\TemporaryTreeTrait;
 use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Observability\RecordingLogger;
+use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Tenant\SitesFixtureTrait;
 use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Token\ContrastCalculatorStub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -60,6 +63,7 @@ final class MaterialiseCommandTest extends TestCase
 {
     use TemporaryTreeTrait;
     use CertifiedAssetTrait;
+    use SitesFixtureTrait;
 
     private const SITE = 'tenantalpha';
 
@@ -113,12 +117,16 @@ final class MaterialiseCommandTest extends TestCase
             $health,
             new MaterialisationLogger($this->recorder),
             new LogoValidator(new RasterImageReader(), new SvgInspector(), new NullLogger()),
+            // A single-tenant sites tree, so the scope notice degrades to its quiet line
+            // and these tests keep asserting about materialisation and nothing else.
+            new SiteScopeNotice(new SiteInventory($this->makeSites([self::SITE => 1]))),
         );
     }
 
     protected function tearDown(): void
     {
         $this->removeTree();
+        $this->removeSites();
     }
 
     // -------------------------------------------------------------------- tenant scoping

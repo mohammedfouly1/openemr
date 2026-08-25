@@ -20,7 +20,6 @@ use OpenEMR\Modules\ThiqaBranding\Tenant\SiteId;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -53,13 +52,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'thiqa-branding:verify',
     description: 'Report one tenant\'s branding revision, freshness and consistency (read-only).',
 )]
-final class VerifyCommand extends Command
+final class VerifyCommand extends TenantScopedBrandingCommand
 {
     private const SECONDS_PER_DAY = 86400;
 
-    public function __construct(private readonly BrandingHealthCheck $health)
-    {
-        parent::__construct();
+    public function __construct(
+        private readonly BrandingHealthCheck $health,
+        SiteScopeNotice $siteScopeNotice,
+    ) {
+        parent::__construct($siteScopeNotice);
     }
 
     protected function configure(): void
@@ -78,18 +79,9 @@ final class VerifyCommand extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function executeForSite(InputInterface $input, SymfonyStyle $io, SiteId $site): int
     {
-        $io = new SymfonyStyle($input, $output);
-
-        $resolved = SiteOption::resolve($input);
-        if (!$resolved->site instanceof SiteId) {
-            $io->error($resolved->error ?? 'A tenant site id is required.');
-
-            return Command::INVALID;
-        }
-
-        $report = $this->health->check($resolved->site);
+        $report = $this->health->check($site);
 
         $this->render($io, $report);
 

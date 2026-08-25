@@ -16,14 +16,17 @@ namespace OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Console;
 
 use OpenEMR\Modules\ThiqaBranding\Config\BrandingGlobalKey;
 use OpenEMR\Modules\ThiqaBranding\Console\SiteOption;
+use OpenEMR\Modules\ThiqaBranding\Console\SiteScopeNotice;
 use OpenEMR\Modules\ThiqaBranding\Console\VerifyCommand;
 use OpenEMR\Modules\ThiqaBranding\Observability\BrandingHealthCheck;
 use OpenEMR\Modules\ThiqaBranding\Tenant\SiteId;
+use OpenEMR\Modules\ThiqaBranding\Tenant\SiteInventory;
 use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Materialisation\FrozenClock;
 use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Materialisation\RecordingGlobalsWriter;
 use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Observability\InMemoryStylesheetProbe;
 use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Observability\RecordingLogger;
 use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Observability\UnreadableGlobalsWriter;
+use OpenEMR\Tests\Isolated\Modules\ThiqaBranding\Tenant\SitesFixtureTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -32,6 +35,8 @@ require_once __DIR__ . '/../Materialisation/materialisation_autoloader.php';
 
 final class VerifyCommandTest extends TestCase
 {
+    use SitesFixtureTrait;
+
     private const SITE = 'tenantalpha';
 
     private const NOW = '2026-08-09T12:00:00+00:00';
@@ -44,11 +49,22 @@ final class VerifyCommandTest extends TestCase
 
     private RecordingLogger $logger;
 
+    private SiteScopeNotice $notice;
+
     protected function setUp(): void
     {
         $this->site = new SiteId(self::SITE);
         $this->globals = new RecordingGlobalsWriter($this->site);
         $this->logger = new RecordingLogger();
+
+        // A single-tenant sites tree, so the scope notice degrades to its quiet line and
+        // these tests keep asserting about the health report and nothing else.
+        $this->notice = new SiteScopeNotice(new SiteInventory($this->makeSites([self::SITE => 1])));
+    }
+
+    protected function tearDown(): void
+    {
+        $this->removeSites();
     }
 
     // -------------------------------------------------------------------- tenant scoping
@@ -156,12 +172,15 @@ final class VerifyCommandTest extends TestCase
 
     public function testAnUnreadableTenantExitsNonZero(): void
     {
-        $command = new VerifyCommand(new BrandingHealthCheck(
-            new UnreadableGlobalsWriter(),
-            new InMemoryStylesheetProbe(),
-            FrozenClock::at(self::NOW),
-            $this->logger,
-        ));
+        $command = new VerifyCommand(
+            new BrandingHealthCheck(
+                new UnreadableGlobalsWriter(),
+                new InMemoryStylesheetProbe(),
+                FrozenClock::at(self::NOW),
+                $this->logger,
+            ),
+            $this->notice,
+        );
 
         $tester = new CommandTester($command);
         $tester->execute(['--site' => self::SITE], ['interactive' => false]);
@@ -206,12 +225,15 @@ final class VerifyCommandTest extends TestCase
 
     private function command(InMemoryStylesheetProbe $probe): VerifyCommand
     {
-        return new VerifyCommand(new BrandingHealthCheck(
-            $this->globals,
-            $probe,
-            FrozenClock::at(self::NOW),
-            $this->logger,
-        ));
+        return new VerifyCommand(
+            new BrandingHealthCheck(
+                $this->globals,
+                $probe,
+                FrozenClock::at(self::NOW),
+                $this->logger,
+            ),
+            $this->notice,
+        );
     }
 
     private function tester(InMemoryStylesheetProbe $probe): CommandTester

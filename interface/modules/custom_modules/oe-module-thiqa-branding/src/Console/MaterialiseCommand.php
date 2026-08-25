@@ -30,7 +30,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -60,7 +59,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'thiqa-branding:materialise',
     description: 'Apply a branding revision to one tenant (out-of-request; requires --site).',
 )]
-final class MaterialiseCommand extends Command
+final class MaterialiseCommand extends TenantScopedBrandingCommand
 {
     /** Ten digits cannot overflow a 32-bit int cast; no real revision approaches it. */
     private const MAX_REVISION_DIGITS = 9;
@@ -70,8 +69,9 @@ final class MaterialiseCommand extends Command
         private readonly BrandingHealthCheck $health,
         private readonly MaterialisationLogger $log,
         private readonly LogoValidator $logoValidator,
+        SiteScopeNotice $siteScopeNotice,
     ) {
-        parent::__construct();
+        parent::__construct($siteScopeNotice);
     }
 
     protected function configure(): void
@@ -101,19 +101,8 @@ final class MaterialiseCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function executeForSite(InputInterface $input, SymfonyStyle $io, SiteId $site): int
     {
-        $io = new SymfonyStyle($input, $output);
-
-        $resolved = SiteOption::resolve($input);
-        if (!$resolved->site instanceof SiteId) {
-            $io->error($resolved->error ?? 'A tenant site id is required.');
-
-            return Command::INVALID;
-        }
-
-        $site = $resolved->site;
-
         // Reading the live revision here, rather than letting the materialiser discover it,
         // is what lets --revision default to "the next one" and what lets the summary show
         // the operator what they moved from.

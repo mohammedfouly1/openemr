@@ -45,6 +45,7 @@ use OpenEMR\Modules\ThiqaBranding\Console\BackupCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\MaterialiseCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\ProvisionReportAclCommand;
 use OpenEMR\Modules\ThiqaBranding\Console\SeedDemoCommand;
+use OpenEMR\Modules\ThiqaBranding\Console\SiteScopeNotice;
 use OpenEMR\Modules\ThiqaBranding\Console\VerifyCommand;
 use OpenEMR\Modules\ThiqaBranding\Language\CoreSessionLanguage;
 use OpenEMR\Modules\ThiqaBranding\Listener\LoginTemplateListener;
@@ -63,6 +64,7 @@ use OpenEMR\Modules\ThiqaBranding\Observability\MaterialisationLogger;
 use OpenEMR\Modules\ThiqaBranding\Service\BrandingService;
 use OpenEMR\Modules\ThiqaBranding\Service\BrandingServiceInterface;
 use OpenEMR\Modules\ThiqaBranding\Tenant\SiteId;
+use OpenEMR\Modules\ThiqaBranding\Tenant\SiteInventory;
 use OpenEMR\Modules\ThiqaBranding\Theme\ThemeResolver;
 use OpenEMR\Modules\ThiqaBranding\Token\CssVariableRenderer;
 use OpenEMR\Modules\ThiqaBranding\Token\TokenSetParser;
@@ -199,6 +201,13 @@ final class Bootstrap
             $projectDir . '/sites',
         );
 
+        // Finding B1. --site is mandatory and has no default, and nothing enumerated the
+        // tenants that exist, so a branding run could exit 0 having silently left a second
+        // fully configured tenant untouched. Every tenant-scoped command below now carries
+        // this notice; it reads the sites directory and nothing else, opens no database
+        // connection, and never changes an exit code.
+        $siteScopeNotice = new SiteScopeNotice(new SiteInventory($projectDir . '/sites'));
+
         $globalsWriter = new QueryUtilsBrandingGlobalsWriter($site);
         $clock = ServiceContainer::getClock();
 
@@ -228,12 +237,19 @@ final class Bootstrap
                 new BrandingProfileLoader(),
                 $this->moduleDirectory . '/' . ModulePaths::PROFILE_SUBPATH,
                 $site,
+                $siteScopeNotice,
             ),
-            new VerifyCommand($health),
+            new VerifyCommand($health, $siteScopeNotice),
             new ProvisionReportAclCommand(),
             new BackupCommand(),
             new SeedDemoCommand(),
-            new MaterialiseCommand($materialiser, $health, new MaterialisationLogger($logger), $logoValidator),
+            new MaterialiseCommand(
+                $materialiser,
+                $health,
+                new MaterialisationLogger($logger),
+                $logoValidator,
+                $siteScopeNotice,
+            ),
         ] as $command) {
             $event->setCommand($command::class, $command);
         }

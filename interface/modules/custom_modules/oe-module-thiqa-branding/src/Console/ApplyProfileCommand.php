@@ -26,7 +26,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -64,7 +63,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'thiqa-branding:apply-profile',
     description: 'Apply the declarative Thiqa branding profile to one tenant (requires --site).',
 )]
-final class ApplyProfileCommand extends Command
+final class ApplyProfileCommand extends TenantScopedBrandingCommand
 {
     /** Every branding global is a scalar setting, never one row of a multi-valued list. */
     private const GL_INDEX = 0;
@@ -83,8 +82,9 @@ final class ApplyProfileCommand extends Command
         private readonly BrandingProfileLoader $loader,
         private readonly string $profilePath,
         private readonly SiteId $bootstrappedSite,
+        SiteScopeNotice $siteScopeNotice,
     ) {
-        parent::__construct();
+        parent::__construct($siteScopeNotice);
     }
 
     protected function configure(): void
@@ -114,18 +114,9 @@ final class ApplyProfileCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function executeForSite(InputInterface $input, SymfonyStyle $io, SiteId $site): int
     {
-        $io = new SymfonyStyle($input, $output);
-
-        $resolved = SiteOption::resolve($input);
-        if (!$resolved->site instanceof SiteId) {
-            $io->error($resolved->error ?? 'A tenant site id is required.');
-
-            return Command::INVALID;
-        }
-
-        if (!$resolved->site->equals($this->bootstrappedSite)) {
+        if (!$site->equals($this->bootstrappedSite)) {
             // The site is not echoed back. This message can reach a shared log, and which
             // tenants exist is topology detail (plan §3.8.1 rule 4).
             $io->error(
@@ -172,7 +163,7 @@ final class ApplyProfileCommand extends Command
         }
 
         $io->definitionList(
-            ['Site' => $resolved->site->value],
+            ['Site' => $site->value],
             ['Profile' => $profile->name],
             ['Source' => $profile->sourceDocument],
             ['Globals declared' => (string) count($profile)],
