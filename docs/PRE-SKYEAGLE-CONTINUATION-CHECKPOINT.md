@@ -254,7 +254,7 @@ implemented yet.
 | PRE-16 | Scan-2G Materialisation / tenant safety | orchestrator continuation | R/W (reversible runtime proof) | **DONE — VERIFIED; LIVE STATE RESTORED** | §15 SCAN2G and §16 continuation evidence |
 | PRE-17 | Scan-2H Telemetry / network egress | Agent 2H | R | **DONE** | §15 SCAN2H |
 | PRE-18…24 | Scan-3A…3E adversarial red-team | fresh agents | R | **COMPLETE (2026-08-24) — 5 of 5 returned; 1 P0 found and fixed** | All five reported. Scan-3A found **S3-P0-28**, a fresh-install-versus-upgrade precedence divergence that would have wedged every upgrade uncatchably; fixed and regression-pinned. 3B hardened six gate assertions; 3C found the composition architecture's real reach gap; 3D found three documentation defects including a stale headline status; 3E found one live-state gap and corrected an orchestrator docblock. **Rev 29 closed S3-P1-31, S3-P1-32 and S3-P1-34; 4 remain unclosed** — 1 accepted trade, 1 P1 needing a design step, 2 governance/CI P2s. See §15B. Originally: | Five independent read-only agents, launched only after the Owner explicitly authorised spawning them. Scoped to five attack surfaces rather than the original seven letters: **3A** translation-contract subsystem (orphaning, page-fatal patterns, install-vs-upgrade divergence, rollback); **3B** CI gate and guardrail false-greens; **3C** brand leaks on live and source surfaces incl. Arabic/RTL; **3D** documentation truthfulness (falsify the corpus's own claims, including this file's); **3E** rename blast radius and silent breakage. Each was told to falsify rather than inherit, given the host constraints (no Docker, Twig render tests hang, scoped searches, sibling-worktree exclusion), and bound to read-only with no live-DB mutation. |
-| PRE-25 | Final reconciliation / certification | orchestrator | R | **RECONCILIATION COMPLETE (§21); VERDICT PENDING** | Every documented code blocker closed at Rev 32 (§15E). Three inputs still outstanding before it can begin: Scan-4A…4E (dispatched at `e16913d5b`), the full PHPStan run (exit code alone is not proof on this host — grep for `Internal error` / `Result is incomplete`), and the two unlabelled P1 slots at the S2-P1-19 / S2-P1-21 numbering gap, which must be resolved from Scan-2's register rather than filled with invented findings. |
+| PRE-25 | Final reconciliation / certification | orchestrator | R | **VERDICT: FAIL (§22.1).** Scan-4 has since returned, found a fifth P0 and 40 further findings, and the §21 reconciliation predates all of it. §22 carries the Scan-4 register; §23 carries the remediation of its HIGH findings and of the guard defects. PRE-25 must be re-run against the corrected ledger. Superseded row follows: **RECONCILIATION COMPLETE (§21); VERDICT PENDING** | Every documented code blocker closed at Rev 32 (§15E). Three inputs still outstanding before it can begin: Scan-4A…4E (dispatched at `e16913d5b`), the full PHPStan run (exit code alone is not proof on this host — grep for `Internal error` / `Result is incomplete`), and the two unlabelled P1 slots at the S2-P1-19 / S2-P1-21 numbering gap, which must be resolved from Scan-2's register rather than filled with invented findings. |
 
 **Orchestrator's own guardrail proof:** two direct PHPUnit runs exceeded timeout on the Drive mount without
 capturing output. The claim was then **proven by a faster route** — reading the real `MODULE_NAMESPACE`
@@ -327,7 +327,10 @@ POST-SCAN-3 REGISTER (2026-08-25, see §15C):
                                                                      unapplied migration, not a
                                                                      code defect; deliberately
                                                                      not run (Owner, 2026-08-25)
-REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 2 unlabelled slots only · P2 0 open (4 fixed)
+REGISTERS:          P0 5 total (0 open, 5 fixed) · P1 2 unlabelled slots only · P2 0 open (4 fixed)
+                    [S4D-05, corrected 2026-08-25: this line long read "P0 4 total". PRE-25 §21.1
+                    re-derived five, the fifth being S3-P0-28. Scan 4 then added S4-P0-40, so the
+                    running total is SIX P0 findings, none open. See §22.]
                     FIXED so far: S1-P0-01; S1-P0-09; S1-P0-13; S1-P1-02; S1-P1-03; S1-P1-04; S1-P1-05; S1-P1-06; S1-P1-10; S1-P1-11; S1-P1-15; S1-P1-17; S2-P0-21; S2-P1-18; S2-P1-22; S2-P1-23; S2-P1-25; S2-P1-26.
                     PARTLY FIXED: S2-P1-24 — juxtaposition and text-variant halves closed;
                     only the Arabic LOGO variant remains, blocked on an approved asset
@@ -2279,7 +2282,10 @@ library/globals.inc.php                                      (modified — consu
 
 **Two things are missing, and the second is a process deviation worth recording.**
 
-1. **`setup.php` is untouched.** It still carries all **10** `Thiqa` literals at the recorded lines,
+1. **`setup.php` is untouched.** *(S4D-06, corrected 2026-08-25: superseded. `setup.php` carries*
+   ***zero*** *product literals as of `e16913d5b`. What follows records the state at Rev 31 and is*
+   *kept as the history of what was open then, not as a current claim.)*
+   It still carries all **10** `Thiqa` literals at the recorded lines,
    alongside 32 `OpenEMR` occurrences. `setup.php` *is* the finding — the generator is only the means
    — so despite the volume of new code, **S3-P1-33 has not been materially advanced against its own
    target** and remains OPEN.
@@ -2853,5 +2859,317 @@ Local-disk     certification copy; deferred behind the Owner's push decision  PE
 **A verdict written before these return would be exactly the false green this programme exists to
 prevent.** The reconciliation stands on its own and does not change if the scans come back clean; if
 they do not, the new findings enter the ledger above and are dispositioned like every other.
+
+---
+
+## 22. SCAN 4 — RESULTS, AND WHY THE PRE-25 VERDICT IS FAIL
+
+> **This section was written during the Scan-4 session and was never committed.** It survived only
+> as a scratchpad file while three of its fixes landed as commits referencing finding IDs that
+> existed in no ledger. That gap is itself the governance defect worth naming: for a period, the
+> repository's authoritative checkpoint said "Scan-4 PENDING" while Scan-4 had returned, found a
+> fifth P0, and had three of its findings fixed and committed above the PRE-25 reconciliation.
+
+### 22.1 VERDICT
+
+```text
+PRE-SKYEAGLE CERTIFICATION:  FAIL
+SKYEAGLE MIGRATION:          NOT AUTHORIZED
+```
+
+Settled, not provisional. Scan-4A found a **new P0** by execution; 4B, 4D and 4E returned 40 further
+findings, three of them HIGH, against code and documents that had not been independently reviewed. A
+large share were against work done earlier the same day by the same author who then reconciled PRE-25.
+
+### 22.2 Dispatch
+
+Five independent adversarial agents, read-only, dispatched at `e16913d5b`, each given the six-worktree
+exclusion set (PRE-ORCH-02) and told to falsify rather than confirm.
+
+| Agent | Area | Returned |
+|---|---|---|
+| 4A | translation-contract subsystem | **YES** — found a P0 |
+| 4B | CI gate and guardrail false-greens | **YES** — 13 findings |
+| 4C | brand leaks, live and source | **NO — never reported. Treat 4C's area as UNAUDITED.** |
+| 4D | documentation truthfulness | **YES** — 12 findings |
+| 4E | rename blast radius | **YES** — 15 findings across three reports |
+
+### 22.3 Fixed during the Scan-4 session
+
+| ID | Commit | Evidence |
+|---|---|---|
+| **S4-P0-40** | `8f84fd189` | 50 tests / 179 assertions, exit 0; negative control reproduced the defect, source restored to `13b00528dd5878d3` |
+| **S4D-02** | `2d063ca3e` | SVG sweep 21 → 25 files; per-root guard added; control fired; restored to `70afe0047d829ffd` |
+| **S4B-12 / S4E-04** | `a3035bf13` | 10 tests / 42 assertions, exit 0; tracked artefact byte-identical across the run |
+
+**S4-P0-40 in one line:** the generated installer SQL *filters* unusable catalogue rows; the PHP upgrade
+path *threw* on them. `sql_upgrade.php:526` has no PHP try/catch, so the throw landed after the DDL
+applied and before the version row was bumped — **every upgrade of every affected site wedged
+permanently**, recoverable only by hand-editing `lang_definitions`. Proven on three real French rows in
+the shipped seed. The renderer's own comment claimed `compose()` was the PHP mirror of the SQL guard; it
+was the opposite policy wearing the same name, which is why four scans walked past it.
+
+### 22.4 PHPStan — now has a result, and it is not clean
+
+The Scan-4 session recorded PHPStan as `NOT RUN`; the first attempt aborted with the **second** host
+failure variant (`Child process timed out after 600.0 seconds`) while exiting `0`. The host-local
+override now carries `parallel.processTimeout: 3600.0` and `maximumNumberOfProcesses: 4` — neither
+weakens a rule, changes the level, or suppresses an error.
+
+**A complete run was executed on 2026-08-25 and is recorded here.** Zero `Internal error`, zero
+`Result is incomplete`, so RB-24 does not apply and the result is trustworthy. **Exit 1, 996 errors
+displayed against the 1,000 cap.**
+
+```text
+658  sites/rdy0082restore/**   host artefact — an untracked second site (see 23.1), gitignored,
+                               absent in CI. The baseline is path-keyed against sites/default/**,
+                               so this is the same upstream file at an unbaselined path.
+                               497 of them in statement.inc.php alone.
+338  everything else           real, and CI would see them
+~114 of those 338             in branding-module and branch-touched files, unbaselined
+```
+
+`.github/workflows/phpstan.yml` gates this in CI, and the branch has never been pushed, so that gate has
+never run against any of this work. Remediation is recorded at §23.
+
+### 22.5 Open Scan-4 findings not closed in the Scan-4 session
+
+**HIGH** — all three worked in the session recorded at §23: S4E-01 (a second live site invisible to the
+rename tooling), S4E-02 (repo-root pages printing a hardcoded brand name to anonymous visitors),
+S4E-03 ("the next rename is one JSON edit" is false as written).
+
+**MEDIUM-HIGH / MEDIUM** — S4E-15 (generator and loader enforce opposite invariants on one file),
+S4B-01 (the gate's collapse detector counts nothing), S4B-02 (the matrix-pin guard reads the first
+regex match of five), S4B-10 / S4E-06 (all four guardrails miss the two namespaces this programme
+added), S4B-03 / S4B-04 (leak-extractor false negatives), S4E-13 (`i18n_generator.php` ships the whole
+catalogue keyed by English constants), S4B-08 (the 11-font equality check runs in zero CI legs),
+S4E-07 (`modules` has a second `directory` column), S4E-08 (`facility.name` is join-key data in
+`BillingExport.csv.php`), S4E-09 (`ProductIdentity`'s tenancy rationale describes a capability it does
+not have).
+
+**LOW / documentation** — S4B-05, 06, 09, 11, 13; S4E-10, 11, 14; S4D-01 … S4D-12. The S4D set is
+largely this register failing to keep up with itself. Three are substantive errors in ADR-BRAND-005 and
+are carried into §23.
+
+---
+
+## 23. SESSION OF 2026-08-25 (afternoon) — THE FOUR HIGH BLOCKERS AND THE GUARD DEFECTS
+
+Four agents were dispatched in parallel against the HIGH findings, partitioned by file ownership so
+they could share one working tree; the orchestrator took the guard-integrity defects itself and held an
+ownership tripwire over the protected files throughout. **No agent violated its ownership boundary, no
+`@phpstan-ignore` or `markTestSkipped` was introduced, and no SkyEagle identity was added.**
+
+Two agents were terminated by session usage limits rather than by task failure — B1 while waiting on a
+PHPStan run, B3 mid-remediation. B1's work was complete and is verified below. **B3's is partial and is
+recorded as partial.**
+
+### 23.1 S4E-01 — a second configured site was invisible to the rename tooling — **FIXED — VERIFIED**
+
+`sites/rdy0082restore/` is a complete tenant: `$config = 1`, database `openemr_rdy0082_restore`,
+`openemr_name='Thiqa'`, `saas_branding_product_name_ar='ثقة'`, its own untracked logo assets, and **its
+own `modules` row** (`mod_id=6, mod_directory='oe-module-thiqa-branding', mod_active=1`). It serves
+HTTP 200. It is gitignored at `.gitignore:131`, which is why every static sweep walked past it.
+
+§9 records `modules` as "**1 row**" and names `mod_directory` the highest-severity rename hazard,
+because `ModulesApplication.php:141-161` runs `UPDATE modules SET mod_active = 0` when the path stops
+resolving. **There are two such rows, in two databases.** Every branding command takes a mandatory
+`--site` with no default and nothing enumerated sites, so a rename run against `--site=default` exits 0
+having silently left a second fully-branded instance on the old identity.
+
+Closed for **visibility**, which is the part that is code. `SiteInventory` enumerates configured tenants
+from the filesystem — parsing `sqlconf.php` with `token_get_all()` rather than including it, so a
+commented-out `$config` cannot be misread and no site's credentials enter scope — and every
+tenant-scoped command now renders a notice naming the tenants it did **not** act on. `--site` still has
+no default and must not acquire one. Exit codes are untouched on every path: a tenant left unbranded is
+a decision for a human, not a probe result. Evidence:
+`docs/evidence/EV-B1-second-configured-site-visibility.md`. **163 tests / 1,651 assertions, exit 0.**
+
+**Whether that second tenant is retired remains an Owner decision and was deliberately not taken.**
+
+### 23.2 S4E-02 (extended) — anonymous pages printing a hardcoded brand name — **FIXED — VERIFIED**
+
+Scan-4E raised `admin.php`. There were three, all answering an unauthenticated request:
+`admin.php` (2 literals), `sql_patch.php` (3), `ippf_upgrade.php` (3). None routed through
+`xl_product_name()` or `ProductIdentity`; `admin.php` cannot, in its present form, because it never
+loads `vendor/autoload.php`.
+
+All eight converted. `admin.php` requires the one identity class directly rather than pulling in the
+autoloader, and hand-rolls its escaping — the idiom already in that file. `sql_patch.php` and
+`ippf_upgrade.php` resolve `text(xl_product_name())` **before any output**, deliberately: the resolver
+may start a session to select the Arabic wordmark and both pages flush progress as they work, so a late
+resolve would hit "headers already sent" and silently degrade to the Latin name.
+
+**The structural half mattered more.** `BrandLeakSurfaceContractTest`'s `SCANNED_ROOTS` never included
+the repository root, so `setup.php`'s hand-won S3-P1-33 closure had no regression guard behind it. The
+root is now scanned as a non-recursive list of the executable entry points — recursing it would pull in
+`vendor/`, `sites/` and `Documentation/` and make the gate machine-dependent.
+
+**A third hole, found by the agent and not by this programme:** every assertion in that file hunts the
+*upstream* name, so none of them could ever have caught a page printing the *configured* brand as a
+literal — which is exactly what all three pages did. Widening the roots alone would still have passed.
+A new guard reads the current name from the generated artefact (so the test names no brand and survives
+the rename it protects) and scans `T_INLINE_HTML` as well as string tokens, since `admin.php` closes
+its PHP block before printing anything.
+
+Both extractor defects (S4B-03 / S4B-04) were closed in the same pass: the Twig matcher's character
+class excluded both quote characters, defeating the backreference its own docblock credited; the PHP
+tokenizer inspected only a first-position `T_CONSTANT_ENCAPSED_STRING`. Concatenation, heredocs,
+`T_NAME_FULLY_QUALIFIED` calls and every top-level argument (covering `xl()`'s prepend/append) are now
+seen. What remains undecidable — dynamic arguments, and concatenation *outside* the call such as
+`xlt('Welcome to') . ' OpenEMR'` — is documented in the file rather than papered over.
+
+`setup.php:1939` was ruled a **leak and converted**: it is none of the four C7 PRESERVE categories, and
+its referent inside the same file was already converted at `:625`, so the cross-reference had been
+stale against the heading it cites. **The S3-P1-33 closure's "zero user-facing leaks remain" was
+therefore wrong**, and is corrected here rather than left standing.
+
+Live verification, anonymous, after the change: `/admin.php` 200 with 0 old literals in source;
+`/sql_patch.php` 200 with 0; `/ippf_upgrade.php` 200 with 0. Final gate on that file:
+**6 tests / 16 assertions, exit 0**, with a transient end-to-end negative control that failed with the
+three intended messages and exact `file:line`, then restored to SHA-256 `4fc4477cff5de5e5…`.
+
+### 23.3 Two anonymous leaks the same class reached, found downstream — **FIXED — VERIFIED**
+
+`admin.php:215` loads `Documentation/help_files/openemr_multisite_admin_help.php` into its help modal,
+so that page is anonymously reachable too. It carried three user-facing product names, and
+**`Documentation/` is scanned by no branding guard** — including the widened one, deliberately, for the
+determinism reason above.
+
+Converted through `ProductIdentity`, the same seam `admin.php` uses. **Separately, that page called
+`xla()` in two `<script>` blocks and loaded nothing that defines it, so every direct load ended in
+`Call to undefined function xla()` and a 500** — verified in the PHP error log against the unmodified
+file. It has been broken for as long as those calls have been there. Live: **500 → 200**, heading
+renders the configured product name, zero upstream names.
+
+`Documentation/help_files/openemr_installation_help.php` carried three cross-references to
+`setup.php`'s Step 2 heading, still spelled with the upstream literal after that heading was converted.
+Those three now compose; live 200, 0 stale references, 3 converted. **The other 66 upstream references
+in that file are deliberately untouched** — most are factual statements about the upstream OpenEMR
+project, and converting them wholesale is exactly the "hardcode it into ~30 places" mistake S3-P1-33
+warned against. They need a recorded class (a)/(b)/(c) pass, which is open work.
+
+### 23.4 The Zend module installer view — **FIXED — VERIFIED**
+
+`interface/modules/zend_modules/module/Installer/view/installer/installer/index.phtml:36,117` hardcoded
+`href="https://skyeagle.uk/docs/installer"` twice with anchor text naming the product, introduced by
+`df3cc18f2` in place of upstream's wiki URL. **No branding global, guard or CI gate reached it**, and
+its target 404s (§23.6). The URL now follows the configured documentation link — omitting the link
+entirely when none is configured, rather than emitting an empty `href` — and the product name composes
+through `xlp()`.
+
+That last change retires a translation-catalogue key, so it required a contract:
+`contrib/util/language_translations/contracts/installer-third-party-modules.json`, carrying **both** the
+`OpenEMR` and `Thiqa` legacy keys forward, with `on_missing_identity: skip`. Swapping the literal
+without one would have orphaned every existing translation of it. **3 tests / 85 assertions, exit 0.**
+
+### 23.5 The guard-integrity defects — **ALL FIXED — VERIFIED, each with a control**
+
+| ID | Defect | Control that proves the fix |
+|---|---|---|
+| **S4B-01** | The collapse detector's docblock promised "a floor on the total"; the body asserted only ≥4 paths and ≥1 `*Test.php` per directory. The gate could fall 513 → 7 and stay green. | A fake tree of four empty `*Test.php` files: **old detector PASS, new detector FAIL**. Separately, raising the floor to 999 fires naming the real count (260); source restored byte-identical. |
+| **S4B-02** | The matrix-pin guard `preg_match`ed the **first** `if: matrix.php-version ==` in a workflow that now has five. | A decoy step inserted above the gate: **old regex reads `7.4`, new step-scoped read returns `8.2`**. *Correction to the scan report:* line 52 **is** the branding step today, so the guard was correct by ordering accident, not validating the wrong step. The real workflow was never written to. |
+| **S4B-10 / S4E-06** | All four rules gated on `MODULE_NAMESPACE`; `OpenEMR\Common\Branding` and `OpenEMR\Branding` — the newest and least supervised branding code — were outside every guardrail. | Two new fixtures, byte-identical to the in-module one from line 10 down, differing only in the namespace: both now fire. Narrowing the scope back to module-only makes exactly those two plus the structural coverage assertion fail; source restored to `c5ea364e2ecbcb0b`. **67 tests / 335 assertions, exit 0.** |
+| **S4B-08** | `/public/assets/*` is gitignored and no CI step installed assets, so the 11-font byte-equality check ran in **zero** legs while printing a reassuring "not installed" line. | CI now runs `install-assets.php` before the gate, and the gate declares `OPENEMR_DEPLOYED_ASSETS_REQUIRED` on that leg — the same "environment declares its obligation" wiring `e203d5bdd` gave the Q77 theme check. Removing the install step makes the guard fail with the intended message; workflow restored byte-identical. |
+| **S4E-15** | `globalsRowValue()` returned on the first matching key, so a duplicated global produced a clean committable artefact that CI accepted, while `BrandingProfile::fromEntries()` threw on the same file at runtime — failures on opposite sides of the CI boundary. | A scratch profile duplicating `main_menu_logo_link`: **generator and loader now both refuse**, the generator naming both row indices. The real artefact hash is unchanged (`4cf14f3ad97d25d1`), so the change is behaviour-preserving on the real profile. |
+
+**Scope now has one owner.** The four private `MODULE_NAMESPACE` copies are replaced by
+`tests/PHPStan/Rules/BrandingGuardrailScope.php`, and a new test forbids a rule reintroducing its own
+namespace literal — the S1-P2-12 lesson applied where it had not been.
+
+### 23.6 ADR-BRAND-006 — the shipped product URLs — **WRITTEN, AWAITING OWNER RULING**
+
+`docs/branding/adr/ADR-BRAND-006-shipped-product-url-identity.md`. `library/globals.inc.php:454–494`
+writes `openemr_name='Thiqa'` alongside three `skyeagle.uk` URLs into the globals defaults at install
+time, so a fresh install from this branch is born with a name and links that disagree.
+
+**The severity is higher than "mismatch".** `https://skyeagle.uk/support` and `https://skyeagle.uk/docs`
+both return **404**, at every locale prefix; `reg.skyeagle.uk` is NXDOMAIN. The root is live and its
+title names five SkyEagle product lines with **zero** occurrences of "Thiqa". Two of three shipped URL
+defaults are dead links. `main_menu_logo_title` also ships **blank**, despite the profile's own note
+saying it must not be.
+
+**No guard covers this**, and eleven existing assertions actively pin the mismatch as correct. Every
+gate asks "does the artefact match the profile?"; none asks "is the profile right?" — which is why four
+scans passed over it.
+
+Provenance corrected: `skyeagle.uk` entered at **`a1c22b6a1`**, not `b3b821ffa` as ADR-BRAND-005:116
+states — that commit touches the profile on one line of unrelated prose. Two further ADR-BRAND-005
+errors are recorded there: `:78-79` claims every read is escaped with `text()` while `setup.php:1945`
+correctly uses `js_escape()` for a JS sink, and its PRESERVE citation of `:513-515` points at the
+*converted* success message when the genuine preserved references are `:526-527`.
+
+### 23.7 Owner decision taken 2026-08-25 (afternoon)
+
+| Decision | Ruling |
+|---|---|
+| Apply SkyEagle branding now? | **No — hold the rename until the approved artwork exists.** There is no SkyEagle asset in this repository: the only token file is `brand/tokens/thiqa-tokens.json` (primary `#0B1B4D`), every master SVG is the current mark, and KG-03's authoritative SkyEagle colours (`#0B376E`, `#1E5A96`, `#0B4E91`) appear nowhere. KG-05 forbids fabricating one. Renaming the text alone would ship a SkyEagle-named product wearing the old mark; the rename runs as **one coherent pass** when the vector and palette arrive. |
+
+### 23.8 B3 — PHPStan remediation — **PARTIAL, NOT VERIFIED**
+
+The agent was terminated by a usage limit while its confirming PHPStan run was still I/O-bound (workers
+showed ~3 minutes of CPU over ~2 hours of wall clock — the documented Drive-mount "blocked, not busy"
+signature). Its edits are in the tree and are recorded here as **unverified against PHPStan**:
+
+```text
+…/Console/SeedDemoCommand.php                     +242/-  (the 65-error file)
+…/Console/BackupCommand.php                       +145/-  (22 errors)
+src/Common/Translation/QueryUtilsTranslationCatalogueStore.php   +76/-  (10)
+interface/language/lang_definition.php             +28/-  (8)
+interface/globals.php                               +5/-  (1)
+.phpstan/baseline/variable.undefined.php           -5     stale entry REMOVED, not added
+```
+
+The baseline deletion is correct and worth naming: `CLAUDE.md` requires that a file's existing baseline
+entries be fixed when the file is modified, and the removed entry (`$go` might not be defined in
+`lang_definition.php`) was already producing an `ignore.unmatched (non-ignorable)` error in the full run.
+**No baseline entry was added anywhere, and no `@phpstan-ignore` was introduced** — verified by an
+ownership tripwire held over the whole session.
+
+**A clean full PHPStan run is still outstanding and is the single largest remaining input to PRE-25.**
+
+### 23.9 Recorded, not fixed
+
+- **The live database was written to.** Verifying `sql_patch.php` by anonymous GET does not merely
+  render it — it *runs the patch*: `upgradeFromSqlFile()`, `UuidRegistry::populateAllMissingUuids()`,
+  and inserts of missing `globals` rows. The agent disclosed this rather than hiding it. **Checked
+  afterwards: `v_database` is still 541 and all five branding values are unchanged**, so the write
+  populated UUIDs and nothing of consequence — but the programme's "live database mutated: NO"
+  invariant is broken and is recorded as broken. **This page cannot be verified by live GET without
+  mutating state; that belongs in the method, not in a future rediscovery.**
+- **S4E-07** — `sql/database.sql:7819` declares `directory VARCHAR(255)` alongside `mod_directory`;
+  neither §9 nor §10 records it. `ModuleMenuSubscriber.php:112` also derives an ACL section from the
+  directory name, so a rename silently re-keys an ACL check.
+- **S4E-08** — `custom/BillingExport.csv.php:182` joins `LEFT OUTER JOIN facility AS f ON f.name = e.facility`.
+  A facility rename empties address and CLIA on every pre-rename encounter, with no error. Not changed:
+  altering a billing export's join key is a behaviour change, not a lint fix.
+- **S4E-13** — `library/ajax/i18n_generator.php:23-29` ships the whole catalogue keyed by English
+  constant names. Authenticated and CSRF-gated, so bounded — but the keys are where the brand survives
+  a value-level rename.
+- **`public/images/login-logo.svg`** is the upstream "OpenEMR Logo Vectorized" and is inlined by
+  `interface/smart/register-app.php:374,383`. It sits outside `public/images/logos/`, the subtree the
+  SVG sweep was narrowed to at `2d063ca3e`, so no asset guard covers it. *Correction to the original
+  observation:* the page carries `$ignoreAuth = true` but dies with "Not Authorized" unless
+  `rest_fhir_api` is on — verified here, 14 bytes. On a deployment with FHIR enabled it **is** an
+  anonymous surface serving upstream branding. Replacing it needs an approved asset, so it is held with
+  the rename.
+- **Scan-4C never reported.** The live brand-leak surface is **UNAUDITED**, and live-driven audits have
+  produced this programme's two highest-value findings.
+- `Documentation/help_files/openemr_installation_help.php` — 66 upstream references awaiting a recorded
+  PRESERVE/convert classification pass.
+
+### 23.10 What remains before PRE-25 can be re-attempted
+
+```text
+1. PHPStan                    B3's remediation is partial and unverified; no clean full run exists
+2. Scan-4C                    re-dispatch; the live leak surface is unaudited
+3. ADR-BRAND-006              Owner ruling on the shipped URLs (two of three 404)
+4. S4E-07 / S4E-08 / S4E-13   recorded above, unfixed by decision
+5. Push / CI                  the branch is ahead of its remote and CI has never run against this work
+6. PRE-25                     re-run §21 against the corrected ledger
+7. SkyEagle rename            HELD pending approved artwork (§23.7)
+```
+
+**Certification remains NOT PASSED.**
 
 ---
