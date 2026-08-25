@@ -48,8 +48,27 @@ jobs:
         php-version: ${{ matrix.php-version }}
         coverage: xdebug
 
+    # The manifest's equality-with-source class covers eleven font files that live under
+    # `/public/assets/*` — gitignored, so a fresh checkout has none of them. Nothing in CI
+    # ever invoked install-assets.php, so the verifier took its "not installed" branch in
+    # every leg and the byte-equality guarantee was never once exercised (S4B-08).
+    #
+    # This script is deliberately self-contained: no vendor/, no OpenEMR bootstrap, no
+    # database, and every source is hash-checked against the manifest before it is allowed
+    # to overwrite anything. It is a file copy, not a build, so it costs no npm install and
+    # is safe to run before the gate rather than after it.
+    - name: Install branding assets into their deployed slots
+      if: matrix.php-version == '8.2'
+      run: php tools/branding/install-assets.php
+
     - name: Run deterministic branding gates
       if: matrix.php-version == '8.2'
+      env:
+        # Explicit obligation, never an inference from the filesystem: on the one leg that
+        # installed the mirrored trees above, an absent tree is an install failure the
+        # verifier must report, not a reason for it to skip into a false green. Every other
+        # leg leaves this empty and the skip survives, exactly as a bare checkout needs.
+        OPENEMR_DEPLOYED_ASSETS_REQUIRED: ${{ matrix.php-version == '8.2' && '1' || '' }}
       run: composer branding-ci
 
     # Locked Q77 constrains the DEPLOYED public/themes/ directory, not the webpack

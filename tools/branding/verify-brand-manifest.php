@@ -222,6 +222,13 @@ final class BrandManifestVerifier
     ];
 
     /** @var list<string> */
+    /**
+     * Set to `1` by any environment that has installed the mirrored asset trees and therefore
+     * expects the equality check to actually run. See {@see self::verifyMirroredTree()} for why
+     * this is declared rather than inferred.
+     */
+    public const DEPLOYED_ASSETS_REQUIRED_ENV = 'OPENEMR_DEPLOYED_ASSETS_REQUIRED';
+
     private array $problems = [];
 
     /** @var array<string, int> */
@@ -360,6 +367,18 @@ final class BrandManifestVerifier
     /**
      * @param array<string, string> $recorded repo-relative path => recorded sha256
      */
+    /**
+     * Whether this environment has declared that the mirrored trees are installed.
+     *
+     * Only the exact string `1` counts. GitHub Actions renders an unset expression as the empty
+     * string rather than omitting the variable, so a truthiness test would read `''` as "set" on
+     * every leg that is meant to opt out.
+     */
+    private function deployedAssetsRequired(): bool
+    {
+        return getenv(self::DEPLOYED_ASSETS_REQUIRED_ENV) === '1';
+    }
+
     private function verifyMirroredTree(MirroredTree $tree, array $recorded): void
     {
         $label = $tree->deployedRoot . ' <- ' . $tree->sourceRoot;
@@ -379,6 +398,30 @@ final class BrandManifestVerifier
         $deployedRelatives = $this->filesUnder($this->repoRoot . '/' . $tree->deployedRoot);
 
         if ($deployedRelatives === []) {
+            // S4B-08: absent is not automatically innocent, and inferring it from the filesystem
+            // is how this check came to run in ZERO CI legs while printing a reassuring line.
+            // `/public/assets/*` is gitignored and nothing in CI invoked install-assets.php, so
+            // every run took this branch: the byte-equality guarantee for the eleven mirrored
+            // font files was never once exercised by the gate that claims to cover them.
+            //
+            // The environment declares its obligation rather than the verifier guessing it —
+            // the same wiring `e203d5bdd` used for the locked Q77 deployed-theme check, and for
+            // the same reason. Where the tree is supposed to be installed, absence is a hard
+            // failure; everywhere else the skip survives, which is correct for a bare checkout
+            // and for developer hosts that install off-tree.
+            if ($this->deployedAssetsRequired()) {
+                $this->problems[] = sprintf(
+                    '%s: not installed, but %s is set. Either install-assets.php did not run '
+                        . 'before this gate, or it failed silently — and an uninstalled tree means '
+                        . 'the equality check covering %d recorded source files did not run at all.',
+                    $label,
+                    self::DEPLOYED_ASSETS_REQUIRED_ENV,
+                    count($expectedRelatives),
+                );
+
+                return;
+            }
+
             // A clean checkout: `.gitignore` excludes this tree and install-assets.php has
             // not run. Nothing to verify, and nothing wrong.
             $this->mirrorSummaries[] = sprintf(

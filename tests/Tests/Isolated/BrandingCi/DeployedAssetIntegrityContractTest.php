@@ -178,6 +178,80 @@ final class DeployedAssetIntegrityContractTest extends TestCase
     }
 
     /**
+     * S4B-08: an absent tree is only innocent where nobody promised to install one.
+     *
+     * The skip above is correct for a bare checkout, and it is exactly what CI took in every
+     * leg — `/public/assets/*` is gitignored and no workflow step ever invoked
+     * install-assets.php, so the eleven-file byte-equality guarantee ran precisely nowhere
+     * while the gate printed a line implying it had been considered.
+     *
+     * The environment now declares its obligation, the same wiring `e203d5bdd` gave the locked
+     * Q77 deployed-theme check. `putenv()` rather than a fixture flag, because the production
+     * code reads the real environment and a test that stubs that reads nothing real.
+     */
+    public function testAbsentMirroredTreeIsAFailureWhereTheEnvironmentDeclaresItInstalled(): void
+    {
+        self::removeTree($this->fixtureRoot . '/public/assets');
+
+        $variable = BrandManifestVerifier::DEPLOYED_ASSETS_REQUIRED_ENV;
+        $restore = getenv($variable);
+
+        try {
+            putenv($variable . '=1');
+            $report = (new BrandManifestVerifier($this->fixtureRoot))->verify();
+        } finally {
+            if ($restore === false) {
+                putenv($variable);
+            } else {
+                putenv($variable . '=' . $restore);
+            }
+        }
+
+        self::assertNotSame([], $report->problems, 'A declared-but-absent tree must fail the gate.');
+        self::assertSame(1, $report->exitCode());
+        self::assertStringContainsString($variable, implode("\n", $report->problems));
+
+        // The environment must be left exactly as found, or every later test in this process
+        // inherits an obligation it never declared.
+        self::assertSame($restore, getenv($variable));
+    }
+
+    /**
+     * The obligation is worthless unless something actually installs the tree first, and
+     * unless the leg that installs it is the leg that declares it.
+     *
+     * Both halves are asserted against the workflow because both are deletable in one line,
+     * and deleting either restores the silent skip this pair exists to close.
+     */
+    public function testTheWorkflowInstallsTheMirroredTreesAndDeclaresTheObligation(): void
+    {
+        $workflow = file_get_contents(self::PROJECT_ROOT . '/.github/workflows/isolated-tests.yml');
+        self::assertIsString($workflow);
+        $workflow = str_replace("\r\n", "\n", $workflow);
+
+        $install = strpos($workflow, 'run: php tools/branding/install-assets.php');
+        self::assertIsInt(
+            $install,
+            'No CI step installs the mirrored asset trees, so the equality check runs in zero legs.',
+        );
+
+        $gate = strpos($workflow, 'run: composer branding-ci');
+        self::assertIsInt($gate);
+        self::assertLessThan(
+            $gate,
+            $install,
+            'Assets must be installed BEFORE the gate runs; afterwards the verifier still sees '
+            . 'an empty tree and the obligation fails for the wrong reason.',
+        );
+
+        self::assertStringContainsString(
+            BrandManifestVerifier::DEPLOYED_ASSETS_REQUIRED_ENV . ": \${{ matrix.php-version == '8.2' && '1' || '' }}",
+            $workflow,
+            'The gate step must declare the obligation on exactly the leg that installed the trees.',
+        );
+    }
+
+    /**
      * The summary must name each class separately, so `123/123` can never again be read as
      * "everything deployed is intact".
      */
