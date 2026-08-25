@@ -125,6 +125,17 @@ final class BrandingCiContractTest extends TestCase
      * ordinary version-cleanup edit — and the condition is false on every leg: the branding gate
      * never runs, all five legs go green, and this contract test used to pass. The pin and the
      * matrix have to be asserted against each other, not separately.
+     *
+     * **S4B-02: the pin must be read out of the branding step, not out of the file.** Commit
+     * `e203d5bdd` added the Node/npm theme-build steps, each carrying its own identical
+     * `if: matrix.php-version ==` line — five in the file now. A bare `preg_match` takes the first
+     * match, so this guard was reading whichever pinned step happened to appear first. It is the
+     * branding step today only because that step happens to sit above the others; insert a step
+     * ahead of it and the guard silently begins validating something else while still passing.
+     *
+     * That is the same positional fragility that turned this suite red at Rev 32 when a new gate
+     * step shifted the composer script array. Locating by content, via {@see self::brandingStep()},
+     * is the fix in both places.
      */
     public function testTheMatrixLegTheGateIsPinnedToActuallyExists(): void
     {
@@ -133,7 +144,7 @@ final class BrandingCiContractTest extends TestCase
         $matches = [];
         self::assertSame(
             1,
-            preg_match("~if: matrix\.php-version == '([^']+)'~", $workflow, $matches),
+            preg_match("~if: matrix\.php-version == '([^']+)'~", $this->brandingStep($workflow), $matches),
             'The branding gate must stay pinned to one explicit matrix leg.',
         );
         $pinned = $matches[1];
@@ -180,26 +191,101 @@ final class BrandingCiContractTest extends TestCase
     }
 
     /**
+     * The floor below which the gate has collapsed rather than merely been tidied.
+     *
+     * 258 test methods are declared across the gated paths at the time of writing, producing 513
+     * executed tests once data providers multiply them out. This number is deliberately well
+     * below that: it is a collapse detector, not a ratchet that reddens every time someone
+     * removes a redundant case.
+     */
+    private const MINIMUM_DECLARED_TEST_METHODS = 180;
+
+    /**
      * Scan-3B P1-5: `--fail-on-empty-test-suite` fires only when the WHOLE run is empty.
      *
      * A gated directory that loses every test class — deleted, or its classes renamed off the
      * `*Test` convention — contributes zero tests while the run stays green, because other
-     * directories still have some. `BrandingCiContractTest` only checked that the path *strings*
-     * appeared in composer.json. A floor on the total makes that collapse visible.
+     * directories still have some.
      *
-     * The number is deliberately well below the current count (257 at the time of writing): this
-     * is a collapse detector, not a ratchet that fails every time someone removes a redundant test.
+     * **S4B-01: this test used to promise that floor and never compute it.** The docblock claimed
+     * "a floor on the total"; the body asserted only that four or more paths were gated and that
+     * each directory held at least one `*Test.php`. A fake repository of empty test files
+     * satisfied it, so the gate could have fallen from 513 executed tests to seven and stayed
+     * green — the exact false-green shape this suite exists to catch, inside the suite itself.
+     *
+     * The floor is now actually counted, by declared test method rather than by file: a file that
+     * survives with every method deleted is precisely the silent collapse, and a file count
+     * cannot see it.
      */
     public function testTheGateRunsASubstantialNumberOfTests(): void
+    {
+        $paths = $this->gatedTestPaths();
+
+        self::assertGreaterThanOrEqual(4, count($paths), 'The gate should cover several suites.');
+
+        $total = 0;
+        foreach ($paths as $path) {
+            $total += $this->declaredTestMethodsUnder($path);
+        }
+
+        self::assertGreaterThanOrEqual(
+            self::MINIMUM_DECLARED_TEST_METHODS,
+            $total,
+            sprintf(
+                'The canonical gate declares only %d test methods across %d gated paths, below the '
+                . 'floor of %d. Either the gate has collapsed or the floor needs a deliberate, '
+                . 'documented revision — do not simply lower it.',
+                $total,
+                count($paths),
+                self::MINIMUM_DECLARED_TEST_METHODS,
+            ),
+        );
+    }
+
+    /**
+     * The floor answers "is this gate running anything"; this answers "is every part of it still
+     * contributing".
+     *
+     * Both are needed, and the reason is the S4D-02 lesson repeated: a total large enough to pass
+     * hides a single path that has silently stopped contributing, because the other paths carry
+     * it. The two smallest gated paths contribute 11 methods each — either could vanish entirely
+     * without troubling a floor of 180.
+     *
+     * The walk is recursive. The previous non-recursive `glob('/*Test.php')` would have reported a
+     * directory as populated or empty purely by whether its tests happened to sit at the top
+     * level, which is a property of nobody's intent.
+     */
+    public function testEveryGatedPathStillContributesTests(): void
+    {
+        foreach ($this->gatedTestPaths() as $path) {
+            $absolute = $this->root() . '/' . $path;
+            self::assertFileExists($absolute, 'Gated path has disappeared: ' . $path);
+
+            self::assertGreaterThan(
+                0,
+                $this->declaredTestMethodsUnder($path),
+                'Gated path ' . $path . ' declares no test methods, so it contributes nothing to '
+                . 'the gate while the run still reports green.',
+            );
+        }
+    }
+
+    /**
+     * The `tests/…` arguments of the gate's phpunit step, located by content.
+     *
+     * @return list<string>
+     */
+    private function gatedTestPaths(): array
     {
         $composer = json_decode($this->read('composer.json'), true, 512, JSON_THROW_ON_ERROR);
         self::assertIsArray($composer);
 
-        $gate = $composer['scripts']['branding-ci'] ?? null;
+        $scripts = $composer['scripts'] ?? null;
+        self::assertIsArray($scripts);
+
+        $gate = $scripts['branding-ci'] ?? null;
         self::assertIsArray($gate);
 
-        // Each gated path must still resolve to something that exists; a deleted path already
-        // fails loudly (PHPUnit exits 70), but a path that silently became empty does not.
         $tests = '';
         foreach ($gate as $step) {
             if (is_string($step) && str_contains($step, 'vendor/bin/phpunit')) {
@@ -207,6 +293,9 @@ final class BrandingCiContractTest extends TestCase
                 break;
             }
         }
+
+        self::assertNotSame('', $tests, 'The canonical gate no longer runs phpunit at all.');
+
         $paths = [];
         foreach (explode(' ', $tests) as $token) {
             if (str_starts_with($token, 'tests/')) {
@@ -214,22 +303,42 @@ final class BrandingCiContractTest extends TestCase
             }
         }
 
-        self::assertGreaterThanOrEqual(4, count($paths), 'The gate should cover several suites.');
+        return $paths;
+    }
 
-        foreach ($paths as $path) {
-            $absolute = $this->root() . '/' . $path;
-            self::assertFileExists($absolute, 'Gated path has disappeared: ' . $path);
+    /**
+     * Declared test methods under one gated path, counting both the `test*` naming convention and
+     * the `#[Test]` attribute, since this suite uses both.
+     */
+    private function declaredTestMethodsUnder(string $relativePath): int
+    {
+        $absolute = $this->root() . '/' . $relativePath;
 
-            if (is_dir($absolute)) {
-                $found = glob($absolute . '/*Test.php') ?: [];
-                self::assertNotSame(
-                    [],
-                    $found,
-                    'Gated directory ' . $path . ' contains no *Test.php, so it contributes nothing '
-                    . 'to the gate while the run still reports green.',
-                );
+        $files = [];
+        if (is_dir($absolute)) {
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($absolute, \FilesystemIterator::SKIP_DOTS),
+            );
+
+            foreach ($iterator as $entry) {
+                if ($entry instanceof \SplFileInfo && $entry->isFile() && str_ends_with($entry->getFilename(), 'Test.php')) {
+                    $files[] = $entry->getPathname();
+                }
             }
+        } elseif (is_file($absolute)) {
+            $files[] = $absolute;
         }
+
+        $methods = 0;
+        foreach ($files as $file) {
+            $source = file_get_contents($file);
+            self::assertIsString($source);
+
+            $methods += preg_match_all('~\n\s*public (?:static )?function test[A-Z_]~', $source);
+            $methods += preg_match_all('~#\[Test\]~', $source);
+        }
+
+        return $methods;
     }
 
     /**
