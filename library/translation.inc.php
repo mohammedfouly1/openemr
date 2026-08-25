@@ -123,9 +123,17 @@ if (!(function_exists('xl'))) {
  */
 function xlp($pattern)
 {
+    // Composes the SESSION's product name, not the configured Latin one.
+    //
+    // Finding S3-P1-32: this function and its Twig twin are the two places built specifically to
+    // put the product name inside translated prose, and both originally read `openemr_name`
+    // directly — so they bypassed the Arabic resolver that exists for exactly this purpose. An
+    // Arabic session got Arabic chrome with a Latin wordmark embedded in every composed string.
+    // Routing through xl_product_name() fixes every composed surface at once; it degrades to
+    // `openemr_name` for non-Arabic sessions and when no Arabic name is configured.
     return \OpenEMR\Common\Translation\ProductContextTranslation::compose(
         xl($pattern),
-        \OpenEMR\Core\OEGlobalsBag::getInstance()->getString('openemr_name'),
+        xl_product_name(),
     );
 }
 
@@ -168,7 +176,30 @@ function xl_product_name()
         return $resolved = $name;
     }
 
-    return $resolved = (getLanguageCode(xl_session_language_id()) === 'ar') ? $arabic : $name;
+    // Resolving the session language needs a startable session. Since S3-P1-32 this function sits
+    // behind every `xlp()` call, including the ones `library/globals.inc.php` evaluates at include
+    // time — and `sql_upgrade.php:551` / `sql_patch.php:74` require that file *after* they have
+    // already echoed and flushed progress output. If the session is not active by then,
+    // `getActiveSession()` starts one and Symfony raises `RuntimeException: Failed to start the
+    // session because headers have already been sent` (reproduced directly in a cold CLI process).
+    // Uncaught, that would abort an upgrade mid-run — the same failure shape as S3-P0-28. Choosing
+    // the wrong wordmark variant is a cosmetic error; killing an upgrade is not.
+    //
+    // The installer is *not* the case this guards, despite being the obvious candidate:
+    // `Installer::insert_globals()` loads the same file, but `saas_branding_product_name_ar` is a
+    // branding-module global that does not exist yet, so the `has()` check above returns first and
+    // nothing here is reached. Verified cold: an unpopulated bag returns `''` without touching the
+    // session or the database.
+    //
+    // A database failure is deliberately not handled: `sqlQuery()` routes errors to `HelpfulDie()`,
+    // which ends in `exit(1)`, so no catch here could recover from one.
+    try {
+        $isArabic = getLanguageCode(xl_session_language_id()) === 'ar';
+    } catch (\RuntimeException) {
+        return $resolved = $name;
+    }
+
+    return $resolved = $isArabic ? $arabic : $name;
 }
 
 /**

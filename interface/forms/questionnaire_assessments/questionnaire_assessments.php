@@ -334,7 +334,10 @@ if ($isModule || $isDashboard || $isPortal) {
         function initSearch() {
             initSelect();
             <?php if ($do_warning) { ?>
-            let msg = xl("OpenEMR is not responsible for any copyright and or permissions pertaining to questionnaires or assessments imported from external sources and then implemented and used by this feature.");
+            // S3-P1-34: this disclaimer names the party accepting liability, so it must name
+            // the tenant's product rather than upstream. The JS xl() cannot compose a product
+            // name, so it is composed server-side and emitted as an escaped JS string.
+            let msg = <?php echo js_escape(xlp('%s is not responsible for any copyright and or permissions pertaining to questionnaires or assessments imported from external sources and then implemented and used by this feature.')); ?>;
             msg += "<br />" + xl("Some, if not many, LOINC forms will display a copyright notice for information regarding permissions.");
             msg += "<br /><br />" + xl("Click Got it icon to dismiss this alert forever.");
             // dialog alertMsg 5th parameter will set flag to disable this user seeing message

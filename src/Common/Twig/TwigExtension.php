@@ -22,7 +22,6 @@ use OpenEMR\Common\Csrf\CsrfUtils;
 use OpenEMR\Common\Forms\Types\EncounterListOptionType;
 use OpenEMR\Common\Layouts\LayoutsUtils;
 use OpenEMR\Common\Session\SessionWrapperFactory;
-use OpenEMR\Common\Translation\ProductContextTranslation;
 use OpenEMR\Common\Utils\CacheUtils;
 use OpenEMR\Core\Header;
 use OpenEMR\Core\Kernel;
@@ -354,9 +353,11 @@ class TwigExtension extends AbstractExtension implements GlobalsInterface
      */
     public function translateWithProductName(string $pattern): string
     {
-        return ProductContextTranslation::compose(
-            xl($pattern),
-            $this->globals->getString('openemr_name'),
-        );
+        // Delegates to the same helper the PHP call sites use, so the product name composed into a
+        // Twig template and into a PHP string are always the same value — including the Arabic
+        // variant on an Arabic session. Reading `openemr_name` directly here was finding
+        // S3-P1-32: the filter built to compose the product name was the one place that could not
+        // see which product name the session should get.
+        return xlp($pattern);
     }
 }

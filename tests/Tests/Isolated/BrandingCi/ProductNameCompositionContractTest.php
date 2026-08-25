@@ -15,6 +15,8 @@ use OpenEMR\Common\Translation\MissingIdentityPolicy;
 use OpenEMR\Common\Translation\ProductContextTranslation;
 use OpenEMR\Common\Translation\TranslationCatalogueContractSet;
 use OpenEMR\Common\Translation\TranslationDerivation;
+use OpenEMR\Common\Twig\TwigExtension;
+use OpenEMR\Core\OEGlobalsBag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -171,14 +173,165 @@ final class ProductNameCompositionContractTest extends TestCase
 
     /**
      * The PHP composition helper exists and delegates to the same parser as everything else.
+     *
+     * The `openemr_name` assertion this test used to make was file-wide, so it went on passing
+     * after S3-P1-32 moved that read out of `xlp()` and into `xl_product_name()` — a guard that
+     * checks a file for a string rather than a function for a behaviour, which is the exact
+     * false-green class Scan-3B catalogued. It is now scoped to the function's own body and
+     * inverted: `xlp()` must *not* read the global itself.
      */
     public function testThePhpCompositionHelperUsesTheSharedParser(): void
     {
-        $source = $this->read($this->root() . '/library/translation.inc.php');
+        $body = $this->functionBody('xlp');
 
-        self::assertStringContainsString('function xlp(', $source);
-        self::assertStringContainsString('ProductContextTranslation::compose', $source);
-        self::assertStringContainsString("getString('openemr_name')", $source);
+        self::assertStringContainsString('ProductContextTranslation::compose', $body);
+        self::assertStringNotContainsString(
+            'openemr_name',
+            $body,
+            'S3-P1-32: xlp() must resolve the name through xl_product_name(), not read the '
+            . 'configured Latin global directly.',
+        );
+    }
+
+    // ------------------------------------------------- S3-P1-32: the resolver must be on the path
+
+    /**
+     * Both composition entry points must resolve the **session's** product name.
+     *
+     * Finding S3-P1-32, from Scan-3C, and the sharpest critique this programme received of its own
+     * architecture: `xl_product_name()` — the function written specifically to pick the Arabic
+     * wordmark for an Arabic session — had exactly two callers, in the main shell, while `xlp()`
+     * and the `|xlp` Twig filter both read `openemr_name` directly. The two functions built to put
+     * the product name inside translated prose were the two that could not see which name the
+     * session should get, so an Arabic session got Arabic chrome with a Latin wordmark embedded in
+     * every composed string, everywhere except the browser tab.
+     */
+    public function testBothCompositionEntryPointsRouteThroughTheSessionResolver(): void
+    {
+        self::assertStringContainsString('xl_product_name()', $this->functionBody('xlp'));
+
+        $filter = $this->functionBody('translateWithProductName', 'src/Common/Twig/TwigExtension.php');
+        self::assertStringContainsString('xlp(', $filter);
+        self::assertStringNotContainsString(
+            'openemr_name',
+            $filter,
+            'S3-P1-32: the |xlp filter must delegate to xlp(), not read the configured global.',
+        );
+    }
+
+    /**
+     * The same claim, proven by execution rather than by reading the source.
+     *
+     * `xl_product_name()` memoises its answer for the request, and that is what makes a DB-free
+     * discrimination possible: resolve once under one configured name, change the configured name,
+     * then compose. A routed `xlp()` returns the memoised first value; a bypassing one returns the
+     * changed value. No session, database or Arabic locale is needed to tell the two apart, which
+     * matters because the isolated suite has none of them.
+     *
+     * **Residue, stated rather than hidden.** The probe leaves `xl_product_name()` memoised for the
+     * remainder of the process and loads `library/translation.inc.php` into it. PHPUnit's
+     * `RunInSeparateProcess` was tried first and hangs on this host, so the bag values are restored
+     * by hand instead and the memo is left behind deliberately. No other isolated test executes
+     * either function — they read the file as text — so the residue is inert today. A future test
+     * that calls `xl_product_name()` and expects a different answer must move this one out.
+     */
+    public function testCompositionResolvesTheSessionNameNotTheConfiguredOne(): void
+    {
+        require_once $this->root() . '/library/translation.inc.php';
+
+        $globals = OEGlobalsBag::getInstance();
+        $previousName = $globals->get('openemr_name');
+        $previousSkip = $globals->get('temp_skip_translations');
+
+        try {
+            // Keeps xl() off the session and the database; it returns its argument unchanged.
+            $globals->set('temp_skip_translations', true);
+            $globals->set('openemr_name', 'RESOLVED_FIRST');
+
+            self::assertSame('RESOLVED_FIRST', xl_product_name());
+
+            $globals->set('openemr_name', 'CHANGED_AFTERWARDS');
+
+            self::assertSame(
+                'RESOLVED_FIRST',
+                xlp('%s'),
+                'S3-P1-32: xlp() read openemr_name directly instead of asking xl_product_name().',
+            );
+            self::assertSame(
+                'RESOLVED_FIRST',
+                (new TwigExtension($globals))->translateWithProductName('%s'),
+                'S3-P1-32: the |xlp filter read openemr_name directly instead of asking '
+                . 'xl_product_name().',
+            );
+        } finally {
+            $globals->set('openemr_name', $previousName);
+            $globals->set('temp_skip_translations', $previousSkip);
+        }
+    }
+
+    /**
+     * The resolver sits behind every composed string, so it must never be the thing that fails.
+     *
+     * `library/globals.inc.php` evaluates `xlp()` calls at include time, and `sql_upgrade.php` and
+     * `sql_patch.php` both require that file *after* echoing and flushing progress output. If no
+     * session is active by then, starting one raises `RuntimeException: Failed to start the session
+     * because headers have already been sent`. Uncaught, that aborts an upgrade mid-run — the
+     * failure shape S3-P0-28 already demonstrated is unrecoverable without hand-editing. The
+     * resolver must degrade to the configured name instead.
+     */
+    public function testTheResolverDegradesRatherThanFailingWhenNoSessionCanStart(): void
+    {
+        $body = $this->functionBody('xl_product_name');
+
+        self::assertStringContainsString('catch (\RuntimeException)', $body);
+        self::assertMatchesRegularExpression(
+            '~catch \(\\\\RuntimeException\)\s*\{\s*return \$resolved = \$name;~',
+            $body,
+            'The degrade path must return the configured name, not rethrow or return empty.',
+        );
+
+        foreach (['sql_upgrade.php', 'sql_patch.php'] as $script) {
+            self::assertStringContainsString(
+                'globals.inc.php',
+                $this->read($this->root() . '/' . $script),
+                $script . ' no longer loads globals.inc.php; re-derive whether the guard above is '
+                . 'still describing a reachable path before deleting it.',
+            );
+        }
+    }
+
+    /**
+     * S3-P1-34: the one call site that had to cross the PHP/JavaScript boundary to be fixed.
+     *
+     * The browser-side `xl()` reads a translation map the server sends it; it cannot compose a
+     * product name, which is why Rev 23 excluded this literal for mechanical reasons rather than
+     * on merit. The fix composes in PHP and hands JavaScript a finished string.
+     *
+     * Escaping is the part worth pinning. `xlp()` returns unescaped text, exactly like `xl()`, so
+     * the value must pass through `js_escape()` — which is `json_encode()`, so it emits its own
+     * surrounding quotes. Wrapping it in quotes as well would produce `""…""` and break the
+     * script; escaping it twice would show the operator `ث` instead of a wordmark.
+     */
+    public function testTheQuestionnaireDisclaimerIsComposedServerSideAndEscapedOnce(): void
+    {
+        $source = $this->read(
+            $this->root() . '/interface/forms/questionnaire_assessments/questionnaire_assessments.php',
+        );
+
+        self::assertMatchesRegularExpression(
+            '~let msg = <\?php echo js_escape\(xlp\(\x27%s is not responsible~',
+            $source,
+            'S3-P1-34: the disclaimer must be composed server-side and emitted through js_escape() '
+            . 'with no surrounding quotes of its own.',
+        );
+
+        // The two neighbouring lines are ordinary browser-side xl() calls and must stay that way:
+        // neither carries the product name, so converting them would be churn.
+        self::assertStringContainsString(
+            'xl("Some, if not many, LOINC forms will display a copyright notice',
+            $source,
+        );
+        self::assertStringContainsString('xl("Click Got it icon to dismiss this alert forever.")', $source);
     }
 
     /**
@@ -214,6 +367,17 @@ final class ProductNameCompositionContractTest extends TestCase
             'oauth scope list entity' => [
                 'src/Common/Auth/OpenIDConnect/Entities/ServerScopeListEntity.php',
                 ['the OpenEMR standard api', 'the OpenEMR FHIR api', 'the OpenEMR apis from inside'],
+            ],
+            // S3-P1-34. Held back at Rev 23 as the one mechanical exclusion: the literal was an
+            // argument to the *browser-side* xl(), which has no way to compose a product name.
+            // Resolved by composing on the server and emitting the result as a JSON-escaped JS
+            // string literal, which is what js_escape() produces. This one matters more than its
+            // size suggests — the sentence names the party disclaiming copyright liability, so
+            // leaving it as "OpenEMR is not responsible" makes the tenant's software disclaim on
+            // behalf of an organisation that is not shipping it.
+            'questionnaire copyright disclaimer' => [
+                'interface/forms/questionnaire_assessments/questionnaire_assessments.php',
+                ['OpenEMR is not responsible for any copyright'],
             ],
         ];
     }
@@ -361,10 +525,7 @@ final class ProductNameCompositionContractTest extends TestCase
 
         // Scoped to this function's own body: `getLanguageDir()` lives in the same file and uses
         // `lang_is_rtl` entirely correctly for its own purpose.
-        $start = strpos($helper, 'function xl_product_name(');
-        self::assertIsInt($start);
-        $end = strpos($helper, "\nfunction ", $start + 1);
-        $body = substr($helper, $start, $end === false ? null : $end - $start);
+        $body = $this->functionBody('xl_product_name');
 
         self::assertStringContainsString('saas_branding_product_name_ar', $body);
         self::assertStringContainsString("=== 'ar'", $body);
@@ -456,6 +617,52 @@ final class ProductNameCompositionContractTest extends TestCase
         ksort($corpus);
 
         return self::$templateCorpus = $corpus;
+    }
+
+    /**
+     * The source text of one function's own body, so an assertion cannot be satisfied by a match
+     * somewhere else in the same file. `xlp()` and `xl_product_name()` are neighbours in
+     * `translation.inc.php`, and a file-wide `assertStringContainsString` cannot tell them apart —
+     * which is how the pre-S3-P1-32 guard kept passing after the behaviour it named moved.
+     *
+     * Comments are stripped before the text is returned. These functions carry long explanations
+     * that name the very globals the assertions below forbid — "this used to read `openemr_name`"
+     * is the whole point of the comment — so a raw substring check would fail on the record of the
+     * fix rather than on the fix. Stripping keeps the assertions about executable code.
+     *
+     * @param string $relativePath defaults to the shared translation helpers
+     */
+    private function functionBody(string $name, string $relativePath = 'library/translation.inc.php'): string
+    {
+        $source = $this->read($this->root() . '/' . $relativePath);
+
+        $start = strpos($source, 'function ' . $name . '(');
+        self::assertIsInt($start, $name . '() not found in ' . $relativePath . '.');
+
+        // Both files declare one function per nesting level, so the next declaration at the same
+        // indentation ends this one. Methods are indented four spaces; plain functions are not.
+        $end = strpos($source, "\n    public function ", $start + 1);
+        if ($end === false) {
+            $end = strpos($source, "\nfunction ", $start + 1);
+        }
+
+        $raw = substr($source, $start, $end === false ? null : $end - $start);
+        $code = '';
+
+        foreach (token_get_all('<?php ' . $raw) as $token) {
+            if (!is_array($token)) {
+                $code .= $token;
+                continue;
+            }
+            if ($token[0] === T_OPEN_TAG) {
+                continue;
+            }
+            // Replaced with a newline rather than removed: a `//` comment's own line terminator is
+            // part of its token, and dropping it would splice two statements together.
+            $code .= ($token[0] === T_COMMENT || $token[0] === T_DOC_COMMENT) ? "\n" : $token[1];
+        }
+
+        return $code;
     }
 
     private function read(string $path): string
