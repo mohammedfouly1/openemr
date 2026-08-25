@@ -52,6 +52,8 @@
 
 | 31 | **S3-P2-36 and the bulk of S3-P2-35 FIXED — VERIFIED; PRE-ORCH-02 fixed; S3-P1-33 and the SVG safeguard left as UNCOMMITTED work-in-progress after a quota stop.** `e203d5bdd` makes the locked Q77 deployed-theme check actually execute in CI - the environment now declares its obligation via `OPENEMR_DEPLOYED_THEMES_REQUIRED` instead of the guard inferring it from whether the directory happened to exist, CI builds the themes on one leg, and the negative controls are encoded as permanent tests rather than run once. `57e51286c` assigns manifest coverage by **ownership class** - 123 source + 21 deployed-immutable by recorded hash, 11 deployed font copies by equality-with-source, generated themes deferred to S3-P2-36, tenant/runtime output excluded by design. **S3-P2-35 is NOT fully closed**: `11-asset-manifest.md` and `12-release-verification.md` still describe the old re-issue discipline, and both are themselves manifest-covered so updating them requires re-issuing their entries in the same change. `d42a7d6d4` fixes **PRE-ORCH-02**, a sixth worktree at a path the S1-P2-14 exclusion rule did not match. **Four remediation agents were cut off mid-task by a session usage limit**; two finished and are the commits above, two did not - see §15D for exactly where each stopped and what a resuming session must do. Live database mutated: NO. |
 
+| 32 | **ALL FOUR REMAINING CODE BLOCKERS CLOSED — VERIFIED. Scan-4A…4E dispatched.** `55738dc82` SKY-Q08 production-logo geometry safeguard (27/27 shipped SVGs pass, zero flagged; the 29 failures it arrived with were an interrupted agent's own negative-control injection left in the fixture builder, not a defect — recorded in §15E because "the tests were red" and "the code was wrong" are different claims). `57e51286c` + `c154215d9` **S3-P2-35 fully closed**, mechanism and governance: coverage by ownership class, 123 source / 21 deployed / 11 mirrored-by-equality, with the re-issue discipline rewritten because one edit can now oblige more than one entry. `e203d5bdd` + `cb685e1f9` **S3-P2-36 closed** — the environment now declares its obligation instead of the guard inferring it, negative controls are permanent tests, and four level-10 PHPStan findings were fixed in source with no baseline. `e16913d5b` + **ADR-BRAND-005** (written first, as SKY-Q11 required) **S3-P1-33 closed** — `setup.php` product literals 10 → 0, zero user-facing leaks, PRESERVE class re-derived on disk. `d42a7d6d4` **PRE-ORCH-02**, a sixth worktree that escaped the S1-P2-14 path rule. **One self-inflicted regression is recorded rather than quietly fixed**: adding the new drift gate shifted the script array that `BrandingCiContractTest` read positionally, turning a strengthened gate red. Canonical gate: **317 tests / 3,574 assertions, exit 0**. Owner decisions of the day recorded in §15E. Live database mutated: NO. **Certification still NOT PASSED** — PRE-25 not started, Scan-4 outstanding, two unlabelled P1 slots unresolved. |
+
 *If you amend this file again, add a row here. A checkpoint that silently changes is worse than one that
 admits what moved — that is the same corrections-register discipline the rest of this corpus uses.*
 
@@ -143,7 +145,14 @@ under `C:\Program Files\nodejs`; required PHPStan override
 `C:\openemr-stack\phpstan-localtmp.neon` exists. No tests, analysis, broad scan, service repair, database
 mutation, or PRE repair was run in Phase 1. **Currently active task:** verify work already landed.
 Those landed-work verification steps and the next eleven PRE-09 repairs are now complete; see revisions 6…18.
-**Exact next incomplete item (updated at Rev 30):** SKY-F01 is FIXED — VERIFIED (`02bcae75c`), and
+**Exact next incomplete item (updated at Rev 32):** all four remaining code blockers are FIXED —
+VERIFIED (§15E): SKY-Q08 `55738dc82`, S3-P2-35 `57e51286c`+`c154215d9`, S3-P2-36 `e203d5bdd`+`cb685e1f9`,
+S3-P1-33 `e16913d5b` with ADR-BRAND-005, plus PRE-ORCH-02 `d42a7d6d4`. **The next incomplete work is
+PRE-25**, gated on Scan-4A…4E returning and on resolving the two unlabelled P1 slots. Superseded
+pointer from Rev 30 follows, kept because the three findings it names are now closed and the reader
+should see what moved:
+
+**Superseded (Rev 30):** SKY-F01 is FIXED — VERIFIED (`02bcae75c`), and
 A-01/A-02/A-03 (`5202b0253`) are now reconciled into the record — see §15C for both, and for the
 independent read-only verification of S3-P1-27, S3-OBS-01 and S3-P1-30. **The same three Scan-3
 findings remain open, and all three were re-verified by execution on 2026-08-25 rather than
@@ -235,7 +244,7 @@ implemented yet.
 | PRE-06 | Scan-1E Architecture / persisted state | Agent 1E | R | **DONE** + 3 sub-fork addenda | §9, §10 |
 | PRE-07 | Scan-1F Documentation drift | Agent 1F | R | **DONE** | §6 S1-P1-05, S1-P1-06, Correction F |
 | PRE-08 | Scan-1 reconciliation | orchestrator | R | **SUBSTANTIALLY DONE** | Every P0 and high-severity P1 independently reproduced by orchestrator. Not formally closed because remediation (PRE-09) has not run. |
-| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **COMPLETE — 18 items verified** (one sub-item, S2-P1-24's Arabic logo variant, is blocked on an approved asset that does not exist) | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). ✅ All four P2 findings closed (`97f6952cf`). ✅ S2-P1-22 + S2-P1-23 + the juxtaposition half of S2-P1-24 closed together by the multi-key contract subsystem and the `xlp` composition filter (`6edc03b8b`). ✅ S2-P1-26 Class B — the uncatalogued leak class no override could reach — converted, with the Foundation/ONC preserve list locked by test (`6da352e9a`). ✅ S2-P1-26 Class A: 20 legacy contracts + 22 call sites, after fixing a latent install-vs-upgrade divergence that would have aborted real upgrades (`177d5dc97`). ✅ S2-P1-24 text half: the shell selects the Arabic product name by language. **PRE-09 IS COMPLETE** apart from S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist. ✅ Scan-3 remediation, Rev 29: S3-P1-32 + S3-P1-34 (`f18f75080`) and S3-P1-31 (`59d5c14df`). **Next:** S3-P1-33 (needs a recorded design step first — see §1), the two governance/CI P2s, then PRE-25. |
+| PRE-09 | Scan-1 FIX-NOW remediation | orchestrator | **W** | **COMPLETE — 18 items verified** (one sub-item, S2-P1-24's Arabic logo variant, is blocked on an approved asset that does not exist) | ✅ S2-P1-25 manifest gate restored (`45e9eb4f3`). ✅ S1-P0-01 inventory invariant fixed (`aebcfdfc5`, `26c32fcb3`). ✅ S1-P0-09 token-consumer contract fixed and live-verified (`566b14ea6`). ✅ S1-P0-13 neutral translation migration/rollback fixed (`948e4a6d1`, `2baf7322a`). ✅ S2-P0-21 install/rebuild/release durability fixed (`02671f0c9`, `2baf7322a`). ✅ S1-P1-03 deterministic CI wiring and false-green protection fixed (`597276b09`, `ff6e35b4f`). ✅ S1-P1-15 neutral mixed-family backup retention fixed (`77d2b3e12`, `8eb4ea7f8`, `64d2ba23c`). ✅ S1-P1-17 disabled-token product contract fixed (`0af1ce174`). ✅ S1-P1-02 dead overrides retired safely (`2b801e668`). ✅ S1-P1-05 WCAG evidence synchronized (`b400546a2`). ✅ S1-P1-06 D-8 status reconciled while retaining the open dependency (`88ff34289`). ✅ S1-P1-10 false PDF-font capability claim removed (`723170df7`). ✅ S1-P1-11 operational identity safely classified/neutralized (`29be1fcd5`). ✅ S2-P1-18 branding health now measures the served state and is gated in CI (`1474263b4`). ✅ S1-P1-04 guardrail scope cross-checked against the real module, and S2-P1-20 refuted-in-part with its real gap closed (`2df9b5eb1`). ✅ All four P2 findings closed (`97f6952cf`). ✅ S2-P1-22 + S2-P1-23 + the juxtaposition half of S2-P1-24 closed together by the multi-key contract subsystem and the `xlp` composition filter (`6edc03b8b`). ✅ S2-P1-26 Class B — the uncatalogued leak class no override could reach — converted, with the Foundation/ONC preserve list locked by test (`6da352e9a`). ✅ S2-P1-26 Class A: 20 legacy contracts + 22 call sites, after fixing a latent install-vs-upgrade divergence that would have aborted real upgrades (`177d5dc97`). ✅ S2-P1-24 text half: the shell selects the Arabic product name by language. **PRE-09 IS COMPLETE** apart from S2-P1-24's Arabic logo variant, which is blocked on an approved asset that does not exist. ✅ Scan-3 remediation, Rev 29: S3-P1-32 + S3-P1-34 (`f18f75080`) and S3-P1-31 (`59d5c14df`). **Rev 32 (2026-08-25): PRE-09 IS NOW COMPLETE.** The three items this row listed as next are all closed and verified — S3-P1-33 (`e16913d5b`, with ADR-BRAND-005 recorded first as SKY-Q11 required), S3-P2-35 (`57e51286c` mechanism + `c154215d9` governance) and S3-P2-36 (`e203d5bdd` + `cb685e1f9`) — along with the Owner-directed SKY-Q08 logo-geometry safeguard (`55738dc82`) and PRE-ORCH-02 (`d42a7d6d4`). See §15E. **Next: PRE-25**, gated on Scan-4A…4E returning and on resolving the two unlabelled P1 slots. |
 | PRE-10 | Scan-2A Guardrail execution proof | Agent 2A → orchestrator | R | **AGENT FAILED (6 empty returns); CLAIM SUBSEQUENTLY PROVEN BY ORCHESTRATOR** | Agent burned ~117k tokens / 63 tool calls with zero findings — **do not re-dispatch it.** Orchestrator proved the inert-rule behaviour directly; see §16 PRE-10. |
 | PRE-11 | Scan-2B Test-harness truthfulness | Agent 2B → orchestrator | R/W | **DONE — VERIFIED** | Deliberately nonexistent `--filter SkyEagleBranding` executed 0 tests: exit 0 without the supported guard; exit 1 with `--fail-on-empty-test-suite`. The canonical gate includes that flag plus fail-on-incomplete/risky, and its contract test prevents removal. See §16 PRE-11. |
 | PRE-12 | Scan-2C Generator/theme reproducibility | Agent 2C | R | **DONE** | §15 SCAN2C |
@@ -245,7 +254,7 @@ implemented yet.
 | PRE-16 | Scan-2G Materialisation / tenant safety | orchestrator continuation | R/W (reversible runtime proof) | **DONE — VERIFIED; LIVE STATE RESTORED** | §15 SCAN2G and §16 continuation evidence |
 | PRE-17 | Scan-2H Telemetry / network egress | Agent 2H | R | **DONE** | §15 SCAN2H |
 | PRE-18…24 | Scan-3A…3E adversarial red-team | fresh agents | R | **COMPLETE (2026-08-24) — 5 of 5 returned; 1 P0 found and fixed** | All five reported. Scan-3A found **S3-P0-28**, a fresh-install-versus-upgrade precedence divergence that would have wedged every upgrade uncatchably; fixed and regression-pinned. 3B hardened six gate assertions; 3C found the composition architecture's real reach gap; 3D found three documentation defects including a stale headline status; 3E found one live-state gap and corrected an orchestrator docblock. **Rev 29 closed S3-P1-31, S3-P1-32 and S3-P1-34; 4 remain unclosed** — 1 accepted trade, 1 P1 needing a design step, 2 governance/CI P2s. See §15B. Originally: | Five independent read-only agents, launched only after the Owner explicitly authorised spawning them. Scoped to five attack surfaces rather than the original seven letters: **3A** translation-contract subsystem (orphaning, page-fatal patterns, install-vs-upgrade divergence, rollback); **3B** CI gate and guardrail false-greens; **3C** brand leaks on live and source surfaces incl. Arabic/RTL; **3D** documentation truthfulness (falsify the corpus's own claims, including this file's); **3E** rename blast radius and silent breakage. Each was told to falsify rather than inherit, given the host constraints (no Docker, Twig render tests hang, scoped searches, sibling-worktree exclusion), and bound to read-only with no live-DB mutation. |
-| PRE-25 | Final reconciliation / certification | orchestrator | R | **NOT STARTED** | — |
+| PRE-25 | Final reconciliation / certification | orchestrator | R | **NOT STARTED — but now unblocked** | Every documented code blocker closed at Rev 32 (§15E). Three inputs still outstanding before it can begin: Scan-4A…4E (dispatched at `e16913d5b`), the full PHPStan run (exit code alone is not proof on this host — grep for `Internal error` / `Result is incomplete`), and the two unlabelled P1 slots at the S2-P1-19 / S2-P1-21 numbering gap, which must be resolved from Scan-2's register rather than filled with invented findings. |
 
 **Orchestrator's own guardrail proof:** two direct PHPUnit runs exceeded timeout on the Drive mount without
 capturing output. The claim was then **proven by a faster route** — reading the real `MODULE_NAMESPACE`
@@ -287,19 +296,17 @@ SCAN-3 REGISTER:    S3-P0-28  translation precedence divergence      FIXED — V
                     S3-P1-30  `skip` costs Arabic 8 strings          ACCEPTED, quantified
                     S3-P1-31  language editor has no `%s` guard      FIXED — VERIFIED (59d5c14df)
                     S3-P1-32  xlp()/|xlp bypass the Arabic resolver  FIXED — VERIFIED (f18f75080)
-                    S3-P1-33  setup.php is a mixed-brand installer   OPEN — ADR still unwritten;
-                                                                     a draft mechanism exists
-                                                                     UNCOMMITTED and unreviewed,
-                                                                     and setup.php's 10 literals
-                                                                     are all still present (§15D)
+                    S3-P1-33  setup.php is a mixed-brand installer   FIXED — VERIFIED (e16913d5b,
+                                                                     ADR-BRAND-005 written first;
+                                                                     literals 10 → 0) (§15E)
                     S3-P1-34  questionnaire disclaimer names OpenEMR FIXED — VERIFIED (f18f75080)
-                    S3-P2-35  deployed assets outside the manifest   SUBSTANTIALLY FIXED —
-                                                                     VERIFIED (57e51286c);
-                                                                     STILL OPEN for its
-                                                                     documentation half (§15D)
-                    S3-P2-36  Q77 theme check skips in CI            FIXED — VERIFIED (e203d5bdd)
-                    SKY-Q08   production SVG geometry safeguard      OPEN — implemented but RED,
-                              (Owner-directed PRE deliverable)       29 failures, UNCOMMITTED (§15D)
+                    S3-P2-35  deployed assets outside the manifest   FIXED — VERIFIED (57e51286c
+                                                                     mechanism, c154215d9 the
+                                                                     governance half) (§15E)
+                    S3-P2-36  Q77 theme check skips in CI            FIXED — VERIFIED (e203d5bdd,
+                                                                     cb685e1f9) (§15E)
+                    SKY-Q08   production SVG geometry safeguard      FIXED — VERIFIED (55738dc82);
+                              (Owner-directed PRE deliverable)       27/27 shipped SVGs pass (§15E)
                     PRE-ORCH-02 a 6th worktree escaped the S1-P2-14
                               path exclusion                         FIXED — VERIFIED (d42a7d6d4)
                     S3-OBS-01 admin.php renders its site table with
@@ -350,6 +357,15 @@ REGISTERS:          P0 4 total (0 open, 4 fixed) · P1 2 unlabelled slots only �
                     S2-P1-19 and S2-P1-21 is where they sit). Treat the four documented
                     findings as the actionable set and resolve the discrepancy at PRE-25
                     rather than inventing findings to fill the slots.
+
+STATE AT REV 32 (2026-08-25): every documented CODE blocker is closed and verified.
+                    What remains is verification and reconciliation, not construction:
+                      · Scan-4A…4E — five independent adversarial agents dispatched at e16913d5b
+                      · PHPStan full run — exit code alone is NOT proof on this host
+                      · Two unlabelled P1 slots — the S2-P1-19 / S2-P1-21 numbering gap
+                      · PRE-25 — NOT STARTED
+                      · Push and the local-disk certification copy — deferred by Owner
+                        decision until PRE-25 passes
 
 SAFE TO START SKYEAGLE:  NO
 ```
@@ -2296,6 +2312,189 @@ production file. The instruction never to corrupt a real asset to test failure w
 
 **Certification remains NOT PASSED.** S3-P1-33 is open, S3-P2-35 is partly open, the SVG safeguard is
 red, and PRE-25 has not started.
+
+---
+
+## 15E. THE FOUR REMAINING BLOCKERS — CLOSED 2026-08-25
+
+> Every closure below was verified by execution, and each carries a negative control that was run and
+> then exactly restored. Where a fix caused a regression elsewhere, the regression is recorded here
+> rather than quietly repaired.
+
+### SKY-Q08 — production logo geometry safeguard — **FIXED — VERIFIED** (`55738dc82`)
+
+A logo is a trademark, and a stretched trademark is no longer the mark. Nothing in the intake path
+prevented a production logo shipping with distortion-enabling geometry.
+
+`SvgGeometry` extends the existing `SvgInspector` seam rather than sitting beside it — layers 1-3
+answer "can this file hurt the tenant", this is layer 4, "can this file hurt the mark". It is
+brand-neutral by construction: keyed on what a slot **is**, with no filename, brand name or colour
+anywhere in it. Three clauses at two deliberately different scopes — **G1** (`preserveAspectRatio`
+must not be `none`) is document-wide because a nested `svg` is allowlisted and opens a viewport of its
+own; **G2** (root must declare a usable `viewBox`) and **G3** (declared `width`/`height` ratio must
+agree with the viewBox) stay root-only, because a nested svg legitimately omits its viewBox to get a
+1:1 viewport and requiring one there would be a false positive.
+
+**Verified against the real corpus, not only fixtures:** all **27** shipped SVGs under `brand/`,
+`public/images/` and the module's dark marks were checked. Every one has `preserveAspectRatio` absent
+and a valid viewBox. **Zero flagged** — so the rule is not riding on its tolerance and no shipped
+asset is grandfathered in.
+
+Negative control: both guard call sites commented out → **18 failures, 2 errors, exit 2**. Source
+restored to SHA-256 `fe043b8578327eba…`; suite returned **259 tests / 786 assertions, exit 0**.
+
+**Why this looked broken and was not.** The work arrived from an interrupted agent with **29 failing
+tests**, and the diagnosis was initially recorded here as an over-broad rule. That was wrong. The
+fixture builder still carried a live negative-control injection —
+`$preserveAspectRatio ??= 'none'; // NEGATIVE CONTROL INJECTION - REMOVE` — which forced the attribute
+onto the root of every fixture. The implementation was correct throughout. The file was swept for
+other leftover markers; there were none. Recorded because "the tests were red" and "the code was
+wrong" are different claims, and only the first was true.
+
+### S3-P2-35 — deployed-asset integrity — **FIXED — VERIFIED** (`57e51286c`, `c154215d9`)
+
+Mechanism and governance both closed. Coverage is assigned by **ownership class** so that only like is
+compared with like:
+
+| Class | Verified how | Count |
+|---|---|---:|
+| Source artefact (`brand/`, `docs/branding-production/`) | recorded SHA-256 | 123 |
+| Deployed immutable (`public/images/**`, `sites/default/images/*`, module dark marks) | recorded SHA-256 | 21 |
+| Mirrored deployment (`public/assets/fonts/thiqa/**`) | **equality with the recorded source** | 11 |
+| Generated deterministic (`public/themes/*.css`) | deferred to S3-P2-36 by decision | — |
+| Tenant materialised / runtime overlay | excluded by recorded decision | — |
+
+The mirrored class is verified by equality rather than a second recorded hash because
+`public/assets/` is gitignored build output: a recorded hash there would go stale on every legitimate
+rebuild and train maintainers to re-issue entries without reading them — precisely the habit that let
+the gate sit RED for five days undetected at Revision 5. The check runs in **both** directions, so an
+unshipped source file is reported rather than ignored.
+
+The documentation half is what makes it governable, and it changed the re-issue discipline: **one edit
+can now oblige more than one entry**, because a source artefact and its deployed copy are two manifest
+rows describing one decision. Recorded in `11-asset-manifest.md` (the coverage model, including why
+classes 4-6 are excluded **by decision** rather than by oversight) and `12-release-verification.md`
+Revision 8.
+
+**A live demonstration fell out of the work:** writing the two documents took the gate RED with exactly
+the two expected mismatches and no others, and re-issuing returned it to 123/123 · 21/21 · 11/11,
+exit 0.
+
+### S3-P2-36 — the Q77 theme check now actually executes in CI — **FIXED — VERIFIED** (`e203d5bdd`, `cb685e1f9`)
+
+The environment now **declares** its obligation rather than the guard inferring it.
+`OPENEMR_DEPLOYED_THEMES_REQUIRED=1` is set on the one leg that builds the themes; there an absent
+directory is a hard failure. Every other leg leaves it empty and the skip survives, which is correct
+for a developer host that builds off-tree (`CLAUDE.local.md` §6 — on the Windows host the build
+genuinely cannot run inside the repository).
+
+Coverage is layered because neither layer alone is honest: the **projected** set is derived from
+`webpack.themes.js`'s entry map and executes everywhere with no build; the **deployed directory**
+itself is checked where mandatory, and that is not redundant — webpack's output cleaning applies to its
+own workspace and `robocopy /E` deletes nothing at the destination, so a stale stylesheet can survive
+where the entry map has no visibility of it, and `interface/globals.php`'s `file_exists()` gate
+resolves it just as happily as a fresh one. A third layer parses the workflow YAML so removing the
+build step or the signal breaks a test.
+
+Negative controls are permanent tests rather than one-off runs: the audit is proven to flag a forbidden
+stylesheet, a stale one outside Q77's four names, and a missing required one, and to accept a faithful
+directory; and the skip semantics are pinned in both directions. `cb685e1f9` then cleared four
+level-10 PHPStan findings in source — no baseline, no ignores — one of which was substantive: a preg
+alternation branch that does not fire yields `''`, indistinguishable from a branch that matched empty
+text, so the check could not do the job it appeared to do.
+
+### S3-P1-33 — pre-database product identity — **FIXED — VERIFIED** (`e16913d5b`, ADR-BRAND-005)
+
+The design was recorded **first**, as Owner decision SKY-Q11 required:
+`docs/branding/adr/ADR-BRAND-005-pre-database-product-identity.md`.
+
+One authority (the branding profile), one deterministic offline generator, one committed artefact that
+`return`s an immutable array, one reader (`OpenEMR\Common\Branding\ProductIdentity`). An array rather
+than `define()`d constants because constants are process-global, cannot be re-resolved for a second
+site, and warn on redefinition. Values are emitted through `var_export()` after schema validation, so
+profile content cannot escape its string literal — the property is guaranteed by the serializer, not by
+the escaping discipline of whoever edits the generator next.
+
+**Failure degrades, never aborts** — the deliberate inverse of this codebase's usual
+parse-don't-validate posture, because every consumer is an installer, an upgrade path or a fatal-error
+reporter, and in all three raising is strictly worse than rendering a neutral name (the S3-P0-28
+lesson). The ADR records the one failure that is genuinely **not** guardable: a syntax error in the
+artefact is an uncatchable compile-time fatal at `require`, mitigated by nothing hand-editing the file,
+`php-syntax-check` linting it, and `--check` failing CI on any byte drift.
+
+**`setup.php` — the actual finding — is converted.** Product literals: **10 → 0**. The classification
+was re-derived on disk, not inherited. What remains naming the upstream product is exactly the PRESERVE
+class under locked constraint C7: namespaces and code identifiers, docblocks, `error_log()` lines an
+operator reads against upstream documentation, and the genuinely factual project references — the
+`open-emr.org` home page and the grant-funding paragraph, which are about the OpenEMR **project** and
+not about this product. **Zero user-facing product-identity leaks remain.**
+
+Escaping is per context, not uniform: `text()` for HTML, and `js_escape()` with string concatenation
+for the one occurrence inside a JavaScript string literal, where HTML-escaping would have been the
+wrong helper. Both are composer `autoload.files` entries, **verified available in a cold CLI process** —
+a helper that were not loaded there would have turned the openssl error path into a fatal instead of a
+message.
+
+The **D-3 rebase checklist was updated, not relaxed**. Its `mustNotContain` lists — the actual
+protection against a rebase restoring upstream branding — are untouched; only the expected patched
+*form* changed, and it now additionally asserts both files really do wire `ProductIdentity`.
+`interface/globals.php`'s expected literal count goes **4 → 0**, which is the stronger assertion: it
+fails if anyone reintroduces a hardcoded name there.
+
+**A regression this work caused, and its fix.** Adding `@branding-identity-check` to the canonical gate
+shifted the script array, and `BrandingCiContractTest` read that array **positionally**, so a correct
+and strengthened gate turned it red. Steps are now located by content. Recorded because the lesson
+generalises: a guard that fails when the thing it guards is *strengthened* trains people to edit the
+guard, which is how a real regression eventually gets waved through.
+
+**Category-B check.** The artefact carries `product_domain` = `skyeagle.uk` because the committed
+branding profile has carried it since `b3b821ffa`, well before this change. The generator reflects
+existing configuration and introduces **no new identity**. Payload remains the current pre-SkyEagle
+product name.
+
+Verification: canonical `composer branding-ci` **317 tests / 3,574 assertions, exit 0**; ProductIdentity
+contract **9 tests / 38 assertions** including a drift negative control that tampers with the artefact,
+requires `--check` to exit 3, restores it byte-for-byte and re-verifies; determinism proven by
+regenerating and comparing bytes; PHPCS 13/13.
+
+### PRE-ORCH-02 — a sixth worktree escaped the exclusion rule — **FIXED — VERIFIED** (`d42a7d6d4`)
+
+The S1-P2-14 remediation named `G:/My Drive/OpenEMR.worktrees/` as a literal path. A worktree has since
+been registered at `G:/My Drive/worktrees/OpenEMR/jade-ibis/OpenEMR`, which does not match that prefix,
+so a scan applying the documented exclusion verbatim would ingest it. It is the **more** misleading of
+the two siblings: the first sits at the pre-branding baseline where a stray hit reads as obviously
+stale, while this one is **one commit behind current HEAD on this branch**, so it yields plausible
+phantom findings on near-current code — including defects closed at `5202b0253` and `02bcae75c`.
+
+The rule is generalised rather than given a third literal path: the exclusion set is **every path
+`git worktree list` reports other than the repository root**, enumerated at scan time. Both siblings are
+left in place; removing another agent's worktree is not this programme's call.
+
+### Owner decisions taken 2026-08-25
+
+| Decision | Ruling |
+|---|---|
+| Run the S3-P1-27 migration on the demo database? | **No.** Keep the "live database mutated: NO" invariant. It stays an operator step. |
+| Fix S3-OBS-01? | **No — verify and record only.** Confirmed live, and confirmed **upstream OpenEMR posture**, not a fork regression. Outside branding; not a PRE blocker. |
+| Push the branch now? | **No — push only after PRE-25 passes.** The branch stays local until certification. |
+| Scope of the scan re-run? | **Full five-agent Scan 1/2/3 equivalent** from the corrected state. Dispatched as Scan-4A…4E. |
+
+### What remains
+
+```text
+1. Two unlabelled P1 slots      numbering gap at S2-P1-19 / S2-P1-21; resolve at PRE-25,
+                                do NOT invent findings to fill them
+2. Scan-4A…4E                   five independent adversarial agents DISPATCHED at e16913d5b
+3. PHPStan full run             running; exit code alone is NOT proof on this host --
+                                grep for "Internal error" and "Result is incomplete"
+4. PRE-25                       NOT STARTED
+5. Push / protect branch        deferred by Owner decision until PRE-25 passes
+6. Local-disk certification     must clone from git, not copy files; blocked on the push decision,
+                                so it will clone from the local repository path instead
+```
+
+**Certification remains NOT PASSED.** Every documented code blocker is now closed; what remains is
+verification and reconciliation, not construction.
 
 ---
 
