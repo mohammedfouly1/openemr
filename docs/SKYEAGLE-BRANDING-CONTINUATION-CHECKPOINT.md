@@ -350,7 +350,7 @@ image-to-image generation was used anywhere in this phase; the Owner's Recraft A
 ```text
 PHASE:            B3
 START SHA:        ea007a19a
-END SHA:           (this commit)
+END SHA:           86ef1ae96
 FILES:             brand/tokens/thiqa-tokens.json (43-key palette, both themes); 6 generated
                     artefacts under interface/themes/thiqa/{_tokens-light,_tokens-dark,
                     _css-variables}.scss and the module's smart-style_{light,dark}.json.twig
