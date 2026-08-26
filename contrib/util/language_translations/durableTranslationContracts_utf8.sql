@@ -1,5 +1,5 @@
 -- Generated from contrib/util/language_translations/contracts/.
--- Contracts: 28
+-- Contracts: 29
 -- Do not edit this generated file directly.
 
 -- Contract: about-product-neutral-v1
@@ -604,6 +604,54 @@ FROM (
     INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
     WHERE BINARY `c`.`constant_name` = 'There was an OpenEMR SQL Escaping ERROR of the following string'
       AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
+      AND LOCATE('%', `d`.`definition`) = 0
+) AS `src`
+LEFT JOIN `lang_definitions` `existing`
+    ON `existing`.`cons_id` = @openemr_translation_contract_cons_id
+    AND `existing`.`lang_id` = `src`.`lang_id`
+WHERE @openemr_translation_contract_cons_id IS NOT NULL
+  AND `existing`.`def_id` IS NULL;
+
+SET @openemr_translation_contract_cons_id = NULL;
+
+-- Contract: installer-third-party-modules-neutral-v1
+-- SHA256: 67f7212d295bdfb9b7f8aa4eabc554ef5c3324bd785412e9815d66a967fd6c13
+
+INSERT INTO `lang_constants` (`constant_name`)
+SELECT 'Visit additional modules for %s developed and listed by third party vendors.' FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM `lang_constants` WHERE BINARY `constant_name` = 'Visit additional modules for %s developed and listed by third party vendors.');
+
+SET @openemr_translation_contract_cons_id = (
+    SELECT `cons_id` FROM `lang_constants`
+    WHERE BINARY `constant_name` = 'Visit additional modules for %s developed and listed by third party vendors.'
+);
+
+-- Carry forward: Visit additional modules for OpenEMR developed and listed by third party vendors. (neutralise "OpenEMR")
+INSERT INTO `lang_definitions` (`cons_id`, `lang_id`, `definition`)
+SELECT @openemr_translation_contract_cons_id, `src`.`lang_id`, REPLACE(`src`.`definition`, 'OpenEMR', '%s')
+FROM (
+    SELECT `d`.`lang_id` AS `lang_id`, `d`.`definition` AS `definition`
+    FROM `lang_definitions` `d`
+    INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
+    WHERE BINARY `c`.`constant_name` = 'Visit additional modules for OpenEMR developed and listed by third party vendors.'
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'OpenEMR', '')) = CHAR_LENGTH('OpenEMR')
+      AND LOCATE('%', `d`.`definition`) = 0
+) AS `src`
+LEFT JOIN `lang_definitions` `existing`
+    ON `existing`.`cons_id` = @openemr_translation_contract_cons_id
+    AND `existing`.`lang_id` = `src`.`lang_id`
+WHERE @openemr_translation_contract_cons_id IS NOT NULL
+  AND `existing`.`def_id` IS NULL;
+
+-- Carry forward: Visit additional modules for Thiqa developed and listed by third party vendors. (neutralise "Thiqa")
+INSERT INTO `lang_definitions` (`cons_id`, `lang_id`, `definition`)
+SELECT @openemr_translation_contract_cons_id, `src`.`lang_id`, REPLACE(`src`.`definition`, 'Thiqa', '%s')
+FROM (
+    SELECT `d`.`lang_id` AS `lang_id`, `d`.`definition` AS `definition`
+    FROM `lang_definitions` `d`
+    INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
+    WHERE BINARY `c`.`constant_name` = 'Visit additional modules for Thiqa developed and listed by third party vendors.'
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'Thiqa', '')) = CHAR_LENGTH('Thiqa')
       AND LOCATE('%', `d`.`definition`) = 0
 ) AS `src`
 LEFT JOIN `lang_definitions` `existing`

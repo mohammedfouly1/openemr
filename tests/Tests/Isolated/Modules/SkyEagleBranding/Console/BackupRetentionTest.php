@@ -95,10 +95,18 @@ final class BackupRetentionTest extends TestCase
     #[DataProvider('validLabelProvider')]
     public function testAcceptedLabelsUseOnlyThePortableGrammar(string $label): void
     {
+        // No expectNotToPerformAssertions() here: this class's setUp()/tearDown() always assert
+        // (mkdir/unlink bookkeeping), so that expectation is never satisfiable in this class and
+        // would always be flagged risky regardless of this method's own body. A thrown exception
+        // from assertValidLabel() still fails the test on its own.
         ManagedBackupArtifact::assertValidLabel($label);
-        self::assertTrue(true);
     }
 
+    /**
+     * @return array<string, array{string}>
+     *
+     * @codeCoverageIgnore Data providers run before coverage instrumentation starts.
+     */
     public static function validLabelProvider(): array
     {
         return [
@@ -117,6 +125,11 @@ final class BackupRetentionTest extends TestCase
         ManagedBackupArtifact::assertValidLabel($label);
     }
 
+    /**
+     * @return array<string, array{string}>
+     *
+     * @codeCoverageIgnore Data providers run before coverage instrumentation starts.
+     */
     public static function invalidLabelProvider(): array
     {
         return [
@@ -206,6 +219,7 @@ final class BackupRetentionTest extends TestCase
         self::assertSame([$filename], $inventory->malformed);
     }
 
+    /** @param list<string> $expected */
     #[DataProvider('keepProvider')]
     public function testKeepSemanticsSelectExactlyTheOldestManagedBackups(int $keep, array $expected): void
     {
@@ -219,6 +233,11 @@ final class BackupRetentionTest extends TestCase
         self::assertSame($expected, array_column($selected, 'filename'));
     }
 
+    /**
+     * @return array<string, array{int, list<string>}>
+     *
+     * @codeCoverageIgnore Data providers run before coverage instrumentation starts.
+     */
     public static function keepProvider(): array
     {
         return [
@@ -282,6 +301,11 @@ final class BackupRetentionTest extends TestCase
         ManagedBackupRetention::parseKeep($value);
     }
 
+    /**
+     * @return array<string, array{int|string|bool|null}>
+     *
+     * @codeCoverageIgnore Data providers run before coverage instrumentation starts.
+     */
     public static function invalidKeepProvider(): array
     {
         return [
@@ -304,6 +328,11 @@ final class BackupRetentionTest extends TestCase
         ManagedBackupRetention::assertTargetInput($target);
     }
 
+    /**
+     * @return array<string, array{string}>
+     *
+     * @codeCoverageIgnore Data providers run before coverage instrumentation starts.
+     */
     public static function unsafeTargetProvider(): array
     {
         return [
