@@ -167,5 +167,12 @@ bab0f2d97de2fe8deee096efdedcb4ea42299c76e271b7641e057c9c757c91c6  sites/default/
 7e31733588f77e51513a630a8833039b4a00a485af8e4a31922c9e75f23aeb70  sites/default/images/logo_2.png
 d29b0130b44e1efa3fe19e8977a5921a774a7d082e2fb4b7dc6b2d9dca0d74ff  sites/default/images/practice_logo.gif
 43e5e5abf6cc594793cfd9616ff44d7198f7632ded02c8bbc342c747b4cdcf62  interface/modules/custom_modules/oe-module-skyeagle-branding/public/logos/dark/core/menu/primary/logo.svg
-baa9628046e04fa8c7e54389e62952641dad7b597cffc8da7316efbef057a79b  interface/modules/custom_modules/oe-module-skyeagle-branding/public/logos/dark/core/login/primary/logo.svg
-baa9628046e04fa8c7e54389e62952641dad7b597cffc8da7316efbef057a79b  interface/modules/custom_modules/oe-module-skyeagle-branding/public/logos/dark/core/login/secondary/logo.svg
+# Re-issued (found during Owner-authorized master->feature merge validation, 2026-08-26):
+# both entries below carried brand-logo-white.svg's monochrome-master hash
+# (baa9628046e04fa8...) instead of their own file's hash -- a copy/paste error present
+# since before the SkyEagle module rename (confirmed via the pre-rename commit's own
+# manifest, same wrong value under the old oe-module-thiqa-branding path). The deployed
+# file content itself is unchanged back to its original a12e63471 commit and was never
+# corrupted; only the recorded hash was wrong. Re-issued to the file's actual hash.
+4dbe36c19efd929505aa51025c87effab95eb214d99d1bf6b91c6b33f27c9d15  interface/modules/custom_modules/oe-module-skyeagle-branding/public/logos/dark/core/login/primary/logo.svg
+4dbe36c19efd929505aa51025c87effab95eb214d99d1bf6b91c6b33f27c9d15  interface/modules/custom_modules/oe-module-skyeagle-branding/public/logos/dark/core/login/secondary/logo.svg

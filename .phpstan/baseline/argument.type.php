@@ -25762,16 +25762,6 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/_global_config.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$value of method IRenderEngine\\:\\:assign\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/_global_config.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$value of method IRenderEngine\\:\\:assign\\(\\) expects VARIANT, string given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/_global_config.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Parameter \\#1 \\$array of function array_unshift expects array, mixed given\\.$#',
     'count' => 1,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/savant/Savant3.php',
@@ -26322,7 +26312,7 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Criteria.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$val of method Criteria\\:\\:GetQuotedSql\\(\\) expects VARIANT, mixed given\\.$#',
+    'message' => '#^Parameter \\#1 \\$val of method Criteria\\:\\:GetQuotedSql\\(\\) expects string, mixed given\\.$#',
     'count' => 6,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Criteria.php',
 ];
@@ -26332,32 +26322,12 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Criteria.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$val of static method DataAdapter\\:\\:GetQuotedSql\\(\\) expects string, VARIANT given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Criteria.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$val of method Criteria\\:\\:GetQuotedSql\\(\\) expects VARIANT, string given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/CriteriaFilter.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Parameter \\#1 \\$listener of method DataAdapter\\:\\:AttachObserver\\(\\) expects IObserver, Observable given\\.$#',
     'count' => 1,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/DataAdapter.php',
 ];
 $ignoreErrors[] = [
     'message' => '#^Parameter \\#1 \\$listener of method DataAdapter\\:\\:AttachObserver\\(\\) expects IObserver, mixed given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/DataAdapter.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$obj of method DataAdapter\\:\\:Observe\\(\\) expects VARIANT, string given\\.$#',
-    'count' => 24,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/DataAdapter.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$object_or_class of function is_a expects object, mixed given\\.$#',
     'count' => 1,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/DataAdapter.php',
 ];
@@ -26557,17 +26527,7 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezable.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$obj of method Observable\\:\\:Observe\\(\\) expects VARIANT, string given\\.$#',
-    'count' => 12,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Parameter \\#1 \\$observer of method Observable\\:\\:AttachObserver\\(\\) expects IObserver, Observable given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$string of function strlen expects string, VARIANT given\\.$#',
     'count' => 1,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
 ];
@@ -26577,23 +26537,13 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$val of method Phreezer\\:\\:Escape\\(\\) expects VARIANT, mixed given\\.$#',
+    'message' => '#^Parameter \\#1 \\$val of method Phreezer\\:\\:Escape\\(\\) expects string, mixed given\\.$#',
     'count' => 3,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$val of method Phreezer\\:\\:GetQuotedSql\\(\\) expects VARIANT, mixed given\\.$#',
+    'message' => '#^Parameter \\#1 \\$val of method Phreezer\\:\\:GetQuotedSql\\(\\) expects string, mixed given\\.$#',
     'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$val of static method DataAdapter\\:\\:Escape\\(\\) expects string, VARIANT given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$val of static method DataAdapter\\:\\:GetQuotedSql\\(\\) expects string, VARIANT given\\.$#',
-    'count' => 1,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
 ];
 $ignoreErrors[] = [
@@ -26612,28 +26562,8 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$id of method Phreezer\\:\\:GetCache\\(\\) expects string, VARIANT given\\.$#',
+    'message' => '#^Parameter \\#2 \\$id of method Phreezer\\:\\:Get\\(\\) expects string, mixed given\\.$#',
     'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$id of method Phreezer\\:\\:Get\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$id of method Phreezer\\:\\:SetCache\\(\\) expects string, VARIANT given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$val of method ICache\\:\\:Set\\(\\) expects VARIANT, Phreezable given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$val of method ICache\\:\\:Set\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 3,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Phreezer.php',
 ];
 $ignoreErrors[] = [
@@ -26657,28 +26587,13 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$input of method PortalController\\:\\:UTF8Encode\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Parameter \\#1 \\$object of function get_object_vars expects object, mixed given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$permission of method IAuthenticatable\\:\\:IsAuthorized\\(\\) expects VARIANT, int given\\.$#',
     'count' => 1,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
 ];
 $ignoreErrors[] = [
     'message' => '#^Parameter \\#1 \\$username of method IAuthenticatable\\:\\:Login\\(\\) expects string, mixed given\\.$#',
     'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, ValidationResponse given\\.$#',
-    'count' => 2,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
 ];
 $ignoreErrors[] = [
@@ -26699,31 +26614,6 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
     'message' => '#^Parameter \\#2 \\$timestamp of function date expects int\\|null, int\\|false given\\.$#',
     'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, BrowserDevice given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, IAuthenticatable\\|null given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, IRouter given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, string given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, value given\\.$#',
-    'count' => 1,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/PortalController.php',
 ];
 $ignoreErrors[] = [
@@ -26760,11 +26650,6 @@ $ignoreErrors[] = [
     'message' => '#^Parameter \\#2 \\$array of function implode expects array\\<string\\>, list given\\.$#',
     'count' => 1,
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/QueryBuilder.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$obj of method Observable\\:\\:Observe\\(\\) expects VARIANT, string given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Phreeze/Reporter.php',
 ];
 $ignoreErrors[] = [
     'message' => '#^Parameter \\#1 \\$row of method Reporter\\:\\:Load\\(\\) expects array, mixed given\\.$#',
@@ -26862,21 +26747,6 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/fwk/libs/verysimple/Util/VsDateUtil.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$value of method IRenderEngine\\:\\:assign\\(\\) expects VARIANT, \\(int\\|string\\) given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/index.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$value of method IRenderEngine\\:\\:assign\\(\\) expects VARIANT, string given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/index.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, stdClass given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/AppBasePortalController.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Parameter \\#2 \\$callback of method PortalController\\:\\:RenderJSON\\(\\) expects string, array\\|string given\\.$#',
     'count' => 1,
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/AppBasePortalController.php',
@@ -26897,23 +26767,8 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteActivityViewController.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteActivityViewController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, stdClass given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteActivityViewController.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Parameter \\#2 \\$callback of method PortalController\\:\\:RenderJSON\\(\\) expects string, mixed given\\.$#',
     'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteActivityViewController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 1,
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteActivityViewController.php',
 ];
 $ignoreErrors[] = [
@@ -26947,21 +26802,6 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteDocumentController.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, OnsiteDocument given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteDocumentController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteDocumentController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, stdClass given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteDocumentController.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Parameter \\#2 \\$callback of method PortalController\\:\\:RenderJSON\\(\\) expects string, mixed given\\.$#',
     'count' => 5,
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteDocumentController.php',
@@ -26974,16 +26814,6 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
     'message' => '#^Parameter \\#2 \\$timestamp of function date expects int\\|null, int\\|false given\\.$#',
     'count' => 8,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteDocumentController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, int given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteDocumentController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 18,
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsiteDocumentController.php',
 ];
 $ignoreErrors[] = [
@@ -27018,21 +26848,6 @@ $ignoreErrors[] = [
 ];
 $ignoreErrors[] = [
     'message' => '#^Parameter \\#1 \\$value of function count expects array\\|Countable, mixed given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsitePortalActivityController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, OnsitePortalActivity given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsitePortalActivityController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsitePortalActivityController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, stdClass given\\.$#',
     'count' => 2,
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/OnsitePortalActivityController.php',
 ];
@@ -27087,21 +26902,6 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, Patient given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, stdClass given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Parameter \\#2 \\$callback of method PortalController\\:\\:RenderJSON\\(\\) expects string, mixed given\\.$#',
     'count' => 5,
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
@@ -27119,31 +26919,6 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
     'message' => '#^Parameter \\#2 \\$timestamp of function date expects int\\|null, int\\|false given\\.$#',
     'count' => 5,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, array\\<string, mixed\\> given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, int given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, list\\<array\\> given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, list\\<string\\> given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 4,
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/PatientController.php',
 ];
 $ignoreErrors[] = [
@@ -27182,21 +26957,6 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/PortalPatientController.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, array\\<string, mixed\\> given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PortalPatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 1,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PortalPatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#1 \\$var of method PortalController\\:\\:RenderJSON\\(\\) expects VARIANT, stdClass given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PortalPatientController.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Parameter \\#2 \\$callback of method PortalController\\:\\:RenderJSON\\(\\) expects string, mixed given\\.$#',
     'count' => 4,
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/PortalPatientController.php',
@@ -27217,24 +26977,9 @@ $ignoreErrors[] = [
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/PortalPatientController.php',
 ];
 $ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, int given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PortalPatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/PortalPatientController.php',
-];
-$ignoreErrors[] = [
     'message' => '#^Parameter \\#3 \\$default of method AppBasePortalController\\:\\:SafeGetVal\\(\\) expects string, mixed given\\.$#',
     'count' => 52,
     'path' => __DIR__ . '/../../portal/patient/libs/Controller/PortalPatientController.php',
-];
-$ignoreErrors[] = [
-    'message' => '#^Parameter \\#2 \\$varval of method PortalController\\:\\:Assign\\(\\) expects VARIANT, mixed given\\.$#',
-    'count' => 2,
-    'path' => __DIR__ . '/../../portal/patient/libs/Controller/ProviderController.php',
 ];
 $ignoreErrors[] = [
     'message' => '#^Parameter \\#2 \\$array of function implode expects array\\<string\\>, array given\\.$#',
