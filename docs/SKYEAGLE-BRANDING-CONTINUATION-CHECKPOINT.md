@@ -431,7 +431,7 @@ info), `brand.sage/amber/critical`, `border`, `divider`, `borderStrong`, `text.s
 ```text
 PHASE:            B4
 START SHA:        e2a628979
-END SHA:           (this commit)
+END SHA:           be54165ce
 FILES:             src/RestControllers/FHIR/FhirMetaDataRestController.php (hardcoded 'Thiqa'
                     fallback -> ProductIdentity::name()); src/RestControllers/Subscriber/
                     OAuth2AuthorizationListener.php (BRAND-134 message -> ProductIdentity::name(),
