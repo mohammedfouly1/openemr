@@ -160,7 +160,7 @@
             "key": "extra_logo_login",
             "value": "0",
             "value_ar": null,
-            "note": "No secondary login logo ships in the Thiqa kit."
+            "note": "No secondary login logo ships in the SkyEagle kit."
         },
         {
             "map_row": 20,
@@ -272,7 +272,7 @@
             "key": "statement_logo",
             "value": "practice_logo.gif",
             "value_ar": null,
-            "note": "Filename unchanged; the file contents are replaced with the Thiqa monochrome navy mark by the asset workstream (brand/logos/legacy/practice_logo.gif)."
+            "note": "Filename unchanged; the file contents are the SkyEagle monochrome navy mark (brand/logos/legacy/practice_logo.gif)."
         },
         {
             "map_row": null,

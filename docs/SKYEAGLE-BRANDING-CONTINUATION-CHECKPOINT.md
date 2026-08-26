@@ -456,6 +456,45 @@ Test`'s own D-3 checklist (which independently confirmed the same 2 PHP files + 
 the only remaining live-app hits — everything else already closed in PRE). Findings and the one
 self-caught mistake are recorded in §8/§9.
 
+### B5 — Arabic identity + RTL — COMPLETE (verification, 2 doc-comment fixes)
+
+```text
+PHASE:            B5
+START SHA:        5806296ce
+END SHA:           (this commit)
+FILES:             branding-profile.json (2 stale "Thiqa" documentation notes corrected to
+                    SkyEagle -- comment-only, does not feed the identity generator, hash
+                    unchanged, confirmed via generate-product-identity.php --check)
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: none
+TESTS:              tests/Tests/Isolated/Modules/SkyEagleBranding/{Config,Asset,Listener,Service}
+                    — 432 tests / 1285 assertions, exit 0
+ROLLBACK METHOD:    git revert this commit (single commit; no dependent commits yet)
+DEPENDENT NEXT PHASES: B6 (translation catalogue migration for B4's 3 deferred xlp keys, and
+                    for the tagline AR delivery path B1-02 already flagged)
+```
+
+Findings, both already correct — verified, not newly implemented:
+
+- **Tagline AR.** `login_tagline_text` value_ar = "من هنا تبدأ رعاية أفضل." and `product_name_ar`
+  / `saas_branding_product_name_ar` = "سكاي إيجل" were already set correctly in B1. Confirmed
+  present and unchanged.
+- **KG-05 interim wordmark disclosure.** `BrandAssetResolver::altTextArabic()` (BRAND-053) already
+  composes an accurate Arabic accessible name ("شعار %s" / "%s - الصفحة الرئيسية" with the real
+  Arabic product name) for every logo slot, rather than either fabricating a claim of a genuine
+  Arabic wordmark graphic or silently falling back to the Latin alt text on an Arabic page. This
+  is covered by `BrandAssetResolverTest.php` and already part of the passing suite. No RTL
+  mirroring rule exists anywhere in `interface/themes/thiqa/*.scss` that would flip the mark's
+  geometry, satisfying KG-05's "never mirror the eagle/beak direction" clause by simple absence.
+  Read as satisfying KG-05 as already implemented; no new UI work identified.
+- **Arabic-script residue sweep.** Grepped for `ثقة` across the module and the durable
+  translation-contracts SQL — the only two hits are historical change-log prose (already-fixed
+  audit notes), not live rendered strings. Clean.
+
+Two stale documentation `note` fields in `branding-profile.json` were corrected in passing
+("...Thiqa kit" / "...Thiqa monochrome navy mark..." -> SkyEagle) — comment-only, confirmed via
+`generate-product-identity.php --check` that the generated artefact hash is unaffected.
+
 ## 13. Live database mutation state
 
 ```text
@@ -466,4 +505,4 @@ Only read-only `SELECT` queries have been run against the live `openemr` databas
 
 ---
 
-*Checkpoint revision 4, updated after B4. Next update: after B5.*
+*Checkpoint revision 5, updated after B5. Next update: after B6.*
