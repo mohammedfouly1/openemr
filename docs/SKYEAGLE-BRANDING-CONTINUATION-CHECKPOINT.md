@@ -791,7 +791,7 @@ metadata, not clinical data.
 ```text
 PHASE:            B13
 START SHA:        41e64d21c
-END SHA:           (this commit)
+END SHA:           0163f0e8f
 FILES:             none
 DB MUTATION:       NONE
 GENERATED ARTEFACTS: none
