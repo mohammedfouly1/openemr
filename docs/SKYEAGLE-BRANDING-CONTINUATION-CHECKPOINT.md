@@ -786,6 +786,48 @@ call site. No PHI or patient-data surface was touched by any Phase-B change; B9/
 reads were limited to `globals`, `facility.name`, `lang_constants` and `modules` — tenant
 metadata, not clinical data.
 
+### B13 — PHPStan (host-local config, RB-24 discipline) — COMPLETE (0 branding-attributable errors)
+
+```text
+PHASE:            B13
+START SHA:        41e64d21c
+END SHA:           (this commit)
+FILES:             none
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: none
+TESTS:              php vendor/bin/phpstan analyze --memory-limit=4G
+                    --configuration=C:/openemr-stack/phpstan-localtmp.neon --no-progress
+                    (RB-24 host-local config, per CLAUDE.local.md §9)
+ROLLBACK METHOD:    n/a
+DEPENDENT NEXT PHASES: B14 (branding-ci + full test matrix)
+```
+
+**Full run, RB-24 compliant.** Grepped the complete output for `Internal error` and
+`Result is incomplete` (the two documented exit-0-while-broken signatures) — zero matches on
+either. The run completed and exited 1 (PHPStan's normal "errors found" exit code, not the
+silent-incomplete failure mode), reporting **908 errors across 61 files**.
+
+**Zero of the 908 are in any file this session touched.** Cross-checked the full 61-file list
+against every file modified across B1-B12 (the `oe-module-skyeagle-branding` module,
+`FhirMetaDataRestController.php`, `OAuth2AuthorizationListener.php`, the error templates, the
+translation contracts, every test file) — no overlap. `src/Common/Branding/ProductIdentity.php`
+appears once (an `openemr.forbiddenErrorLog` finding at line 223) — not a file this session
+edited; its `error_log()` use matches the class's own documented design constraint (it runs
+before the DI container exists, so a PSR-3 logger is unavailable by construction).
+
+**Scale note, for the record.** A prior session's PHPStan run (recorded in `CLAUDE.local.md`,
+2026-08-10) found 80 errors, "all `openemr.forbidDirectSessionWrite`, all in `tests/` files."
+This run's 908 spans 24 distinct rule identifiers across app code, tests and `sites/
+rdy0082restore/*` site files — a materially larger and broader pre-existing-drift surface than
+previously documented, accumulated across the many PRE/Phase-B sessions since. Three
+`ignore.unmatched` findings trace to the same CRLF/DriveFS drift this whole project has fought
+repeatedly (a baseline ignore-pattern written against LF content no longer matches a file that
+picked up CRLF from an unrelated checkout) — a small amplifier, not the primary cause of the
+908 count. **Out of scope to fix here**: none of it is branding-attributable, and fixing 908
+pre-existing errors across auth/session/FHIR internals is not this phase's — or this
+programme's — mandate. Recorded honestly rather than silently passed over, per this session's
+own evidence-first discipline; worth a dedicated pass outside Phase-B.
+
 ## 13. Live database mutation state
 
 ```text
@@ -799,4 +841,4 @@ has been issued against either database at any point in Phase B.
 
 ---
 
-*Checkpoint revision 12, updated after B12. Next update: after B13.*
+*Checkpoint revision 13, updated after B13. Next update: after B14.*
