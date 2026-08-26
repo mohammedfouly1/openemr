@@ -461,7 +461,7 @@ self-caught mistake are recorded in §8/§9.
 ```text
 PHASE:            B5
 START SHA:        5806296ce
-END SHA:           (this commit)
+END SHA:           6455e7911
 FILES:             branding-profile.json (2 stale "Thiqa" documentation notes corrected to
                     SkyEagle -- comment-only, does not feed the identity generator, hash
                     unchanged, confirmed via generate-product-identity.php --check)
