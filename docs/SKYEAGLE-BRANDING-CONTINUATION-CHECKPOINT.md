@@ -861,6 +861,52 @@ suites (`unit-test`, `services-test`, `api-test`, `e2e-test`) remain, per `CLAUD
 unvalidatable on this native Windows setup — no Docker stack — and out of reach for the same
 reason on every phase of this session, not a new limitation B14 introduces.
 
+### B15 — Negative controls on critical guardrails — COMPLETE (4 guardrails proven live)
+
+```text
+PHASE:            B15
+START SHA:        31376a199
+END SHA:           (this commit)
+FILES:             none — two guardrails deliberately broken then reverted in the working tree,
+                    never committed
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: none
+TESTS:              see below — each guardrail's negative-control run plus a confirming
+                    green re-run after revert
+ROLLBACK METHOD:    n/a
+DEPENDENT NEXT PHASES: B16 (push, check CI)
+```
+
+A passing test suite proves nothing about a guardrail that would pass anyway — this phase proves
+each one actually rejects the specific regression it exists to catch, not just that Phase-B's own
+output happens to satisfy it.
+
+**1. `MandatoryCoreStringPatchesIsolatedTest` (B4/B7's regression guard).** Reintroduced the
+literal `"Thiqa 400 Error"` into `templates/error/400.html.twig` (reverting B4's fix by hand) and
+re-ran the test: **both** `testMandatoryPatchIsPresent` and
+`testHardcodedProductNameLiteralCountMatchesInventory` failed immediately, independently, with
+the exact expected messages ("lost the branding patch" / "expected 0... found 1"). Reverted via
+`git checkout --`; re-ran clean (34/34).
+
+**2. `verify-brand-manifest.php` (the release-gate hash check).** Appended a byte to
+`brand/master/brand-symbol.svg` and re-ran: failed immediately, `122/123`, reporting the exact
+mismatched hash and file. Reverted via `git checkout --`; re-ran clean (`123/123`).
+
+**3. `SvgGeometryInvariantTest`/`LogoValidator` (`preserveAspectRatio="none"` rejection) —
+organic proof, not re-staged.** B2's own delivered SVGs originally carried
+`preserveAspectRatio="none"` from the vectorizer; this exact test caught it (16 failures) before
+the fix was applied. Already-recorded evidence the guard is live; artificially re-breaking a now
+correctly-generated file would test the same code path with no new information.
+
+**4. `TokenValidator::DISABLED_STATE_SEPARATION_MINIMUM` (B3's distinguishability floor) —
+organic proof, not re-staged.** The first disabled-fill derivation (25% mix weight) measured
+1.48:1 and was rejected by this exact check before the fix (30%) was applied. Same reasoning as
+#3: already-live evidence, re-staging would be redundant.
+
+Two guardrails (#1, #2) freshly, deliberately broken and confirmed to fail this phase; two (#3,
+#4) already have first-class organic proof from when Phase-B's own work originally violated them.
+All four are load-bearing, not decorative.
+
 ## 13. Live database mutation state
 
 ```text
@@ -874,4 +920,4 @@ has been issued against either database at any point in Phase B.
 
 ---
 
-*Checkpoint revision 14, updated after B14. Next update: after B15.*
+*Checkpoint revision 15, updated after B15. Next update: after B16.*
