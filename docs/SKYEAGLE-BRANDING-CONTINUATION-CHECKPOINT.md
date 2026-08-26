@@ -599,7 +599,7 @@ constants, not residue.
 ```text
 PHASE:            B8
 START SHA:        ebe0377b6
-END SHA:           (this commit)
+END SHA:           a9fac8b0e
 FILES:             SeedDemoCommand.php (B4-04: console title 'Thiqa demo seed' -> 'SkyEagle
                     demo seed')
 DB MUTATION:       NONE
