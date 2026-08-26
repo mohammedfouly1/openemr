@@ -191,7 +191,7 @@ before.
 | B1-01 | `login_tagline_text` (EN) | Clinical confidence, connected care. | Better care begins here. | USER-FACING PRODUCT IDENTITY | Owner instruction 2026-08-26 | Yes | Yes (profile + live tenant) | Source now; tenant sync is B9 | B1 | Pending |
 | B1-02 | `login_tagline_text` (AR, `value_ar` doc field) | ثقة إكلينيكية، رعاية مترابطة. | من هنا تبدأ رعاية أفضل. | USER-FACING PRODUCT IDENTITY | Owner instruction 2026-08-26 | Yes (via translation catalogue) | Yes | Source now; tenant sync is B9 | B1/B6 | Pending |
 | B1-03 | `main_menu_logo_title` `value_ar` doc field | نظام ثقة للمعلومات الصحية | (to be derived — SkyEagle Arabic equivalent) | TRANSLATION VALUE / DOCUMENTATION | Discovered this session | Documentation-only in this file | No | No | B1 | Pending |
-| B2-01 | `brand/master/*.svg` (8 files) | Thiqa-era artwork, Thiqa navy/coral | Recolored to KG-03 (`#0B376E`/`#1E5A96`/`#0B4E91`), same geometry | USER-FACING PRODUCT IDENTITY (asset) | KG-03 | Yes (feeds all derived logo variants) | No | No | B2 | Pending |
+| B2-01 | `brand/master/*.svg` (8 files) + all live-deployed logo/favicon PNG/GIF/ICO slots | Thiqa-era artwork, Thiqa navy/coral | New verified SkyEagle vector artwork (deep navy `rgb(9,58,116)`/tonal blue `rgb(21,84,150)`), Owner-redirected away from recolor-in-place | USER-FACING PRODUCT IDENTITY (asset) | Owner instruction 2026-08-26 (supersedes KG-03 recolor plan — see §9) + `OpenEMRWebSite/docs/Assets/Entity.md` | Yes (feeds all derived logo variants) | No | No | B2 | COMPLETE |
 | B3-01 | `brand/tokens/thiqa-tokens.json` | Thiqa 43-key palette | SkyEagle 43-key palette per provisional plan (revalidated) | USER-FACING PRODUCT IDENTITY (tokens); filename itself stays (KG-06) | PRE §12 provisional plan + KG-02/03/04/08 | Yes | No | No | B3 | Pending |
 | B7-VERIFY | Module namespace/directory | `SkyEagleBranding` / `oe-module-skyeagle-branding` | (no change expected) | TECHNICAL MODULE IDENTITY | KG-01 (already executed in PRE) | — | — | — | B7 | To verify, not re-execute |
 | B9-01 | `sites/default` tenant globals | Stale (old tagline, old URLs) | Synced to current profile | DATABASE VALUE | branding-profile.json | Yes | Yes — live write | GATE-4 | B9 | PLAN ONLY |
@@ -202,7 +202,53 @@ More rows are added as each phase's own reconnaissance runs.
 
 ## 9. Out-of-scope / observation register
 
-*(empty so far — populated as discovered)*
+**B2 pivot, 2026-08-26 — recolor-in-place abandoned, replaced with new verified artwork.**
+Original B2 plan (per KG-03) was to recolor the existing Thiqa `brand/master/*.svg` silhouettes
+in place, preserving their geometry. Mid-phase, resolving KG-03's three named colour roles onto
+the master SVG's actual two shapes required a clarifying question; the Owner's answer changed the
+approach entirely: **no old visual asset may be reused at all — logo and every other visual must
+be replaced with new SkyEagle artwork**, sourced first from
+`G:\My Drive\OpenEMRWebSite\docs\Assets` (a separate, already-verified asset delivery for the
+`skyeagle.uk` website project), falling back to the Owner's Recraft.ai API key only for assets
+genuinely missing there. That folder's own `DELIVERY.md`/`assets.md` records that generative AI
+was tested and **rejected** for anything carrying the trademark (two documented failed attempts:
+text-to-image and image-to-image both corrupted the beak/feathers/E-bars/wordmark) — the only
+approved method is Recraft's **vectorize** endpoint against the real approved master raster
+(`Intial Logo.png`), i.e. tracing, not generating. That delivery was found to be complete for
+every asset OpenEMR needed, so the Recraft API key was never invoked this phase — it stayed
+unused, and is still not written anywhere in the repository.
+
+**Symbol/wordmark geometry, confirmed against `Entity.md`:** S+E monogram (flowing S evoking an
+eagle, beak-like upper-right termination, feather shapes lower-left, E as three bold parallel
+bars), two-tone SkyEagle blue (`rgb(9,58,116)` dominant / `rgb(21,84,150)` tonal, used on feather
+planes) — matches Entity.md's own symbol description verbatim. This is a materially different
+palette from KG-03's `#0B376E`/`#1E5A96`/`#0B4E91` three-role split; KG-03 is treated as
+superseded for the mark itself by this newer, Owner-sourced, already-verified artwork. Whether
+KG-03's values still govern the *non-logo* UI token palette (buttons, links, etc.) is a B3
+question, not resolved here.
+
+**Deliberately deferred, not silently skipped — catalog-only brand-kit completeness gap.**
+`install-assets.php`'s mapping table (BRAND-014..033 + dark-variant rows) defines the actual
+live-deployed asset surface; every file it references was replaced this phase. Not wired into any
+live UI slot (grep-confirmed) and left on old Thiqa artwork for now: `brand/logos/compact/*`,
+`brand/logos/symbol/*` (black/white/cream variants), `brand/logos/monochrome/brand-logo-black.svg`
+and its cream-background sibling, plus the non-logo evidence trees `brand/colors/`, `brand/email/`,
+`brand/guidelines/`, `brand/previews/`, `brand/qa/`, `brand/rtl/`, `brand/smart/`. These still carry
+Thiqa colours/geometry and their `asset-manifest.json`/`SHA256SUMS` rows are untouched. A follow-up
+pass should either replace them the same way or formally retire the ones (cream-background
+variants especially) that have no equivalent in the new Owner-approved kit.
+
+**`brand-logo-compact.svg` design choice.** Not wired into any live slot. Rather than fabricate a
+stacked (symbol-over-wordmark) composition not present in the verified source set — which would
+require guessing at spacing/proportions no one has approved — it was set to the symbol-only mark,
+a standard "compact = mark without wordmark" brand-kit convention. Documented here as a visible
+decision per KG-04's "surface material new visible decisions before executing."
+
+**Vectorizer artifact fixed, not inherited.** Every source SVG from the website delivery carried
+`preserveAspectRatio="none"`, which `SvgGeometryInvariantTest`/`LogoValidator` correctly reject
+(it would let a renderer stretch the mark non-uniformly). Replaced with `xMidYMid meet` — an
+attribute-only change, zero effect on path geometry — across all 8 master SVGs plus the two files
+copied from them (`brand/favicon/favicon.svg`, `brand/logos/monochrome/brand-logo-white.svg`).
 
 ## 10. Owner Decision Gates encountered
 
@@ -249,6 +295,47 @@ assertions (test fixture proving generic rewrite mechanics, not the shipped iden
 message); `docs/branding-production/14-string-replacement-map.md` (historical Thiqa-era planning
 document); the live `default` tenant DB; `facility.name` = "Thiqa Demo Eye Clinic" (tenant data).
 
+### B2 — Visual identity replacement (logo, symbol, favicon) — COMPLETE
+
+```text
+PHASE:            B2
+START SHA:        e6549eee4
+END SHA:           (this commit)
+FILES:             8x brand/master/*.svg (recolored/composed from verified SkyEagle vector
+                    source, not the old Thiqa geometry — see §9 for the pivot);
+                    brand/favicon/{favicon.ico,favicon.svg,favicon-16x16.png,favicon-32x32.png,
+                    favicon-48x48.png}; brand/logos/login/*.png (4); brand/logos/portal/*.png (3);
+                    brand/logos/legacy/* (9, incl. 2 GIF); brand/logos/monochrome/brand-logo-white.svg;
+                    brand/manifests/{SHA256SUMS,asset-manifest.json,asset-manifest.csv}
+                    (30 source-class + 21 deployed-class rows re-hashed);
+                    tests/.../LogoValidatorTest.php (2 certified-dimension fixtures updated to the
+                    new assets' real intrinsic size — not a weakened assertion, see §9)
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: 21 deployed-slot files regenerated via `php tools/branding/install-assets.php`
+                    from the new brand/ sources (public/images/logos/**, public/images/{login-logo,
+                    logo-full-con,menu-logo,favicon,favicon-32x32}.*, sites/default/images/*, and
+                    the module's 3 dark-variant marks under
+                    interface/modules/custom_modules/oe-module-skyeagle-branding/public/logos/dark/)
+TESTS:              composer branding-ci — branding-tokens-check PASS, branding-identity-check PASS,
+                    verify-brand-manifest.php (123/123 source + 21/21 deployed + 11/11 font-equality),
+                    isolated suite 1674 tests / 8412 assertions, exit 0
+ROLLBACK METHOD:    git revert this commit (single commit; no dependent commits yet)
+DEPENDENT NEXT PHASES: B3 (color tokens — must resolve whether KG-03's 3-role palette still governs
+                    non-logo UI tokens now that the mark itself uses a different verified 2-tone
+                    palette), B9 (existing-tenant asset sync, gated)
+```
+
+**Provenance discipline applied.** Every new pixel/vector byte in this phase traces to one of: (a)
+`derived/{symbol,symbol-transparent}.svg` and `derived/lockups/skyeagle-logo-horizontal-{transparent,
+dark}.svg` in the OpenEMRWebSite delivery — themselves produced by Recraft's vectorize endpoint
+against the real approved master raster, per that project's own tested-and-documented no-AI-on-
+trademark rule; (b) deterministic recolor of those files' `fill=` attributes only (`brand-symbol-white.svg`,
+`brand-symbol-black.svg`, `brand-logo-black.svg` — geometry/path data untouched, verified by XML
+validation + a grep for zero remaining Thiqa hex values); (c) deterministic contain-fit/resize via PHP
+GD from the delivery's own square icon source (`derived/icon-512.png`) for legacy raster slots with no
+size-matched delivered file (`menu-logo.png`, the 86x43 legacy trio, the two GIFs). No text-to-image or
+image-to-image generation was used anywhere in this phase; the Owner's Recraft API key was not invoked.
+
 ## 13. Live database mutation state
 
 ```text
@@ -259,4 +346,4 @@ Only read-only `SELECT` queries have been run against the live `openemr` databas
 
 ---
 
-*Checkpoint revision 1, written before any Phase-B implementation commit. Next update: after B1.*
+*Checkpoint revision 2, updated after B2. Next update: after B3.*

@@ -600,7 +600,7 @@ final class LogoValidatorTest extends TestCase
             'certified svg monochrome white' => [
                 LogoSlot::CoreMenuPrimary,
                 'brand/logos/monochrome/brand-logo-white.svg',
-                '2528x1696',
+                '3142x900',
                 'logo.svg',
             ],
             'certified svg on a cream background' => [
@@ -612,7 +612,7 @@ final class LogoValidatorTest extends TestCase
             'certified favicon svg' => [
                 LogoSlot::CoreMenuPrimary,
                 'brand/favicon/favicon.svg',
-                '2048x2048',
+                '2158x1756',
                 'logo.svg',
             ],
             'legacy gif' => [
