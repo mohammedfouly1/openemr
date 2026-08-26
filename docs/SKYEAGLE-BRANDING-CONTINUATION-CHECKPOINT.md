@@ -765,7 +765,7 @@ session had not queried before B11 — added to §8 now for completeness.
 ```text
 PHASE:            B12
 START SHA:        b925d5b49
-END SHA:           (this commit)
+END SHA:           de020fec5
 FILES:             none
 DB MUTATION:       NONE
 GENERATED ARTEFACTS: none
