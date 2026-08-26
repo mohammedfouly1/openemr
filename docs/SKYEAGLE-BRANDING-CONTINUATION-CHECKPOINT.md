@@ -682,6 +682,29 @@ guarded by any command this module ships — whoever executes B9 should decide w
 through a similar Console command or a direct, reviewed `UPDATE facility SET name = ... WHERE
 id = 3` on each database.
 
+### B10 — Reports / print / PDF / email — COMPLETE (verification, no findings)
+
+```text
+PHASE:            B10
+START SHA:        9b614e72e
+END SHA:           (this commit)
+FILES:             none
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: none
+TESTS:              n/a (no code changed)
+ROLLBACK METHOD:    n/a
+DEPENDENT NEXT PHASES: B11 (complete residue scan)
+```
+
+Targeted sweep of `interface/reports/`, `interface/forms/`, `library/classes/Pdf.php`,
+`library/statement.inc.php`, and email-template paths found no residue. This domain sits entirely
+within the directories B4's comprehensive sweep already covered
+(`interface/`, `library/`, `src/`, `templates/`); nothing new surfaced. The print-specific brand
+assets (`brand/logos/print/*`) remain the deliberately-deferred catalog-only files noted in B2 —
+confirmed here that `install-assets.php`'s mapping table never references that directory, so
+nothing live actually reads it; the asset that IS live for print/statement use
+(`brand/logos/legacy/practice_logo.gif`) was already replaced with real SkyEagle content in B2.
+
 ## 13. Live database mutation state
 
 ```text
@@ -694,4 +717,4 @@ has been issued against either database at any point in Phase B.
 
 ---
 
-*Checkpoint revision 9, updated after B9. Next update: after B10.*
+*Checkpoint revision 10, updated after B10. Next update: after B11.*
