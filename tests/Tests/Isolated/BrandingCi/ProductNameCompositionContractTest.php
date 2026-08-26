@@ -169,6 +169,13 @@ final class ProductNameCompositionContractTest extends TestCase
      * `TwigContainer` builds its environment with `autoescape => false`, so an unescaped `{{ }}`
      * emits raw output. The composed value carries a tenant-supplied product name, so every call
      * site has to name its own escaper.
+     *
+     * `|json_encode` joined the allowlist alongside `|text`/`|attr` (BRAND-101, SkyEagle phase
+     * B4): the error templates compose a JSON string value (`templates/error/{400,404}.json.twig`),
+     * and JSON-encoding a string properly escapes it for that sink exactly as `|text` does for
+     * HTML body copy and `|attr` for an attribute — it is a third correct escaper, not a gap in
+     * this check. `|text`/`|attr` were the only two options because no prior call site composed
+     * into a JSON sink.
      */
     public function testTheCompositionFilterIsNeverEmittedUnescaped(): void
     {
@@ -179,7 +186,7 @@ final class ProductNameCompositionContractTest extends TestCase
             foreach ($matches[1] as $following) {
                 self::assertContains(
                     $following,
-                    ['|text', '|attr'],
+                    ['|text', '|attr', '|json_encode'],
                     substr($file, strlen($this->root()) + 1) . ' emits |xlp without an escaper.',
                 );
             }

@@ -198,6 +198,11 @@ before.
 | B9-02 | `facility.name` (id 3) | Thiqa Demo Eye Clinic | International Healthcare Center | TENANT DATA | Owner instruction 2026-08-26 | Yes | Yes — live write | GATE-4 | B9 | PLAN ONLY |
 | B9-03 | `sites/rdy0082restore` tenant | Unknown, not yet inspected | TBD | — | — | Yes | Yes — live write | GATE-4 | B9 | Not yet inspected |
 
+| B4-01 | `src/RestControllers/FHIR/FhirMetaDataRestController.php` `openemr_name` fallback | literal `'Thiqa'` | `ProductIdentity::name()` | USER-FACING (FHIR CapabilityStatement) | Found by B4 residue sweep | Yes | No | No | B4 | COMPLETE |
+| B4-02 | `OAuth2AuthorizationListener.php` API-disabled exception (BRAND-134) | literal `"Thiqa Error: API is disabled"` | `ProductIdentity::name() . " Error: ..."` | USER-FACING (OAuth2 error response) | Found by B4 residue sweep; mandatory-patch test confirms BRAND-134 is deliberate | Yes | No | No | B4 | COMPLETE |
+| B4-03 | 5 error-page templates (BRAND-101): `general_http_error`, `400`/`404` `.html.twig`/`.json.twig` | literal `"Thiqa ... Error"` | `"%s ... Error"|xlp|text` (HTML) / `|xlp|json_encode` (JSON) | USER-FACING (every 400/404/general error page) | Found by B4 residue sweep | Yes | No | No | B4 | COMPLETE — translation contract deferred to B6 (see §9) |
+| B4-04 | `SeedDemoCommand.php` console title | literal `'Thiqa demo seed — profile %s%s'` | TBD | OPERATOR-FACING (CLI console output) | Found by B4 residue sweep | Yes | No | No | B8 | Deferred — CLI-specific, in B8's explicit scope |
+
 More rows are added as each phase's own reconnaissance runs.
 
 ## 9. Out-of-scope / observation register
@@ -249,6 +254,38 @@ decision per KG-04's "surface material new visible decisions before executing."
 (it would let a renderer stretch the mark non-uniformly). Replaced with `xMidYMid meet` — an
 attribute-only change, zero effect on path geometry — across all 8 master SVGs plus the two files
 copied from them (`brand/favicon/favicon.svg`, `brand/logos/monochrome/brand-logo-white.svg`).
+
+**B4: three new `xlp`-composed keys need a B6 translation contract.** The 5 error-page templates
+(B4-03) now compose `"%s Error"`, `"%s 400 Error"`, `"%s 404 Error"` through the established
+`|xlp` mechanism (same RTL-safe pattern as `setup.php`/`sql_patch.php`/the OAuth2 templates),
+replacing the old literal `"Thiqa ... Error"` strings. Unlike those other conversions, these three
+keys are **not yet** registered in `ProductNameCompositionContractTest::CONVERTED_SITES` and have
+**no backing translation contract** in `contrib/util/language_translations/contracts/` — both are
+deliberately deferred to B6 ("Translation catalogue migration"), matching the exact precedent
+already set by B1-02 (`login_tagline_text` AR: "Source now; tenant sync is B9" — same English-now,
+migration-later split, just for a different downstream mechanism). They render correctly in
+English today (the `|xlp` filter degrades gracefully with no contract, per its own design — this
+was independently confirmed by the full isolated suite passing 1674/1674 after the change), they
+just are not yet translatable. Not a silent gap: `testNoTemplateJuxtaposesTheProductNameWithA
+TranslatedPhrase` and `testNoRendererPassesARawProductNameIntoTemplateScope` already cover them
+generically (they scan the whole template tree, not just `CONVERTED_SITES`), so the only missing
+piece is contract-backed translatability, which is B6's job by design.
+
+**B4: extended the `|xlp` escaper allowlist to include `json_encode`.** `ProductNameComposition
+ContractTest::testTheCompositionFilterIsNeverEmittedUnescaped` only recognised `|text`/`|attr`
+because no prior call site composed a product name into a JSON sink. The two `.json.twig` error
+templates are the first to do so; `|json_encode` is exactly as valid an escaper for that sink as
+`|text` is for HTML, so the allowlist was extended rather than the templates forced into an
+HTML-escaper that would corrupt the JSON. Documented in the test's own docblock.
+
+**B4: BRAND-134 conflict caught by the regression-guard test, not silently shipped.** My first
+attempt at the OAuth2 "API is disabled" message matched it to a *different* line in the same file
+("OpenEMR Error: ..." for an internal 500) by pattern-matching instead of checking history — wrong,
+and `MandatoryCoreStringPatchesIsolatedTest`'s BRAND-134 row caught it immediately (mustContain
+still expected the pre-fix literal). The correct fix routes through `ProductIdentity::name()`,
+matching the file's own sibling `interface/globals.php` pre-bootstrap pattern; the guard-test row
+itself is updated to expect that mechanism instead of either literal. Recorded here because it is
+exactly the kind of self-correction the checkpoint's evidence-first discipline exists to surface.
 
 ## 10. Owner Decision Gates encountered
 
@@ -389,6 +426,36 @@ info), `brand.sage/amber/critical`, `border`, `divider`, `borderStrong`, `text.s
 `text.disabled`, `text.inverse`, `surface`/`surfaceInput`/`surfaceInputOnRaised`/`surfaceRaised`
 — is untouched, preserved exactly as validated.
 
+### B4 — User-facing English identity residue sweep — COMPLETE
+
+```text
+PHASE:            B4
+START SHA:        e2a628979
+END SHA:           (this commit)
+FILES:             src/RestControllers/FHIR/FhirMetaDataRestController.php (hardcoded 'Thiqa'
+                    fallback -> ProductIdentity::name()); src/RestControllers/Subscriber/
+                    OAuth2AuthorizationListener.php (BRAND-134 message -> ProductIdentity::name(),
+                    with an import added); 5 error-page templates under templates/error/
+                    (BRAND-101: literal "Thiqa ... Error" -> "%s ... Error"|xlp composed);
+                    2 regression-guard test files updated to match (MandatoryCoreStringPatches
+                    IsolatedTest counts/mechanisms, ProductNameCompositionContractTest escaper
+                    allowlist)
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: none
+TESTS:              composer branding-ci — tokens-check PASS, identity-check PASS,
+                    verify-brand-manifest.php 123/123 + 21/21 + 11/11, isolated suite 1674
+                    tests / 8424 assertions, exit 0
+ROLLBACK METHOD:    git revert this commit (single commit; no dependent commits yet)
+DEPENDENT NEXT PHASES: B6 (translation contracts for the 3 new xlp keys, see §9); B8 (the
+                    SeedDemoCommand.php CLI-title finding, B4-04, deferred there by scope)
+```
+
+Methodology: `interface/`, `library/`, `src/`, `templates/`, `portal/`, `public/` swept
+case-insensitively for `\bTHIQA\b`, cross-checked against `MandatoryCoreStringPatchesIsolated
+Test`'s own D-3 checklist (which independently confirmed the same 2 PHP files + 5 templates were
+the only remaining live-app hits — everything else already closed in PRE). Findings and the one
+self-caught mistake are recorded in §8/§9.
+
 ## 13. Live database mutation state
 
 ```text
@@ -399,4 +466,4 @@ Only read-only `SELECT` queries have been run against the live `openemr` databas
 
 ---
 
-*Checkpoint revision 3, updated after B3. Next update: after B4.*
+*Checkpoint revision 4, updated after B4. Next update: after B5.*

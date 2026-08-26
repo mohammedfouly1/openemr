@@ -5,6 +5,7 @@ namespace OpenEMR\RestControllers\Subscriber;
 // TODO: Would it be better to call these route guards?
 use League\OAuth2\Server\Exception\OAuthServerException;
 use OpenEMR\BC\ServiceContainer;
+use OpenEMR\Common\Branding\ProductIdentity;
 use OpenEMR\Common\Auth\OpenIDConnect\Repositories\ClaimRepository;
 use OpenEMR\Common\Csrf\CsrfUtils;
 use OpenEMR\Common\Http\HttpRestRequest;
@@ -105,7 +106,7 @@ class OAuth2AuthorizationListener implements EventSubscriberInterface
         ) {
             $logger->debug("api disabled exiting call");
             $session->invalidate();
-            throw new NotFoundHttpException("Thiqa Error: API is disabled");
+            throw new NotFoundHttpException(ProductIdentity::name() . " Error: API is disabled");
         }
         // site is already valid from previous listener
 

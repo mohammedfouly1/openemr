@@ -142,14 +142,23 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
             // link follows the configured documentation URL, so no literal remains. Zero is the
             // stronger assertion: it fails if anyone hardcodes a name here again.
             'zend installer view' => [self::ZEND_INSTALLER_VIEW, 0],
-            'FHIR capability statement' => ['src/RestControllers/FHIR/FhirMetaDataRestController.php', 1],
-            'OAuth2 API disabled message' => ['src/RestControllers/Subscriber/OAuth2AuthorizationListener.php', 1],
+            // Was 1. Now resolves through ProductIdentity, so no literal remains. Zero is the
+            // stronger assertion, as for interface/globals.php above.
+            'FHIR capability statement' => ['src/RestControllers/FHIR/FhirMetaDataRestController.php', 0],
+            // Was 1 (BRAND-134). Now resolves through ProductIdentity like the other
+            // pre-bootstrap/error surfaces, so no literal remains. Zero is the stronger
+            // assertion.
+            'OAuth2 API disabled message' => ['src/RestControllers/Subscriber/OAuth2AuthorizationListener.php', 0],
             'product registration service (must stay clean)' => ['src/Services/ProductRegistrationService.php', 0],
-            'error page 400 title' => ['templates/error/400.html.twig', 1],
-            'error page 404 title' => ['templates/error/404.html.twig', 1],
-            'error page 400 JSON location' => ['templates/error/400.json.twig', 1],
-            'error page 404 JSON location' => ['templates/error/404.json.twig', 1],
-            'general HTTP error page title' => ['templates/error/general_http_error.html.twig', 1],
+            // Were 1 each (BRAND-101). The five error surfaces below now compose the product
+            // name through `xlp()` (matching the RTL-safe pattern used elsewhere in this file --
+            // see setup.php/sql_patch.php/ippf_upgrade.php), so no literal remains in any of
+            // them. Zero is the stronger assertion.
+            'error page 400 title' => ['templates/error/400.html.twig', 0],
+            'error page 404 title' => ['templates/error/404.html.twig', 0],
+            'error page 400 JSON location' => ['templates/error/400.json.twig', 0],
+            'error page 404 JSON location' => ['templates/error/404.json.twig', 0],
+            'general HTTP error page title' => ['templates/error/general_http_error.html.twig', 0],
             // The six former compound-string consumers below are asserted at ZERO deliberately.
             //
             // BRAND-127/128/129 carry the action SET-TRANSLATION in docs/rebranding.md §16.2
@@ -222,10 +231,16 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
                 ['Remote product registration is disabled'],
                 ['reg.open-emr.org', 'reg.skyeagle.uk'],
             ],
+            // ProductIdentity now resolves the name here too, matching interface/globals.php's
+            // pre-bootstrap pattern. mustNotContain forbids BOTH the tenant literal this test
+            // used to require and the unbranded upstream literal -- either is a regression now.
             'OAuth2 API disabled message (BRAND-134)' => [
                 'src/RestControllers/Subscriber/OAuth2AuthorizationListener.php',
-                ['"Thiqa Error: API is disabled"'],
-                ['"OpenEMR Error: API is disabled"'],
+                [
+                    'use OpenEMR\\Common\\Branding\\ProductIdentity;',
+                    'ProductIdentity::name() . " Error: API is disabled"',
+                ],
+                ['"Thiqa Error: API is disabled"', '"OpenEMR Error: API is disabled"'],
             ],
             'pre-bootstrap fatal messages (BRAND-135, BRAND-136)' => [
                 'interface/globals.php',
@@ -263,30 +278,34 @@ final class MandatoryCoreStringPatchesIsolatedTest extends TestCase
                     'modules for Thiqa developed',
                 ],
             ],
+            // All five error surfaces now compose the product name through `xlp()` -- the same
+            // RTL-safe %s-placeholder mechanism setup.php/sql_patch.php/ippf_upgrade.php already
+            // use -- rather than a hardcoded literal. mustNotContain forbids both the tenant
+            // literal this test used to require (BRAND-101) and the unbranded upstream literal.
             'error page 400 title (BRAND-101)' => [
                 'templates/error/400.html.twig',
-                ['"Thiqa 400 Error"|xlt'],
-                ['"OpenEMR 400 Error"'],
+                ['"%s 400 Error"|xlp|text'],
+                ['"Thiqa 400 Error"', '"OpenEMR 400 Error"'],
             ],
             'error page 404 title (BRAND-101)' => [
                 'templates/error/404.html.twig',
-                ['"Thiqa 404 Error"|xlt'],
-                ['"OpenEMR 404 Error"'],
+                ['"%s 404 Error"|xlp|text'],
+                ['"Thiqa 404 Error"', '"OpenEMR 404 Error"'],
             ],
             'error page 400 JSON location (BRAND-101)' => [
                 'templates/error/400.json.twig',
-                ['"Thiqa 400 Error"|xl|json_encode'],
-                ['"OpenEMR 400 Error"'],
+                ['"%s 400 Error"|xlp|json_encode'],
+                ['"Thiqa 400 Error"', '"OpenEMR 400 Error"'],
             ],
             'error page 404 JSON location (BRAND-101)' => [
                 'templates/error/404.json.twig',
-                ['"Thiqa 404 Error"|xl|json_encode'],
-                ['"OpenEMR 404 Error"'],
+                ['"%s 404 Error"|xlp|json_encode'],
+                ['"Thiqa 404 Error"', '"OpenEMR 404 Error"'],
             ],
             'general HTTP error page title (BRAND-101)' => [
                 'templates/error/general_http_error.html.twig',
-                ['"Thiqa Error"|xlt'],
-                ['"OpenEMR Error"'],
+                ['"%s Error"|xlp|text'],
+                ['"Thiqa Error"', '"OpenEMR Error"'],
             ],
             // BRAND-127/128/129 are NOT listed here. The OAuth views use tenant-provided
             // applicationTitle plus translated action phrases, while the Zend views use

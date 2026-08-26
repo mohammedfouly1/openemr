@@ -12,6 +12,7 @@
 namespace OpenEMR\RestControllers\FHIR;
 
 use OpenApi\Attributes as OA;
+use OpenEMR\Common\Branding\ProductIdentity;
 use OpenEMR\Core\OEGlobalsBag;
 use OpenEMR\FHIR\Config\ServerConfig;
 use OpenEMR\FHIR\R4\FHIRDomainResource\FHIRCapabilityStatement;
@@ -71,8 +72,9 @@ class FhirMetaDataRestController
         $capabilityStatement->addFormat(new FHIRCode("application/json"));
         $resturl = new FHIRUrl();
         $resturl->setValue($this->config->getFhirUrl());
-        // Product name is operator-configurable via the openemr_name global; the literal is only a fallback.
-        $productName = $this->globalsBag->getString('openemr_name') ?: 'Thiqa';
+        // Product name is operator-configurable via the openemr_name global; ProductIdentity
+        // (the branding artefact, not a literal) supplies the fallback when it is unset.
+        $productName = $this->globalsBag->getString('openemr_name') ?: ProductIdentity::name();
         $implementation = new FHIRCapabilityStatementImplementation();
         $implementation->setUrl($resturl);
         $implementation->setDescription(new FHIRString($productName . " FHIR API"));
