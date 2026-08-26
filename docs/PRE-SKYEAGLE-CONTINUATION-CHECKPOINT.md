@@ -3624,3 +3624,71 @@ Owner accepts a PR-based integration where GitHub's own merge UI surfaces the sa
 resolution there instead of locally.
 
 ---
+
+## 28. MASTER MERGED INTO FEATURE — RESOLVED, VALIDATED, PUSHED (orchestrating session, 2026-08-26)
+
+Following the read-only forensics report (§27's conflict analysis, delivered as a standalone report
+rather than committed here), the Owner ruled: **do not sync with real `upstream/master`** (546 commits,
+explicitly out of scope for this cycle — SkyEagle stays on the OpenEMR 8.2.0/rel-820 line) and
+**Strategy 2** — merge this fork's own `master` (17 commits since the fork point) into
+`feat/thiqa-branding-foundation`, resolve and validate here, only merge back into `master` after that
+validation passes. No rebase, no cherry-pick, no history rewrite.
+
+**Merge commit:** `691fc2c2f` (parents `f69743d32` + `631f2b38c`), pushed to
+`origin/feat/thiqa-branding-foundation`.
+
+### 28.1 The three git-flagged conflicts
+
+| Conflict | Resolution | Basis |
+|---|---|---|
+| `composer.lock` | Kept feature's version | `git patch-id` proved master's only change (removing `twilio/sdk`) is byte-identical to a cherry-pick already on feature (`406bb7015`); feature's package set is a strict superset (adds `symfony/mime`/`symfony/polyfill-intl-idn`, dev-only). Nothing from master was lost. |
+| `docker/release/upgrade/fsupgrade-12.sh` (add/add) | Kept feature's version | Both sides created a byte-identical file at branch-cut (`patch-id` confirmed); only feature's copy later received `a2c7e3792`, a real upstream backport fixing a confirmed bug ("every fresh 8.2.0 install upgrading from an earlier version replays the entire chain from 2.9.0"). Master's copy is simply stale. |
+| `docker/production/docker-compose.yml` | Feature's `openemr:8.2.0` pin **and** master's newer mariadb digest | Per Owner instruction — release-line philosophy preserved (no floating `latest`), safe infrastructure improvement independently taken. Only the `openemr` image line was a real 3-way conflict; the mariadb line auto-merged cleanly on its own. |
+
+### 28.2 A fourth issue, found beyond the three known conflicts, not flagged by Git
+
+The same master branch-cut commit (`93ccd10db`) that created `fsupgrade-12.sh` also advanced master's
+own version identity to 8.3.0 (standard OpenEMR practice — "next-dev advance" after cutting a release
+branch). That merged **cleanly** — feature never touched those lines, so Git saw no conflict — but
+silently violated the Owner's explicit "target remains OpenEMR 8.2.0/rel-820-based, do not upgrade the
+product base" instruction. Caught by inspecting the full merge diff rather than trusting a clean
+`git merge` exit status. Reverted to feature's original 8.2.0 values in `version.php`,
+`src/RestControllers/OpenApi/OpenApiDefinitions.php`, `swagger/openemr-api.yaml` (confirmed zero net
+diff from pre-merge feature HEAD); removed the inert `sql/8_2_0-to-8_3_0_upgrade.sql` scaffold master
+created for its own next-dev cycle. Kept `.github/release-targets.yml`'s change — it correctly
+registers `rel-820` in the release-targets registry and only bumps master's own row, not what this
+branch itself targets.
+
+### 28.3 Validation, and two more pre-existing (not merge-caused) issues found and fixed
+
+`composer branding-ci` (the real, unmodified, widened gate): tokens-check, identity-check, brand
+manifest verifier, and the full 1674-test isolated selection — all green, exit 0, on the merged and
+resolved state.
+
+Getting there surfaced two further issues, **both proven via `git hash-object`/blob comparison to
+predate this merge** — present on feature's own HEAD before merging began, not introduced by it:
+
+- **Six deployed branding artefacts carried CRLF line endings** (4 theme SCSS, 2 SMART Twig templates)
+  while HEAD and the generator both use LF — a host artifact of this session's own extensive git
+  checkout operations on this Windows/DriveFS environment, colliding with `DeployedArtefacts::verify()`'s
+  byte-exact (SCSS) and payload-exact (Twig, after correctly stripping the deliberately-preserved
+  Q38/CR-17 explanatory comment header — confirmed by reading that class's own source) comparisons.
+  Normalized to LF in place; zero content change beyond line-ending representation.
+- **`brand/manifests/SHA256SUMS` carried a copy/paste error** for the dark login logo's
+  primary+secondary entries — both recorded `baa9628046e04fa8...`, which is actually
+  `brand-logo-white.svg`'s monochrome-master hash. Traced to predate even the SkyEagle module rename
+  (same wrong value found under the old `oe-module-thiqa-branding` path in `48f09c523`'s parent
+  commit). The deployed SVG content itself was never corrupted — traces cleanly back to its original
+  `a12e63471` commit. Re-issued both entries to the file's actual hash (`4dbe36c1...`), per the
+  verifier's own "re-issue, never delete" convention, with the reasoning recorded inline as a comment.
+
+Full `php -l` sweep of every touched PHP file: clean. `composer.lock`/`composer.json` JSON validity:
+clean. `fsupgrade-12.sh`: `bash -n` clean.
+
+### 28.4 What remains
+
+**Not merged back into `master`** — the Owner's instruction requires this validation to pass first
+(now done) and review of this result before that step. No PR opened. Branch pushed to origin, ready
+for the Owner's review of `691fc2c2f` before authorizing the final merge-back.
+
+---
