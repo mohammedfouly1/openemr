@@ -3335,3 +3335,131 @@ remote (a shared-state action, not taken without asking), and 6 is a large re-re
 that should run only after 3 and 5 are settled, not before.
 
 ---
+
+## 26. PRE-26 — RECONCILIATION AFTER SCAN-4 AND PHPSTAN CLOSURE (orchestrating session, 2026-08-26)
+
+The Owner authorized the push (§25.3 item 5, done — HEAD `ae9c3317e` pushed to
+`origin/feat/thiqa-branding-foundation`) and asked for this reconciliation, with ADR-BRAND-006
+explicitly left for their own ruling rather than acted on. This section reconciles the 40 Scan-4
+findings §22.5 left open the same way §21 reconciled the original 34 — one final state per finding,
+nothing merged away, no finding closed because a test passes.
+
+### 26.1 Scan-4 HIGH — three findings, three closed
+
+| ID | Finding | Final state | Evidence |
+|---|---|---|---|
+| S4E-01 | Second live site invisible to the rename tooling | **FIXED — VERIFIED** | §23.1; live-escalation half closed by §24.2 |
+| S4E-02 | Repo-root pages printing a hardcoded brand name to anonymous visitors | **FIXED — VERIFIED** | §23.2, §23.3 |
+| S4E-03 | "The next rename is one JSON edit" is false as written | **PARTIALLY CONFIRMED, NOT FULLY CLOSED — see below** | §25.2 |
+
+**S4E-03 needs an honest correction rather than a clean checkmark.** §22.5 filed it under "worked in
+the session recorded at §23," but no subsection of §23 carries its ID or disposition explicitly —
+this reconciliation is the first place it is actually addressed. The SkyEagle rename that happened
+between the two blockers in this section being dispatched (§25.2) is direct empirical evidence on
+the finding's literal claim, and it cuts both ways: the **product-identity** half of a rename
+genuinely is now one JSON-shaped step (`af36dbef3`: six profile values, `apply-profile` per tenant,
+zero test edits) — but that rename explicitly did **not** touch the **module-identity** half, which
+required a separate, real refactor commit (`48f09c523`, `ThiqaBranding` → `SkyEagleBranding` across
+719 references and three sibling token classes). So the finding's claim is **still true** for
+module identity and **now refuted** for product identity — it was never one undifferentiated claim,
+and no prior session's text drew that line. Recorded here as the finding's actual disposition;
+carrying a name change again would still mean two separate steps, not one.
+
+### 26.2 Scan-4 guard-integrity and extractor defects — nine findings, nine closed
+
+| ID | Finding | Final state | Evidence |
+|---|---|---|---|
+| S4B-01 | Collapse detector's floor didn't match its docblock's promise | **FIXED — VERIFIED** | §23.5 |
+| S4B-02 | Matrix-pin guard read the first of five regex matches | **FIXED — VERIFIED** | §23.5 |
+| S4B-03 | Twig leak-extractor character class excluded both quote chars | **FIXED — VERIFIED** | §23.2 |
+| S4B-04 | PHP leak-extractor inspected only a first-position string token | **FIXED — VERIFIED** | §23.2 |
+| S4B-08 | 11-font equality check ran in zero CI legs | **FIXED — VERIFIED** | §23.5 |
+| S4B-10 / S4E-06 | Guardrails missed the two namespaces this programme added | **FIXED — VERIFIED** | §23.5 |
+| S4E-15 | Generator and loader enforced opposite invariants on one file | **FIXED — VERIFIED** | §23.5 |
+
+Seven rows for nine IDs (`S4B-10`/`S4E-06` share one disposition, as they did in §22.5's own
+grouping). **Zero open in this class.**
+
+### 26.3 Scan-4 MEDIUM — recorded, not fixed, by deliberate decision (unchanged since §23.9)
+
+| ID | Finding | Final state | Reasoning |
+|---|---|---|---|
+| S4E-07 | `modules` has a second `directory` column `ModuleMenuSubscriber.php` also keys an ACL section from | **RECORDED, NOT FIXED — deliberate** | Rename blast-radius hazard, not a present defect; acting on it means widening the rename tooling's scope, not a lint fix. §23.9. |
+| S4E-08 | `facility.name` is join-key data in `BillingExport.csv.php` | **RECORDED, NOT FIXED — deliberate** | A facility rename would silently empty address/CLIA on pre-rename encounters. Altering a billing export's join key is a behaviour change requiring its own review, not something to fold into a lint pass. §23.9. |
+| S4E-13 | `i18n_generator.php` ships the whole catalogue keyed by English constant names | **RECORDED, NOT FIXED — deliberate** | Authenticated and CSRF-gated, so bounded; the keys are where the brand survives a value-level rename. §23.9. |
+
+These three are dispositioned, not silent — the same class as §21.3's S2-P1-24 (Arabic logo,
+deferred with explicit justification) or S3-P1-30 (accepted with Owner decision). None represent an
+active, reachable brand leak or governance breach; all three are scoped, bounded, and documented.
+**Not blocking.**
+
+### 26.4 Scan-4 MEDIUM — spot-checked now, not independently re-verified against the original quote
+
+| ID | Finding | Current state |
+|---|---|---|
+| S4E-09 | `ProductIdentity`'s tenancy rationale describes a capability it does not have | `src/Common/Branding/ProductIdentity.php:51-53,100-101` reads, today, as hedged/aspirational ("the direction the five-plane architecture is heading," "and, later, a multi-tenant caller") rather than a present-tense capability claim. This reconciliation spot-checked the current docblock and found no false present-tense claim — but did not diff against the exact wording Scan-4E's agent quoted, so this is recorded as **LIKELY ALREADY ACCURATE, NOT FORMALLY CLOSED** rather than claimed fixed. |
+
+### 26.5 Scan-4 LOW / documentation — genuine, named audit debt
+
+**Not individually re-verified in this reconciliation:** S4B-05, S4B-06, S4B-09, S4B-11, S4B-13,
+S4E-10, S4E-11, S4E-14, and the S4D set (S4D-01…S4D-12, twelve items), except the three S4D items
+§23.6 already named explicitly (the `skyeagle.uk` provenance correction and two ADR-BRAND-005
+citation errors — those three are **FIXED**, folded into ADR-BRAND-006's text). The remaining
+roughly seventeen LOW/documentation items were triaged by Scan-4's own severity label and were not
+re-derived here against current source, on a deliberate resource trade-off: chasing seventeen
+low-severity documentation nits to the same evidentiary standard as this section's other findings
+would cost materially more than their severity justifies, and none of the seventeen were flagged by
+Scan-4B/4D as affecting a user-facing brand leak, a governance breach, or a guard's correctness —
+the classes this programme treats as blocking. **This is recorded as open audit debt, not closed and
+not silently dropped** — a future low-priority pass should sweep these seventeen the same way §23
+swept the HIGH and guard-integrity classes.
+
+### 26.6 PHPStan and Scan-4C
+
+Both closed. §25.1 (PHPStan, 270→22 branch-attributable, 22 deliberately deferred and documented,
+plus two further real bugs found and fixed by this reconciliation's own independent verification).
+§24 (Scan-4C, 5/5 Scan-4 agents now returned, all three findings dispositioned).
+
+### 26.7 Push / CI
+
+Pushed 2026-08-26, `65616d4b2..ae9c3317e` (plus the three commits from §25/§26 landing after that
+push — a further push is needed to bring origin current with this section). **CI has still never
+run against any of this work.** `.github/workflows/*.yml` trigger only on `push`/`pull_request`
+targeting `master` or `rel-*` — a feature-branch push does not fire them, confirmed via
+`gh run list` returning nothing for this branch. Opening a PR would trigger CI; the Owner was asked
+and explicitly deferred that decision (**not now**). This remains a real, unclosed gate — not a
+formality — because every other verification in this entire programme has run against this branch's
+own state and no external CI system has yet independently reproduced any of it.
+
+### 26.8 VERDICT
+
+```text
+PRE-SKYEAGLE CERTIFICATION:  CONDITIONAL — CODE AND AUDIT GATES CLEAR, CI GATE NOT YET RUN
+SKYEAGLE MIGRATION:          ALREADY EXECUTED (§25.2), UNDER A CITED OWNER RULING, NOT BY THIS SESSION
+```
+
+Every P0 (5/5), every P1 (22/22), every Scan-4 HIGH (3/3) and every guard-integrity defect (9/9,
+§26.2) is closed. PHPStan and Scan-4C, the two items that blocked the previous verdict outright, are
+both closed (§26.6). Three MEDIUM findings remain open **by deliberate, documented decision**
+(§26.3) — not oversight — and are not blocking on the same precedent §21 already established for
+comparable P1/P2 dispositions. One MEDIUM (S4E-09) is very likely already accurate but not formally
+re-verified (§26.4). Roughly seventeen LOW/documentation items remain genuine, named audit debt
+(§26.5) — real, but never claimed by any prior scan to affect a user-facing or governance-blocking
+property.
+
+**This does not round up to an unconditional PASS**, for two reasons that are facts, not judgment
+calls: (1) CI has never run against this branch in any form — every gate that has passed, has passed
+only under this session's and its predecessors' own local execution, never independently; (2)
+ADR-BRAND-006's two dead shipped URLs remain an open Owner ruling, per the Owner's explicit
+instruction this session — flag it, do not act on it. Writing "PASS" over either of those would be
+exactly the false green this programme's own §21.7 warned against issuing early. The concrete
+remainder, in order:
+
+```text
+1. CI            open a PR (or otherwise get this branch through the workflows that gate master/rel-*)
+2. ADR-BRAND-006 Owner ruling on the two dead skyeagle.uk URLs — explicitly deferred, not this session's to take
+3. Push          one more push needed; this reconciliation's own commit lands after the last push
+4. S4E-09 / LOW set   optional low-priority sweep (§26.4, §26.5) — not blocking, recorded so it isn't lost
+```
+
+---
