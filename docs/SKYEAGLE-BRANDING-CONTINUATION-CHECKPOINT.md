@@ -992,3 +992,71 @@ change, executed or planned.
 
 *Checkpoint revision 16, updated after B16 — Phase-B complete. Next update: when GATE-4 is
 authorized, or when a master-merge decision is made.*
+
+## 15. Final certification, master integration and controlled tenant migration
+
+Owner authorization received 2026-08-26 to proceed: final feature-branch certification, master
+integration, post-merge certification, then (only if all of that passes) the two GATE-4 items
+under a further, separate safety boundary. Full stage sequence and safety rules per the Owner's
+own prompt; not summarized here — see conversation record for the complete instruction.
+
+### Stage 1 — state reconstruction
+
+```text
+Current branch:                feat/skyeagle-branding
+HEAD SHA:                      bb8e0774886cfb24e5193e44bb4be4d85c107a9d
+origin/feat/skyeagle-branding: bb8e07748 (identical to HEAD)
+origin/master:                 826d194eb947a198801c1dc595e7066dd843ec5b
+local master:                  826d194eb (identical to origin/master)
+merge-base(master, feature):   826d194eb -- EXACTLY current master tip
+Ahead/behind feature vs origin: 0/0
+Ahead/behind master vs origin:  0/0
+Commits feature ahead of master: 33
+Working tree:                   clean -- git diff --name-only empty; git status noise on
+                                 .phpstan/baseline/* confirmed 0 real diff (DriveFS stat-cache,
+                                 per Rule 5)
+```
+
+Merge-base sitting exactly at master's current tip means **master has not moved since the
+feature branch was cut** -- a fast-forward integration is available.
+
+History integrity: B1 (`27685109e`) and B2 (`30d45f00a`) commits confirmed reachable ancestors
+of HEAD; all 32 B1-B16 commits present in the expected order (verified by listing every
+`(skyeagle)`-scoped commit between master and HEAD). No `rebase`/`reset --hard`/force-push
+markers in `feat/skyeagle-branding`'s reflog.
+
+**Unrelated worktrees found, not touched.** `git worktree list` shows 3x `.claude/worktrees/
+agent-*` plus `OpenEMR.worktrees/sds` (all at old commit `631f2b38c`, a shared ancestor, on
+throwaway branches `worktree-agent-*`/`agents/sds`) and one detached-HEAD worktree elsewhere
+(`5ea20d4dd`). None intersect `master` or `feat/skyeagle-branding`; none touched, per Rule 4
+(`.claude/` untouched) and general non-interference.
+
+No evidence of concurrent modification to either relevant branch since this session last touched
+them.
+
+### Stage 2 — final feature-branch certification
+
+| Check | Result |
+|---|---|
+| C1 Git integrity | PASS -- see Stage 1 above |
+| C2 Branding identity | PASS -- `generate-product-identity.php --check`: up to date (hash `99a06b0f31...`); `openemr_name`="SkyEagle"/"سكاي إيجل", tagline="Better care begins here."/"من هنا تبدأ رعاية أفضل.", support/manual URLs = ADR-BRAND-006 values, token anchors `#0B376E`/`#1E5A96`/`#0B4E91`, `background`=`#FFFFFF`; zero old Thiqa hex (`FE6658`/`FD6558`/`FD6759`/`0B0D2B`) in any `brand/master/*.svg` |
+| C3 Residue sweep | PASS -- full repo-wide case-insensitive sweep, every hit classified (table below); **zero active user-facing or active internal residue**; B2/B11's deferred catalog-only assets re-confirmed unreachable (zero references in module source or install/verify tooling) |
+| C4 Verification gates | PASS -- tokens-check, identity-check, manifest (123/123 + 21/21 + 11/11), isolated suite **1674 tests / 8450 assertions**, exit 0 -- exact match to the established baseline, no count drift |
+| C5 PHPStan | PASS -- reused B13's cached run (working tree unchanged since, confirmed 0 diff): 0 `Internal error`/`Result is incomplete` signals, 908 findings across 61 files, zero overlap with any file this session touched |
+
+**C3 classification table** (full detail; see conversation record for per-item reasoning):
+
+| Category | Examples found |
+|---|---|
+| ACTIVE USER-FACING RESIDUE | none |
+| ACTIVE INTERNAL RESIDUE | none |
+| INTENTIONAL MIGRATION COMPATIBILITY | `brand/tokens/thiqa-tokens.json`, `interface/themes/thiqa/*`, `brand/typography/thiqa-fonts.scss` (KG-06 plumbing, deploys to the real `public/assets/fonts/thiqa/` path); `tools/branding/brand-strings.json`'s `retired_english_overrides.managed_english` literals (self-documented exact-match keys for retiring old catalogue rows -- renaming would break retirement) |
+| HISTORICAL/AUDIT DOCUMENTATION | `interface/main/tabs/main.php:405` (audit finding A-01 comment); `.phpstan/extension.neon:13` ("RebrandingPlan WP-2.7" rule-category comment) |
+| TEST FIXTURE / NEGATIVE CONTROL | `LoginTemplateListenerTest.php`, `TokenSetTest.php`, `CssVariableRendererTest.php` and similar -- "Thiqa" used as an arbitrary example string, not shipped identity |
+| DATABASE-ONLY RESIDUE | `lang_constants` orphaned row "Thiqa Database Upgrade"; `modules` row `mod_id=6` (B11-01) |
+| DEAD/INERT CONTENT | `brand/qa/wcag-contrast-results.json` -- still shows old `#0B1B4D`/`#FAFAF8`, never read by live code (only cross-referenced in 3 docblocks as a human pointer), same category as the already-deferred `brand/qa/*-render.png` evidence files. Noted as a minor documentation-accuracy housekeeping item, not a blocker. |
+
+## FEATURE CERTIFICATION: PASS
+
+Certified SHA: `bb8e0774886cfb24e5193e44bb4be4d85c107a9d` (`bb8e07748`), branch
+`feat/skyeagle-branding`, identical to `origin/feat/skyeagle-branding`.
