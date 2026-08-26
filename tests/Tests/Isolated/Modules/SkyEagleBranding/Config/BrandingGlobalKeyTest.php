@@ -177,9 +177,9 @@ final class BrandingGlobalKeyTest extends TestCase
             'SkyEagle Health Information System',
             BrandingGlobalKey::MainMenuLogoTitle->defaultValue()
         );
-        $this->assertSame('https://skyeagle.uk/docs', BrandingGlobalKey::UserManualLink->defaultValue());
+        $this->assertSame('https://skyeagle.uk/en/resources', BrandingGlobalKey::UserManualLink->defaultValue());
         $this->assertSame('https://skyeagle.uk/', BrandingGlobalKey::MainMenuLogoLink->defaultValue());
-        $this->assertSame('https://skyeagle.uk/support', BrandingGlobalKey::OnlineSupportLink->defaultValue());
+        $this->assertSame('https://skyeagle.uk/en/contact', BrandingGlobalKey::OnlineSupportLink->defaultValue());
     }
 
     public function testUpstreamCommunityLinksAreOffByDefault(): void

@@ -216,14 +216,14 @@ enum BrandingGlobalKey: string
                 'Online support link',
                 'Support destination. HTTPS is mandatory and the host is the product domain.',
                 BrandingValueType::Text,
-                'https://skyeagle.uk/support',
+                'https://skyeagle.uk/en/contact',
             ),
             self::UserManualLink => new BrandingGlobalDefinition(
                 'User manual link',
                 'Documentation destination. Must never be blank: upstream falls back to the '
                     . 'open-emr.org wiki when it is.',
                 BrandingValueType::Text,
-                'https://skyeagle.uk/docs',
+                'https://skyeagle.uk/en/resources',
             ),
             self::SupportPhoneNumber => new BrandingGlobalDefinition(
                 'Support phone number',

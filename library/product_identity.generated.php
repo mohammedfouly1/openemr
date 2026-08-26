@@ -27,6 +27,6 @@ declare(strict_types=1);
 return [
     'product_name' => 'SkyEagle',
     'product_website_url' => 'https://skyeagle.uk/',
-    'product_support_url' => 'https://skyeagle.uk/support',
-    'product_documentation_url' => 'https://skyeagle.uk/docs',
+    'product_support_url' => 'https://skyeagle.uk/en/contact',
+    'product_documentation_url' => 'https://skyeagle.uk/en/resources',
 ];

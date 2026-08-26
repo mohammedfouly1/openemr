@@ -70,17 +70,17 @@
             "map_row": 7,
             "inventory_id": "BRAND-057",
             "key": "online_support_link",
-            "value": "https://skyeagle.uk/support",
+            "value": "https://skyeagle.uk/en/contact",
             "value_ar": null,
-            "note": "Was http://open-emr.org/ over plain HTTP. HTTPS is mandatory."
+            "note": "Was http://open-emr.org/ over plain HTTP. HTTPS is mandatory. ADR-BRAND-006: /support 404s on the live site; the Owner ruled the published Contact page (verified 200, 2026-08-26) is the authoritative support/contact destination."
         },
         {
             "map_row": 8,
             "inventory_id": "BRAND-058",
             "key": "user_manual_link",
-            "value": "https://skyeagle.uk/docs",
+            "value": "https://skyeagle.uk/en/resources",
             "value_ar": null,
-            "note": "MUST NOT be blank. Upstream falls back to the open-emr.org wiki from an empty value."
+            "note": "MUST NOT be blank. Upstream falls back to the open-emr.org wiki from an empty value. ADR-BRAND-006: /docs 404s on the live site; the Owner ruled the published Resources page (verified 200, 2026-08-26) is the authoritative guides/informational destination."
         },
         {
             "map_row": 10,

@@ -51,8 +51,8 @@ final class BrandingConfigFactoryTest extends TestCase
         $this->assertTrue($config->showTaglineOnLogin);
         $this->assertSame('https://skyeagle.uk/', $config->mainMenuLogoLink);
         $this->assertSame('SkyEagle Health Information System', $config->mainMenuLogoTitle);
-        $this->assertSame('https://skyeagle.uk/support', $config->onlineSupportLink);
-        $this->assertSame('https://skyeagle.uk/docs', $config->userManualLink);
+        $this->assertSame('https://skyeagle.uk/en/contact', $config->onlineSupportLink);
+        $this->assertSame('https://skyeagle.uk/en/resources', $config->userManualLink);
         $this->assertSame('', $config->supportPhoneNumber);
         $this->assertSame('style_light.css', $config->cssHeader);
         $this->assertSame('style_light.css', $config->portalCssHeader);
@@ -105,7 +105,7 @@ final class BrandingConfigFactoryTest extends TestCase
         ]);
 
         $this->assertSame('SkyEagle Health Information System', $config->mainMenuLogoTitle);
-        $this->assertSame('https://skyeagle.uk/docs', $config->userManualLink);
+        $this->assertSame('https://skyeagle.uk/en/resources', $config->userManualLink);
         $this->assertSame('SkyEagle', $config->productName);
         $this->assertSame('style_light.css', $config->cssHeader);
     }

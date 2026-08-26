@@ -1,11 +1,54 @@
 # ADR-BRAND-006: What the installer should ship as the product's website, support and documentation URLs
 
-**Status:** **PROPOSED — awaiting an Owner ruling.** Nothing in this document has been applied.
-No value in `branding-profile.json`, `library/product_identity.generated.php`, the `globals` table
-or any source file was changed to write it. Records finding **B4**.
+**Status:** **RESOLVED — 2026-08-26, Owner selected Option E (§8).** Records finding **B4**.
 
-**Decision required from:** Owner (product identity / SkyEagle rename).
-**Blocks:** nothing today; the exposure it describes is live and grows with every new install.
+**Owner ruling, verbatim (2026-08-26):**
+
+```text
+Dead URL: https://skyeagle.uk/support   -> Replace with: https://skyeagle.uk/en/contact
+Reason: no /support route on the live site; the published Contact page is the
+authoritative support/contact destination.
+
+Dead URL: https://skyeagle.uk/docs      -> Replace with: https://skyeagle.uk/en/resources
+Reason: no /docs route on the live site; the published Resources page is the
+authoritative destination for guides and informational resources.
+
+Verification source: current production website https://skyeagle.uk
+```
+
+Both replacement URLs are exactly the ones §8 Option E already named and pre-verified `200`
+(`/en/contact`; `/en/resources` was one of the two candidates offered there for
+`user_manual_link`, and is the one selected). Independently re-verified again at ruling time:
+`/support` and `/docs` still `404`, `/en/contact` and `/en/resources` both `200`.
+
+**Applied.** `branding-profile.json` rows for `online_support_link` (BRAND-057) and
+`user_manual_link` (BRAND-058), `library/product_identity.generated.php` (regenerated via
+`tools/branding/bin/generate-product-identity.php`, `--check` clean), the second, independent
+copy of the same defaults at `BrandingGlobalKey.php:219,226` (§3.4 — not generated, would have
+gone stale otherwise), and all eleven pinning assertions enumerated in §7 that named the two old
+values (`BrandingGlobalKeyTest.php`, `BrandingConfigFactoryTest.php`,
+`BrandingProfileLoaderTest.php` — seven of the eleven move, matching §8's own prediction; the four
+`main_menu_logo_link` pins and the `BrandingCoreStrings` `/docs/installer` pin are untouched,
+also as predicted). Migration for the two existing sites (both already carrying the dead URLs,
+§6) still needs one `apply-profile` run each — not yet done as of this ADR update; tracked as
+follow-up, not blocking the code-level resolution.
+
+**What this does not resolve, by design (§9's separation still holds):** the Thiqa-name /
+SkyEagle-domain question this ADR treated as a separate, deferrable branding ruling was
+independently settled by the SkyEagle rename (`af36dbef3`, `docs/PRE-SKYEAGLE-CONTINUATION-CHECKPOINT.md`
+§25.2) before this URL ruling arrived — `openemr_name` is now `SkyEagle`, so the juxtaposition
+this ADR flagged as a "separate branding ruling" no longer exists either. Option D (publishing
+real `/support` and `/docs` routes) remains open as a future improvement over the interim E
+repoint, per §8's own framing of E as "genuinely interim."
+
+**Original status below, preserved for the record:** ~~PROPOSED — awaiting an Owner ruling.
+Nothing in this document has been applied. No value in `branding-profile.json`,
+`library/product_identity.generated.php`, the `globals` table or any source file was changed to
+write it.~~
+
+**Decision required from:** Owner (product identity / SkyEagle rename) — **taken**, 2026-08-26.
+**Blocked:** nothing; the exposure it described was live and grew with every new install until
+this ruling.
 
 **Verification history.** Drafted in a first pass on 2026-08-25 that terminated on an infrastructure
 error. A second pass the same day **re-derived every substantive claim independently** rather than
