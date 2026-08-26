@@ -3240,3 +3240,98 @@ attaches to an open Owner decision rather than standing alone.
 is an input to a ruling that was already outstanding.
 
 ---
+
+## 25. PHPSTAN CLOSED, AND THE UPDATED REMAINDER (orchestrating session, 2026-08-26)
+
+Dispatched as one of two parallel blockers alongside the Scan-4C re-dispatch (§24). Ran long — 8
+full analyse passes plus corrections, ~7.5 hours of agent wall time — but landed a genuinely
+verified result, independently re-checked by the orchestrating session rather than taken on the
+agent's word alone.
+
+### 25.1 PHPStan — **CLOSED**, superseding §22.4/§23.8/§23.10 item 1
+
+`fix(prebrand): the branch's own PHPStan errors, from 270 to 22` (`c124660a5`) plus a second
+commit for two issues the orchestrator's own verification pass caught
+(`fix(prebrand): regenerate the stale installer SQL supplement, fix an unsatisfiable risky-test
+expectation`, `9a2300954`). Full detail, including the two fixes that needed correcting mid-pass
+and the orchestrator's independent re-verification: `docs/evidence/EV-B4-phpstan-clean-run.md`.
+
+```text
+Baseline (this session, current HEAD):  1212 total, 658 rdy0082restore (out of scope), 554 real
+Branch-attributable (git-blame vs merge-base b91c12aee3f6...): 270 of the 554
+Fixed: 248.  Remaining: 22, all documented file:line, all deliberate (§4.8/§6 of the evidence file):
+  - ~13 in interface/reports/pat_ledger.php's CSV-export $_REQUEST handling — needs a
+    filter_input()/Request refactor across a ~1000-line legacy financial report; not safely
+    verifiable live on this host without either mutating production-shaped billing state or a
+    working browser session, so left open rather than guessed at.
+  - 1 in src/Common/Branding/ProductIdentity.php:223 (error_log()) — hinges on an installer
+    bootstrap-order question only the real installer can answer.
+Final run (run8): 908 total, 658 rdy0082restore (unchanged, still out of scope), 250 real.
+RB-24 verified clean (zero "Internal error", zero "Result is incomplete") on every one of 8 runs.
+```
+
+**One collateral fix outside branding scope, flagged for independent review rather than buried:**
+`tests/PHPStan/Rules/ForbiddenGlobalNamespaceRule.php` compared Windows backslash paths against
+the forward-slash paths in `composer.json`'s `autoload.files`, so every legacy global function in
+every allow-listed file — not just this branch's — was misreported as forbidden on this
+native-Windows host. Reproduced standalone, fixed with one `str_replace('\\', '/', ...)`, a no-op
+on the POSIX paths CI actually runs on.
+
+**Independent re-verification (orchestrating session, not the dispatched agent) found and fixed
+two further real issues** that the PHPStan pass's own scope didn't cover — both confirmed via
+`git stash` against the clean committed HEAD to be pre-existing/self-inflicted rather than
+regressions from anything dispatched in this session:
+
+1. `contrib/util/language_translations/durableTranslationContracts_utf8.sql` — the SQL supplement
+   real installs and upgrades actually execute — was never regenerated after the
+   `installer-third-party-modules-neutral-v1` contract landed (§23.4, `df3cc18f2`). The contract
+   set correctly discovers and renders all 29 contracts; the deployed file only ever shipped 28.
+   That contract's translations have never reached a real install or upgrade. Regenerated from the
+   renderer's own output.
+2. `BackupRetentionTest::testAcceptedLabelsUseOnlyThePortableGrammar` used
+   `expectNotToPerformAssertions()`, which the same class's `setUp()`/`tearDown()` (which
+   unconditionally assert) made unsatisfiable regardless of the method body — all 5 data-set runs
+   were flagged risky. Fixed by calling the validator directly.
+
+Full scoped isolated suite, final confirming run: **1724 tests, 8590 assertions, 0 failures,
+0 risky, exit 0.** (One transient failure, a 25-second subprocess-spawn timeout in
+`MaterialiserKillRecoveryTest` under full-suite Drive-mount I/O contention, was investigated and
+is not a regression — passed cleanly in isolation at 12.2s; the same documented class of slowness
+as the Twig-render hang, noted so a future flake on this test isn't mistaken for new.)
+
+### 25.2 SkyEagle rename — **DONE**, superseding §23.7's "HELD"
+
+Between the two blockers above being dispatched and this reconciliation, a concurrent session on
+this same host took the Owner ruling recorded at commit `af36dbef3` ("Owner ruling, 2026-08-25:
+the new branding applies") and executed it: `af36dbef3` (six profile values, everything else
+composed automatically, 523 tests / 4311 assertions green, no test edited), `48f09c523` (KG-01
+internal module-identity rename, `ThiqaBranding` → `SkyEagleBranding` and three sibling token
+classes, bounded and enumerated first), and `bad90c7ef` (a gate-coverage defect the rename walk
+surfaced: the canonical gate ran 523 of the branding module's 1,448 declared tests — nine whole
+test directories were in neither the gate nor any assertion about the gate). **This orchestrating
+session did not initiate or approve the rename** — it was already committed, under a cited Owner
+ruling, by the time this session next checked `git log`. Recorded here for continuity rather than
+re-litigated; see those three commits directly for full detail.
+
+### 25.3 Updated remainder — supersedes §23.10
+
+```text
+1. PHPStan                    CLOSED — §25.1
+2. Scan-4C                    CLOSED — §24
+3. ADR-BRAND-006              Owner ruling on the shipped URLs — PARTIALLY addressed: af36dbef3
+                               resolved the name/link mismatch half (product_name now agrees with
+                               the skyeagle.uk links); the two 404s at /support and /docs are
+                               unaffected and still need a ruling on their own terms.
+4. S4E-07 / S4E-08 / S4E-13   still recorded, still unfixed by deliberate decision (§23.9)
+5. Push / CI                  branch is now several commits further ahead of origin; still never
+                               pushed, CI has still never run against any of this work
+6. PRE-25                     still needs a re-run of §21 against this now-further-updated ledger
+7. SkyEagle rename            DONE — §25.2 (no longer HELD)
+```
+
+**Certification remains NOT PASSED.** Items 3, 5 and 6 are the load-bearing gaps: 3 needs an Owner
+ruling this session cannot take unilaterally, 5 needs an explicit go-ahead before pushing to a
+remote (a shared-state action, not taken without asking), and 6 is a large re-reconciliation pass
+that should run only after 3 and 5 are settled, not before.
+
+---
