@@ -192,7 +192,7 @@ before.
 | B1-02 | `login_tagline_text` (AR, `value_ar` doc field) | ثقة إكلينيكية، رعاية مترابطة. | من هنا تبدأ رعاية أفضل. | USER-FACING PRODUCT IDENTITY | Owner instruction 2026-08-26 | Yes (via translation catalogue) | Yes | Source now; tenant sync is B9 | B1/B6 | Pending |
 | B1-03 | `main_menu_logo_title` `value_ar` doc field | نظام ثقة للمعلومات الصحية | (to be derived — SkyEagle Arabic equivalent) | TRANSLATION VALUE / DOCUMENTATION | Discovered this session | Documentation-only in this file | No | No | B1 | Pending |
 | B2-01 | `brand/master/*.svg` (8 files) + all live-deployed logo/favicon PNG/GIF/ICO slots | Thiqa-era artwork, Thiqa navy/coral | New verified SkyEagle vector artwork (deep navy `rgb(9,58,116)`/tonal blue `rgb(21,84,150)`), Owner-redirected away from recolor-in-place | USER-FACING PRODUCT IDENTITY (asset) | Owner instruction 2026-08-26 (supersedes KG-03 recolor plan — see §9) + `OpenEMRWebSite/docs/Assets/Entity.md` | Yes (feeds all derived logo variants) | No | No | B2 | COMPLETE |
-| B3-01 | `brand/tokens/thiqa-tokens.json` | Thiqa 43-key palette | SkyEagle 43-key palette per provisional plan (revalidated) | USER-FACING PRODUCT IDENTITY (tokens); filename itself stays (KG-06) | PRE §12 provisional plan + KG-02/03/04/08 | Yes | No | No | B3 | Pending |
+| B3-01 | `brand/tokens/thiqa-tokens.json` | Thiqa 43-key palette | SkyEagle 43-key palette (KG-03 anchors, KG-08 flat light bg, KG-04 semantic preserved) | USER-FACING PRODUCT IDENTITY (tokens); filename itself stays (KG-06) | PRE §12 provisional plan + KG-02/03/04/08, role-mapping confirmed with Owner 2026-08-26 | Yes | No | No | B3 | COMPLETE |
 | B7-VERIFY | Module namespace/directory | `SkyEagleBranding` / `oe-module-skyeagle-branding` | (no change expected) | TECHNICAL MODULE IDENTITY | KG-01 (already executed in PRE) | — | — | — | B7 | To verify, not re-execute |
 | B9-01 | `sites/default` tenant globals | Stale (old tagline, old URLs) | Synced to current profile | DATABASE VALUE | branding-profile.json | Yes | Yes — live write | GATE-4 | B9 | PLAN ONLY |
 | B9-02 | `facility.name` (id 3) | Thiqa Demo Eye Clinic | International Healthcare Center | TENANT DATA | Owner instruction 2026-08-26 | Yes | Yes — live write | GATE-4 | B9 | PLAN ONLY |
@@ -252,8 +252,17 @@ copied from them (`brand/favicon/favicon.svg`, `brand/logos/monochrome/brand-log
 
 ## 10. Owner Decision Gates encountered
 
-*(none yet — B2/B3 initially looked GATE-1-bound but KG-03's "recolor the existing vector"
-instruction resolves that; tracked here if that changes on closer inspection)*
+**B2 pivot (2026-08-26).** Not a numbered GATE from the execution prompt, but a genuine
+mid-phase redirect: a clarifying question about mapping KG-03's three colour roles onto the
+master SVG's two shapes led the Owner to abandon recolor-in-place entirely in favour of new
+verified artwork. See §9.
+
+**B3 role-mapping question (2026-08-26).** KG-02 says the SkyEagle CTA maps to the
+`interactive.primary` token; KG-03 names three colours (primary/accent/link) without saying
+which is the CTA. Asked before deriving all 43×2 keys, since a wrong mapping would mean redoing
+every downstream generated artefact. Owner confirmed: **accent (#1E5A96) → interactive.primary
+(CTA)**; primary (#0B376E) → brand.navy / interactive.secondary / text.primary (main brand/nav
+colour); link (#0B4E91) → link.default, unchanged from its existing role.
 
 ## 11. Rollback boundaries
 
@@ -336,6 +345,50 @@ GD from the delivery's own square icon source (`derived/icon-512.png`) for legac
 size-matched delivered file (`menu-logo.png`, the 86x43 legacy trio, the two GIFs). No text-to-image or
 image-to-image generation was used anywhere in this phase; the Owner's Recraft API key was not invoked.
 
+### B3 — Colour tokens — COMPLETE
+
+```text
+PHASE:            B3
+START SHA:        ea007a19a
+END SHA:           (this commit)
+FILES:             brand/tokens/thiqa-tokens.json (43-key palette, both themes); 6 generated
+                    artefacts under interface/themes/thiqa/{_tokens-light,_tokens-dark,
+                    _css-variables}.scss and the module's smart-style_{light,dark}.json.twig
+                    (+ their tools/branding/output-preview/ copies); brand/manifests/{SHA256SUMS,
+                    asset-manifest.json,asset-manifest.csv}; 3 test files
+                    (TokenSetParserTest, TokenValidatorTest, TokenGeneratorIsolatedTest) —
+                    fixtures reading the real shipped document updated to the new values
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: regenerated via `php tools/branding/bin/generate-tokens.php`, deployed by
+                    byte-exact copy (SCSS) / header-preserving payload splice (Twig, per
+                    DeployedArtefacts' own documented convention), verified via
+                    `generate-tokens.php --check` (12/12 up to date, 6 preview + 6 deployed)
+TESTS:              composer branding-ci — tokens-check PASS, identity-check PASS,
+                    verify-brand-manifest.php 123/123 + 21/21 + 11/11, isolated suite 1674
+                    tests / 8412 assertions, exit 0. WCAG contrast independently checked for
+                    every text/background and textOn/interactive pair (light 7.10–11.76:1,
+                    dark 6.68–17.31:1, all well above the 4.5:1 AA floor)
+ROLLBACK METHOD:    git revert this commit (single commit; no dependent commits yet)
+DEPENDENT NEXT PHASES: B4 onward per the original phase sequence (§7) — module/manifest/DB
+                    phases still gated per §10/GATE-4
+```
+
+**Derivation method, not eyeballed.** hover = shade(default, 13%) · active = shade(default, 22%)
+· disabled = mix(default, background, 30%) · dark tints = tint(light, 45%) — all per the PRE
+checkpoint's §12 documented formulas. One deviation from that plan's stated 25% disabled-mix:
+25% measured 1.48:1 against background, below this module's own `TokenValidator
+::DISABLED_STATE_SEPARATION_MINIMUM` (1.5, "not a WCAG contrast gate" — a separate
+product-distinguishability rule). 30% clears it at 1.61:1 with headroom; recorded here because
+it is a real, if small, deviation from the provisional plan's own number.
+
+**KG-04 applied literally.** Only the identity-linked keys changed: `brand.navy`, `brand.coral`,
+`brand.coralDeep`, `brand.sky`, `text.primary`, `interactive.primary.*`,
+`interactive.secondary.default/hover`, `interactive.focusRing`, `link.*`, plus `background` and
+`surfaceSunken` (light only, KG-08). Everything else — `semantic.*` (success/warning/critical/
+info), `brand.sage/amber/critical`, `border`, `divider`, `borderStrong`, `text.secondary`,
+`text.disabled`, `text.inverse`, `surface`/`surfaceInput`/`surfaceInputOnRaised`/`surfaceRaised`
+— is untouched, preserved exactly as validated.
+
 ## 13. Live database mutation state
 
 ```text
@@ -346,4 +399,4 @@ Only read-only `SELECT` queries have been run against the live `openemr` databas
 
 ---
 
-*Checkpoint revision 2, updated after B2. Next update: after B3.*
+*Checkpoint revision 3, updated after B3. Next update: after B4.*

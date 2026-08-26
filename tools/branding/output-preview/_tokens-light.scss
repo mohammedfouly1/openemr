@@ -11,19 +11,19 @@
 // -----------------------------------------------------------------------------
 
 // Brand palette
-$thiqa-brand-navy:                    #0B1B4D;
-$thiqa-brand-coral:                   #FF6F5E;
-$thiqa-brand-coral-deep:              #C43F2E;
+$thiqa-brand-navy:                    #0B376E;
+$thiqa-brand-coral:                   #4B7BAB;
+$thiqa-brand-coral-deep:              #1E5A96;
 $thiqa-brand-sage:                    #5FA777;
-$thiqa-brand-sky:                     #3E7FBD;
+$thiqa-brand-sky:                     #1E5A96;
 $thiqa-brand-amber:                   #C77A1E;
 $thiqa-brand-critical:                #C0392B;
 
 // Surfaces, borders and lines
-$thiqa-background:                    #FAFAF8;
+$thiqa-background:                    #FFFFFF;
 $thiqa-surface:                       #FFFFFF;
 $thiqa-surface-raised:                #FFFFFF; // alias of surface — surfaceRaised is not defined for the light variant
-$thiqa-surface-sunken:                #F2F1EE;
+$thiqa-surface-sunken:                #F5F5F5;
 $thiqa-surface-input:                 #FFFFFF;
 $thiqa-surface-input-on-raised:       #FFFFFF;
 $thiqa-border:                        #E4E2DC;
@@ -31,7 +31,7 @@ $thiqa-border-strong:                 #4B5266;
 $thiqa-divider:                       #ECEAE5;
 
 // Text
-$thiqa-text-primary:                  #0B1B4D;
+$thiqa-text-primary:                  #0B376E;
 $thiqa-text-secondary:                #4B5266;
 $thiqa-text-disabled:                 #9CA0AC;
 $thiqa-text-inverse:                  #FFFFFF;
@@ -51,16 +51,16 @@ $thiqa-semantic-info-text:            #264C74;
 $thiqa-semantic-info-border:          #BBD3EE;
 
 // Interactive
-$thiqa-interactive-primary-default:   #C43F2E;
-$thiqa-interactive-primary-hover:     #A8351F;
-$thiqa-interactive-primary-active:    #8E2B18;
-$thiqa-interactive-primary-disabled:  #EAC1BA;
+$thiqa-interactive-primary-default:   #1E5A96;
+$thiqa-interactive-primary-hover:     #1A4E83;
+$thiqa-interactive-primary-active:    #174675;
+$thiqa-interactive-primary-disabled:  #BCCEE0;
 $thiqa-interactive-primary-text-on:   #FFFFFF;
-$thiqa-interactive-secondary-default: #0B1B4D;
-$thiqa-interactive-secondary-hover:   #0E2461;
+$thiqa-interactive-secondary-default: #0B376E;
+$thiqa-interactive-secondary-hover:   #0A3060;
 $thiqa-interactive-secondary-text-on: #FFFFFF;
-$thiqa-interactive-focus-ring:        #3E7FBD;
+$thiqa-interactive-focus-ring:        #1E5A96;
 
 // Links
-$thiqa-link-default:                  #2C5F94;
-$thiqa-link-hover:                    #1E4574;
+$thiqa-link-default:                  #0B4E91;
+$thiqa-link-hover:                    #0A447E;

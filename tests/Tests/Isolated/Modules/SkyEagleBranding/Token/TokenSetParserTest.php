@@ -43,12 +43,12 @@ final class TokenSetParserTest extends TestCase
         self::assertFalse($sets['light']->has(TokenKey::SurfaceRaised));
         self::assertTrue($sets['dark']->has(TokenKey::SurfaceRaised));
 
-        self::assertSame('#0B1B4D', $sets['light']->valueOf(TokenKey::BrandNavy)?->value);
-        self::assertSame('#FAFAF8', $sets['light']->valueOf(TokenKey::Background)?->value);
+        self::assertSame('#0B376E', $sets['light']->valueOf(TokenKey::BrandNavy)?->value);
+        self::assertSame('#FFFFFF', $sets['light']->valueOf(TokenKey::Background)?->value);
         self::assertSame('#8E271D', $sets['light']->valueOf(TokenKey::SemanticCriticalText)?->value);
-        self::assertSame('#C43F2E', $sets['light']->valueOf(TokenKey::InteractivePrimaryDefault)?->value);
-        self::assertSame('#3E7FBD', $sets['light']->valueOf(TokenKey::InteractiveFocusRing)?->value);
-        self::assertSame('#B7D9F5', $sets['dark']->valueOf(TokenKey::LinkHover)?->value);
+        self::assertSame('#1E5A96', $sets['light']->valueOf(TokenKey::InteractivePrimaryDefault)?->value);
+        self::assertSame('#1E5A96', $sets['light']->valueOf(TokenKey::InteractiveFocusRing)?->value);
+        self::assertSame('#6989AA', $sets['dark']->valueOf(TokenKey::LinkHover)?->value);
     }
 
     public function testEveryDocumentedTokenSurvivesTheRoundTrip(): void

@@ -22,19 +22,19 @@
 
 @mixin thiqa-css-variables-light {
     /* Brand palette */
-    --brand-navy:                          #0B1B4D;
-    --brand-coral:                         #FF6F5E;
-    --brand-coral-deep:                    #C43F2E;
+    --brand-navy:                          #0B376E;
+    --brand-coral:                         #4B7BAB;
+    --brand-coral-deep:                    #1E5A96;
     --brand-sage:                          #5FA777;
-    --brand-sky:                           #3E7FBD;
+    --brand-sky:                           #1E5A96;
     --brand-amber:                         #C77A1E;
     --brand-critical:                      #C0392B;
 
     /* Surfaces, borders and lines */
-    --background:                          #FAFAF8;
+    --background:                          #FFFFFF;
     --surface:                             #FFFFFF;
     --surface-raised:                      #FFFFFF;
-    --surface-sunken:                      #F2F1EE;
+    --surface-sunken:                      #F5F5F5;
     --surface-input:                       #FFFFFF;
     --surface-input-on-raised:             #FFFFFF;
     --border:                              #E4E2DC;
@@ -42,7 +42,7 @@
     --divider:                             #ECEAE5;
 
     /* Text */
-    --text-primary:                        #0B1B4D;
+    --text-primary:                        #0B376E;
     --text-secondary:                      #4B5266;
     --text-disabled:                       #9CA0AC;
     --text-inverse:                        #FFFFFF;
@@ -62,19 +62,19 @@
     --semantic-info-border:                #BBD3EE;
 
     /* Interactive */
-    --interactive-primary-default:         #C43F2E;
-    --interactive-primary-hover:           #A8351F;
-    --interactive-primary-active:          #8E2B18;
-    --interactive-primary-disabled:        #EAC1BA;
+    --interactive-primary-default:         #1E5A96;
+    --interactive-primary-hover:           #1A4E83;
+    --interactive-primary-active:          #174675;
+    --interactive-primary-disabled:        #BCCEE0;
     --interactive-primary-text-on:         #FFFFFF;
-    --interactive-secondary-default:       #0B1B4D;
-    --interactive-secondary-hover:         #0E2461;
+    --interactive-secondary-default:       #0B376E;
+    --interactive-secondary-hover:         #0A3060;
     --interactive-secondary-text-on:       #FFFFFF;
-    --interactive-focus-ring:              #3E7FBD;
+    --interactive-focus-ring:              #1E5A96;
 
     /* Links */
-    --link-default:                        #2C5F94;
-    --link-hover:                          #1E4574;
+    --link-default:                        #0B4E91;
+    --link-hover:                          #0A447E;
 
     /* ------------------------------------------------------------------
      * Legacy identity-specific aliases. New consumers use the
@@ -157,11 +157,11 @@
 
 @mixin thiqa-css-variables-dark {
     /* Brand palette */
-    --brand-navy:                          #7C8CE0;
-    --brand-coral:                         #FF6F5E;
-    --brand-coral-deep:                    #FF8B7C;
+    --brand-navy:                          #7991AF;
+    --brand-coral:                         #A5BDD5;
+    --brand-coral-deep:                    #83A4C5;
     --brand-sage:                          #8FD1A6;
-    --brand-sky:                           #8FC1EE;
+    --brand-sky:                           #83A4C5;
     --brand-amber:                         #F0B45C;
     --brand-critical:                      #F29088;
 
@@ -197,19 +197,19 @@
     --semantic-info-border:                #254361;
 
     /* Interactive */
-    --interactive-primary-default:         #FF6F5E;
-    --interactive-primary-hover:           #FF8672;
-    --interactive-primary-active:          #E85C4C;
-    --interactive-primary-disabled:        #5A3530;
+    --interactive-primary-default:         #83A4C5;
+    --interactive-primary-hover:           #728FAB;
+    --interactive-primary-active:          #66809A;
+    --interactive-primary-disabled:        #2F3E52;
     --interactive-primary-text-on:         #0B1220;
     --interactive-secondary-default:       #F5F6F8;
     --interactive-secondary-hover:         #D8DCE6;
     --interactive-secondary-text-on:       #0B1220;
-    --interactive-focus-ring:              #8FC1EE;
+    --interactive-focus-ring:              #83A4C5;
 
     /* Links */
-    --link-default:                        #8FC1EE;
-    --link-hover:                          #B7D9F5;
+    --link-default:                        #799EC3;
+    --link-hover:                          #6989AA;
 
     /* ------------------------------------------------------------------
      * Legacy identity-specific aliases. New consumers use the

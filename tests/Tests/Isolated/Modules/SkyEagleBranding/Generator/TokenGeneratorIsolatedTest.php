@@ -179,12 +179,12 @@ class TokenGeneratorIsolatedTest extends TestCase
         $this->assertStringContainsString('"color_background": "#0B1220"', $dark);
         $this->assertStringContainsString('"color_text": "#F5F6F8"', $dark);
         $this->assertStringContainsString('"color_error": "#F29088"', $dark);
-        $this->assertStringContainsString('"color_highlight": "#8FC1EE"', $dark);
+        $this->assertStringContainsString('"color_highlight": "#83A4C5"', $dark);
         $this->assertStringContainsString('"color_success": "#8FD1A6"', $dark);
         $this->assertStringContainsString('"color_modal_backdrop": "rgba(0, 0, 0, 0.6)"', $dark);
 
         // The whole point of R-SMART-DARK: no light value may survive into dark.
-        foreach (['#FAFAF8', '#0B1B4D', '#8E271D', '#3E7FBD', '#2F6B45'] as $lightValue) {
+        foreach (['#FFFFFF', '#0B376E', '#8E271D', '#1E5A96', '#2F6B45'] as $lightValue) {
             $this->assertStringNotContainsString($lightValue, $dark, 'Dark must not fall back to a light value.');
         }
     }
@@ -194,8 +194,8 @@ class TokenGeneratorIsolatedTest extends TestCase
         $light = self::artefact('smart-style_light.json.twig');
 
         $this->assertStringContainsString('"logo_primary": "{{ logo.primary }}"', $light);
-        $this->assertStringContainsString('"color_background": "#FAFAF8"', $light);
-        $this->assertStringContainsString('"color_modal_backdrop": "rgba(11, 27, 77, 0.6)"', $light);
+        $this->assertStringContainsString('"color_background": "#FFFFFF"', $light);
+        $this->assertStringContainsString('"color_modal_backdrop": "rgba(11, 55, 110, 0.6)"', $light);
         $this->assertStringContainsString('"dim_font_size": "14px"', $light);
         $this->assertStringContainsString(
             '"font_family_body": "\'Inter\',\'IBM Plex Sans Arabic\',sans-serif"',
@@ -284,9 +284,9 @@ class TokenGeneratorIsolatedTest extends TestCase
     {
         return [
             'light background and text' => [
-                '--background:                          #FAFAF8;',
+                '--background:                          #FFFFFF;',
                 'smart-style_light.json.twig',
-                ['"color_background": "#FAFAF8"', '"color_text": "#0B1B4D"'],
+                ['"color_background": "#FFFFFF"', '"color_text": "#0B376E"'],
             ],
             'dark background and text' => [
                 '--background:                          #0B1220;',

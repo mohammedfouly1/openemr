@@ -1,97 +1,135 @@
 {
-  "light": {
-    "brand": {
-      "navy": "#0B1B4D",
-      "coral": "#FF6F5E",
-      "coralDeep": "#C43F2E",
-      "sage": "#5FA777",
-      "sky": "#3E7FBD",
-      "amber": "#C77A1E",
-      "critical": "#C0392B"
+    "light": {
+        "brand": {
+            "navy": "#0B376E",
+            "coral": "#4B7BAB",
+            "coralDeep": "#1E5A96",
+            "sage": "#5FA777",
+            "sky": "#1E5A96",
+            "amber": "#C77A1E",
+            "critical": "#C0392B"
+        },
+        "background": "#FFFFFF",
+        "surface": "#FFFFFF",
+        "surfaceSunken": "#F5F5F5",
+        "surfaceInput": "#FFFFFF",
+        "surfaceInputOnRaised": "#FFFFFF",
+        "border": "#E4E2DC",
+        "borderStrong": "#4B5266",
+        "divider": "#ECEAE5",
+        "text": {
+            "primary": "#0B376E",
+            "secondary": "#4B5266",
+            "disabled": "#9CA0AC",
+            "inverse": "#FFFFFF"
+        },
+        "semantic": {
+            "success": {
+                "bg": "#E9F5EE",
+                "text": "#2F6B45",
+                "border": "#BFE3CC"
+            },
+            "warning": {
+                "bg": "#FCEFE0",
+                "text": "#8A5314",
+                "border": "#F0CE9E"
+            },
+            "critical": {
+                "bg": "#FBE9E7",
+                "text": "#8E271D",
+                "border": "#F0BDB6"
+            },
+            "info": {
+                "bg": "#E8F0FA",
+                "text": "#264C74",
+                "border": "#BBD3EE"
+            }
+        },
+        "interactive": {
+            "primary": {
+                "default": "#1E5A96",
+                "hover": "#1A4E83",
+                "active": "#174675",
+                "disabled": "#BCCEE0",
+                "textOn": "#FFFFFF"
+            },
+            "secondary": {
+                "default": "#0B376E",
+                "hover": "#0A3060",
+                "textOn": "#FFFFFF"
+            },
+            "focusRing": "#1E5A96"
+        },
+        "link": {
+            "default": "#0B4E91",
+            "hover": "#0A447E"
+        }
     },
-    "background": "#FAFAF8",
-    "surface": "#FFFFFF",
-    "surfaceSunken": "#F2F1EE",
-    "surfaceInput": "#FFFFFF",
-    "surfaceInputOnRaised": "#FFFFFF",
-    "border": "#E4E2DC",
-    "borderStrong": "#4B5266",
-    "divider": "#ECEAE5",
-    "text": {
-      "primary": "#0B1B4D",
-      "secondary": "#4B5266",
-      "disabled": "#9CA0AC",
-      "inverse": "#FFFFFF"
-    },
-    "semantic": {
-      "success": { "bg": "#E9F5EE", "text": "#2F6B45", "border": "#BFE3CC" },
-      "warning": { "bg": "#FCEFE0", "text": "#8A5314", "border": "#F0CE9E" },
-      "critical": { "bg": "#FBE9E7", "text": "#8E271D", "border": "#F0BDB6" },
-      "info": { "bg": "#E8F0FA", "text": "#264C74", "border": "#BBD3EE" }
-    },
-    "interactive": {
-      "primary": {
-        "default": "#C43F2E",
-        "hover": "#A8351F",
-        "active": "#8E2B18",
-        "disabled": "#EAC1BA",
-        "textOn": "#FFFFFF"
-      },
-      "secondary": {
-        "default": "#0B1B4D",
-        "hover": "#0E2461",
-        "textOn": "#FFFFFF"
-      },
-      "focusRing": "#3E7FBD"
-    },
-    "link": { "default": "#2C5F94", "hover": "#1E4574" }
-  },
-  "dark": {
-    "brand": {
-      "navy": "#7C8CE0",
-      "coral": "#FF6F5E",
-      "coralDeep": "#FF8B7C",
-      "sage": "#8FD1A6",
-      "sky": "#8FC1EE",
-      "amber": "#F0B45C",
-      "critical": "#F29088"
-    },
-    "background": "#0B1220",
-    "surface": "#121A2E",
-    "surfaceRaised": "#17213A",
-    "surfaceSunken": "#0E1526",
-    "surfaceInput": "#121A2E",
-    "surfaceInputOnRaised": "#0B1220",
-    "border": "#26314A",
-    "borderStrong": "#AEB5C4",
-    "divider": "#1E2740",
-    "text": {
-      "primary": "#F5F6F8",
-      "secondary": "#AEB5C4",
-      "disabled": "#6B7280",
-      "inverse": "#0B1220"
-    },
-    "semantic": {
-      "success": { "bg": "#173425", "text": "#8FD1A6", "border": "#2B5A3E" },
-      "warning": { "bg": "#3A2A12", "text": "#F0B45C", "border": "#5C4520" },
-      "critical": { "bg": "#3A1815", "text": "#F29088", "border": "#5C2A24" },
-      "info": { "bg": "#132437", "text": "#8FC1EE", "border": "#254361" }
-    },
-    "interactive": {
-      "primary": {
-        "default": "#FF6F5E",
-        "hover": "#FF8672",
-        "active": "#E85C4C",
-        "disabled": "#5A3530",
-        "textOn": "#0B1220"
-      },
-      "secondary": {
-        "default": "#F5F6F8",
-        "hover": "#D8DCE6",
-        "textOn": "#0B1220"
-      },
-      "focusRing": "#8FC1EE"
-    },
-    "link": { "default": "#8FC1EE", "hover": "#B7D9F5" }
-  }
+    "dark": {
+        "brand": {
+            "navy": "#7991AF",
+            "coral": "#A5BDD5",
+            "coralDeep": "#83A4C5",
+            "sage": "#8FD1A6",
+            "sky": "#83A4C5",
+            "amber": "#F0B45C",
+            "critical": "#F29088"
+        },
+        "background": "#0B1220",
+        "surface": "#121A2E",
+        "surfaceRaised": "#17213A",
+        "surfaceSunken": "#0E1526",
+        "surfaceInput": "#121A2E",
+        "surfaceInputOnRaised": "#0B1220",
+        "border": "#26314A",
+        "borderStrong": "#AEB5C4",
+        "divider": "#1E2740",
+        "text": {
+            "primary": "#F5F6F8",
+            "secondary": "#AEB5C4",
+            "disabled": "#6B7280",
+            "inverse": "#0B1220"
+        },
+        "semantic": {
+            "success": {
+                "bg": "#173425",
+                "text": "#8FD1A6",
+                "border": "#2B5A3E"
+            },
+            "warning": {
+                "bg": "#3A2A12",
+                "text": "#F0B45C",
+                "border": "#5C4520"
+            },
+            "critical": {
+                "bg": "#3A1815",
+                "text": "#F29088",
+                "border": "#5C2A24"
+            },
+            "info": {
+                "bg": "#132437",
+                "text": "#8FC1EE",
+                "border": "#254361"
+            }
+        },
+        "interactive": {
+            "primary": {
+                "default": "#83A4C5",
+                "hover": "#728FAB",
+                "active": "#66809A",
+                "disabled": "#2F3E52",
+                "textOn": "#0B1220"
+            },
+            "secondary": {
+                "default": "#F5F6F8",
+                "hover": "#D8DCE6",
+                "textOn": "#0B1220"
+            },
+            "focusRing": "#83A4C5"
+        },
+        "link": {
+            "default": "#799EC3",
+            "hover": "#6989AA"
+        }
+    }
 }

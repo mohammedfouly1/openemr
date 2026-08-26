@@ -74,14 +74,14 @@ final class TokenValidatorTest extends TestCase
         self::assertSame('#1E4574', $result->resolved()?->valueOf(TokenKey::LinkDefault)?->value);
         // Untouched Tier 1 tokens survive the overlay. No nullsafe on resolved() here: the
         // assertion above already proves it is non-null, so `?->` would be dead syntax.
-        self::assertSame('#FAFAF8', $result->resolved()->valueOf(TokenKey::Background)?->value);
+        self::assertSame('#FFFFFF', $result->resolved()->valueOf(TokenKey::Background)?->value);
     }
 
     public function testAcceptedOverlayDoesNotMutateTheBase(): void
     {
         $this->validator->validateOverlay(['link.default' => '#1E4574'], $this->lightBase);
 
-        self::assertSame('#2C5F94', $this->lightBase->valueOf(TokenKey::LinkDefault)?->value);
+        self::assertSame('#0B4E91', $this->lightBase->valueOf(TokenKey::LinkDefault)?->value);
     }
 
     public function testHighContrastPrimaryIsAcceptedTogetherWithItsInheritedLabelColour(): void

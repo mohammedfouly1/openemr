@@ -1632,10 +1632,10 @@
         "variant": "default",
         "rtl_ltr_relevance": "LTR",
         "master_source": "brand/master/",
-        "byte_size": 2706,
-        "sha256": "a876bd6ecda58f484bc42964c71e0c62de27df3d3afba3a7a0b3b4c73482c4ff",
+        "byte_size": 3766,
+        "sha256": "fec92ecd4826ffa7bf5348bc9a7f1945f6f641c043ae1f6d7989812c3822657d",
         "validation_status": "PASS",
-        "notes": ""
+        "notes": "SkyEagle token replacement, 2026-08-26 (Phase B3)."
     },
     {
         "asset_id": "THIQA-092",
