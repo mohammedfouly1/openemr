@@ -58,6 +58,7 @@ parameters:
   - tests
   - tools/branding/bin
   - tools/branding/src
+  - tools/branding/verify-brand-manifest.php
   - tools/release/bin
   - tools/release/src
   - version.php

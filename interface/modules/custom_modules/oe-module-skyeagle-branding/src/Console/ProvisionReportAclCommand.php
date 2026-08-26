@@ -112,12 +112,11 @@ final class ProvisionReportAclCommand extends Command
             );
 
             foreach ($spec['groups'] as $groupTitle) {
-                // getAclIdNumber() returns the raw search_acl() result, which updateAcl() then
-                // indexes as an array. Anything that is not a populated array means the group ACL
-                // was not found, which is exactly what the previous empty() check treated as
-                // missing — narrowed here so the value handed to updateAcl() is a real array.
+                // getAclIdNumber() is declared (docblock) to always return an array — an empty
+                // one means the group ACL was not found, which is exactly what the previous
+                // empty() check treated as missing.
                 $aclId = AclExtended::getAclIdNumber($groupTitle, 'write');
-                if (!is_array($aclId) || $aclId === []) {
+                if ($aclId === []) {
                     $missing[] = $groupTitle . '/' . $objectName;
                     continue;
                 }

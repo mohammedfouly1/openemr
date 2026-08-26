@@ -81,7 +81,6 @@ final class TokenKeyTest extends TestCase
         );
 
         self::assertSame(self::EXPECTED_OVERRIDABLE, $actual);
-        self::assertCount(11, $actual);
         self::assertCount(
             10,
             array_filter(

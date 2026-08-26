@@ -307,7 +307,7 @@ final class ProductNameCompositionContractTest extends TestCase
         require_once $this->root() . '/library/translation.inc.php';
 
         $globals = OEGlobalsBag::getInstance();
-        $previousName = $globals->get('openemr_name');
+        $previousName = $globals->getString('openemr_name');
         $previousSkip = $globals->get('temp_skip_translations');
 
         try {
@@ -408,7 +408,7 @@ final class ProductNameCompositionContractTest extends TestCase
      * row at all, so no translation override could ever have reached it and changing the key
      * orphans nothing. That is why they need no carry-forward contract, unlike the class-A set.
      *
-     * @return array<string, list<string>>
+     * @return array<string, array{string, list<string>}>
      *
      * @codeCoverageIgnore Data providers run before coverage instrumentation starts.
      */

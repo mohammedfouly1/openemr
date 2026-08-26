@@ -130,7 +130,7 @@ final class ForbiddenBrandingHttpClientRule implements Rule
     private function isRuntimePlane(Scope $scope): bool
     {
         $namespace = $scope->getNamespace();
-        if (!BrandingGuardrailScope::covers($namespace)) {
+        if ($namespace === null || !BrandingGuardrailScope::covers($namespace)) {
             return false;
         }
 

@@ -13,6 +13,10 @@ namespace OpenEMR\Common\Translation;
 
 use OpenEMR\Common\Database\QueryUtils;
 
+/**
+ * @phpstan-import-type TranslationSnapshot from TranslationCatalogueStore
+ * @phpstan-import-type TranslationJournalEntry from TranslationCatalogueStore
+ */
 final class QueryUtilsTranslationCatalogueStore implements TranslationCatalogueStore
 {
     public function transaction(callable $operation): mixed
@@ -86,6 +90,7 @@ final class QueryUtilsTranslationCatalogueStore implements TranslationCatalogueS
         );
     }
 
+    /** @return TranslationJournalEntry|null */
     public function readJournal(string $migrationId): ?array
     {
         $rows = QueryUtils::fetchRecordsNoLog(
@@ -103,17 +108,23 @@ final class QueryUtilsTranslationCatalogueStore implements TranslationCatalogueS
             return [
                 'contract_hash' => self::columnAsString($rows[0]['contract_hash'] ?? null, 'contract_hash'),
                 'status' => self::columnAsString($rows[0]['status'] ?? null, 'status'),
-                'before' => json_decode(
-                    self::columnAsString($rows[0]['before_state'] ?? null, 'before_state'),
-                    true,
-                    512,
-                    JSON_THROW_ON_ERROR,
+                'before' => self::decodeSnapshot(
+                    json_decode(
+                        self::columnAsString($rows[0]['before_state'] ?? null, 'before_state'),
+                        true,
+                        512,
+                        JSON_THROW_ON_ERROR,
+                    ),
+                    'before_state',
                 ),
-                'after' => json_decode(
-                    self::columnAsString($rows[0]['after_state'] ?? null, 'after_state'),
-                    true,
-                    512,
-                    JSON_THROW_ON_ERROR,
+                'after' => self::decodeSnapshot(
+                    json_decode(
+                        self::columnAsString($rows[0]['after_state'] ?? null, 'after_state'),
+                        true,
+                        512,
+                        JSON_THROW_ON_ERROR,
+                    ),
+                    'after_state',
                 ),
             ];
         } catch (\JsonException $exception) {
@@ -121,6 +132,63 @@ final class QueryUtilsTranslationCatalogueStore implements TranslationCatalogueS
         }
     }
 
+    /**
+     * Narrows a `json_decode()`d journal snapshot to its declared shape.
+     *
+     * The journal is this class's own `writeJournal()` output round-tripped through JSON, so a
+     * malformed decode means the stored row was corrupted or written by something else entirely
+     * — worth failing loudly rather than silently coercing, the same posture {@see columnAsInt()}
+     * and {@see columnAsString()} take for database columns.
+     *
+     * @return TranslationSnapshot
+     */
+    private static function decodeSnapshot(mixed $decoded, string $column): array
+    {
+        if (!is_array($decoded)) {
+            throw new \RuntimeException(sprintf('Column "%s" did not decode to an object.', $column));
+        }
+
+        $exists = $decoded['exists'] ?? null;
+        if (!is_bool($exists)) {
+            throw new \RuntimeException(sprintf('Column "%s" is missing a boolean "exists".', $column));
+        }
+
+        $id = $decoded['id'] ?? null;
+        if ($id !== null && !is_int($id)) {
+            throw new \RuntimeException(sprintf('Column "%s" has a non-integer "id".', $column));
+        }
+
+        $definitionsRaw = $decoded['definitions'] ?? null;
+        if (!is_array($definitionsRaw)) {
+            throw new \RuntimeException(sprintf('Column "%s" is missing an array "definitions".', $column));
+        }
+        $definitions = [];
+        foreach ($definitionsRaw as $languageId => $definition) {
+            $definitions[self::columnAsInt($languageId, 'definitions[].languageId')] =
+                self::columnAsString($definition, 'definitions[].value');
+        }
+
+        $integrityRaw = $decoded['integrity'] ?? null;
+        if (!is_array($integrityRaw)) {
+            throw new \RuntimeException(sprintf('Column "%s" is missing an "integrity" object.', $column));
+        }
+
+        return [
+            'exists' => $exists,
+            'id' => $id,
+            'definitions' => $definitions,
+            'integrity' => [
+                'definitions' => self::columnAsInt($integrityRaw['definitions'] ?? null, 'integrity.definitions'),
+                'orphans' => self::columnAsInt($integrityRaw['orphans'] ?? null, 'integrity.orphans'),
+                'duplicate_pairs' => self::columnAsInt($integrityRaw['duplicate_pairs'] ?? null, 'integrity.duplicate_pairs'),
+            ],
+        ];
+    }
+
+    /**
+     * @param TranslationSnapshot $before
+     * @param TranslationSnapshot $after
+     */
     public function writeJournal(
         string $migrationId,
         string $contractHash,
@@ -162,9 +230,9 @@ final class QueryUtilsTranslationCatalogueStore implements TranslationCatalogueS
             [],
         );
         return [
-            'definitions' => (int) $definitions,
-            'orphans' => (int) $orphans,
-            'duplicate_pairs' => (int) $duplicates,
+            'definitions' => self::columnAsInt($definitions, 'definitions.count'),
+            'orphans' => self::columnAsInt($orphans, 'orphans.count'),
+            'duplicate_pairs' => self::columnAsInt($duplicates, 'duplicate_pairs.count'),
         ];
     }
 

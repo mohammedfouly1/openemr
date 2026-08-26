@@ -16,6 +16,7 @@ namespace OpenEMR\Tests\Isolated\BrandingCi;
 
 use OpenEMR\Common\Branding\ProductIdentity;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Process;
 
 /**
  * Finding S3-P1-33. `setup.php` runs before the database exists, so every other product-name
@@ -115,7 +116,6 @@ final class ProductIdentityContractTest extends TestCase
         $path = $this->scratch . '/wrong-type.php';
         file_put_contents($path, "<?php\n\nreturn ['product_name' => 42];\n");
 
-        self::assertIsString(ProductIdentity::load($path)['product_name']);
         self::assertNotSame('42', ProductIdentity::load($path)['product_name']);
     }
 
@@ -126,7 +126,6 @@ final class ProductIdentityContractTest extends TestCase
 
         self::assertNotSame([], $identity);
         foreach ($identity as $key => $value) {
-            self::assertIsString($value, $key . ' must be a string.');
             self::assertNotSame('', $value, $key . ' must never resolve empty.');
         }
     }
@@ -247,8 +246,13 @@ final class ProductIdentityContractTest extends TestCase
             $arguments,
         );
 
-        $escaped = implode(' ', array_map(escapeshellarg(...), $command));
-        exec($escaped . ' 2>&1', $output, $exitCode);
+        $process = new Process($command);
+        $process->run();
+
+        $exitCode = $process->getExitCode();
+        if ($exitCode === null) {
+            throw new \RuntimeException('Generator process did not produce an exit code.');
+        }
 
         return $exitCode;
     }

@@ -434,12 +434,11 @@ final class TranslationCatalogueMigrationTest extends TestCase
             3 => 'Companias de seguros',
         ]);
 
-        $result = $this->migration()->forward(
+        $this->migration()->forward(
             $this->derivedContract('Insurance Companies %s', 'Insurance Companies', 'suffix'),
             $store,
         );
 
-        self::assertNotNull($result, 'The migration must complete rather than throw.');
         self::assertSame(
             [3 => 'Companias de seguros %s'],
             $store->definitionsOf('Insurance Companies %s'),
@@ -464,12 +463,11 @@ final class TranslationCatalogueMigrationTest extends TestCase
             3 => 'Acceso a OpenEMR',
         ]);
 
-        $result = $this->migration()->forward(
+        $this->migration()->forward(
             $this->legacyContract('%s Login', 'OpenEMR Login', 'skip'),
             $store,
         );
 
-        self::assertNotNull($result, 'The migration must complete rather than throw.');
         self::assertSame(
             [3 => 'Acceso a %s'],
             $store->definitionsOf('%s Login'),
@@ -587,13 +585,17 @@ final class TranslationCatalogueMigrationTest extends TestCase
     }
 }
 
+/**
+ * @phpstan-import-type TranslationSnapshot from TranslationCatalogueStore
+ * @phpstan-import-type TranslationJournalEntry from TranslationCatalogueStore
+ */
 final class MemoryTranslationCatalogueStore implements TranslationCatalogueStore
 {
     /** @var array<int, string> */
     private array $constants = [];
     /** @var array<int, array<int, string>> */
     private array $definitionsByConstant = [];
-    /** @var array<string, array<string, mixed>> */
+    /** @var array<string, TranslationJournalEntry> */
     private array $journals = [];
     private int $nextId = 1;
     public int $orphanCount = 0;
@@ -612,7 +614,7 @@ final class MemoryTranslationCatalogueStore implements TranslationCatalogueStore
 
     public function constantIds(string $exactName): array
     {
-        return array_values(array_keys($this->constants, $exactName, true));
+        return array_keys($this->constants, $exactName, true);
     }
 
     public function definitions(int $constantId): array
@@ -651,11 +653,16 @@ final class MemoryTranslationCatalogueStore implements TranslationCatalogueStore
         unset($this->definitionsByConstant[$constantId], $this->constants[$constantId]);
     }
 
+    /** @return TranslationJournalEntry|null */
     public function readJournal(string $migrationId): ?array
     {
         return $this->journals[$migrationId] ?? null;
     }
 
+    /**
+     * @param TranslationSnapshot $before
+     * @param TranslationSnapshot $after
+     */
     public function writeJournal(
         string $migrationId,
         string $contractHash,

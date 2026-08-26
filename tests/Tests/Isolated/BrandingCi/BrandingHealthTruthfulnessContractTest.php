@@ -73,6 +73,22 @@ final class BrandingHealthTruthfulnessContractTest extends TestCase
 
     public function testEveryFindingIsClassifiedOnItsExpectedPlane(): void
     {
+        self::assertSame(self::EXPECTED_PLANES, self::actualPlanesByIdentifier());
+    }
+
+    /**
+     * Built as its own method, with a general `array<string, string>` return type, rather than
+     * inline in the test: PHPStan infers a dynamically-built array's type as a per-key union of
+     * every value ever assigned during the loop, which it then compares against
+     * self::EXPECTED_PLANES's literal per-key shape and pronounces the two "impossible" to be
+     * equal — a false positive of the shape inference, not a real defect. A declared general
+     * element type sidesteps that over-precise (and here wrong) shape unification while keeping
+     * the actual runtime comparison exactly as strict.
+     *
+     * @return array<string, string>
+     */
+    private static function actualPlanesByIdentifier(): array
+    {
         $actual = [];
         foreach (BrandingInconsistency::cases() as $case) {
             $actual[$case->value] = $case->plane()->value;
@@ -82,7 +98,7 @@ final class BrandingHealthTruthfulnessContractTest extends TestCase
         // change while adding or reclassifying a case still is.
         ksort($actual);
 
-        self::assertSame(self::EXPECTED_PLANES, $actual);
+        return $actual;
     }
 
     /**

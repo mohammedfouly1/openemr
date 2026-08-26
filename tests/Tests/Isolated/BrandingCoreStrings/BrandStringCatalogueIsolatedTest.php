@@ -18,11 +18,18 @@ use OpenEMR\Branding\RetiredEnglishOverrideDecision;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @phpstan-type BrandStringCatalogue array{
+ *     english_overrides: array<mixed, mixed>,
+ *     retired_english_overrides: list<array<mixed, mixed>>,
+ *     carry_forward: array<mixed, mixed>,
+ * }
+ */
 final class BrandStringCatalogueIsolatedTest extends TestCase
 {
     private const PROJECT_ROOT = __DIR__ . '/../../../..';
 
-    /** @var array<string, mixed> */
+    /** @var BrandStringCatalogue */
     private array $catalogue;
 
     protected function setUp(): void
@@ -32,7 +39,34 @@ final class BrandStringCatalogueIsolatedTest extends TestCase
 
         $decoded = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
         self::assertIsArray($decoded);
-        $this->catalogue = $decoded;
+        $this->catalogue = self::parseCatalogue($decoded);
+    }
+
+    /**
+     * @param array<mixed, mixed> $decoded
+     * @return BrandStringCatalogue
+     */
+    private static function parseCatalogue(array $decoded): array
+    {
+        $englishOverrides = $decoded['english_overrides'] ?? null;
+        self::assertIsArray($englishOverrides);
+
+        $retiredRaw = $decoded['retired_english_overrides'] ?? null;
+        self::assertIsArray($retiredRaw);
+        $retired = [];
+        foreach (array_values($retiredRaw) as $entry) {
+            self::assertIsArray($entry);
+            $retired[] = $entry;
+        }
+
+        $carryForward = $decoded['carry_forward'] ?? null;
+        self::assertIsArray($carryForward);
+
+        return [
+            'english_overrides' => $englishOverrides,
+            'retired_english_overrides' => $retired,
+            'carry_forward' => $carryForward,
+        ];
     }
 
     /**
@@ -88,11 +122,14 @@ final class BrandStringCatalogueIsolatedTest extends TestCase
         ]);
 
         foreach ($this->catalogue['retired_english_overrides'] as $entry) {
+            $constant = $entry['constant'];
+            self::assertIsString($constant);
+
             foreach ($consumers as $consumer) {
                 self::assertStringNotContainsString(
-                    "xl('" . $entry['constant'] . "')",
+                    "xl('" . $constant . "')",
                     $this->readProjectFile($consumer),
-                    $consumer . ' still translates the retired constant ' . $entry['constant'] . '.',
+                    $consumer . ' still translates the retired constant ' . $constant . '.',
                 );
             }
         }
@@ -144,9 +181,12 @@ final class BrandStringCatalogueIsolatedTest extends TestCase
 
         $raw = $this->readProjectFile('contrib/util/language_translations/contracts/database-upgrade.json');
         $contract = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+        self::assertIsArray($contract);
         self::assertSame('%s Database Upgrade', $contract['target_key']);
-        self::assertArrayHasKey('OpenEMR Database Upgrade', $contract['legacy_keys']);
-        self::assertArrayHasKey('Thiqa Database Upgrade', $contract['legacy_keys']);
+        $legacyKeys = $contract['legacy_keys'];
+        self::assertIsArray($legacyKeys);
+        self::assertArrayHasKey('OpenEMR Database Upgrade', $legacyKeys);
+        self::assertArrayHasKey('Thiqa Database Upgrade', $legacyKeys);
     }
 
     #[DataProvider('retirementDecisionProvider')]

@@ -376,6 +376,7 @@ final class BrandLeakSurfaceContractTest extends TestCase
      */
     private function deriveLeakSurface(): array
     {
+        /** @var array<string, list<string>>|null $cache */
         static $cache = null;
         if ($cache !== null) {
             return $cache;

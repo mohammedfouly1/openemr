@@ -341,7 +341,9 @@ final class SkyEagleBrandingGuardrailScopeTest extends TestCase
         );
 
         self::assertIsArray($manifest);
-        $autoload = $manifest['autoload']['psr-4'] ?? null;
+        $autoloadSection = $manifest['autoload'] ?? null;
+        self::assertIsArray($autoloadSection);
+        $autoload = $autoloadSection['psr-4'] ?? null;
         self::assertIsArray($autoload);
         self::assertCount(1, $autoload, 'The branding module must declare exactly one PSR-4 prefix.');
 

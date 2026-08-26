@@ -259,6 +259,17 @@ function PrintCreditDetail($detail, $pat, $unassigned = false, $effectiveInsuran
         // CSV export shares this loop with the HTML render, but the report's CSV
         // schema only has one amount column (Chg/Pmt Amount), so the payment,
         // adjustment, applied and balance figures are labeled and packed into it.
+        //
+        // $description, $payer and $type are built from untyped legacy row data
+        // (List_Look() / sqlQuery() results have no declared type), and by this point in the
+        // loop are always genuine strings at runtime — text() above already renders them as
+        // such. csvEscape(), unlike text(), declares a strict `string` parameter, so the value
+        // is narrowed rather than cast: a non-string here is impossible in practice, and an
+        // empty CSV field is a safe fallback if that assumption is ever wrong.
+        $csvDescription = is_string($description) ? $description : '';
+        $csvPayer = is_string($payer) ? $payer : '';
+        $csvType = is_string($type) ? $type : '';
+
         $csv_amounts = [];
         if ($print_pmt !== '') {
             $csv_amounts[] = xl('Payment') . ': ' . $print_pmt;
@@ -273,9 +284,9 @@ function PrintCreditDetail($detail, $pat, $unassigned = false, $effectiveInsuran
             $csv_amounts[] = xl('UAC Tot') . ': ' . $print_bal;
         }
         $csv = csvEscape('') . ',';
-        $csv .= csvEscape($description) . ',';
-        $csv .= csvEscape($pmt_date . ' / ' . $payer) . ',';
-        $csv .= csvEscape($type) . ',';
+        $csv .= csvEscape($csvDescription) . ',';
+        $csv .= csvEscape($pmt_date . ' / ' . $csvPayer) . ',';
+        $csv .= csvEscape($csvType) . ',';
         $csv .= csvEscape(implode(' | ', $csv_amounts)) . "\n";
 
         if (!empty($_REQUEST['form_csvexport'])) {

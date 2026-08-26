@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace OpenEMR\Common\Translation;
 
+/**
+ * @phpstan-import-type TranslationSnapshot from TranslationCatalogueStore
+ * @phpstan-import-type TranslationJournalEntry from TranslationCatalogueStore
+ */
 final class TranslationCatalogueMigration
 {
     public function forward(
@@ -52,7 +56,7 @@ final class TranslationCatalogueMigration
                 }
             }
 
-            if ($added === 0 && ($before['exists'] ?? false)) {
+            if ($added === 0 && $before['exists']) {
                 return new TranslationCatalogueMigrationResult('already_current', 0, $targetId);
             }
 
@@ -78,11 +82,11 @@ final class TranslationCatalogueMigration
                 return new TranslationCatalogueMigrationResult('nothing_to_rollback');
             }
             $this->assertJournalContract($journal, $contract);
-            if (($journal['status'] ?? null) === 'rolled_back') {
+            if ($journal['status'] === 'rolled_back') {
                 $this->assertCurrentMatches($store, $contract->targetKey, $journal['before']);
                 return new TranslationCatalogueMigrationResult('already_rolled_back');
             }
-            if (($journal['status'] ?? null) !== 'applied') {
+            if ($journal['status'] !== 'applied') {
                 throw new \RuntimeException('Unknown translation migration journal status.');
             }
 
@@ -90,15 +94,18 @@ final class TranslationCatalogueMigration
             $before = $journal['before'];
             $after = $journal['after'];
             $targetId = $after['id'];
-            $beforeDefinitions = $before['definitions'] ?? [];
+            if ($targetId === null) {
+                throw new \RuntimeException('Applied translation migration journal is missing its target id.');
+            }
+            $beforeDefinitions = $before['definitions'];
             $removed = 0;
             foreach ($after['definitions'] as $languageId => $definition) {
-                if (!array_key_exists((int) $languageId, $beforeDefinitions)) {
-                    $store->deleteDefinition($targetId, (int) $languageId);
+                if (!array_key_exists($languageId, $beforeDefinitions)) {
+                    $store->deleteDefinition($targetId, $languageId);
                     $removed++;
                 }
             }
-            if (!($before['exists'] ?? false)) {
+            if (!$before['exists']) {
                 $store->deleteConstant($targetId);
             }
 
@@ -268,28 +275,33 @@ final class TranslationCatalogueMigration
         }
     }
 
-    /** @param array<string, mixed> $expected */
+    /** @param TranslationSnapshot $expected */
     private function assertCurrentMatches(TranslationCatalogueStore $store, string $targetKey, array $expected): void
     {
         $id = $this->singleExactId($store, $targetKey);
-        if (!($expected['exists'] ?? false)) {
+        if (!$expected['exists']) {
             if ($id !== null) {
                 throw new \RuntimeException('Translation target drifted from the recorded absent state.');
             }
             return;
         }
-        if ($id !== $expected['id'] || $store->definitions($id) !== $expected['definitions']) {
+        if ($id === null || $id !== $expected['id'] || $store->definitions($id) !== $expected['definitions']) {
             throw new \RuntimeException('Translation target drifted from its journalled state.');
         }
     }
 
-    /** @param array{definitions: int, orphans: int, duplicate_pairs: int} $integrity */
+    /**
+     * @param array{definitions: int, orphans: int, duplicate_pairs: int} $integrity
+     * @return TranslationSnapshot
+     */
     private function snapshot(TranslationCatalogueStore $store, ?int $targetId, array $integrity): array
     {
+        $definitions = $targetId === null ? [] : $store->definitions($targetId);
+
         return [
             'exists' => $targetId !== null,
             'id' => $targetId,
-            'definitions' => $targetId === null ? [] : $store->definitions($targetId),
+            'definitions' => $definitions,
             'integrity' => $integrity,
         ];
     }

@@ -75,7 +75,14 @@ final readonly class TranslationCatalogueContract
             if (!is_array($data['derive_from'])) {
                 throw new \InvalidArgumentException('derive_from must be an object.');
             }
-            $derivation = TranslationDerivation::fromArray($data['derive_from']);
+            $deriveFrom = [];
+            foreach ($data['derive_from'] as $deriveFromKey => $deriveFromValue) {
+                if (!is_string($deriveFromKey)) {
+                    throw new \InvalidArgumentException('derive_from must be a JSON object, not an array.');
+                }
+                $deriveFrom[$deriveFromKey] = $deriveFromValue;
+            }
+            $derivation = TranslationDerivation::fromArray($deriveFrom);
         }
 
         $id = self::requiredString($data, 'id');
@@ -115,7 +122,7 @@ final readonly class TranslationCatalogueContract
         // from the source constant at migration time, either by derivation or by neutralising a
         // brand literal. With neither, there is nothing else to supply them, so an empty set would
         // mean a constant with no translations at all.
-        $carriesForward = $derivation !== null || ($legacyKeys !== null && $legacyKeys !== []);
+        $carriesForward = $derivation !== null || $validatedLegacyKeys !== [];
         if ($definitions === [] && !$carriesForward) {
             throw new \InvalidArgumentException('definitions must contain at least one translated pattern.');
         }

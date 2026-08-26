@@ -58,6 +58,12 @@ class ForbiddenGlobalNamespaceRule implements Rule
         }
         $definingFileAbs = $scope->getFile();
         $definingFile = substr($definingFileAbs, strlen($appRoot) + 1);
+        // Normalise to the forward slashes composer.json's autoload.files always uses. On a
+        // native Windows host both getcwd() and $scope->getFile() return backslash-separated
+        // paths, so the raw substr() above never matches an allowed entry and every legacy
+        // global function in every allow-listed file — not just new ones — was misreported as
+        // forbidden. A no-op on POSIX, where the paths already use forward slashes.
+        $definingFile = str_replace('\\', '/', $definingFile);
 
         if (in_array($definingFile, $allowed, true)) {
             return [];

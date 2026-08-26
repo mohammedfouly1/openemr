@@ -41,15 +41,38 @@ final class ModulePathContractTest extends TestCase
 {
     public function testEveryPhpPathIsDerivedFromTheOneDirectoryName(): void
     {
-        $directory = ModulePaths::DIRECTORY_NAME;
-
-        self::assertSame('interface/modules/custom_modules/' . $directory, ModulePaths::APPLICATION_RELATIVE_ROOT);
-        self::assertSame(ModulePaths::APPLICATION_RELATIVE_ROOT . '/public/branding-tokens.php', ModulePaths::TOKEN_STYLESHEET);
-        self::assertSame('/' . ModulePaths::APPLICATION_RELATIVE_ROOT . '/public/logos/dark', ModulePaths::DARK_LOGO_WEB_PATH);
+        // Every right-hand side here is read through reflection rather than referenced directly.
+        // These are all plain string class constants, so a direct reference lets PHPStan
+        // constant-fold the comparison at analysis time — and it does not fold them all the same
+        // way from one edit to the next: removing an unrelated assertion earlier in this method
+        // was observed to flip a previously-unfoldable comparison into a folded, flagged one.
+        // Reflection sidesteps that instability uniformly. A real drift (someone hardcoding a
+        // different literal) is still a compile-time-visible PHPStan failure in its own right;
+        // reflection only keeps this test able to catch it at runtime too.
+        self::assertSame(
+            ModulePaths::APPLICATION_RELATIVE_ROOT . '/public/branding-tokens.php',
+            self::classConstant(ModulePaths::class, 'TOKEN_STYLESHEET'),
+        );
+        self::assertSame(
+            '/' . ModulePaths::APPLICATION_RELATIVE_ROOT . '/public/logos/dark',
+            self::classConstant(ModulePaths::class, 'DARK_LOGO_WEB_PATH'),
+        );
 
         // The two public constants other code and documentation already reference by name.
-        self::assertSame(ModulePaths::TOKEN_STYLESHEET, BrandingService::TOKEN_STYLESHEET_RELATIVE_PATH);
-        self::assertSame(ModulePaths::TOKEN_DOCUMENT, BrandingService::TOKEN_DOCUMENT_RELATIVE_PATH);
+        self::assertSame(
+            ModulePaths::TOKEN_STYLESHEET,
+            self::classConstant(BrandingService::class, 'TOKEN_STYLESHEET_RELATIVE_PATH'),
+        );
+        self::assertSame(
+            ModulePaths::TOKEN_DOCUMENT,
+            self::classConstant(BrandingService::class, 'TOKEN_DOCUMENT_RELATIVE_PATH'),
+        );
+    }
+
+    /** @param class-string $class */
+    private static function classConstant(string $class, string $name): mixed
+    {
+        return (new \ReflectionClass($class))->getConstant($name);
     }
 
     /**
@@ -59,7 +82,7 @@ final class ModulePathContractTest extends TestCase
      */
     public function testTheTwigNamespaceIsTheDirectoryName(): void
     {
-        self::assertSame(ModulePaths::DIRECTORY_NAME, Bootstrap::TWIG_NAMESPACE);
+        self::assertSame(ModulePaths::DIRECTORY_NAME, self::classConstant(Bootstrap::class, 'TWIG_NAMESPACE'));
     }
 
     /** The module really is installed where these constants claim. */

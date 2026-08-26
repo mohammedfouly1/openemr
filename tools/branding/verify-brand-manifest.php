@@ -221,7 +221,6 @@ final class BrandManifestVerifier
         ],
     ];
 
-    /** @var list<string> */
     /**
      * Set to `1` by any environment that has installed the mirrored asset trees and therefore
      * expects the equality check to actually run. See {@see self::verifyMirroredTree()} for why
@@ -229,6 +228,7 @@ final class BrandManifestVerifier
      */
     public const DEPLOYED_ASSETS_REQUIRED_ENV = 'OPENEMR_DEPLOYED_ASSETS_REQUIRED';
 
+    /** @var list<string> */
     private array $problems = [];
 
     /** @var array<string, int> */
@@ -365,9 +365,6 @@ final class BrandManifestVerifier
     }
 
     /**
-     * @param array<string, string> $recorded repo-relative path => recorded sha256
-     */
-    /**
      * Whether this environment has declared that the mirrored trees are installed.
      *
      * Only the exact string `1` counts. GitHub Actions renders an unset expression as the empty
@@ -379,6 +376,9 @@ final class BrandManifestVerifier
         return getenv(self::DEPLOYED_ASSETS_REQUIRED_ENV) === '1';
     }
 
+    /**
+     * @param array<string, string> $recorded repo-relative path => recorded sha256
+     */
     private function verifyMirroredTree(MirroredTree $tree, array $recorded): void
     {
         $label = $tree->deployedRoot . ' <- ' . $tree->sourceRoot;

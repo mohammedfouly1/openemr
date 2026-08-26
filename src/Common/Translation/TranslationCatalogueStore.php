@@ -11,8 +11,27 @@ declare(strict_types=1);
 
 namespace OpenEMR\Common\Translation;
 
+/**
+ * @phpstan-type TranslationSnapshot array{
+ *     exists: bool,
+ *     id: int|null,
+ *     definitions: array<int, string>,
+ *     integrity: array{definitions: int, orphans: int, duplicate_pairs: int},
+ * }
+ * @phpstan-type TranslationJournalEntry array{
+ *     contract_hash: string,
+ *     status: string,
+ *     before: TranslationSnapshot,
+ *     after: TranslationSnapshot,
+ * }
+ */
 interface TranslationCatalogueStore
 {
+    /**
+     * @template T
+     * @param callable(): T $operation
+     * @return T
+     */
     public function transaction(callable $operation): mixed;
 
     /** @return list<int> */
@@ -29,10 +48,13 @@ interface TranslationCatalogueStore
 
     public function deleteConstant(int $constantId): void;
 
-    /** @return array<string, mixed>|null */
+    /** @return TranslationJournalEntry|null */
     public function readJournal(string $migrationId): ?array;
 
-    /** @param array<string, mixed> $before @param array<string, mixed> $after */
+    /**
+     * @param TranslationSnapshot $before
+     * @param TranslationSnapshot $after
+     */
     public function writeJournal(
         string $migrationId,
         string $contractHash,

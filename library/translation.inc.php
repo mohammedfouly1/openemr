@@ -1,5 +1,6 @@
 <?php
 
+use OpenEMR\Common\Database\QueryUtils;
 use OpenEMR\Common\Session\SessionWrapperFactory;
 use OpenEMR\Common\Translation\TranslationCache;
 use OpenEMR\Core\OEGlobalsBag;
@@ -18,25 +19,25 @@ if (!(function_exists('xlWarmCache'))) {
     }
 }
 
-if (!(function_exists('xl'))) {
+if (!(function_exists('xlTranslate'))) {
     /**
-     * Translation function - the translation engine for OpenEMR
+     * The exact-match translation lookup xl() performs, without xl()'s `literal-string`
+     * constraint on the input.
      *
-     * Translates a given constant string into the current session language.
-     * Note: In some installation scenarios this function may already be declared,
-     * so we check to ensure it hasn't been declared yet.
+     * xl()'s literal-string typing (see its own docblock) is deliberate discipline for the
+     * ordinary case: a source-code literal that string-extraction tooling can collect. xlp()
+     * needs this identical lookup from a context that constraint cannot reach — the `|xlp` Twig
+     * filter (`TwigExtension::translateWithProductName()`) receives its pattern from template
+     * text, which is a literal in the .twig file but only ever a plain runtime `string` by the
+     * time it crosses into PHP; PHPStan cannot prove it literal on that side, and never could,
+     * regardless of how the call is written. Extracting the lookup here — with xl() itself now a
+     * one-line delegation — keeps exactly one translation-lookup implementation whichever way
+     * it is reached, rather than a strict copy and a loose copy that could drift apart.
      *
-     * The parameter is typed `literal-string` on purpose: translatable text is
-     * looked up by exact match against the lang_constants table, so it must be a
-     * source-code literal that the string-extraction tooling can collect. Passing
-     * a dynamic value (a database column, request input, a concatenation) cannot
-     * be translated and signals that the value should have been narrowed to a
-     * known string at the call site instead of handed to xl().
-     *
-     * @param literal-string $constant The text constant to translate
-     * @return string The translated string
+     * @param string $constant
+     * @return string
      */
-    function xl($constant)
+    function xlTranslate($constant)
     {
         if (OEGlobalsBag::getInstance()->getBoolean('disable_translation') || !empty(OEGlobalsBag::getInstance()->get('temp_skip_translations'))) {
             return $constant;
@@ -77,22 +78,54 @@ if (!(function_exists('xl'))) {
             TranslationCache::set($lang_id, $constant, $string);
         }
 
-        if ($string == '') {
+        if ($string === null || $string === '') {
             $string = "$constant";
         }
         // remove dangerous characters and remove comments
         if (OEGlobalsBag::getInstance()->getBoolean('translate_no_safe_apostrophe')) {
             $patterns =  ['/\n/','/\r/','/\{\{.*\}\}/'];
             $replace =  [' ','',''];
-            $string = preg_replace($patterns, $replace, (string) $string);
+            $stringable = (string) $string;
+            // preg_replace() returns null on a PCRE execution failure (e.g. backtrack/recursion
+            // limit); falling back to the pre-replacement string is safer than propagating null
+            // into a function documented to always return string.
+            $string = preg_replace($patterns, $replace, $stringable) ?? $stringable;
         } else {
             // convert apostrophes and quotes to safe apostrophe
             $patterns =  ['/\n/','/\r/','/"/',"/'/",'/\{\{.*\}\}/'];
             $replace =  [' ','','`','`',''];
-            $string = preg_replace($patterns, $replace, (string) $string);
+            $stringable = (string) $string;
+            $string = preg_replace($patterns, $replace, $stringable) ?? $stringable;
         }
 
         return $string;
+    }
+}
+
+if (!(function_exists('xl'))) {
+    /**
+     * Translation function - the translation engine for OpenEMR
+     *
+     * Translates a given constant string into the current session language.
+     * Note: In some installation scenarios this function may already be declared,
+     * so we check to ensure it hasn't been declared yet.
+     *
+     * The parameter is typed `literal-string` on purpose: translatable text is
+     * looked up by exact match against the lang_constants table, so it must be a
+     * source-code literal that the string-extraction tooling can collect. Passing
+     * a dynamic value (a database column, request input, a concatenation) cannot
+     * be translated and signals that the value should have been narrowed to a
+     * known string at the call site instead of handed to xl(). A caller that
+     * legitimately cannot supply a literal (an indirection like a Twig filter)
+     * uses {@see xlTranslate()} instead, which is this exact lookup without that
+     * constraint.
+     *
+     * @param literal-string $constant The text constant to translate
+     * @return string The translated string
+     */
+    function xl($constant)
+    {
+        return xlTranslate($constant);
     }
 }
 
@@ -118,6 +151,14 @@ if (!(function_exists('xl'))) {
  * can never turn into an arbitrary format string, and a translation that has lost its placeholder
  * raises rather than silently dropping the product name.
  *
+ * Deliberately not typed `literal-string` the way `xl()` is: this function's own Twig twin
+ * (`TwigExtension::translateWithProductName()`, the `|xlp` filter) receives its pattern from
+ * template text, which is a literal in the .twig source but only ever a plain runtime `string` by
+ * the time it reaches this parameter — PHPStan cannot prove it literal on that side, and requiring
+ * it here would make the filter itself uncallable. The lookup still runs through the identical,
+ * exact-match {@see xlTranslate()} that backs `xl()`; only the compile-time literalness proof is
+ * relaxed, not the translation semantics.
+ *
  * @param string $pattern translatable text containing exactly one product-name placeholder
  * @return string the translated pattern with the configured product name composed in
  */
@@ -132,7 +173,7 @@ function xlp($pattern)
     // Routing through xl_product_name() fixes every composed surface at once; it degrades to
     // `openemr_name` for non-Arabic sessions and when no Arabic name is configured.
     return \OpenEMR\Common\Translation\ProductContextTranslation::compose(
-        xl($pattern),
+        xlTranslate($pattern),
         xl_product_name(),
     );
 }
@@ -159,6 +200,7 @@ function xlp($pattern)
  */
 function xl_product_name()
 {
+    /** @var string|null $resolved */
     static $resolved = null;
     if ($resolved !== null) {
         return $resolved;
@@ -212,7 +254,13 @@ function xl_session_language_id()
     $session = SessionWrapperFactory::getInstance()->getActiveSession();
     $choice = $session->get('language_choice');
 
-    return !empty($choice) ? (int) $choice : 1;
+    if (!is_scalar($choice)) {
+        return 1;
+    }
+
+    $languageId = (int) $choice;
+
+    return $languageId > 0 ? $languageId : 1;
 }
 
 /**
@@ -226,16 +274,18 @@ function xl_session_language_id()
  */
 function getLanguageCode($lang_id)
 {
+    /** @var array<int, string> $codes */
     static $codes = [];
 
-    $lang_id = empty($lang_id) ? 1 : (int) $lang_id;
+    $lang_id = $lang_id === 0 ? 1 : (int) $lang_id;
     if (array_key_exists($lang_id, $codes)) {
         return $codes[$lang_id];
     }
 
-    $row = sqlQuery('SELECT lang_code FROM lang_languages WHERE lang_id = ?', [$lang_id]);
+    $row = QueryUtils::querySingleRow('SELECT lang_code FROM lang_languages WHERE lang_id = ?', [$lang_id]);
+    $code = is_array($row) ? ($row['lang_code'] ?? '') : '';
 
-    return $codes[$lang_id] = (string) ($row['lang_code'] ?? '');
+    return $codes[$lang_id] = is_string($code) ? $code : '';
 }
 
 // ----------- xl() function wrappers ------------------------------

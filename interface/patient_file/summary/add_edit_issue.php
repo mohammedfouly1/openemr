@@ -78,10 +78,13 @@ $thistype = empty($_REQUEST['thistype']) ? '' : $_REQUEST['thistype'];
 
 if (
     $thistype && !$issue
-    && (!array_key_exists($thistype, $ISSUE_TYPES) || !AclMain::aclCheckIssue($thistype, '', ['write', 'addonly']))
+    && (!(is_string($thistype) && array_key_exists($thistype, $ISSUE_TYPES))
+        || !AclMain::aclCheckIssue($thistype, '', ['write', 'addonly']))
 ) {
     // array_key_exists() guards against a $thistype that isn't a real issue type: $ISSUE_TYPES[$thistype][5]
     // would then be an undefined index, empty() on it is true, and aclCheckIssue() fails open (returns true).
+    // A non-string $thistype (arbitrary $_REQUEST shape) is refused the same way: it can never be a
+    // real array key of $ISSUE_TYPES either.
     AccessDeniedHelper::deny('Not authorized to add issue of this type');
 }
 

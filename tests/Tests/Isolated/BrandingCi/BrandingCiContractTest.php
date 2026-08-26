@@ -43,9 +43,17 @@ final class BrandingCiContractTest extends TestCase
     public function testCanonicalComposerGateContainsEveryRequiredFailureBoundary(): void
     {
         $composer = json_decode($this->read('composer.json'), true, 512, JSON_THROW_ON_ERROR);
-        $gate = $composer['scripts']['branding-ci'] ?? null;
+        self::assertIsArray($composer);
+        $scripts = $composer['scripts'] ?? null;
+        self::assertIsArray($scripts);
+        $gateRaw = $scripts['branding-ci'] ?? null;
 
-        self::assertIsArray($gate);
+        self::assertIsArray($gateRaw);
+        $gate = [];
+        foreach ($gateRaw as $step) {
+            self::assertIsString($step, 'Every branding-ci gate step must be a string.');
+            $gate[] = $step;
+        }
 
         // Located by CONTENT, never by index. Indexing this array positionally made the
         // contract brittle in the one way it must not be: adding a legitimate new step --
@@ -59,7 +67,7 @@ final class BrandingCiContractTest extends TestCase
 
         $tests = null;
         foreach ($gate as $step) {
-            if (is_string($step) && str_contains($step, 'vendor/bin/phpunit')) {
+            if (str_contains($step, 'vendor/bin/phpunit')) {
                 $tests = $step;
                 break;
             }
@@ -96,7 +104,9 @@ final class BrandingCiContractTest extends TestCase
         // killed by the default reads exactly like a failing gate, and a gate that can go red
         // with nothing wrong is a gate people learn to ignore. This is a ceiling, not a removal:
         // a genuinely hung process still dies.
-        self::assertSame(1800, $composer['config']['process-timeout'] ?? null);
+        $config = $composer['config'] ?? null;
+        self::assertIsArray($config);
+        self::assertSame(1800, $config['process-timeout'] ?? null);
     }
 
     public function testWorkflowRunsCanonicalGateWithoutSecretsOrFailureMasking(): void

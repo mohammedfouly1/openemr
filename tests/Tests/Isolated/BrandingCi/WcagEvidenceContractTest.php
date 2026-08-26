@@ -16,6 +16,17 @@ namespace OpenEMR\Tests\Isolated\BrandingCi;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @phpstan-type WcagResult array{
+ *     label: string,
+ *     fg: string,
+ *     bg: string,
+ *     ratio: float,
+ *     required: float,
+ *     status: string,
+ *     criterion: string,
+ * }
+ */
 final class WcagEvidenceContractTest extends TestCase
 {
     private const PROJECT_ROOT = __DIR__ . '/../../../..';
@@ -49,13 +60,6 @@ final class WcagEvidenceContractTest extends TestCase
         $document = $this->read('docs/branding-production/08-wcag-contrast.md');
 
         foreach ($this->results() as $index => $result) {
-            self::assertIsString($result['label'] ?? null, "Result #{$index} has no label.");
-            self::assertIsString($result['fg'] ?? null, "Result #{$index} has no foreground.");
-            self::assertIsString($result['bg'] ?? null, "Result #{$index} has no background.");
-            self::assertIsNumeric($result['ratio'] ?? null, "Result #{$index} has no ratio.");
-            self::assertIsNumeric($result['required'] ?? null, "Result #{$index} has no threshold.");
-            self::assertIsString($result['status'] ?? null, "Result #{$index} has no status.");
-
             $row = sprintf(
                 '| %s | `%s` | `%s` | %.2f |',
                 $result['label'],
@@ -74,9 +78,9 @@ final class WcagEvidenceContractTest extends TestCase
     public function testMachineVerdictsAreInternallyConsistent(): void
     {
         foreach ($this->results() as $index => $result) {
-            $ratio = (float) $result['ratio'];
-            $required = (float) $result['required'];
-            $status = (string) $result['status'];
+            $ratio = $result['ratio'];
+            $required = $result['required'];
+            $status = $result['status'];
 
             if ($status === 'PASS') {
                 self::assertGreaterThanOrEqual($required, $ratio, "PASS result #{$index} misses its threshold.");
@@ -87,13 +91,13 @@ final class WcagEvidenceContractTest extends TestCase
             self::assertLessThan($required, $ratio, "ADVISORY result #{$index} does not miss its threshold.");
             self::assertMatchesRegularExpression(
                 '/advisory|exempt/i',
-                (string) ($result['criterion'] ?? ''),
+                $result['criterion'],
                 "ADVISORY result #{$index} has no advisory/exemption rationale."
             );
         }
     }
 
-    /** @return non-empty-list<array<string, mixed>> */
+    /** @return non-empty-list<WcagResult> */
     private function results(): array
     {
         $decoded = json_decode(
@@ -103,10 +107,49 @@ final class WcagEvidenceContractTest extends TestCase
             JSON_THROW_ON_ERROR
         );
         self::assertIsArray($decoded);
-        self::assertIsArray($decoded['results'] ?? null);
-        self::assertNotEmpty($decoded['results']);
+        $resultsRaw = $decoded['results'] ?? null;
+        self::assertIsArray($resultsRaw);
+        self::assertNotEmpty($resultsRaw);
 
-        return $decoded['results'];
+        $results = [];
+        foreach (array_values($resultsRaw) as $index => $row) {
+            self::assertIsArray($row, "Result #{$index} is not an object.");
+            $results[] = self::parseResult($row, $index);
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param array<mixed, mixed> $row
+     * @return WcagResult
+     */
+    private static function parseResult(array $row, int $index): array
+    {
+        $label = $row['label'] ?? null;
+        self::assertIsString($label, "Result #{$index} has no label.");
+        $fg = $row['fg'] ?? null;
+        self::assertIsString($fg, "Result #{$index} has no foreground.");
+        $bg = $row['bg'] ?? null;
+        self::assertIsString($bg, "Result #{$index} has no background.");
+        $ratio = $row['ratio'] ?? null;
+        self::assertIsNumeric($ratio, "Result #{$index} has no ratio.");
+        $required = $row['required'] ?? null;
+        self::assertIsNumeric($required, "Result #{$index} has no threshold.");
+        $status = $row['status'] ?? null;
+        self::assertIsString($status, "Result #{$index} has no status.");
+        $criterion = $row['criterion'] ?? '';
+        self::assertIsString($criterion, "Result #{$index} has a non-string criterion.");
+
+        return [
+            'label' => $label,
+            'fg' => $fg,
+            'bg' => $bg,
+            'ratio' => (float) $ratio,
+            'required' => (float) $required,
+            'status' => $status,
+            'criterion' => $criterion,
+        ];
     }
 
     private function read(string $relativePath): string

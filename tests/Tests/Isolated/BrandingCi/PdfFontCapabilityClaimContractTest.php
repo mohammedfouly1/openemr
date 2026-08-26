@@ -25,6 +25,7 @@ final class PdfFontCapabilityClaimContractTest extends TestCase
         $installer = $this->read('tools/branding/install-assets.php');
         $config = $this->read('src/Pdf/Config_Mpdf.php');
         $lock = json_decode($this->read('composer.lock'), true, 512, JSON_THROW_ON_ERROR);
+        self::assertIsArray($lock);
 
         self::assertStringNotContainsString('registered with mPDF', $installer);
         self::assertStringContainsString(
@@ -35,8 +36,12 @@ final class PdfFontCapabilityClaimContractTest extends TestCase
         self::assertStringNotContainsString('NotoNaskh', $config);
         self::assertStringContainsString("'default_font' => 'dejavusans'", $config);
 
-        $packages = array_column($lock['packages'] ?? [], null, 'name');
-        self::assertSame('v8.3.1', $packages['mpdf/mpdf']['version'] ?? null);
+        $packagesRaw = $lock['packages'] ?? [];
+        self::assertIsArray($packagesRaw);
+        $packages = array_column($packagesRaw, null, 'name');
+        $mpdf = $packages['mpdf/mpdf'] ?? null;
+        self::assertIsArray($mpdf);
+        self::assertSame('v8.3.1', $mpdf['version'] ?? null);
     }
 
     public function testPublishedEvidenceKeepsArabicPdfUnavailableAndD9Open(): void
