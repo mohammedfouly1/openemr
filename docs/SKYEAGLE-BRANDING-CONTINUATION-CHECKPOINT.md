@@ -760,6 +760,32 @@ session had not queried before B11 — added to §8 now for completeness.
 |---|---|---|---|---|---|---|---|---|---|---|
 | B11-01 | `modules` row id 6, both tenants | `mod_name`/`mod_directory`/`mod_ui_name` = Thiqa/oe-module-thiqa-branding | Corrected or removed (executor's judgment) | STALE REGISTRATION DATA | This session's B11 finding | No (inactive) | Yes — live write | GATE-4 | B11/B9 | Found, not executed |
 
+### B12 — Security/privacy regression check — COMPLETE (no findings)
+
+```text
+PHASE:            B12
+START SHA:        b925d5b49
+END SHA:           (this commit)
+FILES:             none
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: none
+TESTS:              n/a (no code changed)
+ROLLBACK METHOD:    n/a
+DEPENDENT NEXT PHASES: B13 (PHPStan)
+```
+
+The concrete risk from this phase's own changes was SVG asset injection (B2's replacement assets
+originated from an external vectorize API): grepped all new/replaced SVGs for `<script>`, event
+handlers (`onload`/`onerror`/`onclick`) and `javascript:` URIs — none found, and this is not just
+a grep-level check: every one of those files already passed `LogoValidator`/`SvgInspector`'s own
+XSS-scanning validation as part of B2's `branding-ci` run (`testCertifiedAssetIsAccepted` exercises
+these exact files). `ProductIdentity::name()` — used raw (no HTML escaping) in B4's OAuth2 fix — is
+safe by construction: the generator that produces its source artefact refuses to emit any value
+containing `< > " ' & \`` or a backtick, enforced before the artefact is ever written, not at the
+call site. No PHI or patient-data surface was touched by any Phase-B change; B9/B11's live-DB
+reads were limited to `globals`, `facility.name`, `lang_constants` and `modules` — tenant
+metadata, not clinical data.
+
 ## 13. Live database mutation state
 
 ```text
@@ -773,4 +799,4 @@ has been issued against either database at any point in Phase B.
 
 ---
 
-*Checkpoint revision 11, updated after B11. Next update: after B12.*
+*Checkpoint revision 12, updated after B12. Next update: after B13.*
