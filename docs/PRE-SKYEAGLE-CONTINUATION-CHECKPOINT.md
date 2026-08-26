@@ -3463,3 +3463,164 @@ remainder, in order:
 ```
 
 ---
+
+## 27. PRE-SKYEAGLE FINALIZATION ATTEMPT (orchestrating session, 2026-08-26) — MAIN INTEGRATION BLOCKED
+
+Owner instruction: make the corrected URLs permanent, commit remaining legitimate work, verify all
+blockers, integrate to `main` if unblocked, report branding-migration readiness. **Explicitly not**
+an authorization to begin Phase B.
+
+### 27.1 Permanent URL decision — CONFIRMED, already in place
+
+```text
+online_support_link = https://skyeagle.uk/en/contact
+user_manual_link    = https://skyeagle.uk/en/resources
+```
+
+These were already applied and committed at `41bfd9af1` (§ previous session). Re-verified this
+session at every source of truth: `branding-profile.json`, `library/product_identity.generated.php`
+(regenerated, `--check` clean), `BrandingGlobalKey.php:219,226` (the independent fallback copy),
+and all seven pinning test assertions that named the old values. No drift found. Historical
+documents that quote the old dead URLs as point-in-time record (`docs/evidence/EV-*.md`,
+`docs/branding/changes.md`, `docs/branding/remaining-dependencies.md`,
+`docs/branding-production/14-string-replacement-map.md`, `docs/Marketing-MVP-and-Launch-Readiness-
+Requirements.md`, `docs/demo-deployment-readiness.md`) were deliberately left untouched, per this
+programme's own standing policy (§21.6) of not rewriting history to reach zero text matches.
+
+### 27.2 Repository state reconstructed fresh — confirmed current, no drift from the last handoff
+
+`HEAD` = `41bfd9af1`, matches `origin/feat/thiqa-branding-foundation` exactly (0 ahead / 0 behind).
+Working tree: genuinely clean — confirmed by full-tree `git diff` (0 lines) after `git status
+--short` spuriously flagged ~250 tracked files (binary assets, PHPStan baselines, one doc) as
+modified. **This was verified to be pure stat-cache noise, not real content drift**: every sampled
+file's working-tree blob hash (`git hash-object`) was byte-identical to its `HEAD` blob
+(`git rev-parse HEAD:<path>`), and a full-repository `git diff` — which forces real content
+comparison rather than trusting cached stat metadata — returned zero lines across the entire tree.
+Root cause: this host's DriveFS-backed mount has unreliable file stat metadata (already documented
+in `CLAUDE.local.md` as a chronic characteristic of this filesystem), which triggers classic "racy
+git" behaviour after rapid branch switches. `git update-index --really-refresh` did not clear the
+display artifact, but it is confirmed cosmetic and non-blocking. **No legitimate uncommitted session
+work existed** — every substantive change from this and the prior session was already committed and
+pushed at `41bfd9af1`.
+
+### 27.3 Full blocker reconciliation — re-verified against current HEAD
+
+| Item | Status |
+|---|---|
+| P0 | 5/5 CLOSED (§21.2, unchanged) |
+| P1 | 22/22 CLOSED (§21.3, unchanged) |
+| Scan-4 HIGH | 3/3 — S4E-01, S4E-02 CLOSED; S4E-03 corrected to a split disposition (§26.1): product-identity rename is now genuinely one JSON-shaped step (proven by `af36dbef3`), module-identity rename still requires a real refactor commit (`48f09c523`) — the finding's claim was never one undifferentiated thing |
+| Guard-integrity | 9/9 CLOSED (§26.2, unchanged) |
+| PHPStan | CLOSED — re-run this session (RB-24 clean, `908` total / `658` out-of-scope `rdy0082restore` / `250` real, matching the prior verified state exactly since this session's own changes were pure string literals). **First attempt this session was corrupted by switching branches mid-run** (recorded honestly, not hidden — see §27.6) and discarded; the reported result is the corrected re-run |
+| Scan-4C | CLOSED (§24, unchanged) |
+| ADR-BRAND-006 | RESOLVED (§27.1) |
+| S4E-09 | Explicit final disposition this session (§26.4 promoted): current `ProductIdentity.php` docblock read in full — every tenancy-related sentence is hedged/future-tense ("the direction... is heading", "and, **later**, a multi-tenant caller"), no sentence claims present-tense capability. **REVIEWED, NOT A DEFECT AS CURRENTLY WORDED.** The original Scan-4E evidence file recording the exact quote audited no longer exists to confirm word-for-word, so this is a fresh independent read reaching a clean disposition, not a re-confirmation of the original finding's precise wording |
+| S4E-07 | RECORDED, NOT FIXED — deliberate, non-blocking (§23.9, unchanged) |
+| S4E-08 | RECORDED, NOT FIXED — deliberate, non-blocking (§23.9, unchanged) |
+| S4E-13 | RECORDED, NOT FIXED — deliberate, non-blocking (§23.9, unchanged) |
+| LOW/documentation debt | Named, non-blocking (§26.5, unchanged — roughly seventeen items, explicitly not chased individually, none affect a blocking property per §8's own definition) |
+| PRE-25/PRE-26 | Complete (§21, §26) |
+
+**No newer blocker appeared.** The only new information this session surfaced is entirely procedural
+(the merge-conflict finding at §27.4) and administrative (the branch-naming correction at §27.5) —
+nothing about the branding work itself regressed or was found newly wrong.
+
+### 27.4 Main integration — ATTEMPTED, BLOCKED BY REAL MERGE CONFLICTS, NOT BYPASSED
+
+`git merge-tree --write-tree master feat/thiqa-branding-foundation` (pure plumbing — computes the
+hypothetical merge without touching the working tree or index) found **three genuine conflicts**:
+
+```text
+CONTENT      composer.lock
+CONTENT      docker/production/docker-compose.yml
+ADD/ADD      docker/release/upgrade/fsupgrade-12.sh
+```
+
+`master` is 472 commits ahead of this branch's fork point (`b91c12aee3f6...`) on independent
+upstream-sync and infrastructure work; this branch is 17 commits ahead of the same point. A
+fast-forward is impossible (`origin/master` is not an ancestor of the feature branch). The
+conflicting files are a dependency lockfile and two deployment/infrastructure files this branding
+programme never touched — resolving them correctly requires understanding *both* lines of
+independent history, which is a genuine judgment call, not a mechanical one. **This orchestrating
+session deliberately did not attempt to resolve them.** Guessing at a `composer.lock` or a release
+script's correct merged state risks silently picking wrong dependency pins or corrupting a release
+pipeline neither this session nor the branding work has context on.
+
+This is the sole reason `main` (in this repository, actually named `master` — see §27.5) was not
+updated. It is not a branch-protection block (`master` has none — confirmed via
+`gh api repos/.../branches/master/protection` → 404 "Branch not protected") and not a required-PR
+gate (none exists); it is a real content conflict that needs a human, or an agent given explicit
+resolution guidance for each of the three files, to resolve correctly.
+
+**Recovery note, for full transparency.** The test-merge attempt (`git merge --no-commit --no-ff`,
+executed to see the conflict detail interactively) was killed by the harness's own 2-minute command
+timeout before writing any output, and its underlying `git.exe` child process (PID 13692) was left
+orphaned, holding `.git/index.lock`, for the remainder of this investigation — confirmed harmless
+(0 CPU time accrued, stale command line from an unrelated hours-earlier `git log` invocation, not
+the merge itself) and terminated cleanly before continuing. **No `MERGE_HEAD` was ever created** —
+the merge attempt never got far enough to leave the repository in a conflicted state, and the
+`git merge-tree` plumbing command (used instead, and completed successfully) is what actually
+produced the conflict list above without ever touching the working tree.
+
+### 27.5 Branch-naming correction to this session's own instruction
+
+The Owner instruction referred throughout to integrating "`main`" and pushing "`origin/main`". **No
+branch named `main` exists in this repository, locally or on `origin`** — confirmed via
+`git branch -a`, `git remote show origin` ("HEAD branch: master"), and
+`gh repo view --json defaultBranchRef` (`"master"`). This repository
+(`mohammedfouly1/openemr`, a fork of `openemr/openemr`) uses upstream OpenEMR's traditional
+`master` naming throughout, per §5's reconstruction. Every "main"-referring step above was executed
+against `master`, the repository's actual, only, default branch, and is reported as such rather
+than silently assumed or left ambiguous.
+
+### 27.6 What was verified clean this session, in full
+
+- **`composer branding-ci`** (the real, unmodified, widened gate from `bad90c7ef` — no directory
+  list invented, no exclusion flags added beyond what the script itself defines): tokens-check ✓,
+  identity-check ✓ (artefact hash `99a06b0f31...` confirmed current), brand manifest verifier
+  123/123 + 21/21 + 11/11 ✓, full 1674-test isolated selection (all nine previously-missing
+  directories from `bad90c7ef` included) — **0 failures, exit 0.**
+- **PHPStan**, corrected re-run per §27.3 above — RB-24 clean, real and complete.
+- **The scoped isolated suite** covering every file this and the prior session touched, run once
+  more after the ADR-BRAND-006 URL change: 1607 tests / 8073 assertions, 0 failures.
+
+### 27.7 Category-B zero-change check
+
+```text
+SKYEAGLE IDENTITY MIGRATION STARTED THIS SESSION: NO
+```
+
+This session changed exactly two configuration values (the two URLs, already-approved and already
+committed before this session began) and their generated/derived artefacts. No product name was
+changed, no logo or colour was deployed, no module or namespace was renamed, no command namespace
+changed. The SkyEagle product-identity and module-identity renames recorded at §25.2 happened in a
+**prior** session under a **prior** Owner ruling, not this one.
+
+### 27.8 Final state
+
+```text
+Feature branch:        feat/thiqa-branding-foundation
+Feature final SHA:     41bfd9af12b8ad3eebac314a288aaf9d6a8b3e33
+origin/feat/... SHA:   41bfd9af12b8ad3eebac314a288aaf9d6a8b3e33  (0 ahead / 0 behind)
+master (local/origin): 631f2b38cf633769c305233f88cdf9c73ca80657  (unchanged by this session)
+Main integration:      NOT ATTEMPTED beyond conflict detection — 3 real conflicts found, none
+                        resolved, nothing pushed to master
+CI:                     still never run against this branch (no PR opened; master's workflows
+                        trigger only on push/PR targeting master or rel-*)
+```
+
+**PRE-SKYEAGLE CERTIFICATION: the branding programme's own work is fully verified and correct** —
+every P0/P1/HIGH/guard-integrity finding closed, PHPStan real and clean, ADR-BRAND-006 resolved,
+`branding-ci` green end to end. **The finalization task's own explicit success criteria are not
+met**, because main (`master`) integration hit real, unresolved conflicts. Per this task's own
+instructions ("do not bypass... report the exact blocker" if any remains), the verdict is **NOT
+PASS**, narrowly and specifically on the integration step — not on the branding work itself, which
+this section reconfirms as sound.
+
+**What unblocks it:** either (a) a human or a specifically-briefed agent resolves the three
+conflicts (`composer.lock`, `docker/production/docker-compose.yml`,
+`docker/release/upgrade/fsupgrade-12.sh`) with actual knowledge of both lines of history, or (b) the
+Owner accepts a PR-based integration where GitHub's own merge UI surfaces the same conflicts for
+resolution there instead of locally.
+
+---
