@@ -57,6 +57,14 @@ final class ProductNameCompositionContractTest extends TestCase
         'templates/interface/main/tabs/user_data_template.html.twig' => ['About %s'],
         'templates/insurance_companies/general_list.html.twig' => ['Insurance Companies %s'],
         'templates/product_registration/product_reg.js.twig' => ['%s Product Registration'],
+        // BRAND-101, SkyEagle phase B4/B6: the five error surfaces, converted from a hardcoded
+        // "Thiqa ... Error" literal to xlp composition; contracts added in B6 (general-http-error,
+        // error-400, error-404).
+        'templates/error/general_http_error.html.twig' => ['%s Error'],
+        'templates/error/400.html.twig' => ['%s 400 Error'],
+        'templates/error/404.html.twig' => ['%s 404 Error'],
+        'templates/error/400.json.twig' => ['%s 400 Error'],
+        'templates/error/404.json.twig' => ['%s 404 Error'],
     ];
 
     /**
@@ -156,8 +164,11 @@ final class ProductNameCompositionContractTest extends TestCase
             $contents = $this->read($this->root() . '/' . $relativePath);
 
             foreach ($keys as $key) {
+                // json_encode joined text/attr (BRAND-101, phase B4): the two .json.twig error
+                // surfaces compose into a JSON string value, and json_encode is exactly as valid
+                // an escaper for that sink as text/attr are for theirs.
                 self::assertMatchesRegularExpression(
-                    '~"' . preg_quote($key, '~') . '"\|xlp\|(text|attr)~',
+                    '~"' . preg_quote($key, '~') . '"\|xlp\|(text|attr|json_encode)~',
                     $contents,
                     $relativePath . ' must compose ' . $key . ' through xlp and escape it exactly once.',
                 );

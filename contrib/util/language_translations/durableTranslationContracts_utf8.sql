@@ -1,9 +1,9 @@
 -- Generated from contrib/util/language_translations/contracts/.
--- Contracts: 29
+-- Contracts: 32
 -- Do not edit this generated file directly.
 
 -- Contract: about-product-neutral-v1
--- SHA256: 48b3ded633634fcfa7e29b25bb6780882aa93ba0187abf5785b5e74bbcc5fab7
+-- SHA256: 5b4785869cc6f8adb98c0d63451e02c24b67586ac47fa040e74c468167507b33
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'About %s' FROM DUAL
@@ -33,7 +33,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: api-fhir-system-scopes-neutral-v1
--- SHA256: 0fcb24513ec81de212d351af9ed2ae124402f1750758859c65a53bb4496a8b1a
+-- SHA256: e4af7bb3c973584b024fddb42f270981b69068a48366895678d0e811dc9828d7
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Enable %s FHIR System Scopes.' FROM DUAL
@@ -64,7 +64,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: api-portal-rest-help-neutral-v1
--- SHA256: 86c297f0e59ea6158611dcacaf0c29606168dce83d035cf964ab0444ee82a88b
+-- SHA256: a6bfbf3bf1ce4c99b0ec2afed034537a50502cc510d9ce621219ba3f298db891
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Enable %s Patient Portal RESTful API.' FROM DUAL
@@ -95,7 +95,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: api-portal-rest-toggle-neutral-v1
--- SHA256: 6ba0265098f4fa1cf29c2f98df2dcb54b82deba484a13d479047e2b88b135529
+-- SHA256: ef33e4028899f6c0a634f4d7ece7349746079201d83e344483452e2b8dc9a00c
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Enable %s Patient Portal REST API (EXPERIMENTAL)' FROM DUAL
@@ -126,7 +126,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: api-standard-fhir-help-neutral-v1
--- SHA256: 54fa18196b0efe34720e76bacccfeb1fba122c5415f74d80205f55b9a5cb851b
+-- SHA256: 8061e8a1f67306098c6e8f8625487cf74dc7f2b1a50100271edb8778e1b57feb
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Enable %s Standard FHIR RESTful API.' FROM DUAL
@@ -157,7 +157,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: api-standard-fhir-toggle-neutral-v1
--- SHA256: 4ec4644a5664d0faa33d4d9746a012db2c98fe28a0ce3d7ef867d1056abe21b4
+-- SHA256: 20016110f53b5a0b3fa879bc90fa4d4030c4a900ec85a9a75240818bd196c7b6
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Enable %s Standard FHIR REST API' FROM DUAL
@@ -188,7 +188,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: api-standard-rest-help-neutral-v1
--- SHA256: f6391dbafb2e3ea05ef3d36200e575c49d60a8abe5eb2bf86923b2c603705b68
+-- SHA256: 70271bb48b4ea261cf72092a00c638daa3e1f1d372c1c39ad228d691d20bc825
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Enable %s Standard RESTful API.' FROM DUAL
@@ -219,7 +219,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: api-standard-rest-toggle-neutral-v1
--- SHA256: 206139699ec9d841682aae9825813cf37c200a7bc3f507dedacd8a601786dcbf
+-- SHA256: d6d7301c314e4f889f34b1a173232c9006b8967b08437b43f7b2b6d344161163
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Enable %s Standard REST API' FROM DUAL
@@ -250,7 +250,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: backup-dump-database-neutral-v1
--- SHA256: 2129b56e66305684acb67bcccdf14572caf43798c049c5dc36ef51d1f7692a69
+-- SHA256: f339001f9c1aae2ea32abf61149d171bee94623a64860d3d5d0cdbea70aeae60
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Dumping %s database' FROM DUAL
@@ -281,7 +281,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: backup-dump-error-neutral-v1
--- SHA256: 526c2601d2b6b5950a3c9cd970921e013b05a77822cae2c6b656df698475a06e
+-- SHA256: 83f9e95fff94ec8b3419ffe583718bdef2f7dfee81a7f8e2f168ea7ce0341b56
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'An error occurred while dumping %s web directory tree' FROM DUAL
@@ -312,7 +312,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: backup-dump-webtree-neutral-v1
--- SHA256: 301f099e77163302351d2be93a99d3942a47e31bb0b203f39ec2cd7673a8e1d7
+-- SHA256: 9fb708c60c16e520733983609105b237051dd0cf402641565f9712b263eecd07
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Dumping %s web directory tree' FROM DUAL
@@ -343,7 +343,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: database-upgrade-neutral-v1
--- SHA256: d3dae438a4e6c14754525101bf20149825177df63b2b0c1557e6d3155f7f3496
+-- SHA256: 518b4abddfeef759bc849a1ab1391efec5e5967f9d43ff9ba843771350dabd54
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT '%s Database Upgrade' FROM DUAL
@@ -553,7 +553,7 @@ WHERE NOT EXISTS (
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: dataloads-unrecognised-file-neutral-v1
--- SHA256: e354cae7a200e00d329ca77c1a1f93b317b5a10386d661ee6bc65c6d4506850c
+-- SHA256: cb1bc75394e5771a3a6cdaae25b5f4fbe55200733296fdabf18e243934550410
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT '%s does not recognize the incoming file in the contrib directory. This is most likely because you need to configure the release in the supported_external_dataloads table in the MySQL database.' FROM DUAL
@@ -583,8 +583,70 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 
 SET @openemr_translation_contract_cons_id = NULL;
 
+-- Contract: error-400-neutral-v1
+-- SHA256: eccb4f65d6ca08ec29139ccabcb4f6e367e4aff1bffb56ae1d68d1b9f98f10d2
+
+INSERT INTO `lang_constants` (`constant_name`)
+SELECT '%s 400 Error' FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM `lang_constants` WHERE BINARY `constant_name` = '%s 400 Error');
+
+SET @openemr_translation_contract_cons_id = (
+    SELECT `cons_id` FROM `lang_constants`
+    WHERE BINARY `constant_name` = '%s 400 Error'
+);
+
+-- Carry forward: Thiqa 400 Error (neutralise "Thiqa")
+INSERT INTO `lang_definitions` (`cons_id`, `lang_id`, `definition`)
+SELECT @openemr_translation_contract_cons_id, `src`.`lang_id`, REPLACE(`src`.`definition`, 'Thiqa', '%s')
+FROM (
+    SELECT `d`.`lang_id` AS `lang_id`, `d`.`definition` AS `definition`
+    FROM `lang_definitions` `d`
+    INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
+    WHERE BINARY `c`.`constant_name` = 'Thiqa 400 Error'
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'Thiqa', '')) = CHAR_LENGTH('Thiqa')
+      AND LOCATE('%', `d`.`definition`) = 0
+) AS `src`
+LEFT JOIN `lang_definitions` `existing`
+    ON `existing`.`cons_id` = @openemr_translation_contract_cons_id
+    AND `existing`.`lang_id` = `src`.`lang_id`
+WHERE @openemr_translation_contract_cons_id IS NOT NULL
+  AND `existing`.`def_id` IS NULL;
+
+SET @openemr_translation_contract_cons_id = NULL;
+
+-- Contract: error-404-neutral-v1
+-- SHA256: a01cdff783d1e2ba9eb962815b3ee94c79c89a4458a29db468f8c96e0f30b119
+
+INSERT INTO `lang_constants` (`constant_name`)
+SELECT '%s 404 Error' FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM `lang_constants` WHERE BINARY `constant_name` = '%s 404 Error');
+
+SET @openemr_translation_contract_cons_id = (
+    SELECT `cons_id` FROM `lang_constants`
+    WHERE BINARY `constant_name` = '%s 404 Error'
+);
+
+-- Carry forward: Thiqa 404 Error (neutralise "Thiqa")
+INSERT INTO `lang_definitions` (`cons_id`, `lang_id`, `definition`)
+SELECT @openemr_translation_contract_cons_id, `src`.`lang_id`, REPLACE(`src`.`definition`, 'Thiqa', '%s')
+FROM (
+    SELECT `d`.`lang_id` AS `lang_id`, `d`.`definition` AS `definition`
+    FROM `lang_definitions` `d`
+    INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
+    WHERE BINARY `c`.`constant_name` = 'Thiqa 404 Error'
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'Thiqa', '')) = CHAR_LENGTH('Thiqa')
+      AND LOCATE('%', `d`.`definition`) = 0
+) AS `src`
+LEFT JOIN `lang_definitions` `existing`
+    ON `existing`.`cons_id` = @openemr_translation_contract_cons_id
+    AND `existing`.`lang_id` = `src`.`lang_id`
+WHERE @openemr_translation_contract_cons_id IS NOT NULL
+  AND `existing`.`def_id` IS NULL;
+
+SET @openemr_translation_contract_cons_id = NULL;
+
 -- Contract: formdata-escaping-error-neutral-v1
--- SHA256: c4c18162d4e1dc95deea1963a5659b35b203890b1b9945feafc4c2db554243ba
+-- SHA256: bff6dea750e29828e7194d9db802e5a5b81e8bed2d1ed100e5fc329e06ee0c3b
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'There was an %s SQL Escaping ERROR of the following string' FROM DUAL
@@ -614,8 +676,55 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 
 SET @openemr_translation_contract_cons_id = NULL;
 
+-- Contract: general-http-error-neutral-v1
+-- SHA256: 89d9a12105e7792495f71f8764eb8b476b221b1d348b6e28e4537ec90cc6365f
+
+INSERT INTO `lang_constants` (`constant_name`)
+SELECT '%s Error' FROM DUAL
+WHERE NOT EXISTS (SELECT 1 FROM `lang_constants` WHERE BINARY `constant_name` = '%s Error');
+
+SET @openemr_translation_contract_cons_id = (
+    SELECT `cons_id` FROM `lang_constants`
+    WHERE BINARY `constant_name` = '%s Error'
+);
+
+-- Carry forward: Error (prefix)
+INSERT INTO `lang_definitions` (`cons_id`, `lang_id`, `definition`)
+SELECT @openemr_translation_contract_cons_id, `src`.`lang_id`, CONCAT('%s ', `src`.`definition`)
+FROM (
+    SELECT `d`.`lang_id` AS `lang_id`, `d`.`definition` AS `definition`
+    FROM `lang_definitions` `d`
+    INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
+    WHERE BINARY `c`.`constant_name` = 'Error'
+      AND LOCATE('%', `d`.`definition`) = 0
+) AS `src`
+LEFT JOIN `lang_definitions` `existing`
+    ON `existing`.`cons_id` = @openemr_translation_contract_cons_id
+    AND `existing`.`lang_id` = `src`.`lang_id`
+WHERE @openemr_translation_contract_cons_id IS NOT NULL
+  AND `existing`.`def_id` IS NULL;
+
+-- Carry forward: Thiqa Error (neutralise "Thiqa")
+INSERT INTO `lang_definitions` (`cons_id`, `lang_id`, `definition`)
+SELECT @openemr_translation_contract_cons_id, `src`.`lang_id`, REPLACE(`src`.`definition`, 'Thiqa', '%s')
+FROM (
+    SELECT `d`.`lang_id` AS `lang_id`, `d`.`definition` AS `definition`
+    FROM `lang_definitions` `d`
+    INNER JOIN `lang_constants` `c` ON `c`.`cons_id` = `d`.`cons_id`
+    WHERE BINARY `c`.`constant_name` = 'Thiqa Error'
+      AND CHAR_LENGTH(`d`.`definition`) - CHAR_LENGTH(REPLACE(`d`.`definition`, 'Thiqa', '')) = CHAR_LENGTH('Thiqa')
+      AND LOCATE('%', `d`.`definition`) = 0
+) AS `src`
+LEFT JOIN `lang_definitions` `existing`
+    ON `existing`.`cons_id` = @openemr_translation_contract_cons_id
+    AND `existing`.`lang_id` = `src`.`lang_id`
+WHERE @openemr_translation_contract_cons_id IS NOT NULL
+  AND `existing`.`def_id` IS NULL;
+
+SET @openemr_translation_contract_cons_id = NULL;
+
 -- Contract: installer-third-party-modules-neutral-v1
--- SHA256: 67f7212d295bdfb9b7f8aa4eabc554ef5c3324bd785412e9815d66a967fd6c13
+-- SHA256: d8e368f00739ab9aa1e9611b0d99d22e9c9b5aa05c456ff59a960384ff7c43b2
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Visit additional modules for %s developed and listed by third party vendors.' FROM DUAL
@@ -663,7 +772,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: installer-users-label-neutral-v1
--- SHA256: 11153194801c1094b3298ddb0580cc8342d0f33b230f00e2cbcfbae92d8eb560
+-- SHA256: ebed562b4082202a7c3e778be837396f42de0f386f7e56d8d90216b724de0417
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT '%s Users' FROM DUAL
@@ -694,7 +803,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: insurance-companies-neutral-v1
--- SHA256: aca4e84467af808cc4093fe2a4743cd3df15b5441f6030946838d157809c0838
+-- SHA256: 734be7237475c624f03c293c77c4d08309c3b77be23810e1ab66a4f0e26bda3b
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Insurance Companies %s' FROM DUAL
@@ -724,7 +833,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: ldap-login-embed-neutral-v1
--- SHA256: f991645de818e9977670a214a8865c96294c498f7e3c313b678f70adcfc3d0c6
+-- SHA256: 12cab681d2be378a8031dfd4f1369512fab4bc8a8c4ac07a925b05d52fda8f8f
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Embed {login} where the %s login name of the user is to be; for example: uid={login},dc=example,dc=com' FROM DUAL
@@ -755,7 +864,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: letter-write-privileges-neutral-v1
--- SHA256: 0d0af765efc43c95f50821f38e7e4eacc936de41816bce9fbb169d20cd06dfec
+-- SHA256: 6075a18326feddb5f021c1b050703e9d7f59cf68698f18b1f578d47ebd06d10f
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Ensure %s has write privileges to directory' FROM DUAL
@@ -786,7 +895,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: list-application-category-neutral-v1
--- SHA256: 3707d073dc54ccb1248f387a77fc8904d263c3e9c0dfdbe2acb67f68de7b9f33
+-- SHA256: 10b8b627f89bf1e59a726f4c61843603c89ad5c61568bbe5f8298a2ebd376de6
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT '%s Application Category' FROM DUAL
@@ -817,7 +926,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: login-requires-javascript-neutral-v1
--- SHA256: 2520bff5cb378441133aabce173391cc5c27235733d934202744b11c5f77fc5a
+-- SHA256: 410f32529db746236f7355b664b2bcf9608ea1df3043d5921fe1a3e4e7226a3e
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT '%s requires Javascript to perform user authentication.' FROM DUAL
@@ -848,7 +957,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: mfa-register-device-neutral-v1
--- SHA256: 116808d026b68bd01af37160c712d20690c25f64f71158a28d0e764d67e95e11
+-- SHA256: 996ea79ec53dc1bea41777cf5e22713f384e48f83e821d0211050f9c79166b0f
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'In order to register your device, please provide your %s login password' FROM DUAL
@@ -879,7 +988,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: oauth-authorization-neutral-v1
--- SHA256: 272ea782d42fcc0b109937f9715535a2e3450dd5c231552ee78fc8df2dab5479
+-- SHA256: cbb10428f4d95a43c071617e5d44d565959086e10d66c4dde8fcf9f31f0f501c
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT '%s Authorization' FROM DUAL
@@ -909,7 +1018,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: oauth-login-neutral-v1
--- SHA256: 8a57396a8c180e2f7c759032c0a0f1d84867cf48ca805f30fdedaabc705616a5
+-- SHA256: bbbcf088c7d5314c45bc9bf8e2d22a7c0ecc299cae0b0e1e31e43509d06c6853
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT '%s Login' FROM DUAL
@@ -939,7 +1048,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: product-registration-neutral-v1
--- SHA256: 3f5336356d388a6e2d934135a4213ba8a4c705498634e4a997a57e493493ee4e
+-- SHA256: 9badc31646cdfd63362c4bc206e0f69876135cc33fdbb54cc148384f656cfc38
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT '%s Product Registration' FROM DUAL
@@ -969,7 +1078,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: smart-app-registration-neutral-v1
--- SHA256: 0452b96910f8f44c3af9cedeb1c1c03747032c07be6c49d1603038d4140e2e80
+-- SHA256: 867ae4eddfe6b41587ded78f268299fa42d2b397e1eba3cdff40fc4a6927d582
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT '%s App Registration' FROM DUAL
@@ -1000,7 +1109,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: sphere-void-credit-password-neutral-v1
--- SHA256: a809b4cc6967237df47008052d5b87d62847ce9ddc0650a9c7aadcacfa74f755
+-- SHA256: 3df6577553b3b95eb99654ff3cd6f02d9855a086d44d61c9930570140d0ea775
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Sphere Void/Credit Confirmation Password. %s confirms pin/password before proceeding with void/credit.' FROM DUAL
@@ -1031,7 +1140,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: zend-application-neutral-v1
--- SHA256: a98fdb9e4f469013c24a3de879310fe22165666fdff794a799fed0e793d6a81a
+-- SHA256: c8779a4bf36311792ecd1473110727fa408ca2284201efb53e2422b2a37ddd27
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT '%s Application' FROM DUAL
@@ -1062,7 +1171,7 @@ WHERE @openemr_translation_contract_cons_id IS NOT NULL
 SET @openemr_translation_contract_cons_id = NULL;
 
 -- Contract: zend-welcome-neutral-v1
--- SHA256: e9e5a3a7ef79d82a36375985b4715333cc100e6cec1cf8c8add439b1d8f62197
+-- SHA256: bb9f763bd5fe21c68fa3468b9a7804de90d4f5d420aa8228e6f7dc903ce2961f
 
 INSERT INTO `lang_constants` (`constant_name`)
 SELECT 'Welcome to %s' FROM DUAL

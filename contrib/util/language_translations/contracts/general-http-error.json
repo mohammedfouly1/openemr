@@ -1,0 +1,14 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "general-http-error-neutral-v1",
+    "target_key": "%s Error",
+    "legacy_keys": {
+        "Thiqa Error": "Thiqa"
+    },
+    "on_missing_identity": "skip",
+    "derive_from": {
+        "source_key": "Error",
+        "placement": "prefix"
+    },
+    "definitions": {}
+}

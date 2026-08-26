@@ -495,6 +495,55 @@ Two stale documentation `note` fields in `branding-profile.json` were corrected 
 ("...Thiqa kit" / "...Thiqa monochrome navy mark..." -> SkyEagle) — comment-only, confirmed via
 `generate-product-identity.php --check` that the generated artefact hash is unaffected.
 
+### B6 — Translation catalogue migration — COMPLETE
+
+```text
+PHASE:            B6
+START SHA:        bc896da42
+END SHA:           (this commit)
+FILES:             3 new translation contracts (contrib/util/language_translations/contracts/
+                    {general-http-error,error-400,error-404}.json); regenerated
+                    durableTranslationContracts_utf8.sql (29 -> 32 contracts);
+                    ProductNameCompositionContractTest.php (5 error templates registered in
+                    CONVERTED_SITES; escaper regex extended to recognise json_encode there too)
+DB MUTATION:       NONE — this generates install/upgrade-time SQL; nothing runs it in this phase
+GENERATED ARTEFACTS: durableTranslationContracts_utf8.sql, regenerated via
+                    TranslationContractSqlRenderer::renderSet() over the full contract set
+TESTS:              tests/Tests/Isolated/{BrandingCi,BrandingCoreStrings,Common/Translation,...}
+                    — 1724 tests / 8631 assertions, exit 0
+ROLLBACK METHOD:    git revert this commit (single commit; no dependent commits yet)
+DEPENDENT NEXT PHASES: B7 (module identity verification), B9 (tenant DB sync, gated)
+```
+
+Closes the gap B4 deliberately left open: the three new `xlp`-composed keys ("%s Error",
+"%s 400 Error", "%s 404 Error") introduced by B4's error-page fix are now backed by real
+translation contracts, matching the established pattern (`about-product.json`,
+`oauth-authorization.json`, `database-upgrade.json`).
+
+- **"%s Error"** derives from the pre-existing, richly-translated bare-word constant "Error"
+  (35 locales, Arabic included) with `placement: prefix` — the same "About"/"Authorization"
+  pattern the other conversions already use.
+- **"%s 400 Error" / "%s 404 Error"** have no plausible pre-existing source to derive from
+  (checked the live catalogue: neither "400 Error" nor "404 Error" exists as a standalone
+  constant). `legacy_keys` records their historical predecessor ("Thiqa 400/404 Error") for
+  provenance, honestly: the live catalogue was also checked and confirmed those literals were
+  **never translated in any locale** (zero rows, not merely zero definitions) — so there is
+  nothing to lose and nothing to carry forward. Functionally identical to before for every
+  non-English locale (still renders English), but the product name is now genuinely dynamic
+  rather than frozen as a literal.
+- All three set `on_missing_identity: skip` explicitly, per
+  `ProductNameCompositionContractTest::testEveryLegacyContractDeclaresItsMissingIdentityPolicy`
+  — required for any legacy-only, no-explicit-definitions contract; caught immediately by the
+  test when first omitted (defaults to `fail`, which is the wrong choice here — there is no
+  locale data to lose, so failing an upgrade over it would be pure friction).
+
+**Not in scope for B6, on reflection.** `login_tagline_text`'s EN/AR values are a tenant-scoped
+branding *global* (`BrandingConfigFactory`/`BrandingGlobalKey`), materialised directly per tenant
+— not looked up through `lang_constants`/`xlt()` at all. The checkpoint's earlier "B1/B6" phase
+tag for that row (§8, B1-01/B1-02) was imprecise: propagating that value to a live tenant's
+`globals` table is a B9/GATE-4 database-write concern, not a translation-contract one. Corrected
+here rather than silently left inconsistent.
+
 ## 13. Live database mutation state
 
 ```text
@@ -505,4 +554,4 @@ Only read-only `SELECT` queries have been run against the live `openemr` databas
 
 ---
 
-*Checkpoint revision 5, updated after B5. Next update: after B6.*
+*Checkpoint revision 6, updated after B6. Next update: after B7.*

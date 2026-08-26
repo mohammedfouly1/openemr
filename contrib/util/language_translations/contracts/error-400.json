@@ -1,0 +1,10 @@
+{
+    "schema": "openemr-translation-contract/2",
+    "id": "error-400-neutral-v1",
+    "target_key": "%s 400 Error",
+    "legacy_keys": {
+        "Thiqa 400 Error": "Thiqa"
+    },
+    "on_missing_identity": "skip",
+    "definitions": {}
+}
