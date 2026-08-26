@@ -833,7 +833,7 @@ own evidence-first discipline; worth a dedicated pass outside Phase-B.
 ```text
 PHASE:            B14
 START SHA:        358f58d18
-END SHA:           (this commit)
+END SHA:           d9f2c12f4
 FILES:             none
 DB MUTATION:       NONE
 GENERATED ARTEFACTS: none
