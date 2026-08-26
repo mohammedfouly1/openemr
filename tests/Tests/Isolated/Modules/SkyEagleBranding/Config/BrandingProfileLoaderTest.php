@@ -106,7 +106,7 @@ final class BrandingProfileLoaderTest extends TestCase
     {
         return [
             'product name' => ['openemr_name', 'SkyEagle'],
-            'tagline' => ['login_tagline_text', 'Clinical confidence, connected care.'],
+            'tagline' => ['login_tagline_text', 'Better care begins here.'],
             'product root url' => ['main_menu_logo_link', 'https://skyeagle.uk/'],
             'support url over https' => ['online_support_link', 'https://skyeagle.uk/en/contact'],
             'documentation url' => ['user_manual_link', 'https://skyeagle.uk/en/resources'],

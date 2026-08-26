@@ -47,7 +47,7 @@ final class BrandingConfigFactoryTest extends TestCase
 
         $this->assertSame('SkyEagle', $config->productName);
         $this->assertSame('سكاي إيجل', $config->productNameArabic);
-        $this->assertSame('Clinical confidence, connected care.', $config->loginTagline);
+        $this->assertSame('Better care begins here.', $config->loginTagline);
         $this->assertTrue($config->showTaglineOnLogin);
         $this->assertSame('https://skyeagle.uk/', $config->mainMenuLogoLink);
         $this->assertSame('SkyEagle Health Information System', $config->mainMenuLogoTitle);

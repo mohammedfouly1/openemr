@@ -185,7 +185,7 @@ enum BrandingGlobalKey: string
                 'Login tagline',
                 'The tagline shown beneath the logo on the login page.',
                 BrandingValueType::Text,
-                'Clinical confidence, connected care.',
+                'Better care begins here.',
             ),
             self::ShowTaglineOnLogin => new BrandingGlobalDefinition(
                 'Show tagline on login',

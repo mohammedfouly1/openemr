@@ -30,9 +30,9 @@
             "map_row": 2,
             "inventory_id": "BRAND-042",
             "key": "login_tagline_text",
-            "value": "Clinical confidence, connected care.",
-            "value_ar": "ثقة إكلينيكية، رعاية مترابطة.",
-            "note": "Replaces the upstream open-source advert copy. Highest-visibility single string in the product."
+            "value": "Better care begins here.",
+            "value_ar": "من هنا تبدأ رعاية أفضل.",
+            "note": "Replaces the upstream open-source advert copy. Highest-visibility single string in the product. Owner-approved tagline, set 2026-08-26 (Phase B, supersedes the PRE-era 'Clinical confidence, connected care.' value)."
         },
         {
             "map_row": 3,
@@ -55,8 +55,8 @@
             "inventory_id": "BRAND-056",
             "key": "main_menu_logo_title",
             "value": "SkyEagle Health Information System",
-            "value_ar": "نظام ثقة للمعلومات الصحية",
-            "note": "MUST NOT be blank. Upstream auto-generates an open-emr.org title from an empty value, which leaks the inherited brand."
+            "value_ar": "نظام سكاي إيجل للمعلومات الصحية",
+            "note": "MUST NOT be blank. Upstream auto-generates an open-emr.org title from an empty value, which leaks the inherited brand. value_ar corrected 2026-08-26 (Phase B, B1-F02): was still 'نظام ثقة للمعلومات الصحية' (contained Thiqa), a residue the internal-identity rename missed. Same structure, brand substituted, matching the already-established سكاي إيجل product name used elsewhere in this profile (openemr_name / saas_branding_product_name_ar)."
         },
         {
             "map_row": 6,

@@ -222,7 +222,7 @@ final class BrandingServiceTest extends TestCase
         $shown = $this->service();
         $hidden = $this->service([BrandingGlobalKey::ShowTaglineOnLogin->value => '0']);
 
-        $this->assertSame('Clinical confidence, connected care.', $shown->tagline());
+        $this->assertSame('Better care begins here.', $shown->tagline());
         $this->assertNull($hidden->tagline());
     }
 
