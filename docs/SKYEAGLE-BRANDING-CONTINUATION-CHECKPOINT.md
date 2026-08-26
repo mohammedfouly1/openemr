@@ -1,0 +1,235 @@
+# SKYEAGLE BRANDING — PHASE B CONTINUATION CHECKPOINT
+
+> **Scope.** This is the Phase-B execution log: the actual Thiqa → SkyEagle brand migration,
+> authorized by the Owner after PRE-SKYEAGLE certification passed. The PRE checkpoint
+> (`docs/PRE-SKYEAGLE-CONTINUATION-CHECKPOINT.md`) remains the historical record of the
+> preparation/audit programme and is **not** rewritten here. This file is the continuation point if
+> a session ends mid-migration — a future session must resume from here, not restart Phase B.
+
+**Revision: 1**
+**Started:** 2026-08-26
+**Certified PRE baseline SHA:** `826d194eb`
+**Branch:** `feat/skyeagle-branding`
+**Current HEAD:** `826d194eb` (branch just created, no Phase-B commits yet)
+**OpenEMR baseline (frozen, must not drift):** 8.2.0 / rel-820
+
+---
+
+## 1. Authorization
+
+```text
+PRE-SKYEAGLE CERTIFICATION: PASS
+MASTER INTEGRATION: COMPLETE
+SKYEAGLE BRAND MIGRATION: READY FOR OWNER AUTHORIZATION
+```
+
+Owner authorization received 2026-08-26: `APPROVE PHASE B — START SKYEAGLE MIGRATION`, with a
+detailed execution prompt establishing the branch rule, phase sequence, Owner Decision Gates, and
+final certification format used throughout this document.
+
+## 2. Initial branch relationship — verified
+
+```text
+master                          = 826d194eb
+origin/master                   = 826d194eb
+feat/skyeagle-branding           = 826d194eb  (created from master, not reset onto it)
+origin/feat/skyeagle-branding    = 826d194eb  (pushed, tracking configured)
+```
+
+No merge/rebase/cherry-pick/revert in progress. Working tree real-content-clean (confirmed via
+full-tree `git diff` = 0 lines; `git status` shows the same DriveFS stat-cache noise documented
+extensively in `CLAUDE.local.md` and the PRE checkpoint — not real changes, not staged, not
+committed).
+
+## 3. Product baseline freeze
+
+SkyEagle remains based on **OpenEMR 8.2.0 / rel-820**. No upstream sync, no dependency upgrades
+beyond what PRE already integrated, no unrelated modernization. Any out-of-scope defect found during
+migration is classified `PHASE-B-BLOCKER` / `OUT-OF-SCOPE-HIGH/MEDIUM/LOW` / `OBSERVATION` and
+recorded in §9 below, not silently fixed.
+
+## 4. Approved brand identity (as given by the Owner, 2026-08-26)
+
+```text
+Product name (EN):     SkyEagle
+Product name (AR):     سكاي إيجل           (KG-05: this exact spelling, already correct in the
+                                            existing profile — verified below)
+Tagline (EN):           Better care begins here.
+Tagline (AR):           من هنا تبدأ رعاية أفضل.
+Example tenant (EN):    International Healthcare Center
+Example tenant (AR):    مركز الرعاية الصحية الدولي
+Support URL:             https://skyeagle.uk/en/contact   (already correct — ADR-BRAND-006)
+Resources/manual URL:    https://skyeagle.uk/en/resources  (already correct — ADR-BRAND-006)
+```
+
+**Do not conflate:** SkyEagle = product/vendor identity; "International Healthcare Center" = example
+healthcare tenant (demo data, not product configuration); OpenEMR = upstream/base software identity,
+preserved wherever technically/historically required (licensing, upstream attribution).
+
+## 5. Authoritative source documents reconstructed this session
+
+| Source | What it governs | Status |
+|---|---|---|
+| `interface/modules/custom_modules/oe-module-skyeagle-branding/config/branding-profile.json` | The canonical, declarative product-level identity — the **only** input to `skyeagle-branding:apply-profile`. Full content re-read this session (§6 below). | Authoritative, current |
+| `docs/PRE-SKYEAGLE-CONTINUATION-CHECKPOINT.md` §11 "OWNER DECISIONS KG-01…KG-09 — DO NOT REOPEN" | Locked visual/technical migration decisions taken during PRE, specifically for Phase B | Authoritative, binding, re-read in full this session |
+| `docs/PRE-SKYEAGLE-CONTINUATION-CHECKPOINT.md` §12 "PROVISIONAL 43-KEY SKYEAGLE TOKEN PLAN" | The worked color-token migration plan (derivation rules, WCAG validation, provenance categories O/P/D/N) — marked NOT IMPLEMENTED, gated on S1-P0-09's repair | S1-P0-09 confirmed FIXED — VERIFIED (§21.2, commit `566b14ea6`) — precondition satisfied; plan itself must still be **revalidated**, not blindly trusted, before `skyeagle-tokens.json` is written |
+| `brand/tokens/thiqa-tokens.json` | Current (Thiqa-era) token source the generator reads | Untouched since `a12e63471`/`d9757fc55` (pre-dates the SkyEagle rename entirely) — confirmed via `git log` |
+| `brand/master/*.svg` | Master logo/symbol vectors | Untouched since the same two commits — still the Thiqa-era artwork, colors, and (per KG-03) needs **recoloring, not redesign** |
+
+### 5.1 The nine locked KG decisions, restated for Phase-B reference
+
+- **KG-01** — Full internal module identity rename during Phase B. *Largely already satisfied*: the
+  active module and namespace were renamed in the PRE session (`48f09c523`,
+  `oe-module-thiqa-branding` → `oe-module-skyeagle-branding`, `ThiqaBranding` →
+  `SkyEagleBranding`). Preserve genuinely brand-neutral identifiers (see KG-06).
+- **KG-02** — SkyEagle CTA maps to `interactive.primary`, not Thiqa's coral-primary/navy-secondary
+  scheme. Construct `interactive.secondary` separately from the approved palette.
+- **KG-03** — Authoritative colours: primary `#0B376E`, accent `#1E5A96`, link `#0B4E91`. Override
+  artwork-sampled and live-site values. **Recolour the existing master vector — geometry,
+  proportions, negative space, beak direction, S curvature, E bars, feather forms, silhouette must
+  NOT change.** (This resolves what looked like a GATE-1 "missing asset" concern in §6/B2 below: B2
+  is a recolor operation on an existing, unmodified vector, not a new design commission.)
+- **KG-04** — Preserve validated functional/semantic colours; mechanically derive structural values;
+  classify every token's provenance O(wner)/P(reserved)/D(erived)/N(ew). Surface any material new
+  visible brand decision before executing it.
+- **KG-05** — No AI redesign of the trademark. Dedicated Arabic wordmark preferred; **until one is
+  available, the approved symbol + English wordmark is an explicitly disclosed interim** for Arabic
+  contexts — never silently presented as a finished Arabic wordmark. Arabic textual brand name is
+  `سكاي إيجل`.
+- **KG-06** — Theme labels become "SkyEagle Light" / "SkyEagle Dark". **CSS filenames unchanged**
+  (`style_light.css` etc. stay as-is — this is why `interface/themes/thiqa/` and the `--thiqa-*`
+  custom-property names are NOT renamed in Phase B; they are permanent technical plumbing, not
+  user-facing). Admin selector's filename-derived Light/Dark behaviour preserved.
+- **KG-07** — Carry the Arabic-PDF Option C deferral forward. Do not reintroduce Amiri. Do not claim
+  Arabic PDF support that hasn't passed real rendering.
+- **KG-08** — Light theme intentionally flat: `background = surface = #FFFFFF`. Hierarchy via
+  borders/sunken surfaces/spacing/elevation, not a background/surface color split.
+- **KG-09** — Telemetry: already closed. OFF by three independent mechanisms, live-proven in PRE
+  Scan 2H. No action needed in Phase B.
+
+## 6. Live state reconstructed this session (read-only checks)
+
+**Current `branding-profile.json` values** (full file re-read, all 33+ rows): `product_name` =
+`SkyEagle` ✓; `product_name_ar` = `سكاي إيجل` ✓ (matches KG-05 exactly); `saas_branding_product_name_ar`
+= `سكاي إيجل` ✓; support/resources URLs already correct (ADR-BRAND-006) ✓.
+
+**Two findings, both real, neither previously recorded:**
+
+- **B1-F01** — `login_tagline_text` = `"Clinical confidence, connected care."` /
+  `"ثقة إكلينيكية، رعاية مترابطة."` — this is the **old** tagline. The Owner's newly-approved tagline
+  (`"Better care begins here."` / `"من هنا تبدأ رعاية أفضل."`) has never been applied anywhere.
+- **B1-F02** — `main_menu_logo_title`'s `value` (English) correctly reads `"SkyEagle Health
+  Information System"`, but its `value_ar` documentation field still reads
+  `"نظام ثقة للمعلومات الصحية"` (contains `ثقة`/Thiqa) — a residue the PRE-session rename missed.
+  `value_ar` is documentation-only in this file (not written to `globals` directly, per the file's
+  own header), but it is the authoritative record a translator would work from, so it is in scope.
+
+**Live database state** (`SELECT` only, no mutation — `openemr` DB, site `default`):
+
+```text
+openemr_name                    = SkyEagle                          (current, matches profile)
+saas_branding_product_name_ar   = سكاي إيجل                          (current, matches profile)
+login_tagline_text              = Clinical confidence, connected care.  (STALE — old tagline, source
+                                                                          not yet updated either, see B1-F01)
+main_menu_logo_title            = SkyEagle Health Information System  (current)
+online_support_link             = https://skyeagle.uk/support         (STALE — pre-ADR-BRAND-006 value;
+                                                                          source already fixed, this
+                                                                          tenant was never re-synced)
+user_manual_link                = https://skyeagle.uk/docs            (STALE — same cause)
+```
+
+This confirms, with live evidence, the B9 concern the Owner's prompt anticipated: the `default`
+tenant's database has never had `skyeagle-branding:apply-profile` re-run since ADR-BRAND-006 (or,
+after this session, since the tagline fix). **Per explicit instruction, this is not touched now.**
+
+**Example tenant / demo data** (`SELECT` only):
+
+```text
+facility.name (id 3) = "Thiqa Demo Eye Clinic"
+```
+
+This is tenant/demo data (the branding profile's own `omitted` section explicitly classifies
+`facility.name` as "tenant data, not product configuration, and not a global"). `SeedDemoCommand.php`
+reads whatever facility already exists rather than hardcoding a name — no source-level script
+generates "Thiqa Demo Eye Clinic" as a literal, so there is no code-level fix available here; renaming
+it is a live-data write, in scope for B9/GATE-4, not before.
+
+**Visual assets** (`git log` on `brand/master/`, `brand/tokens/thiqa-tokens.json`): untouched since
+the original Thiqa asset-kit commits (`a12e63471`, `d9757fc55`), predating the SkyEagle rename
+entirely. No SkyEagle-recolored vector or token file has ever been produced. B2/B3 start from a clean
+slate, using KG-02/03/04/08 and the provisional 43-key plan as the specification.
+
+## 7. Phase sequence (planned, per Owner's execution prompt)
+
+```text
+B1  Source-of-truth product identity        — tagline fix, B1-F02 fix, drift verification
+B2  Visual assets                            — recolor master vector per KG-03, NOT a redesign
+B3  Design tokens / themes                   — revalidate + implement the provisional 43-key plan
+B4  User-facing English identity             — residue sweep beyond what PRE already closed
+B5  Arabic identity + RTL                    — tagline AR, KG-05 interim wordmark disclosure
+B6  Translation catalogue migration          — durable-contract migration of the tagline string
+B7  Technical module identity                — verify KG-01 already-done state; find any residue
+B8  CLI / installer / fresh install          — verify install-time defaults, trace real CLI invocation
+B9  Existing-tenant compatibility            — PLAN ONLY; live writes need separate GATE-4 authorization
+B10 Reports / print / PDF / email            — non-browser surfaces
+B11 Complete residue scan                    — scans A–D
+B12 Security/privacy regression check
+B13 PHPStan (host-local config, RB-24 discipline)
+B14 branding-ci + full test matrix
+B15 Negative controls on critical guardrails
+B16 Push Phase-B branch, check CI (billing lock may still apply)
+```
+
+Executing autonomously through phases with sufficient authoritative evidence (B1 onward). Will stop
+at a genuine Owner Decision Gate, safety blocker, or the final Phase-B certification boundary — not
+before.
+
+## 8. Migration ledger (initial — grows as each phase executes)
+
+| ID | Surface | Current | Target | Classification | Source of truth | Runtime? | DB? | Compat needed? | Phase | Status |
+|---|---|---|---|---|---|---|---|---|---|---|
+| B1-01 | `login_tagline_text` (EN) | Clinical confidence, connected care. | Better care begins here. | USER-FACING PRODUCT IDENTITY | Owner instruction 2026-08-26 | Yes | Yes (profile + live tenant) | Source now; tenant sync is B9 | B1 | Pending |
+| B1-02 | `login_tagline_text` (AR, `value_ar` doc field) | ثقة إكلينيكية، رعاية مترابطة. | من هنا تبدأ رعاية أفضل. | USER-FACING PRODUCT IDENTITY | Owner instruction 2026-08-26 | Yes (via translation catalogue) | Yes | Source now; tenant sync is B9 | B1/B6 | Pending |
+| B1-03 | `main_menu_logo_title` `value_ar` doc field | نظام ثقة للمعلومات الصحية | (to be derived — SkyEagle Arabic equivalent) | TRANSLATION VALUE / DOCUMENTATION | Discovered this session | Documentation-only in this file | No | No | B1 | Pending |
+| B2-01 | `brand/master/*.svg` (8 files) | Thiqa-era artwork, Thiqa navy/coral | Recolored to KG-03 (`#0B376E`/`#1E5A96`/`#0B4E91`), same geometry | USER-FACING PRODUCT IDENTITY (asset) | KG-03 | Yes (feeds all derived logo variants) | No | No | B2 | Pending |
+| B3-01 | `brand/tokens/thiqa-tokens.json` | Thiqa 43-key palette | SkyEagle 43-key palette per provisional plan (revalidated) | USER-FACING PRODUCT IDENTITY (tokens); filename itself stays (KG-06) | PRE §12 provisional plan + KG-02/03/04/08 | Yes | No | No | B3 | Pending |
+| B7-VERIFY | Module namespace/directory | `SkyEagleBranding` / `oe-module-skyeagle-branding` | (no change expected) | TECHNICAL MODULE IDENTITY | KG-01 (already executed in PRE) | — | — | — | B7 | To verify, not re-execute |
+| B9-01 | `sites/default` tenant globals | Stale (old tagline, old URLs) | Synced to current profile | DATABASE VALUE | branding-profile.json | Yes | Yes — live write | GATE-4 | B9 | PLAN ONLY |
+| B9-02 | `facility.name` (id 3) | Thiqa Demo Eye Clinic | International Healthcare Center | TENANT DATA | Owner instruction 2026-08-26 | Yes | Yes — live write | GATE-4 | B9 | PLAN ONLY |
+| B9-03 | `sites/rdy0082restore` tenant | Unknown, not yet inspected | TBD | — | — | Yes | Yes — live write | GATE-4 | B9 | Not yet inspected |
+
+More rows are added as each phase's own reconnaissance runs.
+
+## 9. Out-of-scope / observation register
+
+*(empty so far — populated as discovered)*
+
+## 10. Owner Decision Gates encountered
+
+*(none yet — B2/B3 initially looked GATE-1-bound but KG-03's "recolor the existing vector"
+instruction resolves that; tracked here if that changes on closer inspection)*
+
+## 11. Rollback boundaries
+
+```text
+Immutable root boundary: 826d194eb  — never rewritten.
+```
+
+Per-phase boundaries recorded as each phase completes (§12).
+
+## 12. Phase log
+
+*(filled in as phases complete — format: PHASE / START SHA / END SHA / FILES / DB MUTATION /
+GENERATED ARTEFACTS / TESTS / ROLLBACK METHOD / DEPENDENT NEXT PHASES)*
+
+## 13. Live database mutation state
+
+```text
+LIVE DATABASE MUTATED THIS PHASE: NO
+```
+
+Only read-only `SELECT` queries have been run against the live `openemr` database this session (§6).
+
+---
+
+*Checkpoint revision 1, written before any Phase-B implementation commit. Next update: after B1.*
