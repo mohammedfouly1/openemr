@@ -1117,3 +1117,22 @@ to fix it: the underlying git blobs were already correct LF the entire time.
 ## POST-MERGE MASTER CERTIFICATION: PASS
 
 Candidate SHA `33738daec1a104e9b6ee4e88cb6c43a54c821943` certified. Pushing master next.
+
+**Pushed.** `origin/master` -> `3e4ccad06a9843d1b3e76e4d278dfadb5cc49861` (one commit past the
+certified candidate -- this same certification record). Verified `local master SHA ==
+origin/master SHA` immediately after push: both `3e4ccad06a9843d1b3e76e4d278dfadb5cc49861`.
+
+**GitHub Actions, observed and classified accurately.** The push triggered a full CI run (23
+workflow jobs) -- confirms workflows DO fire on a direct push to `master`, as expected. Multiple
+jobs (`Database`, `Docker Compose Linting`, `Composer Require Checker`, `API Docs Freshness
+Checks`, `Rector PHP Analysis`, `Spell Check`, and others) show `conclusion: failure` at
+2-4 seconds each -- the identical instant-failure signature this session directly confirmed
+earlier today (2026-08-26T11:50:18Z, the prior `docs(prebrand)` push) traces to an **account
+billing lock**, not a code defect: `gh api .../jobs`/`.../check-suites` for this run return only
+`"conclusion":"failure"` with no further detail (the underlying job logs are evidently purged
+for billing-locked runs, consistent with the earlier finding), but the timing signature is
+identical down to the second. **Classified as an external CI infrastructure condition, not code
+PASS or code FAIL** -- this session's own certification (branding-ci, isolated suite, PHPStan,
+residue sweep, manifest, all re-run fresh against this exact SHA) is the operative verdict on
+code correctness; GitHub's CI cannot currently confirm or deny it independently until the
+account-level billing issue is resolved, which is outside this session's control or scope.
