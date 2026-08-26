@@ -194,9 +194,9 @@ before.
 | B2-01 | `brand/master/*.svg` (8 files) + all live-deployed logo/favicon PNG/GIF/ICO slots | Thiqa-era artwork, Thiqa navy/coral | New verified SkyEagle vector artwork (deep navy `rgb(9,58,116)`/tonal blue `rgb(21,84,150)`), Owner-redirected away from recolor-in-place | USER-FACING PRODUCT IDENTITY (asset) | Owner instruction 2026-08-26 (supersedes KG-03 recolor plan — see §9) + `OpenEMRWebSite/docs/Assets/Entity.md` | Yes (feeds all derived logo variants) | No | No | B2 | COMPLETE |
 | B3-01 | `brand/tokens/thiqa-tokens.json` | Thiqa 43-key palette | SkyEagle 43-key palette (KG-03 anchors, KG-08 flat light bg, KG-04 semantic preserved) | USER-FACING PRODUCT IDENTITY (tokens); filename itself stays (KG-06) | PRE §12 provisional plan + KG-02/03/04/08, role-mapping confirmed with Owner 2026-08-26 | Yes | No | No | B3 | COMPLETE |
 | B7-VERIFY | Module namespace/directory | `SkyEagleBranding` / `oe-module-skyeagle-branding` | (no change expected) | TECHNICAL MODULE IDENTITY | KG-01 (already executed in PRE) | — | — | — | B7 | To verify, not re-execute |
-| B9-01 | `sites/default` tenant globals | Stale (old tagline, old URLs) | Synced to current profile | DATABASE VALUE | branding-profile.json | Yes | Yes — live write | GATE-4 | B9 | PLAN ONLY |
-| B9-02 | `facility.name` (id 3) | Thiqa Demo Eye Clinic | International Healthcare Center | TENANT DATA | Owner instruction 2026-08-26 | Yes | Yes — live write | GATE-4 | B9 | PLAN ONLY |
-| B9-03 | `sites/rdy0082restore` tenant | Unknown, not yet inspected | TBD | — | — | Yes | Yes — live write | GATE-4 | B9 | Not yet inspected |
+| B9-01 | `sites/default` `globals` (5 rows: `login_tagline_text`, `main_menu_logo_title`, `online_support_link`, `user_manual_link`) | Stale, itemised in §9 B9 plan | Synced to current profile, itemised in §9 B9 plan | DATABASE VALUE | branding-profile.json | Yes | Yes — live write | GATE-4 | B9 | PLAN COMPLETE, not executed |
+| B9-02 | `facility.name` (id 3), both tenants | Thiqa Demo Eye Clinic | International Healthcare Center | TENANT DATA | Owner instruction 2026-08-26 | Yes | Yes — live write | GATE-4 | B9 | PLAN COMPLETE, not executed |
+| B9-03 | `sites/rdy0082restore` `globals`, same 5 rows | Inspected 2026-08-26 (read-only): identical drift to `default` — see §9 B9 plan | Synced to current profile, itemised in §9 B9 plan | DATABASE VALUE | branding-profile.json | Yes | Yes — live write | GATE-4 | B9 | PLAN COMPLETE, not executed |
 
 | B4-01 | `src/RestControllers/FHIR/FhirMetaDataRestController.php` `openemr_name` fallback | literal `'Thiqa'` | `ProductIdentity::name()` | USER-FACING (FHIR CapabilityStatement) | Found by B4 residue sweep | Yes | No | No | B4 | COMPLETE |
 | B4-02 | `OAuth2AuthorizationListener.php` API-disabled exception (BRAND-134) | literal `"Thiqa Error: API is disabled"` | `ProductIdentity::name() . " Error: ..."` | USER-FACING (OAuth2 error response) | Found by B4 residue sweep; mandatory-patch test confirms BRAND-134 is deliberate | Yes | No | No | B4 | COMPLETE |
@@ -621,14 +621,77 @@ installer view and is already passing, so B8's own scan targeted the surfaces th
 does not — the automated installer script and the console bootstrap — rather than re-deriving
 what B4/that test already established.
 
+### B9 — Existing-tenant compatibility — PLAN ONLY, GATE-4, no live write executed
+
+```text
+PHASE:            B9
+START SHA:        64d822f18
+END SHA:           (this commit)
+FILES:             docs/SKYEAGLE-BRANDING-CONTINUATION-CHECKPOINT.md only (this plan)
+DB MUTATION:       NONE — read-only SELECTs against both live databases (openemr,
+                    openemr_rdy0082_restore); the plan below is not executed
+GENERATED ARTEFACTS: none
+TESTS:              n/a (no code changed)
+ROLLBACK METHOD:    n/a
+DEPENDENT NEXT PHASES: B10-B16 do not depend on B9 executing; B9's actual write remains a
+                    separate, explicitly gated action per the Owner's own Phase-B authorization
+```
+
+**Per the phase table, B9 is PLAN ONLY — live writes need separate GATE-4 authorization.** This
+entry produces that plan via read-only inspection of both live tenant databases. No `UPDATE`,
+`INSERT` or `DELETE` was run against either.
+
+**Both tenants inspected — identical drift, both still on pre-Phase-B values:**
+
+| `globals.gl_name` | Current (both `default` and `rdy0082restore`) | Target (branding-profile.json) |
+|---|---|---|
+| `login_tagline_text` | `Clinical confidence, connected care.` | `Better care begins here.` |
+| `main_menu_logo_title` | `SkyEagle Health Information System` | *(unchanged — already correct)* |
+| `online_support_link` | `https://skyeagle.uk/support` | `https://skyeagle.uk/en/contact` (ADR-BRAND-006) |
+| `user_manual_link` | `https://skyeagle.uk/docs` | `https://skyeagle.uk/en/resources` (ADR-BRAND-006) |
+| `openemr_name` | `SkyEagle` | *(unchanged — already correct)* |
+| `saas_branding_product_name_ar` | `سكاي إيجل` | *(unchanged — already correct)* |
+| `facility.name` (id 3) | `Thiqa Demo Eye Clinic` | `International Healthcare Center` |
+
+Three of seven checked rows are already correct on both tenants (`main_menu_logo_title`,
+`openemr_name`, `saas_branding_product_name_ar`) — a prior partial sync evidently already ran.
+The four still-stale rows are exactly what B9-01/B9-03 track. `rdy0082restore`'s
+`openemr_rdy0082_restore` database exists locally and was reachable read-only; both tenants show
+byte-identical drift, so one plan covers both.
+
+**Mechanism, when GATE-4 is authorized.** The correct execution path is `php bin/console
+skyeagle-branding:apply-profile --site=default` (and again with `--site=rdy0082restore`) — the
+console command this module already ships (B7 verified it) — **not** a hand-written `UPDATE
+globals` statement. Hand-writing the SQL would bypass whatever validation/materialisation
+`ApplyProfileCommand` performs (token materialisation, revision bookkeeping per
+`saas_branding_revision`/`saas_branding_materialised_at`, which currently show empty on both
+tenants — consistent with the command never having been run against either).
+
+**Open question, not resolved here, flagged for whoever executes B9.** `BrandingConfigFactory`
+reads `login_tagline_text` as a single un-suffixed value (`$this->text(BrandingGlobalKey::
+LoginTaglineText)`) — there is no `login_tagline_text_ar` sibling global (unlike
+`saas_branding_tenant_display_name` / `_ar`, which do exist as a pair). How the Arabic tagline
+(`value_ar` in the profile) actually reaches an Arabic session — a translation-catalogue lookup
+keyed on the English value, a materialisation-time swap, or genuinely not yet wired — was not
+traced in this phase. Worth resolving before or during B9's actual execution, since applying the
+profile without understanding this could silently leave the Arabic tagline on the old string
+even after the English one updates correctly.
+
+`facility.name` sync is a plain tenant-data `UPDATE`, unrelated to `apply-profile`, and is not
+guarded by any command this module ships — whoever executes B9 should decide whether that goes
+through a similar Console command or a direct, reviewed `UPDATE facility SET name = ... WHERE
+id = 3` on each database.
+
 ## 13. Live database mutation state
 
 ```text
 LIVE DATABASE MUTATED THIS PHASE: NO
 ```
 
-Only read-only `SELECT` queries have been run against the live `openemr` database this session (§6).
+Only read-only `SELECT` queries have been run against the live `openemr` database this session
+(§6), extended in B9 to also read-only query `openemr_rdy0082_restore` (§12 B9 entry). No write
+has been issued against either database at any point in Phase B.
 
 ---
 
-*Checkpoint revision 8, updated after B8. Next update: after B9.*
+*Checkpoint revision 9, updated after B9. Next update: after B10.*
