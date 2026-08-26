@@ -594,6 +594,33 @@ the many *legitimate* `thiqa` references left untouched: `brand/tokens/thiqa-tok
 = 'thiqa-'` are all permanent technical plumbing (KG-06) or deliberate legacy-compatibility
 constants, not residue.
 
+### B8 — CLI / installer / fresh install — COMPLETE
+
+```text
+PHASE:            B8
+START SHA:        ebe0377b6
+END SHA:           (this commit)
+FILES:             SeedDemoCommand.php (B4-04: console title 'Thiqa demo seed' -> 'SkyEagle
+                    demo seed')
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: none
+TESTS:              tests/Tests/Isolated/Modules/SkyEagleBranding/Console — 125 tests / 1593
+                    assertions, exit 0
+ROLLBACK METHOD:    git revert this commit (single commit; no dependent commits yet)
+DEPENDENT NEXT PHASES: B9 (existing-tenant compatibility, PLAN ONLY / GATE-4)
+```
+
+Applied B4-04, the one finding explicitly deferred to this phase by scope. Verified the rest of
+the install-time surface directly: `library/globals.inc.php`'s `openemr_name` default already
+resolves through `ProductIdentity::name()` (not a literal); `contrib/util/installScripts/
+InstallerAuto.php`, `library/classes/Installer.class.php`, `bin/console` and `src/Console/`
+(the Symfony Application bootstrap) are all clean of the brand literal. This is not a fresh
+finding — `MandatoryCoreStringPatchesIsolatedTest`'s own D-3 checklist already exhaustively
+covers `setup.php`/`sql_patch.php`/`sql_upgrade.php`/`ippf_upgrade.php`/`admin.php`/the Zend
+installer view and is already passing, so B8's own scan targeted the surfaces that checklist
+does not — the automated installer script and the console bootstrap — rather than re-deriving
+what B4/that test already established.
+
 ## 13. Live database mutation state
 
 ```text
@@ -604,4 +631,4 @@ Only read-only `SELECT` queries have been run against the live `openemr` databas
 
 ---
 
-*Checkpoint revision 7, updated after B7. Next update: after B8.*
+*Checkpoint revision 8, updated after B8. Next update: after B9.*

@@ -259,7 +259,7 @@ final class SeedDemoCommand extends Command
         $verifyContext = (bool) $input->getOption('verify-context');
 
         $io->title(sprintf(
-            'Thiqa demo seed — profile %s%s',
+            'SkyEagle demo seed — profile %s%s',
             self::PROFILE_VERSION,
             $this->dryRun ? ' (DRY RUN — nothing will be written)' : ''
         ));
