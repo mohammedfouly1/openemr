@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The closed set of non-branding globals the Thiqa profile is allowed to switch off.
+ * The closed set of non-branding globals the SkyEagle profile is allowed to switch off.
  *
  * @package   OpenEMR
  * @link      https://www.open-emr.org

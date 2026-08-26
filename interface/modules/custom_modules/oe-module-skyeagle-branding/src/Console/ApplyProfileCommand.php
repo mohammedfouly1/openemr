@@ -61,7 +61,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 #[AsCommand(
     name: 'skyeagle-branding:apply-profile',
-    description: 'Apply the declarative Thiqa branding profile to one tenant (requires --site).',
+    description: 'Apply the declarative SkyEagle branding profile to one tenant (requires --site).',
 )]
 final class ApplyProfileCommand extends TenantScopedBrandingCommand
 {

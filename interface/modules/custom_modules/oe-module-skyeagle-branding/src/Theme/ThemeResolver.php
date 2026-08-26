@@ -30,7 +30,7 @@ use OpenEMR\Modules\SkyEagleBranding\Config\BrandingConfig;
  * Locked decision Q77: there are exactly two variants, and ANY value that is not
  * recognisably the dark stylesheet resolves to Light. The fallback is deliberately the
  * product's own light theme and never an upstream-branded default — a mis-typed or
- * stale global must degrade to Thiqa branding, not to OpenEMR branding.
+ * stale global must degrade to SkyEagle branding, not to OpenEMR branding.
  */
 final readonly class ThemeResolver
 {

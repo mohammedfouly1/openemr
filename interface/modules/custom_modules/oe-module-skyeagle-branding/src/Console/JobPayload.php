@@ -27,7 +27,7 @@ use OpenEMR\Modules\SkyEagleBranding\Materialisation\MaterialisationJob;
  * {
  *   "light":   { "link.default": "#1E4574" },
  *   "dark":    { "link.default": "#B7D9F5" },
- *   "strings": { "openemr_name": "Thiqa", "portal_primary_menu_logo_height": 30 },
+ *   "strings": { "openemr_name": "SkyEagle", "portal_primary_menu_logo_height": 30 },
  *   "assets":  [ { "slot": "core/login/primary", "path": "/var/staging/logo.png" } ]
  * }
  * ```

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provisions the Thiqa report-authorization ACO so a clean deployment matches a live one.
+ * Provisions the SkyEagle report-authorization ACO so a clean deployment matches a live one.
  *
  * @package   OpenEMR
  * @link      https://www.open-emr.org
@@ -32,7 +32,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * It lives in this module rather than in core `acl_upgrade.php` because locked-decision
  * Invariant 4 forbids core edits without a numbered patch record, and the requirement is
- * Thiqa-specific. It follows the module's established console pattern so it is discoverable
+ * SkyEagle-specific. It follows the module's established console pattern so it is discoverable
  * via `bin/console` alongside the branding commands.
  *
  * **Idempotent by construction.** `addObjectAcl()` checks `get_object_id()` before inserting and
@@ -44,7 +44,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 #[AsCommand(
     name: 'skyeagle-branding:provision-report-acl',
-    description: 'Provision the Thiqa bulk-patient-report ACO and its group grants (idempotent).',
+    description: 'Provision the SkyEagle bulk-patient-report ACO and its group grants (idempotent).',
 )]
 final class ProvisionReportAclCommand extends Command
 {
@@ -88,7 +88,7 @@ final class ProvisionReportAclCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $dryRun = (bool) $input->getOption('dry-run');
 
-        $io->title('Thiqa report authorization provisioning');
+        $io->title('SkyEagle report authorization provisioning');
 
         $missing = [];
         foreach (self::ACOS as $objectName => $spec) {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WCAG 2.2 contrast ratio calculator for the Thiqa branding token gate.
+ * WCAG 2.2 contrast ratio calculator for the SkyEagle branding token gate.
  *
  * @package   OpenEMR
  * @link      https://www.open-emr.org

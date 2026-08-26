@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The closed allowlist of Thiqa design-token keys.
+ * The closed allowlist of SkyEagle design-token keys.
  *
  * @package   OpenEMR
  * @link      https://www.open-emr.org
@@ -151,7 +151,7 @@ enum TokenKey: string
      * TokenValidator applies a non-WCAG distinguishability floor against both the
      * enabled primary fill and the page background. Everything else is false:
      *
-     *  - brand.* is identity; a tenant recolouring the Thiqa mark is a trademark problem;
+     *  - brand.* is identity; a tenant recolouring the SkyEagle mark is a trademark problem;
      *  - surfaces, borders, dividers and text are structural, and the certified design
      *    (and its recorded WCAG results) depends on them holding still;
      *  - semantic.{success,warning,critical,info}.* are NON-OVERRIDABLE FOR CLINICAL

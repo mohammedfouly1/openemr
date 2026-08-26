@@ -183,7 +183,7 @@ final class Bootstrap
 
         if (!$site instanceof SiteId) {
             $logger->error(
-                'Thiqa branding console commands were not registered: this site id is outside the '
+                'SkyEagle branding console commands were not registered: this site id is outside the '
                 . 'character set the branding layer supports, so no tenant can be bound safely.',
                 [
                     'siteDirectory' => $siteDirectory,

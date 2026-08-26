@@ -49,7 +49,7 @@ final readonly class GlobalsRegistrationListener
      * Plain English on purpose: edit_globals.php passes the section key itself through
      * xlt(), so the key must be the untranslated literal.
      */
-    public const SECTION = 'Thiqa Branding';
+    public const SECTION = 'SkyEagle Branding';
 
     public function __construct(private BrandingConfigFactory $configFactory)
     {

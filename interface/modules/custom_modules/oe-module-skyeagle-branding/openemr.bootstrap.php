@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Bootstrap for the Thiqa branding module.
+ * Bootstrap for the SkyEagle branding module.
  *
  * Registers the module namespace and hands control to Bootstrap, which attaches
  * the branding layer to OpenEMR through published extension points only. No core
