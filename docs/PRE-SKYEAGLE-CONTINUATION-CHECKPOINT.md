@@ -3692,3 +3692,105 @@ clean. `fsupgrade-12.sh`: `bash -n` clean.
 for the Owner's review of `691fc2c2f` before authorizing the final merge-back.
 
 ---
+
+## 29. MASTER INTEGRATION COMPLETE (orchestrating session, 2026-08-26)
+
+Final gate, re-verified independently rather than trusted from §28's own report. Every check below was
+re-run directly against the exact commit named, not inferred from prior session state.
+
+### 29.1 Repository state and merge structure — re-confirmed
+
+`691fc2c2f` has exactly two parents (`f69743d32` — the literal pre-merge feature HEAD — and `631f2b38c`
+— master, unchanged): a real merge, no rebase. Seven historically-cited PRE-audit SHAs
+(`bee6a4ffd`, `8dd3149e7`, `af36dbef3`, `48f09c523`, `bad90c7ef`, `c124660a5`, `41bfd9af1`) all confirmed
+still-reachable ancestors. Commit count delta from pre-merge feature HEAD: exactly +19 (17 master
+commits + 1 merge + 1 docs commit) — no history rewritten, none lost.
+
+### 29.2 The three conflict resolutions — re-verified directly on HEAD, not from memory
+
+- `composer.lock`: programmatic full package-set diff against master found **zero** lost or
+  version-mismatched packages; `twilio/sdk` confirmed absent; both `symfony/mime` and
+  `symfony/polyfill-intl-idn` confirmed present.
+- `docker/production/docker-compose.yml`: `openemr` image confirmed pinned to `8.2.0` (line 28); mariadb
+  digest confirmed matching master's newer value exactly (line 8).
+- `fsupgrade-12.sh`: `--from="${priorOpenemrVersion}"` confirmed present; the old `sed -e` hack confirmed
+  absent (zero matches).
+
+### 29.3 8.3.0 drift — full sweep, every occurrence classified
+
+`version.php` (8.2.0), `OpenApiDefinitions.php` (8.2.0), `swagger/openemr-api.yaml` (8.2.0), the
+8.3.0 upgrade-SQL scaffold (absent) — all confirmed clean. Broader sweep across `docker/`, `.github/`,
+`sql/`, `tools/release/`, `src/Common/Command/ReleasePrep/` and their test fixtures found eleven more
+occurrences, every one classified HISTORICAL/DOC/INERT/TEST or ACTIVE-but-scoped-to-master's-own-row
+(`.github/release-targets.yml`'s master row correctly reads `8.3.0,dev`; its `rel-820` row correctly
+reads `8.2.0,next`). **No active 8.3.0 product-identity reference remains anywhere.**
+
+### 29.4 The two artefact fixes — re-verified at the byte level
+
+Initial verification attempts inside a bash `for` loop gave false-positive CR counts (66, 304, 145...)
+for files already proven byte-clean; re-run as individual, non-looped commands confirmed **zero** CR
+bytes in all 7 previously-CRLF-fixed files' committed blobs — the loop construct itself was unreliable
+on this host for this specific check, not the files. Recorded so a future session doesn't rediscover the
+same false alarm. `brand/manifests/SHA256SUMS` re-verified: 21/21 deployed artefacts, 123/123 source
+artefacts.
+
+### 29.5 Full validation, re-run on the exact final HEAD
+
+- `composer branding-ci`: 1674 tests, 8412 assertions, exit 0.
+- PHPStan: RB-24 clean (zero `Internal error`, zero `Result is incomplete`, zero timeout) across the
+  full run; 908 total / 658 out-of-scope (`rdy0082restore`) / 250 real — identical to every prior
+  verified state on this branch, confirming zero new errors from the merge.
+- **Full unscoped isolated suite (5547 tests) run for the first time this session** (every prior run
+  was deliberately branding-scoped) surfaced a sixth Twig/session-lock hang class
+  (`ReadAndCloseNativeSessionStorageTest`, joining the five already documented in `CLAUDE.local.md`) and
+  three failure clusters (`ReleasePrep\Mutator\*` tests, `FrontControllerRoutingTest`,
+  `DocumentImportCommandTest`) — every one confirmed via `git diff` to sit in files **no commit on this
+  entire branch has ever touched**, i.e. pre-existing host-specific gaps, not merge regressions.
+  Recorded in `CLAUDE.local.md` for future sessions. `branding-ci`'s own 1674-test selection remains the
+  relevant, already-established suite for this validation, and it is clean.
+
+### 29.6 Category-B — confirmed not started
+
+`brand/` diff from the merge is exactly the SHA256SUMS bookkeeping fix (9 lines) — no logo, colour, or
+identity content changed. Branding module directory, namespace, and `product_name` (`SkyEagle`,
+unchanged from the prior session's rename) all confirmed untouched by this merge.
+**SKYEAGLE PHASE B STARTED: NO.**
+
+### 29.7 Master integration — executed
+
+Since master was already an ancestor of the validated feature branch (having been merged into it, not
+the reverse — Strategy 2), the merge-back was a clean **fast-forward**: `git checkout master && git
+merge feat/thiqa-branding-foundation --ff-only`. No new commit, zero conflict risk, full history
+preserved by construction. Pushed to `origin/master`.
+
+```text
+Feature branch tested SHA:  f19427835 (= 691fc2c2f + 1 docs-only commit)
+Master merge commit:        f19427835 (fast-forward — same SHA, no new commit)
+Final master SHA:           f19427835
+origin/master SHA:          f19427835  (confirmed identical after push)
+```
+
+### 29.8 CI — a real, but non-code, gap: GitHub Actions is billing-locked on this account
+
+`gh run list` against this fork (not upstream — an early query without `-R` silently defaulted to
+`openemr/openemr` and returned unrelated results; corrected with the explicit `-R
+mohammedfouly1/openemr` flag) shows 29 workflows triggered by the push to `f19427835`, all 29 either
+`failure` or `skipped`. **Every single one traces to the identical root cause**, spot-checked across
+three independent workflows (Syntax, Isolated Tests, PHPStan): *"The job was not started because your
+account is locked due to a billing issue."* Not one line of this push's code was actually evaluated by
+GitHub Actions — every job was blocked before execution. This is an account-administrative matter, not
+a code defect, and is outside this session's ability to resolve; it requires the Owner's own action with
+GitHub billing. Recorded plainly rather than reported as either a code failure or a clean CI pass —
+it is neither; CI simply never ran.
+
+### 29.9 Final state
+
+```text
+PRE-SKYEAGLE CERTIFICATION: PASS (on the code/merge work itself — every check this session could
+                             perform locally is genuinely green, re-verified independently)
+MASTER INTEGRATION: COMPLETE (f19427835, fast-forward, pushed, origin/master confirmed matching)
+GITHUB CI: BLOCKED — account billing lock, not a code signal either way; Owner action required
+SKYEAGLE BRAND MIGRATION: READY FOR OWNER AUTHORIZATION, with the CI-billing gap disclosed
+```
+
+---
