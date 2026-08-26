@@ -300,7 +300,7 @@ document); the live `default` tenant DB; `facility.name` = "Thiqa Demo Eye Clini
 ```text
 PHASE:            B2
 START SHA:        e6549eee4
-END SHA:           (this commit)
+END SHA:           30d45f00a
 FILES:             8x brand/master/*.svg (recolored/composed from verified SkyEagle vector
                     source, not the old Thiqa geometry — see §9 for the pivot);
                     brand/favicon/{favicon.ico,favicon.svg,favicon-16x16.png,favicon-32x32.png,
