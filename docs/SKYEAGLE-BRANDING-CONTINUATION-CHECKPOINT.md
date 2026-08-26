@@ -828,6 +828,39 @@ pre-existing errors across auth/session/FHIR internals is not this phase's — o
 programme's — mandate. Recorded honestly rather than silently passed over, per this session's
 own evidence-first discipline; worth a dedicated pass outside Phase-B.
 
+### B14 — branding-ci + full test matrix — COMPLETE (green)
+
+```text
+PHASE:            B14
+START SHA:        358f58d18
+END SHA:           (this commit)
+FILES:             none
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: none
+TESTS:              composer branding-ci, run as its literal composer.json script sequence
+                    (tokens-check, identity-check, verify-brand-manifest.php, the exact
+                    isolated-suite directory list) — 1674 tests / 8450 assertions, exit 0
+ROLLBACK METHOD:    n/a
+DEPENDENT NEXT PHASES: B15 (negative controls)
+```
+
+Final, definitive gate run of the exact `composer.json` `branding-ci` sequence (not a scoped
+subset — the literal script). All four stages clean: tokens-check, identity-check,
+`verify-brand-manifest.php` (123/123 + 21/21 + 11/11), isolated suite 1674/1674.
+
+**"Full test matrix" on this host, scoped honestly.** `branding-ci`'s own selection is this
+project's established authoritative gate — confirmed clean above and repeatedly throughout
+B1-B13. The broader, unscoped `tests/Tests/Isolated` suite carries pre-existing, host-specific
+failures already investigated and characterised in `CLAUDE.local.md` (§ "full unscoped isolated
+suite" notes, 2026-08-26): CRLF-vs-Windows-`PHP_EOL` mismatches in `ReleasePrep\Mutator\*`,
+`FrontControllerRoutingTest`, `DocumentImportCommandTest` — all confirmed via `git diff` to be in
+files no Phase-B (or PRE) commit has ever touched, and expected to pass in CI/Docker where they
+run on Linux. Not re-run here since nothing in Phase-B changed any file in that failure set;
+re-litigating an already-documented, unrelated host artifact would not add information. DB-backed
+suites (`unit-test`, `services-test`, `api-test`, `e2e-test`) remain, per `CLAUDE.local.md`,
+unvalidatable on this native Windows setup — no Docker stack — and out of reach for the same
+reason on every phase of this session, not a new limitation B14 introduces.
+
 ## 13. Live database mutation state
 
 ```text
@@ -841,4 +874,4 @@ has been issued against either database at any point in Phase B.
 
 ---
 
-*Checkpoint revision 13, updated after B13. Next update: after B14.*
+*Checkpoint revision 14, updated after B14. Next update: after B15.*
