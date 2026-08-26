@@ -1059,4 +1059,61 @@ them.
 ## FEATURE CERTIFICATION: PASS
 
 Certified SHA: `bb8e0774886cfb24e5193e44bb4be4d85c107a9d` (`bb8e07748`), branch
-`feat/skyeagle-branding`, identical to `origin/feat/skyeagle-branding`.
+`feat/skyeagle-branding`, identical to `origin/feat/skyeagle-branding`. (One further docs-only
+commit, `33738daec`, records this certification itself and became the feature branch's new tip
+before integration -- no code/behaviour change, see its own commit for detail.)
+
+### Stage 3 -- master integration
+
+`merge-base(master, feature)` sat exactly at `origin/master`'s current tip (`826d194eb`), so
+master had not advanced since the feature branch was cut -- a **fast-forward** was the correct
+and safest method (preferred order item 1), needing no conflict analysis (nothing to conflict
+with by construction).
+
+First attempt failed: `git merge --ff-only` refused, citing 16 binary asset files as carrying
+"local changes that would be overwritten." Per Rule 5, verified with `git diff --stat` before
+treating this as real -- zero real difference on every one of the 16. A DriveFS index-vs-working-
+tree stat mismatch, not real data. `git update-index --refresh` alone did not clear it; re-
+checking out the exact 16 paths from `HEAD` (safe -- already proven byte-identical) did. Retried
+`git merge --ff-only feat/skyeagle-branding`: succeeded cleanly. **No merge commit** -- history
+stays linear. Local `master` -> `33738daec1a104e9b6ee4e88cb6c43a54c821943`, 101 files changed
+(4077 insertions / 2420 deletions), matching the full Phase-B programme scope. Not pushed yet
+per instruction.
+
+### Stage 4 -- post-merge master certification
+
+**A second, broader DriveFS artifact surfaced here, run down completely before certifying.**
+`generate-tokens.php --check` failed immediately after the fast-forward, reporting 5 deployed
+artefacts "out of date." Raw-byte inspection (not `git diff`, which is autocrlf-blind to this)
+found real `\r` bytes reintroduced into the working tree by the fast-forward's own file-write
+step -- the same recurring DriveFS checkout phenomenon this project has documented repeatedly,
+here triggered at wider scope because a fast-forward writes every changed file in one pass.
+Stripped and re-verified clean (`generate-tokens.php --check`: 12/12 up to date). A second,
+independent instance then surfaced in `tests/Tests/Isolated/Common/Translation` (`durable
+TranslationContracts_utf8.sql` and the 3 new contract JSONs) -- same fix, same re-verification
+(50/50 green). Given the pattern had now recurred twice, ran a **systematic sweep**: every text
+file (`.php`/`.scss`/`.twig`/`.json`/`.svg`/`.sql`/`.md`) among the 101 the merge touched,
+raw-byte-scanned for `\r`. Found **32 affected files total** (the ones above plus 27 more --
+full list in the session's tool-call record). **Every one confirmed via `git diff --stat` to
+carry zero real content difference** before being touched -- this was purely a working-tree
+artifact from the checkout, never a real regression, and nothing needed to be (or was) committed
+to fix it: the underlying git blobs were already correct LF the entire time.
+
+| Check | Result |
+|---|---|
+| Git integrity | PASS -- `master` == `feat/skyeagle-branding` tip exactly (`33738daec`) |
+| Release line | PASS -- `version.php`: 8.2.0/0 (`$v_major`/`$v_minor`/`$v_patch`); `swagger/openemr-api.yaml` and `OpenApiDefinitions.php` both `8.2.0`; zero `8.3.x` drift |
+| Complete residue sweep | PASS -- re-spot-checked the highest-risk live surfaces on the merged tree; only the already-classified historical comment in `main.php:405` |
+| Identity/token checks | PASS (after the CRLF fix above) -- `generate-product-identity.php --check`: up to date; `generate-tokens.php --check`: 12/12 |
+| Asset manifest | PASS -- 123/123 + 21/21 + 11/11, unaffected by the CRLF fix (different file classes) |
+| Translation/RTL contracts | PASS (after the CRLF fix above) -- `Common/Translation`: 50/50 |
+| `composer branding-ci` + isolated suite | PASS -- combined final run, branding-ci scope + `Common/Translation`: **1724 tests / 8631 assertions**, exit 0 |
+| B15-equivalent guardrail proof | Carried over, not re-staged -- this merged tree is byte-identical (post-CRLF-fix) to the exact content B15 already proved 4 guardrails against; re-running the same deliberate-break test against the same code would produce the same result with no new information |
+| Targeted installer/bootstrap check | PASS -- `library/globals.inc.php`'s `openemr_name` default resolves through `ProductIdentity::name()`, confirmed present on the merged tree |
+| Targeted module identity check | PASS -- `composer.json` `name: "saas/oe-module-skyeagle-branding"`, directory `oe-module-skyeagle-branding`, confirmed present |
+| Targeted CLI title check (B8) | PASS -- `SeedDemoCommand.php`'s `'SkyEagle demo seed...'` confirmed present |
+| PHPStan | PASS -- B13's cached result remains valid (content identical); reused rather than re-run, per the instruction to avoid an uncontrolled re-launch when not needed |
+
+## POST-MERGE MASTER CERTIFICATION: PASS
+
+Candidate SHA `33738daec1a104e9b6ee4e88cb6c43a54c821943` certified. Pushing master next.
