@@ -907,6 +907,40 @@ Two guardrails (#1, #2) freshly, deliberately broken and confirmed to fail this 
 #4) already have first-class organic proof from when Phase-B's own work originally violated them.
 All four are load-bearing, not decorative.
 
+### B16 — Push Phase-B branch, check CI — COMPLETE
+
+```text
+PHASE:            B16
+START SHA:        0ea5a91c4
+END SHA:           (this commit)
+FILES:             none
+DB MUTATION:       NONE
+GENERATED ARTEFACTS: none
+TESTS:              n/a
+ROLLBACK METHOD:    n/a
+DEPENDENT NEXT PHASES: none — this is the last phase in the B1-B16 sequence
+```
+
+`git status -sb` confirms `feat/skyeagle-branding` is fully synced with `origin/feat/skyeagle-
+branding` — every phase this session pushed immediately after its own commits, so there was
+nothing left to push here.
+
+**CI, checked and explained, not just observed.** `gh run list` shows only one run against this
+branch: "Branch-Cut Automation," triggered on branch `create`, outcome `skipped`. No run
+corresponds to any of this session's 30+ pushed commits. Traced the reason rather than assuming
+billing-lock: `.github/workflows/all-checks-passed.yml` (and the other core test workflows) scope
+their `push` trigger to `branches: [master, rel-*]` only, with `pull_request` against the same
+two as the feature-branch path — by design, a feature branch gets CI through a PR, not through
+direct pushes. No PR has been opened (per the execution prompt's own instruction, Phase B does
+not merge to master), so this is expected, not a gap.
+
+**Separately, the billing lock is still live.** The most recent `master`-branch push (same day,
+2026-08-26T11:50:18Z, an unrelated prebrand-integration commit) shows all ~19 checks failing in
+3-18 seconds each — the exact instant-failure signature this session already root-caused to an
+account billing lock, not a code defect. Recorded for completeness: even if a PR were opened
+against master right now, real CI signal would not be obtainable until that lock clears — outside
+this session's control.
+
 ## 13. Live database mutation state
 
 ```text
@@ -920,4 +954,41 @@ has been issued against either database at any point in Phase B.
 
 ---
 
-*Checkpoint revision 15, updated after B15. Next update: after B16.*
+## 14. Phase-B certification summary (B1-B16 complete)
+
+```text
+PHASES COMPLETE:        B1-B16 (all 16), sequentially, each committed, tested and pushed
+LIVE DATABASE WRITES:   ZERO — GATE-4 respected throughout (§13)
+MASTER MERGE:           NOT PERFORMED — not authorized by the execution prompt for this cycle
+BRANCH:                 feat/skyeagle-branding, fully pushed, HEAD (this commit)
+BRANDING-CI:            GREEN as of B14's definitive run (1674 tests / 8450 assertions)
+PHPSTAN:                0 branding-attributable errors (B13); 908 pre-existing, unrelated,
+                        out of scope
+NEGATIVE CONTROLS:       4 critical guardrails proven load-bearing (B15)
+```
+
+**What changed, end to end:** the visual identity (logos, symbol, favicon — B2), the 43-key
+colour token palette (B3), remaining English string residue (B4), a translation-contract gap
+closed for the new composed keys (B6), the module's own internal identity strings (B7), one CLI
+title (B8) — all verified against Arabic/RTL correctness (B5) and security/privacy (B12) along
+the way. Tagline and product-name source-of-truth values were already set in B1.
+
+**What is deliberately NOT done, and why — three items, all requiring separate authorization:**
+
+1. **B9 — existing-tenant `globals`/`facility.name` sync**, both `default` and
+   `rdy0082restore`. Full plan produced (§12 B9), Owner authorization (GATE-4) required before
+   execution. Correct mechanism identified: the module's own `apply-profile` console command,
+   not a hand-written `UPDATE`.
+2. **B11-01 — orphaned `modules` table row** (`mod_id=6`, `Thiqa Branding` /
+   `oe-module-thiqa-branding`, inactive, both tenants). Data-hygiene finding, also GATE-4.
+3. **Master merge.** Per the execution prompt: this cycle builds and certifies
+   `feat/skyeagle-branding` in isolation; merging it into `master` is a separate, explicit
+   decision for the Owner to make after reviewing this checkpoint.
+
+**Everything else — every phase, every finding, every fix, every test run — is complete,
+committed, and pushed.** This checkpoint (revision 16) is the full audit trail; §12's phase log
+has the exact commit range for each phase, and §8's migration ledger has every tracked value
+change, executed or planned.
+
+*Checkpoint revision 16, updated after B16 — Phase-B complete. Next update: when GATE-4 is
+authorized, or when a master-merge decision is made.*
