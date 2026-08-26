@@ -866,7 +866,7 @@ reason on every phase of this session, not a new limitation B14 introduces.
 ```text
 PHASE:            B15
 START SHA:        31376a199
-END SHA:           (this commit)
+END SHA:           854654bca
 FILES:             none — two guardrails deliberately broken then reverted in the working tree,
                     never committed
 DB MUTATION:       NONE
