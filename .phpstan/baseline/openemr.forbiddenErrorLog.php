@@ -179,6 +179,22 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
     'message' => '#^Use a PSR\\-3 logger such as OpenEMR\\\\BC\\\\ServiceContainer\\:\\:getLogger\\(\\) instead of error_log\\(\\)\\.$#',
     'count' => 1,
+    // ProductIdentity is the pre-database identity seam required directly (no vendor/autoload.php)
+    // from admin.php and setup.php specifically so they work before Composer's autoloader exists
+    // (admin.php's own comment: "no vendor/autoload.php, no interface/globals.php ... so this page
+    // works on a checkout where composer has never run"). ServiceContainer::getLogger() pulls in
+    // League\Flysystem, Lcobucci\Clock and several OpenEMR\Common/Services namespaces that cannot
+    // resolve without the autoloader, so swapping it in here would turn today's soft fallback into
+    // a fatal "class not found" on exactly the degraded-artefact path this function exists to
+    // survive. Verified against interface/globals.php too: that path already has a working PSR-3
+    // $logger by the time ProductIdentity::name() runs, but reportFallback() has no way to know
+    // which caller it is in, so it cannot conditionally use one only where one happens to exist.
+    // Same precedent already accepted for setup.php below.
+    'path' => __DIR__ . '/../../src/Common/Branding/ProductIdentity.php',
+];
+$ignoreErrors[] = [
+    'message' => '#^Use a PSR\\-3 logger such as OpenEMR\\\\BC\\\\ServiceContainer\\:\\:getLogger\\(\\) instead of error_log\\(\\)\\.$#',
+    'count' => 1,
     'path' => __DIR__ . '/../../interface/patient_file/encounter/find_code_dynamic_ajax.php',
 ];
 $ignoreErrors[] = [

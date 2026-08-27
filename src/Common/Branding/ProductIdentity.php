@@ -217,6 +217,20 @@ final class ProductIdentity
      * the logger and the database exist, and `interface/globals.php` calls it on a path
      * that has already decided to `exit(1)`. `error_log()` is the only sink guaranteed to
      * be there, and is what the surrounding bootstrap code already uses.
+     *
+     * Verified, not merely assumed: `admin.php` and `setup.php` both call into this class
+     * via a direct `require_once` of this single file, deliberately without loading
+     * `vendor/autoload.php` (admin.php's own comment: "no vendor/autoload.php, no
+     * interface/globals.php ... so this page works on a checkout where composer has never
+     * run"). `ServiceContainer::getLogger()` pulls in `League\Flysystem`, `Lcobucci\Clock`
+     * and several `OpenEMR\Common`/`OpenEMR\Services` namespaces that cannot resolve
+     * without that autoloader, so calling it here would trade today's benign log line for
+     * a fatal "class not found" on exactly the degraded-artefact path this function exists
+     * to survive gracefully. `interface/globals.php` does already have a working PSR-3
+     * `$logger` by the time it calls `ProductIdentity::name()`, but this function has no
+     * way to know which caller it is in, so it cannot switch loggers per call site.
+     * `openemr.forbiddenErrorLog` is baselined for this file for the same reason it is
+     * already baselined for `setup.php`.
      */
     private static function reportFallback(string $artefactPath, string $reason): void
     {
