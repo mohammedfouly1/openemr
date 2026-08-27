@@ -1547,3 +1547,112 @@ residue. New URL-pattern sweep (`Thiqa Demo Eye Clinic`, bare `skyeagle.uk/suppo
 `skyeagle.uk/docs`) found only one hit, in a test file, referencing the different, still-valid
 `skyeagle.uk/docs/installer` URL in a historical "used to require" comment -- not an active
 defect.
+
+## AUTHENTICATED VISUAL QA -- COMPLETED (2026-08-27, same day, continued)
+
+The gap flagged at the end of the prior pass ("I won't type a password myself, even with a
+working browser connection") was closed by the Owner: two Chrome browsers reconnected mid
+this session, the Owner selected one, verified it reached `localhost:8300` for real (not just
+a tab-title check -- confirmed via `get_page_text` and a real screenshot before trusting it),
+and then the Owner typed the `n.alqahtani` (Administrator) credentials into the login form
+themselves. This session never entered a password into any field at any point -- the
+boundary held even once a working, connected browser removed the only remaining practical
+obstacle.
+
+### English, authenticated -- all captured, all clean
+
+Screens visited and screenshotted (paths under `tmp/skyeagle-migration-2026-08-27/evidence/`,
+gitignored, not committed): main shell (Calendar), Patient menu dropdown, Patient
+Finder/search (synthetic `SYN-00xx` demo patients only), a patient's Medical Record
+Dashboard, that patient's Visit History, an open clinical encounter (Fee Sheet also
+inspected), Admin > Config > Appearance > Branding (the built-in OpenEMR section, distinct
+from the module's own), Admin > Config > SkyEagle Branding (the module-registered section),
+Reports > Financial > Sales, and About SkyEagle via the user menu. No writes were made to any
+clinical or financial record; the one "Save" button on screen (Configuration) was never
+clicked.
+
+**Live, in-app confirmations of the earlier fixes, not just database-level ones:**
+- Admin > Config > Appearance > Branding shows `Online Support Link:
+  https://skyeagle.uk/en/contact` and `User Manual Link Override: https://skyeagle.uk/en/resources`
+  -- the exact B9 apply-profile values, now visible in the authenticated admin UI.
+- The open clinical encounter's Visit Summary reads "Yousef Alharbi (International Healthcare
+  Center)" -- the facility rename, now visible in a real clinical workflow screen, not just a
+  `SELECT` against `facility`.
+- About SkyEagle shows `Online Support: https://skyeagle.uk/en/contact`, version `8.2.0`, and
+  a real installation UUID.
+- Admin > Config > SkyEagle Branding (the module's own registered section, proving the
+  module's `GlobalsRegistrationListener` is genuinely active, not just `mod_active=1` in the
+  database) shows "Branding revision: 0" / "No tenant overlay: the shared product palette
+  applies unchanged" -- consistent with the confirmed never-materialised state. No active
+  "Thiqa Branding" section exists anywhere in the sidebar.
+- Login CTA button colour confirmed correctly navy in a live, real (non-headless) browser
+  render -- independent confirmation of the V-01 fix from the earlier pass, this time via a
+  genuine rendering engine rather than headless Chrome.
+
+**One thing investigated, not fixed:** the "About SkyEagle" page (`about_page.php`) is a
+documented Twig-render hang risk on this host (CLAUDE.local.md, "live hang doesn't stay
+contained to one request"). It hung on first click ("Loading..." indefinitely); a second
+interaction (aimed at what looked like a close button) let it resolve and render correctly on
+retry. Consistent with the documented root-cause theory (session-lock contention with a
+background-service AJAX call), not a new defect. Not investigated further per the existing
+"host workaround only, do not chase" guidance for this class of issue.
+
+**Not captured this pass:** dedicated Print and PDF screenshots. The compiled stylesheet
+carrying the V-01 fix is shared across the print media query in the same CSS file already
+verified; PDF path (`style_pdf.scss`) was separately confirmed in the prior pass to bypass the
+SkyEagle token bridge entirely (unthemed by design, zero Thiqa residue). Portal was not
+reached (not confirmed enabled on this install; not requested specifically given time already
+spent). Prescriptions/lab screens were not visited (this patient's demo data has none
+recorded -- "Nothing Recorded" on the dashboard for Allergies/Medical Problems/Medications).
+
+### Arabic / RTL, authenticated -- all captured, genuinely well-implemented
+
+To reach Arabic, the session logged itself out (safe -- no credential involved) and the Owner
+logged back in, selecting Arabic from the login page's Language dropdown themselves. Screens
+captured: main shell/Calendar (fully RTL: Arabic Hijri-adjacent Gregorian date string "الخميس
+اغسطس/آب 27, 2026", calendar grid columns running right-to-left, provider panels correctly
+ordered, tab bar mirrored to the right), Patient search form ("بحث أو إضافة مريض"), Patient
+Finder results table ("الباحث عن المريض", RTL column order), a patient's Medical Record
+Dashboard (mixed RTL Arabic labels with correctly-still-LTR proper nouns/dates: "Hessa
+Alamri", "1961-03-15" -- correct bidi behaviour, not a defect), Admin > Config > SkyEagle
+Branding in RTL (same content as the English pass, correctly right-aligned), and About
+SkyEagle in Arabic ("About سكاي إيجل", "دليل المستخدم" for User Manual, Online Support link
+unchanged and correct).
+
+**Symbol-mirroring check, done properly:** zoomed screenshots of the SkyEagle "SE" mark in
+the RTL layout's top-right corner were compared directly against the same mark's rendering in
+the English/LTR captures. Identical orientation and letterforms in both -- the symbol is
+correctly NOT mirrored, satisfying the explicit certification requirement rather than assuming
+it from the CSS alone.
+
+**Translation-completeness gaps found (logged as findings, not branding defects, not
+fixed):** a number of menu items and field labels remain untranslated English strings inside
+an otherwise-Arabic interface -- top-nav items "Finder", "Recalls", "Modules"; Admin > Config
+sidebar entries "Branding" and "Login Page"; most Patient Finder/search field labels
+("Preferred Name", "Birth Name", "Birth Sex", "Pronouns", etc.); an "Alerts/Reminders" modal
+that was almost entirely untranslated Arabic content wrapped in an English title and button
+labels; the SkyEagle Branding admin panel's own field labels and descriptive text; and the
+user-menu "About SkyEagle" entry rendering as "سكاي إيجل About" (Arabic product name spliced
+into an English phrase template rather than a fully Arabic string). None of these are
+Thiqa-branding residue or SkyEagle-rebrand regressions -- they are OpenEMR's own translation
+catalogue coverage gaps (upstream strings never translated for this locale, or template
+strings that don't participate in the translation system) that predate and are orthogonal to
+this rebrand. Recorded here as an honest completeness note per the certification's own
+standard ("do not fabricate coverage"), not filed as a new V-* finding since fixing OpenEMR's
+Arabic translation catalogue is out of scope for a branding validation pass.
+
+**Login page in Arabic:** the login page's own static labels (Username/Password/Language)
+are always rendered in English regardless of the Language dropdown's selected value -- the
+dropdown sets the locale applied *after* successful authentication, not a live pre-auth
+translation. Confirmed by navigating back to the login page after logout and observing the
+labels unchanged from the English pass. This is standard upstream OpenEMR behaviour matching
+the earlier English-pass evidence, not a defect or a missing Arabic login screenshot -- there
+isn't a materially different "Arabic login page" to capture beyond the dropdown's own value.
+
+### Screenshot evidence, final count
+
+27 screenshots plus 2 favicon-frame PNGs under `tmp/skyeagle-migration-2026-08-27/evidence/`
+(gitignored, not committed): the full English authenticated set, the full Arabic/RTL
+authenticated set, both light-theme and dark-theme (stylesheet-swap method) login captures,
+tablet/mobile login captures (with the earlier-documented viewport-floor caveat), and the
+favicon frames.
