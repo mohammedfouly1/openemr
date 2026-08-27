@@ -1,6 +1,20 @@
-# 08 — WCAG 2.2 Numeric Contrast Validation (CORRECTED — REVISION 3)
+# 08 — WCAG 2.2 Numeric Contrast Validation (CORRECTED — REVISION 4)
 
 **Status:** **PASS — 0 FAIL pairs, 0 gates blocked.**
+
+**Revision 4 (2026-08-27):** regenerated from `brand/tokens/thiqa-tokens.json` as it exists today,
+using the repository's own `ContrastCalculator` class rather than hand-typed figures. This is a
+palette-tracking refresh, not a new correction: the token source itself moved on since revision 3
+(part of the SkyEagle rebrand's token pass) — light-theme brand navy went from `#0B1B4D` to
+`#0B376E`, the light-theme primary interactive/CTA colour from `#C43F2E` to `#1E5A96`, and light-theme
+link colours from `#2C5F94`/`#1E4574` to `#0B4E91`/`#0A447E` — but this evidence file and document had
+not been regenerated to match, so it was still reporting ratios for colours the live product no longer
+uses. Two other values converge to the same hex under the current source and are not new: light
+`background` and `surface` are both `#FFFFFF` in the current token file, so every "on background" /
+"on surface" pair in the Light theme table below is now the same figure by construction, not a
+generation error. The pair/PASS/ADVISORY/FAIL shape is unchanged at **38 evaluated pairs: 35 PASS, 3
+ADVISORY, 0 FAIL** — the counts happen to match revision 3 exactly; only the underlying colours and
+ratios moved.
 
 **Revision 3 (2026-08-24):** current machine evidence was re-derived rather than inherited. The JSON
 contains **38 evaluated pairs: 35 PASS, 3 ADVISORY, 0 FAIL**. Four passing `borderStrong` UI pairs had
@@ -52,25 +66,28 @@ Pair count rose from 33 to 34 in revision 2 because `link hover on surface` was 
 
 | Pair | fg | bg | Ratio | Required | Status |
 |---|---|---|---:|---:|---|
-| body text on background | `#0B1B4D` | `#FAFAF8` | 15.72 | 4.5 | PASS |
-| body text on surface | `#0B1B4D` | `#FFFFFF` | 16.43 | 4.5 | PASS |
-| secondary text on background | `#4B5266` | `#FAFAF8` | 7.45 | 4.5 | PASS |
+| body text on background | `#0B376E` | `#FFFFFF` | 11.76 | 4.5 | PASS |
+| body text on surface | `#0B376E` | `#FFFFFF` | 11.76 | 4.5 | PASS |
+| secondary text on background | `#4B5266` | `#FFFFFF` | 7.78 | 4.5 | PASS |
 | secondary text on surface | `#4B5266` | `#FFFFFF` | 7.78 | 4.5 | PASS |
-| disabled text on background | `#9CA0AC` | `#FAFAF8` | 2.50 | 3.0 (exempt) | ADVISORY — WCAG exempts disabled UI text |
-| link default on background | `#2C5F94` | `#FAFAF8` | 6.34 | 4.5 | PASS |
-| link default on surface | `#2C5F94` | `#FFFFFF` | 6.62 | 4.5 | PASS |
-| link hover on background | `#1E4574` | `#FAFAF8` | 9.31 | 4.5 | PASS |
-| link hover on surface | `#1E4574` | `#FFFFFF` | 9.73 | 4.5 | PASS |
-| primary CTA text on primary bg (interactive.primary) | `#FFFFFF` | `#C43F2E` | 5.12 | 4.5 | PASS |
-| secondary CTA text on secondary bg | `#FFFFFF` | `#0B1B4D` | 16.43 | 4.5 | PASS |
-| focus ring on background (UI) | `#3E7FBD` | `#FAFAF8` | 4.04 | 3.0 | PASS |
+| disabled text on background | `#9CA0AC` | `#FFFFFF` | 2.61 | 3.0 (exempt) | ADVISORY — WCAG exempts disabled UI text |
+| link default on background | `#0B4E91` | `#FFFFFF` | 8.36 | 4.5 | PASS |
+| link default on surface | `#0B4E91` | `#FFFFFF` | 8.36 | 4.5 | PASS |
+| link hover on background | `#0A447E` | `#FFFFFF` | 9.81 | 4.5 | PASS |
+| link hover on surface | `#0A447E` | `#FFFFFF` | 9.81 | 4.5 | PASS |
+| primary CTA text on primary bg (interactive.primary) | `#FFFFFF` | `#1E5A96` | 7.10 | 4.5 | PASS |
+| secondary CTA text on secondary bg | `#FFFFFF` | `#0B376E` | 11.76 | 4.5 | PASS |
+| focus ring on background (UI) | `#1E5A96` | `#FFFFFF` | 7.10 | 3.0 | PASS |
 | success text on success bg | `#2F6B45` | `#E9F5EE` | 5.67 | 4.5 | PASS |
 | warning text on warning bg | `#8A5314` | `#FCEFE0` | 5.58 | 4.5 | PASS |
 | critical text on critical bg | `#8E271D` | `#FBE9E7` | 7.29 | 4.5 | PASS |
 | info text on info bg | `#264C74` | `#E8F0FA` | 7.72 | 4.5 | PASS |
-| border.default on background (UI) | `#E4E2DC` | `#FAFAF8` | 1.24 | 3.0 (advisory) | ADVISORY — subtle divider by design |
-| borderStrong on background (UI) | `#4B5266` | `#FAFAF8` | 7.45 | 3.0 | PASS |
+| border.default on background (UI) | `#E4E2DC` | `#FFFFFF` | 1.30 | 3.0 (advisory) | ADVISORY — subtle divider by design |
+| borderStrong on background (UI) | `#4B5266` | `#FFFFFF` | 7.78 | 3.0 | PASS |
 | borderStrong on surface (UI) | `#4B5266` | `#FFFFFF` | 7.78 | 3.0 | PASS |
+
+Light-theme `background` and `surface` are both `#FFFFFF` in the current token source, which is why
+every "on background" / "on surface" row above shares the same figure — not a duplication error.
 
 ## Dark theme
 
@@ -82,12 +99,12 @@ Pair count rose from 33 to 34 in revision 2 because `link hover on surface` was 
 | secondary text on background | `#AEB5C4` | `#0B1220` | 9.10 | 4.5 | PASS |
 | secondary text on surface | `#AEB5C4` | `#121A2E` | 8.41 | 4.5 | PASS |
 | disabled text on background | `#6B7280` | `#0B1220` | 3.87 | 3.0 | PASS |
-| link default on background | `#8FC1EE` | `#0B1220` | 9.83 | 4.5 | PASS |
-| link default on surface | `#8FC1EE` | `#121A2E` | 9.09 | 4.5 | PASS |
-| link hover on background | `#B7D9F5` | `#0B1220` | 12.71 | 4.5 | PASS |
-| primary CTA text on primary bg (interactive.primary) | `#0B1220` | `#FF6F5E` | 6.85 | 4.5 | PASS |
+| link default on background | `#799EC3` | `#0B1220` | 6.68 | 4.5 | PASS |
+| link default on surface | `#799EC3` | `#121A2E` | 6.18 | 4.5 | PASS |
+| link hover on background | `#6989AA` | `#0B1220` | 5.13 | 4.5 | PASS |
+| primary CTA text on primary bg (interactive.primary) | `#0B1220` | `#83A4C5` | 7.21 | 4.5 | PASS |
 | secondary CTA text on secondary bg | `#0B1220` | `#F5F6F8` | 17.31 | 4.5 | PASS |
-| focus ring on background (UI) | `#8FC1EE` | `#0B1220` | 9.83 | 3.0 | PASS |
+| focus ring on background (UI) | `#83A4C5` | `#0B1220` | 7.21 | 3.0 | PASS |
 | success text on success bg | `#8FD1A6` | `#173425` | 7.62 | 4.5 | PASS |
 | warning text on warning bg | `#F0B45C` | `#3A2A12` | 7.49 | 4.5 | PASS |
 | critical text on critical bg | `#F29088` | `#3A1815` | 6.90 | 4.5 | PASS |
@@ -128,8 +145,19 @@ roles were in scope for D-1.
 ## Notes
 
 - Logo/wordmark colours are exempt from SC 1.4.3 per WCAG (essential logos).
-- `docs/Thiqa_Group_1_5B_Handoff/table (1).md` pre-computed:
-  - "white text on bright coral ≈ 2.7:1" → matches `#FFFFFF` on `#FF6F5E` = 2.63:1 (this pair is NOT used at runtime; `interactive.primary.default` is `coralDeep` #C43F2E which passes at 5.12:1). Matches.
-  - "coral brand color as text/icon on dark background ~6.9:1" → matches `dark.brand.coral` (`#FF6F5E`) on `dark.background` (`#0B1220`) = 6.85:1. Matches.
-- Numeric ratios above are reproducible from [brand/tokens/thiqa-tokens.json](../../brand/tokens/thiqa-tokens.json) using the W3C formula stated under *Method*; revision 2 was verified by two independent implementations and revision 3 by the repository `ContrastCalculatorTest` (110 tests / 264 assertions).
-- The `table (1).md` note *"white text on bright coral ≈ 2.7:1"* still holds and is still not a runtime pair: production buttons use `interactive.primary.default` (`#C43F2E`) at 5.12:1.
+- **Revision 4 update:** the coral family (`#FF6F5E`, `#C43F2E`) has been fully retired from the
+  token source — `interactive.primary.default` is now `#1E5A96` (light) / `#83A4C5` (dark), and no
+  `brand.coral*` value in the current `thiqa-tokens.json` matches the coral hexes referenced in the
+  historical cross-check below. That cross-check is kept as a dated record of a prior verification
+  pass, not a claim about current runtime colours.
+- **Historical (revision ≤3), retained as evidence — do not treat as current:**
+  `docs/Thiqa_Group_1_5B_Handoff/table (1).md` pre-computed, at the time:
+  - "white text on bright coral ≈ 2.7:1" → matched `#FFFFFF` on `#FF6F5E` = 2.63:1 (that pair was
+    never used at runtime; `interactive.primary.default` was then `coralDeep` `#C43F2E`, passing at
+    5.12:1).
+  - "coral brand color as text/icon on dark background ~6.9:1" → matched `dark.brand.coral`
+    (`#FF6F5E`) on `dark.background` (`#0B1220`) = 6.85:1.
+  Neither `#FF6F5E` nor `#C43F2E` exists in the token source as of revision 4; the current runtime
+  primary/CTA pair is `#FFFFFF` on `#1E5A96` (light, 7.10:1) / `#0B1220` on `#83A4C5` (dark, 7.21:1),
+  both recorded in the tables above.
+- Numeric ratios above are reproducible from [brand/tokens/thiqa-tokens.json](../../brand/tokens/thiqa-tokens.json) using the W3C formula stated under *Method*; revision 2 was verified by two independent implementations, revision 3 by the repository `ContrastCalculatorTest`, and revision 4 was generated directly by that same `ContrastCalculator` class (not hand-typed) against the current token file.

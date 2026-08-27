@@ -1506,10 +1506,10 @@
         "variant": "default",
         "rtl_ltr_relevance": "LTR",
         "master_source": "brand/master/",
-        "byte_size": 9681,
-        "sha256": "34b6121a8277669e9a279a2e0226cc89b3374ceb2ace4c10c2e0a21f9dcb4db1",
+        "byte_size": 11408,
+        "sha256": "c9ee0a7647fd98999c86cfc59b84c8118044a5b91ba61477d9028efdc51af8d9",
         "validation_status": "PASS",
-        "notes": ""
+        "notes": "Revision 4 (2026-08-27): regenerated against the current SkyEagle token source (brand/tokens/thiqa-tokens.json) by the ContrastCalculator class; the palette moved on since revision 3's hash was recorded. See docs/branding-production/08-wcag-contrast.md."
     },
     {
         "asset_id": "THIQA-085",
