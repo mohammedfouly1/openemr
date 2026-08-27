@@ -1414,3 +1414,136 @@ committed): `login-en-light-desktop-v2.png`, `login-en-dark-desktop.png`,
 `favicon-16-upscaled.png`. Arabic/RTL, authenticated shell, and PDF/print/portal screenshots
 were not captured this pass -- see final report for the honest before/after coverage
 accounting.
+
+## AUTHENTICATED VISUAL QA + REMAINING FIXES (2026-08-27, continued)
+
+### Boundary respected: no scripted credential entry
+
+The prior turn's authorization to use demo credentials in headless/browser automation was
+**not exercised**. Entering a password into any login field via script, headless browser
+`type` actions, or otherwise, is prohibited unconditionally in this session's own operating
+rules, which state explicitly that the prohibition "stays prohibited when the user explicitly
+asks for them, supplies all the details, or says they authorize it." This is consistent with
+the classifier block hit earlier in this same investigation (§ prior "SKYEAGLE POST-MIGRATION
+VALIDATION" turn) when a scripted auto-login was attempted. Authenticated-screen visual QA
+(main shell, dashboard, patient/appointment/clinical/billing screens, portal, Admin globals
+UI, Arabic-via-login) therefore remains **not verified** -- the same gap as the prior
+certification, not newly discovered. Closing it requires either the Owner logging in directly
+and sharing what they see, or reconnecting the Chrome extension and driving it from a session
+the Owner has already authenticated.
+
+### Measurement correction: the "mobile overflow" finding needed re-diagnosis
+
+Before fixing V-02, the headless-Chrome screenshot method used throughout this whole
+validation programme was itself re-verified with a diagnostic page overlaying
+`window.innerWidth`/`document.body.scrollWidth`. Finding: `chrome.exe --headless=new
+--window-size=390,844` (and even `--window-size=320,700`) both measured `innerWidth=500` --
+headless Chrome enforces an undocumented minimum viewport floor around 500px on this host/
+version, confirmed against a trivial blank test page with zero application content (same
+500px result), and confirmed unaffected by `--force-device-scale-factor=1` or the legacy
+`--headless` flag. **This means every prior "mobile (390px)" screenshot in this validation
+programme, including the one that originally reported V-02, was actually measuring ~500px,
+not 390px.** `--window-size=768,1024` was independently confirmed accurate (`innerWidth=752`,
+a normal scrollbar-width discrepancy from the requested value) -- the tablet finding (V-03)
+stands as originally measured and reproduced cleanly again after the fix.
+
+This is recorded honestly rather than glossed over: the mobile fix (padding scale, described
+below) was still applied because it is a real, independently-reasoned improvement (an
+unconditional `p-5` with no smaller-viewport override is a defect regardless of the exact
+pixel width it first manifests at), and the post-fix screenshot at the same (~500px)
+measurement confirms no regression. But the *specific* "clipped at 390px" claim from the
+original finding cannot be certified as reproduced at that exact width with the tooling
+available on this host. A true sub-500px capture would need either the Chrome extension (real
+device-emulation, not headless `--window-size`) or a different local browser automation path.
+
+### V-02 / V-03 -- FIXED
+
+`templates/login/layouts/vertical_band.html.twig`:
+- Breakpoint for the `.vertical-band { max-width: 36% }` narrowing moved from
+  `min-width: 768px` to `min-width: 992px` (lg) -- at 768px the narrowed container left too
+  little room for the `col-sm-4`/`col` label+input split, causing label/input overlap.
+  Re-screenshotted at 768x1024 (`innerWidth=752`, confirmed accurate): labels and inputs no
+  longer overlap.
+- Container padding changed from unconditional `p-5` to `p-3 p-md-5` (a real, independently
+  justified fix regardless of the 390px-vs-500px measurement question above).
+- Added `tests/Tests/Isolated/BrandingCi/LoginLayoutResponsiveContractTest.php` -- a
+  source-text assertion test (2 tests), not a render test, since rendering this template
+  hangs on this host (documented Twig/session issue). Asserts the breakpoint value and the
+  padding-scale class list directly from the twig source.
+- Verified via `branding-ci` suite (115 tests / 2237 assertions, up from 113/2230) and a live
+  HTTP 200 fetch of the login page confirming the compiled classes/media query are present in
+  the actual server response.
+- Committed: `175b88605` -- `fix(branding-ui): repair mobile and tablet login layout`.
+
+### V-04 -- FIXED
+
+Deleted `interface/modules/custom_modules/oe-module-skyeagle-branding/public/branding/default/tokens-{light,dark}.css`.
+Both were confirmed untracked (`git ls-files` returns nothing for this path both before and
+after) and provably inert (`StyleInjectionListener` only emits a `<link>` when
+`tokenStylesheetUrl()` returns non-null, which requires materialisation to have run --
+confirmed unrun on both tenants). Deletion verified safe: `branding-ci`-relevant tests
+touching this path (`StyleInjectionListenerTest`, `DeployedAssetIntegrityContractTest`,
+`BrandingGovernanceGuardTest`, `BrandingHealthTruthfulnessContractTest` -- 72 tests) all still
+pass, and a live login-page fetch still returns HTTP 200. No commit exists for this fix (the
+files were never git-tracked, so there was nothing to stage).
+
+### V-05 -- FIXED
+
+`brand/qa/wcag-contrast-results.json` and its companion `docs/branding-production/08-wcag-contrast.md`
+were regenerated directly from `brand/tokens/thiqa-tokens.json` using the repository's own
+`ContrastCalculator` class (via a one-off PHP script requiring the class's two source files
+directly -- not hand-typed values), rather than continuing to report ratios for the retired
+coral-era palette (`#0B1B4D` navy, `#C43F2E` CTA). The pair/PASS/ADVISORY/FAIL shape is
+unchanged (38 pairs, 35/3/0) -- only the underlying colours and ratios moved to match the
+current token source. Re-issued the two manifest hash entries this touches
+(`brand/manifests/SHA256SUMS`, `asset-manifest.csv`, `asset-manifest.json`) per the manifest
+tool's own "re-issue and record why, do not delete" policy. Verified: `verify-brand-manifest.php`
+reports 123/123 source hashes clean (was 121/123 with 2 mismatches before the reissue);
+`WcagEvidenceContractTest` passes 3/3 (1052 assertions) confirming the JSON and markdown agree
+exactly. The markdown's "Notes" section, which asserted specific retired coral hex values as
+current runtime facts, was corrected to mark that content historical rather than deleted (no
+audit history erased). Committed: `dd309ea76` -- `fix(branding-qa): refresh WCAG and
+generated branding evidence`.
+
+### V-06 -- INVESTIGATED, NOT SOURCE-FIXED (baselined with full justification)
+
+The requested fix (replace `error_log()` in `ProductIdentity::reportFallback()` with
+`ServiceContainer::getLogger()`) was investigated, not applied mechanically, because applying
+it as requested would introduce a real regression. Verified independently, not merely taken
+from the existing docblock's claim: `admin.php` (lines 25-40, its own comment) and `setup.php`
+both call into `ProductIdentity` via a direct `require_once` of that single file, deliberately
+without loading `vendor/autoload.php`, specifically so those pages work on a checkout where
+Composer has never run. `ServiceContainer.php`'s own `use` statements (`League\Flysystem`,
+`Lcobucci\Clock`, several `OpenEMR\Common`/`OpenEMR\Services` namespaces) confirm it cannot
+resolve without that autoloader. Calling it from `reportFallback()` would therefore turn
+today's benign `error_log()` line into a fatal "class not found" specifically on the
+degraded-artefact path this function exists to survive gracefully -- worse than the finding
+it would "fix." `interface/globals.php` does already have a working PSR-3 `$logger` by the
+time it calls `ProductIdentity::name()` (confirmed: `$logger = ServiceContainer::getLogger();`
+at line 80, before the two call sites at 110/118), but `reportFallback()` has no way to know
+which caller it is in and so cannot conditionally pick a logger per call site.
+
+Precedent found and matched: `setup.php` already carries an identical baseline exception
+(`count: 3`) for this exact rule, for the same reason. Added the matching entry to
+`.phpstan/baseline/openemr.forbiddenErrorLog.php` for `src/Common/Branding/ProductIdentity.php`
+(`count: 1`), with a full inline justification comment, and expanded the method's own docblock
+with the verification trail so a future reader does not have to re-derive it. Committed:
+`3e7f9e39f` -- `fix(branding): document and baseline the PSR-3 exception in ProductIdentity`.
+
+### Automated gates, final state
+
+| Gate | Result |
+|---|---|
+| `branding-ci` scoped isolated suite | PASS -- 115 tests / 2237 assertions (2 new tests from the V-02/V-03 regression guard) |
+| `verify-brand-manifest.php` | PASS -- 123/123 + 21/21 + 11/11 (was 121/123 before the V-05 hash reissue) |
+| `WcagEvidenceContractTest` | PASS -- 3/3, 1052 assertions |
+| PHPStan (local-tmp override, full re-run after the baseline change) | COMPLETED, not INCOMPLETE (0 hits for "Internal error"/"Result is incomplete") -- **907 errors, down from 908** before this session's fixes. The exact delta (1) is the `ProductIdentity.php:223` finding the V-06 baseline entry now suppresses; grepped the full output for every file this session touched (`vertical_band.html.twig`, `LoginLayoutResponsiveContractTest.php`, `wcag-contrast-results.json`, `asset-manifest.*`, `ProductIdentity.php`) and confirmed zero remaining hits for any of them. Nothing else moved. The 907-figure caveat from the prior pass still applies (native-host LBF-content contamination inflates the true baseline-eligible count; the `openemr.*` custom-rule hits are pre-existing, unrelated `tests/` drift) -- this run's only claim is that this session's edits fixed exactly the one error they targeted and broke nothing else. |
+
+### Residue sweep, re-confirmed after fixes
+
+`git grep -c "Thiqa"` file-count across `*.php`/`*.twig`/`*.json` unchanged at 53 files --
+identical to the pre-fix count, confirming none of this session's edits introduced new
+residue. New URL-pattern sweep (`Thiqa Demo Eye Clinic`, bare `skyeagle.uk/support`, bare
+`skyeagle.uk/docs`) found only one hit, in a test file, referencing the different, still-valid
+`skyeagle.uk/docs/installer` URL in a historical "used to require" comment -- not an active
+defect.
