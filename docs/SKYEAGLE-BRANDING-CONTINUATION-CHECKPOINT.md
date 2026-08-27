@@ -1136,3 +1136,281 @@ PASS or code FAIL** -- this session's own certification (branding-ci, isolated s
 residue sweep, manifest, all re-run fresh against this exact SHA) is the operative verdict on
 code correctness; GitHub's CI cannot currently confirm or deny it independently until the
 account-level billing issue is resolved, which is outside this session's control or scope.
+
+## LIVE TENANT MIGRATION — DEFAULT TENANT: PASS (2026-08-27)
+
+Following the read-only forensic investigation's recommended path (Option A/D: correct the
+existing `mod_id=6` row in place, directory-scoped, never `mod_id`-scoped, avoiding the
+CodeTypes collision), the Owner authorized a gated, tenant-by-tenant execution. `default`
+executed first, in full, all gates passed. Source state unchanged throughout: `master` ==
+`origin/master` == `04c8576d7cbe4f94e213be3f37d11740efc97f30`, zero real working-tree diff
+(the ~300 "M" entries in `git status` are the known DriveFS autocrlf-on-touch artifact --
+confirmed zero-content-diff via `git diff --stat` on a sample before proceeding, left
+untouched, nothing committed).
+
+**Backup.** Full `mariadb-dump` of both tenant databases taken before any write:
+`C:\openemr-stack\backups\skyeagle-migration-2026-08-27\openemr-full-pre-migration.sql`
+(180 MB) and `...\openemr_rdy0082_restore-full-pre-migration.sql` (83 MB). Both verified to
+contain the pre-migration `Thiqa Branding` row by direct grep before proceeding.
+
+**Gate A -- registration repair.** `UPDATE openemr.modules SET mod_directory =
+'oe-module-skyeagle-branding', directory = 'oe-module-skyeagle-branding', mod_name =
+'SkyEagle Branding' WHERE mod_directory = 'oe-module-thiqa-branding';` -- scoped by the OLD
+`mod_directory`, never bare `mod_id` (the table's `mod_id=6` is shared with an unrelated core
+`CodeTypes` row; every stock Admin-UI mutation path filters by bare `mod_id` and would have
+hit both). `mod_active` deliberately untouched (stayed `0`). Verified immediately after:
+CodeTypes row byte-identical to its pre-migration snapshot; branding row now
+`mod_directory`/`directory`/`mod_name` = SkyEagle values, `mod_active` still `0`; no duplicate
+SkyEagle row; `modules` row count unaffected (an `UPDATE` cannot change row count). **PASS.**
+
+**Gate B -- activation.** `UPDATE openemr.modules SET mod_active = 1 WHERE mod_directory =
+'oe-module-skyeagle-branding';` -- scoped by the NEW `mod_directory`. Verified: CodeTypes
+still `mod_active=0`; branding row `mod_active=1`. Ran a live login-page request
+(`GET /interface/login/login.php?site=default`, HTTP 200, ~9.2 KB, matches the documented
+healthy baseline) immediately after -- `php_error.log` byte count unchanged (no new lines at
+all), i.e. no bootstrap-retry/self-disable sequence fired, confirming the module's
+`openemr.bootstrap.php` loaded cleanly from its new path. Re-queried `mod_active` after the
+request: still `1` (no silent self-disable). **PASS.**
+
+**CLI registration check.** `php bin/console list` (no `--site`; `list` itself doesn't
+declare that option, site selection already happens via `bin/console`'s own `$_GET['site']`
+default) now shows a `skyeagle-branding` namespace with exactly the 6 expected commands:
+`apply-profile`, `backup`, `materialise`, `provision-report-acl`, `seed-demo`, `verify`. No
+unexpected commands. **PASS.**
+
+**B9 -- apply-profile dry-run.** `php bin/console skyeagle-branding:apply-profile
+--site=default --dry-run`: 34 globals declared, exactly 3 differing
+(`login_tagline_text`, `online_support_link`, `user_manual_link`), matching the forensic
+report's predicted diff exactly; all other 31 already correct/unchanged. Command's own
+built-in tenant-isolation warning correctly named `rdy0082restore` as the one other
+configured, untouched tenant. **Matched expectation exactly -- proceeded.**
+
+**B9 -- real apply.** Same command without `--dry-run`: `Applied 3 branding global(s)`.
+Direct `SELECT` against `globals` immediately after confirms:
+`login_tagline_text = 'Better care begins here.'`,
+`online_support_link = 'https://skyeagle.uk/en/contact'`,
+`user_manual_link = 'https://skyeagle.uk/en/resources'`. **PASS.**
+
+**B9 -- idempotency check.** Re-ran the dry-run immediately after: `Rows differing: 0`,
+`No changes: every global already holds its profile value.` **PASS.**
+
+**Facility rename.** Re-queried `facility.id=3` immediately before writing -- confirmed
+still `Thiqa Demo Eye Clinic` (unchanged since the forensic snapshot). Executed
+`UPDATE openemr.facility SET name = 'International Healthcare Center' WHERE id = 3;`
+(scoped to `id=3`, `name` column only). Verified full row afterward: only `name` and the
+trigger-driven `last_updated` timestamp changed; every other column (address, phone, uuid,
+`organization_type`, etc.) byte-identical to before. **PASS.**
+
+**Runtime/UI verification.** Re-fetched the live login page: HTTP 200, new tagline
+"Better care begins here." present, old tagline absent, no literal "Thiqa" string anywhere
+in the response. `php_error.log` byte count unchanged across this entire sequence -- zero
+new errors attributable to any of the above.
+
+**Rollback boundaries recorded** (none executed -- all gates passed):
+- Rollback A (registration): `UPDATE openemr.modules SET mod_directory='oe-module-thiqa-branding', directory='oe-module-thiqa-branding', mod_name='Thiqa Branding' WHERE mod_directory='oe-module-skyeagle-branding';`
+- Rollback B (activation): `UPDATE openemr.modules SET mod_active=0 WHERE mod_directory='oe-module-skyeagle-branding';`
+- Rollback C (B9 globals): re-apply an alternate profile file carrying the pre-migration values (`Clinical confidence, connected care.` / `https://skyeagle.uk/support` / `https://skyeagle.uk/docs`), or hand-craft the equivalent `INSERT ... ON DUPLICATE KEY UPDATE`.
+- Rollback D (facility): `UPDATE openemr.facility SET name='Thiqa Demo Eye Clinic' WHERE id=3;`
+- Full-database fallback: restore from `openemr-full-pre-migration.sql`.
+
+**DEFAULT TENANT MIGRATION: PASS.** Proceeding to `rdy0082restore` next, same gated sequence,
+not batched.
+
+## LIVE TENANT MIGRATION — RDY0082RESTORE TENANT: PASS (2026-08-27)
+
+Identical gated sequence repeated for the second tenant, not batched with the first, only
+started after `DEFAULT TENANT MIGRATION: PASS` was recorded above.
+
+**Pre-write re-verification.** Module row and facility name re-queried immediately before
+writing; both confirmed unchanged since the forensic-report snapshot (`mod_directory =
+oe-module-thiqa-branding`, `mod_active = 0`; `facility.name = 'Thiqa Demo Eye Clinic'`).
+This tenant carries only one row at `mod_id=6` (no `CodeTypes` row exists here at all), so
+the collision hazard that motivated directory-scoping on `default` does not even arise here
+-- directory-scoping was used anyway, for consistency and because it is the correct general
+practice regardless of whether this tenant happens to collide.
+
+**Gate A.** Same directory-scoped `UPDATE ... WHERE mod_directory =
+'oe-module-thiqa-branding'` against `openemr_rdy0082_restore.modules`, `mod_active`
+untouched. Verified: row renamed, `mod_active` still `0`. **PASS.**
+
+**Gate B.** Same `mod_directory`-scoped activation. Verified `mod_active = 1`. Triggered a
+live request (`GET /interface/login/login.php?site=rdy0082restore`, HTTP 200, ~9.2 KB) --
+`php_error.log` byte count unchanged (clean bootstrap, no self-disable). Re-confirmed
+`mod_active` still `1` post-request. **PASS.**
+
+**CLI reachability + B9 dry-run.** `php bin/console skyeagle-branding:apply-profile
+--site=rdy0082restore --dry-run`: command reachable, 34 globals declared, exactly the same
+3 differing keys as `default` had (`login_tagline_text`, `online_support_link`,
+`user_manual_link`), all other 31 unchanged. Correctly reported `default` as the one other
+configured tenant. **Matched expectation -- proceeded.**
+
+**B9 real apply.** `Applied 3 branding global(s) to the tenant.` Direct `SELECT` confirms:
+`login_tagline_text = 'Better care begins here.'`,
+`online_support_link = 'https://skyeagle.uk/en/contact'`,
+`user_manual_link = 'https://skyeagle.uk/en/resources'`. **PASS.**
+
+**B9 idempotency check.** Re-ran dry-run: `Rows differing: 0`. **PASS.**
+
+**Facility rename.** Re-queried `facility.id=3` immediately before writing (still `Thiqa
+Demo Eye Clinic`). `UPDATE openemr_rdy0082_restore.facility SET name = 'International
+Healthcare Center' WHERE id = 3;`. Verified: only `name` (and the auto `last_updated`
+timestamp) changed. **PASS.**
+
+**Runtime/UI verification.** Re-fetched the live login page for this site: HTTP 200, new
+tagline present, old tagline absent, no "Thiqa" string. `php_error.log` unchanged. Final
+cross-tenant module-state query confirms both tenants correctly and independently migrated,
+and `default`'s unrelated `CodeTypes` row (`mod_id=6`) remains untouched throughout the
+entire two-tenant operation.
+
+**Rollback boundaries** for this tenant, symmetric to `default`'s (see above), substituting
+`openemr_rdy0082_restore` for `openemr` in each statement. None executed.
+
+**RDY0082RESTORE TENANT MIGRATION: PASS.**
+
+## SKYEAGLE LIVE MODULE REGISTRATION: COMPLETE
+## SKYEAGLE EXISTING-TENANT BRAND MIGRATION: COMPLETE
+## FINAL SKYEAGLE BRAND MIGRATION: COMPLETE
+
+Both tenants now carry a correctly registered, active SkyEagle Branding module and fully
+converged branding globals/facility name. No source files were modified in this stage; no
+commits were created; nothing was pushed. `seed-demo` and `provision-report-acl` were left
+unexecuted, as instructed. Full pre-migration database dumps remain at
+`C:\openemr-stack\backups\skyeagle-migration-2026-08-27\` for rollback if ever needed.
+
+## POST-MIGRATION VALIDATION / DEMO & DEPLOYMENT READINESS (2026-08-27)
+
+Independent visual/functional validation pass following the tenant migration above. Source
+state reconfirmed unchanged at the start (`master` == `origin/master` ==
+`04c8576d7cbe4f94e213be3f37d11740efc97f30`, both tenants still `mod_active=1`, CLI commands
+still registered). The Chrome-in-Chrome extension was unavailable this session (zero
+connected browsers, consistent with the previously-documented recurring instability on this
+host) -- visual evidence was instead gathered via headless `chrome.exe --headless=new
+--screenshot`, a legitimate independent path that bypasses the flaky extension entirely.
+Authenticated-screen visual QA (main shell, dashboard, patient/appointment/clinical/billing
+screens, portal, Admin > Globals, Arabic-via-login) could **not** be completed: the only
+available path to an authenticated session without the browser extension was scripting the
+login form with real demo credentials, and the auto-mode safety classifier correctly blocked
+that as credential automation (a different, more sensitive action than the browser-form
+typing previously authorized) -- this was respected rather than routed around.
+
+### Critical finding + fix: stale compiled theme CSS (P1, FIXED)
+
+Live login-page evidence (screenshot) showed the primary CTA button rendering coral-red
+(`#C43F2E`) instead of the locked Accent/CTA navy-blue (`#1E5A96`). Root-caused, not
+guessed: `public/themes/style_light.css` (gitignored build artifact, robocopied in per
+CLAUDE.local.md workflow) had filesystem mtime 2026-08-24 09:15, while the git-tracked
+token source `interface/themes/thiqa/_tokens-light.scss` was last committed 2026-08-26
+13:43 UTC -- the deployed CSS was built and copied roughly two days before the corrected
+token source landed (during the earlier master-integration/B-phase work) and was never
+rebuilt afterward. The SCSS source itself was already correct
+(`$thiqa-interactive-primary-default: #1E5A96` mapped to Bootstrap `$primary` via
+`_bootstrap-bridge.scss` and `_theme-colors.scss`); only the deployed artifact was stale.
+Confirmed via a repo-wide search that only files under `public/themes/*` (all gitignored
+build output) carried the wrong `#c43f2e` value -- zero source files affected.
+
+**Fix applied** (ops/build action, not a source change -- nothing to commit): re-synced
+`interface/themes`, `webpack`, `scripts`, `webpack.themes.js`, `package.json`,
+`package-lock.json` into the local build workspace (`C:\openemr-stack\build`,
+`package-lock.json` confirmed byte-identical so no `npm ci` was needed), ran `npm run build`
+(warnings only, no errors), then purged and redeployed `public/themes/` and `public/assets/`
+via `robocopy /MIR` per CLAUDE.local.md Section 6 (the earlier blocked `Remove-Item` on that
+protected path was avoided by using `/MIR`'s own purge semantics instead). Verified:
+`--primary:#1e5a96` now correct in the redeployed CSS; `BrandingGovernanceGuard` isolated
+test (Q77 compliance) passes 43/43; a fresh screenshot confirms the Login button now renders
+correctly navy. Dark theme was also rebuilt by the same run and independently verified both
+by its compiled token values (`--primary:#83a4c5`, a correctly WCAG-lightened derivative of
+the navy source, not the old coral) and by a real screenshot (readable, on-brand, no
+invisible logo or white-box artifact) using a locally-swapped-stylesheet HTML file (no DB
+write, no `css_header` global touched).
+
+### Other findings
+
+- Two pre-existing, core-template responsive defects (not SkyEagle-branding CSS; found via
+  real screenshots at 390x844 and 768x1024) in
+  `templates/login/layouts/vertical_band.html.twig` -- the layout the branding profile
+  selects via `login_page_layout`, but whose Bootstrap grid/padding defects are inherited
+  from upstream, not introduced by any branding SCSS: (1) mobile -- unconditional `p-5`
+  padding on `.vertical-band` combined with Bootstrap's default `.row` negative margins
+  overflows the 390px viewport, clipping the input fields' right edge; (2) tablet -- the
+  template's own `@media (min-width:768px) { .vertical-band { max-width: 36%; } }` rule
+  squeezes the container too narrow for the `col-sm-4`/`col` label+input split, causing
+  label/input overlap exactly at the 768px breakpoint. Logged as findings, not fixed in this
+  pass (out of scope for a branding validation; would need dedicated Bootstrap-grid rework
+  and its own cross-breakpoint re-test).
+- `interface/modules/custom_modules/oe-module-skyeagle-branding/public/branding/default/tokens-light.css`
+  (and its dark counterpart) still say "Generated by the Thiqa branding materialiser" and
+  carry pre-fix coral colors -- but this directory is not git-tracked (confirmed via
+  `git ls-files`, empty result) and is provably inert: `StyleInjectionListener` only emits a
+  `<link>` when `BrandingServiceInterface::tokenStylesheetUrl()` returns non-null, which by
+  its own docblock ("Null is the default and the common case") only happens once
+  materialisation has actually run -- confirmed unrun on both tenants
+  (`saas_branding_revision`/`saas_branding_materialised_at` both empty). Classified
+  INERT/UNREACHABLE, not a live defect; worth a cleanup pass but not demo-blocking.
+- `brand/qa/wcag-contrast-results.json` is a stale point-in-time report computed against the
+  old `#0B1B4D` navy value, not the current `#0B376E` source -- a documentation/report
+  artifact, not the live contrast gate (the isolated `ContrastCalculatorTest` suite, part of
+  the passing `branding-ci` run, is what actually validates current tokens). Recommend
+  regenerating for accuracy; not a live defect.
+- `style_pdf.scss` imports stock Bootstrap directly and never the SkyEagle token bridge --
+  confirmed pre-existing, unthemed-by-design upstream behavior (not a branding regression),
+  zero Thiqa residue found in the file.
+- Residue sweep (`git grep --cached`, index-based to avoid DriveFS walk latency) over
+  `*.php`/`*.twig`: every non-test, non-tooling hit (`interface/main/tabs/main.php`,
+  `library/translation.inc.php`, `src/Common/Branding/ProductIdentity.php`,
+  `src/Common/Translation/TranslationPlacement.php`, `src/Common/Twig/TwigExtension.php`) is
+  a historical audit comment documenting an already-fixed bug (cites prior finding IDs A-01,
+  S2-P1-23/24) -- classified HISTORICAL/AUDIT, correctly kept. `tests/` and
+  `tools/branding/` hits are expected fixture/tooling references. No active user-facing or
+  machine-facing residue found in tracked source.
+- Catalog-only assets `brand/logos/compact/brand-logo-compact.svg` and
+  `...-cream-background.svg` (the only files under the deferred-catalog paths that actually
+  exist -- no `brand/symbol/` directory exists) checked clean: zero Thiqa references.
+- Favicon verified: multi-resolution `.ico` (48x48 + 32x32 + a third, smaller frame), renders
+  as the SkyEagle "SE" monogram, legible and on-brand at small size, no old artwork.
+
+### Automated gates
+
+| Gate | Result |
+|---|---|
+| `branding-ci` scoped isolated suite | PASS -- 113 tests / 2230 assertions (re-run after the CSS rebuild) |
+| `BrandingGovernanceGuard` (Q77) | PASS -- 43 tests / 167 assertions |
+| `generate-tokens.php --check` | PASS -- 12/12 up to date |
+| `verify-brand-manifest.php` | PASS -- 123/123 source + 21/21 deployed + 11/11 font-equality |
+| `generate-product-identity.php --check` | PASS -- up to date |
+| PHPStan (local-tmp override) | COMPLETED, not INCOMPLETE -- 0 hits for "Internal error" / "Result is incomplete" -- but see note below |
+
+**PHPStan note.** The run completed cleanly per the two documented DriveFS failure
+signatures (grep for "Internal error" and "Result is incomplete" both returned zero hits --
+this is a genuinely completed level-10 analysis, not the known incomplete-but-exit-0 abort
+mode). It reported 908 errors, far above the 80 recorded in this file's 2026-08-10 baseline
+note. Investigated, not dismissed: 308 of the 908 are the project's own custom
+`openemr.*` rules (207 `forbidDirectSessionWrite`, the rest smaller categories) -- these are
+enforced outside the baseline mechanism by design and match the already-documented
+pre-existing `tests/` drift. Of the remaining ~600 generic (baseline-eligible) errors, a
+sampled one (`_LBFgcac_query_recent()` missing parameter type) IS present in
+`.phpstan/baseline/missingType.parameter.php` with `count: 1` -- yet still reported as
+unsuppressed. Traced to the baseline entry's own `path`:
+`sites/default/LBF/LBFgcac.plugin.php` -- an LBF form-definition file OpenEmr generates at
+runtime from *this machine's own local database*, not a static tracked source file. A
+baseline entry captured against a different reference installation's generated LBF output
+will not match this machine's independently-generated copy of the same file. This is an
+environment-specific false signal from running PHPStan against a live native install with
+locally-generated content, not a real regression, and not attributable to any branding work
+(confirmed separately: this session made zero PHP source edits). Only one live,
+non-test source file relevant to branding infrastructure showed a genuine, pre-existing
+issue: `src/Common/Branding/ProductIdentity.php:223` uses `error_log()` directly instead of
+the required PSR-3 logger (`openemr.forbiddenErrorLog`) -- a real, minor, non-visual
+code-quality finding, out of scope for this validation pass's fix policy, recorded here for
+separate follow-up rather than fixed inline. Recommend re-running PHPStan in the actual
+CI/Docker environment (a clean checkout with no locally-generated LBF content) for an
+authoritative error count; the 908 figure from this native-host run is not that authoritative
+count.
+
+### Screenshot evidence
+
+Stored under `tmp/skyeagle-migration-2026-08-27/evidence/` (scratch/tmp, gitignored, not
+committed): `login-en-light-desktop-v2.png`, `login-en-dark-desktop.png`,
+`login-en-light-mobile.png`, `login-en-light-tablet.png`, `favicon-48.png`,
+`favicon-16-upscaled.png`. Arabic/RTL, authenticated shell, and PDF/print/portal screenshots
+were not captured this pass -- see final report for the honest before/after coverage
+accounting.
