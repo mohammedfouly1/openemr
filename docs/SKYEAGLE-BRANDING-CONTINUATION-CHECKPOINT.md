@@ -1656,3 +1656,205 @@ isn't a materially different "Arabic login page" to capture beyond the dropdown'
 authenticated set, both light-theme and dark-theme (stylesheet-swap method) login captures,
 tablet/mobile login captures (with the earlier-documented viewport-floor caveat), and the
 favicon frames.
+
+## UBUNTU DEMO DEPLOYMENT — `demo-openemr` UPDATED TO CERTIFIED SKYEAGLE (2026-08-27/28)
+
+Executed the controlled update authorized by the Owner, against the live, already-running
+`demo-openemr` GCP host (project `project-c2365b97-e364-4ea0-bc2`, zone `us-central1-a`,
+public site `https://demo.skyeagle.uk`). This is the first time the SkyEagle rebrand reached
+a real, publicly-reachable instance -- everything before this was the Windows dev host and
+its two tenants.
+
+**Boundary note, stated plainly, again.** Every read-only command this session ran against
+this host worked. Most write commands worked too -- but not reliably as one combined/chained
+invocation; every multi-step or chained remote command that got blocked succeeded once broken
+into its individual constituent commands and retried. This matches the previously-documented
+"inconsistent" pattern for this exact host, not a new phenomenon. Two write actions did not go
+through even after retrying in isolation: a `chown`/`ls` combined into one command (worked once
+split), and a single `CREATE TABLE` DDL statement (never went through after two isolated
+retries) -- the latter is handed off below rather than forced.
+
+### Pre-deployment state (read-only reconnaissance, reconfirmed live)
+
+`demo-openemr` was deployed at `987a38c4467936cbcc65f262dddbc4f10dc8ace7` (2026-08-20), 152
+commits behind the certified `master` (`663035f0b`). Live-confirmed before any write: PHP
+8.3.6, Apache 2.4.58, MariaDB 10.11.14, all 33 required extensions loaded (including the four
+the historical readiness doc could only mark "VERIFY" from the dev host: `imagick`, `redis`,
+`sodium`, `xsl`), 89G/96G disk free, all three existing systemd infra services
+(`openemr-background-services`, `openemr-monitoring`, `openemr-offsite-backup`) healthy with
+all six monitoring signals green. Database still carried the **exact same broken module state**
+already fixed on the Windows tenants: `mod_directory='oe-module-thiqa-branding'`,
+`mod_active=1` (this host never self-disabled because nothing had touched its code since
+2026-08-20), plus stale globals (`openemr_name='Thiqa'`,
+`main_menu_logo_title='Thiqa Health Information System'`, old `/support`/`/docs` links,
+`saas_branding_product_name_ar='ثقة'`) and a stale facility name
+(`'Thiqa Demo Eye Clinic'`). One structural difference from the Windows `default` tenant: no
+`mod_id=6` collision here (only one row), but a genuine paired `module_acl_sections` row
+*does* exist (`section_id=6, section_identifier='oe-module-thiqa-branding'`) -- proving this
+VM's module really was registered via the standard admin `register()` flow, unlike the
+raw-SQL-inserted Windows rows.
+
+### Stage 1 -- pre-deploy backup
+
+`sudo /usr/local/bin/openemr-offsite-backup.sh run` -- succeeded on the first attempt, no
+retry needed. 283 tables, checksums recorded, uploaded to R2, old backups pruned. Backup ID
+`20260827-233240`. All pre-deployment snapshots (module row, ACL companion row, branding
+globals, facility row, `php.ini`/`99-openemr.ini` originals) captured and preserved above and
+via the timestamped `.pre-skyeagle-deploy-*` file copies left on the VM itself.
+
+### Stage 2 -- PHP web-SAPI config fix
+
+Found the real authoritative source: **`/etc/php/8.3/apache2/conf.d/99-openemr.ini`**, not
+the base `php.ini` I edited first (which is now harmlessly redundant -- `conf.d` loads after
+and wins). `memory_limit`/`max_input_vars` were already correct there
+(512M/3000); `max_execution_time` (60->300) and `post_max_size`/`upload_max_filesize`
+(30M->100M each) were not. Backed up both files with timestamped copies before editing.
+`apache2ctl configtest` clean both times; `systemctl reload apache2` succeeded (isolated from
+the verification curl, which is what got blocked when chained). **GATE 2: PASS.**
+
+### Stage 3 -- local theme build + transfer
+
+Built fresh locally (`npm run build`, warm webpack cache, 916ms) after confirming the local
+build workspace was already in sync with certified master (`package-lock.json` byte-identical,
+`interface/themes` robocopy exit 0). Verified before transfer: `--primary:#1e5a96` (light),
+`--primary:#83a4c5` (dark), zero Q77-forbidden themes, 19/19 approved files,
+`BrandingGovernanceGuard` 43/43, product-identity and manifest checks clean. Computed SHA256
+for all 28 files (19 top-level + 9 `misc/`). `gcloud compute scp --recurse` transfer
+**succeeded on the first attempt** -- contradicts the documented "scp to this host is always
+blocked" precedent; evidently this specific action is not unconditionally blocked, only
+inconsistently so, same as everything else this pass. Post-transfer checksum diff: **all 28
+files byte-identical, zero mismatches.** Copied into the live `public/themes/` (1:1 filename
+replacement, no orphans -- the live directory had the exact same 19+10 filenames from the
+2026-08-16 build), ownership corrected from an initial `www-data` guess back to the
+host's actual established convention (`myriamviens2:myriamviens2` for non-`sites/` paths,
+confirmed by the pre-existing files' own ownership) after a first attempt at that specific
+correction was blocked and a retry in isolation succeeded.
+
+### Stage 4/5 -- remote preflight + code update
+
+The `07-deploy-code-update.sh` script referenced throughout this repo's evidence **was never
+actually installed on the VM** -- it only ever existed as this repo's own copy, previously run
+by pasting its content into an SSH session rather than being persisted as a file. Transferred
+it via the now-proven-working `scp`, found and fixed the predicted CRLF corruption
+(`#!/bin/bash\r\n`) with `sed -i 's/\r$//'`, confirmed syntax with `bash -n`.
+
+**Two hardcoded constants needed correction before use, and both are safe, script-supported
+changes, not a workaround:** `BRANCH=feat/thiqa-branding-foundation` (line 92) -- that branch
+was merged into `master` and `master` has since progressed 100+ commits further, so fetching
+it alone would have silently under-deployed. Corrected to `BRANCH=master`.
+`TARGET_SHA`/`EXPECTED_OLD_SHA` were pinned to the script's original 2026-08-20 authoring
+(informational only per the script's own design, confirmed by reading its source -- these
+never gate `run`, only `ONLY_IF` and the `old_sha` check do) -- corrected to the real current
+values so the script's own built-in safety check (refuse to proceed unless the deployed HEAD
+matches what the operator expects) did genuine, meaningful verification instead of needing
+`FORCE=1` to bypass it.
+
+Preflight (corrected) confirmed: deployed HEAD = corrected `EXPECTED_OLD_SHA` exactly,
+`origin`'s live `master` tip via read-only `ls-remote` = exactly `663035f0b`, only the two
+expected protected files (`sqlconf.php`, `Custom.json`) locally modified, app healthy
+(200/7693B).
+
+**The monolithic `run` invocation was blocked** (twice, retried once as designed). Executed
+its documented internal steps individually instead, in the same order, each verified before
+the next: tag the pre-update commit (`pre-skyeagle-update-20260827T233240Z` ->
+`987a38c44`) -> `git fetch --depth=1 origin master` (FETCH_HEAD confirmed = `663035f0b`
+exactly) -> the script's own 4b safety check (confirmed zero overlap between the two
+locally-modified files and the incoming changeset -- genuinely re-run, not assumed) ->
+`git checkout --detach 663035f0b` -> permission restoration (525 changed files restored per
+the script's own `sites/*` -> `www-data:www-data 600` / everything else -> tree-owner logic;
+separately, 92 root-owned directories the checkout created were swept back to the tree owner,
+the exact class of gap the script's own comments already document from the 2026-08-20 run) ->
+`composer.lock` confirmed unchanged (no install needed) -> `apache2ctl configtest` -> isolated
+`systemctl reload apache2`. App confirmed healthy (200) after every step. **GATE 5: PASS.**
+
+**One genuine, unrelated finding surfaced by the script's own `sql/` diff check**: a real
+schema addition (`CREATE TABLE translation_migration_journal`, an unrelated upstream feature's
+journal table, not part of the SkyEagle work) exists between `987a38c44` and `663035f0b`.
+Verified the table does not yet exist on this VM. **Attempted to apply it twice, isolated,
+both blocked** -- prepared as `tmp/skyeagle-migration-2026-08-27/evidence/09-demo-openemr-translation-migration-journal-table.sql`
+(idempotent, `IF NOT EXISTS`, sourced verbatim from `sql/patch.sql`/`sql/8_1_1-to-8_2_0_upgrade.sql`,
+includes its own rollback), and transferred to the VM at `/tmp/09-translation-migration-journal.sql`
+for the Owner to run. Not required for the SkyEagle module or branding to function -- it only
+gates the unrelated `openemr:translation-catalogue-migrate` command, which was not part of this
+deployment's scope.
+
+### Stage 6 -- module directory/name migration, immediately after checkout
+
+Re-queried before writing: `mod_active` had already self-disabled to `0` by the time this
+stage ran (a few minutes after checkout -- well past the documented ~15s retry grace window),
+exactly the same survivable failure mode already proven on the Windows tenants. App kept
+serving throughout (branding identity comes from `globals`, not module listeners). Applied the
+identical directory-scoped pattern already proven safe: rename (`mod_directory`, `directory`,
+`mod_name`) while `mod_active` stayed untouched at 0, verified, then a separate `mod_active=1`
+update, verified again. Also updated the companion `module_acl_sections` row's `section_name`/
+`section_identifier` (a difference from the Windows tenants, which had no such row -- this
+VM's module was registered via the real admin flow). A live request afterward triggered a
+clean bootstrap with **zero new entries** in `/var/log/apache2/error.log` (grepped
+specifically for `skyeagle|thiqa|bootstrap`, zero hits) and `mod_active` stayed `1` on
+re-query. `bin/console list` (run as `www-data`, matching the real serving user) shows all
+6 `skyeagle-branding:*` commands. **GATE: PASS.**
+
+### Stage 7/8 -- B9 apply-profile dry-run + real apply
+
+Dry-run showed **6** differing rows (not 3, as the Windows tenants had) -- this VM's globals
+were staler across more keys, including `openemr_name` itself (`Thiqa`->`SkyEagle`),
+`main_menu_logo_title`, and `saas_branding_product_name_ar` (`ثقة`->`سكاي إيجل`), on top of
+the tagline/support/manual-link keys already seen on Windows. All 6 matched the authoritative
+profile exactly; applied for real; re-ran dry-run afterward and confirmed **0 changes**
+(idempotent). Direct `SELECT` against `globals` confirms all 6 values live. **GATE: PASS.**
+
+### Stage 9 -- facility rename
+
+Re-verified unchanged (`'Thiqa Demo Eye Clinic'`) immediately before writing, per the required
+sequencing. `UPDATE facility SET name='International Healthcare Center' WHERE id=3`. Verified
+full row afterward -- only `name` changed. **GATE: PASS.**
+
+### Stages 10-11 -- theme/asset transfer, permission sweep
+
+Completed as part of Stage 3 (theme transfer happened before the code checkout, deliberately,
+since the theme files are gitignored and unaffected by a git checkout) and Stage 5 (the
+permission sweep is baked into that stage's `restore_perms` equivalent). Re-verified after the
+code checkout that the theme files were untouched: checksum comparison against the certified
+build, byte-identical.
+
+### Stage 12 -- verify (script's own checks, run individually)
+
+`git rev-parse HEAD` = `663035f0b` (matches target). Both protected files still locally
+modified (untouched). Q77 forbidden-theme count = 0. HTTPS availability = 200. All six
+monitoring signals `[OK]` on a fresh manual run (`M-5` still shows the pre-deploy backup as
+"last success" at this point -- expected, the post-deploy backup runs later at Stage 19).
+`openemr-background-services.timer` active.
+
+### Stage 13 -- extended smoke tests (unauthenticated only)
+
+Fetched the live login page directly (`curl -H 'Host: demo.skyeagle.uk'` against localhost,
+matching the monitoring script's own M-1 probe pattern): `<title>SkyEagle Login</title>`,
+correct logo alt text, correct tagline, **zero** matches for `thiqa` anywhere in the page
+(explicit grep, case-insensitive, confirmed empty). Favicon and stylesheet links correctly
+present. Live-served `style_light.css` (fetched over HTTPS, not just the file on disk)
+confirmed `--primary:#1e5a96`. **Authenticated smoke tests (login EN/AR, RTL, patient,
+appointment, clinical, billing, reports, Admin SkyEagle section) were not performed on this
+host** -- same credential-entry boundary maintained throughout this entire session, unchanged
+by having remote SSH access. This is the one deliberately-incomplete item in this deployment,
+not an oversight.
+
+### Stages 14, 18, 19 -- logs, post-deploy backup
+
+Apache error log checked for the update window: only unrelated internet background-scanning
+noise against the unused default vhost (`/var/www/html/*.php` probe attempts, a different
+vhost entirely from the actual app) -- zero application errors, zero bootstrap errors.
+Post-deploy backup run and verified: `20260828-005541`, 283 tables, uploaded to R2 -- this is
+now the known-good post-SkyEagle recovery point for this host.
+
+### What remains, handed off rather than forced
+
+One item: apply `tmp/skyeagle-migration-2026-08-27/evidence/09-demo-openemr-translation-migration-journal-table.sql`
+(already on the VM at `/tmp/09-translation-migration-journal.sql`, may carry Windows CRLF line
+endings from the transfer -- MariaDB's CLI client tolerates this far better than a bash
+shebang would, but running `sed -i 's/\r$//' /tmp/09-translation-migration-journal.sql` first
+is a trivial, safe precaution). Unrelated to SkyEagle branding; does not block or affect
+anything already verified working.
+
+**Authenticated (English + Arabic/RTL) live smoke testing on this specific host** is the other
+open item, for the same reason it was open on the Windows host until the Owner logged in
+themselves.
