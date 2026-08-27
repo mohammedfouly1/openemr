@@ -16,7 +16,18 @@ This layout creates a vertical banded login layout
 {{ parent() }}
 <style type="text/css">
 /* Custom CSS to be moved after the BS5 migration, this helps responsiveness */
-@media (min-width: 768px) {
+/*
+ * max-width:36% is only safe once the viewport itself is wide enough that 36%
+ * still leaves room for the col-sm-4/col label+input split beneath it — that
+ * split lays out side-by-side starting at the (viewport-based) sm breakpoint
+ * regardless of how narrow the container is. At exactly 768px, 36% yields a
+ * ~276px container and the label column collapses to ~92px, too narrow for
+ * "Password"/"Language" and causing label/input overlap. Moving the trigger
+ * to the lg breakpoint (992px) keeps the intended narrow band on genuinely
+ * wide desktop screens while letting tablet widths use the full band, which
+ * has ample room for the label+input row at those sizes.
+ */
+@media (min-width: 992px) {
     .vertical-band {
         max-width: 36%;
     }
@@ -25,7 +36,7 @@ This layout creates a vertical banded login layout
 {% endblock %}
 
 {% block content %}
-<div class="vh-100 p-5 d-flex flex-column justify-content-center mx-auto vertical-band">
+<div class="vh-100 p-3 p-md-5 d-flex flex-column justify-content-center mx-auto vertical-band">
     <div class="align-items-center">
         {% include "login/partials/html/primary_logo.html.twig" %}
         {% include "login/partials/html/login_details.html.twig" %}
