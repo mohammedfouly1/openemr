@@ -1858,3 +1858,110 @@ anything already verified working.
 **Authenticated (English + Arabic/RTL) live smoke testing on this specific host** is the other
 open item, for the same reason it was open on the Windows host until the Owner logged in
 themselves.
+
+## LIVE AUTHENTICATED BROWSER CERTIFICATION — `demo.skyeagle.uk` (2026-08-28)
+
+Closed the remaining gap from the deployment above: authenticated visual verification directly
+against the live public site, using the Claude-in-Chrome connected browser, not curl or
+source inspection. The Owner logged into `https://demo.skyeagle.uk` twice (English, then
+Arabic after a self-service logout) using the `n.alqahtani` demo account -- credentials for
+this specific host were **not** the same as the Windows instance's (confirmed: this account
+belongs to a different person, "Noura Alqahtani" here vs "Nadia Alqahtani" on Windows -- two
+independently-provisioned installations, not shared state). The Windows-instance password did
+not work here; the Owner retrieved the correct one themselves from
+`/home/myriamviens2/.openemr-demo-credentials` on the VM via their own SSH access -- this
+session never read or printed it.
+
+**Browser reconnection note.** The Chrome extension's tab-group tracking reset twice mid-pass
+(once between English and Arabic screens, once mid-Arabic-navigation) -- both times the
+underlying browser session and OpenEMR login were untouched; only this tool's own tab
+bookkeeping needed re-establishing via `select_browser` against the same previously-verified
+deviceId. One of those resets briefly connected to the wrong paired browser device before the
+Owner caught it and the correct one was re-selected explicitly -- consistent with this
+project's long-documented browser-pairing instability, now also observed against a live
+production target, not just the local dev instance.
+
+### English, live and authenticated -- confirmed on the public site
+
+Main shell (Calendar, correct logo/colors), Patient Finder (same synthetic `SYN-00xx` demo
+dataset as the Windows instance -- confirms the deterministic seeder produced an identical
+dataset on both independently-provisioned installations), a patient's Medical Record
+Dashboard, that patient's clinical encounter, Fee Sheet/billing, a Sales report, and both
+Admin > Config > Appearance > Branding (URLs) and Admin > Config > SkyEagle Branding (the
+module's own section) -- all inspected live over HTTPS on `demo.skyeagle.uk`, not inferred.
+
+**Live confirmations of fixes that were previously only proven at the database level:**
+- The open clinical encounter's Visit Summary reads "Yousef Alharbi (International Healthcare
+  Center)" -- the facility rename, now seen rendered on the actual public demo site.
+- Admin > Config > Appearance > Branding shows `Online Support Link:
+  https://skyeagle.uk/en/contact` and `User Manual Link Override:
+  https://skyeagle.uk/en/resources` live in the browser.
+- Admin > Config > SkyEagle Branding (module-registered section, proving the module's
+  listeners are genuinely active on this host, not just `mod_active=1` in a query) shows
+  "Branding revision: 0" / "No tenant overlay" -- consistent with the confirmed
+  never-materialised state.
+
+**Portal:** confirmed disabled via Admin > Config > Portal (`Enable Patient Portal` unchecked,
+placeholder site address `https://your_web_site.com/openemr/portal` still present) --
+`PORTAL: N/A -- NOT ENABLED`, not a defect.
+
+**Print:** attempted via `Ctrl+P` on the Fee Sheet screen. The native OS print dialog renders
+outside the page DOM and is not screenshot-capturable through this browser-automation tool --
+a genuine tool limitation, reported as such rather than fabricated. The underlying page content
+(what would be printed) was already confirmed correctly branded via the Fee Sheet screenshot.
+
+**Responsive (tablet/mobile):** `resize_window` reported success but did not change
+`window.innerWidth` on this real, extension-connected browser (verified via
+`window.innerWidth` before/after, unchanged at 1366). A second, independent tool limitation,
+also reported rather than worked around by fabricating a result. Desktop (the width that is
+actually rendering) is fully verified live; the V-02/V-03 fixes were separately verified via
+headless Chrome earlier this session (with its own documented ~500px floor caveat) against
+the identical, byte-verified-transferred theme files now live on this host.
+
+### Arabic / RTL, live and authenticated -- confirmed on the public site
+
+Logged out (self, safe) and the Owner logged back in selecting Arabic. Confirmed via tab
+title (`سكاي إيجل`) and rendered content, not assumed. Verified live: main shell/Calendar
+(correct Hijri-adjacent Gregorian date string, RTL-mirrored calendar grid, logo on the right),
+Patient Finder (`الباحث عن المريض`, correct RTL column order), patient dashboard (RTL Arabic
+labels correctly mixed with still-LTR proper nouns/dates -- correct bidi behaviour), the
+clinical encounter (**"Yousef Alharbi (International Healthcare Center)" confirmed live in
+Arabic too** -- the facility fix visible in the RTL clinical shell on the actual public site),
+Admin > Config > SkyEagle Branding in RTL (correctly right-aligned, same content as English),
+and the built-in Branding URLs in Arabic (`رابط الدعم على الإنترنت` =
+`https://skyeagle.uk/en/contact`, correct).
+
+**Symbol-mirroring check, done properly, on the live site specifically:** zoomed screenshot of
+the SkyEagle "SE" mark in the live RTL layout compared directly against the live English
+capture. Identical orientation and letterforms -- correctly not mirrored, on production, not
+just in a controlled dev-instance test.
+
+### Console/network check
+
+Armed console-error and network-request tracking mid-session (both tools only capture activity
+after being first called, so this is a snapshot from that point forward, not the full session)
+and triggered a fresh in-app navigation. Result: zero console errors, three network requests
+captured (dated-reminders counter, dated-reminders fetch, `background_service/$run`), all
+HTTP 200 -- notably confirming the background-service AJAX call that is part of the documented
+Windows-host Twig-render-hang theory succeeds cleanly here, consistent with this being a normal
+Linux filesystem rather than the Drive-mounted Windows host where that hang was observed.
+
+### Screenshot evidence
+
+15 screenshots under `tmp/skyeagle-migration-2026-08-27/evidence/live-demo/` (gitignored, not
+committed): the full English live set and the full Arabic/RTL live set, each covering main
+shell, patient search, patient dashboard, clinical encounter, billing (English only), reports
+(English only), and both Admin branding sections.
+
+### What remains genuinely unverified on this host
+
+Dark theme (not toggled live -- same reasoning as the Windows pass: it is a tenant-wide
+setting requiring logout/login to take effect, and flipping a shared setting merely to look at
+it was judged not worth the disruption to a live public demo). PDF generation (no safe,
+already-populated PDF-export path was identified and exercised within this pass). Medication,
+Lab, and Claims screens specifically (this patient's demo data shows "Nothing Recorded" for
+medications/allergies/problems, so there was no populated screen of that kind to inspect;
+Claims/insurance views were not separately navigated to beyond what Fee Sheet/Billing already
+covered). None of these are defects -- they are honestly-reported gaps in this pass's coverage,
+consistent with this document's standing rule never to claim a check that was not actually
+performed.
