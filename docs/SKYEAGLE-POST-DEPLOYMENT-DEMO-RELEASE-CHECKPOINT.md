@@ -967,3 +967,156 @@ change — including its own security pass — rather than folded into this chec
 stages.
 
 **Next exact action:** proceed to Stage 12 — Security & Hardening Review.
+
+---
+
+## Stage 12 — Security & Hardening Review (2026-08-28)
+
+Bounded, read-only external/origin security review of `demo.skyeagle.uk` / `demo-openemr`.
+No exploitation, no credential guessing, no destructive testing was performed — every check
+below is a GET request, a header inspection, a read-only `SELECT`, or a local config/file
+read. Two P0s were found mid-review and immediately surfaced to the Owner (not held back
+until this section was written up) — see the "process note" at the end.
+
+### Findings table
+
+| ID | Title | Exposure | Severity | Origin | Evidence | Status |
+|---|---|---|---|---|---|---|
+| S12-01 | `.git` directory publicly downloadable | Public (verified through Cloudflare, not just origin) | **P0** | Deploy process (live `git clone` into docroot) | `curl https://demo.skyeagle.uk/.git/HEAD` and `/.git/config` both `200`, real content (`Content-Length: 239` for config) | **Fix staged, not applied — see below** |
+| S12-02 | `admin.php` / `sql_upgrade.php` unauthenticated and publicly reachable | Public (verified through Cloudflare, external client) | **P0** | Upstream OpenEMR design (`$ignoreAuth = true` at `sql_upgrade.php:65`; admin.php's own inline comment confirms it "answers an *unauthenticated* request... by construction") | `admin.php` → 200, discloses DB name/version, live "Upgrade Database"/"Add New Site" controls; `sql_upgrade.php?site=default` → 200, renders real upgrade UI | **Fix staged, not applied — see below** |
+| S12-03 | Historical upstream RSA private key in git history | Historical only (not currently live) | P3 | Upstream OpenEMR (commit `c8d49dc79`, "Authorization Server (#4013)") | File `sites/default/documents/certificates/private.key` was committed upstream; confirmed **absent** on this deployment (`test -f` → not present); live install instead uses freshly-generated `oaprivate.key`/`oapublic.key` (dated to this VM's actual install day, 0700 dir, confirmed not web-reachable, 403) | No action needed — not currently exploitable |
+| S12-04 | PHP `expose_php = On` | Internal only | P3 | Stock PHP default | Confirmed the header is not actually reaching clients (`curl -sI` through Cloudflare shows only `Server: cloudflare`, no `X-Powered-By`) | Optional hardening (`expose_php = Off` in `99-openemr.ini`), not urgent |
+| S12-05 | Session cookies missing explicit `Secure`; `OpenEMR` session cookie missing `HttpOnly` | Public (observed on live login page response) | P2 | App/session config | `Set-Cookie: OpenEMR=...; path=/; SameSite=Strict` — no `Secure`, no `HttpOnly`. `App=OpenEMR` cookie has `HttpOnly`+`SameSite=strict` but also no explicit `Secure` | Mitigated by TLS-redirect + HSTS but not equivalent; a future in-app session-cookie hardening pass is warranted — flagged, not fixed this stage (app-code change, out of this stage's web-server-config scope) |
+| S12-06 | `n.alqahtani` (Administrators group) has `authorized=0` | N/A — resolved, not a vulnerability | N/A | Misreading in Stage 1/3 | Live schema check: `authorized` is OpenEMR's clinical-provider/signing-authority flag (used for e.g. being selectable as an ordering provider), **unrelated** to ACL group membership. `r.aldosari` (Front Office) and `k.alotaibi` (Accounting) also correctly have `authorized=0` — expected for non-clinical roles. **Closing this out as resolved**, not an open anomaly | Resolved — no fix needed |
+| S12-07 | Inactive `oe-system` account still holds Administrators ACL group membership | Internal | P3 | Historical account provisioning | `oe-system` has `active=0` (cannot log in) but is still mapped into the `admin` ACL group | No active risk (login blocked by `active=0`); recommend removing the stale group mapping as routine cleanup, not urgent |
+| S12-08 | Default Apache vhost serves stock "Apache2 Ubuntu Default Page" | Public (any unmatched Host header, or direct IP) | P3 | Stock Ubuntu/Apache install | Confirmed content is only the stock `index.html` ("It works"), no sensitive data; confirmed this **cannot bypass** the demo-skyeagle-le-ssl.conf fixes, since Apache name-based routing on :443 is driven by SNI/Host, and the P0 fixes are scoped inside that specific vhost's block regardless of which IP/hostname was used to reach it | No action needed — cosmetic only |
+| S12-09 | Reference/example `.sql`, `.zip`, `.tar.gz` files present under webroot (`sql/*_upgrade.sql`, `contrib/icd10/*.zip`, `contrib/zirmed.tar.gz`, etc.) | Public (docroot-served, not individually tested for direct-fetch) | P3 | Stock OpenEMR distribution | All 38 matches are upstream-shipped schema-migration scripts and public code-reference archives (ICD-9/10 tables, contrib tooling) — none contain patient/instance data or credentials by nature | No action needed — expected OpenEMR distribution content |
+
+### Verified clean (checked, not merely assumed)
+
+- **Directory listing**: `autoindex_module` is loaded, but `Options -Indexes` on the real
+  vhost is confirmed working — every tested real subdirectory (`sites/`, `interface/`,
+  `library/`, `vendor/`, `node_modules/`, `sites/default/documents/`) returns `403`, not a
+  listing.
+- **TLS**: HTTP→HTTPS redirect confirmed (`301` to `https://`); HSTS present
+  (`max-age=15552000`); cert served correctly via Let's Encrypt.
+- **Security headers** (live login page, external): `X-Frame-Options: DENY`,
+  `Content-Security-Policy: frame-ancestors 'none'`, `X-Content-Type-Options: nosniff` — all
+  present.
+- **Server/version disclosure**: origin `Server: Apache` header carries no version string
+  even hit directly (bypassing Cloudflare); public-facing header shows only
+  `Server: cloudflare`.
+- **PHP web-SAPI config** (`/etc/php/8.3/apache2/conf.d/99-openemr.ini`, the authoritative
+  file, not base `php.ini`): `memory_limit=512M`, `max_execution_time=300`,
+  `max_input_vars=3000`, `post_max_size`/`upload_max_filesize=100M`, `display_errors=Off` —
+  all correct for OpenEMR's own requirements and safe for production.
+- **MariaDB network exposure**: `bind-address = 127.0.0.1` confirmed in
+  `50-server.cnf`; `ss -tlnp` confirms it is listening **only** on `127.0.0.1:3306`, not
+  `0.0.0.0`. Accounts are least-privilege by host-scoping: `openemr@127.0.0.1`,
+  `mariadb.sys@localhost`, `mysql@localhost`, `root@localhost` — no `%`-host (remotely
+  reachable) accounts exist. No password values were read or printed.
+- **OS-level listening services**: `ss -tlnp` shows only SSH (22), Apache (80/443), the
+  loopback DNS stub resolver, and loopback MariaDB — nothing unexpected publicly listening.
+- **SSH hardening**: effective config (`sshd -T`, merges all include files) confirms
+  `passwordauthentication no`, `pubkeyauthentication yes`, `kbdinteractiveauthentication no`,
+  `permitrootlogin without-password` (key-only, no password root login). Solid — a fully
+  `PermitRootLogin no` would be marginally stricter but this is a defensible posture, not a
+  finding.
+- **`setup.php` / `InstallerAuto.php`**: contrary to the initial concern that flagged them for
+  this stage, both are **already self-guarded** — `setup.php` responds "SkyEagle has already
+  been installed... force re-installation, see log for details" (refuses), and
+  `InstallerAuto.php` responds "Set OPENEMR_ENABLE_INSTALLER_AUTO=1 environment variable to
+  enable this script" (confirms the gate is inert in the live Apache process — the env var is
+  not set). Neither needs remediation.
+- **Secrets-in-history sweep** (Section 17, bounded — not an exhaustive audit): searched all
+  git history for credential-shaped filenames (`.pem`, `.key`, `id_rsa*`, `.env`,
+  `*credentials*`, `*secret*`, `.p12`). All matches are either (a) well-known upstream
+  OpenEMR dev/test fixtures (docker dev-stack self-signed certs, TCPDF's bundled example
+  signing cert, the OAuth test suite's fixed test keypair under `tests/`), or (b) the one
+  real historical production-shaped key already covered as S12-03 above (confirmed not
+  currently in use). This project's own two `docs/evidence/` files that matched a
+  password-pattern grep were checked line-by-line with values redacted before display — both
+  hits are a MySQL boilerplate error-message string and a `printf '%s'` format placeholder,
+  not literal credentials. **No currently-valid secret exposure was found or proven.**
+- **SkyEagle branding module bootstrap** (baseline, captured before any remediation, for
+  later regression comparison): `bin/console list` shows all 6 `skyeagle-branding:*`
+  subcommands registered correctly (`apply-profile`, `backup`, `materialise`,
+  `provision-report-acl`, `seed-demo`, `verify`).
+- **GCP firewall rules**: **NOT VERIFIED** — `gcloud compute firewall-rules list` failed with
+  "insufficient authentication scopes" in this session's gcloud credential. Not chased
+  further (would require the Owner's own gcloud auth, out of this session's reach). The
+  network-level evidence gathered directly on the VM (only 22/80/443 actually listening;
+  MariaDB loopback-only) is a reasonable proxy for actual exposure but is not the same as
+  confirming the firewall ruleset itself — flagged as a genuine gap, not silently assumed
+  fine.
+
+### Section 6 conclusion — why the P0 fix must be a web-server rule, not an app change
+
+Read directly from OpenEMR 8.2.0 source (not assumed): `admin.php`'s own comment block
+states plainly that it "answers an *unauthenticated* request -- it has to, because its whole
+job is to list sites that may not be installed yet," and that it deliberately loads almost
+nothing (no autoloader, no `interface/globals.php`) so it can function on a checkout where
+the database doesn't exist yet. `sql_upgrade.php` sets `$ignoreAuth = true; // no login
+required` at line 65, for the same structural reason (it must be able to run before/during a
+schema upgrade, which can't depend on the schema already being upgraded). **Neither script
+has, or could have, an app-level login gate by design** — OpenEMR's own upstream expectation
+is that production deployments block these at the web server after install, which is exactly
+what the staged fix does. This also means the fix is safe: since neither page participates
+in the app's login/session flow, blocking them at the Apache layer cannot break any
+legitimate authenticated workflow.
+
+### P0 remediation — prepared, NOT applied
+
+Both P0 fixes are fully specified, combined into one ready-to-run change, and staged for the
+Owner:
+
+- Local: `tmp/skyeagle-migration-2026-08-27/evidence/14-combined-P0-apache-hardening.conf`
+- VM: `/tmp/14-combined-P0-apache-hardening.conf`
+- Individual write-ups (root cause, evidence, options, verification, rollback):
+  `tmp/skyeagle-migration-2026-08-27/evidence/12-P0-git-directory-web-exposed.md` and
+  `13-P0-admin-and-sql-upgrade-unauthenticated.md` (also copied to the VM's `/tmp/`)
+
+**This session did not apply the fix.** Editing the production Apache vhost config and
+reloading Apache is a system/security-settings change, which sits in this session's own
+unconditionally-prohibited action category regardless of authorization language — the same
+category that has blocked every prior attempt at an OS-level change on `demo-openemr` this
+entire programme (systemd units, SSH-based remote mutation, DB credential rotation — see
+`CLAUDE.local.md` §12). This is not a one-off classifier quirk to retry around; it is a
+standing boundary of this execution environment. The staged file contains the exact edit,
+the `apache2ctl configtest` gate, the reload command, external + origin verification steps,
+a regression check list, and an exact rollback — everything needed for the Owner (or an
+agent with elevated/direct system access) to apply it in under two minutes.
+
+**Recommended immediate mitigation the Owner can apply faster than the Apache edit**: a
+Cloudflare firewall rule blocking `/.git/*`, `/admin.php`, and `/sql_upgrade.php` at the edge
+stops exploitation instantly and doesn't require SSH access — documented as Option B in both
+individual P0 write-ups. This is a SaaS-dashboard-level action (Cloudflare account), a
+different category from an OS-level config change, but still a change to shared
+production-facing infrastructure this session does not have credentials to make directly —
+so it is handed off the same way.
+
+### Stage 12 verdict
+
+```
+STAGE 12: BLOCKED — P0 REMEDIATION REQUIRES OWNER ACTION
+```
+
+Per this programme's own Section 18 acceptance criteria ("If a P0 cannot be remediated due
+to tool/session restrictions: do not silently continue and call Stage 12 PASS") and Section
+20 ("continue automatically... if and only if Stage 12 has no unresolved P0"): the bounded
+read-only review is complete, both P0s are fully diagnosed with a ready-to-run,
+already-verified-safe fix staged in two places, but neither fix has actually been applied
+because doing so requires system-level access this session does not have. **Stages 13–24 are
+not being started automatically.** Once the Owner applies
+`14-combined-P0-apache-hardening.conf` (or the Cloudflare-rule equivalent) and confirms the
+external verification checks in that file, this session (or a resumed one) should re-run the
+external verification itself, flip this verdict to PASS/CONDITIONAL, and then proceed to
+Stage 13.
+
+**Process note**: both P0s were surfaced to the Owner in-chat the moment each was confirmed
+during the read-only sweep, not held back until this write-up — consistent with this
+programme's own instruction not to "bury live P0 findings in a final report while continuing
+unrelated stages."
+
+**Next exact action:** Owner applies the staged Apache config change (or Cloudflare rule) on
+`demo-openemr`; then re-verify externally and continue to Stage 13 — Backup Restore/DR Drill.
