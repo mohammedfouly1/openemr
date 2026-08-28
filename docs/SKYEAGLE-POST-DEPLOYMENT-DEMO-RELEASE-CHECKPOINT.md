@@ -1387,3 +1387,71 @@ gaps (no active alert delivery; no log rotation) are real and documented rather 
 over, though neither blocks demo readiness or represents a security risk.
 
 **Next exact action:** proceed to Stage 15 — GitHub/CI Closure.
+
+---
+
+## Stage 15 — GitHub/CI Closure (2026-08-28)
+
+### Repo identity check (caught a real mistake before it mattered)
+
+`gh`'s default-repo resolution pointed at `openemr/openemr` (the canonical upstream project,
+via the `upstream` git remote) rather than `origin` (`mohammedfouly1/openemr`, where every
+commit this entire programme has actually been pushed). The first pass of this stage's checks
+was run against the wrong repo and discarded once noticed — all results below are from
+`--repo mohammedfouly1/openemr` explicitly.
+
+### Open PRs / issues
+
+None. `gh pr list --repo mohammedfouly1/openemr` returns empty — consistent with this
+programme's own established convention of pushing checkpoint/fix commits directly to
+`master`, never through a PR. Issues are disabled on the fork (normal for a personal work
+fork, not a gap).
+
+### CI status — genuinely cannot be verified, and the cause is not code-related
+
+Every GitHub Actions check on the fork's `master` branch (Whitespace, Composer Checks,
+PHPStan, Rector, Isolated Tests, Database, Semgrep, JS Unit Test, and others) shows
+`failure` — but each completed in 2-6 seconds, far too fast for any of these to have actually
+executed. Checked the actual annotation on one run rather than trusting the status label:
+
+```
+The job was not started because your account is locked due to a billing issue.
+```
+
+This is a GitHub Actions **billing lockout on the `mohammedfouly1` account**, unrelated to
+any code in this repository, present across every workflow, and outside this session's
+ability or authorization to fix (an account/financial matter for the Owner, not a technical
+one). **None of the "failure" labels reflect an actual test or lint result** — treating them
+as code-quality signal would be wrong.
+
+### Substitute local gate — also not currently active
+
+Checked for a fallback: no `.git/hooks/pre-commit` is installed on this machine (expected —
+`openemr-cmd prek-install` requires the Docker container, which `CLAUDE.local.md` §1
+documents as permanently unavailable on this VM due to missing nested virtualization). So
+there is currently **no automated lint/static-analysis/test gate of any kind** — neither
+remote (billing-locked) nor local (Docker-unavailable) — running against commits on this
+machine.
+
+**Practical risk assessment**, not just a flag-and-move-on: every commit this entire
+programme has made is `docs/*.md` checkpoint documentation — no application/PHP/JS source
+files have been touched — so the absence of a PHPStan/Rector/PSR-12/test gate carries no
+practical risk for this specific body of work. This would be a materially more serious gap
+the moment any actual application-code change is made on this fork without first running the
+manual host-side tools documented in `CLAUDE.local.md` §9 (`vendor\bin\phpstan`, `phpcs`,
+`rector`, `phpunit-isolated.xml`).
+
+### Stage 15 verdict
+
+```
+GITHUB/CI CLOSURE: CONDITIONAL
+```
+
+Not PASS — CI cannot be genuinely exercised or verified in its current billing-locked state,
+so "CI is green" cannot be claimed. Not FAIL — there is no evidence of an actual failing
+check, broken build, or code-quality regression; the gate is simply absent, not red on real
+content, and this session's own commits carry no code-quality risk given their doc-only
+nature. Recommend the Owner resolve the GitHub billing issue on `mohammedfouly1` as routine
+account maintenance, independent of this programme's remaining stages.
+
+**Next exact action:** proceed to Stage 16 — Source/Documentation Reconciliation.
