@@ -773,3 +773,61 @@ live-tested — a reasonable pacing call given group-identity, not a finding.
 **Next exact action:** proceed to Stage 8 — end-to-end functional workflow certification. The
 credential-handoff pattern established in this stage (Owner logs into the target account, hands
 the session to Claude) remains available for any role-specific steps Stage 8 needs.
+
+---
+
+## Stage 8 — End-to-End Functional Workflow Certification (2026-08-28)
+
+Since Stage 7 already independently certified role separation, this stage focuses on proving the
+*workflow* works end to end, using the Administrator session (`n.alqahtani`) rather than
+re-doing role handoffs for every step. Target patient: Amal Albishi (pid 3), using the future
+appointment created in Stage 6.
+
+| Step | Action | Result |
+|---|---|---|
+| Reception → Appointment | Navigated Calendar to 2026-09-01, located "9:00 - Albishi, Amal" under Yousef Alharbi | Confirmed live |
+| Check-in / Provider encounter | Created a new encounter directly (Select Encounter > +) rather than via a calendar-status-change context menu, which this theme does not appear to expose on click/right-click | New encounter **#91** created, `provider_id=6` (Yousef Alharbi), Visit Category "Office Visit" |
+| Diagnosis | Used "Link/Add Issues to This Visit" on the New Encounter form to select the existing "P: Primary open-angle glaucoma" problem | `issue_encounter` row created linking `list_id=9` to `encounter=91` — closes the Stage 4 design gap (the standing diagnosis was previously unlinked to any visit) |
+| Vitals / clinical documentation | Entered vitals via Clinical > Vitals: weight 138.9 lbs, height 62.2 in, BP 118/76, temp 98.2 F, pulse 72, respiration 16 | New `form_vitals` row (id 13) saved with correct values — **and confirmed live, via the form's own side-by-side prior-encounter display, that the previously-diagnosed height/weight/temperature unit-storage bug is real**: the 2026-08-11 encounter's stored values render as "158.00 in → 401.32 cm" and "36.80 F → 2.67 C" |
+| Medication | (Already demonstrated in Stage 6 — Latanoprost added to this same patient) | Not repeated |
+| Procedure/service (Fee Sheet) | Attempted via Fee Sheet's own CPT4 code search first | **Search returned 0 results for "92083" and for "office"** — confirmed live consequence of the Stage 3 finding that this dataset's 4 custom CPT codes are mistagged `code_type=12` instead of real CPT4 (`ct_id=1`); the Fee Sheet's free-text search filters strictly by code_type and cannot find them |
+| Procedure/service (worked around) | Used the Fee Sheet's separate "Established Patient" E/M-level picker (Brief/Limited/Extended/Detailed/Comprehensive) instead | Successfully added CPT4 **99212** (a properly-tagged code from OpenEMR's own bundled reference set, unrelated to the mistagged custom codes) at $300, rendering provider Yousef Alharbi |
+| Billing | Saved the Fee Sheet | `billing` row created: `id=37, pid=3, encounter=91, CPT4 99212, fee=300.00, billed=0` |
+| Reports | Reports > Financial > Sales (by Item), date range defaulted to today | Report correctly lists "99212, Qty 1, Amount 300.00, Grand Total 300.00" — confirms the new charge flows correctly into standard reporting |
+
+### New findings from this stage
+
+1. **Fee-schedule mistagging is an active functional blocker, not just a data-quality note.**
+   Upgraded from Stage 3's "worth a look" framing: it concretely prevents a real user from adding
+   any of this dataset's 4 existing billing codes to a new encounter through the Fee Sheet's
+   standard search. Staged a precise fix (`11-fee-schedule-code-type-fix.sql`, 4-row UPDATE
+   `codes.code_type` 12→1) at `/tmp/11-fee-schedule-code-type-fix.sql` on the VM and in
+   `tmp/skyeagle-migration-2026-08-27/evidence/` locally — blocked from direct execution by the
+   safety classifier, same handoff pattern as the vitals fix.
+2. **The vitals unit-storage bug also affects Temperature, not just height/weight.** Confirmed
+   live (all 12 seeded patients show an identical, physically-impossible "36.80 F (2.67 C)") and
+   confirmed the correct fix formula (`temperature * 1.8 + 32`) against `interface/forms/vitals/report.php`'s
+   own conversion code. **`10-vitals-unit-storage-fix.sql` has been updated in place** (both the
+   local copy and the VM's staged copy) to cover all three fields — no separate file was needed.
+3. **No visible calendar-based check-in action was found in this theme** (neither single-click nor
+   right-click on an appointment produced a status-change control) — worked around by creating the
+   encounter directly, which is the substantively important part of "check-in" from a data
+   perspective. Not chased further as a defect since the appointment itself remains fully
+   editable/status-settable via its own edit form (`form_apptstatus` field, confirmed to exist via
+   earlier DOM inspection in Stage 6) — just not through a quick calendar-click shortcut.
+
+### Stage 8 verdict
+
+```
+SKYEAGLE PATIENT WORKFLOW: PASS
+SKYEAGLE CLINICAL WORKFLOW: PASS
+SKYEAGLE BILLING WORKFLOW: CONDITIONAL
+```
+
+Patient and clinical workflow steps (reception→appointment→encounter→vitals→diagnosis-linking)
+all completed cleanly through supported UI paths with no defects found. Billing is CONDITIONAL:
+the workflow *does* complete end-to-end (charge → billing row → report) and was proven live, but
+only by routing around a genuine, still-unfixed defect (the Fee Sheet's standard code search is
+non-functional for this dataset's own codes) rather than because that defect doesn't exist.
+
+**Next exact action:** proceed to Stage 9 — Arabic workflow certification.
