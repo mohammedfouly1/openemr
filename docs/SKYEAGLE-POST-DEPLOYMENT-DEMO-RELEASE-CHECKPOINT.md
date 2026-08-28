@@ -1175,6 +1175,38 @@ password and re-generating `oaprivate.key`/`oapublic.key` would be a reasonable
 belt-and-braces step, but is not forced here since no compromise was demonstrated — recorded
 as an optional Owner decision, not a required action.
 
+### Closing the Stage 1 deferred item — `admin` account password-rotation status
+
+Stage 1 flagged, and explicitly deferred to this stage: whether the Ubuntu demo host's
+`admin` account (distinct from the separate local Windows dev box, whose own `admin` rotation
+is already documented in `CLAUDE.local.md` and does not apply here) still carries an
+installer-supplied credential. Checked read-only, no password/hash value read or printed:
+
+```sql
+SELECT username, last_update_password, last_update,
+       (password_history1 IS NOT NULL) AS has_password_history
+FROM users_secure WHERE username='admin';
+-- admin | 2026-08-16 05:33:11 | 2026-08-16 08:16:08 | 0
+```
+
+`last_update_password` is populated (not NULL) but dated to this VM's own install day, and
+`password_history1` is empty — OpenEMR populates a history slot when a password is changed
+*after* an initial value already exists, so an empty history is consistent with the password
+never having been changed since the account was created during install. This does **not**
+prove the current value is weak or guessable — no attempt was made to determine that, since
+doing so would require credential guessing, explicitly out of bounds for this review — but it
+is concrete evidence that **no rotation event has occurred on this specific host**, which is
+enough to warrant a recommendation.
+
+- **S12-10 | `admin` account password not confirmed rotated since install on `demo-openemr`** —
+  Severity: **P1**. Not exploited, not guessed. Recommendation: Owner verifies (or
+  proactively rotates) the `admin` credential on `demo-openemr` specifically, using the same
+  `AuthUtils::updatePassword()` self-change path already used and documented for the separate
+  Windows dev box, so this stays consistent with this programme's own "`admin` must never
+  appear in a demo with a guessable/default credential" principle. This is a P1, not a P0 —
+  it does not reopen the Stage 12 P0 gate — but is recorded here rather than silently closed,
+  since it was an explicit Stage 1 open item.
+
 ### Stage 12 final verdict
 
 ```
@@ -1183,10 +1215,10 @@ SKYEAGLE STAGE 12 SECURITY CERTIFICATION: PASS
 
 Both confirmed P0s are remediated at the origin (not merely edge-masked), independently
 re-verified externally and origin-bypass, with zero regression to login, static assets, the
-branding module, the database, or the backup timer. Six P3/P2 items remain open
-(S12-04 through S12-09 in the findings table above) — all explicitly non-blocking,
-documented, and appropriate to leave for routine follow-up rather than gating this
-certification, per Section 18's own "P1/P2/P3 findings may remain open if clearly documented
-and non-blocking" allowance.
+branding module, the database, or the backup timer. Seven P1/P2/P3 items remain open
+(S12-04 through S12-10, including the closed-out-with-a-recommendation Stage 1 `admin`
+password item) — all explicitly non-blocking, documented, and appropriate to leave for
+routine follow-up rather than gating this certification, per Section 18's own "P1/P2/P3
+findings may remain open if clearly documented and non-blocking" allowance.
 
 **Next exact action:** proceed to Stage 13 — Backup Restore/DR Drill.
