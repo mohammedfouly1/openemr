@@ -1904,3 +1904,35 @@ RELEASE FREEZE: COMPLETE — tag skyeagle-demo-v1 at ba3fec007
 ```
 
 **Next exact action:** proceed to Stage 24 — Final Release Certificate.
+
+---
+
+## Stage 24 — Final Release Certificate (2026-08-28)
+
+Created `docs/SKYEAGLE-DEMO-RELEASE-CERTIFICATE.md` — synthesizes Stages 1-23 into: deployment
+identity, a per-stage verdict table, security certification detail, data integrity summary,
+backup/DR summary, a §F list of 6 explicit non-blocking Owner follow-ups (admin password
+rotation, monitoring alerting, log rotation, GitHub billing lock, Stage 21's deferred capture,
+two minor cleanup items), and a final overall verdict.
+
+**Final verdict:**
+
+```
+SKYEAGLE DEMO RELEASE CERTIFICATION: PASS (with 6 documented, non-blocking follow-ups)
+```
+
+No verdict in the certificate was inflated beyond what was actually tested this
+programme — several stages remain honestly CONDITIONAL (visual gaps, claims capability,
+monitoring alerting, CI) rather than rounded up to PASS, consistent with this programme's own
+instruction never to convert NOT VERIFIED into PASS.
+
+### Programme status
+
+Stages 1-20, 22, 23, 24 complete. Stage 21 (actual marketing capture) is the one deliberately
+deferred item — pre-conditions are met and the plan is ready, but this session's own
+repeated, documented Claude-in-Chrome instability on this host (CDP screenshot/input timeouts
+across many fresh tabs) made it unsafe to claim a completed capture pass. This is recorded as
+a follow-up, not silently dropped.
+
+**This is the end of the SkyEagle Post-Deployment → Full Demo & Release Certification
+programme's autonomous execution for this session.**
