@@ -1120,3 +1120,73 @@ unrelated stages."
 
 **Next exact action:** Owner applies the staged Apache config change (or Cloudflare rule) on
 `demo-openemr`; then re-verify externally and continue to Stage 13 — Backup Restore/DR Drill.
+
+### Stage 12 closure — Owner applied the fix, independently re-verified (2026-08-28)
+
+Owner applied `14-combined-P0-apache-hardening.conf` on `demo-openemr` and reported
+`apache2ctl configtest` → `Syntax OK`, all four protected paths → `403` both externally and
+origin-bypass, branding CLI intact, no regression observed. Per this programme's own Section
+10 ("Do not certify the fixes merely by inspecting files on the VM... re-test from an
+external client"), this was independently re-verified from this session's own tools rather
+than accepted on report alone:
+
+**External (public internet, through Cloudflare, from a genuinely separate client):**
+
+| Path | Before | After |
+|---|---|---|
+| `/.git/HEAD` | 200 | **403** |
+| `/.git/config` | 200 | **403** |
+| `/admin.php` | 200 | **403** |
+| `/sql_upgrade.php?site=default` | 200 | **403** |
+| `/setup.php` | 200 (self-guarded, not a vuln) | **403** (now also blocked at the edge, belt-and-braces) |
+
+**Origin-bypass (`--resolve demo.skyeagle.uk:443:127.0.0.1`, direct to Apache, independent of
+Cloudflare):** `.git/HEAD`, `admin.php`, `sql_upgrade.php` all confirmed `403` — proves the
+fix is a real origin-level control, not edge-only masking.
+
+**Regression checks, all confirmed independently:**
+- `apache2ctl configtest` → `Syntax OK` (re-run, not just trusted from the report)
+- `systemctl is-active apache2` → `active`
+- Login page (`interface/login/login.php?site=default`) → `200`
+- Static assets (`public/themes/style_light.css`, `public/assets/jquery/dist/jquery.min.js`,
+  `public/images/logos/core/favicon/favicon.ico`) → all `200`
+- `demo-skyeagle-error.log` tail reviewed: only expected `AH01630 client denied by server
+  configuration` entries for the newly-protected paths (including real external Cloudflare
+  IPs already hitting `.git`/`admin.php`/`sql_upgrade.php`/`setup.php` and getting correctly
+  blocked — automated internet scanning traffic, unsurprising for any public IP, confirms the
+  fix is actively working against real traffic, not just synthetic tests). No new PHP fatal
+  errors; the one pre-existing `Undefined global variable $OE_SITE_DIR` warning predates this
+  change and is unrelated.
+- `skyeagle-branding:*` CLI: all 6 subcommands still register, matching the pre-fix baseline
+  captured earlier in this stage exactly — zero regression.
+- Database reachable (`SELECT 1` succeeds).
+- `openemr-offsite-backup.timer` healthy (last run ~4h before this check, next run scheduled
+  normally).
+- Monitoring service health was not conclusively re-checked in this pass (the check command
+  used was malformed and returned inconclusive output) — not treated as a finding; full
+  monitoring verification is Stage 14's own scope and will be covered there properly.
+
+**Secrets-consequence follow-up:** closing `.git` does not retroactively un-expose whatever
+was reachable before this fix. Per the Section 17 analysis earlier in this stage, no
+currently-valid secret was proven to have been exposed (the one historical committed private
+key is confirmed unused by this deployment). No credential rotation is being triggered by
+this finding. If the Owner wants additional assurance, rotating the `openemr` DB account
+password and re-generating `oaprivate.key`/`oapublic.key` would be a reasonable
+belt-and-braces step, but is not forced here since no compromise was demonstrated — recorded
+as an optional Owner decision, not a required action.
+
+### Stage 12 final verdict
+
+```
+SKYEAGLE STAGE 12 SECURITY CERTIFICATION: PASS
+```
+
+Both confirmed P0s are remediated at the origin (not merely edge-masked), independently
+re-verified externally and origin-bypass, with zero regression to login, static assets, the
+branding module, the database, or the backup timer. Six P3/P2 items remain open
+(S12-04 through S12-09 in the findings table above) — all explicitly non-blocking,
+documented, and appropriate to leave for routine follow-up rather than gating this
+certification, per Section 18's own "P1/P2/P3 findings may remain open if clearly documented
+and non-blocking" allowance.
+
+**Next exact action:** proceed to Stage 13 — Backup Restore/DR Drill.
