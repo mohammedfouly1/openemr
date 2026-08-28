@@ -1598,3 +1598,47 @@ dangerous script in that tree inert regardless, so this does not block certifica
 carried forward as a P2/P3-equivalent follow-up rather than re-opening the gate a third time.
 
 **Next exact action:** proceed to Stage 17 — Translation Migration Journal Decision.
+
+---
+
+## Stage 17 — Translation Migration Journal Decision (2026-08-28)
+
+### Background
+
+`tmp/skyeagle-migration-2026-08-27/evidence/09-demo-openemr-translation-migration-journal-table.sql`
+(staged during an earlier, pre-summarization phase of this programme) documents the one
+schema change found between the previously-deployed commit and the certified SkyEagle
+master: a `translation_migration_journal` table, added by an unrelated upstream/project
+migration (`openemr:translation-catalogue-migrate`) that happened to land in the same commit
+range as the SkyEagle rebrand — not part of the branding work itself.
+
+### Current state — already applied, verified now
+
+```sql
+SELECT TABLE_NAME, ENGINE FROM information_schema.TABLES
+ WHERE TABLE_SCHEMA='openemr' AND TABLE_NAME='translation_migration_journal';
+-- translation_migration_journal | InnoDB
+
+SELECT COUNT(*) FROM translation_migration_journal;  -- 0
+
+DESCRIBE translation_migration_journal;
+-- migration_id (PK), contract_hash, status, before_state, after_state,
+-- created_at, updated_at -- matches the staged CREATE TABLE exactly, column-for-column
+```
+
+The table exists, uses the correct engine (InnoDB, matching the verification query the staged
+file itself specified), has the exact expected schema, and is empty — consistent with the
+staged file's own note that "nothing in this deployment writes to it." This confirms the
+migration was applied correctly at some point (outside this session's own visible history —
+likely direct Owner action, or a prior un-summarized part of this programme) and needs no
+further action now.
+
+### Stage 17 verdict
+
+```
+TRANSLATION MIGRATION JOURNAL: RESOLVED — ALREADY APPLIED, VERIFIED CORRECT
+```
+
+No decision remains pending; the schema is live, correct, and idle exactly as designed.
+
+**Next exact action:** proceed to Stage 18 — Sales Demo Runbook.
