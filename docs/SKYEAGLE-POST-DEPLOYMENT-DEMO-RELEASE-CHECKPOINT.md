@@ -527,3 +527,42 @@ separate backup per micro-action).
 
 **Next exact action:** proceed to Stage 5 — take and verify a pre-demo-data backup before any of
 the above is written.
+
+---
+
+## Stage 5 — Pre-Demo-Data Backup (2026-08-28)
+
+The existing `openemr-offsite-backup.timer` had already fired at its scheduled time
+(2026-08-28 03:00) — 19 minutes before this stage began, and before any Stage 6 write. Rather
+than trigger a second, redundant backup, this run is adopted as the Stage 5 checkpoint since it
+genuinely precedes all planned Stage 6 mutations.
+
+**Verified, not assumed:** `systemctl status openemr-offsite-backup.service` shows
+`status=0/SUCCESS`. The script's own "Verifying upload" step runs
+`rclone ls r2:skyeaglebucket/$STAMP/` — i.e. it lists the **actual remote R2 bucket contents**,
+not a local staging directory — and the log confirms 4 files genuinely present offsite:
+
+```
+PRE-DEMO-DATA BACKUP ID: 20260828-030018
+  checksums-20260828-030018.txt        366 bytes
+  deployed-ref-20260828-030018.txt       8 bytes
+  openemr-db-20260828-030018.sql.gz  9,110,644 bytes
+  openemr-documents-20260828-030018.tar.gz  20,636 bytes
+```
+
+**BEFORE STATE** (captured by this backup, matches Stage 1/3's live-verified inventory exactly,
+since no writes occurred between Stage 3's inventory and this backup): 30 patients, 72 encounters,
+37 appointments, 12 prescriptions, 36 billing rows, 2 insurance payers, 0 insurance policies,
+0 claims, 0 payments, 0 lab orders, `oe-module-skyeagle-branding` active, deployed SHA
+`663035f0bda91c09a0238de561d25069035914e8`.
+
+**Rollback mechanism of record for Stage 6:** `openemr-db-20260828-030018.sql.gz` (R2 bucket
+`skyeaglebucket/20260828-030018/`), decompressed and imported into a fresh `openemr` schema,
+restores exactly this pre-population state. (The existing `sqlconf.php`/session-token surface is
+unaffected by a DB-only restore; this mirrors the same recovery mechanism already exercised by
+this programme's own prior deployment work.)
+
+**Verdict: `PRE-DEMO-DATA BACKUP: PASS`**
+
+**Next exact action:** proceed to Stage 6 — populate the golden dataset per Stage 4's design,
+smallest supported mutation at a time, verified immediately after each.
