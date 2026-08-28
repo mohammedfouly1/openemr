@@ -880,3 +880,90 @@ failure. This matches and extends (does not contradict) the "Arabic/RTL certific
 result already recorded earlier in this programme.
 
 **Next exact action:** proceed to Stage 10 — Claims/Insurance capability certification.
+
+---
+
+## Stage 10 — Claims / Insurance Capability Certification (2026-08-28)
+
+Synthesizes and confirms (via a fresh read-only query pass) what Stages 3, 6, and 8 already
+independently established live — no new investigation was needed, this stage's job is the
+classification matrix itself.
+
+### SKYEAGLE CLAIMS DEMO CAPABILITY MATRIX
+
+| Capability | Status | Evidence |
+|---|---|---|
+| Insurance payer records | **AVAILABLE / CONFIGURED** | 2 synthetic payers exist (`Meridian Gulf Health`, `Northwind Care Cooperative`), each with a CMS ID |
+| Patient insurance policy attachment | **DEMO-READY** | Was 0/30 patients at Stage 3; now 1 (the golden patient, pid 3), created live through the supported UI in Stage 6 |
+| Fee schedule / billable codes | **CONDITIONAL** | This install's own `codes` master table has **zero** rows of the correct type (CPT4=1/HCPCS=3) as of this checkpoint — the 4 codes this dataset actually bills against are staged for a type-correction fix (Stage 8 finding) that has not yet been applied. Billing today only works by routing through OpenEMR's separate bundled E/M-code picker, not this install's own fee schedule |
+| Fee Sheet / charge entry | **DEMO-READY, with a caveat** | Proven live end-to-end in Stage 8, but only via the E/M-level picker workaround — the standard code-search path is non-functional until the staged fix is applied |
+| Paper claim generation (CMS-1500) | **DEMO-READY** | Proven live in Stage 8/6: PDF and text CMS-1500 generation both work, `claims` table row created correctly, `form_encounter.last_level_billed` updates correctly |
+| X12/EDI claim generation | **NOT INSTALLED** (not merely unconfigured) | `x12_partners` table has 0 rows; attempting "Generate X12" in the Billing Manager returns "No X-12 partner assigned for claim" — this is a genuine absence of any EDI trading-partner configuration, not a bug |
+| NPHIES / Saudi-specific claims integration | **NOT INSTALLED** | No NPHIES-specific configuration, module, or partner record found anywhere in this instance during any stage of this programme. Nothing in the installed OpenEMR base or the SkyEagle branding module claims NPHIES support — this would be genuinely new integration work, not a configuration toggle |
+| Payment posting (patient/insurance) | **DEMO-READY** | Proven live in Stage 6: `payments` table row created via the standard Accept Payment workflow (was 0 rows database-wide before this programme) |
+| Insurance/claims reporting | **DEMO-READY** | Proven live in Stage 8: Reports > Financial > Sales by Item correctly reflects new billing/charge data |
+
+### Explicit non-claim
+
+Per Section 10's own instruction: this programme does **not** claim NPHIES or any other external
+payer/EDI integration "works" merely because insurance-related menus exist in the UI. Everything
+marked DEMO-READY above was proven by actually performing the action and checking the resulting
+database state in this session — nothing here is inferred from menu presence alone.
+
+### Stage 10 verdict
+
+```
+SKYEAGLE CLAIMS DEMO: CONDITIONAL
+```
+
+The demonstrable slice (payer setup → policy → encounter → charge → paper claim → payment →
+report) is real, proven, and repeatable for the golden patient today. It stays CONDITIONAL rather
+than PASS because: (a) the fee-schedule fix from Stage 8 is still pending Owner execution, and (b)
+true EDI/X12 and any NPHIES-specific capability are genuinely not installed on this instance —
+accurately reflected here rather than glossed over.
+
+**Next exact action:** proceed to Stage 11 — Portal decision.
+
+---
+
+## Stage 11 — Portal Decision (2026-08-28)
+
+`portal_onsite_two_enable = 0` — confirmed disabled via direct DB read in Stage 1, re-confirmed
+here, unchanged throughout this entire programme.
+
+### Analysis
+
+**Dependencies/complexity to enable:** a working Portal requires, at minimum: a functioning
+outbound email/SMTP path (for account-invite and password-reset emails — not verified as
+configured or working anywhere in this programme), the `portal-user` system account (present,
+currently inactive) wired up correctly, at least one patient given portal credentials, and its own
+round of UI/security testing (patient-facing login is a materially different, additional attack
+surface from the staff-facing application already certified across Stages 1-10).
+
+**Security implications:** enabling Portal on a live, internet-reachable production demo host
+adds a genuinely new, patient-facing authentication surface that has not been through any of this
+programme's security review (Stage 12, not yet run as of this checkpoint). Doing so before that
+review would invert the intended order of operations.
+
+**Value for this demo's actual purpose:** this programme's own Section 0/32 framing is a
+**staff-facing sales/operational demo** (reception, clinical, billing, reporting, Arabic/English,
+role separation) — nothing in the master prompt's stage list or the golden-patient design (Stage
+4) calls for a patient self-service capability specifically. A sales demonstration to a healthcare
+organization's staff/leadership is very unlikely to need to show patient portal login as part of
+the core pitch.
+
+### Recommendation
+
+```
+PORTAL: KEEP DISABLED
+```
+
+**Rationale:** no identified demo requirement depends on it, enabling it would add a new
+patient-facing security surface not yet covered by Stage 12's review, and doing so "merely to
+increase the PASS count" is explicitly the wrong reason per this programme's own Section 11
+instruction. If a future need for a portal walkthrough is identified (e.g. a specific sales
+scenario asks for it), that should be raised as its own explicitly-scoped, separately-authorized
+change — including its own security pass — rather than folded into this checkpoint's remaining
+stages.
+
+**Next exact action:** proceed to Stage 12 — Security & Hardening Review.
