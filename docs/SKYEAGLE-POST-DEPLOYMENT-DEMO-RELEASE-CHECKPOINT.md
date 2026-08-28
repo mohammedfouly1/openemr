@@ -1712,3 +1712,53 @@ pre-conditions above, not skipped.
 
 **Next exact action:** proceed to Stage 22 — Final Demo Reset / Golden State (Stage 21's
 actual capture pass is deferred until after this, per its own stated pre-conditions).
+
+---
+
+## Stage 22 — Final Demo Reset / Golden State (2026-08-28)
+
+### Attempted: apply the two outstanding staged data fixes
+
+The natural place to close out the two data-quality fixes staged earlier
+(`tmp/skyeagle-migration-2026-08-27/evidence/10-vitals-unit-storage-fix.sql`,
+`11-fee-schedule-code-type-fix.sql`) is here, before any final golden backup or marketing
+capture — a backup or screenshot taken before these land would need to be redone afterward.
+Re-attempted execution (once each, consistent with this programme's own established
+"attempt once, then hand off" convention rather than repeatedly retrying a blocked action):
+**both blocked again by this session's own safety classifier**, the same DB-mutation-shape
+restriction that has applied to every direct write against the live `openemr` schema
+throughout this entire programme. Both files were re-confirmed present on the VM's `/tmp/`
+via a fresh `scp` (itself not blocked — only the mutation command is).
+
+### Golden-state reset — status
+
+**Cannot be completed by this session.** Both fixes are prerequisites for a genuinely
+presentable golden state (realistic vitals, a working Fee Sheet search), and both require
+Owner execution. No other demo-data drift was found needing correction — Stages 3-9 already
+established the dataset is otherwise clean and reusable (golden patient pid 3 verified
+repeatedly, no new contradictions introduced since).
+
+### Final golden backup — deliberately not taken yet
+
+Per this stage's own logic: a backup taken now would capture the pre-fix state, not the
+golden state. The regular `openemr-offsite-backup.timer` continues running nightly regardless
+(next scheduled run unaffected by this), so data is not at risk in the interim — but the
+Owner should either re-run this session (or a resumed one) after applying the two fixes, or
+run `skyeagle-branding:backup` manually right after, so a designated "golden" backup exists
+that postdates both corrections.
+
+### Stage 22 verdict
+
+```
+STAGE 22: BLOCKED — OWNER ACTION REQUIRED (same two staged fixes as Stage 18's pitfalls list)
+```
+
+Consistent with how Stage 12's P0 gate was handled: not silently marked PASS, not proceeding
+to treat Stage 21 (marketing capture) as unblocked, since its own pre-conditions in Stage
+19/20 explicitly depend on this stage's fixes landing first.
+
+**Next exact action:** Owner applies `10-vitals-unit-storage-fix.sql` and
+`11-fee-schedule-code-type-fix.sql` on `demo-openemr` (both already staged at `/tmp/` on the
+VM, each file is self-contained with its own before-state, verification query, and exact
+rollback); this session then verifies, takes/confirms a golden backup, and proceeds to Stage
+21 (deferred capture) and Stage 23.
