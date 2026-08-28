@@ -1223,6 +1223,15 @@ findings may remain open if clearly documented and non-blocking" allowance.
 
 **Next exact action:** proceed to Stage 13 — Backup Restore/DR Drill.
 
+> **AMENDMENT (2026-08-28, found during Stage 16 reconciliation, after this PASS was already
+> recorded):** the fix applied above was incomplete. `sql_patch.php` and `ippf_upgrade.php` —
+> the same unauthenticated-by-design class as `sql_upgrade.php`, confirmed via the identical
+> `$ignoreAuth = true` pattern and the same "Finding B2" in-repo comment — were left publicly
+> reachable because the original `FilesMatch` pattern only listed 3 of the 5 affected
+> filenames. See Stage 16 below for the discovery and the corrected/expanded fix. **This
+> downgrades this PASS to superseded-pending-the-second-fix** — treat Stage 16's verdict on
+> this specific point as the current one, not this one.
+
 ---
 
 ## Stage 13 — Backup Restore / DR Drill (2026-08-28)
@@ -1455,3 +1464,94 @@ nature. Recommend the Owner resolve the GitHub billing issue on `mohammedfouly1`
 account maintenance, independent of this programme's remaining stages.
 
 **Next exact action:** proceed to Stage 16 — Source/Documentation Reconciliation.
+
+---
+
+## Stage 16 — Source/Documentation Reconciliation (2026-08-28)
+
+Scoped, evidence-based spot-check — not an exhaustive full-repo documentation audit (that
+would be unbounded). Focused on: (a) whether pre-existing planning docs made claims about the
+live deployment that this programme's own findings have since proven wrong, and (b) whether
+this repo's top-level branding-facing docs are internally consistent with the runtime-only
+branding design already established. Checked, not assumed.
+
+### Finding 1 — the Stage 12 P0 fix was incomplete (found here, fixed here)
+
+`docs/demo-deployment-readiness.md` line 1829 (pre-existing planning doc, written before this
+programme's own live-certification passes) lists the exact group of files needing
+post-install web-server protection: `version.php setup.php sql_upgrade.php sql_patch.php
+admin.php ippf_upgrade.php`. Stage 12's fix only covered `admin`, `setup`, `sql_upgrade` — 3
+of the 5 that actually need it. Re-checked the two missed ones directly against the live
+site:
+
+```
+curl -s -o /dev/null -w '%{http_code}' https://demo.skyeagle.uk/sql_patch.php      -> 200
+curl -s -o /dev/null -w '%{http_code}' https://demo.skyeagle.uk/ippf_upgrade.php   -> 200
+```
+
+Both confirmed to carry the identical `$ignoreAuth = true; // no login required` pattern and
+the same in-repo `// Finding B2` comment already read during Stage 12 for `admin.php` /
+`sql_upgrade.php` — same root cause, same severity, same fix. `version.php` was also checked
+(200, empty body — defines constants for other scripts to `require`, no direct output,
+confirmed genuinely low-risk, no fix needed).
+
+**This is treated as continuing the same P0 remediation, not a new lower-priority item.** The
+combined fix file was updated in place (not a new file) —
+`tmp/skyeagle-migration-2026-08-27/evidence/14-combined-P0-apache-hardening.conf` — expanding
+the `<FilesMatch>` pattern from 3 to 5 filenames
+(`^(admin|setup|sql_upgrade|sql_patch|ippf_upgrade)\.php$`), with an addendum explaining the
+gap, and re-copied to the VM's `/tmp/`. **Not applied by this session**, for the same reason
+as the original fix — this is an OS-level Apache config change outside this session's
+execution boundary. Stage 12's PASS verdict is amended above to point here.
+
+**Process note, consistent with this programme's own instruction:** surfaced immediately in
+the checkpoint (this stage) rather than silently folded into a later summary — this is a live
+gap in an already-"PASS"ed security stage, which is exactly the kind of thing not to bury.
+
+### Finding 2 — `.git`'s deployment-boundary doc was correct; actual deployment diverged from it
+
+The same planning doc's §21 explicitly lists `.git/` under **"DO NOT DEPLOY"**, alongside
+`.github/`, `tests/`, `docs/`, `node_modules/`, and other build/governance-only paths. The
+plan was right; Stage 12's finding shows the actual deployment process (a live `git clone`
+directly into `/var/www/openemr`, per Stage 12's root-cause note) diverged from this
+documented boundary. This is recorded as a **process gap for the next deployment** (documented
+here, not fixed — a future redeploy should populate the docroot from an export/build artifact
+rather than a live clone, exactly as this doc already recommended) rather than something to
+action against the current already-hardened instance.
+
+### Finding 3 — `contrib/` exposure: partially checked, one gap remains open
+
+The same doc (line 1857-1858) notes `contrib/` must be present during install and "denied by
+Apache afterward." Stage 12 checked `contrib/util/installScripts/InstallerAuto.php`
+specifically (confirmed safe — app-level env-var gate, not an Apache rule) but did not verify
+whether `contrib/` as a whole has an Apache-level deny rule the way the doc recommends.
+**Not re-opened as a new P0** — `InstallerAuto.php`'s own gate makes the one genuinely
+dangerous script in that tree inert regardless — but flagged as an open verification item
+rather than assumed fine, since it wasn't directly checked.
+
+### Finding 4 — branding docs' "OpenEMR" references in top-level project files are correct, not a gap
+
+Checked `README.md` for residual "OpenEMR" naming as a sanity check — it refers to the
+upstream open-source project throughout (contributor-facing, not runtime UI). This is
+**intentional and correct**, consistent with the established design (`ProductIdentity` seam
+handles runtime-only branding; repo-level community/legal docs like `README.md`,
+`CONTRIBUTING.md`, `LICENSE` correctly stay OpenEMR-branded per `docs/branding-production/
+16-conflict-resolutions.md` §12's GPL-attribution reasoning). No action needed — checked and
+confirmed consistent, not left assumed.
+
+### Stage 16 verdict
+
+```
+SOURCE/DOCUMENTATION RECONCILIATION: CONDITIONAL
+```
+
+Not PASS — this pass directly found and is actively fixing a real gap in Stage 12's own
+certification (proof the reconciliation exercise has genuine value, not a rubber stamp). Not
+FAIL — the gap is narrow, already diagnosed, and the fix is already staged pending the same
+Owner handoff as the original P0. One item (`contrib/` Apache-level deny rule) remains an open
+verification, not a fix, for a future pass.
+
+**Next exact action:** Owner re-applies the updated `14-combined-P0-apache-hardening.conf`
+(now covering 5 filenames instead of 3); this session independently re-verifies externally
+per the same discipline as Stage 12's closure, then proceeds to Stage 17 — Translation
+Migration Journal Decision.
