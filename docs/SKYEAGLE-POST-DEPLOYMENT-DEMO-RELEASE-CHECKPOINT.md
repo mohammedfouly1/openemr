@@ -831,3 +831,52 @@ only by routing around a genuine, still-unfixed defect (the Fee Sheet's standard
 non-functional for this dataset's own codes) rather than because that defect doesn't exist.
 
 **Next exact action:** proceed to Stage 9 — Arabic workflow certification.
+
+---
+
+## Stage 9 — Arabic Workflow Certification (2026-08-28)
+
+Live-tested as `n.alqahtani` with Language = Arabic (Owner logged in directly per the same
+credential-handoff pattern as Stage 7, after the browser's saved-password autofill became
+unreliable across the multiple account switches earlier in this session — no password seen or
+typed by Claude). Representative screens per the master prompt's own "do not repeat every test
+unnecessarily" guidance: shell/menus, Patient Finder, patient dashboard, Ledger, Admin.
+
+### Findings — RTL layout and mirroring
+
+Clean throughout every screen checked: top nav mirrors to the right, calendar grid and
+mini-calendar mirror correctly, table column order flips sensibly, form labels sit correctly
+relative to their inputs. No layout breakage, clipping, or overlap found anywhere in this pass —
+consistent with the Arabic/RTL work already certified earlier in this programme (not re-litigated
+here per Section 31).
+
+### Findings — translation coverage, classified per Section 9's own categories
+
+| Location | Untranslated string(s) | Classification |
+|---|---|---|
+| Top nav menu bar | "Finder", "Modules", "Recalls" | (2) OpenEMR upstream translation gap — generic menu labels, not proper nouns |
+| Patient Finder | "Recent Patients", all 5 "Search by ..." column-filter placeholders, "Search with exact method", "Open in New Browser Tab" | (2) Upstream gap — likely DataTables-plugin strings outside the main translation catalogue |
+| Patient Dashboard | The page's own H1 title ("Medical Record Dashboard - Amal Albishi"), and sub-nav items "External Data", "Ledger", "Assessments", "Dashboard" (tab label) | (2) Upstream gap — page-title/tab-label strings, not data |
+| Patient Ledger | Tab label "Patient Ledger by Date", H1 "Patient Ledger - Amal Albishi", "Billed Date / Payor" column header, "Print Ledger" button, the "To:" label (its "From:" counterpart *is* translated — من:) | (2) Upstream gap, plus one small internal inconsistency (From: translated, To: not) |
+| Admin menu | Only "Config" (the very first item) — every other item (Clinic, Patients, Practice, Coding, Forms, Documents, System, Users, Address Book, ACL) is correctly translated | (2) Upstream gap, isolated to one string |
+| Everywhere | Actual clinical/demographic data (drug names, diagnosis text "Primary open-angle glaucoma", provider names, patient name "Amal Albishi") | (3) Correctly *not* translated — this is stored data and proper nouns, not UI chrome |
+| Prescriptions widget | Directions text itself renders in Arabic ("1 داخل حل قبل النوم" for "1 in solution h.s.") while the drug name stays in Latin script | Confirms translation *does* reach structured/computed display text, not just static labels — makes the page-title/tab-label gaps above more clearly a real (if minor) coverage hole rather than a broad failure |
+
+None of the above are classified as (1) SkyEagle regression — every gap found is a pre-existing
+OpenEMR upstream translation-catalogue hole (missing `xl()`/translation-string coverage for that
+specific label), not something the branding work broke. No Thiqa-language residue found anywhere
+in this pass.
+
+### Stage 9 verdict
+
+```
+SKYEAGLE ARABIC/RTL: PASS
+```
+
+RTL layout: clean, no defects found. Translation coverage: good overall, with a documented,
+specific, upstream-attributable backlog of untranslated strings (concentrated in page
+titles/tab labels and a few DataTables-plugin strings) rather than any broad or SkyEagle-caused
+failure. This matches and extends (does not contradict) the "Arabic/RTL certification: PASS"
+result already recorded earlier in this programme.
+
+**Next exact action:** proceed to Stage 10 — Claims/Insurance capability certification.
