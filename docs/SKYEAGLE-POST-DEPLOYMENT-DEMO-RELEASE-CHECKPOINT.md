@@ -1642,3 +1642,36 @@ TRANSLATION MIGRATION JOURNAL: RESOLVED — ALREADY APPLIED, VERIFIED CORRECT
 No decision remains pending; the schema is live, correct, and idle exactly as designed.
 
 **Next exact action:** proceed to Stage 18 — Sales Demo Runbook.
+
+---
+
+## Stage 18 — Sales Demo Runbook (2026-08-28)
+
+Created `docs/SKYEAGLE-SALES-DEMO-RUNBOOK.md`. Built entirely from live-proven evidence
+already established across Stages 3-9 of this programme — no new speculative content.
+Covers: pre-demo checklist, branding/login opening (including the Arabic/RTL option with an
+honest note on the known translation gaps from Stage 9), the full golden-patient (pid 3)
+clinical-to-billing walkthrough exactly as proven live in Stage 8 (appointment → encounter →
+vitals → diagnosis link → E/M-level billing workaround → CMS-1500 claim → payment → report),
+an optional role-separation demo act using Stage 7's confirmed findings, and — most
+importantly — a **known-pitfalls table** translating every workaround/bug found across
+Stages 3-9 (Fee Sheet search, payment's silent validation, the prescription Add link, the
+vitals unit bug's exact current blast radius, X12 unavailability, the duplicate-name and
+pid-2-contradiction patients) into concrete "avoid this / do this instead" guidance for
+someone who wasn't present for the certification work.
+
+Checked current DB state before writing rather than assuming the earlier-staged fixes had
+landed: confirmed both the vitals unit-storage fix and the fee-schedule `code_type` fix are
+**still not applied** (`codes.id 247-250` still `code_type=12`; `form_vitals` rows 1/3 still
+carry the pre-fix buggy values) — so the runbook's workaround guidance is current, not stale.
+Also confirmed pid 3's own *most recent* vitals entry (row 13, entered live during Stage 8)
+already has correct units, narrowing the pitfall specifically to "don't open vitals history"
+rather than a blanket "vitals are broken" caution.
+
+### Stage 18 verdict
+
+```
+SALES DEMO RUNBOOK: CREATED
+```
+
+**Next exact action:** proceed to Stage 19 — Marketing Screenshot Plan.
