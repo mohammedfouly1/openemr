@@ -1675,3 +1675,40 @@ SALES DEMO RUNBOOK: CREATED
 ```
 
 **Next exact action:** proceed to Stage 19 — Marketing Screenshot Plan.
+
+---
+
+## Stage 19 & 20 — Marketing Screenshot Plan and Video Plan (2026-08-28)
+
+Combined into one document, `docs/SKYEAGLE-MARKETING-CAPTURE-RUNBOOK.md`, since the video plan
+is a condensed re-sequencing of the same proven shot list rather than an independent
+narrative.
+
+**14-item screenshot shot list**, each mapped to the specific prior stage that already proved
+that exact view renders correctly — no shot requires new, unverified UI interaction. Includes
+an explicit exclusion list (X12/EDI, Portal, any patient other than pid 3) with reasoning, so
+marketing assets don't accidentally misrepresent capability that isn't actually there.
+
+**~2m30s video plan**: 5 beats, each reusing a step already proven live in Stage 8's
+end-to-end walkthrough, condensed from the sales runbook's fuller sequence.
+
+**Explicit pre-conditions set before actual capture (Stage 21) may run:** the fee-schedule and
+vitals fixes should be applied first (screenshots are a worse place than a sales runbook to
+carry "avoid this view" caveats), and the final golden-state reset (Stage 22) should happen
+first so captured assets reflect a deliberately-curated state rather than mid-certification
+artifacts. Recording-mechanics note: budgets for the Selenium/Panther fallback explicitly,
+given this session's own documented history of intermittent Claude-in-Chrome pairing failures
+on this host.
+
+### Stage 19/20 verdict
+
+```
+MARKETING SCREENSHOT PLAN: CREATED
+MARKETING VIDEO PLAN: CREATED
+```
+
+Stage 21 (actual capture) is deliberately not started yet — sequenced after Stage 22 per the
+pre-conditions above, not skipped.
+
+**Next exact action:** proceed to Stage 22 — Final Demo Reset / Golden State (Stage 21's
+actual capture pass is deferred until after this, per its own stated pre-conditions).
