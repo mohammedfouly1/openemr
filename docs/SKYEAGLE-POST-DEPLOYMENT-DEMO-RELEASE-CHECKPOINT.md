@@ -1555,3 +1555,46 @@ verification, not a fix, for a future pass.
 (now covering 5 filenames instead of 3); this session independently re-verifies externally
 per the same discipline as Stage 12's closure, then proceeds to Stage 17 — Translation
 Migration Journal Decision.
+
+### Stage 16 closure — expanded fix applied, independently re-verified (2026-08-28)
+
+Owner applied the corrected `<FilesMatch>` pattern
+(`^(admin|setup|sql_upgrade|sql_patch|ippf_upgrade)\.php$`) and reported all 5 endpoints plus
+`.git` returning 403 both externally and origin-bypass. Independently re-verified from this
+session's own tools rather than accepted on report alone:
+
+**External (public internet, through Cloudflare):** `admin.php`, `setup.php`,
+`sql_upgrade.php`, `sql_patch.php`, `ippf_upgrade.php`, `.git/HEAD`, `.git/config` — all
+confirmed `403`. Login page and static assets (`style_light.css`) confirmed `200` — no
+regression.
+
+**Origin-bypass (`--resolve demo.skyeagle.uk:443:127.0.0.1`):** same 6 protected paths
+re-checked directly against Apache, bypassing Cloudflare entirely — all confirmed `403`,
+proving this is a real origin-level control for the newly-added paths too, not edge-masking.
+
+**Runtime health, all independently re-confirmed:** `apache2ctl configtest` → `Syntax OK`;
+`apache2` service `active`; `skyeagle-branding:*` CLI — all 6 subcommands still register,
+matching the baseline exactly; database reachable (`SELECT 1`); **live M-1 through M-6
+monitoring run, captured fresh during this check** — all six `[OK]`, including M-2 error rate
+(0 fatals) confirming the new deny rules haven't introduced any PHP/Apache error noise beyond
+the expected `AH01630` denial log lines. The error log shows real external Cloudflare client
+IPs already hitting `sql_patch.php` and `ippf_upgrade.php` and being correctly blocked —
+confirms the fix is protecting against live internet traffic, not just synthetic test
+requests.
+
+### Stage 12/16 final verdict (supersedes the earlier Stage 12 PASS)
+
+```
+SKYEAGLE STAGE 12 SECURITY CERTIFICATION: PASS
+```
+
+All 5 unauthenticated-by-design maintenance/upgrade scripts identified across Stage 12 and
+this reconciliation pass, plus the `.git` exposure, are now confirmed blocked at the origin,
+independently re-verified externally and origin-bypass, with zero regression to login,
+static assets, the branding module, the database, or live monitoring. The
+`contrib/`-directory-wide Apache-level deny rule remains an open **verification** item (not a
+known-broken fix) — `InstallerAuto.php`'s own app-level gate already makes the one genuinely
+dangerous script in that tree inert regardless, so this does not block certification; it is
+carried forward as a P2/P3-equivalent follow-up rather than re-opening the gate a third time.
+
+**Next exact action:** proceed to Stage 17 — Translation Migration Journal Decision.
