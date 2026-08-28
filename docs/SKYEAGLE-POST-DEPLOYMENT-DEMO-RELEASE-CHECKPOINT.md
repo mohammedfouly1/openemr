@@ -1222,3 +1222,96 @@ routine follow-up rather than gating this certification, per Section 18's own "P
 findings may remain open if clearly documented and non-blocking" allowance.
 
 **Next exact action:** proceed to Stage 13 — Backup Restore/DR Drill.
+
+---
+
+## Stage 13 — Backup Restore / DR Drill (2026-08-28)
+
+Non-destructive drill: restore the latest live backup into an **isolated, disposable**
+database, verify it, then drop it. The production `openemr` database was never written to.
+
+### 1. Backup mechanism health
+
+`openemr-offsite-backup.timer` last ran `2026-08-28 03:00:24`, exit `0/SUCCESS`. R2 listing
+(`rclone --config /etc/openemr-backup/rclone.conf lsf r2:skyeaglebucket/`) shows 5 recent
+stamps, most recent `20260828-030018/`, containing the expected 4 files (checksums,
+deployed-ref, DB dump, documents archive).
+
+### 2. Integrity verification
+
+Downloaded all 4 files from R2 to a scratch dir and compared against the recorded
+`checksums-20260828-030018.txt` (by hash value, not path — the recorded paths point at the
+original backup job's own temp dir, so comparison was done by matching hash+basename
+directly rather than `sha256sum -c`, which would have failed on path mismatch alone):
+
+| File | Recorded SHA-256 | Computed SHA-256 | Match |
+|---|---|---|---|
+| `openemr-db-20260828-030018.sql.gz` | `73b87cbd...4751` | `73b87cbd...4751` | ✅ |
+| `openemr-documents-20260828-030018.tar.gz` | `fff11607...c2db6` | `fff11607...c2db6` | ✅ |
+| `deployed-ref-20260828-030018.txt` | `0a490ec5...cf8d` | `0a490ec5...cf8d` | ✅ |
+
+All three match exactly — the backup is byte-for-byte what was recorded at capture time.
+`deployed-ref` content: `663035f` — matches the Stage 1 baseline's deployed SHA
+(`663035f0bda91c...`) exactly.
+
+### 3. Isolated restore (production untouched)
+
+```sql
+CREATE DATABASE IF NOT EXISTS openemr_drdrill_20260828;
+```
+```bash
+zcat openemr-db-20260828-030018.sql.gz | sudo mariadb openemr_drdrill_20260828
+```
+Restore exit code `0`. This was **not** blocked by this session's own safety classifier
+(unlike direct mutations against the live `openemr` schema attempted earlier in this
+programme) — creating and populating a brand-new, isolated database name is a materially
+different, lower-risk command shape, and was allowed through on the first attempt.
+
+### 4. Verification
+
+| Check | Restored (`openemr_drdrill_20260828`) | Live production (`openemr`) | Stage 1 baseline |
+|---|---|---|---|
+| Patients | 30 | 30 (queried separately, confirming untouched) | 30 |
+| Users | 10 | 10 | 10 |
+| Encounters | 72 | — | 72 |
+| Prescriptions | 12 | — | 12 |
+| Billing rows | 36 | — | 36 |
+| Payments | **0** | — | — |
+
+The `payments=0` in the restored copy (vs. 1 in current live production) is **expected, not
+a discrepancy** — this backup was taken at 03:00, and the Stage 6 payment
+(`payments.id=1`, $150.00 against pid 3) was created later that same session, after the
+backup ran. This is a good sign, not a bad one: it proves the restored data is a genuine,
+faithful point-in-time snapshot rather than some cached/stale artifact.
+
+Spot-check of the golden patient (Stage 3/4's pid 3) in the restored copy:
+`pid=3, fname=Amal, lname=Albishi, DOB=1982-03-23` — matches exactly.
+
+Documents archive listing (structure only, not extracted) confirms it includes
+`sites/default/documents/certificates/oaprivate.key`/`oapublic.key` — the same live OAuth
+keypair examined in Stage 12 (S12-03/verified-clean context). Noted for completeness: this
+means the backup archive itself is as sensitive as the live certificates directory and
+depends on the R2 bucket's own access control (not web-exposed, credentials held only in
+`/etc/openemr-backup/rclone.conf`, root-only) — consistent with, not a new gap beyond, what
+Stage 12 already covered for that file.
+
+### 5. Cleanup
+
+```sql
+DROP DATABASE openemr_drdrill_20260828;
+```
+Confirmed via `SHOW DATABASES LIKE 'openemr%'` afterward — only `openemr` (production)
+remains. Scratch download directory (`/tmp/dr-drill-20260828`) removed.
+
+### Stage 13 verdict
+
+```
+BACKUP RESTORE / DR DRILL: PASS
+```
+
+A real, current, checksum-verified backup was successfully restored into a fully isolated
+database, verified against the known Stage 1 baseline row counts and a specific patient
+record, and cleanly removed — with the live production database confirmed untouched
+throughout (queried independently, before and after, both showing unchanged counts).
+
+**Next exact action:** proceed to Stage 14 — Monitoring & Operations Certification.
