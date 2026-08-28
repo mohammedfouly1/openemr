@@ -1315,3 +1315,75 @@ record, and cleanly removed — with the live production database confirmed unto
 throughout (queried independently, before and after, both showing unchanged counts).
 
 **Next exact action:** proceed to Stage 14 — Monitoring & Operations Certification.
+
+---
+
+## Stage 14 — Monitoring & Operations Certification (2026-08-28)
+
+### Timer health
+
+All 3 systemd timers confirmed `active (waiting)`, continuously enabled since
+`2026-08-19` (~1 week 1 day of unbroken operation, not merely "currently up"):
+`openemr-background-services.timer`, `openemr-monitoring.timer`,
+`openemr-offsite-backup.timer` (backup itself already covered in Stage 13).
+
+### Monitoring checks (M-1 through M-6) — live run captured
+
+The most recent monitoring run (captured within ~1 minute of checking, not stale) shows all
+six checks green:
+
+| Check | Result |
+|---|---|
+| M-1 availability | OK — HTTP 200, 8379B response body |
+| M-2 error rate | OK — 0 fatals, 8 warnings in recent tail |
+| M-3 disk | OK — 92% free |
+| M-4 database | OK — reachable, `SELECT 1` succeeded |
+| M-5 backup | OK — last success `2026-08-28T03:00:25+03:00` (matches Stage 13's backup exactly) |
+| M-6 background services | OK — none overdue beyond tolerance |
+
+Read the actual check logic (not just trusted the "OK" labels): M-1 requires HTTP 200 **and**
+a response body over 5120 bytes (guards against a "200 but empty/broken page" false
+positive); M-2/M-3/M-4/M-5/M-6 each have real numeric thresholds with a two-tier severity
+(`ALERT` for a warning-level threshold, `PAGE` for a hard-failure threshold requiring
+consecutive failures before escalating) — this is a genuine, reasonably designed check
+suite, not a rubber-stamp.
+
+### Gap found — alerting is log-only, no active push notification
+
+Read `send_alert()`'s actual implementation: it calls `log()`, which writes to
+`/var/log/openemr-monitoring.log` (and stdout via `tee`) — **there is no email, webhook,
+Slack, or paging integration wired up**. The `ALERT`/`PAGE` severity levels exist
+structurally in the check logic, but nothing currently pushes a notification to a human;
+someone has to actively read the log or run `systemctl status` to learn of a problem. This is
+a genuine operational gap, not a security one — classified **P2**, since the checks
+themselves are sound and would correctly flag a real outage, but no one is told
+automatically today.
+
+### Gap found — monitoring log has no rotation configured
+
+`/var/log/openemr-monitoring.log` is 4.8MB / 68,493 lines after ~8.5 days of continuous
+operation (~0.56 MB/day growth rate observed directly from the file's own first-line
+timestamp vs. its current size). No `/etc/logrotate.d/openemr-monitoring` (or equivalent)
+exists — checked directly, confirmed absent — whereas the standard Ubuntu `apache2` logrotate
+config is present and correct. At the observed growth rate this is **not urgent** (would take
+roughly 150+ days to reach 100MB against 89GB free disk), but is recorded as **P3** routine
+hygiene rather than silently ignored.
+
+### Background services
+
+`openemr-background-services.service` (wraps `bin/console background:services run`) last ran
+41 seconds before this check, exit `0/SUCCESS` — consistent with M-6's "none overdue" result.
+
+### Stage 14 verdict
+
+```
+MONITORING & OPERATIONS CERTIFICATION: CONDITIONAL
+```
+
+The monitoring **detection** logic itself is sound, live, continuously running, and all
+green as of this check — genuinely certified, not assumed. It stays CONDITIONAL rather than
+PASS because detection without notification is an incomplete operational loop: two P2/P3
+gaps (no active alert delivery; no log rotation) are real and documented rather than glossed
+over, though neither blocks demo readiness or represents a security risk.
+
+**Next exact action:** proceed to Stage 15 — GitHub/CI Closure.
