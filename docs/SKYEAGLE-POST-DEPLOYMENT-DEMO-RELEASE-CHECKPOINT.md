@@ -246,3 +246,152 @@ restored. No demo data was touched. No destructive or irreversible action was ta
 **Next exact action:** report back to Owner with the above before proceeding into Stage 3
 (demo dataset design/population) or any other later stage, per the same pacing agreement as
 Stage 1.
+
+Owner direction (2026-08-28): re-pasted the full master prompt verbatim and authorized proceeding
+through all remaining stages continuously, checkpointing after each, stopping only on a genuine
+Section-29 condition.
+
+---
+
+## Stage 3 — Demo Data Inventory (2026-08-28)
+
+All queries below are read-only (`SELECT`/`SHOW`/`DESCRIBE`) against the live `openemr` schema via
+`sudo mariadb --defaults-extra-file=/root/.my.cnf.openemr-backup`. No writes.
+
+### Users
+
+| Username | Name | active | authorized | facility | ACL group |
+|---|---|---|---|---|---|
+| admin | Administrator | 1 | 1 | 3 | Administrators |
+| phimail-service | phiMail Gateway | 0 | 0 | — | (none) |
+| portal-user | Patient Portal User | 0 | 0 | — | (none) |
+| oe-system | System Operation User | 0 | 0 | — | Administrators |
+| n.alqahtani | Noura Alqahtani | 1 | 0 | 3 | Administrators |
+| y.alharbi | Yousef Alharbi | 1 | 1 | 3 | Physicians |
+| s.almutairi | Sara Almutairi | 1 | 1 | 3 | Physicians |
+| r.aldosari | Reem Aldosari | 1 | 0 | 3 | Front Office |
+| k.alotaibi | Khalid Alotaibi | 1 | 0 | 3 | Accounting |
+| m.alzahrani | Maha Alzahrani | 1 | 1 | 3 | Clinicians |
+
+Stock OpenEMR ACL groups present: `Administrators`, `Clinicians`, `Physicians`, `Front Office`,
+`Accounting`, `Emergency Login` (breakglass) — no dedicated `Lab` or `Pharmacist` group exists in
+stock OpenEMR; those functions are covered under `Clinicians`/`Physicians` ACL sections rather than
+a separate group, so Stage 7's role matrix will map Lab/Pharmacist checks onto those two groups
+rather than expecting a distinct account.
+
+**Coverage: the 6 active named demo accounts already span 5 of the 6 stock groups** (Administrators,
+Physicians ×2, Front Office, Accounting, Clinicians) — good baseline for Stage 7 role/ACL testing,
+no new demo user accounts appear necessary.
+
+**Finding, not yet investigated further:** `n.alqahtani` (the account used throughout this session's
+live browser certification) is a member of the `Administrators` ACL group but has `authorized=0`,
+while every other active named account with `authorized=1` is not in `Administrators`. In OpenEMR,
+`authorized` primarily governs co-signing/supervising authority rather than login capability
+(`active` governs login), so this is not necessarily a defect — flagged for a closer look during
+Stage 7 rather than assumed either way here. `admin` (`active=1`) remains the only other
+`Administrators`-group account able to log in; its own security posture is Stage 12's concern (per
+the Stage 1 flag already recorded above).
+
+### Patients
+
+30 synthetic patients (`SYN-0001`–`SYN-0030`), Saudi-context names, cities cycling through
+Riyadh/Jeddah/Dammam/Khobar. **Two exact name+DOB repeats** confirmed (pid 1 "Hessa Alharthi"
+1948-01-01 vs pid 29 identical; pid 8 "Talal Alsubaie" 1977-02-22 vs pid 30 identical) — consistent
+with a deterministic seeder cycling a small name pool past 26 entries; a pre-existing, low-severity
+data-quality note, not a defect introduced by this programme.
+
+**Chart-depth ranking** (encounters / issues / prescriptions / billing rows / forms), top 5:
+
+| pid | pubpid | Name | enc | issues | rx | billing | forms |
+|---|---|---|---|---|---|---|---|
+| 2 | SYN-0002 | Turki Alqarni | 3 | 3 | 1 | 2 | 6 |
+| 1 | SYN-0001 | Hessa Alharthi | 3 | 2 | 1 | 2 | 6 |
+| 3 | SYN-0003 | Amal Albishi | 3 | 2 | 1 | 2 | 6 |
+| 4 | SYN-0004 | Majed Alshamrani | 3 | 2 | 1 | 2 | 6 |
+| 5 | SYN-0005 | Dalal Aldawsari | 3 | 2 | 1 | 2 | 6 |
+
+**Significant finding — pid 2 is disqualified as a golden-patient candidate despite ranking
+highest:** its `lists` (problem/allergy) record shows an **active allergy to "Timolol 0.5% eye
+drops"**, while its own `prescriptions` record shows the patient is **currently prescribed that
+exact drug** (`id=2, patient_id=2, drug='Timolol 0.5% eye drops'`). A live, self-contradictory
+allergy/prescription pair is exactly the kind of thing a sales/demo viewer would notice and that
+would undermine confidence in the product during a live demonstration. Not fixed in this
+read-only inventory stage — carried into Stage 4/6 as a required repair regardless of which
+patient is ultimately chosen.
+
+**Recommended golden-patient candidate: pid 3, Amal Albishi (SYN-0003).** Same chart depth as the
+next-best clean candidates (pid 1, 4, 5), no allergy/prescription contradiction, and its existing
+diagnosis — **Primary open-angle glaucoma** — is the natural, classic ophthalmology demo story that
+already matches this dataset's existing fee-schedule codes (92014 Eye exam, 92083 Visual field
+exam) and prescription pool (Latanoprost/Timolol/Artificial tears/Prednisolone — all real glaucoma
+management drugs). Final selection deferred to Stage 4 (design), not decided unilaterally here.
+
+### Insurance
+
+- **Payers configured:** 2 — `Meridian Gulf Health (SYNTHETIC)` (id 2, CMS ID `SYN001`),
+  `Northwind Care Cooperative (SYNTHETIC)` (id 3, CMS ID `SYN002`). No `attn` contact set on either.
+- **Policies:** `insurance_data` table is **completely empty (0 rows)** — no patient, including the
+  golden-patient candidates above, currently has an insurance policy attached, despite payers
+  existing. This is the single largest gap for Stage 4's "Insurance" component — a policy must be
+  created via the supported Patient > Insurance workflow for whichever patient is selected.
+- **EDI/clearinghouse:** `x12_partners` table is **empty (0 rows)** — no EDI trading-partner
+  configured. Directly relevant to Stage 10's claims-capability classification: real EDI claim
+  submission is not configured on this instance.
+
+### Clinical
+
+- **Problems/allergies (`lists`):** only 6 of 30 patients (pid 1–6) have any `lists` rows at all —
+  one allergy + one medical problem each (pid 2 has an extra allergy, see contradiction above). The
+  other 24 patients have an empty problem list.
+- **Forms used:** `newpatient` ×72 (the demographics/History form recorded once per encounter — this
+  matches the encounter count exactly, i.e. every encounter has this base form), `soap` ×18,
+  `vitals` ×12, `eye_mag` ×8 (an ophthalmology exam form — confirms the dataset's ophthalmology
+  theme). Clinical documentation depth is real but thin and inconsistent — most of the 72 encounters
+  carry only the base demographics form, not SOAP/vitals/exam detail.
+- **Medications:** 12 active prescriptions total, one per patient for pid 1–12 (patients 13–30 have
+  none), all real glaucoma/ophthalmology drugs (Latanoprost, Timolol, Artificial tears, Prednisolone
+  acetate), cycling in that order.
+- **Labs:** `procedure_order` table is **empty (0 rows)** — no lab order exists anywhere in this
+  database. This is a hard gap for Stage 4's "Laboratory" component; needs to be verified against
+  what lab configuration (if any) is installed before deciding whether to populate one.
+
+### Financial
+
+- **Billing (`billing` table):** 36 rows, all `billed=1`. Codes used: CPT4 99213 (Office visit,
+  established, $250), 99214 (Office visit, extended, $400), 92014 (Eye exam, established, $350),
+  92083 (Visual field exam, $300) — cycling across patients, consistent with the ophthalmology
+  theme and with the fee amounts already observed live on Hessa Alamri's ledger in Stage 2.
+- **Fee-schedule master (`codes` table) data-quality finding:** the same four CPT codes exist in the
+  `codes` master table but are tagged `code_type=12`, which does **not** correspond to any row in
+  `code_types` (the real CPT4 type is `ct_id=1`) — and all four have a **NULL default fee**, meaning
+  the fee values seen on real billing rows were set ad hoc at billing time rather than pulled from a
+  configured master fee schedule. A new encounter using the standard Fee Sheet code-picker for these
+  same codes today would show no default price. Not fixed here (Stage 3 is inventory-only); a
+  candidate repair item for Stage 6.
+- **Claims (`claims` table):** **0 rows** — no claim has ever been generated on this instance.
+- **Payments (`payments` table):** **0 rows** — no payment has ever been posted, consistent with the
+  `SAR 0.00` payment column already observed live in Stage 2's ledger screenshot.
+
+### Facility
+
+Single facility confirmed (id 3, "International Healthcare Center", Riyadh) — no facility-mismatch
+risk for any of the above.
+
+### Stage 3 decision (per the programme's own preference to reuse over create)
+
+Reuse the existing 30-patient, single-facility, single-theme (ophthalmology) dataset and the 6
+existing named role accounts as the foundation. New data needed, minimally, to complete a coherent
+golden demo journey:
+
+1. An insurance policy record for the chosen golden patient (none exist at all today).
+2. A repair of the pid-2 allergy/prescription contradiction, regardless of whether pid 2 is used.
+3. A decision on whether to populate a lab order/result (Stage 4 will check what lab support this
+   installation actually has before deciding to create one).
+4. At least one claim and one payment to demonstrate the billing→claims→payment tail of the journey
+   (currently zero of either exist anywhere in the database).
+
+No golden-patient selection, insurance policy, lab order, claim, or payment has been created yet —
+that is Stage 4 (design) and Stage 6 (populate), gated behind Stage 5 (backup) per the programme's
+own sequencing. Nothing in Stage 3 wrote to the database.
+
+**Next exact action:** proceed to Stage 4 — design the golden demo dataset specification.
