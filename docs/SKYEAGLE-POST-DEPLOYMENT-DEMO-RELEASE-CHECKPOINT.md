@@ -395,3 +395,135 @@ that is Stage 4 (design) and Stage 6 (populate), gated behind Stage 5 (backup) p
 own sequencing. Nothing in Stage 3 wrote to the database.
 
 **Next exact action:** proceed to Stage 4 — design the golden demo dataset specification.
+
+---
+
+## Stage 4 — Golden Demo Dataset Design (2026-08-28)
+
+Design only — no writes performed in this stage. All items below are gated behind Stage 5
+(backup) before any is executed in Stage 6.
+
+### Selected golden patient: pid 3, Amal Albishi (SYN-0003)
+
+Confirmed via full-profile read: Female, DOB 1982-03-23, Dammam, fictional address ("1002
+Fictional Street"), existing standing diagnosis **Primary open-angle glaucoma**, 3 existing
+encounters (2026-03-14, 2026-05-28, 2026-08-11) telling a natural glaucoma follow-up arc. The most
+recent encounter (encounter 6, 2026-08-11) already carries full documentation: `newpatient` +
+`soap` + `vitals` + `eye_mag` forms, and a billed $350 "Eye exam, established patient" (CPT
+92014). No allergy/prescription contradiction (unlike pid 2). This patient requires the least new
+data to reach a complete, coherent journey and is the design target below.
+
+### Facility
+
+Reuse existing (id 3, "International Healthcare Center", Riyadh) — unchanged.
+
+### Patient
+
+Reuse existing pid 3 as-is — no demographic changes planned. Note for the record: OpenEMR core
+`patient_data` has no dedicated Arabic-name column (`fname`/`lname`/`mname` are single, untagged
+fields) — the Arabic UI shows this same Latin name under RTL layout/labels, it does not store a
+separate Arabic name. Not a defect; documented here so Stage 9 (Arabic workflow) doesn't expect a
+distinct Arabic name field that doesn't exist.
+
+### Insurance — NEW
+
+Create one policy for pid 3 against the existing payer **Meridian Gulf Health (SYNTHETIC)**
+(id 2) via the supported Patient > Insurance UI (not raw SQL — `insurance_data` has no supported
+"safe" direct-SQL path since it interacts with subscriber/relationship logic in the app layer).
+Fictional subscriber = self, fictional member/policy ID, effective date backdated to before the
+earliest existing encounter (2026-03-14) so it appears active across the whole existing chart
+history.
+
+### Appointment — NEW
+
+Both of pid 3's existing appointments (`pc_eid` 9 and 39, both 2026-08-12, statuses `x`/`>`) are
+already in the past relative to today (2026-08-28). Create one **future-dated** appointment via
+the Calendar UI (role: Front Office / `r.aldosari`) with a Physicians-group provider
+(`y.alharbi` or `s.almutairi`), reason "Glaucoma follow-up (SYNTHETIC DEMO)", status Scheduled —
+this becomes the live check-in → encounter demonstration in Stage 8, rather than fabricating
+history on the two already-past appointments.
+
+### Encounter
+
+No new encounter created in Stage 6 population. Encounter 6 (2026-08-11) stands as reusable chart
+history/continuity evidence. The Stage 8 end-to-end workflow walkthrough will check in the new
+appointment above and create a genuinely new, live encounter as part of that demonstration —
+keeping Stage 6 a data-completeness pass and Stage 8 the actual workflow proof, rather than
+pre-fabricating an encounter that Stage 8 would then just replay.
+
+### Diagnosis
+
+pid 3's "Primary open-angle glaucoma" problem exists in `lists` but has **no row in
+`issue_encounter`** — i.e. it is a standing problem, not linked to any specific visit. Rather than
+retroactively editing encounter 6's history, this link will be made live during the Stage 8
+encounter (the natural point where a clinician reviews/reconciles the problem list against the
+current visit) — consistent with the same "let the workflow do it" principle as the Encounter
+item above.
+
+### Medication — repair + addition
+
+pid 3's only active prescription is "Artificial tears" — not a first-line glaucoma therapy
+(artificial tears treat dry eye, not intraocular pressure). Add **Latanoprost 0.005% eye drops**
+(already an established drug in this dataset's own formulary, used for other patients) as a second
+active prescription for pid 3, via the supported medication/e-prescribe module. This is additive
+(existing Artificial tears prescription untouched) and makes the medication list clinically
+consistent with the glaucoma diagnosis.
+
+### Laboratory — classified N/A, not populated
+
+`procedure_type` (lab test catalog) and `procedure_providers` (lab facility) are **both empty (0
+rows)** — this installation has no lab module configuration at all, not merely an absence of
+orders. Standing up a full lab subsystem (test catalog + provider record + order + result) is
+configuration work substantially beyond "populate demo data" and was not something any prior
+stage of this programme established as needed. Per the master prompt's own conditional language
+("if the installed configuration supports it"), this is classified **`LABORATORY: N/A — NOT
+CONFIGURED`** rather than forced. Recorded as a known limitation for the release certificate
+(Section O of the final certificate); can be revisited as a separate, explicitly-scoped initiative
+if the Owner later wants a Lab demo capability.
+
+### Billing
+
+Reuse existing billed rows on pid 3 (encounter 6: $350 Eye exam 92014; encounter 36: $250 Office
+visit 99213). The Stage 8 live encounter will generate one new billing row (Visual field exam
+92083 — $300, already in the fee schedule and clinically appropriate for glaucoma monitoring)
+during the workflow walkthrough itself, not pre-created here.
+
+### Claims — NEW, internal-only
+
+Generate exactly **one** demo claim from pid 3's existing billed encounter(s) to Meridian Gulf
+Health, via the supported Billing > Claims UI. `x12_partners` is empty (no EDI trading partner
+configured), so external/EDI transmission is not even mechanically possible on this instance —
+the claim will exist purely as an internal record, satisfying Stage 8/Stage 10 without any risk of
+external submission (consistent with Section 2/29's explicit prohibition on that).
+
+### Payment — NEW
+
+Post one fictional payment (patient copay and/or insurance payment, a plausible fractional amount
+against the $350 or $250 billed charge) via the standard Payment posting workflow. `payments` is
+currently 0 rows database-wide — this closes the financial tail (charge → claim → payment) end to
+end for the golden patient.
+
+### Bundled data-quality repairs (Stage 6, via supported UI, not raw SQL)
+
+1. **pid 2 allergy/prescription contradiction** (Stage 3 finding): deactivate (not delete) the
+   conflicting "Timolol 0.5% eye drops" prescription for pid 2 via the medication module's own
+   discontinue action. Chosen over removing the allergy record because allergies are the more
+   clinically load-bearing fact to preserve, and deactivating (vs. hard-deleting) the prescription
+   keeps full audit history intact while removing the live contradiction from the active-medication
+   view. This is independent of the golden-patient choice — left in place, it would surface in a
+   demo or QA pass on pid 2 regardless of which patient is used as the primary story.
+2. **Fee-schedule `code_type=12` orphan tagging** (Stage 3 finding): **not** repaired here — fixing
+   the master `codes` table's type tagging is a system-configuration change, not demo/business
+   data, and out of proportion to this stage's scope. Recorded as a known limitation for the
+   release certificate instead.
+
+### Rollback / backup gating
+
+None of the above is executed until Stage 5's backup is taken and verified `PASS`. Each Stage 6
+action will be performed as the smallest supported UI mutation, verified immediately, with the
+Stage 5 backup as the rollback mechanism of record for the whole batch (per Section 30, a single
+coherent backup checkpoint covering this whole demo-data population pass, rather than a
+separate backup per micro-action).
+
+**Next exact action:** proceed to Stage 5 — take and verify a pre-demo-data backup before any of
+the above is written.
