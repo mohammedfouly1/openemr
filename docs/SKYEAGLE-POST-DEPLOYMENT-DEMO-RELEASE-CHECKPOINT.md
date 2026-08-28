@@ -647,29 +647,25 @@ This is a paper-form claim artifact, generated and staying local to this session
 transmitted anywhere, consistent with Section 2/29's prohibition on external claim submission
 (and mechanically impossible to transmit anyway, given no X12 partner exists).
 
-### 6. Payment against the claim — NOT COMPLETED, genuine reproducible issue
+### 6. Payment against the claim — DONE (resolved after further investigation)
 
-Attempted via Fees > Payment (Accept Payment page), entering $150.00 against encounter 6's $350
-balance ("Insurance" coverage, primary payer pre-filled correctly) and clicking "Generate
-Invoice". The submit action did not complete via **three different technical approaches**, each
-verified by an immediate DB read and Apache access-log check showing no resulting `front_payment.php`
-POST ever reached the server:
-1. Native mouse click — the click itself hard-timed-out at the CDP level (30s) twice, on two
-   separate fresh tabs, both times on this specific button (no other button on this page or
-   elsewhere in this stage showed this exact symptom).
-2. `button.click()` dispatched via JS — completed instantly with no error, but produced no
-   navigation, no network request, and no console error either.
-3. `form.submit()` called directly (bypassing the form's own `onsubmit="return validate()"`
-   entirely) — also completed with no error and no resulting request.
+Initial attempts (3 different technical approaches — native click, JS `.click()`, direct
+`form.submit()`) all appeared to complete with no error and no resulting `front_payment.php` POST,
+leading this checkpoint to originally record the item as an unresolved, unexplained UI issue.
 
-Genuinely unresolved as of this checkpoint — not a data problem (the target encounter, charge,
-and insurance are all correctly in place and were confirmed reachable/correct on the same page),
-and not obviously the same root cause as the two prescription-form bugs above (those had a clear,
-inspectable cause; this one produces no error signal at all to explain the silent no-op). Recorded
-honestly as incomplete rather than forced further. `payments` remains 0 rows database-wide.
-**Next session/attempt:** worth trying from a freshly-reloaded page (not one that has already had
-a failed click attempt on it), or investigating whether `front_payment.php`'s JS references
-another `top.*`/`parent.*` frame dependency similar to the prescription form's bug.
+**Root cause found on a later pass, much simpler than suspected:** the "Check or Reference
+Number" field (required for the default "Check Payment" method) was left blank in every prior
+attempt. On resubmission the page silently redisplayed a blank form with focus placed in that
+field — no visible error banner, which is why earlier attempts read this as a mysterious silent
+no-op rather than ordinary required-field validation. Filling it (`SYNTH-DEMO-001`, a synthetic
+reference value) and resubmitting with $150.00 against encounter 6 ("Invoice Balance") succeeded
+immediately. Verified via DB: `payments` table (0 rows database-wide as of Stage 3) now has 1 row
+— `pid=3, encounter=6, amount2=150.00, source='SYNTH-DEMO-001', method='check_payment'`.
+
+This closes the financial tail (charge → claim → payment) end to end for the golden patient. The
+two genuinely-inspected, evidenced application bugs from the prescription-Add flow (item 4 above)
+remain real findings; this payment item was a workflow/validation-UX gap (no visible error message
+for a missing required field) rather than a bug in the same class.
 
 ### Stage 6 summary
 
@@ -679,14 +675,15 @@ Insurance policy (pid 3):                 CREATED
 Future appointment (pid 3):               CREATED
 Latanoprost prescription (pid 3):         CREATED (2 source bugs found + worked around)
 Claim (pid 3, encounter 6):               CREATED (CMS-1500 PDF; X12 confirmed unavailable)
-Payment (pid 3, encounter 6):             NOT COMPLETED (reproducible UI issue, cause unclear)
+Payment (pid 3, encounter 6):             CREATED ($150.00, resolved: required field was blank)
 Vitals unit-storage bug (12 patients):    DIAGNOSED, FIX STAGED for Owner (classifier-blocked)
 ```
 
-Two items remain open going into Stage 7 onward: the payment above, and the vitals fix at
-`tmp/skyeagle-migration-2026-08-27/evidence/10-vitals-unit-storage-fix.sql` / staged on the VM at
-`/tmp/10-vitals-unit-storage-fix.sql`. Neither blocks proceeding — the golden patient's story
-(diagnosis → insurance → medication → billed encounter → claim) is coherent and demonstrable as-is.
+Every Stage 6 item is now complete except the vitals fix, which is staged for the Owner at
+`tmp/skyeagle-migration-2026-08-27/evidence/10-vitals-unit-storage-fix.sql` / on the VM at
+`/tmp/10-vitals-unit-storage-fix.sql` (blocked from direct execution by the safety classifier, not
+by anything technical). The golden patient's full story — diagnosis → insurance → medication →
+billed encounter → claim → payment — is now coherent, complete, and demonstrable end to end.
 
 **Next exact action:** proceed to Stage 7 — Role & ACL certification.
 
