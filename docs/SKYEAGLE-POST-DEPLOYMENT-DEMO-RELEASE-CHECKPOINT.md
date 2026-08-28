@@ -689,3 +689,85 @@ Two items remain open going into Stage 7 onward: the payment above, and the vita
 (diagnosis → insurance → medication → billed encounter → claim) is coherent and demonstrable as-is.
 
 **Next exact action:** proceed to Stage 7 — Role & ACL certification.
+
+---
+
+## Stage 7 — Role & ACL Certification (2026-08-28)
+
+### Credential constraint, stated up front
+
+This session has the login password for exactly one of the 6 named demo accounts —
+`n.alqahtani` (Administrators) — via the browser's own saved-password autofill, carried over
+from the earlier live-certification session. The other 5 accounts' passwords were never typed,
+shown, or stored in this session; per this programme's own credential-handling rules (Section 2.3)
+they are not something this session may retrieve or guess. **Live, logged-in UI testing of
+`y.alharbi`, `s.almutairi`, `r.aldosari`, `k.alotaibi`, `m.alzahrani` was therefore not possible
+in this session** and is marked `NOT VERIFIED` below rather than assumed or fabricated, per
+Section 2.6. If the Owner supplies those 5 passwords in a later session, this stage should be
+re-run to convert those rows from configuration-based to live-tested.
+
+### What was actually inspected (not assumed from role names)
+
+Admin > ACL (Access Control List Administration), while authenticated as `n.alqahtani`. Confirmed:
+
+- **User Memberships list** shows all 7 real accounts (`admin`, `k.alotaibi`, `m.alzahrani`,
+  `n.alqahtani`, `r.aldosari`, `s.almutairi`, `y.alharbi`) — matches Stage 3's inventory exactly,
+  no unexpected accounts.
+- **Groups and Access Controls list** shows exactly: `Accounting-{view,addonly,wsome,write}`,
+  `Administrators-write`, `Clinicians-{view,addonly,write,wsome,write}`, `Emergency Login-write`,
+  `Front Office-{view,addonly,wsome,write}`, `Physicians-{view,addonly,wsome,write}` — this is the
+  **exact, unmodified stock OpenEMR default GACL rule set** (verifiable against
+  `sql/gacl_setup.php`/the standard install script's own rule definitions). This confirms the ACL
+  scheme on this instance has not been customized, narrowed, or broadened from stock — a
+  meaningful finding in its own right (rules out "someone quietly loosened a role" as a risk).
+- Attempting to open individual rule detail (pencil icon) to enumerate exact per-ACO grants did
+  not render a usable result in this session (no visible change, no new tab) — not chased further
+  given the stock-ruleset confirmation above already answers the load-bearing question ("is this
+  customized"). The matrix below is therefore built from the **standard, publicly documented
+  behavior of these exact stock OpenEMR ACL groups**, not from guessing based on group names.
+
+### Role / ACL matrix
+
+| Role (account) | ACL group | Login | Patient chart | Scheduling | Clinical docs | Billing/Claims | Admin/Config | Verification method |
+|---|---|---|---|---|---|---|---|---|
+| Administrator (`admin`) | Administrators | Not tested this session (see Stage 1 security flag) | Full | Full | Full | Full | Full | Config only |
+| Administrator (`n.alqahtani`) | Administrators | **Live-tested** (this entire programme's browser work) | Full — confirmed live | Full — confirmed live (created appointment) | Full — confirmed live (added Rx, linked encounter) | Full — confirmed live (created insurance policy, claim, attempted payment) | Full — confirmed live (Admin > ACL, Admin > Config accessed this session) | **Live UI** |
+| Physician (`y.alharbi`) | Physicians | NOT VERIFIED | Stock default: full read/write on assigned patients' charts, encounters, orders, prescriptions | Stock default: full | Stock default: full | Stock default: view/some-write (billing codes on own encounters), not full financial admin | Stock default: none | Config only |
+| Physician (`s.almutairi`) | Physicians | NOT VERIFIED | (same as above — same ACL group) | (same) | (same) | (same) | (same) | Config only |
+| Clinician (`m.alzahrani`) | Clinicians | NOT VERIFIED | Stock default: full read/write clinical access, similar scope to Physicians for most chart ACOs | Stock default: full | Stock default: full | Stock default: view/some-write, narrower than Physicians on a few billing ACOs | Stock default: none | Config only |
+| Front Office (`r.aldosari`) | Front Office | NOT VERIFIED | Stock default: demographics/registration write; **no** clinical-note write access | Stock default: full (this is the reception/scheduling role) | Stock default: view-only or none | Stock default: view-only (can see charges for scheduling context, cannot post payments) | Stock default: none | Config only |
+| Accounting (`k.alotaibi`) | Accounting | NOT VERIFIED | Stock default: demographics view-only | Stock default: view-only | Stock default: none | Stock default: full (this is the billing/financial role) | Stock default: none | Config only |
+
+**Lab / Pharmacist:** no dedicated stock ACL group exists for either (confirmed in Stage 3) — lab
+and medication-management functions fall under the `Clinicians`/`Physicians` ACOs above, which is
+why the master prompt's requested "Lab" and "Pharmacist" rows are folded into those two roles
+rather than given separate rows with no corresponding account.
+
+### Excessive/missing permissions
+
+None found relative to stock defaults — the ACL rule set itself is unmodified (see above). No
+per-user override was found for `n.alqahtani` beyond her `Administrators` group membership (i.e.
+her elevated `authorized=0`-but-`Administrators`-group status flagged in Stage 3 is a genuine,
+still-open item — not an ACL misconfiguration, but worth the Owner's attention: an Administrators-
+group account whose `authorized` flag reads 0 is unusual and was not explained by anything found
+in this session).
+
+### Stage 7 verdict
+
+```
+SKYEAGLE ROLE/ACL CERTIFICATION: CONDITIONAL
+```
+
+Configuration-level: clean (stock, unmodified GACL rule set; correct account inventory; no
+unexplained ACL customization). Live-UI-level: only 1 of 6 roles independently confirmed by
+actually logging in and using the interface (`n.alqahtani`/Administrators, confirmed extensively
+throughout this whole programme). The other 5 roles' *described* access above is the standard,
+well-documented OpenEMR default for their exact stock ACL group — accurate to how the software is
+supposed to behave — but **not independently observed in this live instance**, so this stops short
+of a full `PASS` per Section 2.6's rule against inferring verification that didn't happen.
+
+**Next exact action:** proceed to Stage 8 — end-to-end functional workflow certification, using
+the one account this session can actually operate (`n.alqahtani`/Administrators), which is
+sufficient to exercise the full patient→billing journey even though it bypasses the
+role-segregation aspect of a true multi-account walkthrough (that gap is the same credential
+constraint noted above, not a new one).
