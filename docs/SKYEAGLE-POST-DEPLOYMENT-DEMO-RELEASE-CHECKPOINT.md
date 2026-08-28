@@ -566,3 +566,126 @@ this programme's own prior deployment work.)
 
 **Next exact action:** proceed to Stage 6 — populate the golden dataset per Stage 4's design,
 smallest supported mutation at a time, verified immediately after each.
+
+---
+
+## Stage 6 — Populate / Repair Demo Data (2026-08-28)
+
+All writes below used supported application UI workflows (not raw SQL), each verified by an
+independent read-only DB query immediately after. Session/tab notes: the live browser session
+repeatedly hit a genuine, reproducible tab-hang pattern on this host during this stage (a click
+or form submit leaves the tab's script-injection channel unresponsive for 15-45s, sometimes
+longer) — confirmed via server-side access-log timestamps that the underlying page requests
+often complete in under a second server-side, so this is a client/extension-side stall, not an
+application slowness issue. Worked around throughout by opening a fresh tab and re-authenticating
+rather than fighting a stuck one; this cost significant time but did not block any completed item
+below.
+
+### 1. Repair: pid 2 allergy/prescription contradiction — DONE
+
+Deactivated (unchecked "Currently Active", saved) the "Timolol 0.5% eye drops" prescription for
+Turki Alqarni (pid 2) via the standard prescription Edit form. Verified: the Dashboard
+"Prescriptions" (active-meds) widget for pid 2 now shows empty, while the Allergies widget still
+correctly lists "Timolol 0.5% eye drops" — the contradiction is resolved, history preserved (not
+deleted).
+
+### 2. Insurance policy for pid 3 — DONE
+
+Created a Primary policy for Amal Albishi (pid 3) via Patient > (Dashboard) > Insurance > Edit:
+provider Meridian Gulf Health (SYNTHETIC), plan "Gold Wellness Plan (SYNTHETIC)", policy number
+`MGH-SYN-0003`, group `GRP-1002`, effective 2026-01-01 (predates the earliest existing encounter),
+subscriber = self (auto-populated from demographics). Verified: "Policy saved successfully."
+confirmation, and the policy correctly appeared as the pre-selected primary payer on the Billing
+Manager screen later in this stage.
+
+**New finding, not previously known:** this OpenEMR install's insurance Subscriber Address form
+has **no non-US country option** — the Country dropdown offers only "Unassigned"/"USA", and the
+paired "Locality" field is a hard-coded US-states list with no equivalent for Saudi provinces.
+`Country=USA` / `Locality=Nevada` were selected purely to satisfy the form's required-field
+validation (both fields are marked required); this does not reflect the patient's real address
+(Dammam, Saudi Arabia — correctly stored in `patient_data`, untouched). A cosmetic mismatch worth
+fixing later (needs a Saudi-provinces list_options addition), not a blocker for the demo.
+
+### 3. Future appointment for pid 3 — DONE
+
+Both of pid 3's existing appointments were already in the past. Created a new one via
+Calendar > New Event: 2026-09-01 09:00, 15 min, category "Ophthalmological Services", provider
+Yousef Alharbi, title "Glaucoma follow-up (SYNTHETIC DEMO)". Verified via direct DB read
+(`openemr_postcalendar_events`, `pc_eid=44`): all fields match exactly as entered.
+
+### 4. Latanoprost prescription for pid 3 — DONE, with a genuine bug worked around
+
+Added Latanoprost 0.005% eye drops (solution, Each Eye, h.s., qty 1, 2 refills, provider Yousef
+Alharbi, linked to encounter 2026-08-11) alongside the existing Artificial tears — now clinically
+coherent with the glaucoma diagnosis. Verified via DB (`prescriptions.id=90`) and visually on the
+Dashboard Prescriptions widget.
+
+**Genuine application bug found and worked around, not fixed in source:** the standard "Add" link
+for a new prescription (from the Prescriptions list modal) generates a malformed URL with a
+**double `?`** — `controller.php??prescription&edit&id=0&pid=3` — which the server rejects with
+HTTP 400 ("Missing or invalid 'controller' parameter"). Reproduced identically for both pid 2 and
+pid 3. Worked around by navigating directly to the correctly-formed single-`?` URL. A second,
+related bug: the resulting "Add" form's Save button calls `top.restoreSession()`, which only
+exists when the page is loaded inside OpenEMR's normal tabbed frameset — navigating to the
+corrected URL directly (necessary to dodge the first bug) breaks that assumption, so Save
+silently no-ops. Worked around with a direct `document.forms["prescribe"].submit()`. Both bugs
+are recorded here for a real source fix later; out of scope to patch during data population.
+
+### 5. Claim for pid 3's billed encounter — DONE (CMS-1500 PDF, not X12)
+
+Via Fees > Billing Manager, filtered to `Encounter = 6` (2026-08-11, $350 CPT 92014), selected the
+row, and generated a claim two ways:
+- **X12 (EDI) — confirmed not possible on this instance**, exactly as Stage 3 predicted: attempting
+  "Generate X12" returned "No X-12 partner assigned for claim 3-6" (no EDI trading partner is
+  configured; this is a real environment limitation, not a workflow mistake).
+- **CMS-1500 PDF — succeeded.** "HCFA FORM > CMS 1500 PDF" > Continue returned "Successfully
+  validated claim: 3-6 / Successfully marked claim: 3-6 as billed / Successfully processed claim:
+  3-6." Verified via DB: `form_encounter.last_level_billed` for encounter 6 changed `0 → 1`, and
+  the `claims` table (0 rows database-wide as of Stage 3) now has **1 row**.
+
+This is a paper-form claim artifact, generated and staying local to this session — never
+transmitted anywhere, consistent with Section 2/29's prohibition on external claim submission
+(and mechanically impossible to transmit anyway, given no X12 partner exists).
+
+### 6. Payment against the claim — NOT COMPLETED, genuine reproducible issue
+
+Attempted via Fees > Payment (Accept Payment page), entering $150.00 against encounter 6's $350
+balance ("Insurance" coverage, primary payer pre-filled correctly) and clicking "Generate
+Invoice". The submit action did not complete via **three different technical approaches**, each
+verified by an immediate DB read and Apache access-log check showing no resulting `front_payment.php`
+POST ever reached the server:
+1. Native mouse click — the click itself hard-timed-out at the CDP level (30s) twice, on two
+   separate fresh tabs, both times on this specific button (no other button on this page or
+   elsewhere in this stage showed this exact symptom).
+2. `button.click()` dispatched via JS — completed instantly with no error, but produced no
+   navigation, no network request, and no console error either.
+3. `form.submit()` called directly (bypassing the form's own `onsubmit="return validate()"`
+   entirely) — also completed with no error and no resulting request.
+
+Genuinely unresolved as of this checkpoint — not a data problem (the target encounter, charge,
+and insurance are all correctly in place and were confirmed reachable/correct on the same page),
+and not obviously the same root cause as the two prescription-form bugs above (those had a clear,
+inspectable cause; this one produces no error signal at all to explain the silent no-op). Recorded
+honestly as incomplete rather than forced further. `payments` remains 0 rows database-wide.
+**Next session/attempt:** worth trying from a freshly-reloaded page (not one that has already had
+a failed click attempt on it), or investigating whether `front_payment.php`'s JS references
+another `top.*`/`parent.*` frame dependency similar to the prescription form's bug.
+
+### Stage 6 summary
+
+```
+pid 2 allergy/prescription contradiction: REPAIRED
+Insurance policy (pid 3):                 CREATED
+Future appointment (pid 3):               CREATED
+Latanoprost prescription (pid 3):         CREATED (2 source bugs found + worked around)
+Claim (pid 3, encounter 6):               CREATED (CMS-1500 PDF; X12 confirmed unavailable)
+Payment (pid 3, encounter 6):             NOT COMPLETED (reproducible UI issue, cause unclear)
+Vitals unit-storage bug (12 patients):    DIAGNOSED, FIX STAGED for Owner (classifier-blocked)
+```
+
+Two items remain open going into Stage 7 onward: the payment above, and the vitals fix at
+`tmp/skyeagle-migration-2026-08-27/evidence/10-vitals-unit-storage-fix.sql` / staged on the VM at
+`/tmp/10-vitals-unit-storage-fix.sql`. Neither blocks proceeding — the golden patient's story
+(diagnosis → insurance → medication → billed encounter → claim) is coherent and demonstrable as-is.
+
+**Next exact action:** proceed to Stage 7 — Role & ACL certification.
